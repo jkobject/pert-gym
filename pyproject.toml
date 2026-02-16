@@ -1,0 +1,64 @@
+[project]
+name = "pert-gym"
+version = "0.1.0"
+description = "TODO: describe pert-gym"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "jkobject", email = "jkobject@gmail.com" }]
+license = "MIT"
+keywords = ["python", "template", "pert-gym"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "coverage>=7.3.2",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.6.4",
+    "ty",
+    "gitchangelog>=3.0.4",
+    "mkdocs>=1.5.3",
+    "mkdocs-git-revision-date-localized-plugin>=1.0.0",
+    "mkdocstrings>=0.22.0",
+    "mkdocs-git-authors-plugin>=0.4.0",
+    "mkdocs-jupyter>=0.2.0",
+    "mkdocstrings-python>=0.10.0",
+]
+
+[project.scripts]
+pert-gym = "pert_gym.__main__:main"
+
+[project.urls]
+repository = "https://github.com/your-org/pert-gym"
+
+[tool.hatch.build.targets.sdist]
+only-include = [
+    "src/pert_gym",
+    "docs",
+    "config",
+    "data",
+    "tools",
+]
+
+[tool.hatch.build.targets.wheel]
+only-include = [
+    "src/pert_gym",
+    "docs",
+    "config",
+    "data",
+    "tools",
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501", "E203", "E266", "E265", "F401", "F403", "E722", "E741", "E731", "E721"]
+
+[tool.ty.src]
+include = ["src"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

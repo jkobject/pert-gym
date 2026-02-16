@@ -1,0 +1,31 @@
+site_name: pert-gym
+theme:
+  name: readthedocs
+  # logo: logo.png
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Usage: usage.md
+  - Configuration: configuration.md
+  - Development: development.md
+  - API: api.md
+  - CLI: cli.md
+  - Structure: structure.md
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_root_heading: true
+            show_source: true
+            summary: true
+            merge_init_into_class: true
+            show_signature: false
+      default_handler: python
+  - git-revision-date-localized
+  - git-authors
+  - mkdocs-jupyter:
+      include_source: true
+      include_requirejs: true

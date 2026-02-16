@@ -1,0 +1,4 @@
+# Base runtime configuration for pert-gym
+seed: 42
+logging:
+  level: INFO
