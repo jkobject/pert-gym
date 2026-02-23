@@ -6,6 +6,22 @@
 
 ## format of files
 
+- all datasets have 3 files. Starting from their /obs.parquet one can do:
+
+```python
+obs_artifact = db.Artifact.get(
+    key=FILENAME+"/obs.parquet"
+)
+X_artifact = obs_artifact.features.get_values()["X"]
+var_artifact = X_artifact.features.get_values()["var"]
+
+adata = X_artifact.load()
+adata.obs = obs_artifact.load()
+adata.var = var_artifact.load()
+```
+
+### format of files [future]
+
 - image files: are converted to a spatialdata file. Using scPortrait, we
   generate a cell-specific embedding of each cell and cell specific annotations
   are then put in the obs. Then, Based on cell state and cell count, a sensitivy
@@ -31,7 +47,7 @@ Annotations follow the same format as what is described into the db.Features
 field. a set of these features (i.e. a Schema, see db.schema) is present given
 the dataset and the file format (image / sensitivty / scRNAseq).
 
-## missing projects to add
+## missing datasets to add
 
 - xaira/orion https://www.biorxiv.org/content/10.1101/2025.06.11.659105v1.ful.
   https://plus.figshare.com/articles/dataset/Processed_data_for_X-Atlas_Orion_Genome-wide_Perturb-seq_Datasets_via_a_Scalable_Fix-Cryopreserve_Platform_for_Training_Dose-Dependent_Biological_Foundation_Models/29190726
@@ -48,7 +64,8 @@ the dataset and the file format (image / sensitivty / scRNAseq).
   https://www.cell.com/molecular-cell/fulltext/S1097-2765(21)00574-8 GSE150818
 
 - PRISM set of datasets
-  https://www.biorxiv.org/content/10.64898/2025.12.23.696273v1
+  https://www.biorxiv.org/content/10.64898/2025.12.23.696273v1 all h5ads are in
+  https://drive.google.com/drive/folders/1Y0Z19JhiTmTch65kvBNNMdVtosH6QHfi
   - GSE217812
   - GSE90063_mouse
   - GSE250378-016
@@ -102,7 +119,7 @@ the dataset and the file format (image / sensitivty / scRNAseq).
   - https://www.rxrx.ai/rxrx19b
 
 - depmap off target analysis given the CRISPR library used
-- depmap's CCLE
+- depmap's CCLE: https://depmap.org/portal/download/
 - sanger's CCLE: https://cellmodelpassports.sanger.ac.uk/
 
 - also the atac ones:
