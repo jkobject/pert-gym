@@ -51,9 +51,6 @@ the dataset and the file format (image / sensitivty / scRNAseq).
 
 - xaira/orion https://www.biorxiv.org/content/10.1101/2025.06.11.659105v1.ful.
   https://plus.figshare.com/articles/dataset/Processed_data_for_X-Atlas_Orion_Genome-wide_Perturb-seq_Datasets_via_a_Scalable_Fix-Cryopreserve_Platform_for_Training_Dose-Dependent_Biological_Foundation_Models/29190726
-- sanger's dual guid KO in CRC:
-  https://www.nature.com/articles/s41467-025-67256-9#Abs1
-  https://figshare.com/articles/dataset/MAPPING_zip/25533091/1?file=45433417
 - T-cell gwps:
   https://virtualcellmodels.cziscience.com/dataset/genome-scale-tcell-perturb-seq
   GSE314342
@@ -110,6 +107,9 @@ the dataset and the file format (image / sensitivty / scRNAseq).
 - sanger's gdsc: https://www.cancerrxgene.org/
 - sanger's drug combinations https://gdsc-combinations.depmap.sanger.ac.uk/
 - sanger's score crispr KO: https://cellmodelpassports.sanger.ac.uk/downloads
+- sanger's dual guid KO in CRC:
+  https://www.nature.com/articles/s41467-025-67256-9#Abs1
+  https://figshare.com/articles/dataset/MAPPING_zip/25533091/1?file=45433417
 
 - recursion's rxrx:
   - https://www.rxrx.ai/rxrx3
