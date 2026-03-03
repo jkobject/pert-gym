@@ -29,11 +29,19 @@ def _get_registry(db: Any) -> Any:
     return ln
 
 
+def _prefix_from_key(key: str) -> str:
+    """Normalize an artifact key/prefix into the dataset prefix."""
+    key = key.rstrip("/")
+    return key[:-5] if key.endswith(".h5ad") else key
+
+
 def migrate_h5ad_to_triplet(
-    dataset_name: str,
+    dataset_name: str | ad.AnnData,
     db: Any,
     *,
+    dataset_prefix: str | None = None,
     replace_on_instance: bool = True,
+    storage=True,
 ) -> dict[str, Any]:
     """Migrate one legacy h5ad artifact into the canonical 3-file layout.
 
@@ -41,9 +49,12 @@ def migrate_h5ad_to_triplet(
     ----------
     dataset_name
         Either an explicit key ending with ``.h5ad`` or a dataset prefix that
-        resolves to one h5ad artifact.
+        resolves to one h5ad artifact. Can also be an in-memory ``AnnData``.
     db
         LaminDB module (example: ``import lamindb as ln``).
+    dataset_prefix
+        Dataset prefix to use when ``dataset_name`` is an ``AnnData``. Ignored
+        when a string key/prefix is provided.
     replace_on_instance
         If True (default):
         - writes new latest versions for existing output keys (via ``revises``)
@@ -55,27 +66,40 @@ def migrate_h5ad_to_triplet(
         ``{"obs": obs_artifact, "X": x_artifact, "var": var_artifact}``.
     """
     r = _get_registry(db)
+    source = None
+    if isinstance(dataset_name, str):
+        if dataset_name.endswith(".h5ad"):
+            source = r.Artifact.get(key=dataset_name)
+        else:
+            candidates = list(r.Artifact.filter(key=dataset_name, suffix=".h5ad").all())
+            candidates += list(r.Artifact.filter(key=f"{dataset_name}.h5ad").all())
+            if not candidates:
+                candidates = list(
+                    r.Artifact.filter(
+                        key__startswith=f"{dataset_name.rstrip('/')}/", suffix=".h5ad"
+                    ).all()
+                )
+            if not candidates:
+                raise ValueError(f"No .h5ad artifact found for '{dataset_name}'.")
+            source = sorted(candidates, key=lambda a: a.created_at)[-1]
 
-    if dataset_name.endswith(".h5ad"):
-        source = r.Artifact.get(key=dataset_name)
-    else:
-        candidates = list(r.Artifact.filter(key=dataset_name, suffix=".h5ad").all())
-        candidates += list(r.Artifact.filter(key=f"{dataset_name}.h5ad").all())
-        if not candidates:
-            candidates = list(
-                r.Artifact.filter(
-                    key__startswith=f"{dataset_name.rstrip('/')}/", suffix=".h5ad"
-                ).all()
+        source_key = source.key
+        if source_key is None:
+            raise ValueError("Source artifact has no key.")
+        prefix = _prefix_from_key(source_key)
+        adata = source.load()
+    elif isinstance(dataset_name, ad.AnnData):
+        adata = dataset_name
+        if dataset_prefix is None:
+            raise ValueError(
+                "dataset_prefix is required when dataset_name is an AnnData object."
             )
-        if not candidates:
-            raise ValueError(f"No .h5ad artifact found for '{dataset_name}'.")
-        source = sorted(candidates, key=lambda a: a.created_at)[-1]
+        prefix = _prefix_from_key(dataset_prefix)
+    else:
+        raise TypeError(
+            "dataset_name must be a dataset name string or an AnnData object."
+        )
 
-    source_key = source.key
-    if source_key is None:
-        raise ValueError("Source artifact has no key.")
-
-    prefix = source_key[:-5] if source_key.endswith(".h5ad") else source_key.rstrip("/")
     obs_key = f"{prefix}/obs.parquet"
     x_key = f"{prefix}/X.h5ad"
     var_key = f"{prefix}/var.parquet"
@@ -89,7 +113,6 @@ def migrate_h5ad_to_triplet(
         if not feature:
             r.Feature(name=name, dtype="cat[Artifact]").save()
 
-    adata = source.load()
     if not isinstance(adata, ad.AnnData):
         raise TypeError(f"Expected AnnData, got {type(adata).__name__}.")
 
@@ -123,8 +146,8 @@ def migrate_h5ad_to_triplet(
     x_artifact.features.set_values({"var": var_artifact})
     obs_artifact.features.set_values({"X": x_artifact})
 
-    if replace_on_instance:
-        source.delete()
+    if replace_on_instance and source is not None:
+        source.delete(storage=storage)
 
     return {"obs": obs_artifact, "X": x_artifact, "var": var_artifact}
 
@@ -134,6 +157,7 @@ def migrate_triplet_to_zarr(
     db: Any,
     *,
     replace_on_instance: bool = False,
+    storage=True,
 ) -> Any:
     """Rebuild AnnData from triplet artifacts and save as ``X.zarr``.
 
@@ -150,7 +174,11 @@ def migrate_triplet_to_zarr(
     """
     r = _get_registry(db)
 
-    obs_key = dataset_name if dataset_name.endswith("/obs.parquet") else f"{dataset_name}/obs.parquet"
+    obs_key = (
+        dataset_name
+        if dataset_name.endswith("/obs.parquet")
+        else f"{dataset_name}/obs.parquet"
+    )
     obs_artifact = r.Artifact.get(key=obs_key)
 
     x_artifact = obs_artifact.features.get_values()["X"]
@@ -171,8 +199,8 @@ def migrate_triplet_to_zarr(
     ).save()
 
     if replace_on_instance:
-        obs_artifact.delete()
-        x_artifact.delete()
-        var_artifact.delete()
+        obs_artifact.delete(storage=storage)
+        x_artifact.delete(storage=storage)
+        var_artifact.delete(storage=storage)
 
     return zarr_artifact
