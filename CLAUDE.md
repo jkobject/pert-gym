@@ -77,15 +77,17 @@ These datasets still exist as legacy `.h5ad` artifacts and need
 
 ### Phase 2 — Dataset understanding & annotation audit
 
-- [ ] for all datasets in the instance, load obs and inspect all columns — flag
-      missing / inconsistent obs fields (`perturbation`, `perturbation_type`,
-      `cell_line`, `organism`, `tissue_type`, etc.)
-- [ ] make sure that all datasets have their artifact properly annotated (cell
-      counts, modality, perturbation library name and or size, known issues as
-      comment)
+For each dataset group listed in the notebook (`others`, `srivatsan`, `gwps`,
+`adamson`, `nadig`, `dixit`, `lincs`, `tahoe`, `GSE305979`, `GSE306429`):
 
-### other tasks to do later on:
-
+- [ ] Load obs and inspect all columns — flag missing / inconsistent obs fields
+      (`perturbation`, `perturbation_type`, `cell_line`, `organism`,
+      `tissue_type`, etc.)
+- [ ] Identify which scperturb/records bundle datasets are already migrated
+      (triplet exists) and skip them; flag any that still need migration
+- [ ] Document per-dataset notes in the notebook (cell counts, modality,
+      perturbation library, known issues)
+- [ ] `parse10m` — redo ingestion to match the same obs schema as other datasets
 - [ ] `mcfarland20` — add gene effect (DepMap) and other extra features
 - [ ] `GSE305979` — understand why day0-7 normalized has fewer cells than raw
       counts
@@ -96,6 +98,16 @@ These datasets still exist as legacy `.h5ad` artifacts and need
 ### Phase 3 — Missing datasets ingestion
 
 Datasets not yet in the Lamin instance (from `data/README.md`):
+
+**Preparation (done):**
+
+- [x] `data/README.md` — dataset catalogue documented with sources, formats,
+      accessions
+- [x] `notebooks/phase3_ingestion.ipynb` — thin wrapper notebook (imports +
+      commented run cells)
+- [x] `tools/ingest_phase3_scrna.py` — all scRNA-seq ingestion functions
+- [x] `tools/ingest_phase3_bulk.py` — all bulk/sensitivity ingestion functions
+      (hybrid obs model)
 
 Priority (genomic perturbations, scRNA-seq):
 
@@ -130,6 +142,13 @@ Overlap checks before ingestion:
 
 For every dataset in the instance, compute and store the following in obs/obsm:
 
+- [ ] **Quality metrics** — `obs["pct_mito"]`, `obs["pct_ribo"]`,
+      `obs["n_genes"]`, `obs["n_counts"]`, `obs["is_low_quality"]` flag.
+- [ ] **Missing metadata** — `obs["sex"]`, `obs["ethnicity"]`,
+      `obs["pert_library"]` (CRISPRa/i/KO, drug, etc.) where not already
+      present.
+- [ ] **Differential expression** — precompute per-perturbation DE results and
+      store as parquet sidecar (`<prefix>/de.parquet`).
 - [ ] **`obsm["X_embedding"]`** — cell embedding (scVI, scGPT, or similar
       foundation model). Use scVI trained per-dataset or a pretrained universal
       model.
@@ -138,20 +157,13 @@ For every dataset in the instance, compute and store the following in obs/obsm:
 - [ ] **`obs["sensitivity"]`** — perturbation sensitivity score per cell.
       Defined as distance of perturbed cell from control centroid in embedding
       space, or from a viability/proliferation signal if available.
-- [ ] **Quality metrics** — `obs["pct_mito"]`, `obs["pct_ribo"]`,
-      `obs["n_genes"]`, `obs["n_counts"]`, `obs["is_low_quality"]` flag.
-- [ ] **Missing metadata** — `obs["sex"]`, `obs["ethnicity"]`,
-      `obs["pert_library"]` (CRISPRa/i/KO, drug, etc.) where not already
-      present.
-- [ ] **Differential expression** — precompute per-perturbation DE results and
-      store as parquet sidecar (`<prefix>/de.parquet`).
 
 ### Phase 5 — Baseline models
 
 Implement and benchmark the following perturbation response models in
 `src/pert_gym/models/`:
 
-#### Trivial baselines (MIN / MAX reference points)
+#### 5.1 Trivial baselines (MIN / MAX reference points)
 
 - [ ] **Mean control** — predict the mean expression of unperturbed (control)
       cells. The floor: no perturbation signal whatsoever.
@@ -161,7 +173,7 @@ Implement and benchmark the following perturbation response models in
       magnitude (strong vs weak); predict group mean. Tests whether a single
       discriminator adds value.
 
-#### Classical regression / classification
+#### 5.2 Classical regression / classification
 
 - [ ] **Linear regression (per-gene)** — one linear model per gene, features =
       perturbation one-hot + cell state covariates.
@@ -170,7 +182,7 @@ Implement and benchmark the following perturbation response models in
 - [ ] **Logistic classifier (cell-state prediction)** — classify cell state
       given perturbation.
 
-#### Latent perturbation models
+#### 5.3 Latent perturbation models
 
 - [ ] **LPM** (Latent Perturbation Model) — simple VAE with perturbation latent
       shift.
@@ -180,12 +192,12 @@ Implement and benchmark the following perturbation response models in
 - [ ] **trVAE** — transfer VAE for perturbation response.
 - [ ] **scPRAM** — single-cell perturbation response via attention mechanism.
 
-#### Evaluation
+#### 5.4 Evaluation
 
-- [ ] Implement standard metrics in `src/pert_gym/metrics.py`: R², Pearson
+- [x] Implement standard metrics in `src/pert_gym/metrics.py`: R², Pearson
       correlation, MSE on held-out perturbations (mean across genes, top 20 DE
       genes, top 100 DE genes).
-- [ ] Implement train/val/test split by perturbation identity (not cell).
+- [x] Implement train/val/test split by perturbation identity (not cell).
 - [ ] Create evaluation harness: `src/pert_gym/evaluate.py`.
 
 ---
