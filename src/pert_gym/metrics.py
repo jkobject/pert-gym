@@ -249,6 +249,27 @@ def _select_top_k_by_abs_true(
     return [delta_true[idx] for idx in indices], [delta_pred[idx] for idx in indices]
 
 
+def mse(y_true: Vector, y_pred: Vector) -> float:
+    """Mean squared error."""
+    _validate_equal_length(y_true, y_pred)
+    if not y_true:
+        return 0.0
+    return sum((t - p) ** 2 for t, p in zip(y_true, y_pred)) / len(y_true)
+
+
+def r2_score(y_true: Vector, y_pred: Vector) -> float:
+    """Coefficient of determination (R²)."""
+    _validate_equal_length(y_true, y_pred)
+    if not y_true:
+        return 0.0
+    mean_true = sum(y_true) / len(y_true)
+    ss_res = sum((t - p) ** 2 for t, p in zip(y_true, y_pred))
+    ss_tot = sum((t - mean_true) ** 2 for t in y_true)
+    if ss_tot == 0:
+        return 1.0 if ss_res == 0 else 0.0
+    return 1.0 - ss_res / ss_tot
+
+
 def _validate_equal_length(*vectors: Vector) -> None:
     lengths = {len(v) for v in vectors}
     if len(lengths) > 1:

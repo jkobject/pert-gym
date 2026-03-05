@@ -165,22 +165,20 @@ Implement and benchmark the following perturbation response models in
 
 #### 5.1 Trivial baselines (MIN / MAX reference points)
 
-- [ ] **Mean control** — predict the mean expression of unperturbed (control)
-      cells. The floor: no perturbation signal whatsoever.
-- [ ] **Mean perturbation** — predict the mean expression across **all**
-      perturbations. Represents the "average drug effect".
-- [ ] **Binary split** — split perturbations into 2 groups by mean effect
-      magnitude (strong vs weak); predict group mean. Tests whether a single
-      discriminator adds value.
+- [x] **Mean control** — `MeanControl` in `src/pert_gym/models/trivial.py`.
+- [x] **Mean perturbation** — `MeanPerturbation` in `src/pert_gym/models/trivial.py`.
+- [x] **Binary split** — `BinarySplit` in `src/pert_gym/models/trivial.py`.
 
 #### 5.2 Classical regression / classification
 
-- [ ] **Linear regression (per-gene)** — one linear model per gene, features =
-      perturbation one-hot + cell state covariates.
-- [ ] **Ridge / ElasticNet** — regularised versions of the above.
-- [ ] **Random forest / gradient boosting** — non-linear baselines.
-- [ ] **Logistic classifier (cell-state prediction)** — classify cell state
-      given perturbation.
+- [x] **Linear regression (per-gene)** — `LinearPerturbationRegressor` in
+      `src/pert_gym/models/classical.py` (multi-output OLS, one-hot encoding).
+- [x] **Ridge / ElasticNet** — `RidgePerturbationRegressor`,
+      `ElasticNetPerturbationRegressor` in `src/pert_gym/models/classical.py`.
+- [x] **Random forest / gradient boosting** — `RandomForestPerturbationRegressor`,
+      `GradientBoostingPerturbationRegressor` in `src/pert_gym/models/classical.py`.
+- [x] **Logistic classifier (cell-state prediction)** — `CellStateClassifier` in
+      `src/pert_gym/models/classical.py`.
 
 #### 5.3 Latent perturbation models
 
@@ -197,8 +195,9 @@ Implement and benchmark the following perturbation response models in
 - [x] Implement standard metrics in `src/pert_gym/metrics.py`: R², Pearson
       correlation, MSE on held-out perturbations (mean across genes, top 20 DE
       genes, top 100 DE genes).
-- [x] Implement train/val/test split by perturbation identity (not cell).
-- [ ] Create evaluation harness: `src/pert_gym/evaluate.py`.
+- [x] Implement train/val/test split by perturbation identity (not cell) —
+      `src/pert_gym/splits.py`.
+- [x] Create evaluation harness: `src/pert_gym/evaluate.py`.
 
 ---
 
