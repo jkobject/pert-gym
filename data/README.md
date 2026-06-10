@@ -3,6 +3,26 @@
 - `main/`: primary datasets used by the project.
 - `others/`: auxiliary or experimental datasets, will be ignored by default in
   the project code.
+- `temporal_pretraining_datasets/`: deep-research handoff for temporal
+  scRNA-seq, spatial transcriptomics, perturbation time-course, organoid,
+  developmental trajectory, and microscopy datasets that could seed a
+  development/pretraining database.
+
+## Temporal pretraining dataset catalogue
+
+The current handoff lives in `temporal_pretraining_datasets/README.md`.
+
+Current primary files:
+
+- `temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv`
+- `temporal_pretraining_datasets/temporal_pretraining_datasets_v4.json`
+- `temporal_pretraining_datasets/temporal_pretraining_datasets_v4.md`
+- `temporal_pretraining_datasets/validation_v4.json`
+- `temporal_pretraining_datasets/ncbi_sra_bioproject_mapping_v0.tsv`
+
+The v4 table contains 150 temporal dataset/family rows, with 0 `unclear`, 0
+paper-only `dataset_url`, and 0 non-`temporal_yes` rows after the 1-6 source
+pass described in the handoff README.
 
 ## format of files
 

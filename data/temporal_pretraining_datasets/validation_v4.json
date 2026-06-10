@@ -1,0 +1,20 @@
+{
+  "input_rows": 158,
+  "output_rows": 150,
+  "deduped": 8,
+  "paperish_dataset_urls": 0,
+  "non_temporal_yes": 0,
+  "sources": {
+    "CELLxGENE": 66,
+    "CELLxGENE;extra_web": 1,
+    "Single_Cell_Portal_step2": 19,
+    "seed": 13,
+    "ArrayExpress_BioStudies_step1": 9,
+    "GEO_or_database_second_pass": 16,
+    "extra_web": 5,
+    "OrganoidDB": 11,
+    "PerturBase": 6,
+    "scPerturb": 1,
+    "STOmicsDB_STellaris_step3": 3
+  }
+}
