@@ -42,6 +42,7 @@ def migrate_h5ad_to_triplet(
     dataset_prefix: str | None = None,
     replace_on_instance: bool = True,
     storage=True,
+    skip_hash_lookup_for_var: bool = True,
 ) -> dict[str, Any]:
     """Migrate one legacy h5ad artifact into the canonical 3-file layout.
 
@@ -59,6 +60,11 @@ def migrate_h5ad_to_triplet(
         If True (default):
         - writes new latest versions for existing output keys (via ``revises``)
         - deletes the legacy source ``.h5ad`` artifact after successful write
+    skip_hash_lookup_for_var
+        If True (default), write a dataset-specific ``var.parquet`` artifact
+        even when its dataframe hash matches another dataset. Many PRISM
+        datasets share the same gene table, but the canonical triplet layout
+        still expects a ``var`` artifact under each dataset prefix.
 
     Returns
     -------
@@ -140,6 +146,7 @@ def migrate_h5ad_to_triplet(
         var_df,
         key=var_key,
         revises=prev_var[-1] if (replace_on_instance and prev_var) else None,
+        skip_hash_lookup=skip_hash_lookup_for_var,
     ).save()
 
     # Canonical links used throughout this project.

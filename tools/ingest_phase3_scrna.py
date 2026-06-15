@@ -11,10 +11,10 @@ Datasets covered:
 
 Usage::
 
-    import lamindb as ln
+    from tools.lamin_context import connect_pertdata
     from tools.ingest_phase3_scrna import ingest_prism_collection, download_prism_collection
 
-    ln.connect("laminlabs/pertdata")
+    ln = connect_pertdata()
     ln.track()
 
     files = download_prism_collection()
@@ -38,6 +38,10 @@ import pandas as pd
 import sys as _sys
 _sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.convert_triplet_artifacts import migrate_h5ad_to_triplet  # noqa: E402
+from tools.lamin_context import connect_pertdata  # noqa: E402
+
+
+ln = connect_pertdata()
 
 # ---------------------------------------------------------------------------
 # § 1 — PRISM Perturb-seq Collection
@@ -92,10 +96,12 @@ _OBS_RENAMES_PRISM = {
     "guide_target": "perturbation",
     "pert_gene": "perturbation",
     "pert_name": "perturbation",
-    "condition": "perturbation",
+    "perturbation_name": "perturbation",
     "pert_type": "perturbation_type",
+    "crispr_type": "perturbation_type",
     "cell_line_name": "cell_line",
     "cell_type": "tissue_type",
+    "cancer_type": "disease",
 }
 
 
@@ -151,7 +157,10 @@ def standardize_prism_obs(adata: ad.AnnData, dataset_name: str) -> ad.AnnData:
     obs = adata.obs.copy()
 
     obs = obs.rename(columns={k: v for k, v in _OBS_RENAMES_PRISM.items() if k in obs.columns})
+    obs = obs.loc[:, ~obs.columns.duplicated(keep="first")]
 
+    if "is_control" not in obs.columns and "condition" in obs.columns:
+        obs["is_control"] = obs["condition"].astype(str).str.lower().eq("control")
     if "is_control" not in obs.columns and "perturbation" in obs.columns:
         ctrl_patterns = ["non-targeting", "nt", "ctrl", "control", "scramble", "safe_harbor"]
         obs["is_control"] = obs["perturbation"].str.lower().str.contains(
@@ -167,6 +176,24 @@ def standardize_prism_obs(adata: ad.AnnData, dataset_name: str) -> ad.AnnData:
     ]:
         if col not in obs.columns:
             obs[col] = default
+
+    obs["organism"] = obs["organism"].astype(str).replace(
+        {
+            "human adipocytes": "human",
+            "Human": "human",
+            "Homo sapiens": "human",
+            "Mice (Mus musculus)": "mouse",
+            "Mus musculus": "mouse",
+        }
+    )
+    if "cell_line" not in obs.columns:
+        obs["cell_line"] = "unknown"
+    if "dataset" not in obs.columns:
+        obs["dataset"] = dataset_name
+    if "modality" not in obs.columns:
+        obs["modality"] = "scRNA-seq"
+    if "assay" not in obs.columns:
+        obs["assay"] = "Perturb-seq"
 
     if "n_counts" in obs.columns and "ncounts" not in obs.columns:
         obs["ncounts"] = obs["n_counts"]
@@ -188,8 +215,13 @@ def ingest_prism_collection(
     for dataset_name, h5ad_path in files.items():
         prefix = f"{dataset_prefix}/{dataset_name}"
         obs_key = f"{prefix}/obs.parquet"
+        triplet_keys = {
+            obs_key,
+            f"{prefix}/X.h5ad",
+            f"{prefix}/var.parquet",
+        }
 
-        if not overwrite and ln.Artifact.filter(key=obs_key).exists():
+        if not overwrite and all(ln.Artifact.filter(key=key).exists() for key in triplet_keys):
             print(f"Already ingested: {obs_key}")
             continue
 
@@ -377,21 +409,41 @@ def standardize_viperturb_obs(adata: ad.AnnData) -> ad.AnnData:
         "gene_target": "perturbation",
         "guide_target": "perturbation",
         "target_gene": "perturbation",
+        "Gene_assignment": "perturbation",
+        "gene": "perturbation",
+        "Guide_assignment": "guide_id",
+        "guide_ID": "guide_id",
+        "hash.ID": "cell_line",
     }
     obs = obs.rename(columns={k: v for k, v in renames.items() if k in obs.columns})
 
     if "perturbation" not in obs.columns and "guide_id" in obs.columns:
-        obs["perturbation"] = obs["guide_id"].str.split("_").str[0]
+        obs["perturbation"] = obs["guide_id"].astype(str).str.split("_").str[0]
 
-    ctrl_patterns = ["non-targeting", "nt", "safe_harbor", "control"]
     if "perturbation" in obs.columns:
-        obs["is_control"] = obs["perturbation"].str.lower().str.contains(
+        perturbation = obs["perturbation"].astype(str)
+        ctrl_patterns = ["non-targeting", "no.target", "no_target", "nt", "safe_harbor", "control"]
+        obs["is_control"] = perturbation.str.lower().str.contains(
             "|".join(ctrl_patterns), na=False
         )
+    elif "guide_id" in obs.columns:
+        guide_id = obs["guide_id"].astype(str)
+        ctrl_patterns = ["non-targeting", "no.target", "no_target", "nt", "safe_harbor", "control"]
+        obs["is_control"] = guide_id.str.lower().str.contains(
+            "|".join(ctrl_patterns), na=False
+        )
+
+    if "nCount_RNA" in obs.columns and "n_counts" not in obs.columns:
+        obs["n_counts"] = obs["nCount_RNA"]
+    if "nFeature_RNA" in obs.columns and "n_genes" not in obs.columns:
+        obs["n_genes"] = obs["nFeature_RNA"]
 
     for col, default in [
         ("perturbation_type", "CRISPRi"),
         ("organism", "human"),
+        ("cell_line", "unknown"),
+        ("modality", "scRNA-seq"),
+        ("assay", "VIPerturb-seq"),
         ("cancer", True),
         ("disease", "unknown"),
     ]:
@@ -554,7 +606,7 @@ def ingest_properseq(
 # ---------------------------------------------------------------------------
 
 SANGER_DUALGUIDE_FILE_ID = 45433417
-SANGER_DUALGUIDE_URL = f"https://figshare.com/ndownloader/files/{SANGER_DUALGUIDE_FILE_ID}"
+SANGER_DUALGUIDE_URL = f"https://ndownloader.figshare.com/files/{SANGER_DUALGUIDE_FILE_ID}"
 SANGER_DUALGUIDE_LAMIN_PREFIX = "sanger_dual_guide_crc"
 
 

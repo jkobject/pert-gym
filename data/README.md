@@ -128,7 +128,12 @@ the dataset and the file format (image / sensitivty / scRNAseq).
   GSE146194, GSE278572, GSE274751, GSE261025, GSE247599, GSE225807, GSE236304,
   GSE281048, GSE208240, GSE205310, GSE197452, GSE243244, GSE213511, GSE212396,
   GSE255832, GSE272093, GSE236057, GSE263747, GSE164996, GSE190604
-- **Batch ingest:** `migrate_h5ad_to_triplet` per file
+- **Batch ingest:** `tools/run_prism_ingestion_batch.py`
+- **Current status:** first automated pass covered all 77 Drive h5ads found in
+  the folder: 18 moderate compatible datasets ingested as triplets, 6 large
+  compatible h5ads staged to `gs://scperturb/pert-gym/staging`, and 53 Google
+  Drive quota/link failures recorded for retry in
+  `artifacts/phase3_ingestion_progress.json`.
 
 #### Sanger Dual-guide KO in CRC (Figshare 25533091)
 - **Source:** `https://figshare.com/articles/dataset/MAPPING_zip/25533091/1?file=45433417`
@@ -141,6 +146,9 @@ the dataset and the file format (image / sensitivty / scRNAseq).
 - **Key obs columns:** `guide_pair`, `gene_pair`, `cell_line`, `interaction_score`,
   `guide_a`, `guide_b`, `n_counts`, `n_genes`
 - **Note:** contains genetic interaction scores — store in `obs["interaction_score"]`
+- **Current status:** Figshare API reports one `MAPPING.zip` file of
+  1.15 GB. Treat as a larger raw-mapping dataset and inspect the extracted
+  layout before conversion.
 
 #### Arc VCC Perturbations (virtualcellchallenge.org)
 - **Source:** `https://virtualcellchallenge.org/datasets`
@@ -159,6 +167,9 @@ the dataset and the file format (image / sensitivty / scRNAseq).
 - **Scale:** ~4 686 compounds × ~578 cell lines
 - **Conversion:** pivot to AnnData: `obs` = cell lines, `var` = compounds,
   `X` = log fold change (viability); compound metadata → `var` columns
+- **Current status:** ingested at `broad_prism_repurposing` using the hybrid
+  obs model with `obs["lfc"]`; source CSVs staged to GCS. `X` is empty pending
+  CCLE baseline-expression join.
 
 #### Sanger GDSC (GDSC1 + GDSC2)
 - **Source:** `https://www.cancerrxgene.org/downloads/bulk_download`
@@ -166,6 +177,9 @@ the dataset and the file format (image / sensitivty / scRNAseq).
   `LN_IC50`, `AUC`, `RMSE`, `DATASET` + cell-line metadata
 - **Conversion:** pivot to AnnData: `obs` = cell lines, `var` = drugs, `X` = `LN_IC50`
 - **Note:** two separate screens (GDSC1 and GDSC2) with different drug sets
+- **Current status:** ingested at `sanger_gdsc/gdsc1` and
+  `sanger_gdsc/gdsc2` with `obs["ic50"]` and `obs["auc"]`; source Excel files
+  staged to GCS. `X` is empty pending baseline-expression join.
 
 #### Sanger SCORE CRISPR KO (Cell Model Passports)
 - **Source:** `https://cellmodelpassports.sanger.ac.uk/downloads`
@@ -173,6 +187,8 @@ the dataset and the file format (image / sensitivty / scRNAseq).
   values = Bayes Factor or log fold change (CRISPRcleanR-corrected)
 - **Scale:** 323+ cancer cell lines × ~18 000 genes
 - **Conversion:** AnnData `obs` = cell lines, `var` = genes, `X` = gene effect score
+- **Current status:** ingested at `sanger_score_crispr` from the SCORE2
+  fold-change TSV inside the zip; source zip staged to GCS.
 
 #### DepMap CCLE
 - **Source:** `https://depmap.org/portal/download/` (latest public release, e.g. 25Q2)
@@ -180,6 +196,9 @@ the dataset and the file format (image / sensitivty / scRNAseq).
   Additional files: proteomics (MS), mutations (MAF), copy number
 - **Conversion:** AnnData `obs` = cell lines, `var` = genes, `X` = RNA expression;
   proteomics stored in `obsm["proteomics"]`
+- **Current status:** ingested DepMap Public 26Q1 expression at
+  `depmap_ccle/26q1`; source CSV staged to GCS. Proteomics file name/API
+  mapping still needs resolution.
 
 #### Sanger Drug Combinations
 - **Source:** `https://gdsc-combinations.depmap.sanger.ac.uk/`

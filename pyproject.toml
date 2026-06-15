@@ -8,10 +8,13 @@ authors = [{ name = "jkobject", email = "jkobject@gmail.com" }]
 license = "MIT"
 keywords = ["python", "template", "pert-gym"]
 dependencies = [
-    "lamindb==2.2.0",
+    "gcsfs",
+    "lamindb>=2.6",
     "httpx[http2]",
     "ipykernel",
     "mudata",
+    "gdown>=6.1.0",
+    "openpyxl>=3.1.5",
 ]
 
 [project.optional-dependencies]
@@ -46,6 +49,7 @@ only-include = [
 ]
 
 [tool.hatch.build.targets.wheel]
+packages = ["src/pert_gym"]
 only-include = [
     "src/pert_gym",
     "docs",

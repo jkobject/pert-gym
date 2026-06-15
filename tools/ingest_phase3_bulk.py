@@ -28,10 +28,10 @@ transcriptomic readout — only the matched baseline expression is available.
 
 Usage::
 
-    import lamindb as ln
+    from tools.lamin_context import connect_pertdata
     from tools.ingest_phase3_bulk import ingest_broad_prism, ingest_gdsc
 
-    ln.connect("laminlabs/pertdata")
+    ln = connect_pertdata()
     ln.track()
 
     ingest_broad_prism()
@@ -41,7 +41,10 @@ Usage::
 from __future__ import annotations
 
 import re
+import zipfile
+from io import StringIO
 from pathlib import Path
+from urllib.parse import urlparse
 
 import anndata as ad
 import httpx
@@ -53,20 +56,58 @@ import scipy.sparse as sp
 import sys as _sys
 _sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.convert_triplet_artifacts import migrate_h5ad_to_triplet  # noqa: E402
+from tools.lamin_context import connect_pertdata  # noqa: E402
+
+
+ln = connect_pertdata()
+
+DEPMAP_DOWNLOADS_API = "https://depmap.org/portal/api/download/files"
+CMP_DOWNLOADS_API = (
+    "https://api.cellmodelpassports.sanger.ac.uk/download_files?include=groups.files"
+)
+
+
+def _filename_from_url(url: str) -> str:
+    return Path(urlparse(url).path).name
+
+
+def depmap_download_url(
+    release: str,
+    filename: str,
+    *,
+    client: httpx.Client | None = None,
+) -> str:
+    """Resolve a current DepMap download URL by release and filename.
+
+    DepMap now serves many releases through an API that may return signed URLs,
+    so callers should resolve immediately before downloading.
+    """
+    owns_client = client is None
+    if client is None:
+        client = httpx.Client(timeout=60.0, follow_redirects=True)
+    try:
+        resp = client.get(DEPMAP_DOWNLOADS_API)
+        resp.raise_for_status()
+        files = pd.read_csv(StringIO(resp.text)).to_dict("records")
+    finally:
+        if owns_client:
+            client.close()
+
+    matches = [
+        row for row in files
+        if row.get("release") == release and row.get("filename") == filename
+    ]
+    if not matches:
+        raise ValueError(f"Could not find DepMap file {filename!r} in release {release!r}")
+    return matches[0]["url"]
 
 # ---------------------------------------------------------------------------
 # § 8 — Broad PRISM Repurposing
 # ---------------------------------------------------------------------------
 
-BROAD_PRISM_DATA_URL = (
-    "https://depmap.org/portal/data_page/?release=PRISM+Repurposing+Public+23Q2"
-    "&file=Repurposing_Public_23Q2_Extended_Primary_Data_Matrix.csv&tab=allData"
-)
-BROAD_PRISM_META_URL = (
-    "https://depmap.org/portal/data_page/?release=PRISM+Repurposing+Public+23Q2"
-    "&file=Repurposing_Public_23Q2_Extended_Primary_Replicate_Collapsed_Log_Fold_Change.csv"
-    "&tab=allData"
-)
+BROAD_PRISM_RELEASE = "PRISM Primary Repurposing DepMap Public 24Q2"
+BROAD_PRISM_LFC_FILENAME = "Repurposing_Public_24Q2_LFC.csv"
+BROAD_PRISM_META_FILENAME = "Repurposing_Public_24Q2_Treatment_Meta_Data.csv"
 BROAD_PRISM_LAMIN_PREFIX = "broad_prism_repurposing"
 
 
@@ -83,12 +124,19 @@ def download_broad_prism(
     output_dir.mkdir(parents=True, exist_ok=True)
     files: dict[str, Path] = {}
 
-    downloads = [
-        ("matrix", "PRISM_23Q2_lfc.csv", BROAD_PRISM_DATA_URL),
-        ("meta",   "PRISM_23Q2_meta.csv", BROAD_PRISM_META_URL),
-    ]
-
     with httpx.Client(timeout=300.0, follow_redirects=True) as client:
+        downloads = [
+            (
+                "matrix",
+                BROAD_PRISM_LFC_FILENAME,
+                depmap_download_url(BROAD_PRISM_RELEASE, BROAD_PRISM_LFC_FILENAME, client=client),
+            ),
+            (
+                "meta",
+                BROAD_PRISM_META_FILENAME,
+                depmap_download_url(BROAD_PRISM_RELEASE, BROAD_PRISM_META_FILENAME, client=client),
+            ),
+        ]
         for key, filename, url in downloads:
             target = output_dir / filename
             if target.exists():
@@ -133,12 +181,15 @@ def broad_prism_to_anndata(
     meta = pd.read_csv(files["meta"])
     if "broad_id" in meta.columns:
         meta = meta.set_index("broad_id")
+    if not meta.index.is_unique:
+        meta = meta[~meta.index.duplicated(keep="first")]
 
     cell_lines = lfc_df.index.tolist()
 
     # ── Drug-treated obs rows ────────────────────────────────────────────────
     lfc_stacked = lfc_df.stack(dropna=False).reset_index()
     lfc_stacked.columns = ["depmap_id", "broad_id", "lfc"]
+    lfc_stacked["lfc"] = pd.to_numeric(lfc_stacked["lfc"], errors="coerce")
 
     drug_obs = lfc_stacked.copy()
     drug_obs["is_control"] = False
@@ -225,20 +276,14 @@ def ingest_broad_prism(
 # ---------------------------------------------------------------------------
 
 GDSC_URLS = {
-    "GDSC1": (
-        "https://cog.sanger.ac.uk/cancerrxgene/GDSC_bulkdata/"
-        "GDSC1_fitted_dose_response_27Oct23.xlsx"
-    ),
-    "GDSC2": (
-        "https://cog.sanger.ac.uk/cancerrxgene/GDSC_bulkdata/"
-        "GDSC2_fitted_dose_response_27Oct23.xlsx"
-    ),
+    "GDSC1": "https://cmp.cog.sanger.ac.uk/download/GDSC1_fitted_dose_response_27Oct23.xlsx",
+    "GDSC2": "https://cmp.cog.sanger.ac.uk/download/GDSC2_fitted_dose_response_27Oct23.xlsx",
 }
 GDSC_LAMIN_PREFIX = "sanger_gdsc"
 
 # Cell Model Passports bulk RNA-seq expression (used as baseline for GDSC)
 CMP_RNASEQ_URL = (
-    "https://cog.sanger.ac.uk/cmp/download/rnaseq_all_20220624.csv.gz"
+    "https://cog.sanger.ac.uk/cmp/download/rnaseq_latest.csv.gz"
 )
 
 
@@ -417,8 +462,11 @@ def ingest_gdsc(
 # § 10 — Sanger SCORE CRISPR KO
 # ---------------------------------------------------------------------------
 
-CMP_DOWNLOADS_PAGE = "https://cellmodelpassports.sanger.ac.uk/downloads"
-SCORE_GENE_EFFECT_FILENAME = "CRISPR_gene_effect.csv.gz"
+SCORE_GENE_EFFECT_URL = (
+    "https://cog.sanger.ac.uk/cmp/download/"
+    "Project_Score2_fitness_scores_Sanger_v2_Broad_21Q2_20250624.zip"
+)
+SCORE_GENE_EFFECT_FILENAME = _filename_from_url(SCORE_GENE_EFFECT_URL)
 SCORE_LAMIN_PREFIX = "sanger_score_crispr"
 
 
@@ -426,9 +474,6 @@ def download_sanger_score(
     output_dir: Path = Path("data/main/sanger_score"),
 ) -> Path:
     """Download Sanger SCORE CRISPR KO gene effect matrix from Cell Model Passports.
-
-    The download page is parsed for the direct URL; update the regex if the
-    filename pattern changes.
 
     Returns
     -------
@@ -440,24 +485,9 @@ def download_sanger_score(
     if target.exists():
         return target
 
-    with httpx.Client(timeout=60.0, follow_redirects=True) as client:
-        page = client.get(CMP_DOWNLOADS_PAGE)
-        page.raise_for_status()
-        pattern = (
-            r'href="(https://[^"]*CRISPR_gene_effect[^"]*)"|'
-            r'href="(https://[^"]*KO[^"]*gene[^"]*)"|'
-            r'href="([^"]*gene_effect[^"]*)"'
-        )
-        matches = re.findall(pattern, page.text)
-        if not matches:
-            raise RuntimeError(
-                f"Could not find gene effect download link on {CMP_DOWNLOADS_PAGE}. "
-                "Please check the page manually and update the URL."
-            )
-        direct_url = next(m for group in matches for m in group if m)
-
-        print(f"Downloading SCORE gene effect from {direct_url} …")
-        resp = client.get(direct_url)
+    with httpx.Client(timeout=300.0, follow_redirects=True) as client:
+        print(f"Downloading SCORE gene effect from {SCORE_GENE_EFFECT_URL} …")
+        resp = client.get(SCORE_GENE_EFFECT_URL)
         resp.raise_for_status()
         target.write_bytes(resp.content)
 
@@ -465,7 +495,7 @@ def download_sanger_score(
 
 
 def sanger_score_to_anndata(path: Path) -> ad.AnnData:
-    """Convert Sanger SCORE gene effect CSV to AnnData.
+    """Convert Sanger SCORE gene effect matrix to AnnData.
 
     Layout:
         obs  = cell lines (Sanger model IDs)
@@ -473,18 +503,62 @@ def sanger_score_to_anndata(path: Path) -> ad.AnnData:
         X    = gene effect score (negative = essential)
         layers['gene_effect'] = same values (non-sparse, preserves NaN)
     """
-    df = pd.read_csv(path, index_col=0, compression="infer")
-    obs_df = pd.DataFrame({"cell_line": df.index}, index=df.index)
-    var_df = pd.DataFrame({"gene_symbol": df.columns}, index=df.columns)
+    if path.suffix == ".zip":
+        with zipfile.ZipFile(path) as zf:
+            members = [info.filename for info in zf.infolist()]
+            fold_change = [
+                name for name in members
+                if "fold_change_values" in name and name.endswith((".tsv", ".csv"))
+            ]
+            if not fold_change:
+                raise ValueError(
+                    f"Could not find SCORE fold-change matrix in {path}; "
+                    f"members={members[:10]}"
+                )
+            with zf.open(fold_change[0]) as fh:
+                raw = pd.read_csv(fh, sep="\t", header=None, low_memory=False)
+        score_kind = "fold_change"
+
+        model_meta = pd.DataFrame(
+            {
+                "model_name": raw.iloc[0, 3:].to_numpy(dtype=str),
+                "sanger_model_id": raw.iloc[1, 3:].to_numpy(dtype=str),
+                "score_source": raw.iloc[2, 3:].to_numpy(dtype=str),
+                "qc_pass": raw.iloc[3, 3:].astype(str).str.upper().eq("TRUE").to_numpy(),
+            }
+        )
+        model_meta.index = (
+            model_meta["sanger_model_id"].astype(str)
+            + "__"
+            + model_meta["score_source"].astype(str)
+            + "__"
+            + model_meta.groupby(["sanger_model_id", "score_source"]).cumcount().astype(str)
+        )
+
+        gene_meta = raw.iloc[5:, :3].copy()
+        gene_meta.columns = ["gene_id", "gene_symbol", "ensembl_id"]
+        gene_meta = gene_meta.set_index("gene_id", drop=False)
+        values = raw.iloc[5:, 3:].apply(pd.to_numeric, errors="coerce")
+
+        obs_df = model_meta
+        var_df = gene_meta
+        matrix = values.to_numpy(dtype=np.float32).T
+    else:
+        df = pd.read_csv(path, sep=None, engine="python", index_col=0, compression="infer")
+        score_kind = "gene_effect"
+        obs_df = pd.DataFrame({"cell_line": df.index}, index=df.index)
+        var_df = pd.DataFrame({"gene_symbol": df.columns}, index=df.columns)
+        matrix = df.to_numpy(dtype=np.float32)
 
     adata = ad.AnnData(
-        X=sp.csr_matrix(df.fillna(0).values.astype(np.float32)),
+        X=sp.csr_matrix(np.nan_to_num(matrix, nan=0.0)),
         obs=obs_df,
         var=var_df,
     )
-    adata.layers["gene_effect"] = df.values.astype(np.float32)
+    adata.layers["gene_effect"] = matrix
     adata.obs["perturbation_type"] = "CRISPRko"
     adata.obs["organism"] = "human"
+    adata.uns["score_kind"] = score_kind
 
     return adata
 
@@ -510,58 +584,41 @@ def ingest_sanger_score(overwrite: bool = False) -> str:
 # § 11 — DepMap CCLE (bulk expression + proteomics)
 # ---------------------------------------------------------------------------
 
-DEPMAP_RELEASE = "25Q2"
-DEPMAP_EXPR_FILENAME = "OmicsExpressionProteinCodingGenesTPMLogp1.csv"
+DEPMAP_RELEASE = "DepMap Public 26Q1"
+DEPMAP_EXPR_FILENAME = "OmicsExpressionTPMLogp1HumanProteinCodingGenes.csv"
 DEPMAP_PROT_FILENAME = "OmicsProteinExpressionLog2.csv"
-DEPMAP_LAMIN_PREFIX = f"depmap_ccle/{DEPMAP_RELEASE.lower()}"
-
-# Set this to the Figshare article ID for the desired DepMap release.
-# Find it at https://depmap.org/portal/download/ — it changes each quarter.
-DEPMAP_FIGSHARE_ARTICLE: int | None = None  # e.g. 28346093 for 25Q2
+DEPMAP_LAMIN_PREFIX = "depmap_ccle/26q1"
 
 
 def download_depmap_ccle(
     output_dir: Path = Path("data/main/depmap_ccle"),
     release: str = DEPMAP_RELEASE,
 ) -> dict[str, Path]:
-    """Download DepMap CCLE expression (and proteomics) via the Figshare API.
-
-    Before calling, set :data:`DEPMAP_FIGSHARE_ARTICLE` to the Figshare article
-    ID for the desired release (visible at https://depmap.org/portal/download/).
+    """Download DepMap CCLE expression (and proteomics) via the DepMap API.
 
     Returns
     -------
     dict[str, Path]
         Keys: ``'expr'`` (expression CSV), ``'prot'`` (proteomics CSV, optional).
     """
-    if DEPMAP_FIGSHARE_ARTICLE is None:
-        raise ValueError(
-            "Set DEPMAP_FIGSHARE_ARTICLE to the Figshare article ID for "
-            f"DepMap {release}. Find it at https://depmap.org/portal/download/."
-        )
-
     output_dir.mkdir(parents=True, exist_ok=True)
-
-    api_url = f"https://api.figshare.com/v2/articles/{DEPMAP_FIGSHARE_ARTICLE}/files"
-    with httpx.Client(timeout=60.0) as client:
-        resp = client.get(api_url)
-        resp.raise_for_status()
-        all_files = {f["name"]: f["download_url"] for f in resp.json()}
 
     wanted = {"expr": DEPMAP_EXPR_FILENAME, "prot": DEPMAP_PROT_FILENAME}
     downloaded: dict[str, Path] = {}
 
     with httpx.Client(timeout=600.0, follow_redirects=True) as client:
         for key, filename in wanted.items():
-            if filename not in all_files:
-                print(f"File not found in release: {filename}")
+            try:
+                url = depmap_download_url(release, filename, client=client)
+            except ValueError as exc:
+                print(exc)
                 continue
             target = output_dir / filename
             if target.exists():
                 downloaded[key] = target
                 continue
             print(f"Downloading {filename} …")
-            with client.stream("GET", all_files[filename]) as stream:
+            with client.stream("GET", url) as stream:
                 stream.raise_for_status()
                 with target.open("wb") as fh:
                     for chunk in stream.iter_bytes(8 * 1024 * 1024):
@@ -574,26 +631,34 @@ def download_depmap_ccle(
 def depmap_ccle_to_anndata(files: dict[str, Path]) -> ad.AnnData:
     """Convert DepMap CCLE CSV to AnnData.
 
-    Expression columns follow the pattern ``"SYMBOL (ENSG…)"``.
+    Expression columns follow the pattern ``"SYMBOL (EntrezID)"``.
 
     Layout:
         obs  = cell lines (depmap_id)
-        var  = genes (gene_symbol, ensembl_id)
+        var  = genes (gene_symbol, entrez_id)
         X    = log2(TPM + 1) expression
         obsm['proteomics'] = protein expression aligned to obs (if available)
         uns['proteomics_columns'] = protein names
     """
     df_expr = pd.read_csv(files["expr"], index_col=0)
 
-    gene_names = df_expr.columns.str.extract(r"^(.+?) \((.+?)\)$")
+    gene_mask = df_expr.columns.to_series().str.match(r"^.+? \(.+?\)$", na=False)
+    gene_cols = df_expr.columns[gene_mask.to_numpy()]
+    meta_cols = df_expr.columns[~gene_mask.to_numpy()]
+
+    gene_names = gene_cols.str.extract(r"^(.+?) \((.+?)\)$")
     var_df = pd.DataFrame(
-        {"gene_symbol": gene_names[0].values, "ensembl_id": gene_names[1].values},
-        index=df_expr.columns,
+        {"gene_symbol": gene_names[0].values, "entrez_id": gene_names[1].values},
+        index=gene_cols,
     )
-    obs_df = pd.DataFrame({"depmap_id": df_expr.index}, index=df_expr.index)
+    obs_df = df_expr.loc[:, meta_cols].copy()
+    if "ModelID" in obs_df.columns:
+        obs_df["depmap_id"] = obs_df["ModelID"]
+    else:
+        obs_df["depmap_id"] = df_expr.index.astype(str)
 
     adata = ad.AnnData(
-        X=sp.csr_matrix(df_expr.values.astype(np.float32)),
+        X=sp.csr_matrix(df_expr.loc[:, gene_cols].values.astype(np.float32)),
         obs=obs_df,
         var=var_df,
     )

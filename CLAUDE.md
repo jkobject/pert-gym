@@ -2,10 +2,18 @@
 
 ## Project Overview
 
-`pert-gym` is a benchmarking framework for perturbation response prediction. It
-connects to the `laminlabs/pertdata` LaminDB instance which stores single-cell
-perturbation datasets. All data lives in a **triplet format** (obs.parquet /
-X.h5ad / var.parquet).
+`pert-gym` is a benchmarking framework for perturbation and temporal response
+prediction. Treat perturbations, time evolution, dose response, genetic
+dependency, microscopy phenotypes, protein measurements, and molecular profiles
+as different views of the same question: how does a biological system move away
+from a baseline state, and can a model predict that movement?
+
+The project connects to the `laminlabs/pertdata` LaminDB instance and stores
+datasets in a **triplet format** (obs.parquet / X.h5ad / var.parquet). The first
+ingestion target is a broad catalogue of known perturbation datasets, harmonized
+enough that scRNA-seq, bulk sensitivity, proteomics, and imaging-derived
+phenotypes can all expose a depmap-like target such as cell survival,
+dependency, or state displacement.
 
 ### Key entry points
 
@@ -16,18 +24,40 @@ X.h5ad / var.parquet).
   files
 - `tools/preprocess_collection.py` — plan/discover preprocessing across all
   artifacts
+- `tools/plan_phase3_ingestion.py` — local-only manifest/dry-run for missing
+  dataset families; safe to run before Lamin writes
 - `data/README.md` — dataset catalogue, format spec, list of missing datasets
 - `src/pert_gym/` — Python package (models, metrics, CLI)
 
 ### Lamin instance
 
 ```python
-import lamindb as ln
-ln.connect("laminlabs/pertdata")
+from tools.lamin_context import connect_pertdata
+
+ln = connect_pertdata()
 ```
 
 Always call `ln.track()` at the top of notebooks before any artifact operations
-to get run provenance.
+to get run provenance. Do not use the global `lamin` CLI for this project: other
+local sessions may keep it pointed at `jkobject/jouvencekb`. `connect_pertdata()`
+uses the Python API, connects explicitly to `laminlabs/pertdata`, and pins the
+writable Lamin branch:
+
+```python
+assert ln.setup.settings.instance.slug == "laminlabs/pertdata"
+assert ln.setup.settings.branch.name == "jkobject"
+```
+
+If another process may be using LaminDB, do local planning/download/inspection
+first and only run artifact writes in a short, explicit batch.
+
+`connect_pertdata()` also redirects Lamin's local cache to `.lamin-cache/` in
+this repo so large temporary artifact files do not fill the shared `/data`
+mount. After verifying a triplet in Lamin, clear cached payload copies:
+
+```bash
+uv run python tools/clean_lamin_cache.py
+```
 
 ### Triplet format
 
@@ -53,9 +83,41 @@ adata.obs = obs_artifact.load()
 adata.var = var_artifact.load()
 ```
 
+### Large local files / GCS staging
+
+Disk on the VPS is limited. Large raw downloads (`.h5ad`, `.tar`, `.rds`,
+zips, extracted raw matrices) should be treated as temporary cache only:
+
+```bash
+python3 tools/stage_to_gcs.py <paths...> \
+  --bucket scperturb \
+  --prefix pert-gym/staging \
+  --delete-local
+```
+
+This stages files to `gs://scperturb/pert-gym/staging/...`, verifies the object,
+then deletes the local copy only after upload succeeds. Keep `data/main/` out of
+Git; durable ingested data should live in LaminDB, and pre-ingestion raw files
+should live in the GCS staging bucket.
+
 ---
 
 ## Roadmap / Plan
+
+### Phase 0 — Shared task framing
+
+- [ ] Define the canonical prediction task family:
+      baseline state + perturbation/evolution descriptor -> response state.
+- [ ] Define cross-modality response targets:
+      `sensitivity`, `cell_survival`, `state_displacement`, `growth_effect`,
+      `gene_effect`, `drug_effect`, and `phenotype_embedding`.
+- [ ] Define the obs schema needed for all triplets:
+      `perturbation`, `perturbation_type`, `is_control`, `cell_line`,
+      `cell_type`, `organism`, `disease`, `tissue_type`, `timepoint`,
+      `dose`, `modality`, `assay`, `sensitivity`, `response_metric`.
+- [ ] Specify loss families to benchmark beyond standard expression metrics:
+      response-vector loss, delta-from-control loss, sensitivity/ranking loss,
+      distributional state matching, and bias-aware stratified losses.
 
 ### Phase 1 — Dataset migration (unprocessed → triplet)
 
@@ -94,6 +156,8 @@ For each dataset group listed in the notebook (`others`, `srivatsan`, `gwps`,
 - [ ] `GSE306429` — vscores vs demuxed: check if they need to be merged or kept
       separate
 - [ ] LINCS — add Level 4 data on top of Level 2 (see notebook comments)
+- [ ] Write a per-dataset schema manifest with required/missing obs fields and
+      whether `sensitivity` can be computed directly or must be inferred.
 
 ### Phase 3 — Missing datasets ingestion
 
@@ -108,6 +172,7 @@ Datasets not yet in the Lamin instance (from `data/README.md`):
 - [x] `tools/ingest_phase3_scrna.py` — all scRNA-seq ingestion functions
 - [x] `tools/ingest_phase3_bulk.py` — all bulk/sensitivity ingestion functions
       (hybrid obs model)
+- [x] `tools/plan_phase3_ingestion.py` — local ingestion manifest, no Lamin writes
 
 Priority (genomic perturbations, scRNA-seq):
 
@@ -116,21 +181,60 @@ Priority (genomic perturbations, scRNA-seq):
 - [ ] **PRISM** — ~36 datasets (GSE217812, GSE90063, GSE250378, GSE261283, etc.)
       h5ads available at the linked Google Drive. the exact list of datasets to
       use is in the data/README file.
+      - [x] Drive folder listed: 77 `.h5ad` files available.
+      - [x] `GSE217812` downloaded, standardized, ingested, verified as triplet
+            at `prism_collection/GSE217812`.
+      - [x] `GSE90063_mouse` downloaded, standardized, ingested, verified as
+            triplet at `prism_collection/GSE90063_mouse`.
+      - [x] First automated PRISM pass completed over all 77 Drive h5ads:
+            18 compatible/moderate h5ads ingested as triplets, 6 large files
+            staged to `gs://scperturb/pert-gym/staging`, 53 Google Drive
+            quota/link failures recorded for retry in
+            `artifacts/phase3_ingestion_progress.json`.
 - [ ] **T-cell GWPS** — GSE314342
       (https://virtualcellmodels.cziscience.com/dataset/genome-scale-tcell-perturb-seq)
 - [ ] **VIPerturbSeq** — zenodo.org/records/18460279
+      - [x] Zenodo metadata inspected; files are `.rds` chunks (1.6-3.8 GB)
+            plus a small manifest. Manifest staged to GCS; ingestion needs an
+            R/Seurat-to-h5ad conversion path, not the old h5ad downloader.
 - [ ] **PROPER-seq** — GSE150818
+      - [x] GEO raw tar downloaded and inspected.
+      - [ ] Find processed expression matrix source or implement an interaction
+            sidecar; GEO raw tar contains `chimericReadPairs.csv.gz`, not a
+            direct scRNA expression h5ad/10x matrix.
 - [ ] **Sanger dual-guide KO in CRC** — figshare 25533091
+      - [x] Figshare API inspected: `MAPPING.zip` is 1.15 GB. Treat as a
+            larger/raw mapping dataset; inspect layout before attempting triplet
+            conversion.
 - [ ] **Arc VCC perturbations** — virtualcellchallenge.org/datasets
 
 Bulk/screen datasets (sensitivity / gene effect):
 
-- [ ] **Broad PRISM repurposing** — depmap.org/repurposing
-- [ ] **Sanger GDSC** — cancerrxgene.org
-- [ ] **Sanger SCORE CRISPR KO** — cellmodelpassports.sanger.ac.uk
+- [x] **Broad PRISM repurposing** — depmap.org/repurposing
+      - Ingested at `broad_prism_repurposing` with `obs["lfc"]`; source CSVs
+        staged to GCS. `X` is currently empty pending CCLE baseline join.
+- [x] **Sanger GDSC** — cancerrxgene.org
+      - Ingested GDSC1 and GDSC2 at `sanger_gdsc/gdsc1` and
+        `sanger_gdsc/gdsc2`; source Excel files staged to GCS. `X` is
+        currently empty pending CMP/CCLE baseline expression join.
+- [x] **Sanger SCORE CRISPR KO** — cellmodelpassports.sanger.ac.uk
+      - Ingested at `sanger_score_crispr` using the SCORE2 fold-change matrix;
+        source zip staged to GCS.
 - [ ] **Sanger drug combinations** — gdsc-combinations.depmap.sanger.ac.uk
-- [ ] **DepMap CCLE** — depmap.org/portal/download
+- [x] **DepMap CCLE** — depmap.org/portal/download
+      - Ingested DepMap Public 26Q1 expression at `depmap_ccle/26q1`;
+        expression CSV staged to GCS. Proteomics filename changed in 26Q1 and
+        still needs resolution.
 - [ ] **RxRx datasets** (rxrx1/2/3/19a/19b) — rxrx.ai — image-based
+
+Ingestion order:
+
+1. Run `tools/plan_phase3_ingestion.py --json artifacts/phase3_ingestion_manifest.json`
+   to check local files and entrypoints without touching Lamin.
+2. Validate Lamin connectivity and active branch.
+3. Ingest one small/moderate dataset end-to-end, inspect triplets, then batch.
+4. Do large datasets (Orion, T-cell GWPS, RxRx) only after disk space and
+   chunking strategy are confirmed.
 
 Overlap checks before ingestion:
 
