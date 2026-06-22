@@ -1,5 +1,7 @@
-| # | confidence | title | organism | modality | time_axis | category | dataset_url | source |
-|---:|---|---|---|---|---|---|---|---|
+# Temporal pretraining datasets v4
+
+| idx | confidence | title | organism | modality | time_axis | category | dataset_url | source |
+| ---: | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | B_candidate_needs_timepoint_metadata | A cell atlas of human thymic development defines T cell repertoire formation | Homo sapiens | 10x 3' v2;10x 3' v3;10x 5' v1 | needs_metadata_validation | development_strict | https://cellxgene.cziscience.com/collections/de13e3e2-23b6-40ed-a413-e9e12d7d3910 | CELLxGENE |
 | 2 | B_candidate_needs_timepoint_metadata | A cell atlas of the developing human outflow tract of the heart and its adult aortic valve derivatives | Homo sapiens | 10x 3' v2;10x 3' v3;Visium Spatial Gene Expression V1 | needs_metadata_validation | development_strict | https://cellxgene.cziscience.com/collections/5d2077ea-7b49-45c8-b4cb-64790b698591 | CELLxGENE |
 | 3 | B_candidate_needs_timepoint_metadata | A human cell atlas of fetal gene expression | Homo sapiens | sci-RNA-seq3 | needs_metadata_validation | development_strict | https://cellxgene.cziscience.com/collections/c114c20f-1ef4-49a5-9c2e-d965787fb90c | CELLxGENE |
@@ -75,7 +77,9 @@
 | 73 | A_explicit | Single cell transcriptome of cortical inhibitory neurons from the developing mouse brain | Mus musculus | scRNA-seq | developing mouse brain stages | developmental | https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE280655 | GEO_or_database_second_pass |
 | 74 | A_explicit | Single-Cell Atlas of Early Chick Development | Gallus gallus | single-cell RNA-seq | early chick development | developmental | https://singlecell.broadinstitute.org/single_cell/study/SCP1570/single-cell-atlas-of-early-chick-development | Single_Cell_Portal_step2 |
 | 75 | A_explicit | Single-Cell Characterization of Anterior Segment Development: Cell Types, Pathways, and Signals Driving Formation of the Trabecular Meshwork and Schlemms Canal |  | single-cell RNA-seq | Morphogenesis of the anterior segment (AS) is crucial for healthy ocular physiology and vision but is only partially und | developmental | https://singlecell.broadinstitute.org/single_cell/study/SCP3301 | Single_Cell_Portal_step2 |
-| 76 | A_explicit | Single-cell Reconstruction of Developmental Trajectories During Zebrafish Embryogenesis |  | single-cell RNA-seq | Single-cell reconstruction of developmental trajectories during zebrafish embryogenesis    Farrell JA* and Wang Y*, Ries | developmental | https://singlecell.broadinstitute.org/single_cell/study/SCP162 | Single_Cell_Portal_step2 |
+| 76 | A_explicit | Single-cell Reconstruction of Developmental Trajectories During Zebrafish Embryogenesis |  | single-cell RNA-seq | Single-cell reconstruction of developmental trajectories during zebrafish embryogenesis
+
+ Farrell JA* and Wang Y*, Ries | developmental | https://singlecell.broadinstitute.org/single_cell/study/SCP162 | Single_Cell_Portal_step2 |
 | 77 | A_explicit | Single-cell RNA-seq of blastomeres from 2- to 32-cell stage mouse embryos | Mus musculus | scRNA-seq | 2- to 32-cell embryo stages | developmental | https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-3321 | ArrayExpress_BioStudies_step1 |
 | 78 | A_explicit | Single-cell transcriptome atlas of human embryos after gastrulation | Homo sapiens | scRNA-seq | human embryos after gastrulation stages | developmental | https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE325829 | GEO_or_database_second_pass |
 | 79 | A_explicit | Six cell types in the developing Drosophila embryonic heart |  | single-cell RNA-seq | Drosophila has been instrumental in identifying novel genes and pathways required for heart development, and in uncoveri | developmental | https://singlecell.broadinstitute.org/single_cell/study/SCP1467 | Single_Cell_Portal_step2 |
@@ -83,7 +87,7 @@
 | 81 | A_explicit | Zebrahub | Danio rerio | scRNA-seq + imaging | 0-somite to 10 dpf | developmental | https://figshare.com/articles/dataset/Zebrahub_single_cell_dataset/20510367 | seed |
 | 82 | A_explicit | Spatially resolved single cell atlas of human gastrulation | Homo sapiens | scRNA-seq/spatially resolved atlas | human gastrulation stage | developmental;spatial | https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9388 | ArrayExpress_BioStudies_step1 |
 | 83 | A_explicit | NASC-seq | mixed | single-cell metabolic labeling | new/pre-existing RNA | metabolic_labeling;explicit_timecourse | https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE128273 | seed |
-| 84 | A_explicit | scNT-seq | mixed | 4sU metabolic labeling scRNA | time-resolved labeling | metabolic_labeling;explicit_timecourse | https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?term=scNT-seq | seed |
+| 84 | A_explicit | scNT-seq | mixed | 4sU metabolic labeling scRNA | time-resolved labeling | metabolic_labeling;explicit_timecourse | https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE141851 | seed |
 | 85 | A_explicit | scSLAM-seq | mixed | scRNA-seq + SLAM labeling | labeling windows | metabolic_labeling;explicit_timecourse | https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115612 | seed |
 | 86 | A_explicit | Ceratitis capitata LSFM embryogenesis | Ceratitis capitata | light-sheet microscopy | live embryogenesis | microscopy;developmental | https://zenodo.org/communities/cc_embryo_ls/records?q=&l=list&p=1&s=10&sort=newest | seed |
 | 87 | A_explicit | Homo sapiens retina organoid/development scRNA-seq Odd001126 | Homo sapiens | scRNA-seq | day-resolved organoid development | organoid_development_timecourse | http://www.inbirg.com/organoid_db/detail/Odd001126 | OrganoidDB |
