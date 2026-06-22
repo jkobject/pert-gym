@@ -1,0 +1,64 @@
+{
+  "updated_at_utc": "2026-06-22T21:18:20.753565+00:00",
+  "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
+  "gate_summary": {
+    "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
+    "h5ad_objects": 33,
+    "h5ad_bytes": 99139295837,
+    "historical_blocked_rows": 36,
+    "historical_blocked_staged_datasets": 31,
+    "historical_blocked_missing_datasets": [
+      "GSE247598",
+      "GSE261157",
+      "GSE272093",
+      "GSE272457",
+      "GSE282731"
+    ],
+    "decision_counts": {
+      "candidate_ingest_smoke_first": 29,
+      "block_duplicate_named_staged_object": 2,
+      "still_missing_source": 5,
+      "skip_user_excluded": 1
+    },
+    "lamin_instance": "laminlabs/pertdata",
+    "lamin_branch": "jkobject",
+    "outputs": {
+      "tsv": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/schema_audit/prism_p5f_google_drive_recovery_gate_20260622.tsv",
+      "json": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/schema_audit/prism_p5f_google_drive_recovery_gate_20260622.json",
+      "md": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/schema_audit/prism_p5f_google_drive_recovery_gate_20260622.md"
+    }
+  },
+  "completed_datasets": {
+    "GSE255832": {
+      "prefix": "prism_collection/GSE255832",
+      "n_obs": 27912,
+      "n_vars": 32565,
+      "chunk_size": 1000,
+      "chunks_verified": 28,
+      "verification_json": "artifacts/schema_audit/prism_GSE255832_chunked_verification.json"
+    },
+    "GSE263524": {
+      "prefix": "prism_collection/GSE263524",
+      "n_obs": 42289,
+      "n_vars": 32285,
+      "chunk_size": 1000,
+      "chunks_verified": 43,
+      "verification_json": "artifacts/schema_audit/prism_GSE263524_chunked_verification.json"
+    }
+  },
+  "remaining": {
+    "candidate_ingest_smoke_first_before_completed": 29,
+    "completed_now": 2,
+    "candidate_ingest_smoke_first_remaining_estimate": 27,
+    "duplicate_named_staged_object_blocked": 2,
+    "still_missing_source": 5,
+    "user_excluded": 1
+  },
+  "notes": [
+    "GSE90063_human-004 remains excluded by user decision.",
+    "GSE247274 and GSE267982 remain blocked as duplicate-named staged object pairs until compared/cleaned.",
+    "GSE247598, GSE261157, GSE272093, GSE272457, and GSE282731 remain missing from the staged recovery prefix.",
+    "The first GSE255832 smoke chunk was written before ln.track() was patched into the chunker; subsequent P5F writes use the tracked transform cqKr10EUOIPg0000.",
+    "GSE263524 was interrupted by the 600s foreground cap at chunk_0037; resume used --overwrite from chunk_0037 and final verification passed 43/43."
+  ]
+}

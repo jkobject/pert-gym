@@ -1,0 +1,1574 @@
+{
+  "lamin_instance": "laminlabs/pertdata",
+  "lamin_branch": {
+    "name": "jkobject",
+    "uid": "GCjqQtGwPzkY"
+  },
+  "ingested": [
+    {
+      "dataset": "GSE217812",
+      "prefix": "prism_collection/GSE217812",
+      "n_obs": 29889,
+      "n_vars": 33579,
+      "controls": 2350,
+      "organism": "human",
+      "perturbation_type": "CRISPRi"
+    },
+    {
+      "dataset": "GSE90063_mouse",
+      "prefix": "prism_collection/GSE90063_mouse",
+      "n_obs": 65840,
+      "n_vars": 16564,
+      "controls": 1156,
+      "organism": "mouse",
+      "perturbation_type": "CRISPR KO"
+    },
+    {
+      "dataset": "GSE250378",
+      "prefix": "prism_collection/GSE250378",
+      "n_obs": 141290,
+      "n_vars": 40930,
+      "controls": 7890,
+      "organism": "human",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE250378.h5ad",
+      "note": "Source obs has duplicate observation names and time_points metadata."
+    },
+    {
+      "dataset": "GSE261283",
+      "prefix": "prism_collection/GSE261283",
+      "n_obs": 33038,
+      "n_vars": 25737,
+      "controls": 2145,
+      "organism": "human",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE261283.h5ad",
+      "note": "Human fetal osteoblast 1.19 cells (hFOBs); source var names are not unique."
+    },
+    {
+      "dataset": "GSE124703",
+      "prefix": "prism_collection/GSE124703",
+      "n_obs": 24960,
+      "n_vars": 33752,
+      "controls": 9572,
+      "organism": "Humans (Homo sapiens)",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE124703.h5ad",
+      "note": "cell_type=induced pluripotent stem cell; neuron; cancer_type=non-cancer"
+    },
+    {
+      "dataset": "GSE132080",
+      "prefix": "prism_collection/GSE132080",
+      "n_obs": 23608,
+      "n_vars": 33694,
+      "controls": 2446,
+      "organism": "Humans (Homo sapiens)",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE132080.h5ad",
+      "note": "cell_type=leukemia cell; cancer_type=Leukemia"
+    },
+    {
+      "dataset": "GSE133344",
+      "prefix": "prism_collection/GSE133344",
+      "n_obs": 111445,
+      "n_vars": 33694,
+      "controls": 29273,
+      "organism": "Humans (Homo sapiens)",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE133344.h5ad",
+      "note": "cell_type=K562 chronic myelogenous leukemia cell; cancer_type=Leukemiaa; var.parquet created with skip_hash_lookup=True because PRISM gene tables can be hash-identical across datasets."
+    },
+    {
+      "dataset": "GSE150062",
+      "prefix": "prism_collection/GSE150062",
+      "n_obs": 78393,
+      "n_vars": 60497,
+      "controls": 3423,
+      "organism": "Humans (Homo sapiens)",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE150062.h5ad",
+      "note": "cell_type=iPSCs (induced pluripotent stem cells); cancer_type=non-cancer"
+    },
+    {
+      "dataset": "GSE190604",
+      "prefix": "prism_collection/GSE190604",
+      "n_obs": 103805,
+      "n_vars": 36755,
+      "controls": 22353,
+      "organism": "Homo sapiens",
+      "perturbation_type": "CRISPRa",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE190604.h5ad",
+      "note": "cell_type=T Cells; cancer_type=Non-Cancer"
+    },
+    {
+      "dataset": "GSE195510",
+      "prefix": "prism_collection/GSE195510",
+      "n_obs": 140709,
+      "n_vars": 17844,
+      "controls": 59041,
+      "organism": "Homo sapiens",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE195510.h5ad",
+      "note": "cell_type=iPSC-derived forebrain organoid cells; cancer_type=Non-Cancer"
+    },
+    {
+      "dataset": "GSE196142",
+      "prefix": "prism_collection/GSE196142",
+      "n_obs": 13220,
+      "n_vars": 32285,
+      "controls": 13220,
+      "organism": "Mice (Mus musculus)",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE196142.h5ad",
+      "note": "cell_type=B-cell acute lymphoblastic leukemia (B-ALL) cell; cancer_type=Leukemia"
+    },
+    {
+      "dataset": "GSE197452_Perturb-seq",
+      "prefix": "prism_collection/GSE197452_Perturb-seq",
+      "n_obs": 20811,
+      "n_vars": 33694,
+      "controls": 2422,
+      "organism": "Homo sapiens",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE197452_Perturb-seq.h5ad",
+      "note": "cell_type=K562; cancer_type=Leukemia"
+    },
+    {
+      "dataset": "GSE203592",
+      "prefix": "prism_collection/GSE203592",
+      "n_obs": 70646,
+      "n_vars": 31053,
+      "controls": 19085,
+      "organism": "Mus musculus",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE203592.h5ad",
+      "note": "cell_type=CD8+ tumor infiltrating T cells; cancer_type=Colon Cancer"
+    },
+    {
+      "dataset": "GSE205310",
+      "prefix": "prism_collection/GSE205310",
+      "n_obs": 124963,
+      "n_vars": 36601,
+      "controls": 6445,
+      "organism": "Homo sapiens",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE205310.h5ad",
+      "note": "cell_type=K562; cancer_type=Chronic myelogenous leukemia"
+    },
+    {
+      "dataset": "GSE207360",
+      "prefix": "prism_collection/GSE207360",
+      "n_obs": 12487,
+      "n_vars": 60736,
+      "controls": 6081,
+      "organism": "Mice (Mus musculus)",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE207360.h5ad",
+      "note": "cell_type=mesenchymal glioma stem cell; cancer_type=Glioblastoma"
+    },
+    {
+      "dataset": "GSE213921",
+      "prefix": "prism_collection/GSE213921",
+      "n_obs": 9797,
+      "n_vars": 32285,
+      "controls": 434,
+      "organism": "Mus musculus",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE213921.h5ad",
+      "note": "cell_type=CD8+ T Cells; cancer_type=EG.7-OVA tumor"
+    },
+    {
+      "dataset": "GSE221882",
+      "prefix": "prism_collection/GSE221882",
+      "n_obs": 25241,
+      "n_vars": 36601,
+      "controls": 11329,
+      "organism": "Homo sapiens",
+      "perturbation_type": "CRISPR_correction",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE221882.h5ad",
+      "note": "cell_type=iPSC-derived cortical organoid; cancer_type=Non-Cancer"
+    },
+    {
+      "dataset": "GSE263747",
+      "prefix": "prism_collection/GSE263747",
+      "n_obs": 44178,
+      "n_vars": 20627,
+      "controls": 1562,
+      "organism": "Homo sapiens",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE263747.h5ad",
+      "note": "cell_type=SNU-761 liver cancer cells; cancer_type=Liver Cancer"
+    },
+    {
+      "dataset": "GSE165291",
+      "prefix": "prism_collection/GSE165291",
+      "n_obs": 101670,
+      "n_vars": 34057,
+      "controls": 5515,
+      "organism": "Humans (Homo sapiens)",
+      "perturbation_type": "CRISPRn",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE165291.h5ad",
+      "note": "cell_type=human foreskin fibroblasts (HFFs); cancer_type=non-cancer"
+    },
+    {
+      "dataset": "GSE206107",
+      "prefix": "prism_collection/GSE206107",
+      "n_obs": 51055,
+      "n_vars": 33502,
+      "controls": 16736,
+      "organism": "Mus musculus",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE206107.h5ad",
+      "note": "Recovered from GCS after duplicate-column standardization fix; cell_type=MC38 colon cancer cells; cancer_type=Colon Cancer"
+    },
+    {
+      "dataset": "GSE236304",
+      "prefix": "prism_collection/GSE236304",
+      "n_obs": 25220,
+      "n_vars": 36601,
+      "controls": 1367,
+      "organism": "Homo sapiens",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE236304.h5ad",
+      "note": "Recovered from GCS after Lamin AppRegistryNotReady fix; cell_type=A549; cancer_type=Lung Cancer"
+    },
+    {
+      "dataset": "GSE164996",
+      "prefix": "prism_collection/GSE164996",
+      "n_obs": 25794,
+      "n_vars": 33555,
+      "controls": 483,
+      "organism": "human",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE164996.h5ad",
+      "note": "Ingested from GCS-staged h5ad; source var names made unique before triplet migration."
+    },
+    {
+      "dataset": "GSE153056",
+      "prefix": "prism_collection/GSE153056",
+      "n_obs": 20729,
+      "n_vars": 18649,
+      "controls": 2386,
+      "organism": "human",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE153056.h5ad",
+      "note": "Verified complete in Lamin after duplicate-column standardization fix; condition Test/Control; source read from GCS staging."
+    },
+    {
+      "dataset": "GSE146194",
+      "prefix": "prism_collection/GSE146194",
+      "n_obs": 259673,
+      "n_vars": 33694,
+      "controls": 19253,
+      "organism": "human",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE146194.h5ad",
+      "status": "ingested_chunked",
+      "chunk_size": 5000,
+      "chunks": 52,
+      "note": "Large PRISM h5ad ingested via backed-mode chunked triplets under prism_collection/GSE146194/chunk_0000..0051; verified links and payloads."
+    },
+    {
+      "dataset": "GSE161824",
+      "prefix": "prism_collection/GSE161824",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE161824.h5ad",
+      "status": "ingested_chunked_verified",
+      "chunks": 36,
+      "chunk_size": 5000,
+      "n_obs": 176040,
+      "n_vars": 939,
+      "controls": 2000,
+      "verification": "GSE161824_VERIFY True: all 36 chunks have obs/X/var, links by key OK, required obs columns present."
+    },
+    {
+      "dataset": "GSE264667",
+      "prefix": "prism_collection/GSE264667",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE264667.h5ad",
+      "status": "ingested_chunked_verified",
+      "chunk_size": 5000,
+      "chunks": 82,
+      "n_obs": 408429,
+      "n_vars": 7632,
+      "controls": 16989,
+      "verification": "GSE264667_VERIFY True: all 82 chunks have obs/X/var, obs->X and X->var links by key OK, X payloads exist, required obs columns present; last X shape (3429, 7632).",
+      "note": "Dense backed h5ad ingested as 5000-cell chunks; resumed from chunk_0061 after prior interruption and completed chunk_0081."
+    },
+    {
+      "dataset": "GSE120861",
+      "prefix": "prism_collection/GSE120861",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE120861.h5ad",
+      "repacked_gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE120861_csr.h5ad",
+      "status": "ingested_chunked_verified",
+      "chunk_size": 5000,
+      "chunks": 35,
+      "n_obs": 174711,
+      "n_vars": 13135,
+      "controls": 1535,
+      "verification": "GSE120861_VERIFY True: all 35 chunks have obs/X/var, obs->X and X->var links by key OK, X payloads exist, required obs columns present; last X shape (4711, 13135).",
+      "note": "Original h5ad was CSCDataset int64 and unsafe for row slicing on VPS; temporary e2-highmem-8 VM repacked to CSR h5ad on GCS, then VPS chunk ingestion completed."
+    },
+    {
+      "dataset": "GSE212396",
+      "prefix": "prism_collection/GSE212396",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE212396.h5ad",
+      "status": "ingested_chunked_verified",
+      "chunk_size": 5000,
+      "chunks": 21,
+      "n_obs": 103155,
+      "n_vars": 33706,
+      "controls": 6291,
+      "verification": "GSE212396_VERIFY True: all 21 chunks have obs/X/var, obs->X and X->var links by key OK, X payloads exist, required obs columns present; last X shape (3155, 33706).",
+      "note": "Recovered after Google Drive rate-limit cleared; staged to GCS, ingested as 5000-cell chunks from CSR-backed h5ad."
+    },
+    {
+      "dataset": "GSE213511",
+      "prefix": "prism_collection/GSE213511",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE213511.h5ad",
+      "status": "ingested_chunked_verified",
+      "chunk_size": 5000,
+      "chunks": 37,
+      "n_obs": 181177,
+      "n_vars": 35947,
+      "controls": 28658,
+      "verification": "GSE213511_VERIFY True: all 37 chunks have obs/X/var, obs->X and X->var links by key OK, X payloads exist, required obs columns present; last X shape (1177, 35947).",
+      "note": "Recovered after Google Drive rate-limit cleared; staged to GCS, ingested as 5000-cell chunks from CSR-backed h5ad."
+    },
+    {
+      "dataset": "GSE214844",
+      "prefix": "prism_collection/GSE214844",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE214844.h5ad",
+      "status": "ingested_chunked_verified",
+      "n_obs": 12487,
+      "n_vars": 60736,
+      "chunks": 13,
+      "chunk_size": 1000,
+      "controls": 6081,
+      "verified_at": "2026-06-15T18:35:35.632712+00:00",
+      "note": "Drive retry succeeded; CSC-backed h5ad ingested safely with chunk_size=1000; strict obs->X->var verification passed."
+    },
+    {
+      "dataset": "GSE215253",
+      "prefix": "prism_collection/GSE215253",
+      "status": "ingested_chunked_verified",
+      "n_obs": 370636,
+      "n_vars": 36601,
+      "chunks": 75,
+      "chunk_size": 5000,
+      "controls": 0,
+      "raw_gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE215253.h5ad",
+      "verified_at": "2026-06-15T19:52:01.632874+00:00",
+      "verification": "light triplet check: all obs->X->var links, artifact n_observations, row sum, var count; no full X download",
+      "note": "CRISPR Base Editing HSPC PRISM dataset; source staged from Drive retry and local deleted."
+    },
+    {
+      "dataset": "GSE216673",
+      "status": "ingested_chunked_verified",
+      "prefix": "prism_collection/GSE216673",
+      "h5ad_gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE216673.h5ad",
+      "n_obs": 55156,
+      "n_vars": 36601,
+      "chunks": 12,
+      "chunk_size": 5000,
+      "verified_at": "2026-06-15T20:03:52.789639+00:00",
+      "verification": "light triplet check obs->X->var, n_observations, total rows, var rows"
+    },
+    {
+      "dataset": "GSE219317",
+      "prefix": "prism_collection/GSE219317",
+      "n_obs": 95279,
+      "n_vars": 27776,
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE219317.h5ad",
+      "note": "chunked ingestion complete: 96 chunks; verified obs->X->var sample links"
+    },
+    {
+      "dataset": "GSE182308",
+      "prefix": "prism_collection/GSE182308",
+      "n_obs": 94962,
+      "n_vars": 33538,
+      "controls": 1482,
+      "organism": "Humans (Homo sapiens)",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE182308.h5ad",
+      "note": "chunked ingestion complete: 19 chunks; verified obs->X->var sample links; cell_type=astrocytes; cancer_type=non-cancer"
+    },
+    {
+      "dataset": "GSE225807",
+      "prefix": "prism_collection/GSE225807",
+      "n_obs": 17424,
+      "n_vars": 33538,
+      "controls": 13077,
+      "organism": "Homo sapiens",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE225807.h5ad",
+      "status": "chunked_verified",
+      "chunk_size": 5000,
+      "chunks_verified": 4,
+      "chunks_ok": 4,
+      "verification_json": "artifacts/schema_audit/prism_GSE225807_chunked_verification.json",
+      "note": "Cleared by PRISM duplicate gate; ingested as 4 backed h5ad chunks after smoke verification; each chunk has same-prefix obs/X/var and verified payloads/links/canonical obs."
+    },
+    {
+      "dataset": "GSE229505",
+      "prefix": "prism_collection/GSE229505",
+      "n_obs": 126495,
+      "n_vars": 67655,
+      "controls": 0,
+      "organism": "Homo sapiens",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE229505.h5ad",
+      "status": "chunked_verified",
+      "chunk_size": 5000,
+      "chunks_verified": 26,
+      "chunks_ok": 26,
+      "verification_json": "artifacts/schema_audit/prism_GSE229505_chunked_verification.json",
+      "note": "Cleared by PRISM duplicate gate; ingested as backed h5ad chunks after smoke verification; each chunk has same-prefix obs/X/var and verified payloads/links/canonical obs."
+    },
+    {
+      "dataset": "GSE221321",
+      "prefix": "prism_collection/GSE221321",
+      "n_obs": 210131,
+      "n_vars": 14275,
+      "controls": 9000,
+      "organism": "Humans (Homo sapiens)",
+      "perturbation_type": "CRISPR KO",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE221321.h5ad",
+      "status": "chunked_verified",
+      "chunk_size": 5000,
+      "chunks_verified": 43,
+      "chunks_ok": 43,
+      "verification_json": "artifacts/schema_audit/prism_GSE221321_chunked_verification.json",
+      "note": "Cleared by PRISM duplicate gate; ingested as 43 backed h5ad chunks after smoke verification; each chunk has same-prefix obs/X/var and verified payloads/links/canonical obs. Source X is CSRDataset float64; full runner peak RSS ~1.2GB."
+    },
+    {
+      "dataset": "GSE225775",
+      "prefix": "prism_collection/GSE225775",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE225775.h5ad",
+      "status": "ingested_chunked_verified",
+      "chunk_size": 5000,
+      "chunks": 272,
+      "n_obs": 1356998,
+      "n_vars": 58347,
+      "controls": 349114,
+      "verified_at": "2026-06-21T11:19:03.317675+00:00",
+      "verification": "full light verifier: all 272 chunks have obs/X/var, obs->X and X->var links by key OK, X payloads exist; sampled chunks 0000/0016/0205/0271 loaded obs+var with required canonical obs columns and expected row/var counts.",
+      "note": "Mac mini native GCS cache + backed CSRDataset source; resumed from partial chunk_0016 with --overwrite after reclaimed run; no full X load."
+    },
+    {
+      "dataset": "GSE208240",
+      "prefix": "prism_collection/GSE208240",
+      "n_obs": 73989,
+      "n_vars": 33549,
+      "controls": 14315,
+      "status": "already_present_chunked_verified",
+      "chunk_size": 1000,
+      "chunks": 74,
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE208240.h5ad",
+      "note": "Moved from stale downloaded_not_ingested after residual cleanup; existing Lamin triplets verified obs->X->var, payload existence, counts, canonical obs fields without loading X.",
+      "verification_artifact": "artifacts/schema_audit/prism_residual_already_present_verification_20260622.json"
+    },
+    {
+      "dataset": "GSE220974",
+      "prefix": "prism_collection/GSE220974",
+      "n_obs": 24661,
+      "n_vars": 23760,
+      "controls": 4804,
+      "status": "already_present_chunked_verified",
+      "chunk_size": 5000,
+      "chunks": 5,
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE220974.h5ad",
+      "note": "Moved from stale downloaded_not_ingested after residual cleanup; existing Lamin triplets verified obs->X->var, payload existence, counts, canonical obs fields without loading X.",
+      "verification_artifact": "artifacts/schema_audit/prism_residual_already_present_verification_20260622.json"
+    },
+    {
+      "dataset": "D4_Rest.assigned_guide",
+      "prefix": "tcell_gwps/D4_Rest.assigned_guide",
+      "n_obs": 2693903,
+      "n_vars": 18130,
+      "chunks_total": 539,
+      "chunk_size": 5000,
+      "controls": 76908,
+      "organism": "human",
+      "cell_type": "CD4 T cell",
+      "perturbation_type": "CRISPRi",
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/tcell_gwps/raw/genome-scale-tcell-perturb-seq.s3.amazonaws.com/marson2025_data/D4_Rest.assigned_guide.h5ad",
+      "status": "chunked_complete_final_verified",
+      "verification_artifact": "artifacts/schema_audit/tcell_gwps_D4_Rest_final_verification.json",
+      "note": "T-cell GWPS D4_Rest assigned-guide h5ad ingested as 539 remote-streamed chunks; no full X payload loaded during final verification."
+    },
+    {
+      "dataset": "GSE255832",
+      "prefix": "prism_collection/GSE255832",
+      "path": null,
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE255832.h5ad",
+      "n_obs": 27912,
+      "n_vars": 32565,
+      "chunk_size": 1000,
+      "status": "chunked_verified",
+      "chunks": [
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0000",
+          "start": 0,
+          "end": 1000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0001",
+          "start": 1000,
+          "end": 2000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0002",
+          "start": 2000,
+          "end": 3000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0003",
+          "start": 3000,
+          "end": 4000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0004",
+          "start": 4000,
+          "end": 5000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0005",
+          "start": 5000,
+          "end": 6000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0006",
+          "start": 6000,
+          "end": 7000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0007",
+          "start": 7000,
+          "end": 8000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0008",
+          "start": 8000,
+          "end": 9000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0009",
+          "start": 9000,
+          "end": 10000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0010",
+          "start": 10000,
+          "end": 11000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0011",
+          "start": 11000,
+          "end": 12000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0012",
+          "start": 12000,
+          "end": 13000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0013",
+          "start": 13000,
+          "end": 14000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0014",
+          "start": 14000,
+          "end": 15000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0015",
+          "start": 15000,
+          "end": 16000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0016",
+          "start": 16000,
+          "end": 17000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0017",
+          "start": 17000,
+          "end": 18000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0018",
+          "start": 18000,
+          "end": 19000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0019",
+          "start": 19000,
+          "end": 20000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0020",
+          "start": 20000,
+          "end": 21000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0021",
+          "start": 21000,
+          "end": 22000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0022",
+          "start": 22000,
+          "end": 23000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0023",
+          "start": 23000,
+          "end": 24000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0024",
+          "start": 24000,
+          "end": 25000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0025",
+          "start": 25000,
+          "end": 26000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0026",
+          "start": 26000,
+          "end": 27000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE255832/chunk_0027",
+          "start": 27000,
+          "end": 27912,
+          "status": "verified"
+        }
+      ],
+      "verification_json": "artifacts/schema_audit/prism_GSE255832_chunked_verification.json",
+      "note": "P5F Google Drive recovery; memory-bounded backed h5ad ingestion; obs->X->var/payload/counts verified."
+    },
+    {
+      "dataset": "GSE263524",
+      "prefix": "prism_collection/GSE263524",
+      "path": null,
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE263524.h5ad",
+      "n_obs": 42289,
+      "n_vars": 32285,
+      "chunk_size": 1000,
+      "status": "chunked_verified",
+      "chunks": [
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0000",
+          "start": 0,
+          "end": 1000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0001",
+          "start": 1000,
+          "end": 2000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0002",
+          "start": 2000,
+          "end": 3000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0003",
+          "start": 3000,
+          "end": 4000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0004",
+          "start": 4000,
+          "end": 5000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0005",
+          "start": 5000,
+          "end": 6000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0006",
+          "start": 6000,
+          "end": 7000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0007",
+          "start": 7000,
+          "end": 8000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0008",
+          "start": 8000,
+          "end": 9000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0009",
+          "start": 9000,
+          "end": 10000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0010",
+          "start": 10000,
+          "end": 11000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0011",
+          "start": 11000,
+          "end": 12000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0012",
+          "start": 12000,
+          "end": 13000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0013",
+          "start": 13000,
+          "end": 14000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0014",
+          "start": 14000,
+          "end": 15000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0015",
+          "start": 15000,
+          "end": 16000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0016",
+          "start": 16000,
+          "end": 17000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0017",
+          "start": 17000,
+          "end": 18000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0018",
+          "start": 18000,
+          "end": 19000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0019",
+          "start": 19000,
+          "end": 20000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0020",
+          "start": 20000,
+          "end": 21000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0021",
+          "start": 21000,
+          "end": 22000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0022",
+          "start": 22000,
+          "end": 23000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0023",
+          "start": 23000,
+          "end": 24000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0024",
+          "start": 24000,
+          "end": 25000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0025",
+          "start": 25000,
+          "end": 26000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0026",
+          "start": 26000,
+          "end": 27000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0027",
+          "start": 27000,
+          "end": 28000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0028",
+          "start": 28000,
+          "end": 29000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0029",
+          "start": 29000,
+          "end": 30000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0030",
+          "start": 30000,
+          "end": 31000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0031",
+          "start": 31000,
+          "end": 32000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0032",
+          "start": 32000,
+          "end": 33000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0033",
+          "start": 33000,
+          "end": 34000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0034",
+          "start": 34000,
+          "end": 35000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0035",
+          "start": 35000,
+          "end": 36000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0036",
+          "start": 36000,
+          "end": 37000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0037",
+          "start": 37000,
+          "end": 38000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0038",
+          "start": 38000,
+          "end": 39000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0039",
+          "start": 39000,
+          "end": 40000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0040",
+          "start": 40000,
+          "end": 41000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0041",
+          "start": 41000,
+          "end": 42000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE263524/chunk_0042",
+          "start": 42000,
+          "end": 42289,
+          "status": "verified"
+        }
+      ],
+      "verification_json": "artifacts/schema_audit/prism_GSE263524_chunked_verification.json",
+      "note": "P5F Google Drive recovery; memory-bounded backed h5ad ingestion; obs->X->var/payload/counts verified."
+    }
+  ],
+  "downloaded_not_ingested": [
+    {
+      "dataset": "GSE236519",
+      "path": "data/main/prism_collection/GSE236519.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE236519",
+      "attempted_url": "https://drive.google.com/uc?id=1zLIrfy6bYoPPYBXYo8CRyPNh7pszU_qh",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE241683_carT",
+      "path": "data/main/prism_collection/GSE241683_carT.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE241683",
+      "attempted_url": "https://drive.google.com/uc?id=1wDaOw0PD9g1cYXQ_anBGPRSKq29ttRxe",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE241683_cropseq",
+      "path": "data/main/prism_collection/GSE241683_cropseq.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE241683",
+      "attempted_url": "https://drive.google.com/uc?id=1kvOo81O4hT3CrII6sZDcBFh9oZh8OPtI",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE241683_pilot",
+      "path": "data/main/prism_collection/GSE241683_pilot.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE241683",
+      "attempted_url": "https://drive.google.com/uc?id=192_le3CLcWu5JSsBVTpqP90TNuVFKI0S",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE243244",
+      "path": "data/main/prism_collection/GSE243244.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE243244",
+      "attempted_url": "https://drive.google.com/uc?id=1RMG65yM0BFeLKRP7b70awbI5Yk1NfsBH",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE246714",
+      "path": "data/main/prism_collection/GSE246714.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE246714",
+      "attempted_url": "https://drive.google.com/uc?id=1Dy1Lm7yLH6uYt7gkf0ZCa0kpB48Hg3Gu",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE247274",
+      "path": "data/main/prism_collection/GSE247274.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE247274",
+      "attempted_url": "https://drive.google.com/uc?id=1NqIUYv2qBsd6-Czqr5TrPxHmRFzeUIgL",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE247598",
+      "path": "data/main/prism_collection/GSE247598.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE247598",
+      "attempted_url": "https://drive.google.com/uc?id=178q95os6WY5TziWJ6gZN4kBzoRkmSa3V",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE247599",
+      "path": "data/main/prism_collection/GSE247599.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE247599",
+      "attempted_url": "https://drive.google.com/uc?id=1Jl8nhQJPAx1U2GkOhtLTzN6yr4ObY86M",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE251715",
+      "path": "data/main/prism_collection/GSE251715.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE251715",
+      "attempted_url": "https://drive.google.com/uc?id=1LcTD4Hk-o-jUYcMdQeiwtZWwTikHst3x",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE252589",
+      "path": "data/main/prism_collection/GSE252589.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE252589",
+      "attempted_url": "https://drive.google.com/uc?id=1EXW1ZqvD6uCRQszOYeP_fDvpdH3wEuqe",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE254100",
+      "path": "data/main/prism_collection/GSE254100.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE254100",
+      "attempted_url": "https://drive.google.com/uc?id=1lY7ta5iXKxdTL7qM8LOJU0jdWT0duXKo",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE261025",
+      "path": "data/main/prism_collection/GSE261025.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE261025",
+      "attempted_url": "https://drive.google.com/uc?id=1bqdOxNhlb9bdtmUSn87rPZ8G9Zoi8KJ3",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE261157",
+      "path": "data/main/prism_collection/GSE261157.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE261157",
+      "attempted_url": "https://drive.google.com/uc?id=1xcNBbzAg361Fxx_RGc_KSQokwZFVQckQ",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE267982",
+      "path": "data/main/prism_collection/GSE267982.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE267982",
+      "attempted_url": "https://drive.google.com/uc?id=1ZaoLs0zjGIIwVNl3yggdbgTGk8JsKfhc",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE269596",
+      "path": "data/main/prism_collection/GSE269596.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE269596",
+      "attempted_url": "https://drive.google.com/uc?id=1AUyojKDpBjXCiLyeAlFtuo4wr2ReEYPl",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE270828",
+      "path": "data/main/prism_collection/GSE270828.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE270828",
+      "attempted_url": "https://drive.google.com/uc?id=1BwQK4rNA6Ouy1CyhzNosoCDyWKov35Ea",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE272093",
+      "path": "data/main/prism_collection/GSE272093.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE272093",
+      "attempted_url": "https://drive.google.com/uc?id=1EL99lqu0_ocayPG-WQkZSVqiDYILJdqJ",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE272457",
+      "path": "data/main/prism_collection/GSE272457.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE272457",
+      "attempted_url": "https://drive.google.com/uc?id=1jeH9HEabxwLTtBhBLbMMrlojWhGMY1Yx",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE273271",
+      "path": "data/main/prism_collection/GSE273271.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE273271",
+      "attempted_url": "https://drive.google.com/uc?id=1SJArwpuXvZbiC4nLFAOBt68F1BXV5yAL",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE274751",
+      "path": "data/main/prism_collection/GSE274751.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE274751",
+      "attempted_url": "https://drive.google.com/uc?id=1ObDatG4xd4vudvdWHYmJlE0ox-DJIy9j",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE280767",
+      "path": "data/main/prism_collection/GSE280767.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE280767",
+      "attempted_url": "https://drive.google.com/uc?id=1kIf9crmVLv0ZPYZEKbTWjo1XTTsASpWS",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE281048_IFNB_Perturb_seq",
+      "path": "data/main/prism_collection/GSE281048_IFNB_Perturb_seq.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE281048",
+      "attempted_url": "https://drive.google.com/uc?id=1MuNJQuh4LoZgOsHoIndk8eFoIg8hexVR",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE281048_IFNG_Perturb_seq",
+      "path": "data/main/prism_collection/GSE281048_IFNG_Perturb_seq.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE281048",
+      "attempted_url": "https://drive.google.com/uc?id=1k2wr6QpZU5-EgD4f-EC0N_Ez72mpslLM",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE281048_INS_Perturb_seq",
+      "path": "data/main/prism_collection/GSE281048_INS_Perturb_seq.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE281048",
+      "attempted_url": "https://drive.google.com/uc?id=1qLxhzG-XWDUHYIsDIMPEnn5LXA06MnZX",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE281048_TGFB_Perturb_seq",
+      "path": "data/main/prism_collection/GSE281048_TGFB_Perturb_seq.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE281048",
+      "attempted_url": "https://drive.google.com/uc?id=1mlCF0NxCd6tyu2JQGbhPfk6BEVCo_n7R",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE282731",
+      "path": "data/main/prism_collection/GSE282731.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE282731",
+      "attempted_url": "https://drive.google.com/uc?id=1CzBJXIQ3A86CI5HdOX7ZoEzwvBfvYNvA",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE283614",
+      "path": "data/main/prism_collection/GSE283614.h5ad",
+      "gcs_uri": null,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE283614",
+      "attempted_url": "https://drive.google.com/uc?id=1xHNQMA3hcMKwYSsQS_1t3MAEpDKRFOaY",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE281048_TNFA_Perturb_seq",
+      "path": "data/main/prism_collection/GSE281048_TNFA_Perturb_seq.h5ad",
+      "gcs_uri": null,
+      "retry_attempts": 1,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE281048",
+      "attempted_url": "https://drive.google.com/uc?id=1-4Rt96nL5ds9q-rcog08tQyzHrj2KQTh",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE278572",
+      "path": "data/main/prism_collection/GSE278572.h5ad",
+      "gcs_uri": null,
+      "retry_attempts": 1,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE278572",
+      "attempted_url": "https://drive.google.com/uc?id=1-8szfnxT0UsEOd_fro9MKjBBhj2TOpB4",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE210681",
+      "path": "data/main/prism_collection/GSE210681.h5ad",
+      "gcs_uri": null,
+      "retry_attempts": 4,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE210681",
+      "attempted_url": "https://drive.google.com/uc?id=1bbLyTQ2CzBEp4AQWP6n9LAkL4unzUTwg",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE235325",
+      "path": "data/main/prism_collection/GSE235325.h5ad",
+      "gcs_uri": null,
+      "retry_attempts": 1,
+      "note": "Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE235325",
+      "attempted_url": "https://drive.google.com/uc?id=1WyR59y6bkk3nV1KclmSPnb-I5KtsTMhE",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE236057",
+      "path": "data/main/prism_collection/GSE236057.h5ad",
+      "gcs_uri": null,
+      "retry_attempts": 1,
+      "note": "Byte-probe reached 1MiB of Drive response, but full stage-only gdown retry failed; no local h5ad and no GCS object. Progress note: Download failed; retry later: FileURLRetrievalError: Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE236057",
+      "attempted_url": "https://drive.google.com/uc?id=1ID6Ug5dRzF-pH8z6buklSqll8Uf-8gEF",
+      "requires_user_auth_or_manual_download": true
+    },
+    {
+      "dataset": "GSE250558",
+      "path": "data/main/prism_collection/GSE250558.h5ad",
+      "gcs_uri": null,
+      "retry_attempts": 1,
+      "note": "Byte-probe reached 1MiB of Drive response, but full stage-only gdown retry failed; no local h5ad and no GCS object. Progress note: Download failed; retry later: FileURLRetrievalError: Failed to retrieve file url:",
+      "status": "blocked_source_or_metadata",
+      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
+      "source_accession": "GSE250558",
+      "attempted_url": "https://drive.google.com/uc?id=1eZ-f77i0Ey3LHnwPHnpzO7vTLnJVMJTl",
+      "requires_user_auth_or_manual_download": true
+    }
+  ],
+  "metadata_probed": [
+    {
+      "dataset": "VIPerturbSeq",
+      "source": "Zenodo 18460279",
+      "note": "Available files are large RDS objects (~1.6-3.8 GB each) plus manifest; needs R/Seurat conversion path before triplet ingestion."
+    },
+    {
+      "dataset": "PRISM Perturb-seq Collection",
+      "source": "Google Drive",
+      "note": "77 h5ad files listed; four downloaded and ingested."
+    }
+  ],
+  "gcs_staging": {
+    "bucket": "gs://scperturb",
+    "prefix": "pert-gym/staging",
+    "objects": [
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE217812.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE90063_mouse.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/properseq/GSE150818_RAW.tar",
+      "gs://scperturb/pert-gym/staging/data/main/properseq/extracted/GSM4559183_HEK1_chimericReadPairs.csv.gz",
+      "gs://scperturb/pert-gym/staging/data/main/properseq/extracted/GSM4559186_HEK2_chimericReadPairs.csv.gz",
+      "gs://scperturb/pert-gym/staging/data/main/properseq/extracted/GSM4559189_JKT1_chimericReadPairs.csv.gz",
+      "gs://scperturb/pert-gym/staging/data/main/properseq/extracted/GSM4559190_JKT2_chimericReadPairs.csv.gz",
+      "gs://scperturb/pert-gym/staging/data/main/properseq/extracted/GSM4559191_HUVEC1_chimericReadPairs.csv.gz",
+      "gs://scperturb/pert-gym/staging/data/main/properseq/extracted/GSM4559192_HUVEC2_chimericReadPairs.csv.gz",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE250378.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE261283.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE264667.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE120861.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE124703.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE132080.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE133344.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE146194.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE150062.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE153056.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE161824.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE164996.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE190604.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE195510.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE196142.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE197452_Perturb-seq.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE203592.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE205310.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE207360.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE213921.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE221882.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE263747.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE165291.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE206107.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE236304.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/gdsc/raw/GDSC2_fitted_dose_response_27Oct23.xlsx",
+      "gs://scperturb/pert-gym/staging/data/main/gdsc/raw/GDSC1_fitted_dose_response_27Oct23.xlsx",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE212396.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE213511.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE214844.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE215253.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE216673.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE219317.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE182308.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE208240.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE220974.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE221321.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE225775.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE225807.h5ad",
+      "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE229505.h5ad"
+    ],
+    "local_policy": "Large source downloads are staged to GCS and deleted locally after upload verification."
+  },
+  "non_prism_ingested": [
+    {
+      "dataset": "Arc VCC 2025 validation",
+      "prefix": "arc_vcc/2025/validation/chunk_0000",
+      "n_obs": 98927,
+      "n_vars": 18080,
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/arc_vcc/validation/adata_Validation.h5ad",
+      "note": "Completed partial triplet; verified obs -> X -> var links."
+    },
+    {
+      "dataset": "Sanger dual-guide CRC mapping counts",
+      "prefix": "sanger_dual_guide_crc/mapping_counts",
+      "n_obs": 2081431,
+      "n_vars": 1,
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/sanger_dualguide_crc/MAPPING.zip",
+      "note": "Aggregated raw .mapping.out files into guide-pair read_count triplet; verified obs -> X -> var links.",
+      "status": "verified_complete",
+      "verified_at": "2026-06-22T08:41:32.565988+00:00",
+      "verification_artifact": "artifacts/schema_audit/sanger_dualguide_crc_verification_20260622.json",
+      "verification": "obs/X/var payloads exist; obs->X and X->var links resolve; shape 2,081,431 x 1; required obs fields present; raw MAPPING.zip staged on GCS.",
+      "controls": 0,
+      "guide_pairs": 8911,
+      "samples": 13,
+      "walks": 2
+    },
+    {
+      "dataset": "Sanger GDSC1 fitted dose response",
+      "prefix": "sanger_gdsc/gdsc1",
+      "n_obs": 334131,
+      "n_vars": 0,
+      "n_controls": 970,
+      "n_treated": 333161,
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/gdsc/raw/GDSC1_fitted_dose_response_27Oct23.xlsx",
+      "note": "Verified existing GDSC IC50/AUC hybrid obs triplet with empty X baseline placeholder; raw XLSX staged to GCS."
+    },
+    {
+      "dataset": "Sanger GDSC2 fitted dose response",
+      "prefix": "sanger_gdsc/gdsc2",
+      "n_obs": 243005,
+      "n_vars": 0,
+      "n_controls": 969,
+      "n_treated": 242036,
+      "raw_staged_gcs": "gs://scperturb/pert-gym/staging/data/main/gdsc/raw/GDSC2_fitted_dose_response_27Oct23.xlsx",
+      "note": "Verified existing GDSC IC50/AUC hybrid obs triplet with empty X baseline placeholder; raw XLSX staged to GCS."
+    }
+  ],
+  "tcell_gwps": {
+    "prefix": "tcell_gwps",
+    "manifest_artifact": "tcell_gwps/s3_manifest.parquet",
+    "manifest_local": "artifacts/tcell_gwps_s3_manifest.parquet",
+    "metadata_gcs_prefix": "gs://scperturb/pert-gym/staging/data/main/tcell_gwps/",
+    "status": "metadata_staged_manifest_ingested_blocked_large_h5ad_streaming_required",
+    "note": "12 assigned_guide h5ad files are 118-173GB each (~1.73TB total); do not aws sync to VPS. Need streaming/chunked h5ad path or larger conversion host.",
+    "plan": "artifacts/tcell_gwps_ingestion_plan.json"
+  },
+  "last_updated": "2026-06-22T08:41:32.565988+00:00",
+  "prism_staged_gcs_status": {
+    "checked_at": "2026-06-15T17:10:35Z",
+    "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_collection/",
+    "staged_h5ad_checked": 27,
+    "direct_complete": 23,
+    "chunked_complete": 4,
+    "incomplete_staged": 0,
+    "status_artifact": "artifacts/hermes_prism_staged_complete_status_20260615.md"
+  },
+  "excluded_datasets": [
+    {
+      "dataset": "legacy GSE150818",
+      "reason": "mistaken substitute for PRoPER-seq / ProPer-seq 2026; staged files are chimeric read-pair tables, not the wanted scRNA expression source",
+      "archived_lamin_prefix": "properseq/chimeric_read_pairs",
+      "archive_status": "trashed from active jkobject branch on 2026-06-19; storage payloads not permanently deleted",
+      "next_action": "Locate actual 2026 probe-based Perturb-seq scRNA expression matrix before any PRoPER-seq ingestion."
+    },
+    {
+      "dataset": "GSE90063_human-004",
+      "source": "PRISM Perturb-seq Collection",
+      "status": "excluded_user_decision",
+      "reason": "User decision: skip/exclude due duplicate/subset ambiguity.",
+      "date": "2026-06-22",
+      "artifact": "artifacts/schema_audit/prism_drive_residual_resolution_20260622.json"
+    }
+  ],
+  "properseq_source_status": {
+    "wanted_target": "PRoPER-seq / ProPer-seq 2026 probe-based Perturb-seq",
+    "source": "TBD",
+    "legacy_GSE150818": "excluded_archived_from_active_branch",
+    "lamin_active_branch_matches_after_archive": 0
+  },
+  "per_dataset_status": {
+    "GSE225807": {
+      "status": "ingested_verified",
+      "updated_at_utc": "2026-06-19T09:19:17.400592+00:00",
+      "prefix": "prism_collection/GSE225807",
+      "chunks_ok": 4,
+      "chunks_verified": 4,
+      "verification_json": "artifacts/schema_audit/prism_GSE225807_chunked_verification.json"
+    },
+    "GSE229505": {
+      "status": "ingested_verified",
+      "updated_at_utc": "2026-06-19T09:42:38.110684+00:00",
+      "prefix": "prism_collection/GSE229505",
+      "chunks_ok": 26,
+      "chunks_verified": 26,
+      "verification_json": "artifacts/schema_audit/prism_GSE229505_chunked_verification.json"
+    },
+    "GSE221321": {
+      "status": "ingested_verified",
+      "updated_at_utc": "2026-06-19T10:45:25.476615+00:00",
+      "prefix": "prism_collection/GSE221321",
+      "chunks_ok": 43,
+      "chunks_verified": 43,
+      "verification_json": "artifacts/schema_audit/prism_GSE221321_chunked_verification.json"
+    }
+  },
+  "prism_residual_cleanup": {
+    "date": "2026-06-22",
+    "input_downloaded_not_ingested_count": 40,
+    "post_cleanup_downloaded_not_ingested_count": 37,
+    "decision_counts": {
+      "already_present": 2,
+      "blocked_source_or_metadata": 36,
+      "needs_human_decision": 1,
+      "non_prism_wrong_bucket": 1
+    },
+    "removed_from_prism_queue": {
+      "already_present_verified": [
+        "GSE208240",
+        "GSE220974"
+      ],
+      "non_prism_wrong_bucket": [
+        "D4_Rest.assigned_guide"
+      ]
+    },
+    "main_visibility_check": {
+      "branch": {
+        "name": "main",
+        "uid": "mmmmmmmmmmmm"
+      },
+      "with_any_exact": 0,
+      "with_any_same_accession": 0,
+      "artifact": "artifacts/schema_audit/prism_residual_main_visibility_20260622.json"
+    },
+    "artifacts": [
+      "artifacts/schema_audit/prism_residual_cleanup_20260622.json",
+      "artifacts/schema_audit/prism_residual_cleanup_20260622.md",
+      "artifacts/schema_audit/prism_residual_cleanup_20260622.tsv",
+      "artifacts/schema_audit/prism_residual_main_visibility_20260622.json",
+      "artifacts/schema_audit/prism_residual_already_present_verification_20260622.json"
+    ]
+  },
+  "prism_drive_residual_resolution": {
+    "date": "2026-06-22",
+    "input_blocked_rows_retested": 36,
+    "skipped_user_decision": 1,
+    "recovered_h5ad_count": 0,
+    "staged_h5ad_count": 0,
+    "ingested_count": 0,
+    "remaining_blocked_source_or_metadata": 36,
+    "full_stage_attempted_count": 2,
+    "blocker_categories": {
+      "drive_quota_or_rate_limit": 31,
+      "drive_permission_or_private_link": 5
+    },
+    "artifacts": [
+      "artifacts/schema_audit/prism_drive_residual_resolution_20260622.md",
+      "artifacts/schema_audit/prism_drive_residual_resolution_20260622.json",
+      "artifacts/schema_audit/prism_drive_residual_resolution_20260622.tsv",
+      "artifacts/schema_audit/prism_drive_residual_actual_download_probe_20260622.py",
+      "artifacts/schema_audit/prism_p5e_downloadable_gdrive_listing_20260622.json"
+    ]
+  }
+}

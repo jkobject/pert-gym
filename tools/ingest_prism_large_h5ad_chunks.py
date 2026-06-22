@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Memory-bounded PRISM h5ad -> chunked Lamin triplets from GCS staging.
 
-This script is for PRISM h5ad files that are already staged under the GCS mount
-(`/mnt/gcs/scperturb/...`) and are too large for the full AnnData converter.
+This script is for PRISM h5ad files that are already staged on GCS and are too
+large for the full AnnData converter. It accepts either a local filesystem path
+or a ``gs://`` URI. On macOS, where the VPS-only ``/mnt/gcs/scperturb`` mount is
+not assumed, ``gs://`` inputs are copied into ``data/gcs_cache/`` first.
 It opens the source h5ad in backed mode, materializes only one cell slice at a
 time, writes one triplet per chunk, verifies links, and clears the project-local
 Lamin cache after each chunk.
@@ -23,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from tools.clean_lamin_cache import clean_cache  # noqa: E402
+from tools.gcs_cache import ensure_gcs_object_local, is_gcs_uri  # noqa: E402
 from tools.lamin_context import connect_pertdata, ensure_project_cache  # noqa: E402
 
 PRISM_LAMIN_PREFIX = "prism_collection"
@@ -186,8 +189,9 @@ def save_chunk_triplet(ln, prefix: str, chunk: ad.AnnData, *, overwrite: bool) -
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("path", type=Path, help="GCS-mounted or local source .h5ad")
+    parser.add_argument("path", help="Local source .h5ad or gs:// staged object")
     parser.add_argument("--dataset", required=True, help="Dataset name under prism_collection")
+    parser.add_argument("--gcs-cache-dir", type=Path, default=ROOT / "data/gcs_cache")
     parser.add_argument("--chunk-size", type=int, default=25000)
     parser.add_argument("--max-chunks", type=int, default=None)
     parser.add_argument("--start-chunk", type=int, default=0)
@@ -195,17 +199,18 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
-    if not args.path.exists():
-        raise FileNotFoundError(args.path)
+    source_uri = args.path if is_gcs_uri(str(args.path)) else None
+    source_path = ensure_gcs_object_local(args.path, cache_root=args.gcs_cache_dir)
     if args.chunk_size <= 0:
         raise ValueError("--chunk-size must be positive")
 
     ensure_project_cache()
     ln = connect_pertdata()
+    ln.track(path="tools/ingest_prism_large_h5ad_chunks.py")
     print("LAMIN", ln.setup.settings.instance.slug, ln.setup.settings.branch.name, ln.setup.settings.branch.uid, flush=True)
     ensure_artifact_features(ln)
 
-    source = ad.read_h5ad(args.path, backed="r")
+    source = ad.read_h5ad(source_path, backed="r")
     try:
         n_obs, n_vars = int(source.n_obs), int(source.n_vars)
         n_chunks_total = math.ceil(n_obs / args.chunk_size)
@@ -213,7 +218,7 @@ def main() -> int:
         dataset_prefix = f"{PRISM_LAMIN_PREFIX}/{args.dataset}"
         print(
             "SOURCE",
-            args.path,
+            source_path,
             "n_obs", n_obs,
             "n_vars", n_vars,
             "chunk_size", args.chunk_size,
@@ -246,9 +251,19 @@ def main() -> int:
                 continue
 
             print("READ_CHUNK", chunk_prefix, start, end, flush=True)
-            chunk = source[start:end, :].to_memory()
-            chunk.obs = obs_all.iloc[start:end].copy()
-            chunk.var = var_all.copy()
+            # Do not call source[start:end, :].to_memory() and then mutate
+            # .obs/.var: some backed PRISM files carry .obsm views whose index
+            # assignment attempts to copy the backed parent and fails unless a
+            # filename is provided. Build a fresh X-only AnnData for the chunk
+            # instead; canonical obs/var are attached explicitly below.
+            x_slice = source.X[start:end, :]
+            if hasattr(x_slice, "copy"):
+                x_slice = x_slice.copy()
+            chunk = ad.AnnData(
+                X=x_slice,
+                obs=obs_all.iloc[start:end].copy(),
+                var=var_all.copy(),
+            )
             chunk.obs_names_make_unique()
             chunk.var_names_make_unique()
             print(
@@ -267,9 +282,13 @@ def main() -> int:
         entry = {
             "dataset": args.dataset,
             "prefix": dataset_prefix,
-            "path": str(args.path),
-            "gcs_uri": str(args.path).replace("/mnt/gcs/scperturb/", "gs://scperturb/", 1)
-            if str(args.path).startswith("/mnt/gcs/scperturb/") else None,
+            "path": str(source_path),
+            "gcs_uri": source_uri
+            or (
+                str(source_path).replace("/mnt/gcs/scperturb/", "gs://scperturb/", 1)
+                if str(source_path).startswith("/mnt/gcs/scperturb/")
+                else None
+            ),
             "n_obs": n_obs,
             "n_vars": n_vars,
             "chunk_size": args.chunk_size,
