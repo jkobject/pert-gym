@@ -1348,6 +1348,21 @@
       ],
       "verification_json": "artifacts/schema_audit/prism_GSE267982_chunked_verification.json",
       "note": "P5F Google Drive recovery; memory-bounded backed h5ad ingestion; obs->X->var/payload/counts/canonical obs verified. canonical and (1) staged objects are byte-identical by streaming SHA-256; ingested canonical object only."
+    },
+    {
+      "dataset": "GSE247274",
+      "prefix": "prism_collection/GSE247274",
+      "path": null,
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274.h5ad",
+      "n_obs": 69907,
+      "n_vars": 22977,
+      "chunk_size": 1000,
+      "status": "chunked_verified",
+      "chunks_verified": 70,
+      "chunks_ok": 70,
+      "controls": 34323,
+      "verification_json": "artifacts/schema_audit/prism_GSE247274_chunked_verification.json",
+      "note": "P5F Google Drive recovery; duplicate-resolved canonical object ingested as backed h5ad chunks after smoke verification; each chunk has same-prefix obs/X/var and verified payloads/links/canonical obs. canonical and (1) staged objects are byte-identical by streaming SHA-256; ingested canonical object only."
     }
   ],
   "downloaded_not_ingested": [
@@ -1415,17 +1430,6 @@
       "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
       "source_accession": "GSE246714",
       "attempted_url": "https://drive.google.com/uc?id=1Dy1Lm7yLH6uYt7gkf0ZCa0kpB48Hg3Gu",
-      "requires_user_auth_or_manual_download": true
-    },
-    {
-      "dataset": "GSE247274",
-      "path": "data/main/prism_collection/GSE247274.h5ad",
-      "gcs_uri": null,
-      "note": "Failed to retrieve file url:",
-      "status": "blocked_source_or_metadata",
-      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
-      "source_accession": "GSE247274",
-      "attempted_url": "https://drive.google.com/uc?id=1NqIUYv2qBsd6-Czqr5TrPxHmRFzeUIgL",
       "requires_user_auth_or_manual_download": true
     },
     {
@@ -1832,7 +1836,7 @@
     "note": "12 assigned_guide h5ad files are 118-173GB each (~1.73TB total); do not aws sync to VPS. Need streaming/chunked h5ad path or larger conversion host.",
     "plan": "artifacts/tcell_gwps_ingestion_plan.json"
   },
-  "last_updated": "2026-06-22T08:41:32.565988+00:00",
+  "last_updated": "2026-06-22T22:30:30.338855+00:00",
   "prism_staged_gcs_status": {
     "checked_at": "2026-06-15T17:10:35Z",
     "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_collection/",
@@ -1889,6 +1893,14 @@
       "chunks_ok": 43,
       "chunks_verified": 43,
       "verification_json": "artifacts/schema_audit/prism_GSE221321_chunked_verification.json"
+    },
+    "GSE247274": {
+      "status": "ingested_verified",
+      "updated_at_utc": "2026-06-22T22:30:30.338855+00:00",
+      "prefix": "prism_collection/GSE247274",
+      "chunks_ok": 70,
+      "chunks_verified": 70,
+      "verification_json": "artifacts/schema_audit/prism_GSE247274_chunked_verification.json"
     }
   },
   "prism_residual_cleanup": {
