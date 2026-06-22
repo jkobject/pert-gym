@@ -38,7 +38,7 @@ def cmd_run(config: Path) -> int:
 
 def cmd_info() -> int:
     print("Project: pert-gym")
-    print(f"Package: pert_gym")
+    print("Package: pert_gym")
     print(f"Version: {__version__}")
     return 0
 

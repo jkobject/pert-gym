@@ -1,0 +1,132 @@
+# Isolated perturbation-model environment manifest.
+#
+# Policy:
+# - env_path is always under .venv-models/<name> and is git-ignored scratch.
+# - install commands install the local pert-gym package editable with --no-deps,
+#   then add only the deps needed by that model family.
+# - smoke commands are read-only and must not call Lamin artifact writes.
+
+[defaults]
+layout = ".venv-models/{name}"
+local_package_install = "uv pip install --python {python} --no-deps -e ."
+smoke_command = "{python} tools/smoke_model_env.py --model {name}"
+model_ready_data = "Read model-ready triplets through loader artifacts or local manifests; never write Lamin artifacts from model envs."
+
+[models.baselines]
+display_name = "Pure-Python trivial baselines"
+python = "3.11"
+deps = []
+includes = ["mean-control", "mean-perturbation", "binary-split"]
+install_command = "uv run python tools/model_env.py create baselines"
+smoke_command = "uv run python tools/model_env.py smoke baselines"
+isolation_policy = "No heavy deps. Local pert_gym editable install with --no-deps only; safe first smoke target."
+data_policy = "Uses in-memory EvaluationBatch or read-only model-ready data exported by shared loaders."
+
+[models.classical]
+display_name = "Classical regression and tree baselines"
+python = "3.11"
+deps = ["numpy>=1.26", "scipy>=1.11", "scikit-learn>=1.4", "joblib>=1.3"]
+includes = ["linear-regression", "ridge", "elasticnet", "random-forest", "gradient-boosting", "logistic-cell-state-classifier"]
+install_command = "uv run python tools/model_env.py create classical"
+smoke_command = "uv run python tools/model_env.py smoke classical"
+isolation_policy = "CPU-only sklearn stack isolated from Lamin ingestion env; no torch/scvi deps."
+data_policy = "Read-only dense/sparse arrays from model-ready triplet exports or in-memory batches; train outputs remain local under artifacts/model-runs/."
+
+[models.lpm]
+display_name = "LPM latent perturbation model"
+python = "3.11"
+deps = ["numpy>=1.26", "scipy>=1.11", "torch>=2.3", "anndata>=0.10"]
+includes = ["lpm"]
+install_command = "uv run python tools/model_env.py create lpm"
+smoke_command = "uv run python tools/model_env.py smoke lpm"
+isolation_policy = "CPU torch by default on Mac; GPU/MPS-specific wheels must be opt-in in this env only."
+data_policy = "Read AnnData/triplet matrices from local cache or model-ready exports; no lamindb writes."
+
+[models.cpa]
+display_name = "CPA / standalone compositional perturbation autoencoder"
+python = "3.11"
+deps = ["torch>=2.3", "anndata>=0.10"]
+includes = ["cpa-standalone"]
+install_command = "uv run python tools/model_env.py create cpa"
+smoke_command = "uv run python tools/model_env.py smoke cpa"
+isolation_policy = "Torch/anndata CPA smoke stack isolated; never installed in base .venv. scvi-tools CPA route deferred until a stable direct CPA API is selected."
+data_policy = "Read-only model-ready AnnData/triplet exports; generated model checkpoints stay in artifacts/model-runs/cpa/."
+
+[models.chemcpa]
+display_name = "chemCPA"
+python = "3.10"
+deps = ["torch>=2.3", "anndata>=0.10", "scanpy>=1.10", "rdkit>=2023.9", "chemCPA @ git+https://github.com/theislab/chemCPA.git"]
+includes = ["chemCPA"]
+install_command = "uv run python tools/model_env.py create chemcpa"
+smoke_command = "uv run python tools/model_env.py smoke chemcpa"
+isolation_policy = "Separate Python 3.10 env because chemCPA dependency pins may lag; RDKit/torch never enter base env. The upstream package is not published on PyPI, so install from theislab/chemCPA git URL."
+data_policy = "Reads expression data and compound metadata from model-ready read-only exports; chemical fingerprints are local derived files."
+
+[models.trvae]
+display_name = "Legacy trVAE transfer VAE (replaced)"
+python = "3.10"
+deps = ["trVAE==1.1.2"]
+includes = ["trVAE"]
+install_command = "uv run python tools/model_env.py create trvae"
+smoke_command = "uv run python tools/model_env.py smoke trvae"
+create_supported = false
+replaced_by = "trvae-replacement"
+upstream_url = "https://github.com/theislab/trVAE"
+blocker = "PyPI trVAE 1.1.2 pins tensorflow==1.15.2, whose wheels only cover cp35/cp36/cp37; this cannot satisfy this repo's Python >=3.10 local package runtime or Mac arm64. Unpinned `trvae` resolves to old 1.0.1 with a modern TensorFlow/Keras stack, but that is not the maintained 1.1.2 implementation and should not be adapted silently."
+isolation_policy = "Documented legacy blocker only; do not install TensorFlow/Keras legacy deps into base or shared envs. Use models.trvae-replacement for maintained conditional-latent smoke work."
+data_policy = "Read-only AnnData/triplet inputs if ever revived in a separate fork/container; checkpoints and logs local under artifacts/model-runs/trvae/. No Lamin writes."
+
+[models.trvae-replacement]
+display_name = "Maintained trVAE analogue: conditional perturbation VAE"
+python = "3.11"
+deps = ["torch>=2.3", "anndata>=0.10"]
+includes = ["conditional-perturbation-vae", "trvae-analogue"]
+install_command = "uv run python tools/model_env.py create trvae-replacement"
+smoke_command = "uv run python tools/model_env.py smoke trvae-replacement"
+replaces = "trvae"
+replacement_for_blocker = "PyPI trVAE==1.1.2 requires tensorflow==1.15.2/keras==2.2.4 and is not installable under current Mac/Python policy."
+upstream_alternatives_surveyed = ["scGen/scArches conditional VAE route", "scVI-tools covariate models", "CPA-style VAE", "small in-repo conditional VAE adapter"]
+choice_rationale = "Use the in-repo ConditionalPerturbationVAE first: it preserves the trVAE-like conditional latent transfer boundary, uses maintained torch/anndata dependencies installable on Mac/Python 3.11, implements PerturbationModel.fit/predict directly, and avoids full scvi/scanpy stack risk for the smoke benchmark."
+isolation_policy = "CPU torch/anndata isolated under .venv-models/trvae-replacement; never install TensorFlow 1.x, legacy Keras, or old lowercase trvae into base/shared envs."
+data_policy = "Read-only model-ready-v0 loader or deterministic synthetic fallback; no Lamin writes, no huge matrix loads, local outputs under artifacts/model_benchmarks/ and artifacts/model-runs/trvae-replacement/."
+
+[models.scgen]
+display_name = "scGEN / scArches-style perturbation transfer"
+python = "3.11"
+deps = ["torch>=2.3", "anndata>=0.10"]
+includes = ["scgen", "scarches-style", "conditional-vae-transfer", "scgen-perturbation-adapter"]
+install_command = "uv run python tools/model_env.py create scgen"
+smoke_command = "uv run python tools/model_env.py smoke scgen"
+upstream_url = "https://github.com/theislab/scgen"
+upstream_package_assessed = "scgen==2.1.0"
+upstream_blocker = "PyPI scgen==2.1.0 installs but failed import under current Python 3.11 resolver: latest scvi-tools path lacks scvi._compat; pinning scvi-tools<1 then exposed anndata/mudata private-API incompatibilities. Do not ship upstream scgen training until a frozen compatible scverse stack or container is selected."
+choice_rationale = "Use an in-repo ScgenPerturbationAdapter for the first smoke: it preserves the AnnData X plus condition/control scGEN contract, uses maintained torch/anndata dependencies in Python 3.11, and avoids pretending that upstream scgen biological training works on the current unresolved scverse stack. scArches remains a heavier future route because it depends on scvi-tools/scverse compatibility choices."
+isolation_policy = "Dedicated .venv-models/scgen env; torch/anndata deps never enter the Lamin/base env. Upstream scgen/scverse pins must be tested in this env or a container before enabling."
+data_policy = "Read-only AnnData/model-ready-v0 metadata plus deterministic synthetic fallback for API smoke; no Lamin writes, no huge X loads, local outputs under artifacts/model_benchmarks/ and artifacts/model-runs/scgen/."
+
+[models.gears]
+display_name = "GEARS graph perturbation predictor"
+python = "3.11"
+deps = ["cell-gears==0.1.2", "torch_geometric"]
+includes = ["GEARS", "cell-gears", "geometric-perturbation-response"]
+install_command = "uv run python tools/model_env.py create gears"
+smoke_command = "uv run python tools/model_env.py smoke gears"
+upstream_url = "https://github.com/snap-stanford/GEARS"
+upstream_package = "cell-gears==0.1.2"
+upstream_version = "0.1.2"
+upstream_commit_policy = "Official PyPI wheel cell-gears==0.1.2 from snap-stanford/GEARS; source master observed pushed_at 2025-02-01. Do not use unrelated PyPI gears==0.7.2."
+isolation_policy = "Dedicated .venv-models/gears environment because GEARS pulls torch, torch_geometric, scanpy, scipy, networkx, and dcor; never install this stack into the base Lamin env."
+data_policy = "Requires bounded Perturb-seq-like AnnData with obs.condition, obs.cell_type, var.gene_name, controls, and held-out perturbation split. Current model-ready-v0 is metadata/synthetic fallback only; no Lamin writes or huge matrix loads from GEARS scripts."
+
+[models.scpram]
+display_name = "scPRAM attention perturbation response"
+python = "3.8"
+deps = ["scpram==0.0.3"]
+includes = ["scPRAM"]
+install_command = "uv run python tools/model_env.py create scpram"
+smoke_command = "uv run python tools/model_env.py smoke scpram"
+install_local = false
+torch_backend = "cpu"
+upstream_url = "https://github.com/jiang-q19/scPRAM"
+isolation_policy = "Dedicated Python 3.8 CPU env because upstream scPRAM pins scanpy==1.9.3, torch==1.13.1, torchaudio==0.13.1, torchvision==0.14.1; local pert-gym editable install is skipped because this repo requires Python >=3.10."
+data_policy = "Consumes model-ready expression matrices read-only through explicit exported files/manifests; model artifacts remain local and versioned separately from Lamin data. No Lamin writes."
