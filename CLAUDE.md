@@ -96,9 +96,49 @@ python3 tools/stage_to_gcs.py <paths...> \
 ```
 
 This stages files to `gs://scperturb/pert-gym/staging/...`, verifies the object,
-then deletes the local copy only after upload succeeds. Keep `data/main/` out of
-Git; durable ingested data should live in LaminDB, and pre-ingestion raw files
-should live in the GCS staging bucket.
+then deletes the local copy only after upload succeeds. Keep `data/main/`,
+`data/source_cache/`, `data/temporal_pretraining_sources/`, local Lamin caches,
+virtualenvs, and generated benchmark artifacts out of Git; durable ingested data
+should live in LaminDB, and pre-ingestion raw files should live in the GCS
+staging bucket.
+
+### Git / review workflow
+
+Canonical repo strategy as of 2026-06-22: `pert-gym` is a standalone GitHub repo
+at `https://github.com/jkobject/pert-gym.git`, not a subdirectory of the broader
+OpenClaw workspace repo. The active shared checkout is:
+
+```text
+/Users/jkobject/.openclaw/workspace/work/pert-gym
+```
+
+The shared checkout is acceptable for read-only inspection, cache/materialized
+data, and emergency ops. Implementation/model-code Kanban cards should use
+isolated worktrees instead of piling edits into the shared checkout:
+
+```bash
+cd /Users/jkobject/.openclaw/workspace/work/pert-gym
+git fetch origin main
+git worktree add -b fix/t_12345678-loader-contract \
+  /Users/jkobject/.openclaw/worktrees/pert-gym/t_12345678 origin/main
+```
+
+Rules:
+
+- Before editing, `git rev-parse --show-toplevel` must resolve to the pert-gym
+  checkout/worktree, not `/Users/jkobject/.openclaw/workspace`.
+- Branches should include the Kanban task id, for example
+  `ops/t_51be75dd-restore-git-workflow`.
+- Commit only reviewable code, docs, tests, config, and artifact manifests.
+  Exclude raw data, `data/source_cache/`, `data/temporal_pretraining_sources/`,
+  Lamin caches, virtualenvs, `.omx/`, generated benchmark blobs, and local
+  model-ready `.h5ad` exports unless a task explicitly asks for a tiny fixture.
+- Open a PR for implementation/model-code changes before marking code work done.
+  If a worker cannot safely create the PR, leave a review-required Kanban block
+  with branch/path, changed files, tests, and remaining risk.
+- If Git metadata is broken again, stop. Restore standalone repo metadata from
+  `origin/main` without overwriting the working tree, and record the forensic
+  backup path.
 
 ---
 
