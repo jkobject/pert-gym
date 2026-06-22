@@ -97,10 +97,13 @@ class BinarySplitBaseline:
         perturbations: Sequence[str],
         controls: Sequence[bool] | None = None,
     ) -> list[list[float]]:
-        del controls
         self._require_fitted()
+        controls = _default_controls(perturbations, controls)
         predictions = []
-        for perturbation in perturbations:
+        for perturbation, is_control in zip(perturbations, controls):
+            if is_control:
+                predictions.append(list(self.control_mean_))
+                continue
             group = self.perturbation_groups_.get(perturbation)
             if group is None:
                 predictions.append(list(self.global_perturbation_mean_))

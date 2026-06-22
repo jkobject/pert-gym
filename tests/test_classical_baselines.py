@@ -45,6 +45,19 @@ def test_binary_split_baseline_predicts_weak_and_strong_group_centroids(
     assert model.perturbation_groups_["strong"] == "strong"
 
 
+def test_binary_split_baseline_predicts_control_mean_for_requested_controls(
+    synthetic_expression_batch: tuple[list[list[float]], list[str], list[bool]],
+) -> None:
+    X, perturbations, controls = synthetic_expression_batch
+    model = BinarySplitBaseline().fit(X, perturbations, controls)
+
+    predictions = model.predict(["weak", "unseen", "strong"], [True, True, False])
+
+    assert predictions[0] == pytest.approx(model.control_mean_)
+    assert predictions[1] == pytest.approx(model.control_mean_)
+    assert predictions[2] == pytest.approx(model.group_means_["strong"])
+
+
 @pytest.mark.parametrize(
     "model_cls",
     [
