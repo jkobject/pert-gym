@@ -2,7 +2,8 @@
 
 - Task: `t_7523ac9a`
 - Worktree: `/Users/jkobject/.openclaw/worktrees/pert-gym/t_7523ac9a`
-- Base audited: `origin/model/t_55738901-benchmark-adapters` @ `3da26818f0552d48f8b84df8ac93f280e033b993`
+- Base/model commit audited: `origin/model/t_55738901-benchmark-adapters` @ `3da26818f0552d48f8b84df8ac93f280e033b993`
+- PR artifact head at matrix generation: `04ce5e318e9c84b5716bc6c60569a2b9e6bdc1f8`
 
 ## Evidence class definitions
 
