@@ -97,7 +97,13 @@ Current high-level state:
   encoded-barcode/ORF-to-TF-symbol and filtered-cell contract, XAtlas/Orion
   resources, PRISM/GDSC compound-structure/expression joins for response-screen
   modeling, and PRISM residual Drive permission/quota rows. T29 row115/GSE142078
-  is accepted+verified and is not a current deferred blocker.
+  is accepted+verified and is not a current deferred blocker. Late 2026-06-22
+  SCP browser-auth update: T-SCPAUTH-Mac (`t_a469ca1d`) attempted the logged-in
+  Chrome/OMX path but Chrome control failed before page access with a local
+  `node_repl/js` sandbox cwd bootstrap error. No SCP files were downloaded or
+  staged. Prior headless HTTP 401 remains retryable after the OMX/Chrome tooling
+  issue is fixed; evidence is in
+  `artifacts/schema_audit/scp_browser_auth_recovery_20260622.{md,json}`.
 - M0-M7 and MB0-MB6 are done where applicable, but the model benchmark evidence
   is mostly environment/loader/synthetic smoke. chemCPA now has one real tiny
   molecular DRUG-seq expression-response loader smoke; PRISM/GDSC remain response
@@ -222,7 +228,7 @@ artifacts/schema_audit/temporal_t15_scp_gse153162_status_20260622.md
 artifacts/schema_audit/temporal_t15_scp_gse153162_status_20260622.json
 ```
 
-Current decision: row 75 (`SCP3301` / matched `GSE315712`) is source-resolved but not ingested because SCP payloads are auth-gated and GEO exposes a 33 GB RAW tar with a 24 GB sample archive; continue only with a staged/chunked converter. Row 79 (`SCP1467`) remains blocked on authenticated SCP export or a real alternate expression mirror.
+Current decision: row 75 (`SCP3301` / matched `GSE315712`) is source-resolved but not ingested because SCP payloads were auth-gated in headless probes and GEO exposes a 33 GB RAW tar with a 24 GB sample archive; continue only with a staged/chunked converter if using GEO. Row 79 (`SCP1467`) remains blocked on authenticated SCP export or a real alternate expression mirror. T-SCPAUTH-Mac (`t_a469ca1d`) did not resolve either row because OMX/Chrome control failed before authenticated page access, so this is a tooling retry blocker rather than a new source verdict.
 
 ## Temporal T19 large mouse embryo/gastrulation probe — 2026-06-22
 

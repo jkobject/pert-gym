@@ -1,0 +1,28 @@
+{
+  "task_id": "t_a469ca1d",
+  "used_browser_auth": false,
+  "browser_tool": "omx exec / Codex Chrome extension control",
+  "status": "blocked_chrome_control_bootstrap_failed",
+  "attempts": [
+    {
+      "log": "artifacts/logs/omx_scp_browser_auth_20260622_225316.log",
+      "cwd": "/Users/jkobject/.openclaw/workspace/work/pert-gym",
+      "result": "node_repl/js failed before Chrome connection with Mcp error -32602: codex/sandbox-state-meta sandboxCwd must be an absolute file URI: relative URL without a base"
+    },
+    {
+      "log": "artifacts/logs/omx_scp_browser_auth_smoke_home_skip_20260622_225457.log",
+      "cwd": "/Users/jkobject",
+      "result": "same node_repl/js sandboxCwd error; no Chrome tab opened"
+    }
+  ],
+  "datasets": [
+    {"scp_id": "SCP3301", "status": "not_retried_tool_blocked", "files": [], "matrix_family_selection_needed": true, "notes": "OMX Chrome control failed before browser access; prior local docs say SCP payloads auth-gated and GEO GSE315712 RAW is 33 GB, requiring staged/chunked converter if recovered."},
+    {"scp_id": "SCP1467", "status": "not_retried_tool_blocked", "files": [], "matrix_family_selection_needed": false, "notes": "OMX Chrome control failed before browser access; prior manifest lists four small heart expression/metadata files but payload endpoints returned HTTP 401 headlessly."},
+    {"scp_id": "SCP211", "status": "not_retried_tool_blocked", "files": [], "matrix_family_selection_needed": true, "notes": "OMX Chrome control failed before browser access; prior docs list many kidney organoid files including expression matrix, MTX groups, clusters, and metadata; matrix-family selection still needed."},
+    {"scp_id": "SCP3697", "status": "not_retried_tool_blocked", "files": [], "matrix_family_selection_needed": true, "notes": "OMX Chrome control failed before browser access; prior docs indicate SCP public record exposes cell_count/study_file_count 0 and may need alternate processed source even with browser auth."},
+    {"scp_id": "SCP282", "status": "not_retried_tool_blocked", "files": [], "matrix_family_selection_needed": true, "notes": "OMX Chrome control failed before browser access; prior docs list seven expression matrices plus metadata and tSNE sidecars, so deliberate expression+metadata selection is still needed."},
+    {"scp_id": "SCP499", "status": "not_retried_tool_blocked", "files": [], "matrix_family_selection_needed": false, "notes": "OMX Chrome control failed before browser access; prior T34 source probe found SCP499 belongs to GSE121737 early/medium bud repGene family and may be recoverable via coordinated GEO/SCP pattern rather than browser SCP alone."}
+  ],
+  "gcs_staged_files": [],
+  "next_safe_action": "Fix OMX/Codex Chrome extension node_repl sandboxCwd bootstrap, then rerun browser-auth SCP recovery from a trusted repo/non-repo cwd before downloading. Do not mark prior HTTP 401 as terminal, but no browser-auth retry succeeded in this run."
+}
