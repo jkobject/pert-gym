@@ -1,7 +1,7 @@
 {
-  "updated_at_utc": "2026-06-22T21:18:20.753565+00:00",
+  "updated_at_utc": "2026-06-22T21:55:09.140048+00:00",
   "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
-  "gate_summary": {
+  "gate_summary_original": {
     "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
     "h5ad_objects": 33,
     "h5ad_bytes": 99139295837,
@@ -44,21 +44,69 @@
       "chunk_size": 1000,
       "chunks_verified": 43,
       "verification_json": "artifacts/schema_audit/prism_GSE263524_chunked_verification.json"
+    },
+    "GSE236057": {
+      "prefix": "prism_collection/GSE236057",
+      "n_obs": 15866,
+      "n_vars": 28351,
+      "chunk_size": 1000,
+      "chunks_verified": 16,
+      "verification_json": "artifacts/schema_audit/prism_GSE236057_chunked_verification.json"
+    },
+    "GSE267982": {
+      "prefix": "prism_collection/GSE267982",
+      "n_obs": 45808,
+      "n_vars": 32285,
+      "chunk_size": 1000,
+      "chunks_verified": 46,
+      "verification_json": "artifacts/schema_audit/prism_GSE267982_chunked_verification.json"
     }
   },
+  "duplicate_resolution": {
+    "hash_artifact": "artifacts/schema_audit/prism_p5f_duplicate_hashes_20260622.tsv",
+    "results": [
+      "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274.h5ad  cca43320462febf0da93458e6e97136759a01466f26cfc02680c5b84c244db84",
+      "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274 (1).h5ad  cca43320462febf0da93458e6e97136759a01466f26cfc02680c5b84c244db84",
+      "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE267982.h5ad  b50b86d164c496208c35acedf7466ef52d2d6b1898a52295cbda212c074cec1a",
+      "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE267982 (1).h5ad  b50b86d164c496208c35acedf7466ef52d2d6b1898a52295cbda212c074cec1a"
+    ],
+    "resolved_pairs": [
+      "GSE247274",
+      "GSE267982"
+    ],
+    "ingested_after_resolution": [
+      "GSE267982"
+    ],
+    "remaining_duplicate_resolved_candidate": [
+      "GSE247274"
+    ],
+    "action": "Do not ingest browser duplicate-named \u201c(1)\u201d copies; canonical and duplicate copies are byte-identical. Redundant objects were left in GCS, not deleted."
+  },
   "remaining": {
-    "candidate_ingest_smoke_first_before_completed": 29,
-    "completed_now": 2,
-    "candidate_ingest_smoke_first_remaining_estimate": 27,
-    "duplicate_named_staged_object_blocked": 2,
+    "completed_now": 4,
+    "single_staged_smoke_first_candidates_remaining_estimate": 26,
+    "duplicate_named_pairs_still_needing_hash_compare": 0,
+    "duplicate_resolved_candidates_remaining": 1,
+    "total_accessible_candidates_remaining_estimate": 27,
     "still_missing_source": 5,
     "user_excluded": 1
   },
+  "remaining_source_blocked_rows": [
+    "GSE247598",
+    "GSE261157",
+    "GSE272093",
+    "GSE272457",
+    "GSE282731"
+  ],
+  "user_excluded_rows": [
+    "GSE90063_human-004"
+  ],
   "notes": [
     "GSE90063_human-004 remains excluded by user decision.",
-    "GSE247274 and GSE267982 remain blocked as duplicate-named staged object pairs until compared/cleaned.",
+    "GSE247274 and GSE267982 duplicate-named staged pairs were resolved with streaming SHA-256; both pairs are byte-identical.",
+    "GSE267982 canonical object was ingested after duplicate resolution; GSE247274 remains an accessible duplicate-resolved candidate, not a hash blocker.",
     "GSE247598, GSE261157, GSE272093, GSE272457, and GSE282731 remain missing from the staged recovery prefix.",
-    "The first GSE255832 smoke chunk was written before ln.track() was patched into the chunker; subsequent P5F writes use the tracked transform cqKr10EUOIPg0000.",
-    "GSE263524 was interrupted by the 600s foreground cap at chunk_0037; resume used --overwrite from chunk_0037 and final verification passed 43/43."
+    "The first GSE255832 smoke chunk was written before ln.track() was patched into the chunker; subsequent P5F writes use tracked transform cqKr10EUOIPg0000.",
+    "GSE263524 and GSE267982 both required idempotent resume after the 600s foreground cap; final verification passed for all chunks."
   ]
 }
