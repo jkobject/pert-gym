@@ -120,4 +120,3 @@ reports linked there. Practical rules:
 The 1056-member canonical surface is `triplet-integrity-ok`, not fully model-ready.
 For model work, read [model-roadmap.md](model-roadmap.md) and promote reviewed
 subsets with explicit loader evidence before making benchmark claims.
-

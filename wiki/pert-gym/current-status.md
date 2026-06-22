@@ -1419,4 +1419,3 @@ Operational notes:
 - Resume command if future T-cell GWPS files follow this pattern: `uv run python tools/ingest_tcell_gwps_remote_chunks.py --dataset <dataset> --chunk-size 5000 --start-chunk <N> --max-chunks <remaining>` from the repo, preferably through a timestamped tmux runner. The script skips existing triplets unless `--overwrite` is set.
 - The script checkpoints `artifacts/tcell_gwps_remote_chunk_ingestion_status.json`; `artifacts/tcell_gwps_D4_Rest_inflight_status.json` now records the terminal verified state for this run.
 - Non-blocking Lamin warnings observed: missing optional `botocore[crt]` credential-provider dependency and missing `ln.track()` provenance. Writes/verifications still succeeded on `laminlabs/pertdata` branch `jkobject`.
-
