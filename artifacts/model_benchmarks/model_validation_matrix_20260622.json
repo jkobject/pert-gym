@@ -20,7 +20,9 @@
     "exit_code": 0
   },
   "generated_at_utc": "2026-06-22T21:02:36+00:00",
-  "head_commit": "3da26818f0552d48f8b84df8ac93f280e033b993",
+  "audited_base_model_commit": "3da26818f0552d48f8b84df8ac93f280e033b993",
+  "pr_artifact_head_commit_at_generation": "04ce5e318e9c84b5716bc6c60569a2b9e6bdc1f8",
+  "provenance_note": "audited_base_model_commit is the model-code commit being audited; pr_artifact_head_commit_at_generation is the PR artifact commit that generated this matrix before the provenance wording fix.",
   "models": [
     {
       "biological_performance_claim": "none",
