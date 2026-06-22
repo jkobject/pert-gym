@@ -17,3 +17,8 @@ This file is a compact project-state mirror for agent handoffs. Keep detailed ru
 - The shared checkout Git metadata was restored on 2026-06-22 from `origin/main` without overwriting worker files.
 - Broken prior metadata backup in shared checkout: `.git.broken-pre-ops2-20260622T172255`.
 - After restoration, `git status` showed tracked worker changes across docs, data catalogues, package code, tools, notebook, and `uv.lock`, plus untracked raw/source-cache data. Those changes were intentionally not reverted or bulk-committed by OPS2.
+
+## Temporal SCP browser-auth retry status
+
+- T-SCPAUTH-Mac (`t_a469ca1d`) attempted the required OMX/logged-in Chrome retry for residual SCP rows (`SCP3301`, `SCP1467`, `SCP211`, `SCP3697`, `SCP282`, `SCP499`). No files were recovered: OMX reached the Chrome-extension skill but `node_repl/js` failed before browser access with `codex/sandbox-state-meta sandboxCwd must be an absolute file URI`.
+- Evidence artifacts: `artifacts/schema_audit/scp_browser_auth_recovery_20260622.{md,json}` and `artifacts/schema_audit/scp_browser_auth_smoke_20260622.json`. Treat prior headless SCP HTTP 401 as still retryable after the OMX/Chrome bootstrap is fixed; do not mark these datasets terminal from this failed tooling run.
