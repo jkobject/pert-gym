@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT))
 
 from tools.clean_lamin_cache import clean_cache  # noqa: E402
 from tools.convert_triplet_artifacts import migrate_h5ad_to_triplet  # noqa: E402
-from tools.ingest_phase3_scrna import standardize_prism_obs  # noqa: E402
+from tools.ingest_prism_large_h5ad_chunks import standardize_prism_obs_df  # noqa: E402
 from tools.lamin_context import connect_pertdata, ensure_project_cache  # noqa: E402
 
 
@@ -137,7 +137,7 @@ def stage_to_gcs(path: Path, bucket: str, prefix: str) -> str:
 
 def ingest_prism_h5ad(path: Path, name: str, prefix: str, ln) -> None:
     adata = ad.read_h5ad(path)
-    adata = standardize_prism_obs(adata, name)
+    adata.obs = standardize_prism_obs_df(adata.obs, name)
     migrate_h5ad_to_triplet(
         adata,
         ln,
@@ -171,10 +171,18 @@ def main() -> None:
         default=3,
         help="Maximum retry attempts for previous download failures.",
     )
+    parser.add_argument(
+        "--no-lamin-preflight",
+        action="store_true",
+        help=(
+            "Skip Lamin connection/triplet existence checks. Use only for "
+            "stage-only acquisition runs such as --max-ingest-gb 0."
+        ),
+    )
     args = parser.parse_args()
 
     ensure_project_cache()
-    ln = connect_pertdata()
+    ln = None if args.no_lamin_preflight else connect_pertdata()
     progress = load_progress(args.progress)
     listing = json.loads(args.listing.read_text())
     max_ingest_bytes = int(args.max_ingest_gb * 1024**3)
@@ -190,7 +198,7 @@ def main() -> None:
     for file_id, filename, local_path in listing:
         name = dataset_name(filename)
         prefix = f"prism_collection/{name}"
-        if prefix in ingested_prefixes or triplet_exists(ln, prefix):
+        if prefix in ingested_prefixes or (ln is not None and triplet_exists(ln, prefix)):
             print(f"SKIP_INGESTED {name}")
             continue
         staged_entry = staged_by_name.get(name)
@@ -287,6 +295,7 @@ def main() -> None:
             continue
 
         try:
+            assert ln is not None
             ingest_prism_h5ad(path, name, prefix, ln)
             if not triplet_exists(ln, prefix):
                 raise RuntimeError(f"Triplet not found after ingest: {prefix}")
