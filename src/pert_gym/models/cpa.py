@@ -36,6 +36,7 @@ class CompositionalPerturbationAutoencoder:
     n_features_: int | None = None
     loss_: float | None = None
     perturbation_to_index_: dict[str, int] | None = None
+    unknown_perturbation_index_: int | None = None
     _model: Any | None = None
 
     def fit(
@@ -70,11 +71,13 @@ class CompositionalPerturbationAutoencoder:
         self.perturbation_to_index_ = {
             perturbation: idx for idx, perturbation in enumerate(perturbation_names)
         }
+        self.unknown_perturbation_index_ = len(self.perturbation_to_index_)
         model = cast(
             Any,
             _TinyCPA(
                 n_features=self.n_features_,
-                n_perturbations=len(self.perturbation_to_index_),
+                n_perturbations=len(self.perturbation_to_index_) + 1,
+                unknown_perturbation_index=self.unknown_perturbation_index_,
                 hidden_dim=self.hidden_dim,
                 latent_dim=self.latent_dim,
                 perturbation_dim=self.perturbation_dim,
@@ -85,7 +88,13 @@ class CompositionalPerturbationAutoencoder:
 
         expression = torch.tensor(X, dtype=torch.float32)
         perturbation_index = torch.tensor(
-            [self.perturbation_to_index_.get(perturbation, 0) for perturbation in perturbations],
+            [
+                self.perturbation_to_index_.get(
+                    perturbation,
+                    self.unknown_perturbation_index_,
+                )
+                for perturbation in perturbations
+            ],
             dtype=torch.long,
         )
         control_mask = torch.tensor(list(controls), dtype=torch.bool)
@@ -115,10 +124,17 @@ class CompositionalPerturbationAutoencoder:
         torch = _torch()
         assert self._model is not None
         assert self.perturbation_to_index_ is not None
+        assert self.unknown_perturbation_index_ is not None
 
         controls = _default_controls(perturbations, controls)
         perturbation_index = torch.tensor(
-            [self.perturbation_to_index_.get(perturbation, 0) for perturbation in perturbations],
+            [
+                self.perturbation_to_index_.get(
+                    perturbation,
+                    self.unknown_perturbation_index_,
+                )
+                for perturbation in perturbations
+            ],
             dtype=torch.long,
         )
         control_mask = torch.tensor(list(controls), dtype=torch.bool)
@@ -144,6 +160,7 @@ class _TinyCPA:
         *,
         n_features: int,
         n_perturbations: int,
+        unknown_perturbation_index: int,
         hidden_dim: int,
         latent_dim: int,
         perturbation_dim: int,
@@ -162,6 +179,8 @@ class _TinyCPA:
                     n_perturbations,
                     perturbation_dim,
                 )
+                with torch.no_grad():
+                    self.perturbation_embedding.weight[unknown_perturbation_index].zero_()
                 self.decoder = torch.nn.Sequential(
                     torch.nn.Linear(latent_dim + perturbation_dim, hidden_dim),
                     torch.nn.ReLU(),

@@ -83,3 +83,33 @@ def test_compositional_perturbation_autoencoder_rejects_control_only_training() 
             perturbations=["control", "control"],
             controls=[True, True],
         )
+
+
+def test_compositional_perturbation_autoencoder_uses_neutral_unknown_embedding() -> None:
+    model = CompositionalPerturbationAutoencoder(
+        latent_dim=2,
+        hidden_dim=8,
+        perturbation_dim=2,
+        epochs=5,
+        lr=0.03,
+        seed=23,
+    ).fit(
+        X=[
+            [0.0, 0.0],
+            [0.1, 0.0],
+            [2.0, 2.1],
+            [2.2, 2.0],
+            [-2.0, -2.1],
+            [-2.2, -2.0],
+        ],
+        perturbations=["control", "control", "drug_a", "drug_a", "drug_b", "drug_b"],
+        controls=[True, True, False, False, False, False],
+    )
+
+    assert model.perturbation_to_index_ == {"drug_a": 0, "drug_b": 1}
+    assert model.unknown_perturbation_index_ == 2
+
+    predictions = model.predict(["drug_a", "new_drug", "control"], [False, False, True])
+
+    assert predictions[1] == pytest.approx(predictions[2])
+    assert predictions[1] != pytest.approx(predictions[0])
