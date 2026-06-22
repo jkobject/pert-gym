@@ -11,6 +11,13 @@ nav:
   - API: api.md
   - CLI: cli.md
   - Structure: structure.md
+  - Schema Contract: pert_gym_schema.md
+  - Model Environments: model_environments.md
+  - Baselines:
+      - CPA: cpa_baseline.md
+      - LPM: lpm_baseline.md
+      - trVAE Replacement: trvae_replacement.md
+  - Notebooks: notebooks/README.md
 plugins:
   - search
   - mkdocstrings:
