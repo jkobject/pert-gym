@@ -1,0 +1,300 @@
+warning: `VIRTUAL_ENV=/Users/jkobject/.hermes/hermes-agent/venv` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+[92m→[0m connected lamindb: laminlabs/pertdata
+[92m→[0m script invoked with: data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad --dataset GSE247599 --chunk-size 1000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/bin/python3: No module named pip
+[92m→[0m loaded Transform('cqKr10EUOIPg0000', key='ingest_prism_large_h5ad_chunks.py'), started new Run('r180ULWkydkWruYR') at 2026-06-23 11:30:20 UTC
+[94m•[0m recommendation: to identify the script across renames, pass the uid: ln.track("cqKr10EUOIPg")
+[93m![0m environment file is empty, skipping linking an environment
+[92m→[0m monitor at: https://lamin.ai/laminlabs/pertdata/transform/cqKr10EUOIPg0000
+LAMIN laminlabs/pertdata jkobject GCjqQtGwPzkY
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/tools/ingest_prism_large_h5ad_chunks.py:124: DeprecationWarning: Use dtype_as_str instead of dtype, dtype will be removed in the future.
+  if feature and feature[0].dtype != "cat[Artifact]":
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SOURCE data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad n_obs 24435 n_vars 36602 chunk_size 1000 chunks 0:25/25
+SKIP_CHUNK prism_collection/GSE247599/chunk_0000 exists
+READ_CHUNK prism_collection/GSE247599/chunk_0001 1000 2000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0001 obs 1000 vars 36602 controls 63
+[93m![0m There is a problem with your default AWS Credentials: Missing Dependency: Using the login credential provider requires an additional dependency. You will need to pip install "botocore[crt]" before proceeding.
+`anon` mode will be used for all non-managed buckets
+... uploading VyQwWXTU2u8wRAK60000.parquet:  0.0%... uploading VyQwWXTU2u8wRAK60000.parquet: 100.0%
+... uploading qvd37Tlf5gdyiaSZ0000.h5ad:  0.0%... uploading qvd37Tlf5gdyiaSZ0000.h5ad: 100.0%
+... uploading Vksd6ZXAynJIK0HN0000.parquet:  0.0%... uploading Vksd6ZXAynJIK0HN0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0001/X.h5ad 59303388
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0001/obs.parquet 51853
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0001/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0001
+READ_CHUNK prism_collection/GSE247599/chunk_0002 2000 3000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0002 obs 1000 vars 36602 controls 87
+... uploading 0XAyMa7YmSApUvum0000.parquet:  0.0%... uploading 0XAyMa7YmSApUvum0000.parquet: 100.0%
+... uploading DzoG5xcuO1fVGer60000.h5ad:  0.0%... uploading DzoG5xcuO1fVGer60000.h5ad: 100.0%
+... uploading TRApQ3EuuapzmrXv0000.parquet:  0.0%... uploading TRApQ3EuuapzmrXv0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0002/X.h5ad 58848732
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0002/obs.parquet 51814
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0002/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0002
+READ_CHUNK prism_collection/GSE247599/chunk_0003 3000 4000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0003 obs 1000 vars 36602 controls 68
+... uploading 5H8T4zWNFp1NnriF0000.parquet:  0.0%... uploading 5H8T4zWNFp1NnriF0000.parquet: 100.0%
+... uploading 3vBHY1r64lQX4fl70000.h5ad:  0.0%... uploading 3vBHY1r64lQX4fl70000.h5ad: 100.0%
+... uploading i0u6uueKBtoIiiS40000.parquet:  0.0%... uploading i0u6uueKBtoIiiS40000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0003/X.h5ad 58086876
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0003/obs.parquet 51803
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0003/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0003
+READ_CHUNK prism_collection/GSE247599/chunk_0004 4000 5000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0004 obs 1000 vars 36602 controls 67
+... uploading UV6ATaHyO6u0Q5Ub0000.parquet:  0.0%... uploading UV6ATaHyO6u0Q5Ub0000.parquet: 100.0%
+... uploading OubT9ONPVO0HeoAX0000.h5ad:  0.0%... uploading OubT9ONPVO0HeoAX0000.h5ad: 100.0%
+... uploading gsEO6rMRMF2HKcV90000.parquet:  0.0%... uploading gsEO6rMRMF2HKcV90000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0004/X.h5ad 58158556
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0004/obs.parquet 51883
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0004/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0004
+READ_CHUNK prism_collection/GSE247599/chunk_0005 5000 6000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0005 obs 1000 vars 36602 controls 78
+... uploading kdsY1CLXZXQ6BEB70000.parquet:  0.0%... uploading kdsY1CLXZXQ6BEB70000.parquet: 100.0%
+... uploading N9RO63e0ixew1dPA0000.h5ad:  0.0%... uploading N9RO63e0ixew1dPA0000.h5ad: 100.0%
+... uploading pIsk4f1SD0TMIU420000.parquet:  0.0%... uploading pIsk4f1SD0TMIU420000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0005/X.h5ad 59143644
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0005/obs.parquet 51726
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0005/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0005
+READ_CHUNK prism_collection/GSE247599/chunk_0006 6000 7000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0006 obs 1000 vars 36602 controls 78
+... uploading zUj4FvasOPJ2azwC0000.parquet:  0.0%... uploading zUj4FvasOPJ2azwC0000.parquet: 100.0%
+... uploading KOXXJ64kjmZWcf1z0000.h5ad:  0.0%... uploading KOXXJ64kjmZWcf1z0000.h5ad: 100.0%
+... uploading Od6eSZxW4DZP59px0000.parquet:  0.0%... uploading Od6eSZxW4DZP59px0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0006/X.h5ad 58136028
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0006/obs.parquet 51737
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0006/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0006
+READ_CHUNK prism_collection/GSE247599/chunk_0007 7000 8000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0007 obs 1000 vars 36602 controls 81
+... uploading 6X1zhJ5OB9MwZyGG0000.parquet:  0.0%... uploading 6X1zhJ5OB9MwZyGG0000.parquet: 100.0%
+... uploading lo7AXRB3DXdiUrAq0000.h5ad:  0.0%... uploading lo7AXRB3DXdiUrAq0000.h5ad: 100.0%
+... uploading ZJhs2hgQbsq1b9sc0000.parquet:  0.0%... uploading ZJhs2hgQbsq1b9sc0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0007/X.h5ad 57583068
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0007/obs.parquet 51536
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0007/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0007
+READ_CHUNK prism_collection/GSE247599/chunk_0008 8000 9000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0008 obs 1000 vars 36602 controls 85
+... uploading 36pLrVwc6oFJsxjO0000.parquet:  0.0%... uploading 36pLrVwc6oFJsxjO0000.parquet: 100.0%
+... uploading JmghTc1pUd7AaXjx0000.h5ad:  0.0%... uploading JmghTc1pUd7AaXjx0000.h5ad: 100.0%
+... uploading UmPBmNz2pBqqh2KG0000.parquet:  0.0%... uploading UmPBmNz2pBqqh2KG0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0008/X.h5ad 56796636
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0008/obs.parquet 51673
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0008/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0008
+READ_CHUNK prism_collection/GSE247599/chunk_0009 9000 10000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0009 obs 1000 vars 36602 controls 78
+... uploading p4H47o441bXXJ8Dc0000.parquet:  0.0%... uploading p4H47o441bXXJ8Dc0000.parquet: 100.0%
+... uploading AeaHAJzAEi6Pvbxj0000.h5ad:  0.0%... uploading AeaHAJzAEi6Pvbxj0000.h5ad: 100.0%
+... uploading o0jFJafdAI3BpkcG0000.parquet:  0.0%... uploading o0jFJafdAI3BpkcG0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0009/X.h5ad 58811868
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0009/obs.parquet 51614
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0009/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0009
+READ_CHUNK prism_collection/GSE247599/chunk_0010 10000 11000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0010 obs 1000 vars 36602 controls 77
+... uploading 1dKq9q5Ul0OeQ4o50000.parquet:  0.0%... uploading 1dKq9q5Ul0OeQ4o50000.parquet: 100.0%
+... uploading cL0QdWi3zbWMOI240000.h5ad:  0.0%... uploading cL0QdWi3zbWMOI240000.h5ad: 100.0%
+... uploading oaI46nIBHCM7qaXz0000.parquet:  0.0%... uploading oaI46nIBHCM7qaXz0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0010/X.h5ad 58516956
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0010/obs.parquet 51688
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0010/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0010
+READ_CHUNK prism_collection/GSE247599/chunk_0011 11000 12000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0011 obs 1000 vars 36602 controls 83
+... uploading VDDfnSCZ4NVLh81N0000.parquet:  0.0%... uploading VDDfnSCZ4NVLh81N0000.parquet: 100.0%
+... uploading LT06mri5SOnWkadr0000.h5ad:  0.0%... uploading LT06mri5SOnWkadr0000.h5ad: 100.0%
+... uploading JaL7uzEDjT0spoHc0000.parquet:  0.0%... uploading JaL7uzEDjT0spoHc0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0011/X.h5ad 58664412
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0011/obs.parquet 51663
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0011/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0011
+READ_CHUNK prism_collection/GSE247599/chunk_0012 12000 13000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0012 obs 1000 vars 36602 controls 92
+... uploading 6B15h83CuHjXzQz90000.parquet:  0.0%... uploading 6B15h83CuHjXzQz90000.parquet: 100.0%
+... uploading RgCzye8UTJ44QVgE0000.h5ad:  0.0%... uploading RgCzye8UTJ44QVgE0000.h5ad: 100.0%
+... uploading bjiHKQM4edRDPaKr0000.parquet:  0.0%... uploading bjiHKQM4edRDPaKr0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0012/X.h5ad 58357212
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0012/obs.parquet 51565
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0012/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0012
+READ_CHUNK prism_collection/GSE247599/chunk_0013 13000 14000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0013 obs 1000 vars 36602 controls 81
+... uploading 7VIuhb1MaJtnm3M20000.parquet:  0.0%... uploading 7VIuhb1MaJtnm3M20000.parquet: 100.0%
+... uploading NBDSjuWuRFLHgXRc0000.h5ad:  0.0%... uploading NBDSjuWuRFLHgXRc0000.h5ad: 100.0%
+... uploading jY2mNwlulZx0u5Rk0000.parquet:  0.0%... uploading jY2mNwlulZx0u5Rk0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0013/X.h5ad 57718236
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0013/obs.parquet 51570
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0013/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0013
+READ_CHUNK prism_collection/GSE247599/chunk_0014 14000 15000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0014 obs 1000 vars 36602 controls 81
+... uploading 2iMgfbeHINBgDRgF0000.parquet:  0.0%... uploading 2iMgfbeHINBgDRgF0000.parquet: 100.0%
+... uploading ZQwGzKet2Hnb3ieP0000.h5ad:  0.0%... uploading ZQwGzKet2Hnb3ieP0000.h5ad: 100.0%
+... uploading UDpR0ovW36jg6JNb0000.parquet:  0.0%... uploading UDpR0ovW36jg6JNb0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0014/X.h5ad 58330588
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0014/obs.parquet 51408
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0014/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0014
+READ_CHUNK prism_collection/GSE247599/chunk_0015 15000 16000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0015 obs 1000 vars 36602 controls 97
+... uploading sk95FOZRu2TN76Sc0000.parquet:  0.0%... uploading sk95FOZRu2TN76Sc0000.parquet: 100.0%
+... uploading BKEwjbmr5ddD1TPb0000.h5ad:  0.0%... uploading BKEwjbmr5ddD1TPb0000.h5ad: 100.0%
+... uploading b4SR2GC2oQu9o2ei0000.parquet:  0.0%... uploading b4SR2GC2oQu9o2ei0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0015/X.h5ad 57632220
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0015/obs.parquet 51510
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0015/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0015
+READ_CHUNK prism_collection/GSE247599/chunk_0016 16000 17000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0016 obs 1000 vars 36602 controls 72
+... uploading oaUna8UIqsyDuBTc0000.parquet:  0.0%... uploading oaUna8UIqsyDuBTc0000.parquet: 100.0%
+... uploading p04w4WK1QIwC2v8E0000.h5ad:  0.0%... uploading p04w4WK1QIwC2v8E0000.h5ad: 100.0%
+... uploading Gg2iJ3FvQMk60l7I0000.parquet:  0.0%... uploading Gg2iJ3FvQMk60l7I0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0016/X.h5ad 63813084
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0016/obs.parquet 51758
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0016/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0016
+READ_CHUNK prism_collection/GSE247599/chunk_0017 17000 18000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0017 obs 1000 vars 36602 controls 65
+... uploading IawiFhrWt3IBeLcd0000.parquet:  0.0%... uploading IawiFhrWt3IBeLcd0000.parquet: 100.0%
+... uploading gXFc6ypmWf4prOqa0000.h5ad:  0.0%... uploading gXFc6ypmWf4prOqa0000.h5ad: 100.0%
+... uploading FT9fS0uFXTXKdCSl0000.parquet:  0.0%... uploading FT9fS0uFXTXKdCSl0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0017/X.h5ad 63567324
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0017/obs.parquet 51621
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0017/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0017
+READ_CHUNK prism_collection/GSE247599/chunk_0018 18000 19000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0018 obs 1000 vars 36602 controls 66
+... uploading SNTte5ZTUhPHFcoz0000.parquet:  0.0%... uploading SNTte5ZTUhPHFcoz0000.parquet: 100.0%
+... uploading ehNHfCFJPMGY9FN40000.h5ad:  0.0%... uploading ehNHfCFJPMGY9FN40000.h5ad: 100.0%
+... uploading 6nCxUtUyUhT8r1BL0000.parquet:  0.0%... uploading 6nCxUtUyUhT8r1BL0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0018/X.h5ad 64105948
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0018/obs.parquet 51631
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0018/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0018
+READ_CHUNK prism_collection/GSE247599/chunk_0019 19000 20000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0019 obs 1000 vars 36602 controls 65
+... uploading VF7iIc2XOnQ98EJO0000.parquet:  0.0%... uploading VF7iIc2XOnQ98EJO0000.parquet: 100.0%
+... uploading A0IBYIrVr33oMVHm0000.h5ad:  0.0%... uploading A0IBYIrVr33oMVHm0000.h5ad: 100.0%
+... uploading GQsfBa8uajcjps600000.parquet:  0.0%... uploading GQsfBa8uajcjps600000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0019/X.h5ad 64265692
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0019/obs.parquet 51601
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0019/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0019
+READ_CHUNK prism_collection/GSE247599/chunk_0020 20000 21000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0020 obs 1000 vars 36602 controls 74
+... uploading ftWfVQXwuOtMMc6d0000.parquet:  0.0%... uploading ftWfVQXwuOtMMc6d0000.parquet: 100.0%
+... uploading UBj15jG5m4JqV9ch0000.h5ad:  0.0%... uploading UBj15jG5m4JqV9ch0000.h5ad: 100.0%
+... uploading e1l3OAhgPejt0iRT0000.parquet:  0.0%... uploading e1l3OAhgPejt0iRT0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0020/X.h5ad 63737308
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0020/obs.parquet 51572
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0020/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0020
+READ_CHUNK prism_collection/GSE247599/chunk_0021 21000 22000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0021 obs 1000 vars 36602 controls 73
+... uploading aP0S54F6GWrpXIZH0000.parquet:  0.0%... uploading aP0S54F6GWrpXIZH0000.parquet: 100.0%
+... uploading n83zypk8SRv3r1l40000.h5ad:  0.0%... uploading n83zypk8SRv3r1l40000.h5ad: 100.0%
+... uploading cORr7DZHqtjNguJ80000.parquet:  0.0%... uploading cORr7DZHqtjNguJ80000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0021/X.h5ad 62877148
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0021/obs.parquet 51590
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0021/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0021
+READ_CHUNK prism_collection/GSE247599/chunk_0022 22000 23000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0022 obs 1000 vars 36602 controls 82
+... uploading ldIJ81trroHm4HXY0000.parquet:  0.0%... uploading ldIJ81trroHm4HXY0000.parquet: 100.0%
+... uploading yxkXJUXkPsnQEz9v0000.h5ad:  0.0%... uploading yxkXJUXkPsnQEz9v0000.h5ad: 100.0%
+... uploading 7jgAqfzgnUVRdNNV0000.parquet:  0.0%... uploading 7jgAqfzgnUVRdNNV0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0022/X.h5ad 64378332
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0022/obs.parquet 51639
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0022/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0022
+READ_CHUNK prism_collection/GSE247599/chunk_0023 23000 24000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0023 obs 1000 vars 36602 controls 79
+... uploading aKkh5L1ziBJjcFxR0000.parquet:  0.0%... uploading aKkh5L1ziBJjcFxR0000.parquet: 100.0%
+... uploading 6y3n0nKcI7H8TS1Y0000.h5ad:  0.0%... uploading 6y3n0nKcI7H8TS1Y0000.h5ad: 100.0%
+... uploading 99S63NMfNVuq5HNg0000.parquet:  0.0%... uploading 99S63NMfNVuq5HNg0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0023/X.h5ad 63503836
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0023/obs.parquet 51686
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0023/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0023
+READ_CHUNK prism_collection/GSE247599/chunk_0024 24000 24435
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1756: UserWarning: Observation names are not unique. To make them unique, call `.obs_names_make_unique`.
+  utils.warn_names_duplicates("obs")
+SAVE_CHUNK prism_collection/GSE247599/chunk_0024 obs 435 vars 36602 controls 28
+... uploading 5OL3yMldvF6cYlGq0000.parquet:  0.0%... uploading 5OL3yMldvF6cYlGq0000.parquet: 100.0%
+... uploading 8menOFiXMGF9vrYc0000.h5ad:  0.0%... uploading 8menOFiXMGF9vrYc0000.h5ad: 100.0%
+... uploading MHPpPqTCyzzuMzRH0000.parquet:  0.0%... uploading MHPpPqTCyzzuMzRH0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0024/X.h5ad 28559480
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0024/obs.parquet 34258
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_5b591c9d-prism-p5f-cont9/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE247599/chunk_0024/var.parquet 603926
+DONE_CHUNK prism_collection/GSE247599/chunk_0024
+DONE_DATASET prism_collection/GSE247599 25
+      438.30 real        10.37 user         2.26 sys
+           841383936  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              173739  page reclaims
+                 534  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+              103554  messages sent
+                3881  messages received
+                   1  signals received
+                 394  voluntary context switches
+               99500  involuntary context switches
+           292796530  instructions retired
+            90486965  cycles elapsed
+            17973656  peak memory footprint

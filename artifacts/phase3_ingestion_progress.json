@@ -1468,6 +1468,172 @@
       "controls": 12828,
       "verification_json": "artifacts/schema_audit/prism_GSE250558_chunked_verification.json",
       "note": "P5F Google Drive recovery cont8; source is backed CSRDataset int32 with duplicate obs names and unique var; ingested smoke-first then resumed full as 1000-cell chunks; obs/X/var links, X payloads/counts, var rows, and canonical obs fields verified."
+    },
+    {
+      "dataset": "GSE247599",
+      "prefix": "prism_collection/GSE247599",
+      "path": "data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad",
+      "gcs_bytes": 1433706825,
+      "n_obs": 24435,
+      "n_vars": 36602,
+      "chunk_size": 1000,
+      "status": "chunked_verified",
+      "chunks": [
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0000",
+          "start": 0,
+          "end": 1000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0001",
+          "start": 1000,
+          "end": 2000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0002",
+          "start": 2000,
+          "end": 3000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0003",
+          "start": 3000,
+          "end": 4000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0004",
+          "start": 4000,
+          "end": 5000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0005",
+          "start": 5000,
+          "end": 6000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0006",
+          "start": 6000,
+          "end": 7000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0007",
+          "start": 7000,
+          "end": 8000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0008",
+          "start": 8000,
+          "end": 9000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0009",
+          "start": 9000,
+          "end": 10000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0010",
+          "start": 10000,
+          "end": 11000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0011",
+          "start": 11000,
+          "end": 12000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0012",
+          "start": 12000,
+          "end": 13000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0013",
+          "start": 13000,
+          "end": 14000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0014",
+          "start": 14000,
+          "end": 15000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0015",
+          "start": 15000,
+          "end": 16000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0016",
+          "start": 16000,
+          "end": 17000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0017",
+          "start": 17000,
+          "end": 18000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0018",
+          "start": 18000,
+          "end": 19000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0019",
+          "start": 19000,
+          "end": 20000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0020",
+          "start": 20000,
+          "end": 21000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0021",
+          "start": 21000,
+          "end": 22000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0022",
+          "start": 22000,
+          "end": 23000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0023",
+          "start": 23000,
+          "end": 24000,
+          "status": "verified"
+        },
+        {
+          "prefix": "prism_collection/GSE247599/chunk_0024",
+          "start": 24000,
+          "end": 24435,
+          "status": "verified"
+        }
+      ],
+      "verification_json": "artifacts/schema_audit/prism_GSE247599_chunked_verification.json",
+      "controls": 1876,
+      "note": "Memory-bounded backed h5ad ingestion; verified obs->X->var links, X payloads, counts, and required obs fields."
     }
   ],
   "downloaded_not_ingested": [
@@ -1502,17 +1668,6 @@
       "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
       "source_accession": "GSE247598",
       "attempted_url": "https://drive.google.com/uc?id=178q95os6WY5TziWJ6gZN4kBzoRkmSa3V",
-      "requires_user_auth_or_manual_download": true
-    },
-    {
-      "dataset": "GSE247599",
-      "path": "data/main/prism_collection/GSE247599.h5ad",
-      "gcs_uri": null,
-      "note": "Failed to retrieve file url:",
-      "status": "blocked_source_or_metadata",
-      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
-      "source_accession": "GSE247599",
-      "attempted_url": "https://drive.google.com/uc?id=1Jl8nhQJPAx1U2GkOhtLTzN6yr4ObY86M",
       "requires_user_auth_or_manual_download": true
     },
     {
@@ -1863,7 +2018,7 @@
     "note": "12 assigned_guide h5ad files are 118-173GB each (~1.73TB total); do not aws sync to VPS. Need streaming/chunked h5ad path or larger conversion host.",
     "plan": "artifacts/tcell_gwps_ingestion_plan.json"
   },
-  "last_updated": "2026-06-23T11:03:09.153408+00:00",
+  "last_updated": "2026-06-23T11:41:12.773055+00:00",
   "prism_staged_gcs_status": {
     "checked_at": "2026-06-15T17:10:35Z",
     "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_collection/",
