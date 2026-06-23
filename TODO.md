@@ -229,18 +229,22 @@ Done:
   and `artifacts/schema_audit/temporal_t14_final_status_20260622.{md,json}`.
 - T15-Mac (`t_625ca1ff`) resolved SCP1290/SCP3301/SCP1467 public manifests. SCP
   browser-auth continuation `t_1454d364` later recovered and byte-verified the
-  `SCP1467` expression/metadata files in GCS, so SCP1467 is now a conversion
-  planning/ingestion follow-up rather than an auth blocker. SCP1290 has a bounded
-  GEO scRNA alternate (`GSE153162`): 20 per-sample 10x H5 triplets were ingested
-  and verified under
+  `SCP1467` expression/metadata files in GCS. SCP1290 has a bounded GEO scRNA
+  alternate (`GSE153162`): 20 per-sample 10x H5 triplets were ingested and
+  verified under
   `temporal_pretraining/scp1290_gse153162_mammalian_cerebral_cortex/` (`128,746 ×
   27,998` per-sample feature space; E10–P4/Fezf2 contexts; obs→X→var verified).
-  SCP3301/GSE315712 is deferred for processed-vs-raw matrix-family selection and
-  staged/chunked conversion; avoid the 33 GB GEO RAW tar as the first path.
-  Artifacts:
-  `artifacts/schema_audit/temporal_t15_scp_gse153162_status_20260622.{md,json}`
-  and `artifacts/scripts/ingest_temporal_t15_scp_gse153162_20260622.py`; SCPAUTH
-  continuation artifact: `artifacts/schema_audit/temporal_scp_browser_auth_continuation_t1454d364_20260623.{md,json}`.
+  SCP1467 is now ingested and verified under
+  `temporal_pretraining/scp1467_drosophila_embryonic_heart/` (`2,857 × 9,034`):
+  canonical `X.h5ad` is raw counts, and normalized expression is preserved as
+  `X_normalized_expression.h5ad`. SCP3301/GSE315712 is deferred for
+  processed-vs-raw matrix-family selection and staged/chunked conversion; avoid
+  the 33 GB GEO RAW tar as the first path. Artifacts:
+  `artifacts/schema_audit/temporal_t15_scp_gse153162_status_20260622.{md,json}`,
+  `artifacts/scripts/ingest_temporal_t15_scp_gse153162_20260622.py`,
+  `artifacts/schema_audit/temporal_scp_browser_auth_continuation_t1454d364_20260623.{md,json}`,
+  and `artifacts/schema_audit/temporal_scp1467_heart_ingestion_20260623.{md,json}`;
+  reproducible script: `tools/ingest_scp1467_heart.py`.
 - T17-Mac (`t_c8478c79`) resolved BioStudies/ArrayExpress embryo processed
   exports and ingested/verified E-MTAB-3929 human preimplantation embryos as
   `temporal_biostudies/E-MTAB-3929_preimplantation_embryo` (`1,519 × 34,570`,
