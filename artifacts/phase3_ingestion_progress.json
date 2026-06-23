@@ -3694,7 +3694,8 @@
       "verification_json": "artifacts/schema_audit/prism_GSE269596_chunked_verification.json",
       "source_probe_json": "artifacts/schema_audit/prism_GSE269596_source_probe_20260623.json",
       "controls": 7394,
-      "note": "Memory-bounded backed h5ad ingestion; verified obs->X->var links, X payloads, counts, and required obs fields."
+      "cell_line_non_unknown_total": 74312,
+      "note": "Memory-bounded backed h5ad ingestion; verified obs->X->var links, X payloads, counts, required obs fields, and source cellline preserved in cell_line."
     }
   ],
   "downloaded_not_ingested": [
@@ -4046,7 +4047,7 @@
     "note": "12 assigned_guide h5ad files are 118-173GB each (~1.73TB total); do not aws sync to VPS. Need streaming/chunked h5ad path or larger conversion host.",
     "plan": "artifacts/tcell_gwps_ingestion_plan.json"
   },
-  "last_updated": "2026-06-23T15:00:22.557706+00:00",
+  "last_updated": "2026-06-23T15:29:13.208118+00:00",
   "prism_staged_gcs_status": {
     "checked_at": "2026-06-15T17:10:35Z",
     "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_collection/",

@@ -1,6 +1,6 @@
 {
   "dataset": "GSE269596",
-  "updated_at_utc": "2026-06-23T14:35:46.023842+00:00",
+  "updated_at_utc": "2026-06-23T15:18:35.347547+00:00",
   "source_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad",
   "expected_gcs_bytes": 2505068264,
   "local_path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_dc951242/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad",
@@ -52,6 +52,11 @@
     "assay": true
   },
   "controls_after_standardization": 7394,
+  "cell_line_non_unknown_after_standardization": 74312,
+  "cell_line_unique_after_standardization": [
+    "HEK293T",
+    "K562"
+  ],
   "unique_perturbations_sample": [
     "CPSF1",
     "CPSF3",

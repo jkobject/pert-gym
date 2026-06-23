@@ -40,6 +40,7 @@ def main() -> int:
     assert verification["chunks_verified"] == 75
     assert verification["rows_verified"] == 74312
     assert verification["expected_vars"] == 36601
+    assert verification["cell_line_non_unknown_total"] > 0
     assert source_probe["local_bytes"] == SOURCE_BYTES
 
     status_rel = "artifacts/schema_audit/prism_p5f_status_20260622.json"
@@ -56,6 +57,8 @@ def main() -> int:
         "source_uri": SOURCE_URI,
         "source_bytes": SOURCE_BYTES,
         "controls": verification["controls"],
+        "cell_line_non_unknown_total": verification["cell_line_non_unknown_total"],
+        "cell_line_unique_after_standardization": source_probe.get("cell_line_unique_after_standardization", []),
     }
     status["remaining"].update(
         {
@@ -71,7 +74,7 @@ def main() -> int:
     note = (
         "2026-06-23 t_dc951242: GSE269596 ingested from staged Google Drive h5ad "
         "as 75 backed CSR chunks (chunk_size=1000), verified obs->X->var links, X payloads, "
-        "74,312 rows, 36,601 vars, and required obs fields."
+        "74,312 rows, 36,601 vars, required obs fields, and source cellline preserved in cell_line."
     )
     notes = status.setdefault("notes", [])
     if note not in notes:
@@ -109,7 +112,8 @@ def main() -> int:
             "verification_json": VERIFICATION_JSON,
             "source_probe_json": SOURCE_PROBE_JSON,
             "controls": verification["controls"],
-            "note": "Memory-bounded backed h5ad ingestion; verified obs->X->var links, X payloads, counts, and required obs fields.",
+            "cell_line_non_unknown_total": verification["cell_line_non_unknown_total"],
+            "note": "Memory-bounded backed h5ad ingestion; verified obs->X->var links, X payloads, counts, required obs fields, and source cellline preserved in cell_line.",
         },
     )
     save(progress_rel, progress)
@@ -129,6 +133,7 @@ def main() -> int:
                     "rows_verified": verification["rows_verified"],
                     "n_vars": verification["expected_vars"],
                     "controls": verification["controls"],
+                    "cell_line_non_unknown_total": verification["cell_line_non_unknown_total"],
                     "verification_json": VERIFICATION_JSON,
                     "source_probe_json": SOURCE_PROBE_JSON,
                 }

@@ -11,12 +11,15 @@
     36601
   ],
   "controls": 7394,
+  "cell_line_non_unknown_total": 74312,
+  "required_non_unknown_cell_line": true,
   "checks": {
     "all_chunks_ok": true,
     "chunks_verified": true,
     "rows_verified": true,
     "var_counts_match": true,
-    "no_bad_chunks": true
+    "no_bad_chunks": true,
+    "cell_line_not_all_unknown": true
   },
   "ok": true,
   "bad_chunks": [],
@@ -49,6 +52,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 70,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -79,6 +86,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 79,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -109,6 +120,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 61,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -139,6 +154,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 70,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -169,6 +188,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 74,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -199,6 +222,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 73,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -229,6 +256,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 79,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -259,6 +290,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 65,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -289,6 +324,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 75,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -319,6 +358,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 70,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -349,6 +392,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 77,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -379,6 +426,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 76,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -409,6 +460,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 68,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -439,6 +494,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 72,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -469,6 +528,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 78,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -499,6 +562,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 88,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -529,6 +596,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 97,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -559,6 +630,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 102,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -589,6 +664,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 92,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -619,6 +698,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 80,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -649,6 +732,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 96,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -679,6 +766,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 104,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -709,6 +800,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 93,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -739,6 +834,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 69,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -769,6 +868,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 102,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -799,6 +902,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 91,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -829,6 +936,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 87,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -859,6 +970,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 83,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -889,6 +1004,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 87,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -919,6 +1038,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 80,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -949,6 +1072,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 85,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -979,6 +1106,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 91,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1009,6 +1140,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 87,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1039,6 +1174,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 94,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1069,6 +1208,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 93,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1099,6 +1242,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 92,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1129,6 +1276,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 87,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1159,6 +1310,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 86,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1189,6 +1344,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 91,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1219,6 +1378,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 83,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1249,6 +1412,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 75,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1279,6 +1446,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 71,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1309,6 +1480,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 94,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1339,6 +1514,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 77,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1369,6 +1548,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 87,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1399,6 +1582,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 88,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1429,6 +1616,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 93,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1459,6 +1650,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 89,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1489,6 +1684,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 90,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1519,6 +1718,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 71,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1549,6 +1752,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 96,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ],
       "ok": true
     },
     {
@@ -1579,6 +1786,11 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 100,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T",
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1609,6 +1821,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 130,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1639,6 +1855,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 107,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1669,6 +1889,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 94,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1699,6 +1923,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 120,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1729,6 +1957,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 126,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1759,6 +1991,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 119,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1789,6 +2025,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 123,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1819,6 +2059,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 106,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1849,6 +2093,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 126,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1879,6 +2127,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 116,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1909,6 +2161,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 133,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1939,6 +2195,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 115,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1969,6 +2229,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 120,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -1999,6 +2263,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 127,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -2029,6 +2297,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 167,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -2059,6 +2331,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 172,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -2089,6 +2365,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 169,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -2119,6 +2399,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 154,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -2149,6 +2433,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 149,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -2179,6 +2467,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 158,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -2209,6 +2501,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 187,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -2239,6 +2535,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 167,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     },
     {
@@ -2269,6 +2569,10 @@
       },
       "all_required_obs_fields_present": true,
       "controls": 51,
+      "cell_line_non_unknown": 312,
+      "cell_line_unique_sample": [
+        "K562"
+      ],
       "ok": true
     }
   ]

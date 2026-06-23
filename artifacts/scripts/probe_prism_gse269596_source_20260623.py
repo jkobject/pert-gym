@@ -36,6 +36,7 @@ def main() -> int:
         obs_cols = list(source.obs.columns)
         var_cols = list(source.var.columns)
         obs_std = standardize_prism_obs_df(source.obs.copy(), DATASET)
+        cell_line_values = obs_std["cell_line"].astype(str) if "cell_line" in obs_std.columns else None
         result = {
             "dataset": DATASET,
             "updated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -68,6 +69,8 @@ def main() -> int:
                 ]
             },
             "controls_after_standardization": int(obs_std["is_control"].sum()) if "is_control" in obs_std.columns else None,
+            "cell_line_non_unknown_after_standardization": int(cell_line_values.ne("unknown").sum()) if cell_line_values is not None else None,
+            "cell_line_unique_after_standardization": sorted(cell_line_values.unique().tolist()) if cell_line_values is not None else [],
             "unique_perturbations_sample": sorted(obs_std["perturbation"].astype(str).unique()[:20].tolist()) if "perturbation" in obs_std.columns else [],
             "recommended_chunk_size": 1000,
             "recommendation": "safe_to_smoke_chunk_with_backed_reader",
@@ -75,7 +78,7 @@ def main() -> int:
     finally:
         source.file.close()
     OUT.write_text(json.dumps(result, indent=2, sort_keys=False) + "\n")
-    print(json.dumps({k: result[k] for k in ["dataset", "local_bytes", "n_obs", "n_vars", "x_backed_type", "x_dtype", "controls_after_standardization", "recommended_chunk_size"]}, indent=2))
+    print(json.dumps({k: result[k] for k in ["dataset", "local_bytes", "n_obs", "n_vars", "x_backed_type", "x_dtype", "controls_after_standardization", "cell_line_non_unknown_after_standardization", "cell_line_unique_after_standardization", "recommended_chunk_size"]}, indent=2))
     return 0
 
 

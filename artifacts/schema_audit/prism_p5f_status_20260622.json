@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-06-23T15:00:22.557706+00:00",
+  "updated_at_utc": "2026-06-23T15:29:13.208118+00:00",
   "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
   "gate_summary_original": {
     "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
@@ -170,7 +170,12 @@
       "source_probe_json": "artifacts/schema_audit/prism_GSE269596_source_probe_20260623.json",
       "source_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad",
       "source_bytes": 2505068264,
-      "controls": 7394
+      "controls": 7394,
+      "cell_line_non_unknown_total": 74312,
+      "cell_line_unique_after_standardization": [
+        "HEK293T",
+        "K562"
+      ]
     }
   },
   "duplicate_resolution": {
@@ -231,7 +236,8 @@
     "2026-06-23 t_5b591c9d: GSE247599 ingested from staged Google Drive h5ad as 25 backed CSR chunks (chunk_size=1000), verified obs->X->var links, X payloads, 24,435 rows, 36,602 vars, and required obs fields.",
     "2026-06-23 t_278787d2: GSE283614 ingested from staged Google Drive h5ad as 13 backed CSR chunks (chunk_size=1000), verified obs->X->var links, X payloads, 12,844 rows, 33,586 vars, and required obs fields.",
     "2026-06-23 t_ac8dc1a3: GSE280767 ingested from staged Google Drive h5ad as 247 backed CSR chunks (chunk_size=1000), verified obs->X->var links, X payloads, 246,027 rows, 36,601 vars, and required obs fields.",
-    "2026-06-23 t_dc951242: GSE269596 ingested from staged Google Drive h5ad as 75 backed CSR chunks (chunk_size=1000), verified obs->X->var links, X payloads, 74,312 rows, 36,601 vars, and required obs fields."
+    "2026-06-23 t_dc951242: GSE269596 ingested from staged Google Drive h5ad as 75 backed CSR chunks (chunk_size=1000), verified obs->X->var links, X payloads, 74,312 rows, 36,601 vars, and required obs fields.",
+    "2026-06-23 t_dc951242: GSE269596 ingested from staged Google Drive h5ad as 75 backed CSR chunks (chunk_size=1000), verified obs->X->var links, X payloads, 74,312 rows, 36,601 vars, required obs fields, and source cellline preserved in cell_line."
   ],
   "staged_payload_issues": {
     "GSE274751": {

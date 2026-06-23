@@ -12,7 +12,7 @@ Recomputed from the current GCS staging listing and visible Lamin triplet keys o
 - Newly completed this run: `GSE269596`
 - Next candidate: `GSE281048_TGFB_Perturb_seq`
 
-`GSE269596` verification: 75/75 chunks, 74,312 rows, 36,601 vars, 7,394 controls, obs->X->var links and X payloads OK, required obs fields present.
+`GSE269596` verification: 75/75 chunks, 74,312 rows, 36,601 vars, 7,394 controls, obs->X->var links and X payloads OK, required obs fields present, and standardized `cell_line` is not all `unknown` (`74,312/74,312` rows; values `HEK293T`, `K562`). The metadata repair revised obs parquet artifacts only and relinked existing X artifacts; it did not full-load or rewrite X.
 
 ## Remaining candidates by current GCS size
 

@@ -1,0 +1,996 @@
+{
+  "dataset": "GSE269596",
+  "updated_at_utc": "2026-06-23T15:25:31.771111+00:00",
+  "source_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad",
+  "local_path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_dc951242/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad",
+  "local_bytes": 2505068264,
+  "chunk_size": 1000,
+  "expected_rows": 74312,
+  "expected_chunks": 75,
+  "chunks_repaired": 75,
+  "cell_line_non_unknown_total": 74312,
+  "cell_line_unique_sample": [
+    "HEK293T",
+    "K562"
+  ],
+  "obs_only_no_x_rewrite": true,
+  "ok": true,
+  "chunks": [
+    {
+      "chunk": 0,
+      "prefix": "prism_collection/GSE269596/chunk_0000",
+      "obs_key": "prism_collection/GSE269596/chunk_0000/obs.parquet",
+      "old_obs_uid": "bplFGb9hm6QAr6HA0000",
+      "new_obs_uid": "bplFGb9hm6QAr6HA0001",
+      "x_uid": "5GIWa6ngDPNEoK3Y0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 1,
+      "prefix": "prism_collection/GSE269596/chunk_0001",
+      "obs_key": "prism_collection/GSE269596/chunk_0001/obs.parquet",
+      "old_obs_uid": "4DlnP1ScM0x0fkUp0000",
+      "new_obs_uid": "4DlnP1ScM0x0fkUp0001",
+      "x_uid": "ya9iE5RjXBCFVEbq0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 2,
+      "prefix": "prism_collection/GSE269596/chunk_0002",
+      "obs_key": "prism_collection/GSE269596/chunk_0002/obs.parquet",
+      "old_obs_uid": "sqey1zthSTqAGxuD0000",
+      "new_obs_uid": "sqey1zthSTqAGxuD0001",
+      "x_uid": "l9m1MePTUWRm5bx90000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 3,
+      "prefix": "prism_collection/GSE269596/chunk_0003",
+      "obs_key": "prism_collection/GSE269596/chunk_0003/obs.parquet",
+      "old_obs_uid": "XQIEkO77lHa2yOCK0000",
+      "new_obs_uid": "XQIEkO77lHa2yOCK0001",
+      "x_uid": "WEpbpww4ju7P2gJ80000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 4,
+      "prefix": "prism_collection/GSE269596/chunk_0004",
+      "obs_key": "prism_collection/GSE269596/chunk_0004/obs.parquet",
+      "old_obs_uid": "pGGQ4BTvFsjUyf280000",
+      "new_obs_uid": "pGGQ4BTvFsjUyf280001",
+      "x_uid": "gjvmA4jq2LpqFF4W0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 5,
+      "prefix": "prism_collection/GSE269596/chunk_0005",
+      "obs_key": "prism_collection/GSE269596/chunk_0005/obs.parquet",
+      "old_obs_uid": "6DdFsAbUn2ME4z0N0000",
+      "new_obs_uid": "6DdFsAbUn2ME4z0N0001",
+      "x_uid": "iWGUWkP7dXS762HJ0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 6,
+      "prefix": "prism_collection/GSE269596/chunk_0006",
+      "obs_key": "prism_collection/GSE269596/chunk_0006/obs.parquet",
+      "old_obs_uid": "CkKezN5Klut0GeHS0000",
+      "new_obs_uid": "CkKezN5Klut0GeHS0001",
+      "x_uid": "qaVSbyD6c44WViaX0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 7,
+      "prefix": "prism_collection/GSE269596/chunk_0007",
+      "obs_key": "prism_collection/GSE269596/chunk_0007/obs.parquet",
+      "old_obs_uid": "oCFncyFVI3628Yq20000",
+      "new_obs_uid": "oCFncyFVI3628Yq20001",
+      "x_uid": "EEhpOvdBX5zQ67JY0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 8,
+      "prefix": "prism_collection/GSE269596/chunk_0008",
+      "obs_key": "prism_collection/GSE269596/chunk_0008/obs.parquet",
+      "old_obs_uid": "hYjDdid3CuOELM1J0000",
+      "new_obs_uid": "hYjDdid3CuOELM1J0001",
+      "x_uid": "nP2wW6B9vRzchQIB0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 9,
+      "prefix": "prism_collection/GSE269596/chunk_0009",
+      "obs_key": "prism_collection/GSE269596/chunk_0009/obs.parquet",
+      "old_obs_uid": "ie9r2bnktaOu0wsU0000",
+      "new_obs_uid": "ie9r2bnktaOu0wsU0001",
+      "x_uid": "qf4fe9HPQ1hiVweL0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 10,
+      "prefix": "prism_collection/GSE269596/chunk_0010",
+      "obs_key": "prism_collection/GSE269596/chunk_0010/obs.parquet",
+      "old_obs_uid": "7zNUQWJ7GO2swR5o0000",
+      "new_obs_uid": "7zNUQWJ7GO2swR5o0001",
+      "x_uid": "hu0OphIZv7AhBA600000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 11,
+      "prefix": "prism_collection/GSE269596/chunk_0011",
+      "obs_key": "prism_collection/GSE269596/chunk_0011/obs.parquet",
+      "old_obs_uid": "OpPLsrGsdoUDdGni0000",
+      "new_obs_uid": "OpPLsrGsdoUDdGni0001",
+      "x_uid": "wX3VkewPN62oIhwp0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 12,
+      "prefix": "prism_collection/GSE269596/chunk_0012",
+      "obs_key": "prism_collection/GSE269596/chunk_0012/obs.parquet",
+      "old_obs_uid": "AGYDmltODlNYMMwL0000",
+      "new_obs_uid": "AGYDmltODlNYMMwL0001",
+      "x_uid": "q3FuRVxwFG3Rw9pA0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 13,
+      "prefix": "prism_collection/GSE269596/chunk_0013",
+      "obs_key": "prism_collection/GSE269596/chunk_0013/obs.parquet",
+      "old_obs_uid": "iWR4ZsPAwO5ciXV30000",
+      "new_obs_uid": "iWR4ZsPAwO5ciXV30001",
+      "x_uid": "GfmFZZ5RMUmJ5yz20000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 14,
+      "prefix": "prism_collection/GSE269596/chunk_0014",
+      "obs_key": "prism_collection/GSE269596/chunk_0014/obs.parquet",
+      "old_obs_uid": "8fGM1RhbDbMG7Z0p0000",
+      "new_obs_uid": "8fGM1RhbDbMG7Z0p0001",
+      "x_uid": "UpK6SFG7yHTaZRIu0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 15,
+      "prefix": "prism_collection/GSE269596/chunk_0015",
+      "obs_key": "prism_collection/GSE269596/chunk_0015/obs.parquet",
+      "old_obs_uid": "u5ispamIir7Fmgnn0000",
+      "new_obs_uid": "u5ispamIir7Fmgnn0001",
+      "x_uid": "ru0Y3mLLOico9Bkd0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 16,
+      "prefix": "prism_collection/GSE269596/chunk_0016",
+      "obs_key": "prism_collection/GSE269596/chunk_0016/obs.parquet",
+      "old_obs_uid": "Xf538tRuYR7pNtYy0000",
+      "new_obs_uid": "Xf538tRuYR7pNtYy0001",
+      "x_uid": "DHwWQqBY9bka4JJN0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 17,
+      "prefix": "prism_collection/GSE269596/chunk_0017",
+      "obs_key": "prism_collection/GSE269596/chunk_0017/obs.parquet",
+      "old_obs_uid": "6LzkhQeYDy7IeRdk0000",
+      "new_obs_uid": "6LzkhQeYDy7IeRdk0001",
+      "x_uid": "Zzy9m5AeINLD6w9w0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 18,
+      "prefix": "prism_collection/GSE269596/chunk_0018",
+      "obs_key": "prism_collection/GSE269596/chunk_0018/obs.parquet",
+      "old_obs_uid": "1iOYEq7lWtxu63OJ0000",
+      "new_obs_uid": "1iOYEq7lWtxu63OJ0001",
+      "x_uid": "W6tJ09HgoTG6Spvn0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 19,
+      "prefix": "prism_collection/GSE269596/chunk_0019",
+      "obs_key": "prism_collection/GSE269596/chunk_0019/obs.parquet",
+      "old_obs_uid": "tzaiQNCRhfzexiIP0000",
+      "new_obs_uid": "tzaiQNCRhfzexiIP0001",
+      "x_uid": "6NhXu2hWMV0FFlCn0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 20,
+      "prefix": "prism_collection/GSE269596/chunk_0020",
+      "obs_key": "prism_collection/GSE269596/chunk_0020/obs.parquet",
+      "old_obs_uid": "RE0XwdWyVZj72ph90000",
+      "new_obs_uid": "RE0XwdWyVZj72ph90001",
+      "x_uid": "qb4qJDiqefK6llCe0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 21,
+      "prefix": "prism_collection/GSE269596/chunk_0021",
+      "obs_key": "prism_collection/GSE269596/chunk_0021/obs.parquet",
+      "old_obs_uid": "kY3VqfRFGJXpr6Nb0000",
+      "new_obs_uid": "kY3VqfRFGJXpr6Nb0001",
+      "x_uid": "BdiueUFpy9ESeHyQ0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 22,
+      "prefix": "prism_collection/GSE269596/chunk_0022",
+      "obs_key": "prism_collection/GSE269596/chunk_0022/obs.parquet",
+      "old_obs_uid": "iNRxEcXtEFz5enq60000",
+      "new_obs_uid": "iNRxEcXtEFz5enq60001",
+      "x_uid": "fFpYMVq2mYblFacb0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 23,
+      "prefix": "prism_collection/GSE269596/chunk_0023",
+      "obs_key": "prism_collection/GSE269596/chunk_0023/obs.parquet",
+      "old_obs_uid": "oJGFGFdvwQfM4Vkh0000",
+      "new_obs_uid": "oJGFGFdvwQfM4Vkh0001",
+      "x_uid": "6gz9YX52268kMr8P0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 24,
+      "prefix": "prism_collection/GSE269596/chunk_0024",
+      "obs_key": "prism_collection/GSE269596/chunk_0024/obs.parquet",
+      "old_obs_uid": "MBMmhtEdcWmhj2kI0000",
+      "new_obs_uid": "MBMmhtEdcWmhj2kI0001",
+      "x_uid": "LPCTuF56YGbd5PEB0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 25,
+      "prefix": "prism_collection/GSE269596/chunk_0025",
+      "obs_key": "prism_collection/GSE269596/chunk_0025/obs.parquet",
+      "old_obs_uid": "tTi4lFhcuhmVVvo40000",
+      "new_obs_uid": "tTi4lFhcuhmVVvo40001",
+      "x_uid": "mLQmMYhC4Hv5Ik880000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 26,
+      "prefix": "prism_collection/GSE269596/chunk_0026",
+      "obs_key": "prism_collection/GSE269596/chunk_0026/obs.parquet",
+      "old_obs_uid": "a5wZmWD9HOWVYABM0000",
+      "new_obs_uid": "a5wZmWD9HOWVYABM0001",
+      "x_uid": "ong3USl4N1P0hjF10000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 27,
+      "prefix": "prism_collection/GSE269596/chunk_0027",
+      "obs_key": "prism_collection/GSE269596/chunk_0027/obs.parquet",
+      "old_obs_uid": "wQCrIvtvMbKuIm3Y0000",
+      "new_obs_uid": "wQCrIvtvMbKuIm3Y0001",
+      "x_uid": "b9Pq4PFTBJ7EvbYA0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 28,
+      "prefix": "prism_collection/GSE269596/chunk_0028",
+      "obs_key": "prism_collection/GSE269596/chunk_0028/obs.parquet",
+      "old_obs_uid": "HChoeVTZ6QtaBkt00000",
+      "new_obs_uid": "HChoeVTZ6QtaBkt00001",
+      "x_uid": "8Xoaylbzvm8vpd9g0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 29,
+      "prefix": "prism_collection/GSE269596/chunk_0029",
+      "obs_key": "prism_collection/GSE269596/chunk_0029/obs.parquet",
+      "old_obs_uid": "PyopKbOgwX2NAJ0b0000",
+      "new_obs_uid": "PyopKbOgwX2NAJ0b0001",
+      "x_uid": "6iICUbLrr5PRMU7C0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 30,
+      "prefix": "prism_collection/GSE269596/chunk_0030",
+      "obs_key": "prism_collection/GSE269596/chunk_0030/obs.parquet",
+      "old_obs_uid": "49A9lkiP3EDVRvOX0000",
+      "new_obs_uid": "49A9lkiP3EDVRvOX0001",
+      "x_uid": "KFxCeeKng1XB250D0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 31,
+      "prefix": "prism_collection/GSE269596/chunk_0031",
+      "obs_key": "prism_collection/GSE269596/chunk_0031/obs.parquet",
+      "old_obs_uid": "5h26023NKCPO3ufG0000",
+      "new_obs_uid": "5h26023NKCPO3ufG0001",
+      "x_uid": "1WgawtXHOAUQuUCi0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 32,
+      "prefix": "prism_collection/GSE269596/chunk_0032",
+      "obs_key": "prism_collection/GSE269596/chunk_0032/obs.parquet",
+      "old_obs_uid": "SSCKu6kkXBkHzyHo0000",
+      "new_obs_uid": "SSCKu6kkXBkHzyHo0001",
+      "x_uid": "zOW2uy2cSSOGvHA10000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 33,
+      "prefix": "prism_collection/GSE269596/chunk_0033",
+      "obs_key": "prism_collection/GSE269596/chunk_0033/obs.parquet",
+      "old_obs_uid": "3Zc32jyReMgMiSLL0000",
+      "new_obs_uid": "3Zc32jyReMgMiSLL0001",
+      "x_uid": "UzCq4L7W3mPEkMpJ0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 34,
+      "prefix": "prism_collection/GSE269596/chunk_0034",
+      "obs_key": "prism_collection/GSE269596/chunk_0034/obs.parquet",
+      "old_obs_uid": "3cTqyAmWTnq4wVCb0000",
+      "new_obs_uid": "3cTqyAmWTnq4wVCb0001",
+      "x_uid": "xvOb0VrDORoqly5j0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 35,
+      "prefix": "prism_collection/GSE269596/chunk_0035",
+      "obs_key": "prism_collection/GSE269596/chunk_0035/obs.parquet",
+      "old_obs_uid": "IPmvRxN172QrzJBN0000",
+      "new_obs_uid": "IPmvRxN172QrzJBN0001",
+      "x_uid": "aIyTA75O4lI6azAC0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 36,
+      "prefix": "prism_collection/GSE269596/chunk_0036",
+      "obs_key": "prism_collection/GSE269596/chunk_0036/obs.parquet",
+      "old_obs_uid": "Ze0XlrZ3njUJGLay0000",
+      "new_obs_uid": "Ze0XlrZ3njUJGLay0001",
+      "x_uid": "sTYbN4WpfDjOGG9g0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 37,
+      "prefix": "prism_collection/GSE269596/chunk_0037",
+      "obs_key": "prism_collection/GSE269596/chunk_0037/obs.parquet",
+      "old_obs_uid": "aT204d4afUIPcl9v0000",
+      "new_obs_uid": "aT204d4afUIPcl9v0001",
+      "x_uid": "9m3E5QplCBX0wYwR0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 38,
+      "prefix": "prism_collection/GSE269596/chunk_0038",
+      "obs_key": "prism_collection/GSE269596/chunk_0038/obs.parquet",
+      "old_obs_uid": "gdGQjLNWIEXVHYJH0000",
+      "new_obs_uid": "gdGQjLNWIEXVHYJH0001",
+      "x_uid": "UslNIZ9Xls18qgYa0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 39,
+      "prefix": "prism_collection/GSE269596/chunk_0039",
+      "obs_key": "prism_collection/GSE269596/chunk_0039/obs.parquet",
+      "old_obs_uid": "LajO8B1FP9M24CKh0000",
+      "new_obs_uid": "LajO8B1FP9M24CKh0001",
+      "x_uid": "uDzZVPPxFuNQ65Ww0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 40,
+      "prefix": "prism_collection/GSE269596/chunk_0040",
+      "obs_key": "prism_collection/GSE269596/chunk_0040/obs.parquet",
+      "old_obs_uid": "XJviLkvdY110sBHN0000",
+      "new_obs_uid": "XJviLkvdY110sBHN0001",
+      "x_uid": "WtzJ5OaFQkR5nJ9N0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 41,
+      "prefix": "prism_collection/GSE269596/chunk_0041",
+      "obs_key": "prism_collection/GSE269596/chunk_0041/obs.parquet",
+      "old_obs_uid": "XXxxvbLvRn4JVyvl0000",
+      "new_obs_uid": "XXxxvbLvRn4JVyvl0001",
+      "x_uid": "vAXGL7umy9Qmqot30000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 42,
+      "prefix": "prism_collection/GSE269596/chunk_0042",
+      "obs_key": "prism_collection/GSE269596/chunk_0042/obs.parquet",
+      "old_obs_uid": "W4mTktgPqgffT1hu0000",
+      "new_obs_uid": "W4mTktgPqgffT1hu0001",
+      "x_uid": "8bNdqYpPrneGYbYB0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 43,
+      "prefix": "prism_collection/GSE269596/chunk_0043",
+      "obs_key": "prism_collection/GSE269596/chunk_0043/obs.parquet",
+      "old_obs_uid": "5BGwsht48OmdvWDk0000",
+      "new_obs_uid": "5BGwsht48OmdvWDk0001",
+      "x_uid": "QDcxR5NEYHO4ycGX0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 44,
+      "prefix": "prism_collection/GSE269596/chunk_0044",
+      "obs_key": "prism_collection/GSE269596/chunk_0044/obs.parquet",
+      "old_obs_uid": "BgrwRUO09CRF9p2S0000",
+      "new_obs_uid": "BgrwRUO09CRF9p2S0001",
+      "x_uid": "vkYetAzjF2xUYw6L0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 45,
+      "prefix": "prism_collection/GSE269596/chunk_0045",
+      "obs_key": "prism_collection/GSE269596/chunk_0045/obs.parquet",
+      "old_obs_uid": "Q0usVGsF7eLe3ynZ0000",
+      "new_obs_uid": "Q0usVGsF7eLe3ynZ0001",
+      "x_uid": "bnAvNBfOdvN7y1Or0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 46,
+      "prefix": "prism_collection/GSE269596/chunk_0046",
+      "obs_key": "prism_collection/GSE269596/chunk_0046/obs.parquet",
+      "old_obs_uid": "pBYUYS4xl603rI1z0000",
+      "new_obs_uid": "pBYUYS4xl603rI1z0001",
+      "x_uid": "kajSI5ejCnYZQbas0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 47,
+      "prefix": "prism_collection/GSE269596/chunk_0047",
+      "obs_key": "prism_collection/GSE269596/chunk_0047/obs.parquet",
+      "old_obs_uid": "IPUIafyWF2JnqM9a0000",
+      "new_obs_uid": "IPUIafyWF2JnqM9a0001",
+      "x_uid": "M0g2lo0wDlY8Srtt0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 48,
+      "prefix": "prism_collection/GSE269596/chunk_0048",
+      "obs_key": "prism_collection/GSE269596/chunk_0048/obs.parquet",
+      "old_obs_uid": "QnB2Ar8e9WOBfGLx0000",
+      "new_obs_uid": "QnB2Ar8e9WOBfGLx0001",
+      "x_uid": "VzaoIBFOPG87y7hL0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 49,
+      "prefix": "prism_collection/GSE269596/chunk_0049",
+      "obs_key": "prism_collection/GSE269596/chunk_0049/obs.parquet",
+      "old_obs_uid": "fYe8hkZYXpWlSoWd0000",
+      "new_obs_uid": "fYe8hkZYXpWlSoWd0001",
+      "x_uid": "qxrCCS13gn2d9lG50000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 50,
+      "prefix": "prism_collection/GSE269596/chunk_0050",
+      "obs_key": "prism_collection/GSE269596/chunk_0050/obs.parquet",
+      "old_obs_uid": "sCZRhSikR4CsTh150000",
+      "new_obs_uid": "sCZRhSikR4CsTh150001",
+      "x_uid": "2mgaiXLxWJ0HIrqp0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T"
+      ]
+    },
+    {
+      "chunk": 51,
+      "prefix": "prism_collection/GSE269596/chunk_0051",
+      "obs_key": "prism_collection/GSE269596/chunk_0051/obs.parquet",
+      "old_obs_uid": "mqSNDm7KIrvIrFYe0000",
+      "new_obs_uid": "mqSNDm7KIrvIrFYe0001",
+      "x_uid": "ehFJq6QVAd7U1sOr0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "HEK293T",
+        "K562"
+      ]
+    },
+    {
+      "chunk": 52,
+      "prefix": "prism_collection/GSE269596/chunk_0052",
+      "obs_key": "prism_collection/GSE269596/chunk_0052/obs.parquet",
+      "old_obs_uid": "8HTKxo43NYUHbfGI0000",
+      "new_obs_uid": "8HTKxo43NYUHbfGI0001",
+      "x_uid": "xgGaUqid9A9Mn9mO0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 53,
+      "prefix": "prism_collection/GSE269596/chunk_0053",
+      "obs_key": "prism_collection/GSE269596/chunk_0053/obs.parquet",
+      "old_obs_uid": "MrQhgITTnlBOzRZ50000",
+      "new_obs_uid": "MrQhgITTnlBOzRZ50001",
+      "x_uid": "vIek0V06mzST12K30000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 54,
+      "prefix": "prism_collection/GSE269596/chunk_0054",
+      "obs_key": "prism_collection/GSE269596/chunk_0054/obs.parquet",
+      "old_obs_uid": "IJgKk7S0aDs7AaVM0000",
+      "new_obs_uid": "IJgKk7S0aDs7AaVM0001",
+      "x_uid": "Eb52tIcV9mJ31wD90000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 55,
+      "prefix": "prism_collection/GSE269596/chunk_0055",
+      "obs_key": "prism_collection/GSE269596/chunk_0055/obs.parquet",
+      "old_obs_uid": "PuGBGY9468hAvHfk0000",
+      "new_obs_uid": "PuGBGY9468hAvHfk0001",
+      "x_uid": "RP7ny2tj1V4dedX10000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 56,
+      "prefix": "prism_collection/GSE269596/chunk_0056",
+      "obs_key": "prism_collection/GSE269596/chunk_0056/obs.parquet",
+      "old_obs_uid": "btfLrKDihmjSkrXX0000",
+      "new_obs_uid": "btfLrKDihmjSkrXX0001",
+      "x_uid": "dVrmQzEonjieBpue0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 57,
+      "prefix": "prism_collection/GSE269596/chunk_0057",
+      "obs_key": "prism_collection/GSE269596/chunk_0057/obs.parquet",
+      "old_obs_uid": "NfMTbKUgNSQXkHWV0000",
+      "new_obs_uid": "NfMTbKUgNSQXkHWV0001",
+      "x_uid": "XuMdwAfxqjtbm7up0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 58,
+      "prefix": "prism_collection/GSE269596/chunk_0058",
+      "obs_key": "prism_collection/GSE269596/chunk_0058/obs.parquet",
+      "old_obs_uid": "oJMarUPm4wpJ1gza0000",
+      "new_obs_uid": "oJMarUPm4wpJ1gza0001",
+      "x_uid": "5Fq03gtaqqrVwLAh0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 59,
+      "prefix": "prism_collection/GSE269596/chunk_0059",
+      "obs_key": "prism_collection/GSE269596/chunk_0059/obs.parquet",
+      "old_obs_uid": "FQZ3nvwUnpjx6PVc0000",
+      "new_obs_uid": "FQZ3nvwUnpjx6PVc0001",
+      "x_uid": "Lp6jzZ8bbmgejG5N0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 60,
+      "prefix": "prism_collection/GSE269596/chunk_0060",
+      "obs_key": "prism_collection/GSE269596/chunk_0060/obs.parquet",
+      "old_obs_uid": "7NK8OI6a9tvucZk70000",
+      "new_obs_uid": "7NK8OI6a9tvucZk70001",
+      "x_uid": "pHUgTRi78jYwCKEy0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 61,
+      "prefix": "prism_collection/GSE269596/chunk_0061",
+      "obs_key": "prism_collection/GSE269596/chunk_0061/obs.parquet",
+      "old_obs_uid": "3TcX7sevc40joj6F0000",
+      "new_obs_uid": "3TcX7sevc40joj6F0001",
+      "x_uid": "GJlGL46zZxXaNStw0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 62,
+      "prefix": "prism_collection/GSE269596/chunk_0062",
+      "obs_key": "prism_collection/GSE269596/chunk_0062/obs.parquet",
+      "old_obs_uid": "nJYUlxalwYlA9QVk0000",
+      "new_obs_uid": "nJYUlxalwYlA9QVk0001",
+      "x_uid": "nq2LX2QKPFmxyw1Z0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 63,
+      "prefix": "prism_collection/GSE269596/chunk_0063",
+      "obs_key": "prism_collection/GSE269596/chunk_0063/obs.parquet",
+      "old_obs_uid": "7YaU9A2tZWPy198Y0000",
+      "new_obs_uid": "7YaU9A2tZWPy198Y0001",
+      "x_uid": "UVo9jBgzrzTfmEiY0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 64,
+      "prefix": "prism_collection/GSE269596/chunk_0064",
+      "obs_key": "prism_collection/GSE269596/chunk_0064/obs.parquet",
+      "old_obs_uid": "8SQNYnxfMJuhIsVP0000",
+      "new_obs_uid": "8SQNYnxfMJuhIsVP0001",
+      "x_uid": "TH84EkCl1uIbYV500000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 65,
+      "prefix": "prism_collection/GSE269596/chunk_0065",
+      "obs_key": "prism_collection/GSE269596/chunk_0065/obs.parquet",
+      "old_obs_uid": "5vzzsXte2Mq1Uk9s0000",
+      "new_obs_uid": "5vzzsXte2Mq1Uk9s0001",
+      "x_uid": "GJ190Z3ag9rl7li70000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 66,
+      "prefix": "prism_collection/GSE269596/chunk_0066",
+      "obs_key": "prism_collection/GSE269596/chunk_0066/obs.parquet",
+      "old_obs_uid": "ZZv6hq7L8pqCwWae0000",
+      "new_obs_uid": "ZZv6hq7L8pqCwWae0001",
+      "x_uid": "AGt7Ely1kqQwhNh80000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 67,
+      "prefix": "prism_collection/GSE269596/chunk_0067",
+      "obs_key": "prism_collection/GSE269596/chunk_0067/obs.parquet",
+      "old_obs_uid": "iQxcmIjd9wXntP460000",
+      "new_obs_uid": "iQxcmIjd9wXntP460001",
+      "x_uid": "Xx5T3xYcrwSIp71o0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 68,
+      "prefix": "prism_collection/GSE269596/chunk_0068",
+      "obs_key": "prism_collection/GSE269596/chunk_0068/obs.parquet",
+      "old_obs_uid": "a0EZhQonecjzhu5S0000",
+      "new_obs_uid": "a0EZhQonecjzhu5S0001",
+      "x_uid": "yug7tOeyp4OeNw2k0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 69,
+      "prefix": "prism_collection/GSE269596/chunk_0069",
+      "obs_key": "prism_collection/GSE269596/chunk_0069/obs.parquet",
+      "old_obs_uid": "KKhnmS9kv9vu2wYE0000",
+      "new_obs_uid": "KKhnmS9kv9vu2wYE0001",
+      "x_uid": "jyJCP1Vt5Jzjs5ll0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 70,
+      "prefix": "prism_collection/GSE269596/chunk_0070",
+      "obs_key": "prism_collection/GSE269596/chunk_0070/obs.parquet",
+      "old_obs_uid": "UbBcOr0th7zHknq30000",
+      "new_obs_uid": "UbBcOr0th7zHknq30001",
+      "x_uid": "YtsINRvc3iQ79IWJ0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 71,
+      "prefix": "prism_collection/GSE269596/chunk_0071",
+      "obs_key": "prism_collection/GSE269596/chunk_0071/obs.parquet",
+      "old_obs_uid": "MvF3QBQKONFCTNLc0000",
+      "new_obs_uid": "MvF3QBQKONFCTNLc0001",
+      "x_uid": "XGrIilTLz7HPenqh0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 72,
+      "prefix": "prism_collection/GSE269596/chunk_0072",
+      "obs_key": "prism_collection/GSE269596/chunk_0072/obs.parquet",
+      "old_obs_uid": "QeR2KsSDyZfMwZsq0000",
+      "new_obs_uid": "QeR2KsSDyZfMwZsq0001",
+      "x_uid": "UfmdRbZa7YLMherK0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 73,
+      "prefix": "prism_collection/GSE269596/chunk_0073",
+      "obs_key": "prism_collection/GSE269596/chunk_0073/obs.parquet",
+      "old_obs_uid": "Ag0YGmTmexgZblaM0000",
+      "new_obs_uid": "Ag0YGmTmexgZblaM0001",
+      "x_uid": "7rESJmQ3Xpm7MMkh0000",
+      "rows": 1000,
+      "cell_line_non_unknown": 1000,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    },
+    {
+      "chunk": 74,
+      "prefix": "prism_collection/GSE269596/chunk_0074",
+      "obs_key": "prism_collection/GSE269596/chunk_0074/obs.parquet",
+      "old_obs_uid": "PipEFlkdceMBTm5w0000",
+      "new_obs_uid": "PipEFlkdceMBTm5w0001",
+      "x_uid": "df9xBTIkzMmz75eB0000",
+      "rows": 312,
+      "cell_line_non_unknown": 312,
+      "cell_line_unique_sample": [
+        "K562"
+      ]
+    }
+  ]
+}
