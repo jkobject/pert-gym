@@ -35,7 +35,23 @@ import httpx
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
+ROOT_TEXT = str(ROOT)
+if ROOT_TEXT in sys.path:
+    sys.path.remove(ROOT_TEXT)
+sys.path.insert(0, ROOT_TEXT)
+
+existing_tools = sys.modules.get("tools")
+if existing_tools is not None:
+    tools_file = getattr(existing_tools, "__file__", "") or ""
+    repo_tools_root = ROOT / "tools"
+    try:
+        is_repo_tools = Path(tools_file).resolve().is_relative_to(repo_tools_root)
+    except (OSError, ValueError):
+        is_repo_tools = False
+    if not is_repo_tools:
+        for module_name in list(sys.modules):
+            if module_name == "tools" or module_name.startswith("tools."):
+                del sys.modules[module_name]
 
 from tools.clean_lamin_cache import clean_cache  # noqa: E402
 from tools.lamin_context import connect_pertdata, ensure_project_cache  # noqa: E402
