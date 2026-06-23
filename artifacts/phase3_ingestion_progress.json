@@ -1378,6 +1378,36 @@
       "controls": 12859,
       "verification_json": "artifacts/schema_audit/prism_GSE241683_carT_chunked_verification.json",
       "note": "P5F Google Drive recovery; backed h5ad chunked ingestion after smoke verification; each chunk has same-prefix obs/X/var and verified payloads/links/canonical obs."
+    },
+    {
+      "dataset": "GSE252589",
+      "prefix": "prism_collection/GSE252589",
+      "path": null,
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE252589.h5ad",
+      "n_obs": 23297,
+      "n_vars": 68886,
+      "chunk_size": 1000,
+      "status": "chunked_verified",
+      "chunks_verified": 24,
+      "chunks_ok": 24,
+      "controls": 13898,
+      "verification_json": "artifacts/schema_audit/prism_GSE252589_chunked_verification.json",
+      "note": "t_8891e336 smoke-first full ingestion from staged GCS object; GSE274751 skipped because staged H5AD is truncated"
+    },
+    {
+      "dataset": "GSE243244",
+      "prefix": "prism_collection/GSE243244",
+      "path": null,
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE243244.h5ad",
+      "n_obs": 48587,
+      "n_vars": 32286,
+      "chunk_size": 1000,
+      "status": "chunked_verified",
+      "chunks_verified": 49,
+      "chunks_ok": 49,
+      "controls": 14035,
+      "verification_json": "artifacts/schema_audit/prism_GSE243244_chunked_verification.json",
+      "note": "t_8891e336 smoke-first full ingestion from staged GCS object; resumed with --overwrite from chunk_0032 after 600s cap"
     }
   ],
   "downloaded_not_ingested": [
@@ -1412,17 +1442,6 @@
       "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
       "source_accession": "GSE241683",
       "attempted_url": "https://drive.google.com/uc?id=192_le3CLcWu5JSsBVTpqP90TNuVFKI0S",
-      "requires_user_auth_or_manual_download": true
-    },
-    {
-      "dataset": "GSE243244",
-      "path": "data/main/prism_collection/GSE243244.h5ad",
-      "gcs_uri": null,
-      "note": "Failed to retrieve file url:",
-      "status": "blocked_source_or_metadata",
-      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
-      "source_accession": "GSE243244",
-      "attempted_url": "https://drive.google.com/uc?id=1RMG65yM0BFeLKRP7b70awbI5Yk1NfsBH",
       "requires_user_auth_or_manual_download": true
     },
     {
@@ -1467,17 +1486,6 @@
       "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
       "source_accession": "GSE251715",
       "attempted_url": "https://drive.google.com/uc?id=1LcTD4Hk-o-jUYcMdQeiwtZWwTikHst3x",
-      "requires_user_auth_or_manual_download": true
-    },
-    {
-      "dataset": "GSE252589",
-      "path": "data/main/prism_collection/GSE252589.h5ad",
-      "gcs_uri": null,
-      "note": "Failed to retrieve file url:",
-      "status": "blocked_source_or_metadata",
-      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
-      "source_accession": "GSE252589",
-      "attempted_url": "https://drive.google.com/uc?id=1EXW1ZqvD6uCRQszOYeP_fDvpdH3wEuqe",
       "requires_user_auth_or_manual_download": true
     },
     {
@@ -1840,7 +1848,7 @@
     "note": "12 assigned_guide h5ad files are 118-173GB each (~1.73TB total); do not aws sync to VPS. Need streaming/chunked h5ad path or larger conversion host.",
     "plan": "artifacts/tcell_gwps_ingestion_plan.json"
   },
-  "last_updated": "2026-06-23T07:51:35.192536+00:00",
+  "last_updated": "2026-06-23T08:27:57.387434+00:00",
   "prism_staged_gcs_status": {
     "checked_at": "2026-06-15T17:10:35Z",
     "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_collection/",
@@ -1913,6 +1921,22 @@
       "chunks_ok": 56,
       "chunks_verified": 56,
       "verification_json": "artifacts/schema_audit/prism_GSE241683_carT_chunked_verification.json"
+    },
+    "GSE252589": {
+      "status": "ingested_verified",
+      "updated_at_utc": "2026-06-23T08:09:42.568902+00:00",
+      "prefix": "prism_collection/GSE252589",
+      "chunks_ok": 24,
+      "chunks_verified": 24,
+      "verification_json": "artifacts/schema_audit/prism_GSE252589_chunked_verification.json"
+    },
+    "GSE243244": {
+      "status": "ingested_verified",
+      "updated_at_utc": "2026-06-23T08:27:57.387434+00:00",
+      "prefix": "prism_collection/GSE243244",
+      "chunks_ok": 49,
+      "chunks_verified": 49,
+      "verification_json": "artifacts/schema_audit/prism_GSE243244_chunked_verification.json"
     }
   },
   "prism_residual_cleanup": {
