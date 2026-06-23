@@ -45,7 +45,7 @@ COMPATIBLE_PERTURBATION_RE = re.compile(
     re.IGNORECASE,
 )
 CONTROL_TOKEN_RE = re.compile(
-    r"^(control|ctrl|non[-_ ]?target(?:ing)?|ntc|neg(?:ative)?|safe[-_ ]?targeting|scramble(?:d)?|mock|vehicle|unperturbed|no[-_ ]?guide|empty|nan|none)$",
+    r"^(control|ctrl|non[-_ ]?target(?:ing)?|ntc|neg(?:ative)?|safe[-_ ]?targeting|scramble(?:d)?|mock|vehicle|unperturbed|no[-_ ]?guide|empty)$",
     re.IGNORECASE,
 )
 CONTROL_SUBSTRING_RE = re.compile(
@@ -84,6 +84,15 @@ CONTROL_COLUMNS = (
     "target_gene",
     "gene",
 )
+GUIDE_ID_COLUMNS = {
+    "perturbation",
+    "pert_genetic",
+    "pert_name",
+    "guide_target",
+    "sgrna_target",
+    "sgrna_gene",
+    "guide_gene",
+}
 UNKNOWN_TOKENS = {"", "unknown", "nan", "none", "null", "na", "n/a"}
 
 
@@ -152,16 +161,19 @@ def is_missing(value: Any) -> bool:
     return value is None or str(value).strip().lower() in UNKNOWN_TOKENS
 
 
-def normalize_gene(value: Any) -> str | None:
+def normalize_gene(value: Any, *, strip_guide_suffixes: bool = False) -> str | None:
     if is_missing(value):
         return None
     text = str(value).strip()
     if CONTROL_SUBSTRING_RE.search(text):
         return None
-    # Common guide encodings in CROP/ECCITE/VIPerturb metadata.
-    text = re.sub(r"^Tcrlibrary_", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"[_-]g\d+$", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"[_-]\d+$", "", text)
+    if strip_guide_suffixes:
+        # Common guide encodings in CROP/ECCITE/VIPerturb metadata.  Apply only
+        # to guide/perturbation ID columns, not clean gene-symbol columns where
+        # trailing numeric components can be part of real symbols (e.g. MIR-21).
+        text = re.sub(r"^Tcrlibrary_", "", text, flags=re.IGNORECASE)
+        text = re.sub(r"[_-]g\d+$", "", text, flags=re.IGNORECASE)
+        text = re.sub(r"[_-]\d+$", "", text)
     text = text.strip()
     if is_missing(text) or CONTROL_SUBSTRING_RE.search(text):
         return None
@@ -190,9 +202,11 @@ def infer_control_mask(obs: pd.DataFrame) -> tuple[pd.Series, str]:
         if column.lower().startswith(("is_", "control", "ctrl")):
             mask = boolish_control(values)
         else:
+            valid_values = ~values.map(is_missing)
             text = values.astype(str).str.strip()
-            mask = text.str.match(CONTROL_TOKEN_RE, na=False) | text.str.contains(
-                CONTROL_SUBSTRING_RE, na=False
+            mask = valid_values & (
+                text.str.match(CONTROL_TOKEN_RE, na=False)
+                | text.str.contains(CONTROL_SUBSTRING_RE, na=False)
             )
         if bool(mask.any()):
             masks.append((column, mask.fillna(False)))
@@ -210,7 +224,8 @@ def infer_gene_series(obs: pd.DataFrame, control_mask: pd.Series) -> tuple[pd.Se
     for column in GENE_COLUMNS:
         if column not in obs.columns:
             continue
-        genes = obs[column].map(normalize_gene)
+        strip_guide_suffixes = column.lower() in GUIDE_ID_COLUMNS
+        genes = obs[column].map(lambda value: normalize_gene(value, strip_guide_suffixes=strip_guide_suffixes))
         genes = genes.mask(control_mask, None)
         if int(genes.notna().sum()) > 0:
             return genes, column
