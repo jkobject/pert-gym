@@ -3,8 +3,8 @@
 - staging prefix: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/`
 - duplicate gate: `artifacts/schema_audit/prism_p5f_google_drive_recovery_gate_20260622.json`
 - duplicate hash artifact: `artifacts/schema_audit/prism_p5f_duplicate_hashes_20260622.tsv`
-- completed now: `5` datasets
-- accessible candidates remaining estimate: `26`
+- completed now: `6` datasets
+- accessible candidates remaining estimate: `25`
 - duplicate-named pairs still needing hash compare: `0`
 - still missing source rows: `5`
 - user-excluded rows: `1`
@@ -18,6 +18,7 @@
 | GSE236057 | 15866 | 28351 | 16 | `prism_collection/GSE236057` | `artifacts/schema_audit/prism_GSE236057_chunked_verification.json` |
 | GSE267982 | 45808 | 32285 | 46 | `prism_collection/GSE267982` | `artifacts/schema_audit/prism_GSE267982_chunked_verification.json` |
 | GSE247274 | 69907 | 22977 | 70 | `prism_collection/GSE247274` | `artifacts/schema_audit/prism_GSE247274_chunked_verification.json` |
+| GSE241683_carT | 55213 | 36601 | 56 | `prism_collection/GSE241683_carT` | `artifacts/schema_audit/prism_GSE241683_carT_chunked_verification.json` |
 
 ## Duplicate resolution
 
@@ -40,3 +41,4 @@
 - GSE247598, GSE261157, GSE272093, GSE272457, and GSE282731 remain missing from the staged recovery prefix.
 - The first GSE255832 smoke chunk was written before ln.track() was patched into the chunker; subsequent P5F writes use tracked transform cqKr10EUOIPg0000.
 - GSE263524 and GSE267982 both required idempotent resume after the 600s foreground cap; final verification passed for all chunks.
+- GSE241683_carT was smoke-first ingested from the canonical staged object and verified as 56 same-prefix chunks (55,213 obs / 36,601 vars). The full run hit the 600s foreground cap at chunk_0045 and was resumed with `--overwrite` from chunk_0045 to repair the partial obs+X/no-var chunk before final verification.

@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-06-22T22:31:24.727368+00:00",
+  "updated_at_utc": "2026-06-23T07:52:46.297035+00:00",
   "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
   "gate_summary_original": {
     "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
@@ -68,6 +68,14 @@
       "chunk_size": 1000,
       "chunks_verified": 70,
       "verification_json": "artifacts/schema_audit/prism_GSE247274_chunked_verification.json"
+    },
+    "GSE241683_carT": {
+      "prefix": "prism_collection/GSE241683_carT",
+      "n_obs": 55213,
+      "n_vars": 36601,
+      "chunk_size": 1000,
+      "chunks_verified": 56,
+      "verification_json": "artifacts/schema_audit/prism_GSE241683_carT_chunked_verification.json"
     }
   },
   "duplicate_resolution": {
@@ -90,11 +98,11 @@
     "action": "Do not ingest browser duplicate-named \u201c(1)\u201d copies; canonical and duplicate copies are byte-identical. Redundant objects were left in GCS, not deleted."
   },
   "remaining": {
-    "completed_now": 5,
-    "single_staged_smoke_first_candidates_remaining_estimate": 26,
+    "completed_now": 6,
+    "single_staged_smoke_first_candidates_remaining_estimate": 25,
     "duplicate_named_pairs_still_needing_hash_compare": 0,
     "duplicate_resolved_candidates_remaining": 0,
-    "total_accessible_candidates_remaining_estimate": 26,
+    "total_accessible_candidates_remaining_estimate": 25,
     "still_missing_source": 5,
     "user_excluded": 1
   },
@@ -114,6 +122,7 @@
     "GSE247598, GSE261157, GSE272093, GSE272457, and GSE282731 remain missing from the staged recovery prefix.",
     "The first GSE255832 smoke chunk was written before ln.track() was patched into the chunker; subsequent P5F writes use tracked transform cqKr10EUOIPg0000.",
     "GSE263524 and GSE267982 both required idempotent resume after the 600s foreground cap; final verification passed for all chunks.",
-    "GSE247274 canonical object was ingested after duplicate resolution; the redundant `(1)` staged object remains un-ingested and should not be used."
+    "GSE247274 canonical object was ingested after duplicate resolution; the redundant `(1)` staged object remains un-ingested and should not be used.",
+    "GSE241683_carT was smoke-first ingested from the canonical staged object and verified as 56 same-prefix chunks; the full run hit the 600s foreground cap at chunk_0045 and was resumed with --overwrite from chunk_0045 to repair the partial obs+X/no-var chunk before final verification."
   ]
 }
