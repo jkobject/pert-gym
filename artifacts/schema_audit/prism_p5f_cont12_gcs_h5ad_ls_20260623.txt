@@ -1,0 +1,34 @@
+26102404344  2026-06-22T20:28:56Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE210681.h5ad
+6212884683  2026-06-22T20:14:49Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE235325.h5ad
+ 265170425  2026-06-22T20:05:27Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE236057.h5ad
+1058023131  2026-06-22T20:05:56Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE236519.h5ad
+ 323811925  2026-06-22T20:23:20Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_carT.h5ad
+6664749343  2026-06-22T20:21:46Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_cropseq.h5ad
+2890310231  2026-06-22T20:22:54Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_pilot.h5ad
+ 395698500  2026-06-22T20:05:38Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE243244.h5ad
+ 975289638  2026-06-22T20:04:55Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE246714.h5ad
+ 863610838  2026-06-22T20:21:59Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274 (1).h5ad
+ 863610838  2026-06-22T20:12:49Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274.h5ad
+1433706825  2026-06-22T20:11:48Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad
+1339211295  2026-06-22T20:10:33Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE250558.h5ad
+2823124959  2026-06-22T20:08:10Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE251715.h5ad
+ 835303027  2026-06-22T20:06:51Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE252589.h5ad
+1078390433  2026-06-22T20:13:08Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE254100.h5ad
+ 188161214  2026-06-22T20:10:14Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE255832.h5ad
+4607920664  2026-06-22T20:11:27Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE261025.h5ad
+ 203381564  2026-06-22T20:03:56Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE263524.h5ad
+ 702863240  2026-06-22T20:22:18Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE267982 (1).h5ad
+ 702863240  2026-06-22T20:06:08Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE267982.h5ad
+2505068264  2026-06-22T20:04:35Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad
+3998858504  2026-06-22T20:12:36Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE270828.h5ad
+3033728368  2026-06-22T20:03:48Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE273271.h5ad
+ 531628032  2026-06-22T20:19:31Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE274751.h5ad
+4056291107  2026-06-22T20:18:26Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE278572.h5ad
+2010340238  2026-06-22T20:07:24Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad
+4465857408  2026-06-22T20:19:21Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNB_Perturb_seq.h5ad
+3047289494  2026-06-22T20:17:26Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNG_Perturb_seq.h5ad
+5810523276  2026-06-22T20:16:05Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_INS_Perturb_seq.h5ad
+2767634550  2026-06-22T20:16:43Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TGFB_Perturb_seq.h5ad
+4867288765  2026-06-22T20:20:29Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TNFA_Perturb_seq.h5ad
+1514297474  2026-06-22T20:05:19Z  gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad
+TOTAL: 33 objects, 99139295837 bytes (92.33GiB)
