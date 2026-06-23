@@ -1,0 +1,187 @@
+{
+  "api_sidecars": {
+    "cluster_counts": [
+      [
+        "Macrophages",
+        476
+      ],
+      [
+        "Fibroblast-like blastema #4",
+        375
+      ],
+      [
+        "Fibroblast-like blastema #5",
+        326
+      ],
+      [
+        "Erythrocyte #1",
+        220
+      ],
+      [
+        "Erythrocyte #2",
+        215
+      ],
+      [
+        "T cells",
+        83
+      ],
+      [
+        "Basal wound epidermis",
+        81
+      ],
+      [
+        "Fibroblast-like blastema #3",
+        62
+      ],
+      [
+        "Early B cells",
+        59
+      ],
+      [
+        "Endothelial cells",
+        43
+      ],
+      [
+        "Myogenic blastemaa",
+        43
+      ],
+      [
+        "Neutrophils",
+        19
+      ],
+      [
+        "Tenocyte",
+        11
+      ]
+    ],
+    "coords_url": "https://singlecell.broadinstitute.org/single_cell/api/v1/studies/SCP499/clusters/tSNE%20coordinates",
+    "idents_url": "https://singlecell.broadinstitute.org/single_cell/api/v1/studies/SCP499/annotations/Cluster/cell_values",
+    "note": "API-derived sidecars; direct original study-file download endpoints historically returned HTTP 401.",
+    "rows": 2013,
+    "uploads": {
+      "EB.coordinates.api_cluster.tsv": {
+        "bytes": 129206,
+        "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/api_derived/EB.coordinates.api_cluster.tsv",
+        "remote_bytes": 129206
+      },
+      "EB.idents.api_cell_values.txt": {
+        "bytes": 58933,
+        "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/api_derived/EB.idents.api_cell_values.txt",
+        "remote_bytes": 58933
+      },
+      "scp499_tsne_cluster_api_live.json": {
+        "bytes": 195496,
+        "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/api_derived/scp499_tsne_cluster_api_live.json",
+        "remote_bytes": 195496
+      }
+    }
+  },
+  "barcode_map": {
+    "bytes": 138387,
+    "entries": 20000,
+    "path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_102c5a38-scp499/data/scp499_tmp/gse121737/GSE121737_Early_bud_and_medium_bud_cell_name_and_barcode.txt.gz",
+    "source_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE121nnn/GSE121737/suppl/GSE121737_Early_bud_and_medium_bud_cell_name_and_barcode.txt.gz"
+  },
+  "completed_at": "2026-06-23 12:30:03 CEST",
+  "dry_run": false,
+  "duplicate_probe_before_write": {
+    "exact_planned_key_hits": [],
+    "planned_keys": [
+      "temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema/obs.parquet",
+      "temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema/X.h5ad",
+      "temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema/var.parquet"
+    ],
+    "term_hits": {
+      "Early-Bud Blastema": [],
+      "SCP499": [],
+      "early_bud_blastema": [],
+      "gse121737_axolotl_blastema": [
+        "temporal_pretraining/gse121737_axolotl_blastema/intact_limb/obs.parquet",
+        "temporal_pretraining/gse121737_axolotl_blastema/intact_limb/X.h5ad",
+        "temporal_pretraining/gse121737_axolotl_blastema/intact_limb/var.parquet",
+        "temporal_pretraining/gse121737_axolotl_blastema/medium_bud_blastema/obs.parquet",
+        "temporal_pretraining/gse121737_axolotl_blastema/medium_bud_blastema/X.h5ad",
+        "temporal_pretraining/gse121737_axolotl_blastema/medium_bud_blastema/var.parquet",
+        "temporal_pretraining/gse121737_axolotl_blastema/wound_healing_stage/obs.parquet",
+        "temporal_pretraining/gse121737_axolotl_blastema/wound_healing_stage/X.h5ad",
+        "temporal_pretraining/gse121737_axolotl_blastema/wound_healing_stage/var.parquet"
+      ]
+    }
+  },
+  "generated_at": "2026-06-23 12:29:22 CEST",
+  "ln_track": "ok",
+  "matrix_cache": {
+    "bytes": 40372658,
+    "gcs_bytes": 40372658,
+    "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/EB.matrix.txt.gz",
+    "path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_102c5a38-scp499/data/gcs_cache/scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/EB.matrix.txt.gz"
+  },
+  "matrix_parse": {
+    "cells": 2013,
+    "density": 0.03254331457918117,
+    "elapsed_seconds": 5.27,
+    "genes": 59171,
+    "matrix_path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_102c5a38-scp499/data/gcs_cache/scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/EB.matrix.txt.gz",
+    "max_genes": null,
+    "nnz": 3876274
+  },
+  "max_genes": null,
+  "obs_contract": {
+    "barcode_present": 2013,
+    "cluster_counts": {
+      "Basal wound epidermis": 81,
+      "Early B cells": 59,
+      "Endothelial cells": 43,
+      "Erythrocyte #1": 220,
+      "Erythrocyte #2": 215,
+      "Fibroblast-like blastema #3": 62,
+      "Fibroblast-like blastema #4": 375,
+      "Fibroblast-like blastema #5": 326,
+      "Macrophages": 476,
+      "Myogenic blastemaa": 43,
+      "Neutrophils": 19,
+      "T cells": 83,
+      "Tenocyte": 11
+    },
+    "obs_rows": 2013
+  },
+  "write": {
+    "verification": {
+      "cluster_counts": {
+        "Basal wound epidermis": 81,
+        "Early B cells": 59,
+        "Endothelial cells": 43,
+        "Erythrocyte #1": 220,
+        "Erythrocyte #2": 215,
+        "Fibroblast-like blastema #3": 62,
+        "Fibroblast-like blastema #4": 375,
+        "Fibroblast-like blastema #5": 326,
+        "Macrophages": 476,
+        "Myogenic blastemaa": 43,
+        "Neutrophils": 19,
+        "T cells": 83,
+        "Tenocyte": 11
+      },
+      "linked_var_key": "temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema/var.parquet",
+      "linked_x_key": "temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema/X.h5ad",
+      "obs_rows": 2013,
+      "payload_exists": {
+        "X": true,
+        "obs": true,
+        "var": true
+      },
+      "prefix": "temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema",
+      "var_rows": 59171,
+      "x_nnz": 3876274,
+      "x_shape": [
+        2013,
+        59171
+      ]
+    },
+    "write": {
+      "obs_key": "temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema/obs.parquet",
+      "var_key": "temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema/var.parquet",
+      "x_key": "temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema/X.h5ad"
+    }
+  }
+}
