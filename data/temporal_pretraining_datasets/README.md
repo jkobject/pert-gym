@@ -157,14 +157,19 @@ three and exact planned prefixes have no duplicate hits, but every SCP
 available. Status artifact:
 `artifacts/schema_audit/temporal_t32_zebrafish_regen_scp_20260622.md`.
 
-T33 axolotl regeneration probe status (2026-06-22): rows 134, 135, and 136 were
-source/duplicate-probed without bulk download or Lamin writes. Row 134 resolves
+T33/T102 axolotl regeneration status (2026-06-22/23): rows 134, 135, and 136 were
+source/duplicate-probed. Row 134 resolves
 to `GSE165901`, whose axolotl-only MatrixMarket members are bounded but only
 available inside a 1.97 GB GEO RAW tar; row 135 resolves to a SciLifeLab
-ShinyCell/GitHub app without published original Seurat RDS payloads; row 136
-`SCP499` exposes a bounded public manifest (`EB.matrix.txt.gz` 40.4 MB plus
-sidecars) but SCP downloads return HTTP 401. Status artifact:
-`artifacts/schema_audit/temporal_t33_axolotl_status_20260622.md`.
+ShinyCell/GitHub app without published original Seurat RDS payloads. Row 136
+`SCP499` Early-Bud Blastema is ingested and verified as
+`temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema` (`2,013 ×
+59,171`, obs→X→var payloads and links OK). The matrix was the browser-auth staged
+`EB.matrix.txt.gz`; idents/coordinates came from public SCP visualization APIs and
+were staged under an explicit `api_derived/` GCS prefix because the original SCP
+sidecar file downloads remained 401. Status artifacts:
+`artifacts/schema_audit/temporal_t33_axolotl_status_20260622.md` and
+`artifacts/schema_audit/temporal_scp499_early_bud_ingestion_20260623.md`.
 
 T29 PerturBase directed differentiation status (2026-06-22): row 115
 (`GSE142078`) is ingested and verified as
