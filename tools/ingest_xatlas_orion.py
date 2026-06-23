@@ -24,6 +24,7 @@ import json
 import logging
 import math
 import os
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -545,6 +546,45 @@ def current_process_family_pids() -> set[int]:
     return family
 
 
+def shell_tokens(command: str) -> list[str]:
+    """Best-effort shell tokenization, including one nested shell -c payload."""
+    try:
+        tokens = shlex.split(command)
+    except ValueError:
+        tokens = command.split()
+
+    flattened: list[str] = []
+    idx = 0
+    while idx < len(tokens):
+        token = tokens[idx]
+        flattened.append(token)
+        if token.startswith("-") and token.endswith("c") and idx + 1 < len(tokens):
+            try:
+                flattened.extend(shlex.split(tokens[idx + 1]))
+            except ValueError:
+                flattened.extend(tokens[idx + 1].split())
+        idx += 1
+    return flattened
+
+
+def invokes_huge_ingestion_script(command: str) -> bool:
+    """Return True only for actual script invocations, not prompt text mentions."""
+    tokens = shell_tokens(command)
+    if not tokens:
+        return False
+
+    for idx, token in enumerate(tokens):
+        basename = Path(token).name
+        if basename not in HUGE_INGESTION_PATTERNS:
+            continue
+        if idx == 0:
+            return True
+        previous = Path(tokens[idx - 1]).name
+        if previous.startswith("python") or previous in {"uv", "pytest", "bash", "zsh", "sh"}:
+            return True
+    return False
+
+
 def active_huge_ingestions() -> list[str]:
     try:
         output = subprocess.check_output(["ps", "auxww"], text=True)
@@ -554,8 +594,6 @@ def active_huge_ingestions() -> list[str]:
     own_family = current_process_family_pids()
     matches: list[str] = []
     for line in output.splitlines():
-        if not any(pattern in line for pattern in HUGE_INGESTION_PATTERNS):
-            continue
         parts = line.split(None, 10)
         if len(parts) < 11 or not parts[1].isdigit():
             continue
@@ -563,8 +601,7 @@ def active_huge_ingestions() -> list[str]:
         command = parts[10]
         if pid in own_family:
             continue
-        # Ignore the command used by this preflight itself if a shell includes the pattern.
-        if "ps auxww" in command or "active_huge_ingestions" in command:
+        if not invokes_huge_ingestion_script(command):
             continue
         matches.append(line)
     return matches
