@@ -1,0 +1,902 @@
+{
+  "updated_from": "prism_p5f_status_20260622.json + prism_p5f_cont7_inventory_20260623.json + live GCS byte/backing check for GSE250558",
+  "completed": [
+    "GSE236057",
+    "GSE236519",
+    "GSE241683_carT",
+    "GSE243244",
+    "GSE246714",
+    "GSE247274",
+    "GSE250558",
+    "GSE252589",
+    "GSE254100",
+    "GSE255832",
+    "GSE263524",
+    "GSE267982"
+  ],
+  "counts": {
+    "gcs_h5ad_objects": 33,
+    "completed": 12,
+    "candidate": 18,
+    "staged_payload_issue": 1,
+    "missing_source": 5,
+    "user_excluded": 1
+  },
+  "remaining_candidates_by_size": [
+    {
+      "dataset": "GSE247599",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE247599",
+          "object_name": "GSE247599.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad",
+          "bytes": 1433706825,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad",
+      "canonical_bytes": 1433706825,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE283614",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE283614",
+          "object_name": "GSE283614.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad",
+          "bytes": 1514297474,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad",
+      "canonical_bytes": 1514297474,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE280767",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE280767",
+          "object_name": "GSE280767.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad",
+          "bytes": 2010340238,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad",
+      "canonical_bytes": 2010340238,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE269596",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE269596",
+          "object_name": "GSE269596.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad",
+          "bytes": 2505068264,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad",
+      "canonical_bytes": 2505068264,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_TGFB_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_TGFB_Perturb_seq",
+          "object_name": "GSE281048_TGFB_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TGFB_Perturb_seq.h5ad",
+          "bytes": 2767634550,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TGFB_Perturb_seq.h5ad",
+      "canonical_bytes": 2767634550,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE251715",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE251715",
+          "object_name": "GSE251715.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE251715.h5ad",
+          "bytes": 2823124959,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE251715.h5ad",
+      "canonical_bytes": 2823124959,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE241683_pilot",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE241683_pilot",
+          "object_name": "GSE241683_pilot.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_pilot.h5ad",
+          "bytes": 2890310231,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_pilot.h5ad",
+      "canonical_bytes": 2890310231,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE273271",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE273271",
+          "object_name": "GSE273271.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE273271.h5ad",
+          "bytes": 3033728368,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE273271.h5ad",
+      "canonical_bytes": 3033728368,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_IFNG_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_IFNG_Perturb_seq",
+          "object_name": "GSE281048_IFNG_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNG_Perturb_seq.h5ad",
+          "bytes": 3047289494,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNG_Perturb_seq.h5ad",
+      "canonical_bytes": 3047289494,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE270828",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE270828",
+          "object_name": "GSE270828.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE270828.h5ad",
+          "bytes": 3998858504,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE270828.h5ad",
+      "canonical_bytes": 3998858504,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE278572",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE278572",
+          "object_name": "GSE278572.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE278572.h5ad",
+          "bytes": 4056291107,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE278572.h5ad",
+      "canonical_bytes": 4056291107,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_IFNB_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_IFNB_Perturb_seq",
+          "object_name": "GSE281048_IFNB_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNB_Perturb_seq.h5ad",
+          "bytes": 4465857408,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNB_Perturb_seq.h5ad",
+      "canonical_bytes": 4465857408,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE261025",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE261025",
+          "object_name": "GSE261025.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE261025.h5ad",
+          "bytes": 4607920664,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE261025.h5ad",
+      "canonical_bytes": 4607920664,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_TNFA_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_TNFA_Perturb_seq",
+          "object_name": "GSE281048_TNFA_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TNFA_Perturb_seq.h5ad",
+          "bytes": 4867288765,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TNFA_Perturb_seq.h5ad",
+      "canonical_bytes": 4867288765,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_INS_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_INS_Perturb_seq",
+          "object_name": "GSE281048_INS_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_INS_Perturb_seq.h5ad",
+          "bytes": 5810523276,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_INS_Perturb_seq.h5ad",
+      "canonical_bytes": 5810523276,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE235325",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE235325",
+          "object_name": "GSE235325.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE235325.h5ad",
+          "bytes": 6212884683,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE235325.h5ad",
+      "canonical_bytes": 6212884683,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE241683_cropseq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE241683_cropseq",
+          "object_name": "GSE241683_cropseq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_cropseq.h5ad",
+          "bytes": 6664749343,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_cropseq.h5ad",
+      "canonical_bytes": 6664749343,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE210681",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE210681",
+          "object_name": "GSE210681.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE210681.h5ad",
+          "bytes": 26102404344,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE210681.h5ad",
+      "canonical_bytes": 26102404344,
+      "gate_decision": "candidate_ingest_smoke_first"
+    }
+  ],
+  "all_rows": [
+    {
+      "dataset": "GSE210681",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE210681",
+          "object_name": "GSE210681.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE210681.h5ad",
+          "bytes": 26102404344,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE210681.h5ad",
+      "canonical_bytes": 26102404344,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE235325",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE235325",
+          "object_name": "GSE235325.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE235325.h5ad",
+          "bytes": 6212884683,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE235325.h5ad",
+      "canonical_bytes": 6212884683,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE236057",
+      "status": "completed",
+      "gcs_objects": [
+        {
+          "dataset": "GSE236057",
+          "object_name": "GSE236057.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE236057.h5ad",
+          "bytes": 265170425,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE236057.h5ad",
+      "canonical_bytes": 265170425,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE236519",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE236519",
+          "object_name": "GSE236519.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE236519.h5ad",
+          "bytes": 1058023131,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE236519.h5ad",
+      "canonical_bytes": 1058023131,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE241683_carT",
+      "status": "completed",
+      "gcs_objects": [
+        {
+          "dataset": "GSE241683_carT",
+          "object_name": "GSE241683_carT.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_carT.h5ad",
+          "bytes": 323811925,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_carT.h5ad",
+      "canonical_bytes": 323811925,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE241683_cropseq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE241683_cropseq",
+          "object_name": "GSE241683_cropseq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_cropseq.h5ad",
+          "bytes": 6664749343,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_cropseq.h5ad",
+      "canonical_bytes": 6664749343,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE241683_pilot",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE241683_pilot",
+          "object_name": "GSE241683_pilot.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_pilot.h5ad",
+          "bytes": 2890310231,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_pilot.h5ad",
+      "canonical_bytes": 2890310231,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE243244",
+      "status": "completed",
+      "gcs_objects": [
+        {
+          "dataset": "GSE243244",
+          "object_name": "GSE243244.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE243244.h5ad",
+          "bytes": 395698500,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE243244.h5ad",
+      "canonical_bytes": 395698500,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE246714",
+      "status": "completed",
+      "gcs_objects": [
+        {
+          "dataset": "GSE246714",
+          "object_name": "GSE246714.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE246714.h5ad",
+          "bytes": 975289638,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE246714.h5ad",
+      "canonical_bytes": 975289638,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE247274",
+      "status": "completed",
+      "gcs_objects": [
+        {
+          "dataset": "GSE247274",
+          "object_name": "GSE247274 (1).h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274 (1).h5ad",
+          "bytes": 863610838,
+          "duplicate_browser_copy": true
+        },
+        {
+          "dataset": "GSE247274",
+          "object_name": "GSE247274.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274.h5ad",
+          "bytes": 863610838,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274.h5ad",
+      "canonical_bytes": 863610838,
+      "gate_decision": "block_duplicate_named_staged_object"
+    },
+    {
+      "dataset": "GSE247598",
+      "status": "missing_source",
+      "gcs_objects": [],
+      "canonical_uri": "",
+      "canonical_bytes": 0,
+      "gate_decision": "still_missing_source"
+    },
+    {
+      "dataset": "GSE247599",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE247599",
+          "object_name": "GSE247599.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad",
+          "bytes": 1433706825,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad",
+      "canonical_bytes": 1433706825,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE250558",
+      "status": "completed_verified",
+      "gcs_objects": [
+        {
+          "dataset": "GSE250558",
+          "object_name": "GSE250558.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE250558.h5ad",
+          "bytes": 1339211295,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE250558.h5ad",
+      "canonical_bytes": 1339211295,
+      "gate_decision": "candidate_ingest_smoke_first",
+      "verification_json": "artifacts/schema_audit/prism_GSE250558_chunked_verification.json",
+      "chunk_size": 1000,
+      "chunks_verified": 60,
+      "n_obs": 59837,
+      "n_vars": 36713,
+      "controls": 12828,
+      "note": "Source is 1.25 GiB with backed CSRDataset int32 layout, 59,837 rows, duplicate obs names, and 36,713 genes; kept conservative 1,000-row chunks after a smoke chunk to bound per-chunk materialization and preserve the P5F recovery pattern."
+    },
+    {
+      "dataset": "GSE251715",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE251715",
+          "object_name": "GSE251715.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE251715.h5ad",
+          "bytes": 2823124959,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE251715.h5ad",
+      "canonical_bytes": 2823124959,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE252589",
+      "status": "completed",
+      "gcs_objects": [
+        {
+          "dataset": "GSE252589",
+          "object_name": "GSE252589.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE252589.h5ad",
+          "bytes": 835303027,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE252589.h5ad",
+      "canonical_bytes": 835303027,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE254100",
+      "status": "completed_verified",
+      "gcs_objects": [
+        {
+          "dataset": "GSE254100",
+          "object_name": "GSE254100.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE254100.h5ad",
+          "bytes": 1078390433,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE254100.h5ad",
+      "canonical_bytes": 1078390433,
+      "gate_decision": "candidate_ingest_smoke_first",
+      "verification_json": "artifacts/schema_audit/prism_GSE254100_chunked_verification.json",
+      "chunk_size": 5000,
+      "chunks_verified": 5,
+      "n_obs": 21667,
+      "n_vars": 22583,
+      "controls": 4269,
+      "note": "Source is 1.0 GiB with backed CSRDataset float64 layout and only 21,667 rows; smoke chunk at 5,000 rows peaked below 700 MB RSS, so 5,000-row chunks reduced metadata overhead without full-loading the matrix."
+    },
+    {
+      "dataset": "GSE255832",
+      "status": "completed",
+      "gcs_objects": [
+        {
+          "dataset": "GSE255832",
+          "object_name": "GSE255832.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE255832.h5ad",
+          "bytes": 188161214,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE255832.h5ad",
+      "canonical_bytes": 188161214,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE261025",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE261025",
+          "object_name": "GSE261025.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE261025.h5ad",
+          "bytes": 4607920664,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE261025.h5ad",
+      "canonical_bytes": 4607920664,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE261157",
+      "status": "missing_source",
+      "gcs_objects": [],
+      "canonical_uri": "",
+      "canonical_bytes": 0,
+      "gate_decision": "still_missing_source"
+    },
+    {
+      "dataset": "GSE263524",
+      "status": "completed",
+      "gcs_objects": [
+        {
+          "dataset": "GSE263524",
+          "object_name": "GSE263524.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE263524.h5ad",
+          "bytes": 203381564,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE263524.h5ad",
+      "canonical_bytes": 203381564,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE267982",
+      "status": "completed",
+      "gcs_objects": [
+        {
+          "dataset": "GSE267982",
+          "object_name": "GSE267982 (1).h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE267982 (1).h5ad",
+          "bytes": 702863240,
+          "duplicate_browser_copy": true
+        },
+        {
+          "dataset": "GSE267982",
+          "object_name": "GSE267982.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE267982.h5ad",
+          "bytes": 702863240,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE267982.h5ad",
+      "canonical_bytes": 702863240,
+      "gate_decision": "block_duplicate_named_staged_object"
+    },
+    {
+      "dataset": "GSE269596",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE269596",
+          "object_name": "GSE269596.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad",
+          "bytes": 2505068264,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad",
+      "canonical_bytes": 2505068264,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE270828",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE270828",
+          "object_name": "GSE270828.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE270828.h5ad",
+          "bytes": 3998858504,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE270828.h5ad",
+      "canonical_bytes": 3998858504,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE272093",
+      "status": "missing_source",
+      "gcs_objects": [],
+      "canonical_uri": "",
+      "canonical_bytes": 0,
+      "gate_decision": "still_missing_source"
+    },
+    {
+      "dataset": "GSE272457",
+      "status": "missing_source",
+      "gcs_objects": [],
+      "canonical_uri": "",
+      "canonical_bytes": 0,
+      "gate_decision": "still_missing_source"
+    },
+    {
+      "dataset": "GSE273271",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE273271",
+          "object_name": "GSE273271.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE273271.h5ad",
+          "bytes": 3033728368,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE273271.h5ad",
+      "canonical_bytes": 3033728368,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE274751",
+      "status": "staged_payload_issue",
+      "gcs_objects": [
+        {
+          "dataset": "GSE274751",
+          "object_name": "GSE274751.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE274751.h5ad",
+          "bytes": 531628032,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE274751.h5ad",
+      "canonical_bytes": 531628032,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE278572",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE278572",
+          "object_name": "GSE278572.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE278572.h5ad",
+          "bytes": 4056291107,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE278572.h5ad",
+      "canonical_bytes": 4056291107,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE280767",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE280767",
+          "object_name": "GSE280767.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad",
+          "bytes": 2010340238,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad",
+      "canonical_bytes": 2010340238,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_IFNB_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_IFNB_Perturb_seq",
+          "object_name": "GSE281048_IFNB_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNB_Perturb_seq.h5ad",
+          "bytes": 4465857408,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNB_Perturb_seq.h5ad",
+      "canonical_bytes": 4465857408,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_IFNG_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_IFNG_Perturb_seq",
+          "object_name": "GSE281048_IFNG_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNG_Perturb_seq.h5ad",
+          "bytes": 3047289494,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_IFNG_Perturb_seq.h5ad",
+      "canonical_bytes": 3047289494,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_INS_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_INS_Perturb_seq",
+          "object_name": "GSE281048_INS_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_INS_Perturb_seq.h5ad",
+          "bytes": 5810523276,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_INS_Perturb_seq.h5ad",
+      "canonical_bytes": 5810523276,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_TGFB_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_TGFB_Perturb_seq",
+          "object_name": "GSE281048_TGFB_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TGFB_Perturb_seq.h5ad",
+          "bytes": 2767634550,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TGFB_Perturb_seq.h5ad",
+      "canonical_bytes": 2767634550,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE281048_TNFA_Perturb_seq",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE281048_TNFA_Perturb_seq",
+          "object_name": "GSE281048_TNFA_Perturb_seq.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TNFA_Perturb_seq.h5ad",
+          "bytes": 4867288765,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TNFA_Perturb_seq.h5ad",
+      "canonical_bytes": 4867288765,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE282731",
+      "status": "missing_source",
+      "gcs_objects": [],
+      "canonical_uri": "",
+      "canonical_bytes": 0,
+      "gate_decision": "still_missing_source"
+    },
+    {
+      "dataset": "GSE283614",
+      "status": "candidate",
+      "gcs_objects": [
+        {
+          "dataset": "GSE283614",
+          "object_name": "GSE283614.h5ad",
+          "uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad",
+          "bytes": 1514297474,
+          "duplicate_browser_copy": false
+        }
+      ],
+      "canonical_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad",
+      "canonical_bytes": 1514297474,
+      "gate_decision": "candidate_ingest_smoke_first"
+    },
+    {
+      "dataset": "GSE90063_human-004",
+      "status": "user_excluded",
+      "gcs_objects": [],
+      "canonical_uri": "",
+      "canonical_bytes": 0,
+      "gate_decision": "skip_user_excluded"
+    }
+  ],
+  "newly_completed_this_run": {
+    "dataset": "GSE250558",
+    "prefix": "prism_collection/GSE250558",
+    "source_bytes": 1339211295,
+    "n_obs": 59837,
+    "n_vars": 36713,
+    "chunk_size": 1000,
+    "chunks_verified": 60,
+    "controls": 12828,
+    "verification_json": "artifacts/schema_audit/prism_GSE250558_chunked_verification.json",
+    "backing": "CSRDataset int32",
+    "chunk_size_rationale": "Source is 1.25 GiB with backed CSRDataset int32 layout, 59,837 rows, duplicate obs names, and 36,713 genes; kept conservative 1,000-row chunks after a smoke chunk to bound per-chunk materialization and preserve the P5F recovery pattern."
+  }
+}

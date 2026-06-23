@@ -1,24 +1,15 @@
-# PRISM P5F recovery status — updated 2026-06-23 after GSE250558
+# PRISM P5F cont8 remaining inventory — 2026-06-23
 
-- staging prefix: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/`
-- Lamin target: `laminlabs/pertdata` branch `jkobject`
-- completed verified P5F datasets: `12`
-- remaining smoke-first staged candidates: `18`
+- source: current status artifacts + live GCS/backing check for `GSE250558`
+- completed datasets preserved: `12`
+- newly completed in this run: `GSE250558` (`60` chunks, `59,837 × 36,713`)
+- chunk-size rationale: Source is 1.25 GiB with backed CSRDataset int32 layout, 59,837 rows, duplicate obs names, and 36,713 genes; kept conservative 1,000-row chunks after a smoke chunk to bound per-chunk materialization and preserve the P5F recovery pattern.
+- remaining smoke-first candidates: `18`
 - staged payload issues: `1`
 - missing/source rows: `5`
 - user-excluded rows: `1`
 
-## Newly completed in this update
-
-- `GSE250558`: verified `60/60` same-prefix chunks at chunk size `1000`, shape `59,837 × 36,713`, controls `12,828`.
-- verification artifacts: `artifacts/schema_audit/prism_GSE250558_chunked_verification.json` and `.md`.
-- run note: staged object byte-verified at `1,339,211,295` bytes; backed layout `CSRDataset int32`; smoke chunk succeeded then full resume completed without full-loading the matrix.
-
-## Completed verified P5F datasets
-
-GSE236057, GSE236519, GSE241683_carT, GSE243244, GSE246714, GSE247274, GSE250558, GSE252589, GSE254100, GSE255832, GSE263524, GSE267982
-
-## Next remaining candidates by staged object size
+## Next candidates by staged object size
 
 | dataset | GiB | bytes | uri |
 |---|---:|---:|---|
@@ -35,7 +26,7 @@ GSE236057, GSE236519, GSE241683_carT, GSE243244, GSE246714, GSE247274, GSE250558
 
 ## Preserved blockers / exclusions
 
-- `GSE274751`: staged payload issue; current h5ad remains truncated/corrupt (GCS size 531,628,032 bytes; HDF5 stored EOF 2,308,911,126 bytes). Do not retry until re-staged/recovered.
+- `GSE274751`: staged payload issue; current h5ad remains truncated/corrupt; do not retry until re-staged.
 - Missing/source-blocked: `GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, `GSE282731`.
 - User-excluded: `GSE90063_human-004`.
 - Browser duplicate-named `(1)` copies for `GSE247274` and `GSE267982` remain redundant; canonical objects only were/should be ingested.
