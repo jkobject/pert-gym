@@ -1,11 +1,11 @@
 # PRISM P5F Google Drive recovery status — 2026-06-22
 
-- updated UTC: `2026-06-23T08:28:47.271643+00:00`
+- updated UTC: `2026-06-23T09:00:17.648040+00:00`
 - staging prefix: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/`
 - duplicate gate: `artifacts/schema_audit/prism_p5f_google_drive_recovery_gate_20260622.json`
 - duplicate hash artifact: `artifacts/schema_audit/prism_p5f_duplicate_hashes_20260622.tsv`
-- completed now: `8` datasets
-- accessible candidates remaining estimate: `22`
+- completed now: `9` datasets
+- accessible candidates remaining estimate: `21`
 - staged payload issues: `1`
 - duplicate-named pairs still needing hash compare: `0`
 - still missing source rows: `5`
@@ -23,6 +23,7 @@
 | GSE241683_carT | 55213 | 36601 | 56 | `prism_collection/GSE241683_carT` | `artifacts/schema_audit/prism_GSE241683_carT_chunked_verification.json` |
 | GSE252589 | 23297 | 68886 | 24 | `prism_collection/GSE252589` | `artifacts/schema_audit/prism_GSE252589_chunked_verification.json` |
 | GSE243244 | 48587 | 32286 | 49 | `prism_collection/GSE243244` | `artifacts/schema_audit/prism_GSE243244_chunked_verification.json` |
+| GSE246714 | 210314 | 31466 | 43 | `prism_collection/GSE246714` | `artifacts/schema_audit/prism_GSE246714_chunked_verification.json` |
 
 ## Staged payload issues
 
@@ -53,3 +54,4 @@
 - GSE252589 was smoke-first ingested from the canonical staged object and verified as 24 same-prefix chunks (23,297 obs / 68,886 vars).
 - GSE243244 was smoke-first ingested from the canonical staged object and verified as 49 same-prefix chunks (48,587 obs / 32,286 vars); the full run hit the 600s cap at chunk_0032 and was resumed with --overwrite from chunk_0032.
 - GSE274751 staged object is corrupt/truncated: GCS size 531,628,032 bytes but HDF5 stored EOF is 2,308,911,126 bytes; re-stage before retry.
+- GSE246714 was smoke-first ingested from the canonical staged object and verified as 43 same-prefix chunks at chunk size 5000 (210,314 obs / 31,466 vars); full run hit the 600s cap at chunk_0038 and was resumed with --overwrite from chunk_0038 to repair the partial obs+X/no-var chunk before final verification.
