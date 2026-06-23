@@ -6,8 +6,15 @@ Loads obs.parquet artifacts only and checks obs -> X links without loading X.h5a
 from __future__ import annotations
 
 import json
+import sys
+from pathlib import Path
 
-from tools.lamin_context import connect_pertdata
+REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT_STR = str(REPO_ROOT)
+if sys.path[0] != REPO_ROOT_STR:
+    sys.path.insert(0, REPO_ROOT_STR)
+
+from tools.lamin_context import connect_pertdata  # noqa: E402
 
 EXPECTED_CHUNKS = 75
 EXPECTED_ROWS = 74312
