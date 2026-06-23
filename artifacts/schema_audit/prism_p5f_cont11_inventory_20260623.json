@@ -14,8 +14,8 @@
     "user_excluded": 1
   },
   "decision_counts": {
-    "candidate_ingest_smoke_first": 16,
-    "completed": 14,
+    "candidate_ingest_smoke_first": 15,
+    "completed": 15,
     "still_missing_source": 5,
     "staged_h5ad_truncated": 1,
     "skip_user_excluded": 1

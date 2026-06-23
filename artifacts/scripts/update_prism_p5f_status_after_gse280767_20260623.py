@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -135,15 +136,17 @@ def main() -> int:
     inventory["remaining_candidates_by_size"] = [
         row for row in inventory.get("remaining_candidates_by_size", []) if row.get("dataset") != DATASET
     ]
+    decision_counts = Counter(row["decision"] for row in inventory.get("all_rows", []))
     inventory["counts"].update(
         {
-            "completed": int(inventory["counts"].get("completed", 0)) + 1,
+            "completed": int(decision_counts.get("completed", 0)),
             "candidate": len(inventory["remaining_candidates_by_size"]),
-            "staged_payload_issue": 1,
-            "missing_source": 5,
-            "user_excluded": 1,
+            "staged_payload_issue": int(decision_counts.get("staged_h5ad_truncated", 0)),
+            "missing_source": int(decision_counts.get("still_missing_source", 0)),
+            "user_excluded": int(decision_counts.get("skip_user_excluded", 0)),
         }
     )
+    inventory["decision_counts"] = dict(decision_counts)
     inventory["newly_completed_this_run"] = [DATASET]
     inventory["next_candidate"] = NEXT_CANDIDATE
     save(inventory_rel, inventory)
