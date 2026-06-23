@@ -69,20 +69,17 @@ Artifacts to link, not copy:
 
 ## PRISM blockers
 
-Current PRISM residual decision is source-gated, not a coding blocker:
+Current PRISM residual decision is staged-ingestion gated for accessible h5ads, with explicit source/payload exceptions:
 
-- `GSE208240` and `GSE220974` are already present as exact chunked triplets on
-  `jkobject` and were moved to ingested during P5D cleanup.
+- P5D cleanup verified `GSE208240` and `GSE220974` were already present as exact chunked triplets on `jkobject` and moved them to ingested.
+- P5F continuation has ingested and verified 13 datasets through `GSE247599`; latest verification: 25 chunks, 24,435 rows, 36,602 vars, 1,876 controls.
+- 17 accessible staged h5ads remain smoke-first candidates; next by current size inventory is `GSE283614`.
+- `GSE274751` remains `staged_h5ad_truncated` until the source is re-staged.
+- `GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, and `GSE282731` remain missing/source-blocked.
+- `GSE90063_human-004` is excluded/skipped by user decision because of duplicate/subset ambiguity.
 - `D4_Rest.assigned_guide` belongs to T-cell GWPS, not PRISM.
-- 36 PRISM residual rows remain `blocked_source_or_metadata` after Mac-local
-  Drive/gdown retries: 31 quota/rate-limit blockers and 5 permission/private-link
-  blockers.
-- `GSE90063_human-004` is excluded/skipped by user decision because of
-  duplicate/subset ambiguity.
 
-Next safe action after any h5ad recovery: stage to GCS, run duplicate gate against
-public `main` plus `jkobject`, then smoke-first chunked ingestion. Do not mark a
-PRISM residual done from metadata-only access probes.
+Next safe action for accessible staged h5ads: verify GCS bytes, run backed dry-run/shape inspection, smoke-first chunked ingestion, targeted verification, and update P5F status artifacts. For missing/source rows, after any h5ad recovery: stage to GCS, run duplicate gate against public `main` plus `jkobject`, then smoke-first chunked ingestion. Do not mark a PRISM residual done from metadata-only access probes.
 
 ## T-cell and other huge dataset blockers
 

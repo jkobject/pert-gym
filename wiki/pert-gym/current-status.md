@@ -1322,8 +1322,30 @@ These are not blockers for real P3 completion, but they matter before claiming m
 3. Run bounded inspections for the remaining auxiliary/orphan items and convert only confirmed joins to `X_<name>/var_<name>` or `obsm_<name>` artifacts.
 4. Run targeted var payload/backed metadata checks for representative families to classify Ensembl/symbol IDs where registry metadata is insufficient.
 5. Expand duplicate/subduplicate detection beyond the completed PRISM residual same-accession/GCS gate, especially for model-ready biological coverage decisions.
-6. Manually resolve the 36 PRISM residual Google Drive sources that remain `blocked_source_or_metadata` after the Mac-local P5E retry; `GSE90063_human-004` is excluded by user decision due duplicate/subset ambiguity.
+6. Continue the PRISM P5F residual queue from the current artifacts: 17 accessible smoke-first candidates remain after `GSE247599`; `GSE274751` stays `staged_h5ad_truncated` until re-staged; `GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, and `GSE282731` remain missing/source-blocked; `GSE90063_human-004` is excluded by user decision due duplicate/subset ambiguity.
 7. Continue T-cell GWPS and other huge missing datasets with streaming/GCS/high-memory workers; never sync 100GB+ h5ads blindly.
+
+## P5F-cont9-Mac PRISM residual continuation — 2026-06-23
+
+Status artifacts:
+
+```text
+artifacts/schema_audit/prism_GSE247599_chunked_verification.json
+artifacts/schema_audit/prism_p5f_cont9_inventory_20260623.json
+artifacts/schema_audit/prism_p5f_status_20260622.json
+artifacts/phase3_ingestion_progress.json
+artifacts/scripts/verify_prism_p5f_dataset_20260623.py
+artifacts/scripts/update_prism_p5f_status_after_gse247599_20260623.py
+artifacts/logs/prism_GSE247599_full_20260623.log
+```
+
+Current decision:
+
+- `GSE247599` was selected by recomputing the current P5F inventory and GCS object sizes, not by trusting the prior handoff. Source: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad`, 1,433,706,825 bytes.
+- Backed inspection showed CSRDataset int64, 24,435 obs x 36,602 vars, duplicate obs names, unique vars, and no obsm keys. The mounted GCS path was too slow for backed open, so the verified repo-local GCS cache helper was used for this 1.4 GB object.
+- Chunking used `chunk_size=1000` because the matrix is wide (36k vars) and int64; smoke chunk peak RSS was ~614 MB and full ingestion peak RSS was ~841 MB with no swaps. No full X matrix was loaded.
+- Verification passed for 25/25 chunks: 24,435 rows, 36,602 vars, 1,876 controls, all obs->X and X->var links correct, X payloads exist, row/var counts match, and required obs fields are present.
+- Live P5F counts after this run: 13 completed, 17 accessible smoke-first candidates, 1 staged payload issue (`GSE274751` truncated), 5 missing/source-blocked rows (`GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, `GSE282731`), and 1 user-excluded row (`GSE90063_human-004`). Next candidate by size: `GSE283614`.
 
 ## P5D-Mac PRISM residual cleanup — 2026-06-22
 
