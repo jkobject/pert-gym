@@ -206,6 +206,7 @@ def main() -> int:
 
     ensure_project_cache()
     ln = connect_pertdata()
+    ln.track(path="tools/ingest_prism_large_h5ad_chunks.py")
     print("LAMIN", ln.setup.settings.instance.slug, ln.setup.settings.branch.name, ln.setup.settings.branch.uid, flush=True)
     ensure_artifact_features(ln)
 

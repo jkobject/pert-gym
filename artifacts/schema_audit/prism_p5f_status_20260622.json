@@ -1,0 +1,186 @@
+{
+  "updated_at_utc": "2026-06-23T10:33:05.426995+00:00",
+  "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
+  "gate_summary_original": {
+    "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
+    "h5ad_objects": 33,
+    "h5ad_bytes": 99139295837,
+    "historical_blocked_rows": 36,
+    "historical_blocked_staged_datasets": 31,
+    "historical_blocked_missing_datasets": [
+      "GSE247598",
+      "GSE261157",
+      "GSE272093",
+      "GSE272457",
+      "GSE282731"
+    ],
+    "decision_counts": {
+      "candidate_ingest_smoke_first": 29,
+      "block_duplicate_named_staged_object": 2,
+      "still_missing_source": 5,
+      "skip_user_excluded": 1
+    },
+    "lamin_instance": "laminlabs/pertdata",
+    "lamin_branch": "jkobject",
+    "outputs": {
+      "tsv": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/schema_audit/prism_p5f_google_drive_recovery_gate_20260622.tsv",
+      "json": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/schema_audit/prism_p5f_google_drive_recovery_gate_20260622.json",
+      "md": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/schema_audit/prism_p5f_google_drive_recovery_gate_20260622.md"
+    }
+  },
+  "completed_datasets": {
+    "GSE255832": {
+      "prefix": "prism_collection/GSE255832",
+      "n_obs": 27912,
+      "n_vars": 32565,
+      "chunk_size": 1000,
+      "chunks_verified": 28,
+      "verification_json": "artifacts/schema_audit/prism_GSE255832_chunked_verification.json"
+    },
+    "GSE263524": {
+      "prefix": "prism_collection/GSE263524",
+      "n_obs": 42289,
+      "n_vars": 32285,
+      "chunk_size": 1000,
+      "chunks_verified": 43,
+      "verification_json": "artifacts/schema_audit/prism_GSE263524_chunked_verification.json"
+    },
+    "GSE236057": {
+      "prefix": "prism_collection/GSE236057",
+      "n_obs": 15866,
+      "n_vars": 28351,
+      "chunk_size": 1000,
+      "chunks_verified": 16,
+      "verification_json": "artifacts/schema_audit/prism_GSE236057_chunked_verification.json"
+    },
+    "GSE267982": {
+      "prefix": "prism_collection/GSE267982",
+      "n_obs": 45808,
+      "n_vars": 32285,
+      "chunk_size": 1000,
+      "chunks_verified": 46,
+      "verification_json": "artifacts/schema_audit/prism_GSE267982_chunked_verification.json"
+    },
+    "GSE247274": {
+      "prefix": "prism_collection/GSE247274",
+      "n_obs": 69907,
+      "n_vars": 22977,
+      "chunk_size": 1000,
+      "chunks_verified": 70,
+      "verification_json": "artifacts/schema_audit/prism_GSE247274_chunked_verification.json"
+    },
+    "GSE241683_carT": {
+      "prefix": "prism_collection/GSE241683_carT",
+      "n_obs": 55213,
+      "n_vars": 36601,
+      "chunk_size": 1000,
+      "chunks_verified": 56,
+      "verification_json": "artifacts/schema_audit/prism_GSE241683_carT_chunked_verification.json"
+    },
+    "GSE252589": {
+      "prefix": "prism_collection/GSE252589",
+      "n_obs": 23297,
+      "n_vars": 68886,
+      "chunk_size": 1000,
+      "chunks_verified": 24,
+      "verification_json": "artifacts/schema_audit/prism_GSE252589_chunked_verification.json"
+    },
+    "GSE243244": {
+      "prefix": "prism_collection/GSE243244",
+      "n_obs": 48587,
+      "n_vars": 32286,
+      "chunk_size": 1000,
+      "chunks_verified": 49,
+      "verification_json": "artifacts/schema_audit/prism_GSE243244_chunked_verification.json"
+    },
+    "GSE246714": {
+      "prefix": "prism_collection/GSE246714",
+      "n_obs": 210314,
+      "n_vars": 31466,
+      "chunk_size": 5000,
+      "chunks_verified": 43,
+      "verification_json": "artifacts/schema_audit/prism_GSE246714_chunked_verification.json"
+    },
+    "GSE236519": {
+      "prefix": "prism_collection/GSE236519",
+      "n_obs": 98883,
+      "n_vars": 34435,
+      "chunk_size": 5000,
+      "chunks_verified": 20,
+      "verification_json": "artifacts/schema_audit/prism_GSE236519_chunked_verification.json"
+    },
+    "GSE254100": {
+      "prefix": "prism_collection/GSE254100",
+      "n_obs": 21667,
+      "n_vars": 22583,
+      "chunk_size": 5000,
+      "chunks_verified": 5,
+      "verification_json": "artifacts/schema_audit/prism_GSE254100_chunked_verification.json"
+    }
+  },
+  "duplicate_resolution": {
+    "hash_artifact": "artifacts/schema_audit/prism_p5f_duplicate_hashes_20260622.tsv",
+    "results": [
+      "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274.h5ad  cca43320462febf0da93458e6e97136759a01466f26cfc02680c5b84c244db84",
+      "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247274 (1).h5ad  cca43320462febf0da93458e6e97136759a01466f26cfc02680c5b84c244db84",
+      "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE267982.h5ad  b50b86d164c496208c35acedf7466ef52d2d6b1898a52295cbda212c074cec1a",
+      "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE267982 (1).h5ad  b50b86d164c496208c35acedf7466ef52d2d6b1898a52295cbda212c074cec1a"
+    ],
+    "resolved_pairs": [
+      "GSE247274",
+      "GSE267982"
+    ],
+    "ingested_after_resolution": [
+      "GSE247274",
+      "GSE267982"
+    ],
+    "remaining_duplicate_resolved_candidate": [],
+    "action": "Do not ingest browser duplicate-named \u201c(1)\u201d copies; canonical and duplicate copies are byte-identical. Redundant objects were left in GCS, not deleted."
+  },
+  "remaining": {
+    "completed_now": 11,
+    "single_staged_smoke_first_candidates_remaining_estimate": 19,
+    "duplicate_named_pairs_still_needing_hash_compare": 0,
+    "duplicate_resolved_candidates_remaining": 0,
+    "total_accessible_candidates_remaining_estimate": 19,
+    "still_missing_source": 5,
+    "user_excluded": 1,
+    "staged_payload_issue": 1,
+    "next_candidate": "GSE250558"
+  },
+  "remaining_source_blocked_rows": [
+    "GSE247598",
+    "GSE261157",
+    "GSE272093",
+    "GSE272457",
+    "GSE282731"
+  ],
+  "user_excluded_rows": [
+    "GSE90063_human-004"
+  ],
+  "notes": [
+    "GSE90063_human-004 remains excluded by user decision.",
+    "GSE247274 and GSE267982 duplicate-named staged pairs were resolved with streaming SHA-256; both pairs are byte-identical.",
+    "GSE247598, GSE261157, GSE272093, GSE272457, and GSE282731 remain missing from the staged recovery prefix.",
+    "The first GSE255832 smoke chunk was written before ln.track() was patched into the chunker; subsequent P5F writes use tracked transform cqKr10EUOIPg0000.",
+    "GSE263524 and GSE267982 both required idempotent resume after the 600s foreground cap; final verification passed for all chunks.",
+    "GSE247274 canonical object was ingested after duplicate resolution; the redundant `(1)` staged object remains un-ingested and should not be used.",
+    "GSE241683_carT was smoke-first ingested from the canonical staged object and verified as 56 same-prefix chunks; the full run hit the 600s foreground cap at chunk_0045 and was resumed with --overwrite from chunk_0045 to repair the partial obs+X/no-var chunk before final verification.",
+    "GSE252589 was smoke-first ingested from the canonical staged object and verified as 24 same-prefix chunks (23,297 obs / 68,886 vars).",
+    "GSE243244 was smoke-first ingested from the canonical staged object and verified as 49 same-prefix chunks (48,587 obs / 32,286 vars); the full run hit the 600s cap at chunk_0032 and was resumed with --overwrite from chunk_0032.",
+    "GSE274751 staged object is corrupt/truncated: GCS size 531,628,032 bytes but HDF5 stored EOF is 2,308,911,126 bytes; re-stage before retry.",
+    "GSE246714 was smoke-first ingested from the canonical staged object and verified as 43 same-prefix chunks at chunk size 5000 (210,314 obs / 31,466 vars); full run hit the 600s cap at chunk_0038 and was resumed with --overwrite from chunk_0038 to repair the partial obs+X/no-var chunk before final verification.",
+    "GSE236519 was smoke-first ingested from the canonical staged object and verified as 20 same-prefix chunks at chunk size 5000 (98,883 obs / 34,435 vars); full run hit the 600s cap during chunk_0013 and was resumed with --overwrite from chunk_0013 before final verification.",
+    "GSE254100 was smoke-first ingested from the canonical staged object and verified as 5 same-prefix chunks at chunk size 5000 (21,667 obs / 22,583 vars); source backed layout was CSRDataset float64 and smoke RSS stayed below 700 MB."
+  ],
+  "staged_payload_issues": {
+    "GSE274751": {
+      "status": "staged_h5ad_truncated",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE274751.h5ad",
+      "gcs_bytes": 531628032,
+      "hdf5_stored_eof_bytes": 2308911126,
+      "observed_in": "t_8891e336 dry-run backed read",
+      "next_action": "Re-stage/recover source before ingestion; do not retry current staged object."
+    }
+  }
+}
