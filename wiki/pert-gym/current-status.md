@@ -222,7 +222,7 @@ artifacts/schema_audit/temporal_t15_scp_gse153162_status_20260622.md
 artifacts/schema_audit/temporal_t15_scp_gse153162_status_20260622.json
 ```
 
-Current decision: row 75 (`SCP3301` / matched `GSE315712`) is source-resolved but not ingested because SCP payloads are auth-gated and GEO exposes a 33 GB RAW tar with a 24 GB sample archive; continue only with a staged/chunked converter. Row 79 (`SCP1467`) remains blocked on authenticated SCP export or a real alternate expression mirror.
+Current decision after SCPAUTH continuation `t_1454d364`: row 75 (`SCP3301` / matched `GSE315712`) is source-resolved but not ingested because matrix-family selection is still needed before staging the recommended processed `WTintegrated` family; do not use the 33 GB GEO RAW tar as the first path. Row 79 (`SCP1467`) is no longer source-auth blocked: logged-in Chrome/computer-use recovered `Expression_Heart_only.tsv`, `Heart_counts.tsv`, and `Heartmetadata.tsv`, all staged and byte-verified at `gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/`. It now needs a conversion/representation card rather than another auth probe. Artifact: `artifacts/schema_audit/temporal_scp_browser_auth_continuation_t1454d364_20260623.{md,json}`.
 
 ## Temporal T19 large mouse embryo/gastrulation probe — 2026-06-22
 
@@ -585,7 +585,7 @@ Current decision:
 
 - Row 134 adult axolotl limb regeneration: resolved primary candidate `GSE165901` (`Fibroblast Dedifferentiation as a Determinant of Successful Regeneration`, PMID 34004152). GEO exposes only `GSE165901_RAW.tar` (1.97 GB); the axolotl-only members are bounded (24 MatrixMarket/feature/barcode files, ~959 MB compressed across 8 samples; stages include LBst50/LBst52/LBst54, BL5dpa, BL11dpa) but need a selective tar extractor and MatrixMarket smoke before Lamin write. `GSE206235` was rejected for this row because its exposed supplement is a 21 MB differential-expression TSV, not a canonical cell×gene matrix.
 - Row 135 SciLifeLab timecourse: `rp58y-78935` is a ShinyCell app. The linked GitHub repo `RegenImm-Lab/SciLifeLabServe_limb_data` contains scripts and names original Seurat RDS objects (`20251212.merged_copy.rds`, `20251212.immune_filtered_copy.rds`, edited 20260421 variants), but does not publish those RDS/data files. Needs original app/storage RDS payload resolution before conversion.
-- Row 136 `SCP499` Early-Bud Blastema: SCP public site API exposes a bounded manifest (`EB.matrix.txt.gz` 40.4 MB, `EB.idents.txt` 9 KB, `EB.coordinates.txt` 44 KB), but both `download` and `stream` endpoints returned HTTP 401 for tiny metadata and matrix URLs. Needs browser/session-aware SCP export.
+- Row 136 `SCP499` Early-Bud Blastema: SCP public site API exposes a bounded manifest (`EB.matrix.txt.gz` 40.4 MB, `EB.idents.txt` 9 KB, `EB.coordinates.txt` 44 KB). SCPAUTH continuation `t_1454d364` recovered and byte-verified the core matrix at `gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/EB.matrix.txt.gz` (`40,372,658` bytes). `EB.idents.txt` and `EB.coordinates.txt` are still missing; recover those small sidecars before a fully annotated ingestion.
 
 ## Temporal T13 Zebrahub + mouse gastrulation — 2026-06-22
 
@@ -925,6 +925,13 @@ Current decision:
   `laminlabs/pertdata` branch `jkobject`, and accession/term duplicate searches
   returned no artifact keys.
 
+SCPAUTH continuation `t_1454d364` confirms this is no longer a pure auth
+blocker: logged-in Chrome/computer-use can expose the files, but `SCP211`
+remains deferred for matrix-family selection because the visible table mixes one
+combined adult-kidney expression matrix and multiple day-specific 10x-style
+matrices up to ~4.9 GB. Do not stage all 31 files blindly; choose the
+representation first.
+
 ## Temporal T28 brain/cardioid/kidney organoid follow-up probe — 2026-06-22
 
 T28-Mac (`t_40508832`) performed a metadata-only source and duplicate probe for
@@ -957,6 +964,12 @@ Current decision:
 - Exact planned Lamin prefixes had 0 existing obs/X/var hits on
   `laminlabs/pertdata` branch `jkobject`, and accession/term searches returned no
   duplicate artifact keys.
+
+SCPAUTH continuation `t_1454d364` reclassifies `SCP282` from terminal auth block
+to representation/download planning: Chrome-auth can reach the file rows, but the
+source exposes seven sample/timepoint expression matrices plus metadata, roughly
+2.7 GB before annotations. Select the intended matrix family and chunking plan
+before staging.
 
 T39-Mac (`t_16e0d7b6`) now has a metadata-only plant spatial/development source and duplicate probe:
 

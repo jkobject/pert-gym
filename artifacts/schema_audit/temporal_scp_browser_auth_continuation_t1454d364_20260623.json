@@ -1,0 +1,129 @@
+{
+  "task_id": "t_a469ca1d",
+  "used_browser_auth": true,
+  "browser_tool": "Google Chrome logged-in as jkobject via Computer Use UI; Chrome extension node_repl bootstrap failed before browser control with sandboxCwd metadata error; actual successful downloads used visible Chrome SCP Download rows/Save dialogs.",
+  "datasets": [
+    {
+      "scp_id": "SCP3301",
+      "status": "skipped_ambiguous",
+      "files": [],
+      "matrix_family_selection_needed": true,
+      "notes": "Public metadata lists raw and processed WTintegrated matrix families of identical 608,826,059-byte size plus separate genes/barcodes and metadata. Because raw vs processed representation choice is unclear and would require ~610 MB+ per matrix, no browser download was clicked blindly."
+    },
+    {
+      "scp_id": "SCP1467",
+      "status": "recovered",
+      "files": [
+        {
+          "local_name": "Expression_Heart_only.tsv",
+          "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Expression_Heart_only.tsv",
+          "local_size": 100298692,
+          "remote_size": 100298692,
+          "deleted_local": true
+        },
+        {
+          "local_name": "Heart_counts.tsv",
+          "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Heart_counts.tsv",
+          "local_size": 51951316,
+          "remote_size": 51951316,
+          "deleted_local": true
+        },
+        {
+          "local_name": "Heartmetadata.tsv",
+          "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Heartmetadata.tsv",
+          "local_size": 508836,
+          "remote_size": 508836,
+          "deleted_local": true
+        }
+      ],
+      "matrix_family_selection_needed": false,
+      "notes": "SCP page was visibly logged in as jkobject and exposed the 4-file Download table. Browser-auth file-row clicks recovered the two expression matrices and metadata with local/remote byte equality. HeartCluster.txt was visible but not staged because repeated post-download accessibility-ID instability jumped to SCP667; avoided further clicks to prevent unintended downloads."
+    },
+    {
+      "scp_id": "SCP211",
+      "status": "skipped_ambiguous",
+      "files": [],
+      "matrix_family_selection_needed": true,
+      "notes": "Public metadata lists 31 files: one 253,356,316-byte combined expression+metadata pair plus multiple 10X mtx/gene/barcode groups from ~131 MB to ~4.9 GB. Representation choice is unclear, so no blind browser download was attempted."
+    },
+    {
+      "scp_id": "SCP3697",
+      "status": "not_found",
+      "files": [],
+      "matrix_family_selection_needed": false,
+      "notes": "Public SCP study metadata currently reports cell_count=0, gene_count=0, and study_files=[]; no expression or metadata file rows were available to recover."
+    },
+    {
+      "scp_id": "SCP282",
+      "status": "skipped_ambiguous",
+      "files": [],
+      "matrix_family_selection_needed": true,
+      "notes": "Public metadata lists seven expression matrices (276-504 MB each) plus combined metadata and clusters. These are multiple sample/timepoint matrix families totaling roughly 2.7 GB before annotations; selection policy was unclear, so no blind multi-file browser download was attempted."
+    },
+    {
+      "scp_id": "SCP499",
+      "status": "visible_blocked",
+      "files": [
+        {
+          "local_name": "EB.matrix.txt.gz",
+          "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/EB.matrix.txt.gz",
+          "local_size": 40372658,
+          "remote_size": 40372658,
+          "deleted_local": true
+        }
+      ],
+      "matrix_family_selection_needed": false,
+      "notes": "SCP499 page was visibly logged in as jkobject and exposed three intended files. Browser-auth file-row click recovered EB.matrix.txt.gz with byte equality. Small annotation files opened inline as signed Google Storage text rather than reliable Downloads files; a shell refetch of the browser-signed URL returned HTTP 400 and a subsequent UI path became unstable, so EB.idents.txt and EB.coordinates.txt were not staged."
+    }
+  ],
+  "continuation_task_id": "t_1454d364",
+  "gcs_reverified_at": "2026-06-23 09:54 CEST",
+  "gcs_reverification": [
+    {
+      "scp_id": "SCP1467",
+      "filename": "Expression_Heart_only.tsv",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Expression_Heart_only.tsv",
+      "remote_size": 100298692,
+      "expected_size": 100298692,
+      "status": "ok"
+    },
+    {
+      "scp_id": "SCP1467",
+      "filename": "Heart_counts.tsv",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Heart_counts.tsv",
+      "remote_size": 51951316,
+      "expected_size": 51951316,
+      "status": "ok"
+    },
+    {
+      "scp_id": "SCP1467",
+      "filename": "Heartmetadata.tsv",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Heartmetadata.tsv",
+      "remote_size": 508836,
+      "expected_size": 508836,
+      "status": "ok"
+    },
+    {
+      "scp_id": "SCP499",
+      "filename": "EB.matrix.txt.gz",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/EB.matrix.txt.gz",
+      "remote_size": 40372658,
+      "expected_size": 40372658,
+      "status": "ok"
+    }
+  ],
+  "created_followup_cards": [
+    {
+      "task_id": "t_d8f20272",
+      "title": "pert-gym SCP1467 \u2014 ingest browser-auth staged heart expression/metadata"
+    },
+    {
+      "task_id": "t_102c5a38",
+      "title": "pert-gym SCP499 \u2014 recover small sidecars then ingest early-bud matrix"
+    },
+    {
+      "task_id": "t_ffcf5bbf",
+      "title": "pert-gym SCP residuals \u2014 select matrix families for SCP3301/SCP211/SCP282"
+    }
+  ]
+}
