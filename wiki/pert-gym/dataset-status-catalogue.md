@@ -72,8 +72,8 @@ Artifacts to link, not copy:
 Current PRISM residual decision is staged-ingestion gated for accessible h5ads, with explicit source/payload exceptions:
 
 - P5D cleanup verified `GSE208240` and `GSE220974` were already present as exact chunked triplets on `jkobject` and moved them to ingested.
-- P5F continuation has ingested and verified 13 datasets through `GSE247599`; latest verification: 25 chunks, 24,435 rows, 36,602 vars, 1,876 controls.
-- 17 accessible staged h5ads remain smoke-first candidates; next by current size inventory is `GSE283614`.
+- P5F continuation has ingested and verified 14 datasets through `GSE283614`; latest verification: 13 chunks, 12,844 rows, 33,586 vars, 5,763 controls.
+- 16 accessible staged h5ads remain smoke-first candidates; next by current size inventory is `GSE280767`.
 - `GSE274751` remains `staged_h5ad_truncated` until the source is re-staged.
 - `GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, and `GSE282731` remain missing/source-blocked.
 - `GSE90063_human-004` is excluded/skipped by user decision because of duplicate/subset ambiguity.

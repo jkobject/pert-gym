@@ -1,0 +1,51 @@
+{
+  "dataset": "GSE283614",
+  "updated_at_utc": "2026-06-23T11:57:51.849508+00:00",
+  "source_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad",
+  "expected_gcs_bytes": 1514297474,
+  "local_path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad",
+  "local_bytes": 1514297474,
+  "n_obs": 12844,
+  "n_vars": 33586,
+  "x_backed_type": "anndata._core.sparse_dataset._CSRDataset",
+  "x_dtype": "float64",
+  "obs_index_unique": true,
+  "var_index_unique": false,
+  "obsm_keys": [],
+  "layers": [
+    "counts"
+  ],
+  "raw_present": false,
+  "obs_columns": [
+    "organism",
+    "cell_type",
+    "crispr_type",
+    "cancer_type",
+    "inferred_perturbation",
+    "condition",
+    "perturbation_name",
+    "dataset_origin"
+  ],
+  "var_columns": [
+    "gene_id",
+    "gene_name",
+    "feature_type"
+  ],
+  "standardized_required_obs_fields": {
+    "perturbation": true,
+    "is_control": true,
+    "cell_line": true,
+    "organism": true,
+    "perturbation_type": true,
+    "dataset": true,
+    "modality": true,
+    "assay": true
+  },
+  "controls_after_standardization": 5763,
+  "unique_perturbations_sample": [
+    "Non-Targeting",
+    "POU5F1 + NANOG"
+  ],
+  "recommended_chunk_size": 1000,
+  "recommendation": "safe_to_smoke_chunk_with_backed_reader"
+}
