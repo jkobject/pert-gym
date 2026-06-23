@@ -1,0 +1,7 @@
+{
+  "used_browser_auth": false,
+  "status": "chrome_control_bootstrap_failed",
+  "current_url": null,
+  "visible_download_text": null,
+  "error": "Chrome browser control could not bootstrap: node_repl/js failed before execution with Mcp error -32602: codex/sandbox-state-meta sandboxCwd must be an absolute file URI: relative URL without a base"
+}
