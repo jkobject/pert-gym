@@ -1,0 +1,324 @@
+{
+  "components": {
+    "180124_perturb": {
+      "bytes": 703045373,
+      "bytes_by_type": {
+        "MTX": 700613948,
+        "TSV": 2431425
+      },
+      "file_count": 24,
+      "geo_accessions": [
+        "GSM6681039",
+        "GSM6681040",
+        "GSM6681041",
+        "GSM6681042",
+        "GSM6681043",
+        "GSM6681044",
+        "GSM6681045",
+        "GSM6681046"
+      ],
+      "perturbase_record": {
+        "filter_cells": 0,
+        "filter_genes": 0,
+        "filter_perturbations": 0,
+        "id": 98,
+        "modality": "RNA",
+        "qc": "Failed"
+      },
+      "types": {
+        "MTX": 8,
+        "TSV": 16
+      }
+    },
+    "201218_RNA": {
+      "bytes": 1706127653,
+      "bytes_by_type": {
+        "CSV": 1706127653
+      },
+      "file_count": 16,
+      "geo_accessions": [
+        "GSM6706657",
+        "GSM6706658",
+        "GSM6706659",
+        "GSM6706660",
+        "GSM6706661",
+        "GSM6706662",
+        "GSM6706663",
+        "GSM6706664",
+        "GSM6706665",
+        "GSM6706666",
+        "GSM6706667",
+        "GSM6706668",
+        "GSM6706669",
+        "GSM6706670",
+        "GSM6706671",
+        "GSM6706672"
+      ],
+      "perturbase_record": {
+        "filter_cells": 56857,
+        "filter_genes": 36844,
+        "filter_perturbations": 139,
+        "id": 1,
+        "modality": "RNA",
+        "notes": "201218 directed-differentiation RNA, H1 hESC overexpression, D4/D7.",
+        "qc": "Pass",
+        "raw_cells": 69085,
+        "raw_genes": 36844,
+        "raw_perturbations": 196
+      },
+      "types": {
+        "CSV": 16
+      }
+    },
+    "201218_TFmap": {
+      "bytes": 21826932,
+      "bytes_by_type": {
+        "CSV": 21826932
+      },
+      "file_count": 4,
+      "geo_accessions": [
+        "GSM6706673",
+        "GSM6706674",
+        "GSM6706675",
+        "GSM6706676"
+      ],
+      "perturbase_record": null,
+      "types": {
+        "CSV": 4
+      }
+    },
+    "210322_TFAtlas": {
+      "bytes": 12549485393,
+      "bytes_by_type": {
+        "CSV": 12549485393
+      },
+      "file_count": 20,
+      "geo_accessions": [
+        "GSM6719950",
+        "GSM6719951",
+        "GSM6719952",
+        "GSM6719953",
+        "GSM6719954",
+        "GSM6719955",
+        "GSM6719956",
+        "GSM6719957",
+        "GSM6719958",
+        "GSM6719959",
+        "GSM6719960",
+        "GSM6719961",
+        "GSM6719962",
+        "GSM6719963",
+        "GSM6719964",
+        "GSM6719965",
+        "GSM6719966",
+        "GSM6719967",
+        "GSM6719968",
+        "GSM6719969"
+      ],
+      "perturbase_record": {
+        "filter_cells": 527594,
+        "filter_genes": 16873,
+        "filter_perturbations": 1183,
+        "id": 32,
+        "modality": "RNA",
+        "notes": "Large TFAtlas RNA component; expression CSVs are dense gene x encoded-cell tables.",
+        "qc": "Pass",
+        "raw_cells": 623153,
+        "raw_genes": 16873,
+        "raw_perturbations": 1604
+      },
+      "types": {
+        "CSV": 20
+      }
+    },
+    "210322_TFmap": {
+      "bytes": 172745005,
+      "bytes_by_type": {
+        "CSV": 172745005
+      },
+      "file_count": 24,
+      "geo_accessions": [
+        "GSM6719970",
+        "GSM6719971",
+        "GSM6719972",
+        "GSM6719973",
+        "GSM6719974",
+        "GSM6719975",
+        "GSM6719976",
+        "GSM6719977",
+        "GSM6719978",
+        "GSM6719979",
+        "GSM6719980",
+        "GSM6719981",
+        "GSM6719982",
+        "GSM6719983",
+        "GSM6719984",
+        "GSM6719985",
+        "GSM6719986",
+        "GSM6719987",
+        "GSM6719988",
+        "GSM6719989",
+        "GSM6719990",
+        "GSM6719991",
+        "GSM6719992",
+        "GSM6719993"
+      ],
+      "perturbase_record": null,
+      "types": {
+        "CSV": 24
+      }
+    },
+    "210715_combinatorial": {
+      "bytes": 1562113286,
+      "bytes_by_type": {
+        "CSV": 1562113286
+      },
+      "file_count": 9,
+      "geo_accessions": [
+        "GSM6704391",
+        "GSM6704392",
+        "GSM6704393",
+        "GSM6704394",
+        "GSM6704395",
+        "GSM6704396",
+        "GSM6704397",
+        "GSM6704398",
+        "GSM6704399"
+      ],
+      "perturbase_record": {
+        "filter_cells": 0,
+        "filter_genes": 0,
+        "filter_perturbations": 0,
+        "id": 99,
+        "modality": "RNA",
+        "qc": "Failed"
+      },
+      "types": {
+        "CSV": 9
+      }
+    },
+    "other": {
+      "bytes": 1192689127,
+      "bytes_by_type": {
+        "CSV": 49377802,
+        "MTX": 1136545080,
+        "TSV": 6766245
+      },
+      "file_count": 70,
+      "geo_accessions": [
+        "GSM6674255",
+        "GSM6674256",
+        "GSM6674257",
+        "GSM6674258",
+        "GSM6674380",
+        "GSM6674381",
+        "GSM6674382",
+        "GSM6674383",
+        "GSM6674384",
+        "GSM6674385",
+        "GSM6681047",
+        "GSM6681072",
+        "GSM6681073",
+        "GSM6681074",
+        "GSM6681075",
+        "GSM6681076",
+        "GSM6681077",
+        "GSM6681078",
+        "GSM6681079",
+        "GSM6681080",
+        "GSM6681081",
+        "GSM6681082",
+        "GSM6681083",
+        "GSM6704388",
+        "GSM6704389",
+        "GSM6704390"
+      ],
+      "perturbase_record": null,
+      "types": {
+        "CSV": 4,
+        "MTX": 22,
+        "TSV": 44
+      }
+    }
+  },
+  "decisions": {
+    "blocker": "Expression matrix components are identifiable and range-readable, but perturbation labels are not yet safe: TFmap files map encoded R1/R2/R3 cell barcode coordinates to 24nt sequences plus numeric values, while the probed GEO/PerturBase metadata does not expose a verified barcode/ORF-to-TF-symbol library map. Canonical ingestion with perturbation labels would risk wrong labels.",
+    "canonical_writes_performed": false,
+    "excluded_from_canonical_x": [
+      "PRJNA893678_ATAC",
+      "180124_perturb",
+      "210715_combinatorial"
+    ],
+    "rna_components_identified": [
+      "201218_RNA",
+      "210322_TFAtlas"
+    ]
+  },
+  "duplicate_probe": {
+    "branch": "jkobject",
+    "instance": "laminlabs/pertdata",
+    "terms": {
+      "180124_perturb": {
+        "count_first100": 0,
+        "rows": []
+      },
+      "201218_RNA": {
+        "count_first100": 0,
+        "rows": []
+      },
+      "210322_TFAtlas": {
+        "count_first100": 0,
+        "rows": []
+      },
+      "210715_combinatorial": {
+        "count_first100": 0,
+        "rows": []
+      },
+      "GSE216481": {
+        "count_first100": 0,
+        "rows": []
+      },
+      "PRJNA893678": {
+        "count_first100": 0,
+        "rows": []
+      },
+      "PRJNA893678_ATAC": {
+        "count_first100": 0,
+        "rows": []
+      },
+      "temporal_pretraining/perturbase/gse216481": {
+        "count_first100": 0,
+        "rows": []
+      },
+      "tfatlas": {
+        "count_first100": 0,
+        "rows": []
+      }
+    }
+  },
+  "filelist": {
+    "computed_tar_data_end_plus_one": 17908156413,
+    "computed_vs_expected_slack_bytes": 6147,
+    "expected_tar_bytes": 17908162560,
+    "member_count": 167,
+    "member_payload_bytes": 17908032769
+  },
+  "scope": "compact row113 contract validation input derived from temporal_t29_gse216481_row113_probe_20260622.json; excludes per-sample header rows to keep PR reviewable",
+  "source": {
+    "expected_tar_bytes": 17908162560,
+    "filelist_artifact": "artifacts/schema_audit/temporal_t29_gse216481_filelist_20260622.txt",
+    "filelist_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE216nnn/GSE216481/suppl/filelist.txt",
+    "geo": "GSE216481",
+    "raw_tar_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE216nnn/GSE216481/suppl/GSE216481_RAW.tar",
+    "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE216nnn/GSE216481/soft/GSE216481_family.soft.gz",
+    "staged_gcs_target": "gs://scperturb/pert-gym/staging/data/main/temporal_pretraining/perturbase_t29/GSE216481_RAW.tar",
+    "staged_gcs_verification": {
+      "bytes": 17908162560,
+      "crc32c_base64": "4qSU/w==",
+      "expected_bytes": 17908162560,
+      "md5_base64": "F/KU8vFWRdT8CqJSggeYnQ==",
+      "uri": "gs://scperturb/pert-gym/staging/data/main/temporal_pretraining/perturbase_t29/GSE216481_RAW.tar",
+      "verified_at_utc": "2026-06-22T14:32:25Z"
+    }
+  }
+}

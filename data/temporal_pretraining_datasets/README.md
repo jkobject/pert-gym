@@ -125,3 +125,18 @@ When two rows refer to the same dataset family, keep the dataset URL with best d
 - Plant and microscopy-only datasets are included because the user explicitly allowed derivatives and microscopy, but they may deserve a separate modality class during ingestion.
 - OrganoidDB and PerturBase rows are now entry-level, but exact per-sample timepoint values may still require parsing GEO/SRA sample metadata during ingestion.
 - NCBI E-utilities were used for the SRA/BioProject fallback. The ArrayExpress/E-MTAB records should be resolved through ENA/ArrayExpress-specific endpoints in a later ingestion pass.
+
+## PerturBase T29 directed differentiation status — 2026-06-23
+
+- Row 115 / `GSE142078` remains accepted as ingested and verified; preserve the PerturBase filtered-cell discrepancy in obs `qc_note`.
+- Row 114 / `GSE156170` is `excluded_with_reason` from the active path by user decision due perturbation-label/QC ambiguity; do not treat it as the current blocker.
+- Row 113 / `GSE216481` is active with an explicit metadata contract. Existing staged/probe artifacts identify QC-pass RNA components `201218_RNA` and `210322_TFAtlas`, and exclude ATAC plus failed/combinatorial components from canonical RNA `X.h5ad`. The exact missing inputs before canonical write are the barcode/sequence/numeric-id-to-ORF/TF-symbol lookup and component-specific filtered-cell inclusion table/predicate.
+
+Artifacts:
+
+- `artifacts/schema_audit/temporal_t29_gse216481_row113_probe_20260622.md`
+- `artifacts/schema_audit/temporal_t29_gse216481_row113_metadata_contract_20260623.md`
+- `artifacts/scripts/validate_temporal_perturbase_t29_gse216481_contract_20260623.py`
+- `artifacts/schema_audit/temporal_t29_gse216481_row113_contract_validation_20260623.json`
+
+- `artifacts/schema_audit/temporal_t29_gse216481_row113_contract_input_20260623.json` (compact validation input)

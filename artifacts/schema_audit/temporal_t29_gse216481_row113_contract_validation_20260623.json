@@ -1,0 +1,55 @@
+{
+  "active_components": [
+    "201218_RNA",
+    "210322_TFAtlas"
+  ],
+  "errors": [],
+  "excluded_from_canonical_x": [
+    "180124_perturb",
+    "210715_combinatorial",
+    "PRJNA893678_ATAC"
+  ],
+  "generated_at": "2026-06-23T07:41:03+00:00",
+  "missing_required_inputs": [
+    "label_map: barcode/sequence/numeric-id to ORF/TF-symbol lookup",
+    "filtered_cells: component-specific filtered-cell inclusion table/predicate"
+  ],
+  "next_action": "Recover PerturBase repository 1 filtered object/metadata export or original TF atlas supplementary/library table containing barcode/sequence/numeric-id to ORF/TF-symbol mapping and filtered cell inclusion.",
+  "probe_json": "artifacts/schema_audit/temporal_t29_gse216481_row113_contract_input_20260623.json",
+  "required_obs_fields": [
+    "dataset_id",
+    "source",
+    "source_repository",
+    "geo_accession",
+    "bioproject",
+    "component",
+    "sample_title",
+    "sample_id",
+    "encoded_cell_id",
+    "r1_coordinate",
+    "r2_coordinate",
+    "r3_coordinate",
+    "plate_coordinate",
+    "tfmap_coordinate",
+    "tfmap_sequence",
+    "tfmap_numeric_id",
+    "orf_id",
+    "tf_symbol",
+    "perturbation",
+    "perturbation_type",
+    "organism",
+    "cell_type",
+    "assay",
+    "modality",
+    "timepoint_raw",
+    "timepoint",
+    "timepoint_unit",
+    "is_control",
+    "is_baseline",
+    "filter_contract_source",
+    "label_contract_source",
+    "qc_note"
+  ],
+  "status": "contract_incomplete",
+  "warnings": []
+}

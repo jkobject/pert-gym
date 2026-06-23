@@ -306,3 +306,8 @@ the dataset and the file format (image / sensitivty / scRNAseq).
 - genetic perturbations: the target library used, together with the exact
   CAS9-construct should be available for all genetic perturbation datasets
 - WGS/WES data should be available for all patient_id values
+
+#### PerturBase T29 directed differentiation (GSE216481/GSE156170/GSE142078)
+- Row 115 / `GSE142078` is accepted as an ingested, verified LUHMES CRISPRi day-8 triplet; keep the PerturBase 7,684-cell vs reconstructed 8,843-cell discrepancy as a QC note.
+- Row 114 / `GSE156170` is `excluded_with_reason` from the active path by the 2026-06-23 user decision because bounded source probes found perturbation-label/QC ambiguity. Preserve that provenance, but do not reopen row114 as an active ingestion blocker.
+- Row 113 / `GSE216481` is staged and source-probed but not ingested. QC-pass RNA components are `201218_RNA` and `210322_TFAtlas`; ATAC and failed/combinatorial components are excluded from canonical RNA `X.h5ad`. The row113 contract requires a barcode/sequence/numeric-id-to-ORF/TF-symbol map plus component-specific filtered-cell inclusion table before any canonical `perturbation` labels are written. See `../artifacts/schema_audit/temporal_t29_gse216481_row113_metadata_contract_20260623.md` and `../artifacts/scripts/validate_temporal_perturbase_t29_gse216481_contract_20260623.py`.
