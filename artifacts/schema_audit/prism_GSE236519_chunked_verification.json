@@ -1,0 +1,285 @@
+{
+  "dataset": "GSE236519",
+  "prefix": "prism_collection/GSE236519",
+  "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE236519.h5ad",
+  "verified_at_utc": "2026-06-23T09:49:42.614560+00:00",
+  "lamin_instance": "laminlabs/pertdata",
+  "lamin_branch": "jkobject",
+  "n_obs": 98883,
+  "n_vars": 34435,
+  "chunk_size": 5000,
+  "chunks_expected": 20,
+  "chunks_verified": 20,
+  "rows_verified": 98883,
+  "controls": 12241,
+  "all_required_obs_fields_present": true,
+  "checks": {
+    "obs_artifacts_exist": true,
+    "x_artifacts_exist": true,
+    "var_artifacts_exist": true,
+    "obs_to_x_links_by_key_ok": true,
+    "x_to_var_links_by_key_ok": true,
+    "x_payloads_exist": true,
+    "x_n_observations_match_obs_rows": true,
+    "var_rows_match_source_vars": true,
+    "required_obs_fields_present": true
+  },
+  "sampled_chunks": [
+    {
+      "chunk": 0,
+      "obs_key": "prism_collection/GSE236519/chunk_0000/obs.parquet",
+      "x_key": "prism_collection/GSE236519/chunk_0000/X.h5ad",
+      "var_key": "prism_collection/GSE236519/chunk_0000/var.parquet",
+      "obs_rows": 5000,
+      "var_rows": 34435,
+      "controls": 4555,
+      "required_obs": {
+        "perturbation": true,
+        "perturbation_type": true,
+        "organism": true,
+        "cell_line": true,
+        "modality": true,
+        "assay": true,
+        "is_control": true
+      }
+    },
+    {
+      "chunk": 1,
+      "obs_key": "prism_collection/GSE236519/chunk_0001/obs.parquet",
+      "x_key": "prism_collection/GSE236519/chunk_0001/X.h5ad",
+      "var_key": "prism_collection/GSE236519/chunk_0001/var.parquet",
+      "obs_rows": 5000,
+      "var_rows": 34435,
+      "controls": 2192,
+      "required_obs": {
+        "perturbation": true,
+        "perturbation_type": true,
+        "organism": true,
+        "cell_line": true,
+        "modality": true,
+        "assay": true,
+        "is_control": true
+      }
+    },
+    {
+      "chunk": 19,
+      "obs_key": "prism_collection/GSE236519/chunk_0019/obs.parquet",
+      "x_key": "prism_collection/GSE236519/chunk_0019/X.h5ad",
+      "var_key": "prism_collection/GSE236519/chunk_0019/var.parquet",
+      "obs_rows": 3883,
+      "var_rows": 34435,
+      "controls": 242,
+      "required_obs": {
+        "perturbation": true,
+        "perturbation_type": true,
+        "organism": true,
+        "cell_line": true,
+        "modality": true,
+        "assay": true,
+        "is_control": true
+      }
+    }
+  ],
+  "chunks": [
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0000",
+      "start": 0,
+      "end": 5000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 4555,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0001",
+      "start": 5000,
+      "end": 10000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 2192,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0002",
+      "start": 10000,
+      "end": 15000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 2974,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0003",
+      "start": 15000,
+      "end": 20000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0004",
+      "start": 20000,
+      "end": 25000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0005",
+      "start": 25000,
+      "end": 30000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0006",
+      "start": 30000,
+      "end": 35000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0007",
+      "start": 35000,
+      "end": 40000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0008",
+      "start": 40000,
+      "end": 45000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0009",
+      "start": 45000,
+      "end": 50000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0010",
+      "start": 50000,
+      "end": 55000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 92,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0011",
+      "start": 55000,
+      "end": 60000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 263,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0012",
+      "start": 60000,
+      "end": 65000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 310,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0013",
+      "start": 65000,
+      "end": 70000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 248,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0014",
+      "start": 70000,
+      "end": 75000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 259,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0015",
+      "start": 75000,
+      "end": 80000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 270,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0016",
+      "start": 80000,
+      "end": 85000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 273,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0017",
+      "start": 85000,
+      "end": 90000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 273,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0018",
+      "start": 90000,
+      "end": 95000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 34435,
+      "controls": 290,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE236519/chunk_0019",
+      "start": 95000,
+      "end": 98883,
+      "obs_rows": 3883,
+      "x_n_observations": 3883,
+      "var_rows": 34435,
+      "controls": 242,
+      "status": "verified"
+    }
+  ]
+}

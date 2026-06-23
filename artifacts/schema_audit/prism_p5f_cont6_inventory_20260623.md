@@ -1,24 +1,14 @@
-# PRISM P5F recovery status — updated 2026-06-23 after GSE236519
+# PRISM P5F cont6 remaining inventory — 2026-06-23
 
-- staging prefix: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/`
-- Lamin target: `laminlabs/pertdata` branch `jkobject`
-- completed verified P5F datasets: `10`
-- remaining smoke-first staged candidates: `20`
+- source: current status artifacts + live `gsutil ls`
+- completed datasets preserved: `10`
+- newly completed in this run: `GSE236519` (`20` chunks, `98,883 × 34,435`)
+- remaining smoke-first candidates: `20`
 - staged payload issues: `1`
 - missing/source rows: `5`
 - user-excluded rows: `1`
 
-## Newly completed in this update
-
-- `GSE236519`: verified `20/20` same-prefix chunks at chunk size `5000`, shape `98,883 × 34,435`, controls `12,241`.
-- verification artifacts: `artifacts/schema_audit/prism_GSE236519_chunked_verification.json` and `.md`.
-- run note: smoke chunk succeeded; full run hit the 600s foreground cap during `chunk_0013` and was safely resumed with `--start-chunk 13 --overwrite` before final verification.
-
-## Completed verified P5F datasets
-
-GSE236057, GSE236519, GSE241683_carT, GSE243244, GSE246714, GSE247274, GSE252589, GSE255832, GSE263524, GSE267982
-
-## Next remaining candidates by staged object size
+## Next candidates by staged object size
 
 | dataset | GiB | bytes | uri |
 |---|---:|---:|---|
@@ -35,7 +25,7 @@ GSE236057, GSE236519, GSE241683_carT, GSE243244, GSE246714, GSE247274, GSE252589
 
 ## Preserved blockers / exclusions
 
-- `GSE274751`: staged payload issue; current h5ad remains truncated/corrupt (GCS size 531,628,032 bytes; HDF5 stored EOF 2,308,911,126 bytes). Do not retry until re-staged/recovered.
+- `GSE274751`: staged payload issue; current h5ad remains truncated/corrupt; do not retry until re-staged.
 - Missing/source-blocked: `GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, `GSE282731`.
 - User-excluded: `GSE90063_human-004`.
 - Browser duplicate-named `(1)` copies for `GSE247274` and `GSE267982` remain redundant; canonical objects only were/should be ingested.
