@@ -1,0 +1,25 @@
+warning: `VIRTUAL_ENV=/Users/jkobject/.hermes/hermes-agent/venv` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+GCS_CACHE_HIT gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad -> /Users/jkobject/.openclaw/worktrees/pert-gym/t_ac8dc1a3/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad size=2010340238
+[92m→[0m connected lamindb: laminlabs/pertdata
+[92m→[0m script invoked with: gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad --dataset GSE280767 --chunk-size 1000 --max-chunks 1
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_ac8dc1a3/.venv/bin/python3: No module named pip
+[92m→[0m loaded Transform('cqKr10EUOIPg0000', key='ingest_prism_large_h5ad_chunks.py'), started new Run('h9n0jsMK3sFP3roE') at 2026-06-23 12:21:53 UTC
+[94m•[0m recommendation: to identify the script across renames, pass the uid: ln.track("cqKr10EUOIPg")
+[93m![0m environment file is empty, skipping linking an environment
+[92m→[0m monitor at: https://lamin.ai/laminlabs/pertdata/transform/cqKr10EUOIPg0000
+LAMIN laminlabs/pertdata jkobject GCjqQtGwPzkY
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_ac8dc1a3/tools/ingest_prism_large_h5ad_chunks.py:124: DeprecationWarning: Use dtype_as_str instead of dtype, dtype will be removed in the future.
+  if feature and feature[0].dtype != "cat[Artifact]":
+SOURCE /Users/jkobject/.openclaw/worktrees/pert-gym/t_ac8dc1a3/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad n_obs 246027 n_vars 36601 chunk_size 1000 chunks 0:1/247
+READ_CHUNK prism_collection/GSE280767/chunk_0000 0 1000
+SAVE_CHUNK prism_collection/GSE280767/chunk_0000 obs 1000 vars 36601 controls 0
+[93m![0m There is a problem with your default AWS Credentials: Missing Dependency: Using the login credential provider requires an additional dependency. You will need to pip install "botocore[crt]" before proceeding.
+`anon` mode will be used for all non-managed buckets
+... uploading caRHeCqOxt3df9uZ0000.parquet:  0.0%... uploading caRHeCqOxt3df9uZ0000.parquet: 100.0%
+... uploading DDbVIyrplpm84eax0000.h5ad:  0.0%... uploading DDbVIyrplpm84eax0000.h5ad: 100.0%
+... uploading 3ug1ZTioQbWs1bw60000.parquet:  0.0%... uploading 3ug1ZTioQbWs1bw60000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_ac8dc1a3/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE280767/chunk_0000/X.h5ad 32308252
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_ac8dc1a3/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE280767/chunk_0000/obs.parquet 19730
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_ac8dc1a3/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE280767/chunk_0000/var.parquet 603967
+DONE_CHUNK prism_collection/GSE280767/chunk_0000
+DONE_DATASET prism_collection/GSE280767 1
