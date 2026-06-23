@@ -15,8 +15,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "10-month-old stage;10th week post-fertilization stage;11th week post-fertilization stage;12th week post-fertilization stage;13th week post-fertilization stage;15-19 year-old;15-month-old stage;15th week post-fertilization stage;16th week post-fertilization stage;17th week post-fertilization stage;2-year-old stage;3-month-old stage;6-month-old stage;9th week post-fertilization stage;Carnegie stage 19;Carnegie stage 22;Carnegie stage 23;fourth decade stage;juvenile stage (5-14 yo);organogenesis stage;third decade stage",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -35,8 +35,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -55,8 +55,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -75,8 +75,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -95,8 +95,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -115,8 +115,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/source describes developmental trajectory or differentiation; no download needed for coarse inclusion",
     "development_stage_evidence": "10-year-old stage;11-year-old stage;14-year-old stage;15-year-old stage;6-year-old stage;9-year-old stage",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -135,8 +135,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -155,8 +155,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -175,8 +175,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -195,8 +195,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -215,8 +215,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -235,8 +235,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "11th week post-fertilization stage;17th week post-fertilization stage;2-month-old stage;2-week-old stage;20th week post-fertilization stage;3-year-old stage;4-day-old stage;42-year-old stage;44-year-old stage;46-year-old stage;52-year-old stage;6-month-old stage;7-day-old stage;7-month-old stage;9-month-old stage;9th week post-fertilization stage;Carnegie stage 18;Carnegie stage 19;Carnegie stage 22;Theiler stage 18;Theiler stage 20;Theiler stage 21;Theiler stage 22;Theiler stage 23;Theiler stage 25;Theiler stage 27;newborn stage (0-28 days)",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -255,8 +255,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -275,8 +275,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -295,8 +295,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -315,8 +315,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -335,8 +335,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -355,8 +355,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "Carnegie stage 10;Carnegie stage 11;Carnegie stage 13;Carnegie stage 14;Carnegie stage 15;Carnegie stage 16;Carnegie stage 17;unknown",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -375,8 +375,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "Theiler stage 20;Theiler stage 22;Theiler stage 24;Theiler stage 26",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -395,8 +395,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -415,8 +415,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "10th week post-fertilization stage;11th week post-fertilization stage;12th week post-fertilization stage;13th week post-fertilization stage;14th week post-fertilization stage;15th week post-fertilization stage;16th week post-fertilization stage;17th week post-fertilization stage;18th week post-fertilization stage;20th week post-fertilization stage;21st week post-fertilization stage;22nd week post-fertilization stage;9th week post-fertilization stage;Carnegie stage 13;Carnegie stage 16;Carnegie stage 19;Carnegie stage 20;Carnegie stage 22;Carnegie stage 23;unknown",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -435,8 +435,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/source describes developmental trajectory or differentiation; no download needed for coarse inclusion",
     "development_stage_evidence": "22nd week post-fertilization stage;7-month-old stage",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -455,8 +455,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -475,8 +475,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "has explicit time/longitudinal/regeneration signal despite noisy terms",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -495,8 +495,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -515,8 +515,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -535,8 +535,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -555,8 +555,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -575,8 +575,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -595,8 +595,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -615,8 +615,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -635,8 +635,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -655,8 +655,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -675,8 +675,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -695,8 +695,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -715,8 +715,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -735,8 +735,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -755,8 +755,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -775,8 +775,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -795,8 +795,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -815,8 +815,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -835,8 +835,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -855,8 +855,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -875,8 +875,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "10-week-old stage;24-day-old stage;4-week-old stage;5-week-old stage;6-week-old stage;7-week-old stage",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -895,13 +895,13 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "10th week post-fertilization stage;11th week post-fertilization stage;12th week post-fertilization stage;13th week post-fertilization stage;14th week post-fertilization stage;15th week post-fertilization stage;16th week post-fertilization stage;17th week post-fertilization stage;18th week post-fertilization stage;20th week post-fertilization stage",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
     "confidence": "B_candidate_needs_timepoint_metadata",
-    "title": "Single-cell reconstruction of the early maternal\u2013fetal interface in humans",
+    "title": "Single-cell reconstruction of the early maternal–fetal interface in humans",
     "organism": "Homo sapiens",
     "modality": "10x 3' v2;Smart-seq2",
     "time_axis": "needs_metadata_validation",
@@ -915,8 +915,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -935,8 +935,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -955,8 +955,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "10th week post-fertilization stage;11th week post-fertilization stage;12th week post-fertilization stage;13th week post-fertilization stage;14th week post-fertilization stage;15th week post-fertilization stage;16th week post-fertilization stage;17th week post-fertilization stage;18th week post-fertilization stage;19th week post-fertilization stage;21st week post-fertilization stage;5-day-old stage;9th week post-fertilization stage;Carnegie stage 17;Carnegie stage 18;Carnegie stage 19;Carnegie stage 21;Carnegie stage 23;Theiler stage 17;Theiler stage 19;Theiler stage 20;Theiler stage 21;Theiler stage 22;Theiler stage 24;Theiler stage 26;Theiler stage 27",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -975,8 +975,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -995,8 +995,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1015,8 +1015,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "10th week post-fertilization stage;11th week post-fertilization stage;12th week post-fertilization stage;14th week post-fertilization stage;17th week post-fertilization stage;18th week post-fertilization stage;20th week post-fertilization stage;21st week post-fertilization stage;9th week post-fertilization stage",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1035,8 +1035,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "10th week post-fertilization stage;11th week post-fertilization stage;12th week post-fertilization stage;13th week post-fertilization stage;9th week post-fertilization stage;Carnegie stage 14;Carnegie stage 16;Carnegie stage 18;Carnegie stage 22;Carnegie stage 23;unknown",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1055,8 +1055,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1075,8 +1075,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "10th week post-fertilization stage;11th week post-fertilization stage;13th week post-fertilization stage;14th week post-fertilization stage;16th week post-fertilization stage;17th week post-fertilization stage;18th week post-fertilization stage;19th week post-fertilization stage;20th week post-fertilization stage;21st week post-fertilization stage;23rd week post-fertilization stage;66-year-old stage;Carnegie stage 22",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1095,8 +1095,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "CELLxGENE metadata/description contains multiple non-adult stages or explicit timepoint/stage wording",
     "development_stage_evidence": "5-day-old stage;7-day-old stage",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1115,8 +1115,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Segmentation of the vertebrate hindbrain leads to the formation of rhombomeres, each with a distinct anteroposterior identity. Specialised boundary cells form at segment borders that act as a source o",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP667",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1135,8 +1135,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1155,8 +1155,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Studies of ascidian (sea squirt) embryos have highlighted the importance of cell lineages in animal development for over 100 years. As simple proto-vertebrates, they are also used to explore the evolu",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP454",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1175,8 +1175,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "ArrayExpress/Single Cell Expression Atlas record has explicit developmental stage/time axis",
     "development_stage_evidence": "embryonic patterning/developmental stage",
-    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "alternate_accessions": "E-MTAB-9304",
+    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1195,8 +1195,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE190149",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1215,8 +1215,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "E-MTAB-10843",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1235,8 +1235,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE334273",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1255,8 +1255,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "ArrayExpress/Single Cell Expression Atlas record has explicit developmental stage/time axis",
     "development_stage_evidence": "7, 9, 11 post-conceptional weeks",
-    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "alternate_accessions": "E-MTAB-8894",
+    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1275,8 +1275,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "ArrayExpress/Single Cell Expression Atlas record has explicit developmental stage/time axis",
     "development_stage_evidence": "preimplantation embryo stages",
-    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "alternate_accessions": "E-MTAB-3929",
+    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1295,8 +1295,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "The neocortex has an unparalleled diversity of cell types, which are generated during development through a series of temporally orchestrated events that are under tight evolutionary constraint and ar",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP1290",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1315,8 +1315,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1335,8 +1335,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1355,8 +1355,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "This dataset covers single-cell RNA-seq from Hand-GFP transgenic Drosophila lines. Hand is a well-known key transcription factor for cardiogenesis, hemopoiesis and muscle development in Drosophila (Ha",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP1469",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1375,8 +1375,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "ArrayExpress/Single Cell Expression Atlas record has explicit developmental stage/time axis",
     "development_stage_evidence": "Drosophila embryo organogenesis stages",
-    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "alternate_accessions": "E-GEOD-234602",
+    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1395,8 +1395,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "ArrayExpress/Single Cell Expression Atlas record has explicit developmental stage/time axis",
     "development_stage_evidence": "bilaminar disc rabbit embryo stages",
-    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "alternate_accessions": "E-MTAB-10894",
+    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1415,8 +1415,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE173650",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1435,8 +1435,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "ArrayExpress/Single Cell Expression Atlas record has explicit developmental stage/time axis",
     "development_stage_evidence": "in vitro cultured human embryo stages",
-    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "alternate_accessions": "E-MTAB-8060",
+    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1455,8 +1455,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE280655",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1475,8 +1475,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "early chick development",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP1570",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1494,9 +1494,9 @@
     "dedup_key": "single cell characterization of anterior segment development cell types pathways",
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
-    "development_stage_evidence": "Morphogenesis of the anterior segment (AS) is crucial for healthy ocular physiology and vision but is only partially understood. The Schlemm\u2019s canal (SC) and trabecular meshwork (TM) are essential dra",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
+    "development_stage_evidence": "Morphogenesis of the anterior segment (AS) is crucial for healthy ocular physiology and vision but is only partially understood. The Schlemm’s canal (SC) and trabecular meshwork (TM) are essential dra",
     "alternate_accessions": "SCP3301",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1514,9 +1514,9 @@
     "dedup_key": "single cell reconstruction of developmental trajectories during zebrafish embryo",
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
-    "development_stage_evidence": "Single-cell reconstruction of developmental trajectories during zebrafish embryogenesis\n \n Farrell JA* and Wang Y*, Riesenfeld SJ, Shekhar K, Regev A* and Schier AF*.\u00a0Single-cell reconstruction of dev",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
+    "development_stage_evidence": "Single-cell reconstruction of developmental trajectories during zebrafish embryogenesis\n \n Farrell JA* and Wang Y*, Riesenfeld SJ, Shekhar K, Regev A* and Schier AF*. Single-cell reconstruction of dev",
     "alternate_accessions": "SCP162",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1535,8 +1535,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "ArrayExpress/Single Cell Expression Atlas record has explicit developmental stage/time axis",
     "development_stage_evidence": "2- to 32-cell embryo stages",
-    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "alternate_accessions": "E-MTAB-3321",
+    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1555,8 +1555,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE325829",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1575,8 +1575,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Drosophila has been instrumental in identifying novel genes and pathways required for heart development, and in uncovering the genetic and molecular causes of heart disease. However, unlike other mode",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP1467",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1595,8 +1595,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "ArrayExpress/Single Cell Expression Atlas record has explicit developmental stage/time axis",
     "development_stage_evidence": "E6.5-E8.5 every six hours",
-    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "alternate_accessions": "E-MTAB-6967",
+    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1615,8 +1615,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1635,8 +1635,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "ArrayExpress/Single Cell Expression Atlas record has explicit developmental stage/time axis",
     "development_stage_evidence": "human gastrulation stage",
-    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "alternate_accessions": "E-MTAB-9388",
+    "merge_sources": "artifacts/biostudies_arrayexpress/arrayexpress_step1_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1655,8 +1655,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE128273",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1667,7 +1667,7 @@
     "time_axis": "time-resolved labeling",
     "cells": "55000",
     "category": "metabolic_labeling;explicit_timecourse",
-    "dataset_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?term=scNT-seq",
+    "dataset_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE141851",
     "url_type": "dataset_or_collection",
     "paper_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8103797/",
     "source": "seed",
@@ -1675,9 +1675,9 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
+    "alternate_accessions": "GSE141851",
     "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
-    "alternate_accessions": "",
-    "merge_notes": ""
+    "merge_notes": "Resolved exact GEO accession for 2021 scNT-seq paper: GSE141851; previous URL was broad GEO search. RAW.tar contains TXT.gz tagged DGE C/T matrices requiring converter."
   },
   {
     "confidence": "A_explicit",
@@ -1695,8 +1695,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE115612",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1715,8 +1715,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1735,8 +1735,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit day and GEO GSE142526",
     "development_stage_evidence": "Single cell Analysis of fetal retina versus human retinal organoids",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE142526",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1755,8 +1755,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit day and GEO GSE152212",
     "development_stage_evidence": "single cell RNAseq of wild type, RPGRIP1 KO, and CRB1 KO human retinal organoids at days 70, 90, 120, 150, 190, and 225",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE152212",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1775,8 +1775,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit day and GEO GSE196799",
     "development_stage_evidence": "single-cell RNA sequencing of hiPSC-derived endothelial cells in different 3D microenvironments to study differentiation efficiency and impacts on sprouting, tubulogenesis, and cell type maturation",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE196799",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1795,8 +1795,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit week and GEO GSE106245",
     "development_stage_evidence": "Bulk RNAseq of hESCs, ch-iPSCs, or-iPSCs, rhESCs, and each of 6 time points corresponding to weeks 0, 1, 2, 3, 4, and 5 during cortical organoid differentiation. Single cell RNAseq of human ESCs, week 1, week 2, and week 5 organoids.",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE106245",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1815,8 +1815,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit day and GEO GSE162547",
     "development_stage_evidence": "single cell RNA sequencing of pancreatic duct-like organoids differentation kinetics",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE162547",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1835,8 +1835,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit day and GEO GSE194214",
     "development_stage_evidence": "Single-cell mRNA sequencing of human iPSC-derived paraxial mesoderm organoids (Somitoids).",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE194214",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1855,8 +1855,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit day and GEO GSE118184",
     "development_stage_evidence": "Dropseq and 10X Chromium were used to profile organoid cells and adult kidney nuclei",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE118184",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1875,8 +1875,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit day and GEO GSE138002",
     "development_stage_evidence": "10x Genomics V2 single-cell RNA-sequencing",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE138002",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1895,8 +1895,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit day and GEO GSE158999",
     "development_stage_evidence": "10x single-cell RNA-seq of gastruloids at day 4, 5, 6 and 7, in duplicates.",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE158999",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1915,8 +1915,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit day and GEO GSE148093",
     "development_stage_evidence": "Single intestinal organoids were processed at single-cell resolution using deterministic encapsulation of cells with mRNA capture beads.",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE148093",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1935,8 +1935,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "OrganoidDB browse marks study_type=Development, platform=scRNA-Seq; detail page gives development time unit month and GEO GSE130238",
     "development_stage_evidence": "Profling of single cell RNA-Seq for 1, 3, 6, and 10 month-old human cortical organoids",
-    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "alternate_accessions": "GSE130238",
+    "merge_sources": "artifacts/organoiddb/organoiddb_step4_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -1955,8 +1955,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1975,8 +1975,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -1995,8 +1995,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2015,8 +2015,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/source describes developmental trajectory or differentiation; no download needed for coarse inclusion",
     "development_stage_evidence": "unknown",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2035,8 +2035,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/source describes developmental trajectory or differentiation; no download needed for coarse inclusion",
     "development_stage_evidence": "adult stage",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2055,8 +2055,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "The human brain develops and matures over an exceptionally prolonged period of time that spans nearly two decades of life. Processes that govern species-specific aspects of human postnatal brain devel",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP3697",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2075,8 +2075,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Subramanian, A., Sidhom, E. H., Emani, M., Vernon, K., Sahakian, N., Zhou, Y., Kost-Alimova, M., Slyper, M., Waldman, J., Dionne, D., Nguyen, L. T., Weins, A., Marshall, J. L., Rosenblatt-Rosen, O., R",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP211",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2095,8 +2095,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/source describes developmental trajectory or differentiation; no download needed for coarse inclusion",
     "development_stage_evidence": "26-year-old stage;28-year-old stage;29-year-old stage;37-year-old stage;third decade stage;young adult stage",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2115,8 +2115,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE293573",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2135,8 +2135,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Individual brain organoids reproducibly form cell diversity of the human cerebral cortexSilvia Velasco, Amanda J. Kedaigle, Sean K. Simmons, Allison Nash, Marina Rocha, Giorgia Quadrato, Bruna Paulsen",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP282",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2155,8 +2155,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2175,8 +2175,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE269572",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2195,8 +2195,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "has explicit time/longitudinal/regeneration signal despite noisy terms",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2215,8 +2215,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2235,8 +2235,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE329346",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2255,8 +2255,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "PerturBase dataset/list metadata: title/model/perturbation fields indicate temporal developmental/differentiation/reprogramming biology; compacted dataIndex=180124_perturb;201218_RNA;210322_TFAtlas;210715_combinatorial;PRJNA893678",
     "development_stage_evidence": "Embryonic stem cells | ORF overexpression | Activation",
-    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "alternate_accessions": "GSE216481;PRJNA893678",
+    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2275,13 +2275,13 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "PerturBase dataset/list metadata: title/model/perturbation fields indicate temporal developmental/differentiation/reprogramming biology; compacted dataIndex=neural-matrices;screen-matrices;screen-repool-matrices",
     "development_stage_evidence": "Multiple teratoma cell types | CRISPRKO | Inhibition",
-    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "alternate_accessions": "GSE156170;PRJNA656958",
+    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "merge_notes": ""
   },
   {
     "confidence": "A_explicit",
-    "title": "High-throughput single-cell functional elucidation of neurodevelopmental disease\u2013associated genes reveals convergent mechanisms altering neuronal differentiation",
+    "title": "High-throughput single-cell functional elucidation of neurodevelopmental disease–associated genes reveals convergent mechanisms altering neuronal differentiation",
     "organism": "Homo sapiens",
     "modality": "single-cell perturbation RNA",
     "time_axis": "perturbation developmental/differentiation trajectory; exact timepoints require sample metadata",
@@ -2295,8 +2295,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "PerturBase dataset/list metadata: title/model/perturbation fields indicate temporal developmental/differentiation/reprogramming biology; compacted dataIndex=PRJNA595864",
     "development_stage_evidence": "LUHMES | CRISPRi | Inhibition",
-    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "alternate_accessions": "GSE142078;PRJNA595864",
+    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2315,8 +2315,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "PerturBase dataset/list metadata: title/model/perturbation fields indicate temporal developmental/differentiation/reprogramming biology; compacted dataIndex=extend_61;pilot_14",
     "development_stage_evidence": "hPSC | ORF overexpression | Activation",
-    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "alternate_accessions": "GSE107185;PRJNA419230",
+    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2335,8 +2335,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "PerturBase dataset/list metadata: title/model/perturbation fields indicate temporal developmental/differentiation/reprogramming biology; compacted dataIndex=PRJNA505909",
     "development_stage_evidence": "MEF | Drug treatment | Drug treatment",
-    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "alternate_accessions": "GSE122662;PRJNA505909",
+    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2355,8 +2355,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "PerturBase dataset/list metadata: title/model/perturbation fields indicate temporal developmental/differentiation/reprogramming biology; compacted dataIndex=PRJNA524331",
     "development_stage_evidence": "hESC | CRISPRi | Inhibition",
-    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "alternate_accessions": "GSE127202;PRJNA524331",
+    "merge_sources": "artifacts/perturbase/perturbase_step5_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2375,8 +2375,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE312010",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2395,8 +2395,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2415,8 +2415,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "has explicit time/longitudinal/regeneration signal despite noisy terms",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2435,8 +2435,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "title/category indicates explicit developmental, perturbation, regeneration, or time-series axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2455,8 +2455,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "has explicit time/longitudinal/regeneration signal despite noisy terms",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2475,8 +2475,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": "deduplicated Perturb-Seq: Dissecting Molecular Circuits with Scalable Single-Cell RNA Profiling of Pooled Genetic Screens"
   },
   {
@@ -2495,8 +2495,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE296916",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2515,8 +2515,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE293948",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2535,8 +2535,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": "deduplicated Arabidopsis Developmental Atlas"
   },
   {
@@ -2555,8 +2555,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": "deduplicated Flysta3D developing Drosophila embryos and larvae spatiotemporal transcriptomic maps"
   },
   {
@@ -2575,8 +2575,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Regeneration-competent species possess the ability to reverse the progression of severe diseases by restoring the function of the damaged tissue. However, the cellular dynamics underlying this capabil",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP1549",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2584,7 +2584,7 @@
     "title": "Compartmentalization and synergy of osteoblasts drive bone formation in the regenerating fin",
     "organism": "",
     "modality": "single-cell RNA-seq",
-    "time_axis": "Authors: Cudak N., L\u00f3pez-Delgado\u00a0AC., Rost F.,\u00a0Kurth T., Lesche M., Reinhardt S., Dahl A., Rulands S., Knopf F.*Abstract",
+    "time_axis": "Authors: Cudak N., López-Delgado AC., Rost F., Kurth T., Lesche M., Reinhardt S., Dahl A., Rulands S., Knopf F.*Abstract",
     "cells": "6262",
     "category": "regeneration_timecourse",
     "dataset_url": "https://singlecell.broadinstitute.org/single_cell/study/SCP1674",
@@ -2594,9 +2594,9 @@
     "dedup_key": "compartmentalization and synergy of osteoblasts drive bone formation in the rege",
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
-    "development_stage_evidence": "Authors: Cudak N., L\u00f3pez-Delgado\u00a0AC., Rost F.,\u00a0Kurth T., Lesche M., Reinhardt S., Dahl A., Rulands S., Knopf F.*Abstract: Zebrafish faithfully regenerate their fins after amputation which includes res",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
+    "development_stage_evidence": "Authors: Cudak N., López-Delgado AC., Rost F., Kurth T., Lesche M., Reinhardt S., Dahl A., Rulands S., Knopf F.*Abstract: Zebrafish faithfully regenerate their fins after amputation which includes res",
     "alternate_accessions": "SCP1674",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2615,8 +2615,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE328779",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2635,8 +2635,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Injured neurons in the adult mammalian central nervous system often die and seldom regenerate axons. To uncover transcriptional pathways that could ameliorate these disappointing responses we analyzed",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP1846",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2644,7 +2644,7 @@
     "title": "scRNAseq unravels the transcriptional network underlying zebrafish retina regeneration",
     "organism": "",
     "modality": "single-cell RNA-seq",
-    "time_axis": "In the lesioned zebrafish retina, M\u00fcller glia produce multipotent retinal progenitors that generate all retinal neurons,",
+    "time_axis": "In the lesioned zebrafish retina, Müller glia produce multipotent retinal progenitors that generate all retinal neurons,",
     "cells": "11690",
     "category": "regeneration_timecourse",
     "dataset_url": "https://singlecell.broadinstitute.org/single_cell/study/SCP1973",
@@ -2654,9 +2654,9 @@
     "dedup_key": "scrnaseq unravels the transcriptional network underlying zebrafish retina regene",
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
-    "development_stage_evidence": "In the lesioned zebrafish retina, M\u00fcller glia produce multipotent retinal progenitors that generate all retinal neurons, replacing lost cell types. To study the molecular mechanisms linking M\u00fcller gli",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
+    "development_stage_evidence": "In the lesioned zebrafish retina, Müller glia produce multipotent retinal progenitors that generate all retinal neurons, replacing lost cell types. To study the molecular mechanisms linking Müller gli",
     "alternate_accessions": "SCP1973",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2675,8 +2675,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2695,8 +2695,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2715,8 +2715,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Regeneration of complex multi-tissue structures, such as limbs, requires the coordinated effort of multiple cell types. In axolotl limb regeneration, the wound epidermis and blastema have been extensi",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP499",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2735,8 +2735,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Regeneration of complex multi-tissue structures, such as limbs, requires the coordinated effort of multiple cell types. In axolotl limb regeneration, the wound epidermis and blastema have been extensi",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP422",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2755,8 +2755,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Regeneration of complex multi-tissue structures, such as limbs, requires the coordinated effort of multiple cell types. In axolotl limb regeneration, the wound epidermis and blastema have been extensi",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP500",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2775,8 +2775,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "Single Cell Portal result/title describes developmental trajectory, staged development, regeneration, or organoid maturation",
     "development_stage_evidence": "Regeneration of complex multi-tissue structures, such as limbs, requires the coordinated effort of multiple cell types. In axolotl limb regeneration, the wound epidermis and blastema have been extensi",
-    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "alternate_accessions": "SCP489",
+    "merge_sources": "artifacts/single_cell_portal/single_cell_portal_step2_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2795,8 +2795,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2815,8 +2815,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "STOmicsDB/CNGB record describes spatiotemporal development or regeneration dataset",
     "development_stage_evidence": "developing embryos and larvae spatiotemporal stages",
-    "merge_sources": "artifacts/stomics_stellaris/stomics_stellaris_step3_added_v0.tsv",
     "alternate_accessions": "STDS0000060",
+    "merge_sources": "artifacts/stomics_stellaris/stomics_stellaris_step3_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2835,8 +2835,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "STDS0000058",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2855,8 +2855,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE313896",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2875,8 +2875,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "STOmicsDB/CNGB record describes spatiotemporal development or regeneration dataset",
     "development_stage_evidence": "six time points 3.3, 5.25, 10, 12, 18, 24 hpf",
-    "merge_sources": "artifacts/stomics_stellaris/stomics_stellaris_step3_added_v0.tsv",
     "alternate_accessions": "CNP0002220",
+    "merge_sources": "artifacts/stomics_stellaris/stomics_stellaris_step3_added_v0.tsv",
     "merge_notes": ""
   },
   {
@@ -2895,8 +2895,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE303344",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2915,8 +2915,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "second pass retained because dataset title/source gives explicit developmental, spatiotemporal, regeneration, organoid, or perturbation time axis",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "GSE326326",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2935,8 +2935,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "STDS0000057",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2955,8 +2955,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "STDS0000056",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": ""
   },
   {
@@ -2975,8 +2975,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "explicit time axis already validated",
     "development_stage_evidence": "",
-    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "alternate_accessions": "",
+    "merge_sources": "artifacts/FINAL_temporal_pretraining_datasets_v3_expanded.tsv",
     "merge_notes": "deduplicated Planarian STAPR regeneration"
   },
   {
@@ -2995,8 +2995,8 @@
     "temporal_status_verified": "temporal_yes",
     "verification_reason": "STOmicsDB/CNGB record describes spatiotemporal development or regeneration dataset",
     "development_stage_evidence": "zebrafish heart regeneration",
-    "merge_sources": "artifacts/stomics_stellaris/stomics_stellaris_step3_added_v0.tsv",
     "alternate_accessions": "STT0000071",
+    "merge_sources": "artifacts/stomics_stellaris/stomics_stellaris_step3_added_v0.tsv",
     "merge_notes": ""
   }
 ]

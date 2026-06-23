@@ -5,7 +5,7 @@ Datasets covered:
   1. PRISM Perturb-seq Collection (~36 h5ads, Google Drive)
   2. T-cell Genome-Wide Perturb-seq (GSE314342, AWS S3)
   3. VIPerturbSeq (Zenodo 18460279)
-  4. PROPER-seq (GSE150818)
+  4. PRoPER-seq / ProPer-seq 2026 probe-based Perturb-seq (source TBD)
   5. Sanger Dual-guide KO in CRC (Figshare 25533091)
   6. Arc VCC Perturbations (placeholder)
 
@@ -24,24 +24,24 @@ Usage::
 from __future__ import annotations
 
 import math
-import re
 import subprocess
 import zipfile
 from pathlib import Path
 
 import anndata as ad
 import httpx
-import lamindb as ln
 import pandas as pd
 
-# tools/ is not a package; resolve sibling import manually
-import sys as _sys
-_sys.path.insert(0, str(Path(__file__).parent.parent))
-from tools.convert_triplet_artifacts import migrate_h5ad_to_triplet  # noqa: E402
-from tools.lamin_context import connect_pertdata  # noqa: E402
-
+from tools.lamin_context import connect_pertdata
 
 ln = connect_pertdata()
+
+
+def _migrate_h5ad_to_triplet(*args, **kwargs):
+    """Lazy import after explicit pertdata connection to avoid Lamin registry reset."""
+    from tools.convert_triplet_artifacts import migrate_h5ad_to_triplet
+
+    return migrate_h5ad_to_triplet(*args, **kwargs)
 
 # ---------------------------------------------------------------------------
 # § 1 — PRISM Perturb-seq Collection
@@ -229,7 +229,7 @@ def ingest_prism_collection(
         adata = ad.read_h5ad(h5ad_path)
         adata = standardize_prism_obs(adata, dataset_name)
 
-        migrate_h5ad_to_triplet(
+        _migrate_h5ad_to_triplet(
             adata,
             ln,
             dataset_prefix=prefix,
@@ -340,7 +340,7 @@ def ingest_tcell_gwps(
                 chunk.var = var_df
                 chunk = standardize_tcell_obs(chunk)
 
-                migrate_h5ad_to_triplet(
+                _migrate_h5ad_to_triplet(
                     chunk, ln,
                     dataset_prefix=prefix,
                     replace_on_instance=overwrite,
@@ -413,6 +413,7 @@ def standardize_viperturb_obs(adata: ad.AnnData) -> ad.AnnData:
         "gene": "perturbation",
         "Guide_assignment": "guide_id",
         "guide_ID": "guide_id",
+        "guide": "guide_id",
         "hash.ID": "cell_line",
     }
     obs = obs.rename(columns={k: v for k, v in renames.items() if k in obs.columns})
@@ -475,29 +476,27 @@ def ingest_viperturb(
             continue
         adata = ad.read_h5ad(path)
         adata = standardize_viperturb_obs(adata)
-        migrate_h5ad_to_triplet(adata, ln, dataset_prefix=prefix, replace_on_instance=overwrite)
+        _migrate_h5ad_to_triplet(adata, ln, dataset_prefix=prefix, replace_on_instance=overwrite)
         created.append(obs_key)
         print(f"→ saved: {obs_key}")
     return created
 
 
 # ---------------------------------------------------------------------------
-# § 4 — PROPER-seq (GSE150818)
+# § 4 — PRoPER-seq / ProPer-seq 2026 probe-based Perturb-seq
 # ---------------------------------------------------------------------------
 
-PROPERSEQ_GEO_ACC = "GSE150818"
-PROPERSEQ_GEO_FTP = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE150nnn/GSE150818/suppl/"
+PROPERSEQ_GEO_ACC: str | None = None
+PROPERSEQ_GEO_FTP: str | None = None
 PROPERSEQ_LAMIN_PREFIX = "properseq"
 
 
 def check_properseq_in_lamin() -> bool:
-    """Return True if PROPER-seq is already ingested."""
-    candidates = ln.Artifact.filter(key__icontains="GSE150818").all()
-    if candidates:
-        print("Found existing artifacts:")
-        for a in candidates:
-            print(f"  {a.key}")
-        return True
+    """Return True if a sourced 2026 PRoPER-seq matrix is already ingested.
+
+    The old GSE150818 chimeric-read-pair dataset was a mistaken substitute and
+    is intentionally excluded from pert-gym. Do not download or ingest it here.
+    """
     scperturb = ln.Artifact.filter(key__icontains="proper").all()
     if scperturb:
         print("Possible scPerturb match:")
@@ -509,30 +508,13 @@ def check_properseq_in_lamin() -> bool:
 def download_properseq(
     output_dir: Path = Path("data/main/properseq"),
 ) -> list[Path]:
-    """Download PROPER-seq supplementary files from GEO FTP."""
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    with httpx.Client(timeout=120.0, follow_redirects=True) as client:
-        resp = client.get(PROPERSEQ_GEO_FTP)
-        resp.raise_for_status()
-        links = re.findall(r'href="(GSE150818[^"]+)"', resp.text)
-
-        downloaded = []
-        for link in links:
-            target = output_dir / link
-            if target.exists():
-                downloaded.append(target)
-                continue
-            url = PROPERSEQ_GEO_FTP + link
-            print(f"Downloading {link} …")
-            with client.stream("GET", url) as s:
-                s.raise_for_status()
-                with target.open("wb") as fh:
-                    for chunk in s.iter_bytes(4 * 1024 * 1024):
-                        fh.write(chunk)
-            downloaded.append(target)
-
-    return downloaded
+    """Block until the actual 2026 PRoPER-seq expression source is known."""
+    del output_dir
+    raise RuntimeError(
+        "PRoPER-seq / ProPer-seq 2026 source is TBD. The legacy GSE150818 "
+        "supplementary chimeric-read-pair tables are excluded and must not be "
+        "used as a substitute."
+    )
 
 
 def load_properseq(files: list[Path]) -> ad.AnnData:
@@ -585,20 +567,13 @@ def ingest_properseq(
     output_dir: Path = Path("data/main/properseq"),
     overwrite: bool = False,
 ) -> str:
-    """Download → load → standardise → ingest PROPER-seq."""
-    if not overwrite and check_properseq_in_lamin():
-        print("PROPER-seq already ingested. Set overwrite=True to re-ingest.")
-        return ""
-
-    files = download_properseq(output_dir)
-    adata = load_properseq(files)
-    adata = standardize_properseq_obs(adata)
-    result = migrate_h5ad_to_triplet(
-        adata, ln,
-        dataset_prefix=PROPERSEQ_LAMIN_PREFIX,
-        replace_on_instance=overwrite,
+    """Block until the actual 2026 PRoPER-seq expression source is known."""
+    del output_dir, overwrite
+    raise RuntimeError(
+        "PRoPER-seq / ProPer-seq 2026 source is TBD. Locate the real scRNA "
+        "expression matrix before ingestion; do not substitute the excluded "
+        "legacy GSE150818 dataset."
     )
-    return result["obs"].key
 
 
 # ---------------------------------------------------------------------------
@@ -716,7 +691,7 @@ def ingest_sanger_dualguide(overwrite: bool = False) -> list[str]:
             print(f"Already ingested: {obs_key}")
             continue
         adata = standardize_sanger_dualguide_obs(adata, cell_line)
-        migrate_h5ad_to_triplet(adata, ln, dataset_prefix=prefix, replace_on_instance=overwrite)
+        _migrate_h5ad_to_triplet(adata, ln, dataset_prefix=prefix, replace_on_instance=overwrite)
         created.append(obs_key)
         print(f"→ saved: {obs_key}")
 

@@ -8,9 +8,9 @@ chunk write. It can:
    partial chunks without loading the expression matrix into memory;
 2. continue a split from an explicit backed h5ad source using smaller chunks.
 
-Use the mounted GCS object as ``--source`` when possible, e.g.:
-
-    /mnt/gcs/scperturb/pert-gym/staging/data/main/arc_vcc/train/adata_Training.h5ad
+Use a local h5ad path or a staged ``gs://`` object as ``--source``. On macOS,
+``gs://`` inputs are copied into ``data/gcs_cache/`` because the VPS-only
+``/mnt/gcs/scperturb`` mount is not assumed.
 """
 
 from __future__ import annotations
@@ -27,19 +27,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from tools.clean_lamin_cache import clean_cache  # noqa: E402
+from tools.gcs_cache import ensure_gcs_object_local, is_gcs_uri  # noqa: E402
 from tools.lamin_context import connect_pertdata, ensure_project_cache  # noqa: E402
 
 
 DEFAULT_SOURCES = {
-    "train": Path(
-        "/mnt/gcs/scperturb/pert-gym/staging/data/main/arc_vcc/train/adata_Training.h5ad"
-    ),
-    "test": Path(
-        "/mnt/gcs/scperturb/pert-gym/staging/data/main/arc_vcc/test/adata_Test.h5ad"
-    ),
-    "validation": Path(
-        "/mnt/gcs/scperturb/pert-gym/staging/data/main/arc_vcc/validation/adata_Validation.h5ad"
-    ),
+    "train": "gs://scperturb/pert-gym/staging/data/main/arc_vcc/train/adata_Training.h5ad",
+    "test": "gs://scperturb/pert-gym/staging/data/main/arc_vcc/test/adata_Test.h5ad",
+    "validation": "gs://scperturb/pert-gym/staging/data/main/arc_vcc/validation/adata_Validation.h5ad",
 }
 
 
@@ -175,7 +170,8 @@ def write_progress(path: Path, progress: dict[str, Any]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--split", choices=sorted(DEFAULT_SOURCES), default="train")
-    parser.add_argument("--source", type=Path, default=None)
+    parser.add_argument("--source", default=None, help="Local source h5ad or gs:// staged object")
+    parser.add_argument("--gcs-cache-dir", type=Path, default=ROOT / "data/gcs_cache")
     parser.add_argument("--chunk-size", type=int, default=25_000)
     parser.add_argument("--start", type=int, default=100_000)
     parser.add_argument("--chunk-index-start", type=int, default=1)
@@ -192,9 +188,9 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    source = args.source or DEFAULT_SOURCES[args.split]
-    if not source.exists():
-        raise FileNotFoundError(source)
+    source_input = args.source or DEFAULT_SOURCES[args.split]
+    source_uri = source_input if is_gcs_uri(str(source_input)) else None
+    source = ensure_gcs_object_local(source_input, cache_root=args.gcs_cache_dir)
 
     ensure_project_cache()
     # connect_pertdata() verifies laminlabs/pertdata on the jkobject branch.
@@ -267,7 +263,7 @@ def main() -> int:
         split_progress = progress.setdefault(args.split, {})
         split_progress["n_obs"] = n_obs
         split_progress["n_vars"] = n_vars
-        split_progress["raw_gcs_uri"] = (
+        split_progress["raw_gcs_uri"] = source_uri or (
             "gs://scperturb/" + source.as_posix()[len("/mnt/gcs/scperturb/") :]
             if source.as_posix().startswith("/mnt/gcs/scperturb/")
             else str(source)

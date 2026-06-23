@@ -11,11 +11,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from tools.clean_lamin_cache import clean_cache  # noqa: E402
+from tools.gcs_cache import ensure_gcs_object_local  # noqa: E402
 from tools.lamin_context import connect_pertdata, ensure_project_cache  # noqa: E402
 
 DATASET = "GSE153056"
 PREFIX = f"prism_collection/{DATASET}"
-PATH = Path("/mnt/gcs/scperturb/pert-gym/staging/data/main/prism_collection/GSE153056.h5ad")
+GCS_URI = "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE153056.h5ad"
 RENAMES = {
     "gene": "perturbation",
     "gene_name": "perturbation",
@@ -83,8 +84,9 @@ def main() -> int:
     if all(ln.Artifact.filter(key=f"{PREFIX}/{s}").exists() for s in ["obs.parquet", "X.h5ad", "var.parquet"]):
         print("SKIP existing triplet", PREFIX, flush=True)
         return 0
-    print("READ", PATH, PATH.stat().st_size, flush=True)
-    adata = ad.read_h5ad(PATH)
+    path = ensure_gcs_object_local(GCS_URI)
+    print("READ", path, path.stat().st_size, flush=True)
+    adata = ad.read_h5ad(path)
     print("LOADED", adata.n_obs, adata.n_vars, flush=True)
     adata = standardize(adata)
     adata.var_names_make_unique()
