@@ -111,6 +111,40 @@ def ensure_link_features(ln: Any) -> None:
             ln.Feature(name=name, dtype="cat[Artifact]").save()
 
 
+def build_chunk_plan(
+    *,
+    n_obs: int,
+    chunk_size: int,
+    dataset_name: str,
+    prefix_root: str = VIPERTURB_LAMIN_PREFIX,
+) -> list[dict[str, Any]]:
+    """Return deterministic VIPerturb chunk ranges and Lamin prefixes.
+
+    This helper is intentionally pure: it plans chunk names/ranges but does not
+    read matrices or touch Lamin. ``end`` is exclusive.
+    """
+    if chunk_size <= 0:
+        raise ValueError("chunk_size must be positive")
+    if n_obs < 0:
+        raise ValueError("n_obs must be non-negative")
+
+    dataset_prefix = f"{prefix_root.rstrip('/')}/{dataset_name}"
+    chunks: list[dict[str, Any]] = []
+    for chunk_index, start in enumerate(range(0, n_obs, chunk_size)):
+        end = min(start + chunk_size, n_obs)
+        chunk_id = f"chunk_{chunk_index:04d}"
+        chunks.append(
+            {
+                "chunk_id": chunk_id,
+                "name": chunk_id,
+                "start": start,
+                "end": end,
+                "prefix": f"{dataset_prefix}/{chunk_id}",
+            }
+        )
+    return chunks
+
+
 def load_components(components_dir: Path) -> tuple[dict[str, Any], pd.DataFrame, pd.DataFrame]:
     manifest_path = components_dir / "manifest.json"
     if not manifest_path.exists():

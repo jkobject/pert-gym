@@ -1,9 +1,35 @@
-.lamin-pertgym/
-.lamin-cache/
+# Python/runtime caches
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Local virtualenvs / optional model envs
+.venv/
+.venv-*/
+.venv.*
+.venv-models/
+
+# Repo-local Lamin/GCS/cache state; durable data belongs in LaminDB or GCS, not Git
+.lamin-pertgym/
+.lamin-*/
+.lamin-cache*/
 data/main/*
 !data/main/.gitkeep
+data/gcs_cache/
+data/source_cache/
+data/temporal_pretraining_sources/
+
+# Local tooling/runtime state
+.omx/
 .r-lib/
+
+# Generated artifacts and local model-ready exports
 artifacts/
-.gitignore
+pert-gym/model-ready-*/
+
+# Broken Git metadata backups kept only for forensic recovery
+.git.broken-*/
+
+# Accidental shell/package-manager droppings
+=*
