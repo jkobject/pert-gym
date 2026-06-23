@@ -1,5 +1,5 @@
 {
-  "updated_at_utc": "2026-06-23T09:49:42.614560+00:00",
+  "updated_at_utc": "2026-06-23T10:33:05.426995+00:00",
   "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
   "gate_summary_original": {
     "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/",
@@ -108,6 +108,14 @@
       "chunk_size": 5000,
       "chunks_verified": 20,
       "verification_json": "artifacts/schema_audit/prism_GSE236519_chunked_verification.json"
+    },
+    "GSE254100": {
+      "prefix": "prism_collection/GSE254100",
+      "n_obs": 21667,
+      "n_vars": 22583,
+      "chunk_size": 5000,
+      "chunks_verified": 5,
+      "verification_json": "artifacts/schema_audit/prism_GSE254100_chunked_verification.json"
     }
   },
   "duplicate_resolution": {
@@ -130,14 +138,15 @@
     "action": "Do not ingest browser duplicate-named \u201c(1)\u201d copies; canonical and duplicate copies are byte-identical. Redundant objects were left in GCS, not deleted."
   },
   "remaining": {
-    "completed_now": 10,
-    "single_staged_smoke_first_candidates_remaining_estimate": 20,
+    "completed_now": 11,
+    "single_staged_smoke_first_candidates_remaining_estimate": 19,
     "duplicate_named_pairs_still_needing_hash_compare": 0,
     "duplicate_resolved_candidates_remaining": 0,
-    "total_accessible_candidates_remaining_estimate": 20,
+    "total_accessible_candidates_remaining_estimate": 19,
     "still_missing_source": 5,
     "user_excluded": 1,
-    "staged_payload_issue": 1
+    "staged_payload_issue": 1,
+    "next_candidate": "GSE250558"
   },
   "remaining_source_blocked_rows": [
     "GSE247598",
@@ -161,7 +170,8 @@
     "GSE243244 was smoke-first ingested from the canonical staged object and verified as 49 same-prefix chunks (48,587 obs / 32,286 vars); the full run hit the 600s cap at chunk_0032 and was resumed with --overwrite from chunk_0032.",
     "GSE274751 staged object is corrupt/truncated: GCS size 531,628,032 bytes but HDF5 stored EOF is 2,308,911,126 bytes; re-stage before retry.",
     "GSE246714 was smoke-first ingested from the canonical staged object and verified as 43 same-prefix chunks at chunk size 5000 (210,314 obs / 31,466 vars); full run hit the 600s cap at chunk_0038 and was resumed with --overwrite from chunk_0038 to repair the partial obs+X/no-var chunk before final verification.",
-    "GSE236519 was smoke-first ingested from the canonical staged object and verified as 20 same-prefix chunks at chunk size 5000 (98,883 obs / 34,435 vars); full run hit the 600s cap during chunk_0013 and was resumed with --overwrite from chunk_0013 before final verification."
+    "GSE236519 was smoke-first ingested from the canonical staged object and verified as 20 same-prefix chunks at chunk size 5000 (98,883 obs / 34,435 vars); full run hit the 600s cap during chunk_0013 and was resumed with --overwrite from chunk_0013 before final verification.",
+    "GSE254100 was smoke-first ingested from the canonical staged object and verified as 5 same-prefix chunks at chunk size 5000 (21,667 obs / 22,583 vars); source backed layout was CSRDataset float64 and smoke RSS stayed below 700 MB."
   ],
   "staged_payload_issues": {
     "GSE274751": {

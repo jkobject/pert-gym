@@ -1438,6 +1438,21 @@
       "controls": 12241,
       "verification_json": "artifacts/schema_audit/prism_GSE236519_chunked_verification.json",
       "note": "P5F Google Drive recovery; backed h5ad chunked ingestion after smoke verification; each chunk has same-prefix obs/X/var and verified payloads/links/canonical obs."
+    },
+    {
+      "dataset": "GSE254100",
+      "prefix": "prism_collection/GSE254100",
+      "path": null,
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE254100.h5ad",
+      "n_obs": 21667,
+      "n_vars": 22583,
+      "chunk_size": 5000,
+      "status": "chunked_verified",
+      "chunks_verified": 5,
+      "chunks_ok": 5,
+      "controls": 4269,
+      "verification_json": "artifacts/schema_audit/prism_GSE254100_chunked_verification.json",
+      "note": "P5F cont7; GSE254100 staged object byte-verified (1,078,390,433 bytes), backed CSRDataset float64 inspected; smoke-first chunk_0000 succeeded at chunk size 5000 with <700 MB RSS, then full run completed 5 chunks without full matrix load."
     }
   ],
   "downloaded_not_ingested": [
@@ -1494,17 +1509,6 @@
       "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
       "source_accession": "GSE251715",
       "attempted_url": "https://drive.google.com/uc?id=1LcTD4Hk-o-jUYcMdQeiwtZWwTikHst3x",
-      "requires_user_auth_or_manual_download": true
-    },
-    {
-      "dataset": "GSE254100",
-      "path": "data/main/prism_collection/GSE254100.h5ad",
-      "gcs_uri": null,
-      "note": "Failed to retrieve file url:",
-      "status": "blocked_source_or_metadata",
-      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
-      "source_accession": "GSE254100",
-      "attempted_url": "https://drive.google.com/uc?id=1lY7ta5iXKxdTL7qM8LOJU0jdWT0duXKo",
       "requires_user_auth_or_manual_download": true
     },
     {
@@ -1856,7 +1860,7 @@
     "note": "12 assigned_guide h5ad files are 118-173GB each (~1.73TB total); do not aws sync to VPS. Need streaming/chunked h5ad path or larger conversion host.",
     "plan": "artifacts/tcell_gwps_ingestion_plan.json"
   },
-  "last_updated": "2026-06-23T09:49:42.614560+00:00",
+  "last_updated": "2026-06-23T10:31:19.899464+00:00",
   "prism_staged_gcs_status": {
     "checked_at": "2026-06-15T17:10:35Z",
     "staging_prefix": "gs://scperturb/pert-gym/staging/data/main/prism_collection/",
@@ -1961,6 +1965,14 @@
       "chunks_ok": 20,
       "chunks_verified": 20,
       "verification_json": "artifacts/schema_audit/prism_GSE236519_chunked_verification.json"
+    },
+    "GSE254100": {
+      "status": "ingested_verified",
+      "updated_at_utc": "2026-06-23T10:31:19.899464+00:00",
+      "prefix": "prism_collection/GSE254100",
+      "chunks_ok": 5,
+      "chunks_verified": 5,
+      "verification_json": "artifacts/schema_audit/prism_GSE254100_chunked_verification.json"
     }
   },
   "prism_residual_cleanup": {

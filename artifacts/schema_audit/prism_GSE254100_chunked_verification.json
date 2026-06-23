@@ -1,0 +1,135 @@
+{
+  "dataset": "GSE254100",
+  "prefix": "prism_collection/GSE254100",
+  "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE254100.h5ad",
+  "verified_at_utc": "2026-06-23T10:31:19.899464+00:00",
+  "lamin_instance": "laminlabs/pertdata",
+  "lamin_branch": "jkobject",
+  "n_obs": 21667,
+  "n_vars": 22583,
+  "chunk_size": 5000,
+  "chunks_expected": 5,
+  "chunks_verified": 5,
+  "rows_verified": 21667,
+  "controls": 4269,
+  "all_required_obs_fields_present": true,
+  "checks": {
+    "obs_artifacts_exist": true,
+    "x_artifacts_exist": true,
+    "var_artifacts_exist": true,
+    "obs_to_x_links_by_key_ok": true,
+    "x_to_var_links_by_key_ok": true,
+    "x_payloads_exist": true,
+    "x_n_observations_match_obs_rows": true,
+    "var_rows_match_source_vars": true,
+    "required_obs_fields_present": true
+  },
+  "sampled_chunks": [
+    {
+      "chunk": 0,
+      "obs_key": "prism_collection/GSE254100/chunk_0000/obs.parquet",
+      "x_key": "prism_collection/GSE254100/chunk_0000/X.h5ad",
+      "var_key": "prism_collection/GSE254100/chunk_0000/var.parquet",
+      "obs_rows": 5000,
+      "var_rows": 22583,
+      "controls": 4269,
+      "required_obs": {
+        "perturbation": true,
+        "perturbation_type": true,
+        "organism": true,
+        "cell_line": true,
+        "modality": true,
+        "assay": true,
+        "is_control": true
+      }
+    },
+    {
+      "chunk": 1,
+      "obs_key": "prism_collection/GSE254100/chunk_0001/obs.parquet",
+      "x_key": "prism_collection/GSE254100/chunk_0001/X.h5ad",
+      "var_key": "prism_collection/GSE254100/chunk_0001/var.parquet",
+      "obs_rows": 5000,
+      "var_rows": 22583,
+      "controls": 0,
+      "required_obs": {
+        "perturbation": true,
+        "perturbation_type": true,
+        "organism": true,
+        "cell_line": true,
+        "modality": true,
+        "assay": true,
+        "is_control": true
+      }
+    },
+    {
+      "chunk": 4,
+      "obs_key": "prism_collection/GSE254100/chunk_0004/obs.parquet",
+      "x_key": "prism_collection/GSE254100/chunk_0004/X.h5ad",
+      "var_key": "prism_collection/GSE254100/chunk_0004/var.parquet",
+      "obs_rows": 1667,
+      "var_rows": 22583,
+      "controls": 0,
+      "required_obs": {
+        "perturbation": true,
+        "perturbation_type": true,
+        "organism": true,
+        "cell_line": true,
+        "modality": true,
+        "assay": true,
+        "is_control": true
+      }
+    }
+  ],
+  "chunks": [
+    {
+      "prefix": "prism_collection/GSE254100/chunk_0000",
+      "start": 0,
+      "end": 5000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 22583,
+      "controls": 4269,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE254100/chunk_0001",
+      "start": 5000,
+      "end": 10000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 22583,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE254100/chunk_0002",
+      "start": 10000,
+      "end": 15000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 22583,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE254100/chunk_0003",
+      "start": 15000,
+      "end": 20000,
+      "obs_rows": 5000,
+      "x_n_observations": 5000,
+      "var_rows": 22583,
+      "controls": 0,
+      "status": "verified"
+    },
+    {
+      "prefix": "prism_collection/GSE254100/chunk_0004",
+      "start": 20000,
+      "end": 21667,
+      "obs_rows": 1667,
+      "x_n_observations": 1667,
+      "var_rows": 22583,
+      "controls": 0,
+      "status": "verified"
+    }
+  ]
+}
