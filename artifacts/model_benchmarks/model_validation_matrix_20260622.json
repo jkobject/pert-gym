@@ -1,0 +1,337 @@
+{
+  "base_branch": "origin/model/t_55738901-benchmark-adapters",
+  "blocking_or_followup_items": [
+    "Promote at least one real, reviewed benchmark protocol beyond tiny adapter smoke before claiming biological performance.",
+    "If modifying code later, update stale CPA runner wording that still says unseen perturbations map to index 0; the reviewed implementation now uses a neutral unknown embedding.",
+    "PRISM/GDSC chemCPA remain blocked until compound structures and baseline expression joins are available.",
+    "Direct model_ready_v0 loader remains metadata+synthetic fallback; real subset exporters are the honest path for bounded model smokes."
+  ],
+  "evidence_classes": {
+    "biological_performance_claim": "claim about model quality/biology; none supported here",
+    "import/env_smoke": "dependency import or environment availability only",
+    "real_benchmark_run": "reviewed real dataset benchmark protocol at meaningful scale",
+    "real_bounded_adapter_smoke": "tiny real exported subset with metrics; validates loader/adapter semantics but too small for biological performance",
+    "synthetic_contract_smoke": "deterministic/synthetic rows prove API/data contract only"
+  },
+  "fresh_real_run": {
+    "artifact_json": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_7523ac9a/artifacts/model_benchmarks/scgen_real_20260622_t7523ac9a.json",
+    "artifact_md": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_7523ac9a/artifacts/model_benchmarks/scgen_real_20260622_t7523ac9a.md",
+    "command": "PYTHONPATH=$PWD/src /Users/jkobject/.openclaw/workspace/work/pert-gym/.venv-models/scgen/bin/python tools/run_scgen_benchmark.py --real-artifact /Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/model_benchmarks/scgen_real_viperturb_tiny_20260622.json --artifact-dir artifacts/model_benchmarks --date 20260622_t7523ac9a --task-id t_7523ac9a --epochs 5",
+    "exit_code": 0
+  },
+  "generated_at_utc": "2026-06-22T21:02:36+00:00",
+  "audited_base_model_commit": "3da26818f0552d48f8b84df8ac93f280e033b993",
+  "pr_artifact_head_commit_at_generation": "04ce5e318e9c84b5716bc6c60569a2b9e6bdc1f8",
+  "provenance_note": "audited_base_model_commit is the model-code commit being audited; pr_artifact_head_commit_at_generation is the PR artifact commit that generated this matrix before the provenance wording fix.",
+  "models": [
+    {
+      "biological_performance_claim": "none",
+      "can_run_current_subsets": {
+        "DRUG-seq": "yes for expression prediction if loader supplies X/controls/perturbations; no chemical claim",
+        "PRISM": "blocked until baseline expression X join",
+        "VIPerturb": "yes if bounded export is adapted to BenchmarkDataset; no dedicated classical real run artifact found",
+        "VIPerturb_broad": "bounded only; no huge matrix loads",
+        "model_ready_v0": "contract yes but current loader fallback is synthetic"
+      },
+      "evidence": [
+        {
+          "artifact": "tools/run_classical_benchmark.py default load_model_ready_v0_or_synthetic",
+          "class": "synthetic_contract_smoke",
+          "result": "validated in PR #7 test/make-test handoffs; runner itself emits synthetic fallback metrics"
+        }
+      ],
+      "highest_evidence_class": "synthetic_contract_smoke",
+      "implementation_artifacts": [
+        "src/pert_gym/models/baselines.py",
+        "src/pert_gym/models/classical.py",
+        "tools/run_classical_benchmark.py",
+        "tests/test_classical_baselines.py"
+      ],
+      "model_family": "classical",
+      "notes": [
+        "Includes mean-control, mean-perturbation, binary split, linear/ridge/elastic-net/random-forest/gradient-boosting regressors.",
+        "Post-fix BinarySplitBaseline respects requested controls mask."
+      ],
+      "status": "pass_contract_smoke_only"
+    },
+    {
+      "biological_performance_claim": "none",
+      "can_run_current_subsets": {
+        "DRUG-seq": "potentially expression-only; not molecular conditioning",
+        "PRISM": "blocked until expression features are joined",
+        "VIPerturb": "potentially on bounded expression export",
+        "model_ready_v0": "contract yes via in-memory BenchmarkBatch, but v0 loader fallback is synthetic"
+      },
+      "evidence": [
+        {
+          "artifact": "tests/test_lpm_baseline.py / PR #7 targeted tests",
+          "class": "synthetic_contract_smoke",
+          "result": "contract/test evidence only; no real subset benchmark artifact found"
+        }
+      ],
+      "highest_evidence_class": "synthetic_contract_smoke",
+      "implementation_artifacts": [
+        "src/pert_gym/models/lpm.py",
+        "docs/lpm_baseline.md",
+        "tests/test_lpm_baseline.py"
+      ],
+      "model_family": "LPM",
+      "notes": [
+        "Latent baseline belongs in generic expression-prediction family; not validated as a biological benchmark."
+      ],
+      "status": "pass_contract_smoke_only"
+    },
+    {
+      "biological_performance_claim": "none",
+      "can_run_current_subsets": {
+        "DRUG-seq": "potentially expression-only; chemical features belong to chemCPA route",
+        "PRISM": "blocked until expression X and fields joined",
+        "VIPerturb": "potentially on bounded expression export for generic CPA, not chemical CPA",
+        "model_ready_v0": "contract yes but fallback synthetic"
+      },
+      "evidence": [
+        {
+          "artifact": "tools/run_cpa_benchmark.py",
+          "class": "synthetic_contract_smoke",
+          "result": "synthetic fallback CPA vs mean-control metrics; PR #7 tests after fix: CPA unseen perturbations use neutral unknown embedding"
+        }
+      ],
+      "highest_evidence_class": "synthetic_contract_smoke",
+      "implementation_artifacts": [
+        "src/pert_gym/models/cpa.py",
+        "tools/run_cpa_benchmark.py",
+        "docs/cpa_baseline.md",
+        "tests/test_cpa_baseline.py"
+      ],
+      "model_family": "CPA",
+      "notes": [
+        "Audit found stale text in tools/run_cpa_benchmark.py describing old unseen->index0 behavior; code/review says neutral unknown embedding is now implemented."
+      ],
+      "status": "pass_contract_smoke_only_with_recent_semantic_fix"
+    },
+    {
+      "biological_performance_claim": "none",
+      "can_run_current_subsets": {
+        "DRUG-seq": "yes for bounded real molecular loader/env smoke",
+        "GDSC": "blocked: no compound structure + baseline expression join",
+        "PRISM": "blocked: no compound structure + baseline expression join",
+        "model_ready_v0/VIPerturb": "not appropriate for chemical conditioning"
+      },
+      "evidence": [
+        {
+          "artifact": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/model_benchmarks/chemcpa_20260622.json",
+          "class": "import/env_smoke",
+          "result": [
+            "chemCPA env smoke passed",
+            "torch=2.12.1",
+            "anndata=0.11.4 scanpy=1.11.5",
+            "rdkit_fingerprint_bits=6/128",
+            "chemCPA_import=available",
+            "baseline_mae=1.416667"
+          ]
+        },
+        {
+          "artifact": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/model_benchmarks/chemcpa_drugseq_tiny_20260622.json",
+          "class": "real_bounded_adapter_smoke",
+          "result": "72 DRUG-seq rows, 128 expression features, 256-bit compound fingerprints; smoke_chemcpa_drugseq_tiny evaluates MeanControlBaseline, not chemCPA training"
+        }
+      ],
+      "highest_evidence_class": "real_bounded_adapter_smoke",
+      "implementation_artifacts": [
+        "tools/model_env.py",
+        "tools/smoke_chemcpa_env.py",
+        "tools/build_chemcpa_drugseq_tiny.py",
+        "tools/smoke_chemcpa_drugseq_tiny.py",
+        "src/pert_gym/benchmarks.py::load_chemcpa_drugseq_tiny"
+      ],
+      "model_family": "chemCPA",
+      "notes": [
+        "Do not substitute CRISPRi model-ready-v0 synthetic rows for chemCPA chemical conditioning."
+      ],
+      "status": "real_loader_env_smoke_only_not_full_training"
+    },
+    {
+      "biological_performance_claim": "none",
+      "can_run_current_subsets": {
+        "Datlinger17_tiny": "yes for bounded real adapter smoke",
+        "PRISM/DRUG-seq": "not GEARS single-cell genetic perturbation contract",
+        "model_ready_v0/VIPerturb": "blocked/not appropriate until GEARS-ready gene perturbation AnnData with var.gene_name and coherent context is promoted"
+      },
+      "evidence": [
+        {
+          "artifact": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/model_benchmarks/gears_20260622.json",
+          "class": "synthetic_contract_smoke",
+          "result": "smoke_passed"
+        },
+        {
+          "artifact": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/model_benchmarks/gears_datlinger17_real_smoke_20260622.json",
+          "class": "real_bounded_adapter_smoke",
+          "result": {
+            "adapter": "tiny_gears_contract_adapter_real_datlinger17",
+            "interpretation": "real bounded GEARS-contract adapter smoke only; not upstream GEARS GNN training and not biological performance",
+            "mae": 0.5869261026382446,
+            "n_features": 128,
+            "n_test": 80,
+            "n_train": 160,
+            "rmse": 0.9899112994502418,
+            "status": "passed",
+            "test_perturbations": [
+              "NFATC1",
+              "NFKB1"
+            ]
+          }
+        }
+      ],
+      "highest_evidence_class": "real_bounded_adapter_smoke",
+      "implementation_artifacts": [
+        "tools/run_gears_benchmark.py",
+        "artifacts/model_benchmarks/run_gears_datlinger17_real_smoke_20260622.py (local artifact)",
+        "artifacts/model_benchmarks/gears_datlinger17_tiny_20260622/* (local untracked)"
+      ],
+      "model_family": "GEARS",
+      "notes": [
+        "Synthetic runner validates official cell-gears dependency/API contract; real Datlinger artifact is still tiny adapter smoke, not full upstream GNN benchmark."
+      ],
+      "status": "real_bounded_adapter_smoke_available"
+    },
+    {
+      "biological_performance_claim": "none",
+      "can_run_current_subsets": {
+        "DRUG-seq": "not currently wired to scGEN runner",
+        "PRISM": "not an scGEN expression perturbation transfer subset yet",
+        "VIPerturb model-ready member": "yes via bounded local real export; current run uses VIPerturbSeq/vimentin_screen-real-scgen-tiny",
+        "model_ready_v0 direct": "generic loader fallback is synthetic; real export required"
+      },
+      "evidence": [
+        {
+          "artifact": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_7523ac9a/artifacts/model_benchmarks/scgen_real_20260622_t7523ac9a.json",
+          "class": "real_bounded_adapter_smoke",
+          "result": {
+            "baseline_metrics": {
+              "mae": 0.9329783386501734,
+              "rmse": 1.3059583543991486
+            },
+            "fallback": null,
+            "metrics": {
+              "mae": 3.485204718135218,
+              "rmse": 3.7685293361996965
+            },
+            "source": "VIPerturbSeq/vimentin_screen-real-scgen-tiny",
+            "status": "real_subset_smoke_passed"
+          }
+        },
+        {
+          "artifact": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/model_benchmarks/scgen_real_20260622.json",
+          "class": "real_bounded_adapter_smoke",
+          "result": {
+            "metrics": {
+              "mae": 0.9830149456162762,
+              "rmse": 1.4477057446517891
+            },
+            "status": "real_subset_smoke_passed"
+          }
+        },
+        {
+          "artifact": "upstream scgen import probe inside run_scgen_benchmark.py",
+          "class": "import/env_smoke",
+          "result": {
+            "error": "No module named 'scgen'",
+            "error_type": "ModuleNotFoundError",
+            "interpretation": "upstream scgen==2.1.0 was assessed but is not enabled for benchmark training under the current Python 3.11 scverse resolver",
+            "status": "failed"
+          }
+        }
+      ],
+      "highest_evidence_class": "real_bounded_adapter_smoke",
+      "implementation_artifacts": [
+        "src/pert_gym/models/scgen_adapter.py",
+        "tools/build_scgen_viperturb_tiny.py",
+        "tools/run_scgen_benchmark.py",
+        "tests/test_scgen_adapter.py"
+      ],
+      "model_family": "scGEN",
+      "notes": [
+        "This satisfies the card requirement for at least one real-dataset model+metric run through the canonical evaluation path. Upstream scgen package remains dependency-blocked; in-repo ScgenPerturbationAdapter is used."
+      ],
+      "status": "fresh_real_subset_smoke_passed"
+    },
+    {
+      "biological_performance_claim": "none",
+      "can_run_current_subsets": {
+        "McFarland20 Trametinib tiny": "yes for bounded real context-transfer adapter smoke",
+        "PRISM/DRUG-seq": "not scPRAM context-transfer contract without paired control/stimulated contexts",
+        "model_ready_v0/VIPerturb": "infeasible for real scPRAM: unknown context and perturbation-identity screen semantics"
+      },
+      "evidence": [
+        {
+          "artifact": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/model_benchmarks/scpram_real_adapter_20260622_scpram_real_mcfarland20.json",
+          "class": "real_bounded_adapter_smoke",
+          "result": {
+            "mae": 1.1545988321304321,
+            "rmse": 1.4080130227879262
+          }
+        },
+        {
+          "artifact": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/model_benchmarks/scpram_real_adapter_20260622_scpram_real_mcfarland20.json",
+          "class": "synthetic_contract_smoke",
+          "result": {
+            "mae": 0.6712085604667664,
+            "rmse": 0.8340365105442734
+          }
+        }
+      ],
+      "highest_evidence_class": "real_bounded_adapter_smoke",
+      "implementation_artifacts": [
+        "tools/run_scpram_real_adapter.py",
+        "artifacts/scripts/export_scpram_mcfarland20_20260622.py (local artifact)",
+        "artifacts/schema_audit/model_ready_scpram_20260622.* (local artifact)"
+      ],
+      "model_family": "scPRAM",
+      "notes": [
+        "Correct scPRAM mapping is context/cell_type transfer under one perturbation; perturbation_identity is not abused as cell_type."
+      ],
+      "status": "real_bounded_adapter_smoke_available"
+    },
+    {
+      "biological_performance_claim": "none",
+      "can_run_current_subsets": {
+        "PRISM": "blocked until expression features joined",
+        "VIPerturb/DRUG-seq": "potentially with bounded expression BenchmarkDataset export; no real run artifact found for replacement",
+        "model_ready_v0": "contract yes but fallback synthetic"
+      },
+      "evidence": [
+        {
+          "artifact": "/Users/jkobject/.openclaw/workspace/work/pert-gym/artifacts/model_benchmarks/trvae_replacement_20260622.json",
+          "class": "synthetic_contract_smoke",
+          "result": {
+            "metrics": {
+              "mae": 0.5238715145323012,
+              "rmse": 0.6760108925502812
+            },
+            "status": "smoke_passed"
+          }
+        },
+        {
+          "artifact": "docs/trvae_replacement.md / runner candidate survey",
+          "class": "import/env_smoke",
+          "result": "legacy TensorFlow 1.x/lowercase trvae route intentionally not installed"
+        }
+      ],
+      "highest_evidence_class": "synthetic_contract_smoke",
+      "implementation_artifacts": [
+        "src/pert_gym/models/conditional_vae.py",
+        "tools/run_trvae_replacement_benchmark.py",
+        "docs/trvae_replacement.md",
+        "tests/test_conditional_vae.py"
+      ],
+      "model_family": "trVAE replacement / legacy trVAE",
+      "notes": [
+        "Maintained in-repo ConditionalPerturbationVAE replaces legacy trVAE for smoke boundary only."
+      ],
+      "status": "replacement_synthetic_smoke_passed_legacy_blocked"
+    }
+  ],
+  "overall_verdict": "Current model work has strong smoke/contract coverage and several real bounded adapter smokes, but no broad biological performance benchmark claim is supported. scGEN/VIPerturb has a fresh real tiny canonical evaluation run for this card.",
+  "repo_worktree": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_7523ac9a",
+  "task_id": "t_7523ac9a"
+}
