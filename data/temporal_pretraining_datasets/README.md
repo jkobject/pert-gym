@@ -57,17 +57,22 @@ tested `download`/`stream` Range probe returned HTTP 401. `SCP454` includes a
 should be staged/chunked rather than blindly downloaded. Status artifact:
 `artifacts/schema_audit/temporal_t14_scp_small_animal_source_probe_20260622.md`.
 
-T15 developmental neural/eye/heart SCP status (2026-06-22): rows 65 (`SCP1290`),
-75 (`SCP3301`), and 79 (`SCP1467`) were source/duplicate-probed. SCP file
-manifests are public but anonymous payload downloads return HTTP 401. `SCP1290`
-was safely ingested through its bounded GEO scRNA alternate `GSE153162`: 20
-per-sample 10x H5 triplets under
+T15 developmental neural/eye/heart SCP status (2026-06-22/23): rows 65
+(`SCP1290`), 75 (`SCP3301`), and 79 (`SCP1467`) were source/duplicate-probed.
+SCP file manifests are public but anonymous payload downloads return HTTP 401;
+logged-in browser recovery later staged the SCP1467 heart exports on GCS.
+`SCP1290` was safely ingested through its bounded GEO scRNA alternate
+`GSE153162`: 20 per-sample 10x H5 triplets under
 `temporal_pretraining/scp1290_gse153162_mammalian_cerebral_cortex/`, totaling
 128,746 obs rows with 27,998 var rows per sample and verified obs→X→var links.
-`SCP3301`/`GSE315712` is deferred because the GEO RAW tar is 33 GB; `SCP1467`
-remains blocked on authenticated SCP export or an alternate expression mirror.
-Status artifact:
-`artifacts/schema_audit/temporal_t15_scp_gse153162_status_20260622.md`.
+`SCP1467` is now ingested and verified under
+`temporal_pretraining/scp1467_drosophila_embryonic_heart/` (`2,857 × 9,034`):
+canonical `X.h5ad` is raw counts from `Heart_counts.tsv`, with normalized
+expression preserved as `X_normalized_expression.h5ad`. `SCP3301`/`GSE315712`
+is deferred for processed-vs-raw matrix-family selection and staged/chunked
+conversion; avoid the 33 GB GEO RAW tar as the first path. Status artifacts:
+`artifacts/schema_audit/temporal_t15_scp_gse153162_status_20260622.md` and
+`artifacts/schema_audit/temporal_scp1467_heart_ingestion_20260623.md`.
 
 T20 GEO developmental batch status (2026-06-22): rows 62 (`GSE334273` sea
 lamprey), 73 (`GSE280655` mouse cortical inhibitory neurons), and 78

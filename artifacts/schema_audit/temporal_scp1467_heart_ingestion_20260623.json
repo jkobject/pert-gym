@@ -1,0 +1,152 @@
+{
+  "generated_at": "2026-06-23T10:22:26.692211+00:00",
+  "task": "t_d8f20272",
+  "source_accession": "SCP1467",
+  "dataset_id": "scp1467_drosophila_embryonic_heart",
+  "prefix": "temporal_pretraining/scp1467_drosophila_embryonic_heart",
+  "raw_gcs_prefix": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/",
+  "cache": {
+    "counts": {
+      "uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Heart_counts.tsv",
+      "path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_d8f20272/data/gcs_cache/browser_auth_scp/SCP1467/Heart_counts.tsv",
+      "remote_size": 51951316,
+      "local_size": 51951316,
+      "copied": false
+    },
+    "expression": {
+      "uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Expression_Heart_only.tsv",
+      "path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_d8f20272/data/gcs_cache/browser_auth_scp/SCP1467/Expression_Heart_only.tsv",
+      "remote_size": 100298692,
+      "local_size": 100298692,
+      "copied": false
+    },
+    "metadata": {
+      "uri": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Heartmetadata.tsv",
+      "path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_d8f20272/data/gcs_cache/browser_auth_scp/SCP1467/Heartmetadata.tsv",
+      "remote_size": 508836,
+      "local_size": 508836,
+      "copied": false
+    }
+  },
+  "n_obs": 2857,
+  "n_vars": 9034,
+  "counts_file": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Heart_counts.tsv",
+  "expression_file": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Expression_Heart_only.tsv",
+  "metadata_file": "gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP1467/Heartmetadata.tsv",
+  "canonical_x_semantics": "raw_counts",
+  "auxiliary_matrices": [
+    "X_normalized_expression.h5ad"
+  ],
+  "stage_counts": {
+    "Stage13": 506,
+    "Stage14E": 775,
+    "Stage14L": 586,
+    "Stage15": 741,
+    "Stage16": 249
+  },
+  "cell_type_counts": {
+    "1 Cardioblast": 247,
+    "2 EPC (Eve+Tin+)": 482,
+    "3 OPC (Odd+Tin-)": 1005,
+    "4 CPC (Ct+Tin+)": 767,
+    "5 WHPC (Eve+Tin-)": 147,
+    "6 ELPC (Ct+Tin-)": 209
+  },
+  "duplicate_gate": {
+    "queries": {
+      "SCP1467": [],
+      "scp1467": [
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X_normalized_expression.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/obs.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var_normalized_expression.parquet"
+      ],
+      "drosophila": [
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X_normalized_expression.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/obs.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var_normalized_expression.parquet"
+      ],
+      "Drosophila": [],
+      "embryonic_heart": [
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X_normalized_expression.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/obs.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var_normalized_expression.parquet"
+      ],
+      "scp1467_drosophila_embryonic_heart": [
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X_normalized_expression.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/obs.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var_normalized_expression.parquet"
+      ],
+      "temporal_pretraining/scp1467_drosophila_embryonic_heart": [
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/X_normalized_expression.h5ad",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/obs.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var.parquet",
+        "temporal_pretraining/scp1467_drosophila_embryonic_heart/var_normalized_expression.parquet"
+      ]
+    },
+    "planned_prefix_existing_suffixes": [
+      "obs.parquet",
+      "X.h5ad",
+      "var.parquet",
+      "X_normalized_expression.h5ad",
+      "var_normalized_expression.parquet"
+    ],
+    "duplicate_detected": false,
+    "non_planned_duplicate_hits": []
+  },
+  "counts_nnz": 2909898,
+  "expression_nnz": 2909898,
+  "errors": [],
+  "write_result": {
+    "status": "skipped_existing",
+    "prefix": "temporal_pretraining/scp1467_drosophila_embryonic_heart"
+  },
+  "verification": {
+    "obs_rows": 2857,
+    "obs_cols": 49,
+    "var_rows": 9034,
+    "var_cols": 4,
+    "var_aux_rows": 9034,
+    "obs_to_x_ok": true,
+    "obs_to_aux_ok": true,
+    "x_to_var_ok": true,
+    "x_aux_to_var_aux_ok": true,
+    "x_n_observations": 2857,
+    "x_aux_n_observations": 2857,
+    "x_path_exists": true,
+    "x_aux_path_exists": true,
+    "stage_counts": {
+      "Stage13": 506,
+      "Stage14E": 775,
+      "Stage14L": 586,
+      "Stage15": 741,
+      "Stage16": 249
+    },
+    "cell_type_counts": {
+      "1 Cardioblast": 247,
+      "2 EPC (Eve+Tin+)": 482,
+      "3 OPC (Odd+Tin-)": 1005,
+      "4 CPC (Ct+Tin+)": 767,
+      "5 WHPC (Eve+Tin-)": 147,
+      "6 ELPC (Ct+Tin-)": 209
+    },
+    "timepoint_counts": {
+      "18.0": 401,
+      "20.0": 105,
+      "21.0": 775,
+      "22.0": 586,
+      "23.0": 741,
+      "24.0": 249
+    },
+    "ok": true
+  },
+  "status": "ingested_verified"
+}
