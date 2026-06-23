@@ -1,0 +1,146 @@
+GCS_CACHE_HIT gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad -> /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad size=1514297474
+[92m→[0m connected lamindb: laminlabs/pertdata
+[92m→[0m script invoked with: gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad --dataset GSE283614 --chunk-size 1000
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.venv/bin/python3: No module named pip
+[92m→[0m loaded Transform('cqKr10EUOIPg0000', key='ingest_prism_large_h5ad_chunks.py'), started new Run('J99ccoTmDLJgScxS') at 2026-06-23 11:58:57 UTC
+[94m•[0m recommendation: to identify the script across renames, pass the uid: ln.track("cqKr10EUOIPg")
+[93m![0m environment file is empty, skipping linking an environment
+[92m→[0m monitor at: https://lamin.ai/laminlabs/pertdata/transform/cqKr10EUOIPg0000
+LAMIN laminlabs/pertdata jkobject GCjqQtGwPzkY
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/tools/ingest_prism_large_h5ad_chunks.py:124: DeprecationWarning: Use dtype_as_str instead of dtype, dtype will be removed in the future.
+  if feature and feature[0].dtype != "cat[Artifact]":
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1758: UserWarning: Variable names are not unique. To make them unique, call `.var_names_make_unique`.
+  utils.warn_names_duplicates("var")
+SOURCE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad n_obs 12844 n_vars 33586 chunk_size 1000 chunks 0:13/13
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1758: UserWarning: Variable names are not unique. To make them unique, call `.var_names_make_unique`.
+  utils.warn_names_duplicates("var")
+SKIP_CHUNK prism_collection/GSE283614/chunk_0000 exists
+READ_CHUNK prism_collection/GSE283614/chunk_0001 1000 2000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0001 obs 1000 vars 33586 controls 438
+[93m![0m There is a problem with your default AWS Credentials: Missing Dependency: Using the login credential provider requires an additional dependency. You will need to pip install "botocore[crt]" before proceeding.
+`anon` mode will be used for all non-managed buckets
+... uploading iTI6apDmp19GJMrG0000.parquet:  0.0%... uploading iTI6apDmp19GJMrG0000.parquet: 100.0%
+... uploading Vcl85kaX46AJff7O0000.h5ad:  0.0%... uploading Vcl85kaX46AJff7O0000.h5ad: 100.0%
+... uploading yieJwGiE71jGYMlZ0000.parquet:  0.0%... uploading yieJwGiE71jGYMlZ0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0001/X.h5ad 60471644
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0001/obs.parquet 20050
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0001/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0001
+READ_CHUNK prism_collection/GSE283614/chunk_0002 2000 3000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0002 obs 1000 vars 33586 controls 481
+... uploading 8ywv9K8V65AnYUI60000.parquet:  0.0%... uploading 8ywv9K8V65AnYUI60000.parquet: 100.0%
+... uploading 9bhxsv9YF1TOMKv40000.h5ad:  0.0%... uploading 9bhxsv9YF1TOMKv40000.h5ad: 100.0%
+... uploading PCbKOlVtdKlPE06q0000.parquet:  0.0%... uploading PCbKOlVtdKlPE06q0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0002/X.h5ad 61430108
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0002/obs.parquet 20037
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0002/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0002
+READ_CHUNK prism_collection/GSE283614/chunk_0003 3000 4000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0003 obs 1000 vars 33586 controls 435
+... uploading Uk8HE3nK44xDSGkp0000.parquet:  0.0%... uploading Uk8HE3nK44xDSGkp0000.parquet: 100.0%
+... uploading qUW90V34SHhFTT7L0000.h5ad:  0.0%... uploading qUW90V34SHhFTT7L0000.h5ad: 100.0%
+... uploading wWQTxHpuvBPeZvGc0000.parquet:  0.0%... uploading wWQTxHpuvBPeZvGc0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0003/X.h5ad 61636956
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0003/obs.parquet 20055
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0003/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0003
+READ_CHUNK prism_collection/GSE283614/chunk_0004 4000 5000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0004 obs 1000 vars 33586 controls 441
+... uploading J5fSpFSva1mWFATL0000.parquet:  0.0%... uploading J5fSpFSva1mWFATL0000.parquet: 100.0%
+... uploading S8ePh55TiOMAPY4K0000.h5ad:  0.0%... uploading S8ePh55TiOMAPY4K0000.h5ad: 100.0%
+... uploading 4lybCwsqvd1DYc230000.parquet:  0.0%... uploading 4lybCwsqvd1DYc230000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0004/X.h5ad 60322140
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0004/obs.parquet 20042
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0004/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0004
+READ_CHUNK prism_collection/GSE283614/chunk_0005 5000 6000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0005 obs 1000 vars 33586 controls 444
+... uploading iJArkGRyQvmV4wkI0000.parquet:  0.0%... uploading iJArkGRyQvmV4wkI0000.parquet: 100.0%
+... uploading K1ViHjR4kSS9ILih0000.h5ad:  0.0%... uploading K1ViHjR4kSS9ILih0000.h5ad: 100.0%
+... uploading WvXws9IUoVUMWUAq0000.parquet:  0.0%... uploading WvXws9IUoVUMWUAq0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0005/X.h5ad 59881820
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0005/obs.parquet 19961
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0005/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0005
+READ_CHUNK prism_collection/GSE283614/chunk_0006 6000 7000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0006 obs 1000 vars 33586 controls 431
+... uploading Rt7smvxXEYDVbaKz0000.parquet:  0.0%... uploading Rt7smvxXEYDVbaKz0000.parquet: 100.0%
+... uploading LyT521wyoKaWaHtN0000.h5ad:  0.0%... uploading LyT521wyoKaWaHtN0000.h5ad: 100.0%
+... uploading ksMeLxhRHum0w3oy0000.parquet:  0.0%... uploading ksMeLxhRHum0w3oy0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0006/X.h5ad 61108572
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0006/obs.parquet 20010
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0006/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0006
+READ_CHUNK prism_collection/GSE283614/chunk_0007 7000 8000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0007 obs 1000 vars 33586 controls 443
+... uploading H0GjqAofkwYLG8zi0000.parquet:  0.0%... uploading H0GjqAofkwYLG8zi0000.parquet: 100.0%
+... uploading LLGJZGBVWNkXPAI30000.h5ad:  0.0%... uploading LLGJZGBVWNkXPAI30000.h5ad: 100.0%
+... uploading QyKOWg20YdEods3q0000.parquet:  0.0%... uploading QyKOWg20YdEods3q0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0007/X.h5ad 58419548
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0007/obs.parquet 19992
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0007/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0007
+READ_CHUNK prism_collection/GSE283614/chunk_0008 8000 9000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0008 obs 1000 vars 33586 controls 423
+... uploading 33KhIU3Z03m5iPug0000.parquet:  0.0%... uploading 33KhIU3Z03m5iPug0000.parquet: 100.0%
+... uploading ve3xaJ7A2NHdkZhU0000.h5ad:  0.0%... uploading ve3xaJ7A2NHdkZhU0000.h5ad: 100.0%
+... uploading 4HcQEfkmPpO7kdyp0000.parquet:  0.0%... uploading 4HcQEfkmPpO7kdyp0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0008/X.h5ad 57053532
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0008/obs.parquet 20021
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0008/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0008
+READ_CHUNK prism_collection/GSE283614/chunk_0009 9000 10000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0009 obs 1000 vars 33586 controls 454
+... uploading 4SOpu86z4Bg6zocJ0000.parquet:  0.0%... uploading 4SOpu86z4Bg6zocJ0000.parquet: 100.0%
+... uploading EFK24jpIRatwOiMN0000.h5ad:  0.0%... uploading EFK24jpIRatwOiMN0000.h5ad: 100.0%
+... uploading F3tjQFwpQJZFwtuQ0000.parquet:  0.0%... uploading F3tjQFwpQJZFwtuQ0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0009/X.h5ad 60791132
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0009/obs.parquet 19967
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0009/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0009
+READ_CHUNK prism_collection/GSE283614/chunk_0010 10000 11000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0010 obs 1000 vars 33586 controls 461
+... uploading pghxO1aFSOLQRybF0000.parquet:  0.0%... uploading pghxO1aFSOLQRybF0000.parquet: 100.0%
+... uploading tQbYH9ei3pp26qjc0000.h5ad:  0.0%... uploading tQbYH9ei3pp26qjc0000.h5ad: 100.0%
+... uploading UuivsJUb7EZ25xa40000.parquet:  0.0%... uploading UuivsJUb7EZ25xa40000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0010/X.h5ad 61577564
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0010/obs.parquet 20019
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0010/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0010
+READ_CHUNK prism_collection/GSE283614/chunk_0011 11000 12000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0011 obs 1000 vars 33586 controls 450
+... uploading EMBbaKrGOLSqeE1h0000.parquet:  0.0%... uploading EMBbaKrGOLSqeE1h0000.parquet: 100.0%
+... uploading 3v0n110xISM6kyBS0000.h5ad:  0.0%... uploading 3v0n110xISM6kyBS0000.h5ad: 100.0%
+... uploading KRDXJM76TJ6DmWAP0000.parquet:  0.0%... uploading KRDXJM76TJ6DmWAP0000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0011/X.h5ad 58589532
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0011/obs.parquet 19978
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0011/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0011
+READ_CHUNK prism_collection/GSE283614/chunk_0012 12000 12844
+SAVE_CHUNK prism_collection/GSE283614/chunk_0012 obs 844 vars 33586 controls 388
+... uploading 39NgrW4eCfz1R0gY0000.parquet:  0.0%... uploading 39NgrW4eCfz1R0gY0000.parquet: 100.0%
+... uploading 6hXUcHlNDJyoGyxK0000.h5ad:  0.0%... uploading 6hXUcHlNDJyoGyxK0000.h5ad: 100.0%
+... uploading NGSCkLPlzs2GGFh10000.parquet:  0.0%... uploading NGSCkLPlzs2GGFh10000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0012/X.h5ad 52056956
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0012/obs.parquet 18555
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0012/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0012
+DONE_DATASET prism_collection/GSE283614 13
+      200.88 real        12.18 user         2.92 sys
+          1166704640  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              261232  page reclaims
+                 857  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+               32959  messages sent
+                2166  messages received
+                   1  signals received
+                2381  voluntary context switches
+               33647  involuntary context switches
+           280060972  instructions retired
+            95054568  cycles elapsed
+            18055600  peak memory footprint

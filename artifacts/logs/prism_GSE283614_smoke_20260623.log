@@ -1,0 +1,46 @@
+GCS_CACHE_HIT gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad -> /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad size=1514297474
+[92m→[0m connected lamindb: laminlabs/pertdata
+[92m→[0m script invoked with: gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad --dataset GSE283614 --chunk-size 1000 --max-chunks 1
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.venv/bin/python3: No module named pip
+[92m→[0m loaded Transform('cqKr10EUOIPg0000', key='ingest_prism_large_h5ad_chunks.py'), started new Run('PsIGkbK2D1A2F35c') at 2026-06-23 11:58:15 UTC
+[94m•[0m recommendation: to identify the script across renames, pass the uid: ln.track("cqKr10EUOIPg")
+[93m![0m environment file is empty, skipping linking an environment
+[92m→[0m monitor at: https://lamin.ai/laminlabs/pertdata/transform/cqKr10EUOIPg0000
+LAMIN laminlabs/pertdata jkobject GCjqQtGwPzkY
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/tools/ingest_prism_large_h5ad_chunks.py:124: DeprecationWarning: Use dtype_as_str instead of dtype, dtype will be removed in the future.
+  if feature and feature[0].dtype != "cat[Artifact]":
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1758: UserWarning: Variable names are not unique. To make them unique, call `.var_names_make_unique`.
+  utils.warn_names_duplicates("var")
+SOURCE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad n_obs 12844 n_vars 33586 chunk_size 1000 chunks 0:1/13
+/Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.venv/lib/python3.11/site-packages/anndata/_core/anndata.py:1758: UserWarning: Variable names are not unique. To make them unique, call `.var_names_make_unique`.
+  utils.warn_names_duplicates("var")
+READ_CHUNK prism_collection/GSE283614/chunk_0000 0 1000
+SAVE_CHUNK prism_collection/GSE283614/chunk_0000 obs 1000 vars 33586 controls 474
+[93m![0m There is a problem with your default AWS Credentials: Missing Dependency: Using the login credential provider requires an additional dependency. You will need to pip install "botocore[crt]" before proceeding.
+`anon` mode will be used for all non-managed buckets
+... uploading nDEnQ1Mu5SWYEm4l0000.parquet:  0.0%... uploading nDEnQ1Mu5SWYEm4l0000.parquet: 100.0%
+... uploading UtvMpFuYCOQWI2dV0000.h5ad:  0.0%... uploading UtvMpFuYCOQWI2dV0000.h5ad: 100.0%
+... uploading rtNlEunZ6Cum2vB60000.parquet:  0.0%... uploading rtNlEunZ6Cum2vB60000.parquet: 100.0%
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0000/X.h5ad 61391196
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0000/obs.parquet 19993
+DELETE /Users/jkobject/.openclaw/worktrees/pert-gym/t_278787d2/.lamin-cache/lamindb/lamin-us-west-2/H7d9vxvceBoh/prism_collection/GSE283614/chunk_0000/var.parquet 795818
+DONE_CHUNK prism_collection/GSE283614/chunk_0000
+DONE_DATASET prism_collection/GSE283614 1
+       31.53 real         2.75 user         0.88 sys
+          1104904192  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              127882  page reclaims
+                3645  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                3035  messages sent
+                 515  messages received
+                   1  signals received
+                4812  voluntary context switches
+                7517  involuntary context switches
+           304108480  instructions retired
+           104506674  cycles elapsed
+            18153904  peak memory footprint
