@@ -567,9 +567,9 @@ Current decision:
   accession duplicate probes were clean, but it needs GCS staging and backed or
   chunked h5ad ingestion; do not full-load locally.
 
-## Temporal T33 axolotl regeneration probe — 2026-06-22
+## Temporal T33/T102 axolotl regeneration — 2026-06-22/23
 
-T33-Mac (`t_a13812f2`) completed source/duplicate probes for axolotl regeneration rows 134–136. No bulk downloads and no Lamin writes were performed.
+T33-Mac (`t_a13812f2`) completed source/duplicate probes for axolotl regeneration rows 134–136. T102 (`t_102c5a38`) then ingested row 136 / `SCP499` Early-Bud Blastema after recovering API-derived sidecar equivalents.
 
 Artifacts:
 
@@ -579,13 +579,16 @@ artifacts/scripts/write_temporal_t33_axolotl_status_20260622.py
 artifacts/schema_audit/temporal_t33_axolotl_source_probe_20260622.json
 artifacts/schema_audit/temporal_t33_axolotl_status_20260622.md
 artifacts/schema_audit/temporal_t33_axolotl_status_20260622.json
+artifacts/scripts/ingest_temporal_scp499_early_bud_20260623.py
+artifacts/schema_audit/temporal_scp499_early_bud_ingestion_20260623.md
+artifacts/schema_audit/temporal_scp499_early_bud_ingestion_20260623.json
 ```
 
 Current decision:
 
 - Row 134 adult axolotl limb regeneration: resolved primary candidate `GSE165901` (`Fibroblast Dedifferentiation as a Determinant of Successful Regeneration`, PMID 34004152). GEO exposes only `GSE165901_RAW.tar` (1.97 GB); the axolotl-only members are bounded (24 MatrixMarket/feature/barcode files, ~959 MB compressed across 8 samples; stages include LBst50/LBst52/LBst54, BL5dpa, BL11dpa) but need a selective tar extractor and MatrixMarket smoke before Lamin write. `GSE206235` was rejected for this row because its exposed supplement is a 21 MB differential-expression TSV, not a canonical cell×gene matrix.
 - Row 135 SciLifeLab timecourse: `rp58y-78935` is a ShinyCell app. The linked GitHub repo `RegenImm-Lab/SciLifeLabServe_limb_data` contains scripts and names original Seurat RDS objects (`20251212.merged_copy.rds`, `20251212.immune_filtered_copy.rds`, edited 20260421 variants), but does not publish those RDS/data files. Needs original app/storage RDS payload resolution before conversion.
-- Row 136 `SCP499` Early-Bud Blastema: SCP public site API exposes a bounded manifest (`EB.matrix.txt.gz` 40.4 MB, `EB.idents.txt` 9 KB, `EB.coordinates.txt` 44 KB). SCPAUTH continuation `t_1454d364` recovered and byte-verified the core matrix at `gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/EB.matrix.txt.gz` (`40,372,658` bytes). `EB.idents.txt` and `EB.coordinates.txt` are still missing; recover those small sidecars before a fully annotated ingestion.
+- Row 136 `SCP499` Early-Bud Blastema is now ingested and verified as `temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema` (`2,013 × 59,171`, `3,876,274` nnz). The core matrix remains the browser-auth staged `gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/EB.matrix.txt.gz` (`40,372,658` bytes). The original SCP sidecar files were not recovered byte-for-byte; instead, public SCP visualization APIs supplied equivalent idents/coordinates (`Cluster/cell_values` and `clusters/tSNE coordinates`), staged under `gs://scperturb/pert-gym/staging/browser_auth_scp/2026-06-22/SCP499/api_derived/` with verified byte counts. Obs includes cluster/cell_type, tSNE coordinates, GEO barcode mapping, temporal fields, source accessions, and control perturbation fields; obs→X→var links and payload existence verified.
 
 ## Temporal T13 Zebrahub + mouse gastrulation — 2026-06-22
 

@@ -376,12 +376,16 @@ Done:
   (`8,015 × 21,909`, obs→X→var verified). Artifacts:
   `artifacts/schema_audit/temporal_t20_geo_developmental_status_20260622.md` and
   `artifacts/schema_audit/temporal_gse280655_cortical_inhibitory_neurons_20260622.json`.
-- T33-Mac (`t_a13812f2`) resolved axolotl regeneration sources/duplicates for
-  rows 134–136 without Lamin writes: row 134 maps to bounded-but-tar-only
+- T33/T102-Mac (`t_a13812f2`, `t_102c5a38`) resolved axolotl regeneration sources/duplicates for
+  rows 134–136 and ingested row 136: row 134 maps to bounded-but-tar-only
   `GSE165901` axolotl MatrixMarket members; row 135 resolves to a SciLifeLab
   ShinyCell/GitHub app without published original RDS payloads; row 136 `SCP499`
-  exposes a small public file manifest but unauthenticated downloads return 401.
-  Artifact: `artifacts/schema_audit/temporal_t33_axolotl_status_20260622.md`.
+  Early-Bud Blastema is verified as
+  `temporal_pretraining/gse121737_axolotl_blastema/early_bud_blastema` (`2,013 ×
+  59,171`, obs→X→var links/payloads OK) using the browser-auth staged matrix plus
+  API-derived idents/coordinates staged under `api_derived/`. Artifacts:
+  `artifacts/schema_audit/temporal_t33_axolotl_status_20260622.md` and
+  `artifacts/schema_audit/temporal_scp499_early_bud_ingestion_20260623.md`.
 
 Current blockers:
 
@@ -415,16 +419,15 @@ Current blockers:
   11.08 GB h5ad and needs GCS staging + backed/chunked ingestion. Do not full-load
   either locally. Artifact:
   `artifacts/schema_audit/temporal_t20_geo_developmental_status_20260622.md`.
-- T33 (`t_a13812f2`) — axolotl regeneration batch remains ingestion-blocked after
-  source resolution: row 134 `GSE165901` has a bounded axolotl subset but only as
+- T33 residual — axolotl regeneration batch remains partially source-blocked after
+  row 136/SCP499 ingestion: row 134 `GSE165901` has a bounded axolotl subset but only as
   members inside a 1.97 GB GEO RAW tar, requiring a selective tar extractor and
   MatrixMarket smoke before write; row 135 SciLifeLab Serve is a ShinyCell app
-  whose GitHub repo names but does not publish the original Seurat RDS objects;
-  row 136 `SCP499` now has `EB.matrix.txt.gz` (40,372,658 bytes) recovered and
-  byte-verified in GCS by SCPAUTH continuation `t_1454d364`, but still needs the
-  tiny `EB.idents.txt` and `EB.coordinates.txt` sidecars before a fully annotated
-  ingestion. Artifacts: `artifacts/schema_audit/temporal_t33_axolotl_status_20260622.md`
-  and `artifacts/schema_audit/temporal_scp_browser_auth_continuation_t1454d364_20260623.{md,json}`.
+  whose GitHub repo names but does not publish the original Seurat RDS objects.
+  Row 136 `SCP499` is no longer a blocker: API-derived sidecars were byte-verified
+  in GCS and the triplet verifies in Lamin. Artifacts: `artifacts/schema_audit/temporal_t33_axolotl_status_20260622.md`,
+  `artifacts/schema_audit/temporal_scp_browser_auth_continuation_t1454d364_20260623.{md,json}`, and
+  `artifacts/schema_audit/temporal_scp499_early_bud_ingestion_20260623.{md,json}`.
 - T7 (`t_23b14d41`) — review-required blocked row after 3 CELLxGENE development
   triplets; supervisor comment says accepted.
 - T23 (`t_103c7d05`) — OrganoidDB retina/blood-vessel batch source-resolved
