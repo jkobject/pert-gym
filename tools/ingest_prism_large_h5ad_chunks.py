@@ -41,6 +41,7 @@ OBS_RENAMES_PRISM = {
     "pert_type": "perturbation_type",
     "crispr_type": "perturbation_type",
     "cell_line_name": "cell_line",
+    "cellline": "cell_line",
     "cell_type": "tissue_type",
     "cancer_type": "disease",
 }

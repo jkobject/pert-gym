@@ -1322,7 +1322,7 @@ These are not blockers for real P3 completion, but they matter before claiming m
 3. Run bounded inspections for the remaining auxiliary/orphan items and convert only confirmed joins to `X_<name>/var_<name>` or `obsm_<name>` artifacts.
 4. Run targeted var payload/backed metadata checks for representative families to classify Ensembl/symbol IDs where registry metadata is insufficient.
 5. Expand duplicate/subduplicate detection beyond the completed PRISM residual same-accession/GCS gate, especially for model-ready biological coverage decisions.
-6. Continue the PRISM P5F residual queue from the current artifacts: 16 accessible smoke-first candidates remain after `GSE283614`; `GSE274751` stays `staged_h5ad_truncated` until re-staged; `GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, and `GSE282731` remain missing/source-blocked; `GSE90063_human-004` is excluded by user decision due duplicate/subset ambiguity.
+6. Continue the PRISM P5F residual queue from the current artifacts: 14 accessible smoke-first candidates remain after `GSE269596`; `GSE274751` stays `staged_h5ad_truncated` until re-staged; `GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, and `GSE282731` remain missing/source-blocked; `GSE90063_human-004` is excluded by user decision due duplicate/subset ambiguity.
 7. Continue T-cell GWPS and other huge missing datasets with streaming/GCS/high-memory workers; never sync 100GB+ h5ads blindly.
 
 ## P5F-cont9-Mac PRISM residual continuation — 2026-06-23
@@ -1371,6 +1371,31 @@ Current decision:
 - Chunking used `chunk_size=1000`; smoke chunk peak RSS was ~1.1 GB and full ingestion peak RSS was ~1.17 GB with no swaps.
 - Verification passed for 13/13 chunks: 12,844 rows, 33,586 vars, 5,763 controls, all obs->X and X->var links correct, X payloads exist, row/var counts match, and required obs fields are present.
 - Live P5F counts after this run: 14 completed, 16 accessible smoke-first candidates, 1 staged payload issue (`GSE274751` truncated), 5 missing/source-blocked rows (`GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, `GSE282731`), and 1 user-excluded row (`GSE90063_human-004`). Next candidate by size: `GSE280767`.
+
+## P5F-cont12-Mac PRISM residual continuation — 2026-06-23
+
+Status artifacts:
+
+```text
+artifacts/schema_audit/prism_GSE269596_source_probe_20260623.json
+artifacts/schema_audit/prism_GSE269596_chunked_verification.json
+artifacts/schema_audit/prism_p5f_cont12_inventory_20260623.md
+artifacts/schema_audit/prism_p5f_cont12_inventory_20260623.json
+artifacts/schema_audit/prism_p5f_status_20260622.json
+artifacts/phase3_ingestion_progress.json
+artifacts/scripts/recompute_prism_p5f_cont12_inventory_20260623.py
+artifacts/scripts/probe_prism_gse269596_source_20260623.py
+artifacts/scripts/update_prism_p5f_status_after_gse269596_20260623.py
+artifacts/scripts/verify_prism_p5f_dataset_20260623.py
+```
+
+Current decision:
+
+- `GSE269596` was selected by recomputing the current P5F inventory from live GCS object sizes plus visible Lamin triplet keys after accepted PR #33/GSE280767, not by trusting the prior handoff. Source: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad`, 2,505,068,264 bytes.
+- Backed inspection used the repo-local GCS cache helper and showed CSRDataset float32, 74,312 obs x 36,601 vars, unique obs/var names, no layers/raw, and no full X matrix load.
+- Chunking used `chunk_size=1000`; smoke chunk verified first, then full ingestion skipped the smoke chunk and completed all 75 chunks. Full ingestion peak RSS was ~622 MB with no swaps.
+- Verification passed for 75/75 chunks: 74,312 rows, 36,601 vars, 7,394 controls, all obs->X and X->var links correct, X payloads exist, row/var counts match, and required obs fields are present.
+- Live P5F counts after this run: 16 completed, 14 accessible smoke-first candidates, 1 staged payload issue (`GSE274751` truncated), 5 missing/source-blocked rows (`GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, `GSE282731`), and 1 user-excluded row (`GSE90063_human-004`). Next candidate by size: `GSE281048_TGFB_Perturb_seq`.
 
 ## P5D-Mac PRISM residual cleanup — 2026-06-22
 

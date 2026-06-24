@@ -36,6 +36,7 @@ def main() -> int:
     parser.add_argument("--source", required=True, help="Local source h5ad path for expected shape only")
     parser.add_argument("--chunk-size", type=int, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--require-non-unknown-cell-line", action="store_true")
     args = parser.parse_args()
 
     source = ad.read_h5ad(args.source, backed="r")
@@ -47,12 +48,14 @@ def main() -> int:
 
     expected_chunks = math.ceil(expected_rows / args.chunk_size)
     ln = connect_pertdata()
+    ln.track(path="artifacts/scripts/verify_prism_p5f_dataset_20260623.py")
     assert ln.setup.settings.instance.slug == "laminlabs/pertdata"
     assert ln.setup.settings.branch.name == "jkobject"
 
     chunk_results: list[dict[str, Any]] = []
     total_rows = 0
     total_controls = 0
+    total_non_unknown_cell_line = 0
     var_counts: set[int] = set()
     bad: list[dict[str, Any]] = []
 
@@ -69,6 +72,8 @@ def main() -> int:
             var_df = var_art.load()
             fields = {field: field in obs_df.columns for field in REQUIRED_OBS_FIELDS}
             controls = int(obs_df["is_control"].sum()) if "is_control" in obs_df.columns else None
+            cell_line_values = obs_df["cell_line"].astype(str) if "cell_line" in obs_df.columns else None
+            cell_line_non_unknown = int(cell_line_values.ne("unknown").sum()) if cell_line_values is not None else None
             row.update(
                 {
                     "obs_key": obs_art.key,
@@ -86,10 +91,13 @@ def main() -> int:
                     "required_obs_fields_present": fields,
                     "all_required_obs_fields_present": all(fields.values()),
                     "controls": controls,
+                    "cell_line_non_unknown": cell_line_non_unknown,
+                    "cell_line_unique_sample": sorted(cell_line_values.unique().tolist())[:20] if cell_line_values is not None else [],
                 }
             )
             total_rows += int(len(obs_df))
             total_controls += int(controls or 0)
+            total_non_unknown_cell_line += int(cell_line_non_unknown or 0)
             var_counts.add(int(len(var_df)))
             checks = [
                 row["obs_to_x_ok"],
@@ -113,6 +121,7 @@ def main() -> int:
         "rows_verified": total_rows == expected_rows,
         "var_counts_match": var_counts == {expected_vars},
         "no_bad_chunks": not bad,
+        "cell_line_not_all_unknown": (total_non_unknown_cell_line > 0) if args.require_non_unknown_cell_line else True,
     }
     result = {
         "dataset": args.dataset,
@@ -125,6 +134,8 @@ def main() -> int:
         "rows_verified": total_rows,
         "var_counts": sorted(var_counts),
         "controls": total_controls,
+        "cell_line_non_unknown_total": total_non_unknown_cell_line,
+        "required_non_unknown_cell_line": bool(args.require_non_unknown_cell_line),
         "checks": checks,
         "ok": all(checks.values()),
         "bad_chunks": bad,
@@ -132,7 +143,7 @@ def main() -> int:
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=False) + "\n")
-    print(json.dumps({k: result[k] for k in ["dataset", "ok", "chunks_verified", "expected_chunks", "rows_verified", "expected_rows", "expected_vars", "controls"]}, indent=2))
+    print(json.dumps({k: result[k] for k in ["dataset", "ok", "chunks_verified", "expected_chunks", "rows_verified", "expected_rows", "expected_vars", "controls", "cell_line_non_unknown_total"]}, indent=2))
     return 0 if result["ok"] else 1
 
 

@@ -1,31 +1,28 @@
-# PRISM P5F recovery status — updated 2026-06-23 after GSE250558
+# PRISM P5F recovery status — updated 2026-06-23 after GSE269596 cell_line repair
 
 - staging prefix: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/`
 - Lamin target: `laminlabs/pertdata` branch `jkobject`
-- completed verified P5F datasets: `12`
-- remaining smoke-first staged candidates: `18`
+- completed verified P5F datasets: `16`
+- remaining smoke-first staged candidates: `14`
 - staged payload issues: `1`
 - missing/source rows: `5`
 - user-excluded rows: `1`
 
 ## Newly completed in this update
 
-- `GSE250558`: verified `60/60` same-prefix chunks at chunk size `1000`, shape `59,837 × 36,713`, controls `12,828`.
-- verification artifacts: `artifacts/schema_audit/prism_GSE250558_chunked_verification.json` and `.md`.
-- run note: staged object byte-verified at `1,339,211,295` bytes; backed layout `CSRDataset int32`; smoke chunk succeeded then full resume completed without full-loading the matrix.
+- `GSE269596`: verified `75/75` same-prefix chunks at chunk size `1000`, shape `74,312 × 36,601`, controls `7,394`.
+- source `cellline` is preserved in standardized `cell_line`: `74,312/74,312` rows non-unknown, values `HEK293T`, `K562`.
+- verification artifacts: `artifacts/schema_audit/prism_GSE269596_source_probe_20260623.json`, `artifacts/schema_audit/prism_GSE269596_cell_line_obs_repair_20260623.json`, and `artifacts/schema_audit/prism_GSE269596_chunked_verification.json`.
+- run note: staged object byte-verified at `2,505,068,264` bytes; backed layout `CSRDataset float32`; repair revised obs parquet artifacts only and relinked existing X artifacts, without full-loading or rewriting X.
 
 ## Completed verified P5F datasets
 
-GSE236057, GSE236519, GSE241683_carT, GSE243244, GSE246714, GSE247274, GSE250558, GSE252589, GSE254100, GSE255832, GSE263524, GSE267982
+GSE236057, GSE236519, GSE241683_carT, GSE243244, GSE246714, GSE247274, GSE247599, GSE250558, GSE252589, GSE254100, GSE255832, GSE263524, GSE267982, GSE269596, GSE280767, GSE283614
 
 ## Next remaining candidates by staged object size
 
 | dataset | GiB | bytes | uri |
 |---|---:|---:|---|
-| GSE247599 | 1.34 | 1433706825 | `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad` |
-| GSE283614 | 1.41 | 1514297474 | `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad` |
-| GSE280767 | 1.87 | 2010340238 | `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE280767.h5ad` |
-| GSE269596 | 2.33 | 2505068264 | `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad` |
 | GSE281048_TGFB_Perturb_seq | 2.58 | 2767634550 | `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TGFB_Perturb_seq.h5ad` |
 | GSE251715 | 2.63 | 2823124959 | `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE251715.h5ad` |
 | GSE241683_pilot | 2.69 | 2890310231 | `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE241683_pilot.h5ad` |
