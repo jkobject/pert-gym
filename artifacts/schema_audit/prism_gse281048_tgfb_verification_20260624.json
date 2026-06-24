@@ -1,0 +1,2403 @@
+{
+  "dataset": "GSE281048_TGFB_Perturb_seq",
+  "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq",
+  "lamin_instance": "laminlabs/pertdata",
+  "lamin_branch": "jkobject",
+  "expected_chunks": 237,
+  "verified_chunks": 237,
+  "expected_obs": 236606,
+  "verified_obs": 236606,
+  "expected_vars": 33525,
+  "sampled_controls": 69,
+  "sampled_cell_line_values": [
+    "unknown"
+  ],
+  "sampled_perturbation_non_unknown": 1606,
+  "sample_chunks": [
+    0,
+    236
+  ],
+  "required_obs_fields": [
+    "perturbation",
+    "perturbation_type",
+    "is_control",
+    "cell_line",
+    "organism",
+    "modality",
+    "assay",
+    "dataset"
+  ],
+  "failures": [],
+  "chunks": [
+    {
+      "chunk": 0,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0000",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": 33525,
+      "controls": 44,
+      "x_payload_exists_sampled": true,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 1,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0001",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 2,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0002",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 3,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0003",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 4,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0004",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 5,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0005",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 6,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0006",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 7,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0007",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 8,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0008",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 9,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0009",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 10,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0010",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 11,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0011",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 12,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0012",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 13,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0013",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 14,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0014",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 15,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0015",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 16,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0016",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 17,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0017",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 18,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0018",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 19,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0019",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 20,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0020",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 21,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0021",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 22,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0022",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 23,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0023",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 24,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0024",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 25,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0025",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 26,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0026",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 27,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0027",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 28,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0028",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 29,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0029",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 30,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0030",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 31,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0031",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 32,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0032",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 33,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0033",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 34,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0034",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 35,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0035",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 36,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0036",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 37,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0037",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 38,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0038",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 39,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0039",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 40,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0040",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 41,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0041",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 42,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0042",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 43,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0043",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 44,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0044",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 45,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0045",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 46,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0046",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 47,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0047",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 48,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0048",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 49,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0049",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 50,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0050",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 51,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0051",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 52,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0052",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 53,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0053",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 54,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0054",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 55,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0055",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 56,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0056",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 57,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0057",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 58,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0058",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 59,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0059",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 60,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0060",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 61,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0061",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 62,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0062",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 63,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0063",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 64,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0064",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 65,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0065",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 66,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0066",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 67,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0067",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 68,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0068",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 69,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0069",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 70,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0070",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 71,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0071",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 72,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0072",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 73,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0073",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 74,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0074",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 75,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0075",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 76,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0076",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 77,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0077",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 78,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0078",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 79,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0079",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 80,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0080",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 81,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0081",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 82,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0082",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 83,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0083",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 84,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0084",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 85,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0085",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 86,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0086",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 87,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0087",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 88,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0088",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 89,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0089",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 90,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0090",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 91,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0091",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 92,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0092",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 93,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0093",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 94,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0094",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 95,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0095",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 96,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0096",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 97,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0097",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 98,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0098",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 99,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0099",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 100,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0100",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 101,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0101",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 102,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0102",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 103,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0103",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 104,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0104",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 105,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0105",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 106,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0106",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 107,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0107",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 108,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0108",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 109,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0109",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 110,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0110",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 111,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0111",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 112,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0112",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 113,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0113",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 114,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0114",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 115,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0115",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 116,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0116",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 117,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0117",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 118,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0118",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 119,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0119",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 120,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0120",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 121,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0121",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 122,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0122",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 123,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0123",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 124,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0124",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 125,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0125",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 126,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0126",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 127,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0127",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 128,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0128",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 129,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0129",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 130,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0130",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 131,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0131",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 132,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0132",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 133,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0133",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 134,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0134",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 135,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0135",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 136,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0136",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 137,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0137",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 138,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0138",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 139,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0139",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 140,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0140",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 141,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0141",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 142,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0142",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 143,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0143",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 144,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0144",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 145,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0145",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 146,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0146",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 147,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0147",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 148,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0148",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 149,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0149",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 150,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0150",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 151,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0151",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 152,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0152",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 153,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0153",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 154,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0154",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 155,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0155",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 156,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0156",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 157,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0157",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 158,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0158",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 159,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0159",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 160,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0160",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 161,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0161",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 162,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0162",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 163,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0163",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 164,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0164",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 165,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0165",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 166,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0166",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 167,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0167",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 168,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0168",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 169,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0169",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 170,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0170",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 171,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0171",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 172,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0172",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 173,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0173",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 174,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0174",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 175,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0175",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 176,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0176",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 177,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0177",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 178,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0178",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 179,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0179",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 180,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0180",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 181,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0181",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 182,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0182",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 183,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0183",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 184,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0184",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 185,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0185",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 186,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0186",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 187,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0187",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 188,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0188",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 189,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0189",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 190,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0190",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 191,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0191",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 192,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0192",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 193,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0193",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 194,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0194",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 195,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0195",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 196,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0196",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 197,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0197",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 198,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0198",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 199,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0199",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 200,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0200",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 201,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0201",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 202,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0202",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 203,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0203",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 204,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0204",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 205,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0205",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 206,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0206",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 207,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0207",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 208,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0208",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 209,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0209",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 210,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0210",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 211,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0211",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 212,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0212",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 213,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0213",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 214,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0214",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 215,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0215",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 216,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0216",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 217,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0217",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 218,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0218",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 219,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0219",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 220,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0220",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 221,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0221",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 222,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0222",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 223,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0223",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 224,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0224",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 225,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0225",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 226,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0226",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 227,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0227",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 228,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0228",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 229,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0229",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 230,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0230",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 231,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0231",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 232,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0232",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 233,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0233",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 234,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0234",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 235,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0235",
+      "obs_rows": 1000,
+      "x_n_observations": 1000,
+      "var_rows": null,
+      "controls": null,
+      "x_payload_exists_sampled": null,
+      "required_fields_missing": []
+    },
+    {
+      "chunk": 236,
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0236",
+      "obs_rows": 606,
+      "x_n_observations": 606,
+      "var_rows": 33525,
+      "controls": 25,
+      "x_payload_exists_sampled": true,
+      "required_fields_missing": []
+    }
+  ]
+}
