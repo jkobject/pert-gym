@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402,I001
 """Ingestion functions for Phase 3 bulk/screen sensitivity datasets.
 
 Datasets covered:
@@ -41,19 +42,17 @@ Usage::
 from __future__ import annotations
 
 import re
-import zipfile
+import sys as _sys
 from io import StringIO
 from pathlib import Path
 from urllib.parse import urlparse
 
 import anndata as ad
 import httpx
-import lamindb as ln
 import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-import sys as _sys
 _sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.convert_triplet_artifacts import migrate_h5ad_to_triplet  # noqa: E402
 from tools.lamin_context import connect_pertdata  # noqa: E402
@@ -495,89 +494,33 @@ def download_sanger_score(
 
 
 def sanger_score_to_anndata(path: Path) -> ad.AnnData:
-    """Convert Sanger SCORE gene effect matrix to AnnData.
+    """Reject the legacy fake-expression SCORE conversion.
 
-    Layout:
-        obs  = cell lines (Sanger model IDs)
-        var  = genes (HGNC symbol)
-        X    = gene effect score (negative = essential)
-        layers['gene_effect'] = same values (non-sparse, preserves NaN)
+    Sanger SCORE stores essentiality/dependency scores, not RNA expression. The
+    canonical expression ``X.h5ad`` was retyped by
+    ``artifacts/scripts/repair_sanger_score_crispr_retype_20260625.py`` so
+    scores live in the explicit auxiliary ``X_score``/``var_score`` payload path
+    with ``x_semantics=essentiality_score``. Do not regenerate a non-empty
+    canonical ``X`` for this screen.
     """
-    if path.suffix == ".zip":
-        with zipfile.ZipFile(path) as zf:
-            members = [info.filename for info in zf.infolist()]
-            fold_change = [
-                name for name in members
-                if "fold_change_values" in name and name.endswith((".tsv", ".csv"))
-            ]
-            if not fold_change:
-                raise ValueError(
-                    f"Could not find SCORE fold-change matrix in {path}; "
-                    f"members={members[:10]}"
-                )
-            with zf.open(fold_change[0]) as fh:
-                raw = pd.read_csv(fh, sep="\t", header=None, low_memory=False)
-        score_kind = "fold_change"
-
-        model_meta = pd.DataFrame(
-            {
-                "model_name": raw.iloc[0, 3:].to_numpy(dtype=str),
-                "sanger_model_id": raw.iloc[1, 3:].to_numpy(dtype=str),
-                "score_source": raw.iloc[2, 3:].to_numpy(dtype=str),
-                "qc_pass": raw.iloc[3, 3:].astype(str).str.upper().eq("TRUE").to_numpy(),
-            }
-        )
-        model_meta.index = (
-            model_meta["sanger_model_id"].astype(str)
-            + "__"
-            + model_meta["score_source"].astype(str)
-            + "__"
-            + model_meta.groupby(["sanger_model_id", "score_source"]).cumcount().astype(str)
-        )
-
-        gene_meta = raw.iloc[5:, :3].copy()
-        gene_meta.columns = ["gene_id", "gene_symbol", "ensembl_id"]
-        gene_meta = gene_meta.set_index("gene_id", drop=False)
-        values = raw.iloc[5:, 3:].apply(pd.to_numeric, errors="coerce")
-
-        obs_df = model_meta
-        var_df = gene_meta
-        matrix = values.to_numpy(dtype=np.float32).T
-    else:
-        df = pd.read_csv(path, sep=None, engine="python", index_col=0, compression="infer")
-        score_kind = "gene_effect"
-        obs_df = pd.DataFrame({"cell_line": df.index}, index=df.index)
-        var_df = pd.DataFrame({"gene_symbol": df.columns}, index=df.columns)
-        matrix = df.to_numpy(dtype=np.float32)
-
-    adata = ad.AnnData(
-        X=sp.csr_matrix(np.nan_to_num(matrix, nan=0.0)),
-        obs=obs_df,
-        var=var_df,
+    raise RuntimeError(
+        "Sanger SCORE CRISPR is not an expression matrix; use the repaired "
+        "X_score/var_score auxiliary payload path instead of writing scores to X.h5ad."
     )
-    adata.layers["gene_effect"] = matrix
-    adata.obs["perturbation_type"] = "CRISPRko"
-    adata.obs["organism"] = "human"
-    adata.uns["score_kind"] = score_kind
-
-    return adata
 
 
 def ingest_sanger_score(overwrite: bool = False) -> str:
-    """Download → convert → ingest Sanger SCORE."""
+    """Return the repaired SCORE obs key and refuse fake-X overwrites."""
     obs_key = f"{SCORE_LAMIN_PREFIX}/obs.parquet"
     if not overwrite and ln.Artifact.filter(key=obs_key).exists():
         print(f"Already ingested: {obs_key}")
         return obs_key
 
-    path = download_sanger_score()
-    adata = sanger_score_to_anndata(path)
-    migrate_h5ad_to_triplet(
-        adata, ln,
-        dataset_prefix=SCORE_LAMIN_PREFIX,
-        replace_on_instance=overwrite,
+    raise RuntimeError(
+        "Sanger SCORE CRISPR must not be ingested as obs/X/var expression. "
+        "Run the dated retype repair script if the Lamin auxiliary score payload "
+        "needs review or regeneration."
     )
-    return obs_key
 
 
 # ---------------------------------------------------------------------------

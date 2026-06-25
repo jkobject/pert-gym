@@ -1,0 +1,62 @@
+{
+  "after": {
+    "canonical_var_key": "sanger_score_crispr/var.parquet",
+    "canonical_var_shape": [
+      0,
+      0
+    ],
+    "canonical_x_key": "sanger_score_crispr/X.h5ad",
+    "canonical_x_nnz": 0,
+    "canonical_x_shape": [
+      1107,
+      0
+    ],
+    "obs_has_score_matrix_key": true,
+    "obs_key": "sanger_score_crispr/obs.parquet",
+    "obs_shape": [
+      1107,
+      10
+    ],
+    "score_var_key": "sanger_score_crispr/var_score.parquet",
+    "score_var_shape": [
+      17645,
+      8
+    ],
+    "score_x_key": "sanger_score_crispr/X_score.h5ad",
+    "score_x_nnz": 19532743,
+    "score_x_semantics": "essentiality_score",
+    "score_x_shape": [
+      1107,
+      17645
+    ]
+  },
+  "before": {
+    "canonical_var_key": "sanger_score_crispr/var.parquet",
+    "canonical_x_key": "sanger_score_crispr/X.h5ad",
+    "obs_shape": [
+      1107,
+      6
+    ],
+    "score_nnz": 19532743,
+    "score_shape": [
+      1107,
+      17645
+    ],
+    "var_shape": [
+      17645,
+      8
+    ]
+  },
+  "branch": "jkobject",
+  "decision": "Option B: retype score matrix as X_score/var_score auxiliary and revise canonical X to empty",
+  "dry_run": false,
+  "instance": "laminlabs/pertdata",
+  "loader_contract": {
+    "baseline_expression": "DepMap/CCLE baseline RNA remains separate at depmap_ccle/26q1",
+    "canonical_expression_X": "empty placeholder; must not be selected as expression/model-ready",
+    "essentiality_scores": "load through obs feature link X_score -> var_score; X_score.uns['x_semantics'] == 'essentiality_score'",
+    "sanger_gdsc": "drug response metrics are projected from obs; X remains empty placeholder"
+  },
+  "task": "t_5fbcbcd0",
+  "timestamp_utc": "2026-06-25T09:50:20.430850+00:00"
+}
