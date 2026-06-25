@@ -15,6 +15,7 @@ dependencies = [
     "mudata",
     "gdown>=6.1.0",
     "openpyxl>=3.1.5",
+    "pandas>=2.0",
 ]
 
 [project.optional-dependencies]

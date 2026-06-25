@@ -210,6 +210,71 @@ recorded in `obs["dataset"]` plus the prefix structure.
 Auxiliary modality payloads are allowed, but must be typed and named. They must
 not masquerade as canonical expression triplets.
 
+## Global obs identity contract
+
+Every row in every canonical obs artifact must contain these columns:
+
+| column | required | meaning |
+|---|---:|---|
+| `obs_uuid` | yes | Globally unique, stable UUID string for one observation row. |
+| `original_obs_index` | yes | Exact source row/index label before pert-gym rewrites or chunking. |
+
+`obs_uuid` is deterministic, not random. New ingestion and repair scripts should
+use `pert_gym.obs_identity.add_obs_identity()` so the UUID material is stable
+across reruns. The current namespace/version is `pert-gym.obs.v1`; do not change
+it for backfills unless a future migration explicitly versions the contract.
+
+The UUID material follows the reviewed 2026-06-24 audit contract exactly:
+
+```text
+uuid5(uuid.NAMESPACE_URL, "pert-gym.obs.v1:{dataset_id}:{prefix}:{original_obs_index}")
+```
+
+where `dataset_id` is the stable logical dataset id, `prefix` is the canonical
+artifact prefix for the exact obs payload/chunk, and `original_obs_index` is the
+source row/index label preserved before rewriting. The helper keeps compatibility
+arguments for source accession, sample/barcode columns, chunk id, and row kind,
+but those values are not part of the v1 UUID material; the canonical `prefix`
+namespaces chunks and dataset-specific payloads.
+
+If `original_obs_index` repeats inside a single payload, the helper appends the
+zero-based row position only for those repeated labels. This keeps UUIDs unique
+without discarding the original index value.
+
+### Implementation API
+
+Use the helper in `src/pert_gym/obs_identity.py`:
+
+```python
+from pert_gym.obs_identity import add_obs_identity, validate_obs_identity
+
+obs = add_obs_identity(
+    obs,
+    dataset_id="prism_collection/GSE221321",
+    prefix="prism_collection/GSE221321/chunk_0042",
+)
+validate_obs_identity(obs)
+```
+
+The helper returns a copy and does not mutate the input dataframe. Validation
+requires both columns, non-empty values, valid UUID strings, and per-artifact
+`obs_uuid` uniqueness. Cross-artifact uniqueness is achieved by including the
+logical dataset and canonical prefix in UUID material.
+
+### Rewrite policy
+
+For broad backfills over existing canonical artifacts:
+
+1. Load obs metadata only; do not materialize large matrices.
+2. Capture source index into `original_obs_index` before any reset/reindex.
+3. Call `add_obs_identity()` with stable `dataset_id` and canonical `prefix`.
+4. Run `validate_obs_identity()` and a cross-artifact duplicate check on the
+   generated `obs_uuid` values before publishing repaired obs artifacts.
+5. Keep `obs -> X -> var` feature links unchanged when replacing only obs
+   metadata.
+6. Document dataset-id and prefix choices in the rewrite handoff so reruns can
+   reproduce the UUIDs.
+
 ## Required global obs columns
 
 Canonical columns that should exist where applicable:

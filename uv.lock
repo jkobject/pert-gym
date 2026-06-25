@@ -2944,6 +2944,7 @@ dependencies = [
     { name = "lamindb" },
     { name = "mudata" },
     { name = "openpyxl" },
+    { name = "pandas" },
 ]
 
 [package.optional-dependencies]
@@ -2990,6 +2991,7 @@ requires-dist = [
     { name = "mkdocstrings-python", marker = "extra == 'dev'", specifier = ">=0.10.0" },
     { name = "mudata" },
     { name = "openpyxl", specifier = ">=3.1.5" },
+    { name = "pandas", specifier = ">=2.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.4.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.1.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6.4" },
