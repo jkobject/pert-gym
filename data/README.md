@@ -198,7 +198,12 @@ Important current source states:
   `../artifacts/schema_audit/temporal_t35_stomics_spatial_probe_20260622.md`.
 - Broad PRISM Repurposing, Sanger GDSC, Sanger SCORE, DepMap/CCLE, and
   Sanger dual-guide CRC have source-specific handling notes in current status and
-  schema reports. Sanger dual-guide CRC is verified complete as
+  schema reports. Sanger SCORE is an essentiality-family screen, not RNA
+  expression: canonical `sanger_score_crispr/X.h5ad` is intentionally empty after
+  the 2026-06-25 retype, while the preserved score matrix lives in typed
+  auxiliary `sanger_score_crispr/X_score.h5ad` plus `var_score.parquet` with
+  `x_semantics=essentiality_score`. Loaders must not treat SCORE canonical `X` as
+  model-ready expression. Sanger dual-guide CRC is verified complete as
   `sanger_dual_guide_crc/mapping_counts` with audit output at
   `../artifacts/schema_audit/sanger_dualguide_crc_verification_20260622.json`.
 - PRoPER-seq remains source-TBD; the legacy GSE150818 substitute is excluded.

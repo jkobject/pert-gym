@@ -152,10 +152,20 @@ DATASETS: tuple[DatasetPlan, ...] = (
         lamin_prefix="sanger_score_crispr",
         local_dir="data/main/sanger_score",
         ingestion_entrypoint="tools.ingest_phase3_bulk.ingest_sanger_score",
-        status="script_ready_url_needs_validation",
-        expected_outputs=["obs.parquet", "X.h5ad", "var.parquet"],
-        next_action="Resolve current Cell Model Passports gene-effect download URL.",
-        notes="Direct depmap-like gene effect target.",
+        status="retyped_aux_score_payload_20260625",
+        expected_outputs=[
+            "obs.parquet",
+            "X.h5ad(empty)",
+            "var.parquet(empty)",
+            "X_score.h5ad",
+            "var_score.parquet",
+        ],
+        next_action="Keep canonical X empty; loaders must use X_score only for essentiality scores.",
+        notes=(
+            "Direct depmap-like gene-effect target. Canonical X is not expression; "
+            "SCORE values are typed auxiliary X_score/var_score with "
+            "x_semantics=essentiality_score."
+        ),
     ),
     DatasetPlan(
         name="DepMap CCLE",
