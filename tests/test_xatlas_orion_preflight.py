@@ -4,7 +4,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_TEXT = str(ROOT)
 if ROOT_TEXT in sys.path:
@@ -23,7 +22,7 @@ if existing_tools is not None:
             if module_name == "tools" or module_name.startswith("tools."):
                 del sys.modules[module_name]
 
-from tools import ingest_xatlas_orion as xatlas
+from tools import ingest_xatlas_orion as xatlas  # noqa: E402
 
 
 def test_active_huge_ingestions_ignores_prompt_mentions(monkeypatch):
