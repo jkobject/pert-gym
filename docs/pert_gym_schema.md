@@ -132,7 +132,12 @@ x_semantics             # raw_counts | normalized_expression | log1p_expression 
                         # delta_expression | signature | empty | unknown
 has_obs_x_link          # bool
 has_x_var_link          # bool
-same_prefix_var         # bool for canonical triplets
+same_prefix_var         # bool for strict same-prefix triplets
+var_key                 # explicit linked var artifact key; do not infer by prefix
+var_uid                 # linked var artifact uid when recorded
+var_hash                # hash used for exact shared-var validation when recorded
+var_policy              # same_prefix | shared_exact_hash | shared_alias
+var_alias_group         # optional logical shared-var group id
 harmonization_level     # one of the levels below
 harmonization_level_rank # 1..6 numeric rank for filtering/sorting
 revision_status         # original | revised_obs | revised_var | revised_X | revised_triplet
@@ -152,9 +157,12 @@ rewrites by adding revised artifacts, links, or manifest updates.
 
 1. `present-in-collection`: selected in a Collection/manifest, with stable
    `dataset_id`, source, role, and prefix. No claim is made about loadability.
-2. `triplet-integrity-ok`: canonical `obs.parquet`, `X.h5ad`, and `var.parquet`
-   exist; `obs -> X -> var` links resolve; row/feature counts are plausible; same
-   prefix var policy is satisfied for canonical triplets.
+2. `triplet-integrity-ok`: canonical `obs.parquet`, `X.h5ad`, and linked var
+   artifacts exist; `obs -> X -> var` links resolve; row/feature counts are
+   plausible; and the explicit var policy is satisfied. Most triplets use strict
+   same-prefix `var.parquet`, while reviewed exact-hash chunk families may use a
+   dataset-level shared `var.h5ad` recorded by `var_policy`, `var_key`, and
+   `var_alias_group`.
 3. `schema-audited`: required metadata coverage, X semantics, var ID class,
    control availability, duplicate status, and auxiliary roles have been audited
    and written to reports/manifest.
@@ -198,6 +206,18 @@ Every loadable matrix dataset should be represented as a linked triplet:
 <dataset_prefix>/X.h5ad
 <dataset_prefix>/var.parquet
 ```
+
+Reviewed exact-hash chunk families may instead link each chunk `X.h5ad` to one
+dataset-level shared var alias:
+
+```text
+<logical_dataset>/var.h5ad
+```
+
+The manifest must record this explicitly with `same_prefix_var=False`,
+`var_policy=shared_exact_hash` or `shared_alias`, and
+`var_key=<logical_dataset>/var.h5ad`. Loaders must still follow `obs -> X -> var`;
+they must not recover var by string replacement from the obs or X key.
 
 Links:
 

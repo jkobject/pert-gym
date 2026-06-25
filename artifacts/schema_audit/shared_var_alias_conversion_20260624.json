@@ -1,0 +1,35 @@
+{
+  "apply_lamin": true,
+  "collection_key": "pert-gym/canonical/20260624-shared-var",
+  "collection_uid": "38lC0mmlfUMGLa6i0000",
+  "collection_members": 1057,
+  "collection_note": "1056 canonical obs members plus registered manifest artifact pert-gym/manifests/unified_collection_manifest_20260624_shared_var.tsv",
+  "manifest": {
+    "path": "artifacts/schema_audit/unified_collection_manifest_20260624_shared_var.tsv",
+    "rows": 1056,
+    "shared_rows": 959,
+    "shared_families": 23,
+    "var_key_convention": "<logical_dataset>/var.h5ad",
+    "manifest_policy_valid": true
+  },
+  "lamin_link_readback": {
+    "shared_rows_checked": 959,
+    "errors": 0,
+    "method": "Read obs->X feature links and X->var feature links from Lamin for all 23 shared-var families; compared var key to <logical_dataset>/var.h5ad.",
+    "commands": [
+      "uv run python artifacts/scripts/verify_shared_var_links_remaining_20260624.py (first 625/959 rows before timeout, all passing)",
+      "uv run python artifacts/scripts/verify_shared_var_links_tail_20260624.py (GSE225775/GSE225807/GSE229505 all passing before timeout)",
+      "uv run python artifacts/scripts/verify_shared_var_links_tail2_20260624.py (remaining 134 rows passing after relinking GSE264667)"
+    ]
+  },
+  "notebook_loader_smoke": {
+    "command": "PYTHONUNBUFFERED=1 uv run python artifacts/scripts/smoke_shared_var_loader_20260624.py",
+    "status": "PASS",
+    "shared_prism": "prism_collection/GSE221321/chunk_0000: obs=5000, var_key=prism_collection/GSE221321/var.h5ad, var_rows=14275",
+    "legacy_same_prefix": "DRUG-seq/GSE120222: obs=72, var_key=DRUG-seq/GSE120222/var.parquet, var_rows=60371"
+  },
+  "warnings": [
+    "Two earlier interrupted apply attempts created duplicate Lamin records for some <logical_dataset>/var.h5ad keys; helper resolution now uses the latest record when duplicate keys exist.",
+    "Existing old duplicate per-chunk var artifacts were not deleted."
+  ]
+}
