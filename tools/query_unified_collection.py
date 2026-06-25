@@ -30,12 +30,14 @@ from typing import Any, Iterable, Mapping, Sequence
 
 import pandas as pd
 
-DEFAULT_COLLECTION_KEY = "pert-gym/canonical/20260621"
+DEFAULT_COLLECTION_KEY = "pert-gym/canonical/20260624-shared-var"
+VAR_POLICIES = {"same_prefix", "shared_exact_hash", "shared_alias"}
+SHARED_VAR_POLICIES = {"shared_exact_hash", "shared_alias"}
 DEFAULT_MANIFEST_PATH = (
     Path(__file__).resolve().parents[1]
     / "artifacts"
     / "schema_audit"
-    / "unified_collection_manifest_20260621.tsv"
+    / "unified_collection_manifest_20260624_shared_var.tsv"
 )
 UNKNOWN_TOKENS = {"", "unknown", "nan", "none", "null", "na", "n/a"}
 FILTER_COLUMNS = (
@@ -78,6 +80,25 @@ class TripletArtifacts:
         """Return artifact keys as a notebook-friendly dict."""
         return {"obs": self.obs.key, "X": self.x.key, "var": self.var.key}
 
+    def load_var_dataframe(self) -> pd.DataFrame:
+        """Load the linked var artifact as a DataFrame.
+
+        Legacy same-prefix vars are parquet DataFrames. Dataset-level shared
+        vars use the approved `<logical_dataset>/var.h5ad` key and store feature
+        metadata in `AnnData.var`.
+        """
+        return load_var_dataframe(self.var)
+
+
+def load_var_dataframe(var_artifact: Any) -> pd.DataFrame:
+    """Load a linked var artifact, accepting both parquet and h5ad var aliases."""
+    loaded = var_artifact.load()
+    if isinstance(loaded, pd.DataFrame):
+        return loaded
+    if hasattr(loaded, "var"):
+        return loaded.var.copy()
+    raise TypeError(f"unsupported var artifact payload type: {type(loaded)!r}")
+
 
 def _is_missing(value: Any) -> bool:
     if value is None or pd.isna(value):
@@ -94,12 +115,39 @@ def _normalize_values(values: str | Iterable[str] | None) -> list[str] | None:
     return [value for value in normalized if value]
 
 
+def select_latest_artifact(records: Iterable[Any]) -> Any | None:
+    """Select one artifact deterministically from same-key Lamin records.
+
+    Lamin can expose more than one record with the same key when branch-local
+    revisions supersede an earlier record. Queryset order is not a resolution
+    contract: prefer records Lamin marks latest, then break ties by creation time
+    and UID so repeated resolution is stable.
+    """
+    candidates = list(records)
+    if not candidates:
+        return None
+    return sorted(
+        candidates,
+        key=lambda artifact: (
+            bool(getattr(artifact, "is_latest", False)),
+            str(getattr(artifact, "created_at", "")),
+            str(getattr(artifact, "uid", "")),
+        ),
+    )[-1]
+
+
 def _resolve_artifact_value(ln: Any, value: Any) -> Any:
     """Resolve a feature value that may be either an Artifact or an artifact key."""
     if value is None:
         raise KeyError("missing Lamin feature link")
     if isinstance(value, str):
-        return ln.Artifact.get(key=value)
+        if hasattr(ln.Artifact, "filter"):
+            artifact = select_latest_artifact(ln.Artifact.filter(key=value).all())
+            if artifact is not None:
+                return artifact
+        if hasattr(ln.Artifact, "get"):
+            return ln.Artifact.get(key=value)
+        raise KeyError(f"no Lamin artifact found for feature-link key {value!r}")
     if getattr(value, "key", None):
         return value
     raise TypeError(f"unsupported Lamin feature-link value: {type(value)!r}")
@@ -116,12 +164,169 @@ def load_unified_manifest(path: str | Path = DEFAULT_MANIFEST_PATH) -> pd.DataFr
     for column in ["n_obs", "n_vars", "chunk_index", "harmonization_level_rank"]:
         if column in manifest.columns:
             manifest[column] = pd.to_numeric(manifest[column], errors="coerce")
-    for column in ["has_obs_x_link", "has_x_var_link", "same_prefix_var"]:
+    for column in ["has_obs_x_link", "has_x_var_link", "same_prefix_var", "link_verification_checked"]:
         if column in manifest.columns:
             manifest[column] = manifest[column].map(
                 lambda value: str(value).strip().lower() == "true"
             )
-    return manifest
+    return normalize_var_policy_columns(manifest)
+
+
+def expected_same_prefix_var_key(prefix: str) -> str:
+    """Return the strict same-prefix var key for a triplet prefix."""
+    return f"{str(prefix).rstrip('/')}/var.parquet"
+
+
+def shared_var_key_for_logical_dataset(logical_dataset: str) -> str:
+    """Return the canonical shared-var alias key for one logical dataset."""
+    return f"{str(logical_dataset).rstrip('/')}/var.h5ad"
+
+
+def normalize_var_policy_columns(manifest: pd.DataFrame) -> pd.DataFrame:
+    """Ensure next-version var alias columns exist and are internally typed.
+
+    Legacy 20260621 manifests did not include explicit `var_*` fields.  For
+    backwards compatibility they are interpreted as strict same-prefix triplets
+    (`var_policy == "same_prefix"`) and their `var_key` is derived from the
+    existing manifest `prefix`, not from runtime artifact-key replacement.
+    """
+    df = manifest.copy()
+    if "var_policy" not in df.columns:
+        df["var_policy"] = "same_prefix"
+    else:
+        df["var_policy"] = df["var_policy"].astype(str).str.strip().replace("", "same_prefix")
+    if "same_prefix_var" not in df.columns:
+        df["same_prefix_var"] = df["var_policy"].eq("same_prefix")
+    for column in ["var_key", "var_uid", "var_hash", "var_alias_group"]:
+        if column not in df.columns:
+            df[column] = ""
+        else:
+            df[column] = df[column].fillna("").astype(str)
+    if "prefix" in df.columns:
+        missing_same_prefix_keys = df["var_key"].eq("") & df["var_policy"].eq("same_prefix")
+        df.loc[missing_same_prefix_keys, "var_key"] = df.loc[missing_same_prefix_keys, "prefix"].map(expected_same_prefix_var_key)
+    return df
+
+
+def build_shared_var_manifest(
+    manifest: pd.DataFrame,
+    chunk_metadata: pd.DataFrame,
+    shared_candidates: pd.DataFrame,
+    *,
+    collection_version: str,
+    policy: str = "shared_exact_hash",
+) -> pd.DataFrame:
+    """Return a next-version manifest with exact-hash chunk families aliased.
+
+    The function is intentionally manifest-only: it does not create Lamin
+    artifacts and does not mutate feature links.  Production conversion should
+    first create/link the shared `var.parquet` artifact in Lamin, then validate
+    the read-back `obs -> X -> var` links against the returned rows.
+    """
+    if policy not in SHARED_VAR_POLICIES:
+        raise ValueError(f"shared policy must be one of {sorted(SHARED_VAR_POLICIES)}, got {policy!r}")
+    df = normalize_var_policy_columns(manifest)
+    chunks = chunk_metadata.copy()
+    candidates = shared_candidates.copy()
+    candidate_col = "var_exactly_identical_by_hash_across_chunks"
+    if candidate_col in candidates.columns:
+        mask = candidates[candidate_col].astype(str).str.lower().eq("true")
+        candidate_datasets = set(candidates.loc[mask, "logical_dataset"].astype(str))
+    else:
+        candidate_datasets = set(candidates["logical_dataset"].astype(str))
+    metadata_by_artifact = chunks.set_index("artifact_key", drop=False)
+    for logical_dataset in sorted(candidate_datasets):
+        row_mask = df["logical_dataset"].astype(str).eq(logical_dataset)
+        if not row_mask.any():
+            continue
+        family_chunks = chunks.loc[chunks["logical_dataset"].astype(str).eq(logical_dataset)]
+        if family_chunks.empty:
+            continue
+        hashes = sorted(set(family_chunks["var_hash"].dropna().astype(str)) - {""})
+        if len(hashes) != 1:
+            raise ValueError(f"{logical_dataset} does not have exactly one var_hash: {hashes}")
+        df.loc[row_mask, "same_prefix_var"] = False
+        df.loc[row_mask, "var_policy"] = policy
+        df.loc[row_mask, "var_key"] = shared_var_key_for_logical_dataset(logical_dataset)
+        df.loc[row_mask, "var_hash"] = hashes[0]
+        df.loc[row_mask, "var_alias_group"] = logical_dataset
+        # The shared artifact may be newly created, so var_uid is intentionally
+        # blank until Lamin write/read-back fills it.  Preserve legacy per-chunk
+        # uids only in the chunk audit TSV, not as the shared alias uid.
+        df.loc[row_mask, "var_uid"] = ""
+    # Fill var hashes for non-shared rows when available from the audit metadata.
+    if "artifact_key" in df.columns and not metadata_by_artifact.empty:
+        for idx, artifact_key in df["artifact_key"].astype(str).items():
+            if artifact_key in metadata_by_artifact.index and not df.at[idx, "var_hash"]:
+                df.at[idx, "var_hash"] = str(metadata_by_artifact.at[artifact_key, "var_hash"])
+    df["collection_version"] = collection_version
+    return df
+
+
+def validate_manifest_var_policy(manifest: pd.DataFrame) -> pd.DataFrame:
+    """Return row-level var-policy violations; empty means valid offline contract.
+
+    This checks only manifest semantics.  Use `validate_triplet_var_policy()` for
+    live Lamin read-back of `obs -> X -> var` feature links.
+    """
+    df = normalize_var_policy_columns(manifest)
+    violations: list[dict[str, Any]] = []
+    for idx, row in df.iterrows():
+        policy = str(row.get("var_policy", "")).strip()
+        same_prefix = bool(row.get("same_prefix_var", False))
+        var_key = str(row.get("var_key", "")).strip()
+        artifact_key = str(row.get("artifact_key", idx))
+        if policy not in VAR_POLICIES:
+            violations.append({"row": idx, "artifact_key": artifact_key, "reason": f"invalid var_policy {policy!r}"})
+            continue
+        if not bool(row.get("has_x_var_link", False)):
+            violations.append({"row": idx, "artifact_key": artifact_key, "reason": "missing X->var link"})
+        if policy == "same_prefix":
+            if not same_prefix:
+                violations.append({"row": idx, "artifact_key": artifact_key, "reason": "same_prefix policy requires same_prefix_var=True"})
+            expected = expected_same_prefix_var_key(str(row.get("prefix", "")))
+            if var_key and expected != var_key:
+                violations.append({"row": idx, "artifact_key": artifact_key, "reason": f"same_prefix var_key mismatch: {var_key!r} != {expected!r}"})
+        else:
+            if same_prefix:
+                violations.append({"row": idx, "artifact_key": artifact_key, "reason": f"{policy} requires same_prefix_var=False"})
+            if not var_key:
+                violations.append({"row": idx, "artifact_key": artifact_key, "reason": f"{policy} requires explicit var_key"})
+            if not str(row.get("var_hash", "")).strip() and policy == "shared_exact_hash":
+                violations.append({"row": idx, "artifact_key": artifact_key, "reason": "shared_exact_hash requires var_hash"})
+    return pd.DataFrame(violations, columns=["row", "artifact_key", "reason"])
+
+
+def validate_triplet_var_policy(ln: Any, artifact_key_or_row: str | pd.Series) -> dict[str, Any]:
+    """Resolve live Lamin links and verify they match a manifest row's policy.
+
+    The live var artifact is always obtained through `obs.features["X"]` then
+    `X.features["var"]`; the function never infers `var` by key rewriting.
+    """
+    row = None if isinstance(artifact_key_or_row, str) else artifact_key_or_row
+    triplet = get_triplet_artifacts(ln, artifact_key_or_row)
+    result = {
+        "obs_key": triplet.obs.key,
+        "x_key": triplet.x.key,
+        "var_key": triplet.var.key,
+        "ok": True,
+        "errors": [],
+    }
+    if row is not None:
+        normalized = normalize_var_policy_columns(pd.DataFrame([row.to_dict()])).iloc[0]
+        expected_key = str(normalized.get("var_key", "")).strip()
+        if expected_key and triplet.var.key != expected_key:
+            result["ok"] = False
+            result["errors"].append(f"resolved var_key {triplet.var.key!r} != manifest var_key {expected_key!r}")
+        expected_uid = str(normalized.get("var_uid", "")).strip()
+        if expected_uid and getattr(triplet.var, "uid", None) != expected_uid:
+            result["ok"] = False
+            result["errors"].append("resolved var_uid does not match manifest var_uid")
+        expected_hash = str(normalized.get("var_hash", "")).strip()
+        if expected_hash and getattr(triplet.var, "hash", None) not in (None, expected_hash):
+            result["ok"] = False
+            result["errors"].append("resolved var_hash does not match manifest var_hash")
+    return result
 
 
 def get_collection(ln: Any, key: str = DEFAULT_COLLECTION_KEY) -> Any:
