@@ -3696,6 +3696,1444 @@
       "controls": 7394,
       "cell_line_non_unknown_total": 74312,
       "note": "Memory-bounded backed h5ad ingestion; verified obs->X->var links, X payloads, counts, required obs fields, and source cellline preserved in cell_line."
+    },
+    {
+      "dataset": "GSE281048_TGFB_Perturb_seq",
+      "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq",
+      "path": "/Users/jkobject/.openclaw/worktrees/pert-gym/t_c164fce1-prism-cont13/data/gcs_cache/scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TGFB_Perturb_seq.h5ad",
+      "gcs_uri": "gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE281048_TGFB_Perturb_seq.h5ad",
+      "n_obs": 236606,
+      "n_vars": 33525,
+      "chunk_size": 1000,
+      "status": "ingested_verified",
+      "chunks": [
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0000",
+          "start": 0,
+          "end": 1000,
+          "status": "exists"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0001",
+          "start": 1000,
+          "end": 2000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0002",
+          "start": 2000,
+          "end": 3000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0003",
+          "start": 3000,
+          "end": 4000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0004",
+          "start": 4000,
+          "end": 5000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0005",
+          "start": 5000,
+          "end": 6000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0006",
+          "start": 6000,
+          "end": 7000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0007",
+          "start": 7000,
+          "end": 8000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0008",
+          "start": 8000,
+          "end": 9000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0009",
+          "start": 9000,
+          "end": 10000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0010",
+          "start": 10000,
+          "end": 11000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0011",
+          "start": 11000,
+          "end": 12000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0012",
+          "start": 12000,
+          "end": 13000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0013",
+          "start": 13000,
+          "end": 14000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0014",
+          "start": 14000,
+          "end": 15000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0015",
+          "start": 15000,
+          "end": 16000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0016",
+          "start": 16000,
+          "end": 17000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0017",
+          "start": 17000,
+          "end": 18000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0018",
+          "start": 18000,
+          "end": 19000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0019",
+          "start": 19000,
+          "end": 20000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0020",
+          "start": 20000,
+          "end": 21000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0021",
+          "start": 21000,
+          "end": 22000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0022",
+          "start": 22000,
+          "end": 23000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0023",
+          "start": 23000,
+          "end": 24000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0024",
+          "start": 24000,
+          "end": 25000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0025",
+          "start": 25000,
+          "end": 26000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0026",
+          "start": 26000,
+          "end": 27000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0027",
+          "start": 27000,
+          "end": 28000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0028",
+          "start": 28000,
+          "end": 29000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0029",
+          "start": 29000,
+          "end": 30000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0030",
+          "start": 30000,
+          "end": 31000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0031",
+          "start": 31000,
+          "end": 32000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0032",
+          "start": 32000,
+          "end": 33000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0033",
+          "start": 33000,
+          "end": 34000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0034",
+          "start": 34000,
+          "end": 35000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0035",
+          "start": 35000,
+          "end": 36000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0036",
+          "start": 36000,
+          "end": 37000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0037",
+          "start": 37000,
+          "end": 38000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0038",
+          "start": 38000,
+          "end": 39000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0039",
+          "start": 39000,
+          "end": 40000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0040",
+          "start": 40000,
+          "end": 41000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0041",
+          "start": 41000,
+          "end": 42000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0042",
+          "start": 42000,
+          "end": 43000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0043",
+          "start": 43000,
+          "end": 44000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0044",
+          "start": 44000,
+          "end": 45000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0045",
+          "start": 45000,
+          "end": 46000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0046",
+          "start": 46000,
+          "end": 47000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0047",
+          "start": 47000,
+          "end": 48000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0048",
+          "start": 48000,
+          "end": 49000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0049",
+          "start": 49000,
+          "end": 50000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0050",
+          "start": 50000,
+          "end": 51000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0051",
+          "start": 51000,
+          "end": 52000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0052",
+          "start": 52000,
+          "end": 53000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0053",
+          "start": 53000,
+          "end": 54000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0054",
+          "start": 54000,
+          "end": 55000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0055",
+          "start": 55000,
+          "end": 56000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0056",
+          "start": 56000,
+          "end": 57000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0057",
+          "start": 57000,
+          "end": 58000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0058",
+          "start": 58000,
+          "end": 59000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0059",
+          "start": 59000,
+          "end": 60000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0060",
+          "start": 60000,
+          "end": 61000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0061",
+          "start": 61000,
+          "end": 62000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0062",
+          "start": 62000,
+          "end": 63000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0063",
+          "start": 63000,
+          "end": 64000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0064",
+          "start": 64000,
+          "end": 65000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0065",
+          "start": 65000,
+          "end": 66000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0066",
+          "start": 66000,
+          "end": 67000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0067",
+          "start": 67000,
+          "end": 68000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0068",
+          "start": 68000,
+          "end": 69000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0069",
+          "start": 69000,
+          "end": 70000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0070",
+          "start": 70000,
+          "end": 71000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0071",
+          "start": 71000,
+          "end": 72000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0072",
+          "start": 72000,
+          "end": 73000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0073",
+          "start": 73000,
+          "end": 74000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0074",
+          "start": 74000,
+          "end": 75000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0075",
+          "start": 75000,
+          "end": 76000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0076",
+          "start": 76000,
+          "end": 77000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0077",
+          "start": 77000,
+          "end": 78000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0078",
+          "start": 78000,
+          "end": 79000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0079",
+          "start": 79000,
+          "end": 80000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0080",
+          "start": 80000,
+          "end": 81000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0081",
+          "start": 81000,
+          "end": 82000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0082",
+          "start": 82000,
+          "end": 83000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0083",
+          "start": 83000,
+          "end": 84000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0084",
+          "start": 84000,
+          "end": 85000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0085",
+          "start": 85000,
+          "end": 86000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0086",
+          "start": 86000,
+          "end": 87000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0087",
+          "start": 87000,
+          "end": 88000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0088",
+          "start": 88000,
+          "end": 89000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0089",
+          "start": 89000,
+          "end": 90000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0090",
+          "start": 90000,
+          "end": 91000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0091",
+          "start": 91000,
+          "end": 92000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0092",
+          "start": 92000,
+          "end": 93000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0093",
+          "start": 93000,
+          "end": 94000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0094",
+          "start": 94000,
+          "end": 95000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0095",
+          "start": 95000,
+          "end": 96000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0096",
+          "start": 96000,
+          "end": 97000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0097",
+          "start": 97000,
+          "end": 98000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0098",
+          "start": 98000,
+          "end": 99000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0099",
+          "start": 99000,
+          "end": 100000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0100",
+          "start": 100000,
+          "end": 101000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0101",
+          "start": 101000,
+          "end": 102000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0102",
+          "start": 102000,
+          "end": 103000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0103",
+          "start": 103000,
+          "end": 104000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0104",
+          "start": 104000,
+          "end": 105000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0105",
+          "start": 105000,
+          "end": 106000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0106",
+          "start": 106000,
+          "end": 107000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0107",
+          "start": 107000,
+          "end": 108000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0108",
+          "start": 108000,
+          "end": 109000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0109",
+          "start": 109000,
+          "end": 110000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0110",
+          "start": 110000,
+          "end": 111000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0111",
+          "start": 111000,
+          "end": 112000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0112",
+          "start": 112000,
+          "end": 113000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0113",
+          "start": 113000,
+          "end": 114000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0114",
+          "start": 114000,
+          "end": 115000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0115",
+          "start": 115000,
+          "end": 116000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0116",
+          "start": 116000,
+          "end": 117000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0117",
+          "start": 117000,
+          "end": 118000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0118",
+          "start": 118000,
+          "end": 119000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0119",
+          "start": 119000,
+          "end": 120000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0120",
+          "start": 120000,
+          "end": 121000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0121",
+          "start": 121000,
+          "end": 122000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0122",
+          "start": 122000,
+          "end": 123000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0123",
+          "start": 123000,
+          "end": 124000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0124",
+          "start": 124000,
+          "end": 125000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0125",
+          "start": 125000,
+          "end": 126000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0126",
+          "start": 126000,
+          "end": 127000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0127",
+          "start": 127000,
+          "end": 128000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0128",
+          "start": 128000,
+          "end": 129000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0129",
+          "start": 129000,
+          "end": 130000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0130",
+          "start": 130000,
+          "end": 131000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0131",
+          "start": 131000,
+          "end": 132000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0132",
+          "start": 132000,
+          "end": 133000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0133",
+          "start": 133000,
+          "end": 134000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0134",
+          "start": 134000,
+          "end": 135000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0135",
+          "start": 135000,
+          "end": 136000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0136",
+          "start": 136000,
+          "end": 137000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0137",
+          "start": 137000,
+          "end": 138000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0138",
+          "start": 138000,
+          "end": 139000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0139",
+          "start": 139000,
+          "end": 140000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0140",
+          "start": 140000,
+          "end": 141000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0141",
+          "start": 141000,
+          "end": 142000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0142",
+          "start": 142000,
+          "end": 143000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0143",
+          "start": 143000,
+          "end": 144000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0144",
+          "start": 144000,
+          "end": 145000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0145",
+          "start": 145000,
+          "end": 146000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0146",
+          "start": 146000,
+          "end": 147000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0147",
+          "start": 147000,
+          "end": 148000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0148",
+          "start": 148000,
+          "end": 149000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0149",
+          "start": 149000,
+          "end": 150000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0150",
+          "start": 150000,
+          "end": 151000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0151",
+          "start": 151000,
+          "end": 152000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0152",
+          "start": 152000,
+          "end": 153000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0153",
+          "start": 153000,
+          "end": 154000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0154",
+          "start": 154000,
+          "end": 155000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0155",
+          "start": 155000,
+          "end": 156000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0156",
+          "start": 156000,
+          "end": 157000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0157",
+          "start": 157000,
+          "end": 158000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0158",
+          "start": 158000,
+          "end": 159000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0159",
+          "start": 159000,
+          "end": 160000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0160",
+          "start": 160000,
+          "end": 161000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0161",
+          "start": 161000,
+          "end": 162000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0162",
+          "start": 162000,
+          "end": 163000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0163",
+          "start": 163000,
+          "end": 164000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0164",
+          "start": 164000,
+          "end": 165000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0165",
+          "start": 165000,
+          "end": 166000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0166",
+          "start": 166000,
+          "end": 167000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0167",
+          "start": 167000,
+          "end": 168000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0168",
+          "start": 168000,
+          "end": 169000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0169",
+          "start": 169000,
+          "end": 170000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0170",
+          "start": 170000,
+          "end": 171000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0171",
+          "start": 171000,
+          "end": 172000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0172",
+          "start": 172000,
+          "end": 173000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0173",
+          "start": 173000,
+          "end": 174000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0174",
+          "start": 174000,
+          "end": 175000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0175",
+          "start": 175000,
+          "end": 176000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0176",
+          "start": 176000,
+          "end": 177000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0177",
+          "start": 177000,
+          "end": 178000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0178",
+          "start": 178000,
+          "end": 179000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0179",
+          "start": 179000,
+          "end": 180000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0180",
+          "start": 180000,
+          "end": 181000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0181",
+          "start": 181000,
+          "end": 182000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0182",
+          "start": 182000,
+          "end": 183000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0183",
+          "start": 183000,
+          "end": 184000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0184",
+          "start": 184000,
+          "end": 185000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0185",
+          "start": 185000,
+          "end": 186000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0186",
+          "start": 186000,
+          "end": 187000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0187",
+          "start": 187000,
+          "end": 188000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0188",
+          "start": 188000,
+          "end": 189000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0189",
+          "start": 189000,
+          "end": 190000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0190",
+          "start": 190000,
+          "end": 191000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0191",
+          "start": 191000,
+          "end": 192000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0192",
+          "start": 192000,
+          "end": 193000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0193",
+          "start": 193000,
+          "end": 194000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0194",
+          "start": 194000,
+          "end": 195000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0195",
+          "start": 195000,
+          "end": 196000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0196",
+          "start": 196000,
+          "end": 197000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0197",
+          "start": 197000,
+          "end": 198000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0198",
+          "start": 198000,
+          "end": 199000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0199",
+          "start": 199000,
+          "end": 200000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0200",
+          "start": 200000,
+          "end": 201000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0201",
+          "start": 201000,
+          "end": 202000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0202",
+          "start": 202000,
+          "end": 203000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0203",
+          "start": 203000,
+          "end": 204000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0204",
+          "start": 204000,
+          "end": 205000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0205",
+          "start": 205000,
+          "end": 206000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0206",
+          "start": 206000,
+          "end": 207000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0207",
+          "start": 207000,
+          "end": 208000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0208",
+          "start": 208000,
+          "end": 209000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0209",
+          "start": 209000,
+          "end": 210000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0210",
+          "start": 210000,
+          "end": 211000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0211",
+          "start": 211000,
+          "end": 212000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0212",
+          "start": 212000,
+          "end": 213000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0213",
+          "start": 213000,
+          "end": 214000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0214",
+          "start": 214000,
+          "end": 215000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0215",
+          "start": 215000,
+          "end": 216000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0216",
+          "start": 216000,
+          "end": 217000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0217",
+          "start": 217000,
+          "end": 218000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0218",
+          "start": 218000,
+          "end": 219000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0219",
+          "start": 219000,
+          "end": 220000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0220",
+          "start": 220000,
+          "end": 221000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0221",
+          "start": 221000,
+          "end": 222000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0222",
+          "start": 222000,
+          "end": 223000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0223",
+          "start": 223000,
+          "end": 224000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0224",
+          "start": 224000,
+          "end": 225000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0225",
+          "start": 225000,
+          "end": 226000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0226",
+          "start": 226000,
+          "end": 227000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0227",
+          "start": 227000,
+          "end": 228000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0228",
+          "start": 228000,
+          "end": 229000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0229",
+          "start": 229000,
+          "end": 230000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0230",
+          "start": 230000,
+          "end": 231000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0231",
+          "start": 231000,
+          "end": 232000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0232",
+          "start": 232000,
+          "end": 233000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0233",
+          "start": 233000,
+          "end": 234000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0234",
+          "start": 234000,
+          "end": 235000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0235",
+          "start": 235000,
+          "end": 236000,
+          "status": "ingested"
+        },
+        {
+          "prefix": "prism_collection/GSE281048_TGFB_Perturb_seq/chunk_0236",
+          "start": 236000,
+          "end": 236606,
+          "status": "ingested"
+        }
+      ],
+      "note": "Memory-bounded backed h5ad ingestion; one Lamin triplet per cell chunk.",
+      "verification_json": "artifacts/schema_audit/prism_gse281048_tgfb_verification_20260624.json",
+      "verification_md": "artifacts/schema_audit/prism_gse281048_tgfb_verification_20260624.md",
+      "log": "artifacts/logs/prism_gse281048_tgfb_full_ingest_20260624.log"
     }
   ],
   "downloaded_not_ingested": [
@@ -3851,17 +5289,6 @@
       "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
       "source_accession": "GSE281048",
       "attempted_url": "https://drive.google.com/uc?id=1qLxhzG-XWDUHYIsDIMPEnn5LXA06MnZX",
-      "requires_user_auth_or_manual_download": true
-    },
-    {
-      "dataset": "GSE281048_TGFB_Perturb_seq",
-      "path": "data/main/prism_collection/GSE281048_TGFB_Perturb_seq.h5ad",
-      "gcs_uri": null,
-      "note": "Failed to retrieve file url:",
-      "status": "blocked_source_or_metadata",
-      "last_mac_retest_utc": "2026-06-22T07:48:19.624073+00:00",
-      "source_accession": "GSE281048",
-      "attempted_url": "https://drive.google.com/uc?id=1mlCF0NxCd6tyu2JQGbhPfk6BEVCo_n7R",
       "requires_user_auth_or_manual_download": true
     },
     {
