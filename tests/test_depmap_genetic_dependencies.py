@@ -14,6 +14,7 @@ from tools.depmap_genetic_dependencies import (
     depmap_matrix_to_long_table,
     depmap_matrix_to_obs_var,
     durable_manifest_entry,
+    infer_depmap_readout_modality,
     parse_depmap_gene_label,
     redact_transient_download_url,
     validate_baseline_rna_obs_contract,
@@ -119,7 +120,7 @@ def test_depmap_matrix_to_obs_var_essentiality_contract(tmp_path: Path):
     assert set(obs["perturbation_gene"]) == {"A1BG", "TP53"}
     assert set(obs["perturbation_gene_id"]) == {"1", "7157"}
     assert set(obs["perturbation_type"]) == {"CRISPRko"}
-    assert set(obs["readout_modality"]) == {"pooled_CRISPR_screen"}
+    assert set(obs["readout_modality"]) == {"essentiality"}
     assert set(obs["baseline_lamin_prefix"]) == {BASELINE_RNA_CONTRACT["lamin_prefix"]}
     assert set(var["gene_id_type"]) == {"NCBI Entrez Gene ID"}
     assert "X" not in obs.columns
@@ -132,6 +133,21 @@ def test_depmap_matrix_to_obs_var_essentiality_contract(tmp_path: Path):
     assert tp53_ovcar["effect_score"] == -1.25
     assert tp53_ovcar["score"] == -1.25
     assert tp53_ovcar["score_type"] == "effect_score"
+
+
+def test_depmap_readout_modality_distinguishes_effect_and_dependency_scores(tmp_path: Path):
+    assert infer_depmap_readout_modality("effect_score") == "essentiality"
+    assert infer_depmap_readout_modality("dependency_score") == "dependency"
+
+    dependency_matrix = tmp_path / "CRISPRGeneDependency.csv"
+    dependency_matrix.write_text(",A1BG (1)\nACH-000001,0.02\n", encoding="utf-8")
+    dependency_obs, _dependency_var = depmap_matrix_to_obs_var(
+        dependency_matrix,
+        score_column="dependency_score",
+    )
+
+    assert set(dependency_obs["readout_modality"]) == {"dependency"}
+    assert "pooled_CRISPR_screen" not in set(dependency_obs["readout_modality"])
 
 
 def test_no_fake_x_output_for_essentiality_converter(tmp_path: Path):
@@ -201,16 +217,30 @@ def test_sanger_score_contract_matches_pr38_typed_aux_payload():
 def test_phase3_plan_declares_essentiality_and_baseline_as_separate_contracts():
     depmap = next(dataset for dataset in DATASETS if dataset.name == "DepMap genetic dependencies")
     sanger = next(dataset for dataset in DATASETS if dataset.name == "Sanger SCORE CRISPR KO")
+    dual_guide = next(dataset for dataset in DATASETS if dataset.name == "Sanger Dual-guide KO CRC")
+    prism = next(dataset for dataset in DATASETS if dataset.name == "Broad PRISM Repurposing")
+    gdsc = next(dataset for dataset in DATASETS if dataset.name == "Sanger GDSC")
     baseline = next(dataset for dataset in DATASETS if dataset.name == "DepMap CCLE")
 
+    assert depmap.modality == "essentiality"
     assert depmap.expected_outputs == ["obs.parquet", "var.parquet", "source_manifest.json"]
     assert "X.h5ad" not in depmap.expected_outputs
     assert "obs+var" in depmap.notes
     assert "Sanger/Project Score" in depmap.notes
 
     assert sanger.expected_outputs == list(SANGER_SCORE_AUX_CONTRACT["expected_outputs"])
+    assert sanger.modality == "essentiality"
     assert "X_score.h5ad" in sanger.expected_outputs
     assert "typed auxiliary X_score/var_score" in sanger.notes
+
+    assert dual_guide.modality == "genetic_screen_counts"
+    assert dual_guide.perturbation_axis.startswith("CRISPRko_dual_guide")
+    assert dual_guide.expected_outputs == ["obs.parquet", "var.parquet", "source_manifest.json"]
+    assert "X.h5ad" not in dual_guide.expected_outputs
+    assert "count/read_count" in dual_guide.notes
+
+    assert prism.modality == "drug_response"
+    assert gdsc.modality == "drug_response"
 
     assert baseline.expected_outputs == ["obs.parquet", "X.h5ad", "var.parquet"]
     assert baseline.lamin_prefix == BASELINE_RNA_CONTRACT["lamin_prefix"]
@@ -218,3 +248,10 @@ def test_phase3_plan_declares_essentiality_and_baseline_as_separate_contracts():
     assert "no essentiality scores" in baseline.notes
     assert BASELINE_RNA_CONTRACT["join_fields"] == ("baseline_join_id", "model_id", "depmap_id")
     assert "dependency" not in BASELINE_RNA_CONTRACT["x_semantics"].split(",")[0]
+
+
+def test_phase3_plan_uses_controlled_readout_modalities_not_vague_screen_labels():
+    forbidden_modalities = {"screen", "bulk/sensitivity", "scRNA-seq or score matrix"}
+    observed_modalities = {dataset.modality for dataset in DATASETS}
+
+    assert observed_modalities.isdisjoint(forbidden_modalities)

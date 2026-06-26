@@ -115,6 +115,20 @@ SANGER_SCORE_AUX_CONTRACT = {
 GENE_LABEL_RE = re.compile(r"^(?P<symbol>.+?) \((?P<entrez_id>[^()]+)\)$")
 
 
+def infer_depmap_readout_modality(score_column: str) -> str:
+    """Map DepMap score columns to controlled readout-family labels."""
+
+    normalized = score_column.lower()
+    if "dependency" in normalized:
+        return "dependency"
+    if "effect" in normalized or "essentiality" in normalized:
+        return "essentiality"
+    raise ValueError(
+        "Cannot infer DepMap readout_modality from score_column "
+        f"{score_column!r}; pass a controlled value explicitly."
+    )
+
+
 @dataclass(frozen=True)
 class DepMapDownloadFile:
     """Resolved file metadata from DepMap's public download API."""
@@ -284,7 +298,7 @@ def depmap_matrix_to_obs_var(
     baseline_lamin_prefix: str = DEPMAP_BASELINE_RNA_LAMIN_PREFIX,
     score_column: str,
     perturbation_type: str = "CRISPRko",
-    readout_modality: str = "pooled_CRISPR_screen",
+    readout_modality: str | None = None,
     model_csv: Path | None = None,
     source_filename: str | None = None,
     chunksize: int | None = None,
@@ -302,6 +316,9 @@ def depmap_matrix_to_obs_var(
             "Streaming conversion is not implemented yet; use this skeleton on "
             "small samples or add chunked obs parquet writing before full 26Q1 conversion."
         )
+
+    if readout_modality is None:
+        readout_modality = infer_depmap_readout_modality(score_column)
 
     matrix = pd.read_csv(matrix_csv, index_col=0)
     matrix.index = matrix.index.astype(str)
@@ -374,7 +391,7 @@ def depmap_matrix_to_long_table(
     dataset_release: str = DEPMAP_GENETIC_RELEASE,
     score_column: str,
     perturbation_type: str = "CRISPRko",
-    readout_modality: str = "pooled_CRISPR_screen",
+    readout_modality: str | None = None,
     model_csv: Path | None = None,
     source_filename: str | None = None,
     chunksize: int | None = None,
