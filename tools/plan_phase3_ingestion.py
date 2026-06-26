@@ -173,13 +173,39 @@ DATASETS: tuple[DatasetPlan, ...] = (
         modality="bulk RNA/protein",
         perturbation_axis="baseline covariates",
         priority=1,
-        lamin_prefix="depmap_ccle/25q2",
+        lamin_prefix="depmap_ccle/26q1",
         local_dir="data/main/depmap_ccle",
         ingestion_entrypoint="tools.ingest_phase3_bulk.ingest_depmap_ccle",
         status="script_ready_needs_figshare_article",
         expected_outputs=["obs.parquet", "X.h5ad", "var.parquet"],
         next_action="Set DepMap Figshare article id for the target release before download.",
-        notes="Needed to contextualize PRISM/GDSC/SCORE sensitivity triplets.",
+        notes=(
+            "Matched baseline RNA expression artifact: obs + true expression X + var; "
+            "contains no essentiality scores and joins to screen labels by stable model IDs."
+        ),
+    ),
+    DatasetPlan(
+        name="DepMap genetic dependencies",
+        family="gene essentiality screen",
+        modality="screen",
+        perturbation_axis="CRISPRko pooled screen",
+        priority=1,
+        lamin_prefix="depmap_genetic_dependencies/26q1",
+        local_dir="data/main/depmap_genetic_dependencies",
+        ingestion_entrypoint="tools.depmap_genetic_dependencies",
+        status="design_ready_public_urls_resolved",
+        expected_outputs=["obs.parquet", "var.parquet", "source_manifest.json"],
+        next_action=(
+            "Download/stage public DepMap 26Q1 CRISPRGeneEffect and CRISPRGeneDependency "
+            "matrices, then convert to obs+var essentiality artifacts with explicit baseline joins."
+        ),
+        notes=(
+            "DepMap essentiality-family format: obs+var only, scores in obs, "
+            "perturbation genes in var, no fake expression X.h5ad. Sanger/Project "
+            "Score is the same score family but, after PR #38, persists as empty "
+            "canonical X plus typed auxiliary X_score/var_score. Matched RNA "
+            "baseline is the separate depmap_ccle expression artifact."
+        ),
     ),
 )
 
