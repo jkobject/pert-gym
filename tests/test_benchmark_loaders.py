@@ -4,8 +4,10 @@ import pytest
 
 from pert_gym.benchmarks import (
     BenchmarkBatch,
+    filter_expression_model_ready_members,
     load_chemcpa_drugseq_tiny,
     load_model_ready_v0_or_synthetic,
+    load_response_screen_with_baseline,
     load_scgen_viperturb_tiny,
     load_tiny_benchmark_dataset,
     split_perturbation_identities,
@@ -90,6 +92,59 @@ def test_model_ready_v0_loader_reads_manifest_metadata_without_heavy_load(tmp_pa
     assert dataset.metadata["fallback"] == "synthetic"
     assert dataset.metadata["model_ready_collection_key"] == "pert-gym/model-ready/test"
     assert dataset.metadata["model_ready_member_keys"] == ["tiny/obs.parquet"]
+
+def test_model_ready_v0_loader_excludes_broad_prism_empty_response_member(
+    tmp_path,
+) -> None:
+    manifest = tmp_path / "model_ready.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "model_ready_collection": {
+                    "key": "pert-gym/model-ready/test",
+                    "member_count": 2,
+                    "member_keys": [
+                        "viperturb/vimentin_screen_chunk_smoke/chunk_0000/obs.parquet",
+                        "broad_prism_repurposing/obs.parquet",
+                    ],
+                    "member_metadata": {
+                        "viperturb/vimentin_screen_chunk_smoke/chunk_0000/obs.parquet": {
+                            "x_semantics": "expression"
+                        },
+                        "broad_prism_repurposing/obs.parquet": {
+                            "x_semantics": "empty",
+                            "modality": "response_screen",
+                        },
+                    },
+                }
+            }
+        )
+    )
+
+    dataset = load_model_ready_v0_or_synthetic(manifest_path=manifest)
+
+    assert dataset.metadata["model_ready_member_keys"] == [
+        "viperturb/vimentin_screen_chunk_smoke/chunk_0000/obs.parquet"
+    ]
+    assert dataset.metadata["excluded_member_keys"] == [
+        "broad_prism_repurposing/obs.parquet"
+    ]
+    assert dataset.metadata["excluded_member_reasons"] == {
+        "broad_prism_repurposing/obs.parquet": "x_semantics=empty response_screen is not expression-model-ready"
+    }
+
+def test_expression_member_filter_holds_out_broad_prism_even_without_metadata() -> None:
+    filtered = filter_expression_model_ready_members(
+        [
+            "broad_prism_repurposing/obs.parquet",
+            "viperturb/vimentin_screen_chunk_smoke/chunk_0000/obs.parquet",
+        ]
+    )
+
+    assert filtered.included == [
+        "viperturb/vimentin_screen_chunk_smoke/chunk_0000/obs.parquet"
+    ]
+    assert filtered.excluded == ["broad_prism_repurposing/obs.parquet"]
 
 
 def test_chemcpa_drugseq_tiny_loader_uses_real_expression_and_fingerprints(tmp_path) -> None:
@@ -197,6 +252,78 @@ def test_scgen_viperturb_tiny_loader_uses_real_expression_contract(tmp_path) -> 
     assert split_non_controls[0].isdisjoint(split_non_controls[2])
     assert split_non_controls[1].isdisjoint(split_non_controls[2])
 
+
+
+def test_response_screen_loader_joins_rows_to_baseline_by_stable_depmap_id() -> None:
+    response_rows = [
+        {
+            "depmap_id": "ACH-000001::P103::PR500A::REP1M",
+            "perturbation": "BRD-A",
+            "response_metric": "lfc",
+            "response_value": "-0.5",
+            "is_control": False,
+        },
+        {
+            "depmap_id": "ACH-000002",
+            "perturbation": "BRD-B",
+            "response_metric": "lfc",
+            "response_value": "0.25",
+            "is_control": False,
+        },
+    ]
+    baseline_rows = [
+        {"depmap_id": "ACH-000001", "expression": [1.0, 2.0]},
+        {"depmap_id": "ACH-000002", "expression": [3.0, 4.0]},
+    ]
+
+    batch = load_response_screen_with_baseline(
+        response_rows=response_rows,
+        baseline_rows=baseline_rows,
+        feature_names=["gene_a", "gene_b"],
+    )
+
+    assert batch.X == [[1.0, 2.0], [3.0, 4.0]]
+    assert batch.target_response == [[-0.5], [0.25]]
+    assert batch.obs_covariates == (
+        {"depmap_id": "ACH-000001", "response_metric": "lfc"},
+        {"depmap_id": "ACH-000002", "response_metric": "lfc"},
+    )
+
+def test_response_screen_loader_rejects_missing_or_malformed_response_semantics() -> (
+    None
+):
+    baseline_rows = [{"depmap_id": "ACH-000001", "expression": [1.0, 2.0]}]
+
+    with pytest.raises(ValueError, match="response_value"):
+        load_response_screen_with_baseline(
+            response_rows=[
+                {
+                    "depmap_id": "ACH-000001",
+                    "perturbation": "BRD-A",
+                    "response_metric": "missing",
+                    "response_value": "missing",
+                    "is_control": False,
+                }
+            ],
+            baseline_rows=baseline_rows,
+            feature_names=["gene_a", "gene_b"],
+        )
+
+def test_response_screen_loader_requires_separate_baseline_expression() -> None:
+    with pytest.raises(ValueError, match="baseline RNA expression"):
+        load_response_screen_with_baseline(
+            response_rows=[
+                {
+                    "depmap_id": "ACH-000001",
+                    "perturbation": "BRD-A",
+                    "response_metric": "lfc",
+                    "response_value": "1.0",
+                    "is_control": False,
+                }
+            ],
+            baseline_rows=[],
+            feature_names=["gene_a", "gene_b"],
+        )
 
 def test_benchmark_artifact_summary_written(tmp_path) -> None:
     dataset = load_tiny_benchmark_dataset()

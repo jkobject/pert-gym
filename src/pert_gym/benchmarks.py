@@ -20,6 +20,9 @@ CONTROL_PERTURBATIONS = {"control", "ctrl", "vehicle", "ntc", "non-targeting"}
 DEFAULT_CONTEXT_FIELDS = ("cell_line", "cell_type", "tissue", "disease", "assay")
 DEFAULT_MODEL_READY_COLLECTION_KEY = "pert-gym/model-ready/20260621"
 DEFAULT_MODEL_READY_MEMBER_COUNT = 1
+EMPTY_RESPONSE_SCREEN_EXCLUSION_REASON = (
+    "x_semantics=empty response_screen is not expression-model-ready"
+)
 
 
 @dataclass(frozen=True)
@@ -86,6 +89,14 @@ class BenchmarkDataset:
         if not any(self.test.controls or []):
             raise ValueError("test split must include at least one control row.")
 
+@dataclass(frozen=True)
+class ExpressionMemberFilterResult:
+    """Expression-loader membership after holding out non-expression screens."""
+
+    included: Sequence[str]
+    excluded: Sequence[str]
+    excluded_reasons: Mapping[str, str]
+
 
 def load_tiny_benchmark_dataset(
     *,
@@ -123,7 +134,9 @@ def load_tiny_benchmark_dataset(
 
 def load_model_ready_v0_or_synthetic(
     *,
-    manifest_path: Path | str = Path("artifacts/schema_audit/model_ready_subset_20260621.json"),
+    manifest_path: Path | str = Path(
+        "artifacts/schema_audit/model_ready_subset_20260621.json"
+    ),
     source: str = "model-ready-v0",
 ) -> BenchmarkDataset:
     """Return a benchmark dataset from model-ready-v0 metadata or synthetic fallback.
@@ -137,19 +150,23 @@ def load_model_ready_v0_or_synthetic(
     """
 
     manifest = _read_json_if_exists(Path(manifest_path))
+    collection = manifest.get("model_ready_collection", {})
+    expression_members = filter_expression_model_ready_members(
+        collection.get("member_keys", []),
+        member_metadata=collection.get("member_metadata", {}),
+    )
     dataset = load_tiny_benchmark_dataset(source=source)
     metadata = dict(dataset.metadata)
-    model_ready_collection = manifest.get("model_ready_collection", {})
     metadata.update(
         {
             "loader": "model_ready_v0_or_synthetic",
             "fallback": "synthetic",
             "manifest_path": str(manifest_path),
-            "model_ready_collection_key": model_ready_collection.get("key")
-            or DEFAULT_MODEL_READY_COLLECTION_KEY,
-            "model_ready_member_count": model_ready_collection.get("member_count")
-            or DEFAULT_MODEL_READY_MEMBER_COUNT,
-            "model_ready_member_keys": model_ready_collection.get("member_keys", []),
+            "model_ready_collection_key": collection.get("key"),
+            "model_ready_member_count": collection.get("member_count"),
+            "model_ready_member_keys": list(expression_members.included),
+            "excluded_member_keys": list(expression_members.excluded),
+            "excluded_member_reasons": dict(expression_members.excluded_reasons),
         }
     )
     return BenchmarkDataset(
@@ -161,6 +178,100 @@ def load_model_ready_v0_or_synthetic(
         metadata=metadata,
     )
 
+
+def filter_expression_model_ready_members(
+    member_keys: Sequence[str],
+    *,
+    member_metadata: Mapping[str, Mapping[str, Any]] | None = None,
+) -> ExpressionMemberFilterResult:
+    """Return members safe for expression-only benchmark loaders."""
+
+    metadata_by_key = member_metadata or {}
+    included: list[str] = []
+    excluded: list[str] = []
+    reasons: dict[str, str] = {}
+    for key in member_keys:
+        key_text = str(key)
+        metadata = metadata_by_key.get(key_text, {})
+        prefix = _dataset_prefix_from_obs_key(key_text)
+        x_semantics = str(metadata.get("x_semantics", "")).lower()
+        modality = str(metadata.get("modality", metadata.get("assay", ""))).lower()
+        if prefix == "broad_prism_repurposing" or (
+            x_semantics == "empty" and "response" in modality
+        ):
+            excluded.append(key_text)
+            reasons[key_text] = EMPTY_RESPONSE_SCREEN_EXCLUSION_REASON
+            continue
+        included.append(key_text)
+    return ExpressionMemberFilterResult(
+        included=included, excluded=excluded, excluded_reasons=reasons
+    )
+
+def load_response_screen_with_baseline(
+    *,
+    response_rows: Sequence[Mapping[str, Any]],
+    baseline_rows: Sequence[Mapping[str, Any]],
+    feature_names: Sequence[str],
+) -> BenchmarkBatch:
+    """Join bounded response-screen rows to separate baseline RNA expression."""
+
+    if not baseline_rows:
+        raise ValueError(
+            "response-screen loaders require separate baseline RNA expression"
+        )
+    baseline_by_id: dict[str, Sequence[Any]] = {}
+    for idx, row in enumerate(baseline_rows):
+        stable_id = _stable_depmap_id(row.get("depmap_id") or row.get("ach_id"))
+        if not stable_id:
+            raise ValueError(f"baseline row {idx} is missing depmap_id/ach_id")
+        expression = row.get("expression")
+        if expression is None:
+            raise ValueError(f"baseline row {idx} is missing baseline RNA expression")
+        baseline_by_id[stable_id] = expression
+
+    X: list[list[float]] = []
+    target_response: list[list[float]] = []
+    perturbations: list[str] = []
+    controls: list[bool] = []
+    covariates: list[dict[str, Any]] = []
+    for idx, row in enumerate(response_rows):
+        stable_id = _stable_depmap_id(row.get("depmap_id") or row.get("ach_id"))
+        if not stable_id:
+            raise ValueError(f"response row {idx} is missing depmap_id/ach_id")
+        if stable_id not in baseline_by_id:
+            raise ValueError(
+                f"response row {idx} has no baseline RNA expression for {stable_id}"
+            )
+        response_metric = str(row.get("response_metric", "")).strip().lower()
+        response_value = row.get("response_value")
+        if response_value is None:
+            raise ValueError(f"response row {idx} is missing response_value")
+        try:
+            numeric_response = float(response_value)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"response row {idx} has malformed response_value: {response_value!r}"
+            ) from exc
+        if response_metric in {"", "missing", "none", "nan"}:
+            raise ValueError(f"response row {idx} is missing response_metric")
+        X.append([float(value) for value in baseline_by_id[stable_id]])
+        target_response.append([numeric_response])
+        perturbations.append(str(row.get("perturbation", row.get("broad_id", ""))))
+        controls.append(_is_control_row(row))
+        covariates.append({"depmap_id": stable_id, "response_metric": response_metric})
+
+    if not X:
+        raise ValueError("response-screen loader requires at least one response row")
+    if len(feature_names) != _n_features(X):
+        raise ValueError("feature_names must match baseline RNA expression width")
+    return BenchmarkBatch(
+        X=X,
+        perturbations=perturbations,
+        controls=controls,
+        obs_covariates=tuple(covariates),
+        target_response=target_response,
+        feature_names=tuple(feature_names),
+    )
 
 def load_chemcpa_drugseq_tiny(
     *,
@@ -449,6 +560,20 @@ def _as_bool(value: Any) -> bool:
         return value.strip().lower() in {"true", "1", "yes", "y"}
     return bool(value)
 
+
+def _dataset_prefix_from_obs_key(key: str) -> str:
+    suffix = "/obs.parquet"
+    if key.endswith(suffix):
+        return key[: -len(suffix)]
+    return key.split("/", 1)[0]
+
+def _stable_depmap_id(value: Any) -> str:
+    if value is None:
+        return ""
+    text = str(value).strip()
+    if not text:
+        return ""
+    return text.split("::", 1)[0]
 
 def _n_features(X: Matrix) -> int:
     if not X:
