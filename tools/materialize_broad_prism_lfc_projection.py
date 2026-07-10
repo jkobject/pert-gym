@@ -14,6 +14,7 @@ import hashlib
 import heapq
 import json
 import math
+import os
 import sqlite3
 import tempfile
 from collections import Counter
@@ -75,6 +76,27 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def assert_new_destinations(output_tsv: Path, output_manifest: Path) -> None:
+    """Refuse publication paths that could replace a prior projection."""
+    if output_tsv == output_manifest:
+        raise ValueError("output TSV and manifest destinations must be different")
+    existing = [path for path in (output_tsv, output_manifest) if path.exists()]
+    if existing:
+        paths = ", ".join(str(path) for path in existing)
+        raise ValueError(f"refusing to overwrite existing output: {paths}")
+
+
+def publish_new_file(temp_path: Path, destination: Path) -> None:
+    """Atomically publish a temp file without replacing an existing destination."""
+    try:
+        os.link(temp_path, destination)
+    except FileExistsError as exc:
+        raise ValueError(
+            f"refusing to overwrite existing output: {destination}"
+        ) from exc
+    temp_path.unlink()
 
 
 def require_columns(
@@ -220,6 +242,7 @@ def materialize_projection(
     """
     if selection_size <= 0 or chunk_size_rows <= 0:
         raise ValueError("selection_size and chunk_size_rows must be positive")
+    assert_new_destinations(output_tsv, output_manifest)
     metadata = load_metadata(metadata_path)
     lfc_hash = sha256_file(lfc_path)
     metadata_hash = sha256_file(metadata_path)
@@ -232,8 +255,6 @@ def materialize_projection(
 
     denominator = Counter()
     heap: list[tuple[int, str, dict[str, str]]] = []
-    output_tsv.parent.mkdir(parents=True, exist_ok=True)
-    output_manifest.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="broad-prism-projection-") as temp_dir:
         database = sqlite3.connect(Path(temp_dir) / "seen.sqlite")
         try:
@@ -326,10 +347,6 @@ def materialize_projection(
     if any(compound_leakage.values()) or any(source_leakage.values()):
         raise AssertionError("compound or source-row leakage across splits")
 
-    with output_tsv.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=OUTPUT_FIELDS, delimiter="\t")
-        writer.writeheader()
-        writer.writerows(selected)
     manifest = {
         "scope": "bounded real Broad PRISM 24Q2 direct-LFC projection; no Lamin write",
         "source_release": SOURCE_RELEASE,
@@ -345,6 +362,7 @@ def materialize_projection(
         },
         "denominator": {
             "source_rows": denominator["source_rows"],
+            "chunk_size_rows": chunk_size_rows,
             "eligible_rows": denominator["eligible_rows"],
             "excluded_non_finite_lfc": denominator["excluded_non_finite_lfc"],
             "excluded_not_pass": denominator["excluded_not_pass"],
@@ -375,9 +393,48 @@ def materialize_projection(
             sorted(Counter(row["split"] for row in selected).items())
         ),
     }
-    output_manifest.write_text(
-        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    output_tsv.parent.mkdir(parents=True, exist_ok=True)
+    output_manifest.parent.mkdir(parents=True, exist_ok=True)
+    temp_tsv: Path | None = None
+    temp_manifest: Path | None = None
+    published_tsv = False
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            newline="",
+            encoding="utf-8",
+            dir=output_tsv.parent,
+            prefix=f".{output_tsv.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as handle:
+            temp_tsv = Path(handle.name)
+            writer = csv.DictWriter(handle, fieldnames=OUTPUT_FIELDS, delimiter="\t")
+            writer.writeheader()
+            writer.writerows(selected)
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=output_manifest.parent,
+            prefix=f".{output_manifest.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as handle:
+            temp_manifest = Path(handle.name)
+            json.dump(manifest, handle, indent=2, sort_keys=True)
+            handle.write("\n")
+        publish_new_file(temp_tsv, output_tsv)
+        published_tsv = True
+        publish_new_file(temp_manifest, output_manifest)
+    except Exception:
+        if published_tsv:
+            output_tsv.unlink(missing_ok=True)
+        raise
+    finally:
+        if temp_tsv is not None:
+            temp_tsv.unlink(missing_ok=True)
+        if temp_manifest is not None:
+            temp_manifest.unlink(missing_ok=True)
     return manifest
 
 

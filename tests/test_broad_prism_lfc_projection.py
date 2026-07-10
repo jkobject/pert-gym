@@ -122,6 +122,7 @@ def test_materializes_only_real_eligible_rows_with_provenance_and_guards(
     assert summary["selected_rows"] == 2
     assert payload["denominator"] == {
         "source_rows": 7,
+        "chunk_size_rows": 3,
         "eligible_rows": 2,
         "excluded_non_finite_lfc": 1,
         "excluded_not_pass": 1,
@@ -141,6 +142,16 @@ def test_materializes_only_real_eligible_rows_with_provenance_and_guards(
     assert all(row["response_metric"] == "lfc" for row in rows)
     assert all(row["response_value"] in {"-0.4", "-0.8"} for row in rows)
     assert all(row["source_file_row_number"] for row in rows)
+    assert {
+        row["source_row_identifier"]: (
+            row["source_row_chunk_index"],
+            row["source_row_offset_in_chunk"],
+        )
+        for row in rows
+    } == {
+        "ACH-001::plate:a1|profile-a": ("0", "0"),
+        "ACH-007::plate:a7|profile-b": ("2", "0"),
+    }
     assert payload["duplicate_checks"]["exact_source_duplicate_count"] == 0
     assert all(
         not values
@@ -198,3 +209,105 @@ def test_rejects_duplicate_immutable_source_row_identifiers(tmp_path: Path) -> N
             lfc_uri="gs://example/lfc.csv",
             metadata_uri="gs://example/metadata.csv",
         )
+
+
+@pytest.mark.parametrize("existing_destination", ["projection.tsv", "projection.json"])
+def test_refuses_to_overwrite_existing_destination(
+    tmp_path: Path, existing_destination: str
+) -> None:
+    lfc = tmp_path / "lfc.csv"
+    metadata = tmp_path / "metadata.csv"
+    output = tmp_path / "projection.tsv"
+    manifest = tmp_path / "projection.json"
+    write_csv(
+        metadata,
+        ["profile_id", "perturbation_type", "dose", "broad_id", "name"],
+        [
+            {
+                "profile_id": "profile-a",
+                "perturbation_type": "trt_cp",
+                "dose": "2.5",
+                "broad_id": "BRD-A",
+                "name": "compound a",
+            }
+        ],
+    )
+    write_csv(
+        lfc,
+        ["row_id", "profile_id", "LFC", "PASS"],
+        [
+            {
+                "row_id": "ACH-001::plate:a1",
+                "profile_id": "profile-a",
+                "LFC": "-0.4",
+                "PASS": "TRUE",
+            }
+        ],
+    )
+    destination = tmp_path / existing_destination
+    destination.write_text("prior artifact\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="refusing to overwrite existing output"):
+        materialize_projection(
+            lfc_path=lfc,
+            metadata_path=metadata,
+            output_tsv=output,
+            output_manifest=manifest,
+            lfc_uri="gs://example/lfc.csv",
+            metadata_uri="gs://example/metadata.csv",
+        )
+
+    assert destination.read_text(encoding="utf-8") == "prior artifact\n"
+    other_destination = manifest if destination == output else output
+    assert not other_destination.exists()
+
+
+def test_failed_validation_leaves_no_output_artifacts(tmp_path: Path) -> None:
+    lfc = tmp_path / "lfc.csv"
+    metadata = tmp_path / "metadata.csv"
+    output = tmp_path / "projection.tsv"
+    manifest = tmp_path / "projection.json"
+    write_csv(
+        metadata,
+        ["profile_id", "perturbation_type", "dose", "broad_id", "name"],
+        [
+            {
+                "profile_id": "profile-a",
+                "perturbation_type": "trt_cp",
+                "dose": "2.5",
+                "broad_id": "BRD-A",
+                "name": "compound a",
+            }
+        ],
+    )
+    write_csv(
+        lfc,
+        ["row_id", "profile_id", "LFC", "PASS"],
+        [
+            {
+                "row_id": "ACH-001::plate:a1",
+                "profile_id": "profile-a",
+                "LFC": "-0.4",
+                "PASS": "TRUE",
+            },
+            {
+                "row_id": "ACH-001::plate:a1",
+                "profile_id": "profile-a",
+                "LFC": "-0.8",
+                "PASS": "TRUE",
+            },
+        ],
+    )
+
+    with pytest.raises(ValueError, match="duplicate source_row_identifier"):
+        materialize_projection(
+            lfc_path=lfc,
+            metadata_path=metadata,
+            output_tsv=output,
+            output_manifest=manifest,
+            lfc_uri="gs://example/lfc.csv",
+            metadata_uri="gs://example/metadata.csv",
+        )
+
+    assert not output.exists()
+    assert not manifest.exists()
