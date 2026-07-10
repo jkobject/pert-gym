@@ -1,0 +1,30 @@
+{
+  "baseline": {
+    "cross_release_policy": "forbidden_without_reviewed_versioned_mapping",
+    "join_policy": "exact_normalized_ModelID_equality",
+    "lamin_prefix": "depmap_ccle/26q1",
+    "release": "DepMap Public 26Q1"
+  },
+  "coverage": {
+    "matched_model_ids": 1140,
+    "source_model_ids": 1208,
+    "unmatched_model_ids": 68
+  },
+  "deterministic_unmatched_sidecar": {
+    "generator": "tools.depmap_chronos_contract.write_chronos_coverage_artifact",
+    "row_schema": ["ModelID", "reason"],
+    "sort": "ascending exact-normalized ModelID",
+    "unmatched_reason": "missing_exact_26Q1_baseline_ModelID"
+  },
+  "schema": "model_ready_v2_chronos_coverage/v1",
+  "source": {
+    "accession": "31660582:62677015",
+    "numeric_transform": "none",
+    "release": "DepMap Public 26Q1",
+    "response_direction": "lower_more_dependent",
+    "response_metric": "GeneEffect",
+    "response_transform": "raw_Chronos_GeneEffect",
+    "score_source": "Chronos"
+  },
+  "unmatched_policy": "retain response-source rows; exclude from baseline-conditioned model_ready_v2 promotion with missing_exact_26Q1_baseline_ModelID"
+}
