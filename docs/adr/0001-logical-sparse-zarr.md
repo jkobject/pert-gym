@@ -119,5 +119,8 @@ validator before a remote write. Existing chunkers are not altered by this ADR;
 a follow-up implementation can adopt the writer contract without changing their
 legacy outputs. The configuration defines a VM-only benchmark for 5k/10k/25k
 representative CSR/CSC surfaces and records explicit case-local RSS baseline,
-peak, and peak delta (including matrix generation and write/readback), wall time,
-bytes, and separate matrix/obs/source-row parity plus a total wall time.
+peak, peak delta, and a `case_rss_peak_measurement` declaration. The current
+benchmark isolates each case in its own process and reports the operating
+system's high-water RSS over matrix generation and write/readback. It also
+records wall time, bytes, separate matrix/obs/source-row parity, and a total
+wall time.

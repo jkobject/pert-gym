@@ -85,6 +85,19 @@ def _source_checksum(value: Any, field: str) -> str:
     return value
 
 
+def _validate_sha256_suffix_fields(value: Any, field: str) -> None:
+    """Reject malformed declared or additional SHA-256 fields in a manifest."""
+    if isinstance(value, Mapping):
+        for key, nested_value in value.items():
+            nested_field = f"{field}.{key}"
+            if isinstance(key, str) and key.lower().endswith("_sha256"):
+                _sha256(nested_value, nested_field)
+            _validate_sha256_suffix_fields(nested_value, nested_field)
+    elif isinstance(value, Sequence) and not isinstance(value, (str, bytes)):
+        for index, nested_value in enumerate(value):
+            _validate_sha256_suffix_fields(nested_value, f"{field}[{index}]")
+
+
 def _shape(value: Any, field: str) -> tuple[int, int]:
     if (
         not isinstance(value, Sequence)
@@ -188,6 +201,7 @@ def validate_logical_sparse_surface(
         raise ValueError(
             f"unsupported logical surface version: {manifest.get('version')!r}"
         )
+    _validate_sha256_suffix_fields(manifest, "manifest")
 
     shape = _shape(_require(manifest, "shape"), "shape")
     n_obs, n_vars = shape

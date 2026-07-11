@@ -17,31 +17,47 @@ benchmark = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(benchmark)
 
 
-def test_case_measures_generation_write_readback_and_case_local_rss(
+def test_case_isolated_process_reports_os_high_water_peak(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    samples = iter((100, 140, 180))
-    monkeypatch.setattr(benchmark, "local_rss_bytes", lambda: next(samples))
-    monkeypatch.setattr(
-        benchmark,
-        "write_and_readback",
-        lambda *_args, **_kwargs: {
+    observed: list[tuple[Path, int, str]] = []
+
+    def fake_isolated_case(
+        root: Path, n_obs: int, sparse_format: str
+    ) -> dict[str, object]:
+        observed.append((root, n_obs, sparse_format))
+        return {
+            "n_obs": n_obs,
+            "n_vars": 2_000,
+            "nnz": n_obs,
+            "format": sparse_format,
+            "wall_seconds": 0.1,
+            "case_rss_baseline_bytes": 100,
+            "case_rss_peak_bytes": 180,
+            "case_rss_peak_delta_bytes": 80,
+            "case_rss_peak_measurement": "isolated-process-os-high-water",
             "write_readback_seconds": 0.1,
             "bytes": 1,
             "matrix_parity": True,
             "obs_parity": True,
             "source_row_parity": True,
-        },
+        }
+
+    monkeypatch.setattr(
+        benchmark,
+        "_run_case_in_isolated_process",
+        fake_isolated_case,
     )
 
     result = benchmark.run_case(tmp_path / "case", 8, "csr")
 
+    assert observed == [(tmp_path / "case", 8, "csr")]
     assert result["n_obs"] == 8
     assert result["format"] == "csr"
     assert result["case_rss_baseline_bytes"] == 100
     assert result["case_rss_peak_bytes"] == 180
     assert result["case_rss_peak_delta_bytes"] == 80
-    assert result["wall_seconds"] >= 0
+    assert result["case_rss_peak_measurement"] == "isolated-process-os-high-water"
 
 
 def test_main_emits_exactly_six_required_cases_and_top_level_metadata(
@@ -63,6 +79,7 @@ def test_main_emits_exactly_six_required_cases_and_top_level_metadata(
             "case_rss_baseline_bytes": 10,
             "case_rss_peak_bytes": 20,
             "case_rss_peak_delta_bytes": 10,
+            "case_rss_peak_measurement": "isolated-process-os-high-water",
             "bytes": 30,
             "matrix_parity": True,
             "obs_parity": True,
@@ -105,6 +122,7 @@ def test_main_emits_exactly_six_required_cases_and_top_level_metadata(
             "case_rss_baseline_bytes",
             "case_rss_peak_bytes",
             "case_rss_peak_delta_bytes",
+            "case_rss_peak_measurement",
             "bytes",
             "matrix_parity",
             "obs_parity",

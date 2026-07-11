@@ -144,7 +144,19 @@ def test_v1_manifest_rejects_missing_chunk_integrity_and_obs_provenance(
             ),
             "64-hex",
         ),
+        (
+            lambda value: value["chunks"][0]["checksums"].update(
+                {"payload_sha256": "not-a-sha256"}
+            ),
+            "64-hex",
+        ),
         (lambda value: value["shared_var"].update({"index_sha256": "short"}), "64-hex"),
+        (
+            lambda value: value["shared_var"].update(
+                {"metadata_sha256": "not-a-sha256"}
+            ),
+            "64-hex",
+        ),
         (
             lambda value: value["chunks"][0]["obs"]["provenance"].update(
                 {"source_checksum": SHA256_A}
@@ -263,6 +275,7 @@ def test_machine_readable_policy_covers_required_families_and_vm_benchmark() -> 
         "case_rss_baseline_bytes",
         "case_rss_peak_bytes",
         "case_rss_peak_delta_bytes",
+        "case_rss_peak_measurement",
         "wall_seconds",
         "bytes",
         "matrix_parity",

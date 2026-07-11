@@ -64,7 +64,7 @@
     "runner": "pert-gym-worker-eu only",
     "shapes": [5000, 10000, 25000],
     "formats": ["csr", "csc"],
-    "required_metrics": ["case_rss_baseline_bytes", "case_rss_peak_bytes", "case_rss_peak_delta_bytes", "wall_seconds", "bytes", "matrix_parity", "obs_parity", "source_row_parity"],
+    "required_metrics": ["case_rss_baseline_bytes", "case_rss_peak_bytes", "case_rss_peak_delta_bytes", "case_rss_peak_measurement", "wall_seconds", "bytes", "matrix_parity", "obs_parity", "source_row_parity"],
     "command": "uv run python tools/benchmark_sparse_zarr.py --output artifacts/sparse_zarr_benchmark.json"
   }
 }
