@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "policy_id": "pert-gym.logical-sparse-zarr.v1",
+  "status": "accepted-for-new-logical-surfaces",
+  "scope": "New logical sparse matrix surfaces only; existing Lamin artifacts are read-only and are not migrated by this policy.",
+  "surface": {
+    "format": "pert-gym.logical-sparse-zarr",
+    "version": 1,
+    "matrix_formats": ["csr", "csc"],
+    "chunk_axis": "obs",
+    "chunk_interval": "[start,end)",
+    "chunk_keys": "<logical_key>/chunks/chunk_<zero-padded-index>.zarr",
+    "manifest_key": "<logical_key>/manifest.json"
+  },
+  "adaptive_chunking": {
+    "algorithm": "target_rows = clamp(min_rows, max_rows, floor((max_rss_bytes - n_vars*8) / ((max(1, nnz/n_obs)*bytes_per_nnz + 8)*materialization_factor)))",
+    "inputs": ["n_obs", "n_vars", "nnz", "max_rss_bytes"],
+    "bytes_per_nnz": 12,
+    "materialization_factor": 3.0,
+    "min_rows": 5000,
+    "max_rows": 100000,
+    "balanced_tails": "ceil(n_obs/target_rows) chunks; distribute remainder over leading chunks; row counts differ by at most one",
+    "runtime_gate": "Writer samples/records peak RSS for the first chunk and reduces target_rows before later chunks when peak exceeds max_rss_bytes."
+  },
+  "shared_var": {
+    "key": "vars/<var_identity>/var.parquet",
+    "identity": "var_index_sha256 + var_frame_sha256 + schema_fingerprint",
+    "index_sha256": "SHA-256 of UTF-8 var index values separated by LF with one final LF; values are exact strings and order-sensitive.",
+    "frame_sha256": "SHA-256 of canonical UTF-8 JSON Lines: sorted column names; one record per row in var index order; scalar values normalized to JSON null/bool/number/string; one final LF.",
+    "writer_rule": "Reuse only when all three identity fields match. A filename or dataframe hash alone is insufficient.",
+    "reader_rule": "Reject a shared var whose manifest identity does not exactly match the logical surface manifest."
+  },
+  "obs_provenance": {
+    "required": ["source_uri", "source_checksum", "source_row_start", "source_row_end", "ingestion_run_id", "writer_version"],
+    "row_order": "Each obs parquet is the authoritative order for its same-index X chunk; source intervals are half-open and must be preserved.",
+    "forbidden": ["silent row reorder", "unrecorded obs concatenation"]
+  },
+  "integrity": {
+    "denominator": "sum(chunk.end - chunk.start) == shape[0] and chunks tile [0, shape[0]) with no gaps or overlaps",
+    "nnz_parity": "sum(chunk.nnz) == manifest.nnz; each chunk records shape, nnz, dtype, and CSR/CSC indptr/index/data checksums",
+    "readback_parity": "Before promotion, reconstruct deterministic row probes from every chunk plus first/last row, and compare shape, nnz, values, indices, and obs index against source.",
+    "promotion": "Manifest is written only after all chunk and obs objects have checksums and readback parity passes; consumers resolve an immutable manifest revision, never a mutable directory listing."
+  },
+  "compatibility": {
+    "loaders": ["pert_gym.sparse_zarr_contract.load_compatible_surface"],
+    "legacy": "pert-gym.triplet-h5ad/v1 is exposed as exactly one logical chunk. It remains immutable and is never rewritten in place.",
+    "unknown_versions": "fail closed"
+  },
+  "rollback": {
+    "strategy": "append-only immutable revisions",
+    "procedure": "Atomically repoint the logical alias to the last promoted manifest revision. Never delete a bad candidate during rollback; mark it rejected with reason and retain provenance.",
+    "artifact_safety": "This policy performs no mutation, revision, replacement, or deletion of existing Lamin artifacts."
+  },
+  "dataset_family_policies": {
+    "xatlas_orion_hct116": {"surface": "logical-sparse-zarr", "sparse_format": "csr", "shared_var_scope": "same source var identity only", "notes": "Backed row reads; begin with adaptive max_rows 100000 and RSS gate."},
+    "xatlas_orion_hek293t": {"surface": "logical-sparse-zarr", "sparse_format": "csr", "shared_var_scope": "same source var identity only", "notes": "Separate identity from HCT116 unless all shared-var hashes match."},
+    "prism_perturbseq": {"surface": "logical-sparse-zarr when chunked", "sparse_format": "csr", "shared_var_scope": "per normalized feature identity", "notes": "Each accession remains a logical dataset; do not deduplicate merely by gene count."},
+    "tcell_gwps": {"surface": "logical-sparse-zarr", "sparse_format": "csr", "shared_var_scope": "per source matrix identity", "notes": "22M-cell source requires source row provenance and adaptive RSS gate."},
+    "temporal_and_spatial": {"surface": "logical-sparse-zarr for expression; modality sidecars remain explicit", "sparse_format": "csr", "shared_var_scope": "only identical modality/feature identities", "notes": "Spatial coordinates/images and temporal annotations stay in declared sidecars, not flattened into X."},
+    "perturbai": {"surface": "logical-sparse-zarr when sparse expression is supplied", "sparse_format": "csr", "shared_var_scope": "producer-specific until canonical feature schema is proven", "notes": "Unknown producer version fails closed; preserve producer manifest and provenance."}
+  },
+  "benchmark": {
+    "runner": "pert-gym-worker-eu only",
+    "shapes": [5000, 10000, 25000],
+    "formats": ["csr", "csc"],
+    "required_metrics": ["peak_rss_bytes", "wall_seconds", "stored_bytes", "readback_parity"],
+    "command": "uv run python tools/benchmark_sparse_zarr.py --output artifacts/sparse_zarr_benchmark.json"
+  }
+}
