@@ -126,7 +126,9 @@ def main() -> None:
         },
     }
     try:
-        validate_fixture_for_manifest(baseline_payload, prism_manifest)
+        validate_fixture_for_manifest(
+            baseline_payload, prism_manifest, args.prism_subset
+        )
         batches = load_transversal_batches(
             prism_subset_path=args.prism_subset,
             prism_baseline_rows=baseline_payload["rows"],

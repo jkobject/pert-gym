@@ -8,7 +8,6 @@ do not substitute an ad-hoc JSON baseline or select/aggregate duplicate ModelIDs
 from __future__ import annotations
 
 import argparse
-import csv
 import hashlib
 import json
 import subprocess
@@ -17,24 +16,38 @@ from pathlib import Path
 
 from pert_gym.depmap_baseline_fixture import (
     extract_exact_modelid_baseline,
+    requested_model_ids_from_subset,
     sha256_file,
 )
 
 
-def _stable_model_id(value: str) -> str:
-    return value.split("::", 1)[0].strip()
-
-
 def _requested_model_ids(subset_path: Path) -> set[str]:
-    with subset_path.open(newline="") as handle:
-        reader = csv.DictReader(handle, delimiter="\t")
-        if not reader.fieldnames or "depmap_id" not in reader.fieldnames:
-            raise ValueError("PRISM subset TSV must have a depmap_id column")
-        requested = {_stable_model_id(str(row["depmap_id"])) for row in reader}
-    requested.discard("")
-    if not requested:
-        raise ValueError("PRISM subset TSV has no exact stable ModelIDs")
-    return requested
+    return requested_model_ids_from_subset(subset_path)
+
+
+def _write_immutable_outputs(
+    out_path: Path, fixture_text: str, report_path: Path, report_text: str
+) -> None:
+    """Reserve both output paths exclusively before making either payload visible."""
+
+    created_paths: list[Path] = []
+    handles = []
+    try:
+        for path in (out_path, report_path):
+            path.parent.mkdir(parents=True, exist_ok=True)
+            handles.append(path.open("x", encoding="utf-8"))
+            created_paths.append(path)
+        for handle, payload in zip(handles, (fixture_text, report_text)):
+            handle.write(payload)
+    except BaseException:
+        for handle in handles:
+            handle.close()
+        for path in created_paths:
+            path.unlink(missing_ok=True)
+        raise
+    else:
+        for handle in handles:
+            handle.close()
 
 
 def _commit() -> str:
@@ -51,6 +64,8 @@ def main() -> None:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
+    if args.out.resolve() == args.report.resolve():
+        raise ValueError("--out and --report must be distinct immutable output paths")
     if args.out.exists() or args.report.exists():
         raise FileExistsError(
             "refusing to overwrite an existing immutable fixture or report"
@@ -72,20 +87,19 @@ def main() -> None:
         "prism_subset_sha256": sha256_file(args.prism_subset),
     }
     fixture["provenance"]["extraction"]["requested_unique_model_ids"] = len(requested)
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(fixture, indent=2, sort_keys=True) + "\n")
+    fixture_text = json.dumps(fixture, indent=2, sort_keys=True) + "\n"
     report = {
         "schema_version": "depmap_exact_modelid_baseline_extraction_report.v1",
         "fixture": {
             "path": str(args.out),
-            "sha256": sha256_file(args.out),
+            "sha256": hashlib.sha256(fixture_text.encode()).hexdigest(),
             "rows": len(fixture["rows"]),
             "feature_count": len(fixture["feature_names"]),
         },
         "provenance": fixture["provenance"],
     }
-    args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+    report_text = json.dumps(report, indent=2, sort_keys=True) + "\n"
+    _write_immutable_outputs(args.out, fixture_text, args.report, report_text)
     print(json.dumps(report, indent=2, sort_keys=True))
 
 
