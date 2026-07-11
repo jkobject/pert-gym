@@ -148,7 +148,7 @@ def test_cli_rejects_user_host_and_resource_gate_overrides(
         assert not (tmp_path / "artifacts" / "vm_runs").exists()
 
 
-def test_cli_production_command_creates_log_and_periodic_progress(
+def test_cli_production_command_publishes_periodic_progress_during_partial_stdout(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     monkeypatch.setattr(runner, "ROOT", tmp_path)
@@ -172,7 +172,7 @@ def test_cli_production_command_creates_log_and_periodic_progress(
                 "--command",
                 sys.executable,
                 "-c",
-                "import time; time.sleep(0.06)",
+                "import sys, time; sys.stdout.write('partial'); sys.stdout.flush(); time.sleep(0.06)",
             ]
         )
         == 0
@@ -183,11 +183,20 @@ def test_cli_production_command_creates_log_and_periodic_progress(
     checkpoint = json.loads((run_dir / "checkpoints" / "production.json").read_text())
     assert checkpoint["status"] == "completed"
     assert checkpoint["run_id"] == "production-test"
-    heartbeat_writes = [path for path, _ in writes if path.name == "heartbeat.json"]
+    assert (run_dir / "logs" / "runner.log").read_text() == "partial"
+    heartbeat_writes = [
+        value
+        for path, value in writes
+        if path == run_dir / "heartbeat.json"
+        and isinstance(value, dict)
+        and value.get("status") == "running"
+    ]
     checkpoint_writes = [
-        path
-        for path, _ in writes
+        value
+        for path, value in writes
         if path == run_dir / "checkpoints" / "production.json"
+        and isinstance(value, dict)
+        and value.get("status") == "running"
     ]
     assert len(heartbeat_writes) >= 3
     assert len(checkpoint_writes) >= 3

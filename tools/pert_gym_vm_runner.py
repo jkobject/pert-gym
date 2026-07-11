@@ -233,35 +233,49 @@ def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
         _write_json(checkpoint_path, state)
         _write_json(run_dir / "heartbeat.json", state)
 
-    with log_path.open("w", encoding="utf-8") as log:
+    with log_path.open("wb") as log:
         process = subprocess.Popen(
             command,
             cwd=ROOT,
             env=_child_env(),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            text=True,
         )
         assert process.stdout is not None
         publish("running")
         selector = selectors.DefaultSelector()
         selector.register(process.stdout, selectors.EVENT_READ)
+        stdout_fd = process.stdout.fileno()
+        os.set_blocking(stdout_fd, False)
+
+        def drain_stdout() -> None:
+            """Copy only currently available child bytes without delaying liveness."""
+            nonlocal stdout_lines
+            while True:
+                try:
+                    output = os.read(stdout_fd, 64 * 1024)
+                except BlockingIOError:
+                    return
+                if not output:
+                    return
+                stdout_lines += output.count(b"\n")
+                log.write(output)
+                log.flush()
+                stdout_buffer = getattr(sys.stdout, "buffer", None)
+                if stdout_buffer is not None:
+                    stdout_buffer.write(output)
+                    stdout_buffer.flush()
+                else:
+                    sys.stdout.write(output.decode("utf-8", errors="surrogateescape"))
+                    sys.stdout.flush()
+
         try:
             while True:
                 for _, _ in selector.select(timeout=PRODUCTION_HEARTBEAT_SECONDS):
-                    line = process.stdout.readline()
-                    if line:
-                        stdout_lines += 1
-                        sys.stdout.write(line)
-                        log.write(line)
-                        log.flush()
+                    drain_stdout()
                 exit_code = process.poll()
                 if exit_code is not None:
-                    for line in process.stdout:
-                        stdout_lines += 1
-                        sys.stdout.write(line)
-                        log.write(line)
-                    log.flush()
+                    drain_stdout()
                     publish(
                         "completed" if exit_code == 0 else "failed", exit_code=exit_code
                     )
