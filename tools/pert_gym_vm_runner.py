@@ -28,7 +28,7 @@ from typing import Iterator, Sequence, TextIO
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_HEAVY_HOST = "pert-gym-worker-eu"
+ALLOWED_HEAVY_HOSTS = frozenset({"pert-gym-worker-eu", "pert-gym-capacity-eu-v2"})
 EXPECTED_GCE_PROJECT = "jkobject-1549353370965"
 EXPECTED_ZONE = "europe-west1-b"
 BILLING_PROJECT = "jkobject-1549353370965"
@@ -86,13 +86,14 @@ def _metadata_value(path: str) -> str:
 
 
 def require_heavy_vm() -> tuple[str, str, str, str]:
-    """Reject local Macs and every host except the dedicated heavy worker."""
+    """Reject local Macs and every host outside the exact heavy-host allowlist."""
     if platform.system() == "Darwin":
-        raise RuntimeError("refusing heavy run on Darwin; use pert-gym-worker-eu")
+        raise RuntimeError("refusing heavy run on Darwin; use an approved heavy VM")
     hostname = socket.gethostname().split(".", maxsplit=1)[0]
-    if hostname != EXPECTED_HEAVY_HOST:
+    if hostname not in ALLOWED_HEAVY_HOSTS:
         raise RuntimeError(
-            f"refusing heavy run on host {hostname!r}; expected {EXPECTED_HEAVY_HOST!r}"
+            f"refusing heavy run on host {hostname!r}; expected one of "
+            f"{sorted(ALLOWED_HEAVY_HOSTS)!r}"
         )
     project = _metadata_value("project/project-id")
     zone = _metadata_value("instance/zone").rsplit("/", maxsplit=1)[-1]
@@ -100,7 +101,7 @@ def require_heavy_vm() -> tuple[str, str, str, str]:
     expected = {
         "project": EXPECTED_GCE_PROJECT,
         "zone": EXPECTED_ZONE,
-        "instance": EXPECTED_HEAVY_HOST,
+        "instance": hostname,
     }
     actual = {"project": project, "zone": zone, "instance": instance}
     if actual != expected:
