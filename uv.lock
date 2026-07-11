@@ -2996,13 +2996,12 @@ dependencies = [
     { name = "mudata" },
     { name = "openpyxl" },
     { name = "pandas" },
-]
-
-[package.optional-dependencies]
-benchmark = [
+    { name = "pyarrow" },
     { name = "scipy" },
     { name = "zarr" },
 ]
+
+[package.optional-dependencies]
 classical = [
     { name = "scikit-learn" },
 ]
@@ -3047,15 +3046,16 @@ requires-dist = [
     { name = "mudata" },
     { name = "openpyxl", specifier = ">=3.1.5" },
     { name = "pandas", specifier = ">=2.0" },
+    { name = "pyarrow", specifier = ">=14" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.4.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.1.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6.4" },
     { name = "scikit-learn", marker = "extra == 'classical'", specifier = ">=1.3" },
-    { name = "scipy", marker = "extra == 'benchmark'", specifier = ">=1.11" },
+    { name = "scipy", specifier = ">=1.11" },
     { name = "torch", marker = "extra == 'cpa'", specifier = ">=2.3" },
     { name = "torch", marker = "extra == 'lpm'", specifier = ">=2.3" },
     { name = "ty", marker = "extra == 'dev'" },
-    { name = "zarr", marker = "extra == 'benchmark'", specifier = ">=2.18,<3" },
+    { name = "zarr", specifier = ">=2.18,<3" },
 ]
 provides-extras = ["classical", "benchmark", "dev", "lpm", "cpa"]
 
