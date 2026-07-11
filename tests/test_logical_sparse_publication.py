@@ -222,13 +222,157 @@ def test_publish_resumes_every_exact_partial_stage_and_rejects_drift(
         )
 
 
+@pytest.mark.parametrize(
+    "stage",
+    [
+        "shared-var",
+        "payload",
+        "manifest",
+        "migration-map",
+        "collection-manifest",
+        "collection",
+        "promotion",
+    ],
+)
+def test_publish_adopts_each_remote_save_before_journal_commit(
+    tmp_path: Path, stage: str
+) -> None:
+    root, logical_key, revision = _candidate(tmp_path)
+    ln = _Ln(tmp_path)
+    with pytest.raises(
+        RuntimeError, match=f"intentional crash after remote {stage} save"
+    ):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+            stop_after_save_stage=stage,
+        )
+    result = publish_candidate(
+        ln=ln,
+        root=root,
+        logical_key=logical_key,
+        revision=revision,
+        collection_key="pert-gym/additions/test-r1",
+        require_vm=lambda: None,
+    )
+    assert (
+        len(
+            [item for item in ln.Artifact.existing if item.key == result["payload_key"]]
+        )
+        == 1
+    )
+    assert (
+        len(
+            [
+                item
+                for item in ln.Collection.existing
+                if item.key == result["collection_key"]
+            ]
+        )
+        == 1
+    )
+
+
+def test_publish_rejects_unjournaled_artifact_checksum_or_identity_drift(
+    tmp_path: Path,
+) -> None:
+    root, logical_key, revision = _candidate(tmp_path)
+    ln = _Ln(tmp_path)
+    with pytest.raises(
+        RuntimeError, match="intentional crash after remote payload save"
+    ):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+            stop_after_save_stage="payload",
+        )
+    payload = _payload(ln, "family/revisions/r1/payload.tar.gz")
+    payload.remote_path.write_bytes(b"wrong payload")
+    with pytest.raises(RuntimeError, match="checksum"):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+        )
+    assert len([item for item in ln.Artifact.existing if item.key == payload.key]) == 1
+
+    root, logical_key, revision = _candidate(tmp_path / "identity")
+    ln = _Ln(tmp_path / "identity")
+    with pytest.raises(
+        RuntimeError, match="intentional crash after remote payload save"
+    ):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+            stop_after_save_stage="payload",
+        )
+    payload = _payload(ln, "family/revisions/r1/payload.tar.gz")
+    payload.description = "wrong publication identity"
+    with pytest.raises(RuntimeError, match="identity"):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+        )
+    assert len([item for item in ln.Artifact.existing if item.key == payload.key]) == 1
+
+
+def test_publish_rejects_unjournaled_collection_membership_drift(
+    tmp_path: Path,
+) -> None:
+    root, logical_key, revision = _candidate(tmp_path)
+    ln = _Ln(tmp_path)
+    with pytest.raises(
+        RuntimeError, match="intentional crash after remote collection save"
+    ):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+            stop_after_save_stage="collection",
+        )
+    collection = ln.Collection.existing[0]
+    collection.artifacts = collection.artifacts[:-1]
+    with pytest.raises(RuntimeError, match="membership"):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+        )
+    assert len(ln.Collection.existing) == 1
+
+
 def test_publication_refuses_collection_collision(tmp_path: Path) -> None:
     root, logical_key, revision = _candidate(tmp_path)
     ln = _Ln(tmp_path)
     ln.Collection.existing = [
         _Collection([], key="pert-gym/additions/test-r1", description="old")
     ]
-    with pytest.raises(FileExistsError, match="Collection"):
+    with pytest.raises(RuntimeError, match="Collection identity"):
         publish_candidate(
             ln=ln,
             root=root,

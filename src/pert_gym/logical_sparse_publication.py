@@ -7,6 +7,7 @@ interrupted attempt resume without revising artifacts or Collections.
 
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import shutil
@@ -88,16 +89,9 @@ def assert_jkobject_branch(ln: Any) -> None:
         raise RuntimeError("refusing publication outside pertdata jkobject branch")
 
 
-def _save_file(ln: Any, path: Path, *, key: str, description: str) -> Any:
-    """Save then checksum a readback while the original upload path is absent.
-
-    ``Artifact.cache()`` is allowed to recreate the original pathname from remote
-    storage, but cannot merely return an extant local source file.  This keeps the
-    adapter compatible with Lamin's generic immutable-file constructor while
-    rejecting the same-local-file pseudo-readback that would mask an upload error.
-    """
+def _verify_remote_file(artifact: Any, path: Path, *, key: str) -> None:
+    """Checksum a remote readback while the original upload path is absent."""
     expected = _sha256_file(path)
-    artifact = ln.Artifact(path, key=key, description=description).save()
     parked = path.with_name(f".{path.name}.upload-source")
     if parked.exists():
         raise RuntimeError(f"temporary publication source collision: {parked}")
@@ -111,7 +105,70 @@ def _save_file(ln: Any, path: Path, *, key: str, description: str) -> Any:
             parked.replace(path)
         elif parked.exists():
             parked.unlink()
+
+
+def _save_file(ln: Any, path: Path, *, key: str, description: str) -> Any:
+    """Save then checksum a readback while the original upload path is absent.
+
+    ``Artifact.cache()`` is allowed to recreate the original pathname from remote
+    storage, but cannot merely return an extant local source file.  This keeps the
+    adapter compatible with Lamin's generic immutable-file constructor while
+    rejecting the same-local-file pseudo-readback that would mask an upload error.
+    """
+    artifact = ln.Artifact(path, key=key, description=description).save()
+    _verify_remote_file(artifact, path, key=key)
     return artifact
+
+
+def _reconcile_artifact(
+    artifact: Any, path: Path, *, key: str, description: str
+) -> Any:
+    """Adopt one exact unjournaled Artifact, never saving or revising it."""
+    if str(getattr(artifact, "key", "")) != key:
+        raise RuntimeError("existing artifact key does not match publication identity")
+    if getattr(artifact, "description", None) != description:
+        raise RuntimeError(
+            "existing artifact identity does not match publication identity"
+        )
+    _verify_remote_file(artifact, path, key=key)
+    return artifact
+
+
+def _collection_member_keys(collection: Any) -> list[str]:
+    members = getattr(collection, "artifacts", None)
+    if members is None:
+        raise RuntimeError("existing Collection lacks membership contract")
+    if hasattr(members, "all"):
+        members = members.all()
+    return [str(getattr(artifact, "key", "")) for artifact in members]
+
+
+def _reconcile_collection(
+    collection: Any, *, key: str, description: str, member_keys: Iterable[str]
+) -> Any:
+    """Adopt one exact unjournaled Collection, never saving or revising it."""
+    if str(getattr(collection, "key", "")) != key:
+        raise RuntimeError(
+            "existing Collection key does not match publication identity"
+        )
+    if getattr(collection, "description", None) != description:
+        raise RuntimeError(
+            "existing Collection identity does not match publication identity"
+        )
+    if _collection_member_keys(collection) != list(member_keys):
+        raise RuntimeError(
+            "existing Collection membership does not match publication identity"
+        )
+    if getattr(collection, "revises", None) is not None:
+        raise RuntimeError(
+            "existing Collection revision does not match publication identity"
+        )
+    return collection
+
+
+def _crash_after_remote_save(stage: str, stop_after_save_stage: str | None) -> None:
+    if stop_after_save_stage == stage:
+        raise RuntimeError(f"intentional crash after remote {stage} save")
 
 
 def _write_json(path: Path, value: object) -> None:
@@ -168,9 +225,28 @@ def _build_payload(
     shared = root / shared_key
     if not shared.is_file():
         raise RuntimeError("candidate manifest references a missing shared var")
-    with tarfile.open(target, "w:gz") as archive:
-        archive.add(candidate, arcname=f"{logical_key}/revisions/{revision}")
-        archive.add(shared, arcname=shared_key)
+
+    def normalized_member(info: tarfile.TarInfo) -> tarfile.TarInfo | None:
+        if info.name.endswith("/publication-journal.json"):
+            return None
+        info.mtime = 0
+        info.uid = 0
+        info.gid = 0
+        info.uname = ""
+        info.gname = ""
+        return info
+
+    with target.open("wb") as handle:
+        with gzip.GzipFile(
+            fileobj=handle, mode="wb", mtime=0, filename=""
+        ) as gzip_handle:
+            with tarfile.open(fileobj=gzip_handle, mode="w") as archive:
+                archive.add(
+                    candidate,
+                    arcname=f"{logical_key}/revisions/{revision}",
+                    filter=normalized_member,
+                )
+                archive.add(shared, arcname=shared_key, filter=normalized_member)
 
 
 def publish_candidate(
@@ -182,12 +258,15 @@ def publish_candidate(
     collection_key: str,
     require_vm: Callable[[], object],
     stop_after_stage: str | None = None,
+    stop_after_save_stage: str | None = None,
 ) -> dict[str, object]:
     """Publish a verified local candidate with exact, recoverable append-only stages.
 
-    ``stop_after_stage`` is test-only fault injection; the VM CLI never exposes it.
+    Fault injection arguments are test-only; the VM CLI never exposes them.
     """
     if stop_after_stage is not None and stop_after_stage not in _STAGE_ORDER:
+        raise ValueError("unknown publication stage")
+    if stop_after_save_stage is not None and stop_after_save_stage not in _STAGE_ORDER:
         raise ValueError("unknown publication stage")
     require_vm()
     assert_jkobject_branch(ln)
@@ -250,12 +329,6 @@ def publish_candidate(
         record.key: record for record in _exact_artifacts(ln, artifact_paths.values())
     }
     collection_existing = _exact_collections(ln, [collection_key])
-    if not completed and collection_existing:
-        raise FileExistsError("refusing Collection key collision before publication")
-    if not completed and artifact_existing:
-        raise FileExistsError(
-            "refusing duplicate/no-overwrite publication without an exact journal"
-        )
     for stage, key in artifact_paths.items():
         if stage in completed and key not in artifact_existing:
             raise RuntimeError(
@@ -265,8 +338,6 @@ def publish_candidate(
         raise RuntimeError(
             "publication journal says collection completed but Collection is missing"
         )
-    if "collection" not in completed and collection_existing:
-        raise FileExistsError("refusing Collection key collision before publication")
 
     with tempfile.TemporaryDirectory(prefix="logical_sparse_publish_") as temporary:
         temporary_root = Path(temporary)
@@ -318,21 +389,37 @@ def publish_candidate(
         }
         for stage in _STAGE_ORDER:
             if stage == "collection":
+                member_keys = [
+                    artifact_paths[name]
+                    for name in (
+                        "shared-var",
+                        "payload",
+                        "manifest",
+                        "migration-map",
+                        "collection-manifest",
+                    )
+                ]
+                description = "append-only logical sparse-Zarr candidate metadata"
                 if stage not in completed:
-                    collection = ln.Collection(
-                        [
-                            artifact_existing[artifact_paths[name]]
-                            for name in (
-                                "shared-var",
-                                "payload",
-                                "manifest",
-                                "migration-map",
-                                "collection-manifest",
+                    if collection_existing:
+                        collection = _reconcile_collection(
+                            collection_existing[0],
+                            key=collection_key,
+                            description=description,
+                            member_keys=member_keys,
+                        )
+                    else:
+                        collection = ln.Collection(
+                            [artifact_existing[key] for key in member_keys],
+                            key=collection_key,
+                            description=description,
+                        )
+                        if getattr(collection, "revises", None) is not None:
+                            raise RuntimeError(
+                                "refusing implicit Collection revision during publication"
                             )
-                        ],
-                        key=collection_key,
-                        description="append-only logical sparse-Zarr candidate metadata",
-                    ).save()
+                        collection = collection.save()
+                        _crash_after_remote_save(stage, stop_after_save_stage)
                     collection_existing = [collection]
                     _complete_stage(
                         journal_path=journal_path,
@@ -341,27 +428,34 @@ def publish_candidate(
                         stop_after_stage=stop_after_stage,
                     )
                 continue
-            if stage not in completed:
-                if stage == "promotion":
-                    _write_json(
-                        promotion_path,
-                        {
-                            "format": "pert-gym.logical-sparse-zarr.promotion/v1",
-                            "logical_key": logical_key,
-                            "revision": revision,
-                            "candidate_collection_key": collection_key,
-                            "candidate_collection_uid": _artifact_id(
-                                collection_existing[0]
-                            ),
-                            "manifest_key": artifact_paths["manifest"],
-                            "rollback_to": None,
-                            "state": "candidate-complete",
-                        },
-                    )
-                path, key, description = stage_inputs[stage]
+            path, key, description = stage_inputs[stage]
+            if stage == "promotion":
+                _write_json(
+                    promotion_path,
+                    {
+                        "format": "pert-gym.logical-sparse-zarr.promotion/v1",
+                        "logical_key": logical_key,
+                        "revision": revision,
+                        "candidate_collection_key": collection_key,
+                        "candidate_collection_uid": _artifact_id(
+                            collection_existing[0]
+                        ),
+                        "manifest_key": artifact_paths["manifest"],
+                        "rollback_to": None,
+                        "state": "candidate-complete",
+                    },
+                )
+            existing = artifact_existing.get(key)
+            if existing is not None:
+                artifact_existing[key] = _reconcile_artifact(
+                    existing, path, key=key, description=description
+                )
+            elif stage not in completed:
                 artifact_existing[key] = _save_file(
                     ln, path, key=key, description=description
                 )
+                _crash_after_remote_save(stage, stop_after_save_stage)
+            if stage not in completed:
                 _complete_stage(
                     journal_path=journal_path,
                     journal=journal,
