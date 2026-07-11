@@ -23,16 +23,61 @@ def manifest() -> dict:
         "nnz": 12,
         "sparse_format": "csr",
         "chunks": [
-            {"key": "chunks/0000.zarr", "start": 0, "end": 5, "nnz": 6},
-            {"key": "chunks/0001.zarr", "start": 5, "end": 10, "nnz": 6},
+            {
+                "key": "chunks/0000.zarr",
+                "start": 0,
+                "end": 5,
+                "nnz": 6,
+                "shape": [5, 4],
+                "dtype": "float32",
+                "checksums": {
+                    "data_sha256": "data-0000",
+                    "indices_sha256": "indices-0000",
+                    "indptr_sha256": "indptr-0000",
+                },
+                "obs": {
+                    "key": "obs/0000.parquet",
+                    "provenance": {
+                        "source_uri": "gs://example/source.h5ad",
+                        "source_checksum": "source-hash",
+                        "source_row_start": 0,
+                        "source_row_end": 5,
+                        "ingestion_run_id": "run-0000",
+                        "writer_version": "1.0.0",
+                    },
+                },
+            },
+            {
+                "key": "chunks/0001.zarr",
+                "start": 5,
+                "end": 10,
+                "nnz": 6,
+                "shape": [5, 4],
+                "dtype": "float32",
+                "checksums": {
+                    "data_sha256": "data-0001",
+                    "indices_sha256": "indices-0001",
+                    "indptr_sha256": "indptr-0001",
+                },
+                "obs": {
+                    "key": "obs/0001.parquet",
+                    "provenance": {
+                        "source_uri": "gs://example/source.h5ad",
+                        "source_checksum": "source-hash",
+                        "source_row_start": 5,
+                        "source_row_end": 10,
+                        "ingestion_run_id": "run-0001",
+                        "writer_version": "1.0.0",
+                    },
+                },
+            },
         ],
         "shared_var": {
             "key": "vars/abc/var.parquet",
             "index_sha256": "index-hash",
             "frame_sha256": "frame-hash",
+            "schema_fingerprint": "schema-v1",
         },
-        "obs": {"key": "obs.parquet"},
-        "provenance": {"source_uri": "gs://example/source.h5ad"},
     }
 
 
@@ -44,12 +89,53 @@ def test_v1_manifest_requires_exact_chunk_denominator_and_nnz_parity() -> None:
 
     invalid = manifest()
     invalid["chunks"][1]["start"] = 6
+    invalid["chunks"][1]["shape"] = [4, 4]
+    invalid["chunks"][1]["obs"]["provenance"]["source_row_start"] = 6
     with pytest.raises(ValueError, match="contiguous"):
         validate_logical_sparse_surface(invalid)
 
     invalid = manifest()
     invalid["chunks"][1]["nnz"] = 5
     with pytest.raises(ValueError, match="nnz sum"):
+        validate_logical_sparse_surface(invalid)
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (
+            lambda value: value["shared_var"].pop("schema_fingerprint"),
+            "schema_fingerprint",
+        ),
+        (lambda value: value["chunks"][0].pop("shape"), "shape"),
+        (lambda value: value["chunks"][0].pop("dtype"), "dtype"),
+        (lambda value: value["chunks"][0].pop("checksums"), "checksums"),
+        (lambda value: value["chunks"][0]["obs"].update({"key": ""}), "obs.key"),
+        (
+            lambda value: value["chunks"][0]["obs"]["provenance"].pop("source_uri"),
+            "source_uri",
+        ),
+    ],
+)
+def test_v1_manifest_rejects_missing_chunk_integrity_and_obs_provenance(
+    mutate, message: str
+) -> None:
+    invalid = manifest()
+    mutate(invalid)
+
+    with pytest.raises(ValueError, match=message):
+        validate_logical_sparse_surface(invalid)
+
+
+def test_v1_manifest_rejects_chunk_shape_and_source_row_mismatches() -> None:
+    invalid = manifest()
+    invalid["chunks"][0]["shape"] = [4, 4]
+    with pytest.raises(ValueError, match="shape"):
+        validate_logical_sparse_surface(invalid)
+
+    invalid = manifest()
+    invalid["chunks"][0]["obs"]["provenance"]["source_row_end"] = 4
+    with pytest.raises(ValueError, match="source row"):
         validate_logical_sparse_surface(invalid)
 
 
@@ -83,9 +169,11 @@ def test_legacy_triplet_loader_is_normalized_to_one_chunk() -> None:
     surface = load_compatible_surface(
         {
             "format": LEGACY_FORMAT,
+            "version": 1,
             "n_obs": 3,
             "n_vars": 2,
             "nnz": 4,
+            "sparse_format": "csr",
             "x_key": "old/X.h5ad",
             "obs_key": "old/obs.parquet",
             "var_key": "old/var.parquet",
@@ -98,6 +186,30 @@ def test_legacy_triplet_loader_is_normalized_to_one_chunk() -> None:
     ]
 
 
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [("version", 2, "version"), ("sparse_format", "coo", "sparse_format")],
+)
+def test_legacy_loader_fails_closed_for_unknown_versions_and_formats(
+    field: str, value: object, message: str
+) -> None:
+    legacy = {
+        "format": LEGACY_FORMAT,
+        "version": 1,
+        "n_obs": 3,
+        "n_vars": 2,
+        "nnz": 4,
+        "sparse_format": "csr",
+        "x_key": "old/X.h5ad",
+        "obs_key": "old/obs.parquet",
+        "var_key": "old/var.parquet",
+    }
+    legacy[field] = value
+
+    with pytest.raises(ValueError, match=message):
+        load_compatible_surface(legacy)
+
+
 def test_machine_readable_policy_covers_required_families_and_vm_benchmark() -> None:
     policy = json.loads(
         (ROOT / "config/logical_sparse_zarr_policy.v1.json").read_text()
@@ -106,6 +218,14 @@ def test_machine_readable_policy_covers_required_families_and_vm_benchmark() -> 
     assert policy["surface"]["version"] == 1
     assert policy["benchmark"]["runner"] == "pert-gym-worker-eu only"
     assert set(policy["benchmark"]["shapes"]) == {5_000, 10_000, 25_000}
+    assert set(policy["benchmark"]["required_metrics"]) == {
+        "local_rss_bytes",
+        "wall_seconds",
+        "bytes",
+        "matrix_parity",
+        "obs_parity",
+        "source_row_parity",
+    }
     assert set(policy["dataset_family_policies"]) == {
         "xatlas_orion_hct116",
         "xatlas_orion_hek293t",

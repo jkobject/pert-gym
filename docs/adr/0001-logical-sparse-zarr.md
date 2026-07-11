@@ -71,10 +71,13 @@ match, and PRISM shares only after normalization proves identity.
 
 ### 4. Obs provenance
 
-Every chunk's obs sidecar records source URI/checksum, source row interval,
-ingestion run identifier, and writer version. The obs sidecar is authoritative
-for row order. No concatenate/reorder operation is permitted without an
-explicit new manifest revision and provenance update.
+Every chunk records its exact shape, dtype, and SHA-256 checksums for `data`,
+`indices`, and `indptr`; it has exactly one nonempty obs-sidecar key. Each obs
+sidecar records source URI/checksum, a source-row interval with the same row
+count as its X chunk, ingestion run identifier, and writer version. The shared
+var identity additionally requires a nonempty `schema_fingerprint`. The obs
+sidecar is authoritative for row order. No concatenate/reorder operation is
+permitted without an explicit new manifest revision and provenance update.
 
 ### 5. Exact integrity denominator and promotion
 
@@ -113,5 +116,5 @@ New large write paths must use the machine-readable policy and manifest
 validator before a remote write. Existing chunkers are not altered by this ADR;
 a follow-up implementation can adopt the writer contract without changing their
 legacy outputs. The configuration defines a VM-only benchmark for 5k/10k/25k
-representative CSR/CSC surfaces and records peak RSS, wall time, stored bytes,
-and exact readback parity.
+representative CSR/CSC surfaces and records per-case local RSS, wall time,
+bytes, and separate matrix/obs/source-row parity plus a total wall time.

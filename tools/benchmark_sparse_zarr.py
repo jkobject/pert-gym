@@ -18,11 +18,12 @@ import time
 from pathlib import Path
 
 
-def peak_rss_bytes() -> int:
-    """Return max RSS in bytes on Linux/macOS."""
-
-    value = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    return value if os.uname().sysname == "Darwin" else value * 1024
+def local_rss_bytes() -> int:
+    """Return this process's resident memory in bytes on Linux or macOS."""
+    if os.uname().sysname == "Darwin":
+        return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    statm = Path("/proc/self/statm").read_text().split()
+    return int(statm[1]) * os.sysconf("SC_PAGE_SIZE")
 
 
 def stored_bytes(root: Path) -> int:
@@ -48,7 +49,10 @@ def matrix_for(n_obs: int, sparse_format: str):
     return matrix
 
 
-def write_and_readback(root: Path, matrix, sparse_format: str) -> dict[str, object]:
+def write_and_readback(
+    root: Path, matrix, sparse_format: str, *, source_row_start: int
+) -> dict[str, object]:
+    """Write one case and prove matrix, obs order, and source rows round-trip."""
     import numpy as np
     import zarr
     from scipy import sparse
@@ -65,9 +69,14 @@ def write_and_readback(root: Path, matrix, sparse_format: str) -> dict[str, obje
     group.create_dataset(
         "indptr", data=matrix.indptr, chunks=(min(len(matrix.indptr), 65_536),)
     )
-    write_seconds = time.perf_counter() - started
+    obs_index = np.arange(matrix.shape[0], dtype=np.int64)
+    source_rows = np.arange(
+        source_row_start, source_row_start + matrix.shape[0], dtype=np.int64
+    )
+    (root / "obs.json").write_text(
+        json.dumps({"index": obs_index.tolist(), "source_rows": source_rows.tolist()})
+    )
 
-    started = time.perf_counter()
     loaded = zarr.open_group(str(root), mode="r")
     constructor = sparse.csr_matrix if sparse_format == "csr" else sparse.csc_matrix
     roundtrip = constructor(
@@ -78,19 +87,24 @@ def write_and_readback(root: Path, matrix, sparse_format: str) -> dict[str, obje
         ),
         shape=tuple(loaded.attrs["shape"]),
     )
-    read_seconds = time.perf_counter() - started
-    parity = (
+    obs_sidecar = json.loads((root / "obs.json").read_text())
+    wall_seconds = time.perf_counter() - started
+    matrix_parity = (
         roundtrip.shape == matrix.shape
         and roundtrip.nnz == matrix.nnz
         and np.array_equal(roundtrip.data, matrix.data)
         and np.array_equal(roundtrip.indices, matrix.indices)
         and np.array_equal(roundtrip.indptr, matrix.indptr)
     )
+    obs_parity = obs_sidecar["index"] == obs_index.tolist()
+    source_row_parity = obs_sidecar["source_rows"] == source_rows.tolist()
     return {
-        "write_seconds": write_seconds,
-        "read_seconds": read_seconds,
-        "readback_parity": parity,
-        "stored_bytes": stored_bytes(root),
+        "wall_seconds": wall_seconds,
+        "local_rss_bytes": local_rss_bytes(),
+        "bytes": stored_bytes(root),
+        "matrix_parity": matrix_parity,
+        "obs_parity": obs_parity,
+        "source_row_parity": source_row_parity,
     }
 
 
@@ -109,28 +123,42 @@ def main() -> int:
     base = args.workdir or Path(tempfile.mkdtemp(prefix="pert-gym-sparse-zarr-"))
     created_base = args.workdir is None
     results: list[dict[str, object]] = []
+    total_started = time.perf_counter()
     try:
         for n_obs in (5_000, 10_000, 25_000):
             for sparse_format in ("csr", "csc"):
-                case_dir = base / f"{sparse_format}-{n_obs}"
                 matrix = matrix_for(n_obs, sparse_format)
-                before = peak_rss_bytes()
-                result = write_and_readback(case_dir, matrix, sparse_format)
+                result = write_and_readback(
+                    base / f"{sparse_format}-{n_obs}",
+                    matrix,
+                    sparse_format,
+                    source_row_start=0,
+                )
                 result.update(
                     {
                         "n_obs": n_obs,
                         "n_vars": int(matrix.shape[1]),
                         "nnz": int(matrix.nnz),
                         "format": sparse_format,
-                        "peak_rss_bytes": max(before, peak_rss_bytes()),
                     }
                 )
                 results.append(result)
-        if not all(case["readback_parity"] for case in results):
-            raise RuntimeError("sparse Zarr benchmark readback parity failed")
+        if not all(
+            case["matrix_parity"] and case["obs_parity"] and case["source_row_parity"]
+            for case in results
+        ):
+            raise RuntimeError("sparse Zarr benchmark parity failed")
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(
-            json.dumps({"host": host, "cases": results}, indent=2) + "\n"
+            json.dumps(
+                {
+                    "host": host,
+                    "total_wall_seconds": time.perf_counter() - total_started,
+                    "cases": results,
+                },
+                indent=2,
+            )
+            + "\n"
         )
     finally:
         if created_base:
