@@ -19,6 +19,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from pert_gym.depmap_baseline_fixture import validate_fixture_for_manifest
 from pert_gym.transversal import (
     PRISM_DATASET_TAG,
     STRAND_DATASET_TAG,
@@ -125,6 +126,9 @@ def main() -> None:
         },
     }
     try:
+        validate_fixture_for_manifest(
+            baseline_payload, prism_manifest, args.prism_subset
+        )
         batches = load_transversal_batches(
             prism_subset_path=args.prism_subset,
             prism_baseline_rows=baseline_payload["rows"],
