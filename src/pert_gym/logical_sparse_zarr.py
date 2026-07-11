@@ -128,6 +128,24 @@ def _frame_sha256(frame: pd.DataFrame) -> str:
     )
 
 
+def _canonical_source_identity(value: Mapping[str, object] | None) -> object | None:
+    """Canonicalize immutable source-family identity for fail-closed resumes."""
+    if value is None:
+        return None
+    try:
+        encoded = json.dumps(
+            value, sort_keys=True, separators=(",", ":"), allow_nan=False
+        )
+        decoded = json.loads(encoded)
+    except (TypeError, ValueError) as error:
+        raise ValueError(
+            "source_identity must be JSON-serializable finite data"
+        ) from error
+    if not isinstance(decoded, dict) or not decoded:
+        raise ValueError("source_identity must be a non-empty object")
+    return decoded
+
+
 @contextmanager
 def _exclusive_lock(path: Path) -> Iterator[None]:
     """Create a candidate-local lock without replacing an existing writer lock."""
@@ -270,6 +288,7 @@ def _checkpoint_base(
     source_checksum: str,
     source_uri: str,
     source_row_start: int,
+    source_identity: object | None,
     ingestion_run_id: str,
     var_identity: VarIdentity,
     obs_index_sha256: str,
@@ -287,6 +306,7 @@ def _checkpoint_base(
         "source_checksum": source_checksum,
         "source_uri": source_uri,
         "source_row_start": source_row_start,
+        "source_identity": source_identity,
         "ingestion_run_id": ingestion_run_id,
         "var_index_sha256": var_identity.index_sha256,
         "var_frame_sha256": var_identity.frame_sha256,
@@ -317,6 +337,7 @@ def _load_or_create_checkpoint(
         "source_checksum",
         "source_uri",
         "source_row_start",
+        "source_identity",
         "ingestion_run_id",
         "var_index_sha256",
         "var_frame_sha256",
@@ -388,6 +409,7 @@ def write_logical_sparse_revision(
     source_uri: str,
     source_checksum: str,
     source_row_start: int = 0,
+    source_identity: Mapping[str, object] | None = None,
     ingestion_run_id: str,
     max_rss_bytes: int = 4 * 1024**3,
     min_rows: int = DEFAULT_MIN_ROWS,
@@ -412,6 +434,7 @@ def write_logical_sparse_revision(
         raise ValueError("matrix shape must match obs and var row counts")
     if source_row_start < 0:
         raise ValueError("source_row_start must be non-negative")
+    canonical_source_identity = _canonical_source_identity(source_identity)
     sparse_format = _source_sparse_format(matrix)
     matrix_nnz = _source_nnz(matrix)
     candidate = _candidate_root(root, logical_key, revision)
@@ -449,6 +472,7 @@ def write_logical_sparse_revision(
         source_checksum=source_checksum,
         source_uri=source_uri,
         source_row_start=source_row_start,
+        source_identity=canonical_source_identity,
         ingestion_run_id=ingestion_run_id,
         var_identity=identity,
         obs_index_sha256=_index_sha256(obs),
@@ -547,6 +571,7 @@ def write_logical_sparse_revision(
             "shape": list(shape),
             "nnz": matrix_nnz,
             "sparse_format": sparse_format,
+            "source_identity": canonical_source_identity,
             "chunks": records,
             "shared_var": {
                 "key": shared_key,

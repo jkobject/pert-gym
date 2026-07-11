@@ -204,6 +204,52 @@ def test_resume_rejects_changed_provenance_and_metadata_identity(
             write_logical_sparse_revision(**(kwargs | changed))
 
 
+def test_resume_rejects_changed_ordered_legacy_source_identity(tmp_path: Path) -> None:
+    """A partial legacy-family candidate cannot resume against a changed source list."""
+    matrix, obs, var = fixture_data()
+    kwargs = dict(
+        root=tmp_path,
+        logical_key="surfaces/example",
+        revision="legacy-source-identity",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        schema_fingerprint="schema-v1",
+        source_uri="lamin://legacy/family",
+        source_checksum=SOURCE_CHECKSUM,
+        ingestion_run_id="test-run",
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=4,
+        source_identity={
+            "kind": "legacy-triplets/v1",
+            "sources": [
+                {
+                    "chunk_id": 0,
+                    "obs_artifact_id": "obs-0",
+                    "x_artifact_id": "x-0",
+                    "var_artifact_id": "var-0",
+                    "row_start": 0,
+                    "row_end": 9,
+                }
+            ],
+        },
+    )
+    with pytest.raises(MigrationInterrupted):
+        write_logical_sparse_revision(**kwargs, stop_after_chunks=1)
+
+    drifted = kwargs["source_identity"] | {
+        "sources": [
+            {
+                **kwargs["source_identity"]["sources"][0],
+                "x_artifact_id": "x-drifted",
+            }
+        ]
+    }
+    with pytest.raises(RuntimeError, match="checkpoint mismatch for source_identity"):
+        write_logical_sparse_revision(**(kwargs | {"source_identity": drifted}))
+
+
 def test_writer_rejects_source_or_obs_substitution_before_manifest(
     tmp_path: Path,
 ) -> None:
