@@ -10,15 +10,16 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 from pathlib import Path
 from urllib.parse import quote
 
 import requests
 
-
 DEFAULT_BUCKET = "scperturb"
 DEFAULT_PREFIX = "pert-gym/staging"
+DEFAULT_BILLING_PROJECT = "jkobject-1549353370965"
 CHUNK_SIZE = 8 * 1024 * 1024
 
 
@@ -32,10 +33,13 @@ def access_token() -> str:
     return result.stdout.strip()
 
 
-def start_resumable_upload(bucket: str, object_name: str, token: str) -> str:
+def start_resumable_upload(
+    bucket: str, object_name: str, token: str, billing_project: str
+) -> str:
     url = (
         f"https://storage.googleapis.com/upload/storage/v1/b/{bucket}/o"
         f"?uploadType=resumable&name={quote(object_name, safe='')}"
+        f"&userProject={quote(billing_project, safe='')}"
     )
     response = requests.post(
         url,
@@ -50,8 +54,10 @@ def start_resumable_upload(bucket: str, object_name: str, token: str) -> str:
     return response.headers["Location"]
 
 
-def upload_file(path: Path, bucket: str, object_name: str, token: str) -> dict:
-    upload_url = start_resumable_upload(bucket, object_name, token)
+def upload_file(
+    path: Path, bucket: str, object_name: str, token: str, billing_project: str
+) -> dict:
+    upload_url = start_resumable_upload(bucket, object_name, token, billing_project)
     total = path.stat().st_size
     sent = 0
 
@@ -82,7 +88,7 @@ def upload_file(path: Path, bucket: str, object_name: str, token: str) -> dict:
 
     metadata_url = (
         f"https://storage.googleapis.com/storage/v1/b/{bucket}/o/"
-        f"{quote(object_name, safe='')}"
+        f"{quote(object_name, safe='')}?userProject={quote(billing_project, safe='')}"
     )
     metadata = requests.get(
         metadata_url,
@@ -98,6 +104,11 @@ def main() -> int:
     parser.add_argument("paths", nargs="+", type=Path)
     parser.add_argument("--bucket", default=DEFAULT_BUCKET)
     parser.add_argument("--prefix", default=DEFAULT_PREFIX)
+    parser.add_argument(
+        "--billing-project",
+        default=os.environ.get("PERT_GYM_GCS_USER_PROJECT", DEFAULT_BILLING_PROJECT),
+        help="GCP project billed for requester-pays bucket operations.",
+    )
     parser.add_argument("--delete-local", action="store_true")
     args = parser.parse_args()
 
@@ -106,7 +117,9 @@ def main() -> int:
         if not path.exists():
             raise FileNotFoundError(path)
         object_name = f"{args.prefix.rstrip('/')}/{path.as_posix()}"
-        metadata = upload_file(path, args.bucket, object_name, token)
+        metadata = upload_file(
+            path, args.bucket, object_name, token, args.billing_project
+        )
         print(f"UPLOADED gs://{args.bucket}/{object_name} size={metadata.get('size')}")
         if args.delete_local:
             path.unlink()
