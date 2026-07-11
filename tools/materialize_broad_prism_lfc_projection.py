@@ -349,6 +349,7 @@ def materialize_projection(
 
     manifest = {
         "scope": "bounded real Broad PRISM 24Q2 direct-LFC projection; no Lamin write",
+        "model_ready_status": "loader_projectable_only",
         "source_release": SOURCE_RELEASE,
         "source_files": {
             "lfc": {"uri": lfc_uri, "sha256": lfc_hash},

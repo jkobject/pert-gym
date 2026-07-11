@@ -120,6 +120,8 @@ def test_materializes_only_real_eligible_rows_with_provenance_and_guards(
     rows = list(csv.DictReader(output.open(encoding="utf-8"), delimiter="\t"))
     payload = json.loads(manifest.read_text(encoding="utf-8"))
     assert summary["selected_rows"] == 2
+    assert summary["model_ready_status"] == "loader_projectable_only"
+    assert payload["model_ready_status"] == "loader_projectable_only"
     assert payload["denominator"] == {
         "source_rows": 7,
         "chunk_size_rows": 3,
