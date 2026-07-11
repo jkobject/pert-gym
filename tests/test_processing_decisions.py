@@ -62,9 +62,7 @@ def valid_contract() -> dict[str, object]:
         ],
         "reconstruction": {
             "reproducibility_claimed": True,
-            "immutable_upstream_sources": [
-                {"uri": "https://example.org/record/1"}
-            ],
+            "immutable_upstream_sources": [{"uri": "https://example.org/record/1"}],
             "retained_lamin_raw_artifact": None,
             "safe_to_remove_gcs": False,
             "procedure": "Reacquire immutable upstream payload and rerun recorded script.",

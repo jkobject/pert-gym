@@ -87,7 +87,9 @@ def _immutable_upstream_source_errors(
 ) -> list[str]:
     sources = reconstruction.get("immutable_upstream_sources", [])
     if not isinstance(sources, Sequence) or isinstance(sources, (str, bytes)):
-        return ["reconstruction.immutable_upstream_sources must be a sequence of mappings"]
+        return [
+            "reconstruction.immutable_upstream_sources must be a sequence of mappings"
+        ]
 
     errors: list[str] = []
     for index, source in enumerate(sources):
