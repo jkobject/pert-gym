@@ -1,24 +1,81 @@
-# pert-gym TODO / Kanban mirror
+# pert-gym live migration dashboard
 
-_Last updated: 2026-06-22 by Kanban task `t_51be75dd`._
+_Last reconciled: 2026-07-11. This is a status dashboard, not a run log. A
+running or staged card is not evidence of completion._
 
-This file is a compact project-state mirror for agent handoffs. Keep detailed run logs in Kanban, `wiki/`, `docs/`, or dated artifacts.
+## Accepted foundations
 
-## Repository / PR workflow status
+- **ACCEPTED:** PR [#50](https://github.com/jkobject/pert-gym/pull/50) defines
+the logical sparse-Zarr contract.
+- **ACCEPTED:** PR [#51](https://github.com/jkobject/pert-gym/pull/51) adds the
+guarded EU-VM ingestion runner.
+- **ACCEPTED:** PR [#52](https://github.com/jkobject/pert-gym/pull/52) adds
+VM-only adaptive sparse-Zarr/shared-var migration tooling.
+- **ACCEPTED:** PR [#53](https://github.com/jkobject/pert-gym/pull/53) merges
+crash-recoverable publication from legacy triplets, including the publication
+journal/recovery and stage-order safeguards.
 
-- Canonical Git strategy: `pert-gym` is a standalone repo at `https://github.com/jkobject/pert-gym.git`, not a subdirectory of the broader OpenClaw workspace repo.
-- Shared Mac checkout: `/Users/jkobject/.openclaw/workspace/work/pert-gym`. Use it for inspection, cache/data materialization, and emergency ops; do not let implementation edits accumulate there by default.
-- Future implementation/model-code Kanban cards should use isolated worktrees under `/Users/jkobject/.openclaw/worktrees/pert-gym/<task-id>` and branches that include the task id.
-- Code/docs/tests/config changes should be committed and opened as PRs before a worker marks code work done.
-- Keep raw data, `data/source_cache/`, `data/temporal_pretraining_sources/`, Lamin caches, virtualenvs, `.omx/`, generated artifacts, and local model-ready `.h5ad` exports out of Git unless a task explicitly asks for a tiny fixture or manifest.
+## Running or staged dataset lanes
 
-## Current OPS2 inventory snapshot
+- **CURRENT:** large dataset payload/GCS/Lamin operations are EU-VM-only; keep
+  `pert-gym-worker-eu` warm while the active wave is in progress. The Mac is a
+  control plane and must not cache or materialize large data.
+- **PENDING:** XAtlas/Orion HCT116 and HEK293T are separate logical datasets;
+  each needs its own accepted source, migration, parity/readback, and reviewer
+gate before it can be called complete.
+- **PENDING:** staged or partially represented families remain subject to their
+  own completion/review cards. Do not upgrade status from a writer run, a stage,
+  or an old GCS object.
+- **BLOCKED:** RxRx3 access/EULA remains a real external-access blocker. Do not
+  substitute an inferred source, proxy dataset, or metadata-only result.
 
-- The shared checkout Git metadata was restored on 2026-06-22 from `origin/main` without overwriting worker files.
-- Broken prior metadata backup in shared checkout: `.git.broken-pre-ops2-20260622T172255`.
-- After restoration, `git status` showed tracked worker changes across docs, data catalogues, package code, tools, notebook, and `uv.lock`, plus untracked raw/source-cache data. Those changes were intentionally not reverted or bulk-committed by OPS2.
+## Notebook and inventory lane
 
-## Temporal SCP browser-auth retry status
+- **CURRENT:** establish the exact `jkobject`-vs-`main` logical-dataset ledger
+  before creating per-dataset notebooks; distinguish datasets from chunks,
+  revisions, typed auxiliaries, aliases, and exclusions.
+- **PENDING:** every added/revised logical dataset needs an executable,
+  metadata-first processing-decisions notebook. It must document source identity,
+  transformation choices, Lamin keys/UIDs/Collections, parity/readback, and
+  temporary GCS inputs/outputs plus their durable replacement.
+- **PENDING:** notebooks are a reconstruction layer, not a claim that a staged
+  dataset is accepted. Default execution is Mac-safe metadata only; optional
+  live Lamin checks are guarded to the EU VM.
 
-- T-SCPAUTH-Mac (`t_a469ca1d`) attempted the required OMX/logged-in Chrome retry for residual SCP rows (`SCP3301`, `SCP1467`, `SCP211`, `SCP3697`, `SCP282`, `SCP499`). No files were recovered: OMX reached the Chrome-extension skill but `node_repl/js` failed before browser access with `codex/sandbox-state-meta sandboxCwd must be an absolute file URI`.
-- Evidence artifacts: `artifacts/schema_audit/scp_browser_auth_recovery_20260622.{md,json}` and `artifacts/schema_audit/scp_browser_auth_smoke_20260622.json`. Treat prior headless SCP HTTP 401 as still retryable after the OMX/Chrome bootstrap is fixed; do not mark these datasets terminal from this failed tooling run.
+## Collections, tests, and final review
+
+- **PENDING:** retain the distinction between artifact records, Collection
+  members/chunks, logical datasets, and model-ready datasets. The denominator
+  authority is the reviewed live inventory and its explicit count vocabulary.
+- **PENDING:** final Collections, model-ready inclusion, remote source parity,
+  and real readback must be independently tested/reviewed per dataset; legacy
+  triplets remain until an accepted replacement is proven.
+- **PENDING:** a final provenance review must reconcile dataset notebooks,
+  Collections, source checksums/retained raw evidence, and the live inventory.
+
+## `GCS_DECOMMISSION_READY` (hard exit gate)
+
+The project is ready to decommission project-owned pert-gym staging only when a
+reviewed, machine-readable `GCS_DECOMMISSION_READY` manifest proves for **every**
+project-owned prefix either an allowlisted safe removal or a documented retained
+exception. Each removable prefix must map to: an accepted Lamin UID/Collection,
+source-to-Lamin parity and remote readback, a successfully executed dataset
+notebook, immutable upstream checksum or retained Lamin raw source, and no live
+consumer. Lamin-managed storage and shared/unrelated buckets are never in scope.
+
+Exit means: completed, independently reviewed Lamin datasets; one executable
+notebook for each added logical dataset; and zero unexplained project-owned
+pert-gym GCS dependencies. This is not satisfied by a running card, a staged
+object, an old cache, or prose.
+
+## Cleanup and VM/disk decommission
+
+- **PENDING:** cleanup may delete only exact `SAFE_DELETE` allowlisted staging
+  prefixes after the exit gate; no broad bucket deletion and no deletion of the
+  sole irreproducible source.
+- **PENDING:** stop/decommission the warm EU VM and its temporary disks only
+  after no active migration, parity, notebook, review, or cleanup card requires
+  them and all retained data is accounted for in Lamin/upstream provenance.
+
+See [migration/reproducibility/GCS exit contract](wiki/pert-gym/migration-reproducibility-and-gcs-exit.md)
+and [current status](wiki/pert-gym/current-status.md) for durable details.

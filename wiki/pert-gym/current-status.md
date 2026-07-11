@@ -1,6 +1,7 @@
 # Current harmonization status
 
-_Last updated: 2026-06-22 18:07 CEST_
+_Historical run log last updated: 2026-06-22 18:07 CEST. The live 2026-07-11
+dashboard and operating contract supersede historical operational advice below._
 
 ## Live branch
 
@@ -12,8 +13,25 @@ _Last updated: 2026-06-22 18:07 CEST_
 
 - Use this page for the canonical latest status, validation evidence, and dated handoffs.
 - Use [dataset-status-catalogue.md](dataset-status-catalogue.md) for detailed source/family descriptions, PRISM/T-cell blockers, temporal catalogue notes, and artifact pointers.
-- Use [model-roadmap.md](model-roadmap.md) for model-ready criteria, benchmark status, and environment decisions.
+- Use [model environment notes](../../docs/model_environments.md) for model-ready criteria, benchmark status, and environment decisions.
 - Use [lamin-audit-and-branch-model.md](lamin-audit-and-branch-model.md) for count vocabulary and branch/audit interpretation.
+- Use [migration-reproducibility-and-gcs-exit.md](migration-reproducibility-and-gcs-exit.md)
+  for the current Lamin/notebook/GCS-exit contract and publication lessons.
+- Use [agent-context.md](agent-context.md) for concise worker routing.
+
+## Current migration policy — 2026-07-11
+
+**CURRENT, not a completion claim:** Lamin is the durable system of record;
+project-owned GCS is temporary staging. All large payload/GCS/broad-Lamin work
+runs on the warm EU VM, never the Mac. Historical references below to Mac GCS
+caches or staging are retained only as evidence of past runs; they are not
+instructions and do not authorize a new Mac cache or a retained GCS dependency.
+
+**PENDING:** GCS cleanup requires a reviewed machine-readable
+`GCS_DECOMMISSION_READY` manifest mapping each removable prefix to accepted
+Lamin UIDs/Collections, source parity/readback, an executed reconstruction
+notebook, immutable upstream checksum or retained Lamin raw, and no live
+consumer. See the migration/reproducibility page for the complete rule.
 
 ## P3R final verdict — real P3 complete
 
@@ -1342,7 +1360,7 @@ artifacts/logs/prism_GSE247599_full_20260623.log
 Current decision:
 
 - `GSE247599` was selected by recomputing the current P5F inventory and GCS object sizes, not by trusting the prior handoff. Source: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE247599.h5ad`, 1,433,706,825 bytes.
-- Backed inspection showed CSRDataset int64, 24,435 obs x 36,602 vars, duplicate obs names, unique vars, and no obsm keys. The mounted GCS path was too slow for backed open, so the verified repo-local GCS cache helper was used for this 1.4 GB object.
+- Historical run evidence: backed inspection showed CSRDataset int64, 24,435 obs x 36,602 vars, duplicate obs names, unique vars, and no obsm keys. Its former local cache workaround is deprecated; current policy forbids Mac payload caching.
 - Chunking used `chunk_size=1000` because the matrix is wide (36k vars) and int64; smoke chunk peak RSS was ~614 MB and full ingestion peak RSS was ~841 MB with no swaps. No full X matrix was loaded.
 - Verification passed for 25/25 chunks: 24,435 rows, 36,602 vars, 1,876 controls, all obs->X and X->var links correct, X payloads exist, row/var counts match, and required obs fields are present.
 - Live P5F counts after this run: 13 completed, 17 accessible smoke-first candidates, 1 staged payload issue (`GSE274751` truncated), 5 missing/source-blocked rows (`GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, `GSE282731`), and 1 user-excluded row (`GSE90063_human-004`). Next candidate by size: `GSE283614`.
@@ -1367,7 +1385,7 @@ artifacts/logs/prism_GSE283614_full_20260623.log
 Current decision:
 
 - `GSE283614` was selected by recomputing the current P5F inventory from live GCS object sizes plus visible Lamin triplet keys, not by trusting the prior handoff. Source: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE283614.h5ad`, 1,514,297,474 bytes.
-- Backed inspection used the repo-local GCS cache helper and showed CSRDataset float64, 12,844 obs x 33,586 vars, unique obs names, non-unique vars handled by the chunker, and no obsm/layer keys. No full X matrix was loaded.
+- Historical run evidence: backed inspection found CSRDataset float64, 12,844 obs x 33,586 vars, unique obs names, non-unique vars handled by the chunker, and no obsm/layer keys. The former local cache workaround is deprecated; no current Mac payload cache is permitted.
 - Chunking used `chunk_size=1000`; smoke chunk peak RSS was ~1.1 GB and full ingestion peak RSS was ~1.17 GB with no swaps.
 - Verification passed for 13/13 chunks: 12,844 rows, 33,586 vars, 5,763 controls, all obs->X and X->var links correct, X payloads exist, row/var counts match, and required obs fields are present.
 - Live P5F counts after this run: 14 completed, 16 accessible smoke-first candidates, 1 staged payload issue (`GSE274751` truncated), 5 missing/source-blocked rows (`GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, `GSE282731`), and 1 user-excluded row (`GSE90063_human-004`). Next candidate by size: `GSE280767`.
@@ -1392,7 +1410,7 @@ artifacts/scripts/verify_prism_p5f_dataset_20260623.py
 Current decision:
 
 - `GSE269596` was selected by recomputing the current P5F inventory from live GCS object sizes plus visible Lamin triplet keys after accepted PR #33/GSE280767, not by trusting the prior handoff. Source: `gs://scperturb/pert-gym/staging/data/main/prism_google_drive_datasets_20260622/GSE269596.h5ad`, 2,505,068,264 bytes.
-- Backed inspection used the repo-local GCS cache helper and showed CSRDataset float32, 74,312 obs x 36,601 vars, unique obs/var names, no layers/raw, and no full X matrix load.
+- Historical run evidence: backed inspection found CSRDataset float32, 74,312 obs x 36,601 vars, unique obs/var names, no layers/raw, and no full X matrix load. The former local cache workaround is deprecated; no current Mac payload cache is permitted.
 - Chunking used `chunk_size=1000`; smoke chunk verified first, then full ingestion skipped the smoke chunk and completed all 75 chunks. Full ingestion peak RSS was ~622 MB with no swaps.
 - Verification passed for 75/75 chunks: 74,312 rows, 36,601 vars, 7,394 controls, all obs->X and X->var links correct, X payloads exist, row/var counts match, and required obs fields are present.
 - Live P5F counts after this run: 16 completed, 14 accessible smoke-first candidates, 1 staged payload issue (`GSE274751` truncated), 5 missing/source-blocked rows (`GSE247598`, `GSE261157`, `GSE272093`, `GSE272457`, `GSE282731`), and 1 user-excluded row (`GSE90063_human-004`). Next candidate by size: `GSE281048_TGFB_Perturb_seq`.
