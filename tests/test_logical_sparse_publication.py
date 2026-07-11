@@ -324,6 +324,146 @@ def test_publish_adopts_each_remote_save_before_journal_commit(
     )
 
 
+def test_publish_rejects_orphan_promotion_before_creating_prior_stages(
+    tmp_path: Path,
+) -> None:
+    root, logical_key, revision = _candidate(tmp_path)
+    ln = _Ln(tmp_path)
+    result = publish_candidate(
+        ln=ln,
+        root=root,
+        logical_key=logical_key,
+        revision=revision,
+        collection_key="pert-gym/additions/test-r1",
+        require_vm=lambda: None,
+    )
+    ln.Artifact.existing[:] = [
+        item for item in ln.Artifact.existing if item.key == result["promotion_key"]
+    ]
+    ln.Collection.existing = []
+    (root / logical_key / "revisions" / revision / "publication-journal.json").unlink()
+
+    with pytest.raises(RuntimeError, match="remote publication stages must form"):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+        )
+
+    assert len(ln.Artifact.existing) == 1
+    assert not ln.Collection.existing
+    assert not (
+        root / logical_key / "revisions" / revision / "publication-journal.json"
+    ).exists()
+
+
+@pytest.mark.parametrize("orphan_stage", ["payload", "collection-manifest"])
+def test_publish_rejects_future_remote_stage_holes_before_any_save(
+    tmp_path: Path, orphan_stage: str
+) -> None:
+    root, logical_key, revision = _candidate(tmp_path)
+    ln = _Ln(tmp_path)
+    result = publish_candidate(
+        ln=ln,
+        root=root,
+        logical_key=logical_key,
+        revision=revision,
+        collection_key="pert-gym/additions/test-r1",
+        require_vm=lambda: None,
+    )
+    stage_keys = {
+        "payload": result["payload_key"],
+        "collection-manifest": result["collection_manifest_key"],
+    }
+    ln.Artifact.existing[:] = [
+        item for item in ln.Artifact.existing if item.key == stage_keys[orphan_stage]
+    ]
+    ln.Collection.existing = []
+    (root / logical_key / "revisions" / revision / "publication-journal.json").unlink()
+
+    with pytest.raises(RuntimeError, match="remote publication stages must form"):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+        )
+
+    assert len(ln.Artifact.existing) == 1
+    assert not ln.Collection.existing
+
+
+def test_publish_rejects_collection_promotion_inconsistency_before_any_save(
+    tmp_path: Path,
+) -> None:
+    root, logical_key, revision = _candidate(tmp_path)
+    ln = _Ln(tmp_path)
+    result = publish_candidate(
+        ln=ln,
+        root=root,
+        logical_key=logical_key,
+        revision=revision,
+        collection_key="pert-gym/additions/test-r1",
+        require_vm=lambda: None,
+    )
+    ln.Artifact.existing[:] = [
+        item for item in ln.Artifact.existing if item.key != result["shared_var_key"]
+    ]
+    ln.Collection.existing[0].uid = "collection-not-matching-promotion"
+    (root / logical_key / "revisions" / revision / "publication-journal.json").unlink()
+    artifacts_before = len(ln.Artifact.existing)
+    collections_before = len(ln.Collection.existing)
+
+    with pytest.raises(RuntimeError, match="remote publication stages must form"):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+        )
+
+    assert len(ln.Artifact.existing) == artifacts_before
+    assert len(ln.Collection.existing) == collections_before
+
+
+def test_publish_rejects_collection_promotion_uid_mismatch_without_saves(
+    tmp_path: Path,
+) -> None:
+    root, logical_key, revision = _candidate(tmp_path)
+    ln = _Ln(tmp_path)
+    publish_candidate(
+        ln=ln,
+        root=root,
+        logical_key=logical_key,
+        revision=revision,
+        collection_key="pert-gym/additions/test-r1",
+        require_vm=lambda: None,
+    )
+    ln.Collection.existing[0].uid = "collection-not-matching-promotion"
+    artifacts_before = len(ln.Artifact.existing)
+    collections_before = len(ln.Collection.existing)
+
+    with pytest.raises(RuntimeError, match="checksum mismatch"):
+        publish_candidate(
+            ln=ln,
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            collection_key="pert-gym/additions/test-r1",
+            require_vm=lambda: None,
+        )
+
+    assert len(ln.Artifact.existing) == artifacts_before
+    assert len(ln.Collection.existing) == collections_before
+
+
 def test_publish_rejects_unjournaled_artifact_checksum_or_identity_drift(
     tmp_path: Path,
 ) -> None:

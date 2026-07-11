@@ -254,7 +254,7 @@ def _journal_path(root: Path, logical_key: str, revision: str) -> Path:
 
 
 def _load_or_create_journal(
-    path: Path, identity: Mapping[str, object]
+    path: Path, identity: Mapping[str, object], *, write: bool = True
 ) -> dict[str, object]:
     if path.exists():
         journal = json.loads(path.read_text(encoding="utf-8"))
@@ -270,8 +270,41 @@ def _load_or_create_journal(
         "identity": dict(identity),
         "completed_stages": [],
     }
-    _write_json(path, journal)
+    if write:
+        _write_json(path, journal)
     return journal
+
+
+def _assert_remote_stage_prefix(
+    *,
+    artifact_existing: Mapping[str, Any],
+    artifact_paths: Mapping[str, str],
+    collection_existing: list[Any],
+    completed_stages: list[str],
+) -> None:
+    """Allow only one remote save ahead of the durable journal prefix.
+
+    A remote save can succeed immediately before its journal update. Any later
+    remote stage without its predecessors cannot come from that crash window and
+    must be rejected before publication attempts another save.
+    """
+    remote_stages = [
+        stage
+        for stage in _STAGE_ORDER
+        if (
+            bool(collection_existing)
+            if stage == "collection"
+            else artifact_paths[stage] in artifact_existing
+        )
+    ]
+    if remote_stages != list(_STAGE_ORDER[: len(remote_stages)]):
+        raise RuntimeError("remote publication stages must form a contiguous prefix")
+    if completed_stages != list(_STAGE_ORDER[: len(completed_stages)]):
+        raise RuntimeError("publication journal stages must form a contiguous prefix")
+    if len(remote_stages) not in (len(completed_stages), len(completed_stages) + 1):
+        raise RuntimeError(
+            "remote publication stages must form a prefix consistent with the journal"
+        )
 
 
 def _complete_stage(
@@ -394,12 +427,38 @@ def publish_candidate(
         "collection_manifest_sha256": _sha256_json(collection_manifest),
     }
     journal_path = _journal_path(root, logical_key, revision)
-    journal = _load_or_create_journal(journal_path, identity)
+    journal = _load_or_create_journal(journal_path, identity, write=False)
     completed = set(cast(list[str], journal["completed_stages"]))
     artifact_existing = {
         record.key: record for record in _exact_artifacts(ln, artifact_paths.values())
     }
     collection_existing = _exact_collections(ln, [collection_key])
+    collection_member_keys = [
+        artifact_paths[name]
+        for name in (
+            "shared-var",
+            "payload",
+            "manifest",
+            "migration-map",
+            "collection-manifest",
+        )
+    ]
+    collection_description = "append-only logical sparse-Zarr candidate metadata"
+    if collection_existing:
+        _reconcile_collection(
+            collection_existing[0],
+            key=collection_key,
+            description=collection_description,
+            member_keys=collection_member_keys,
+        )
+    _assert_remote_stage_prefix(
+        artifact_existing=artifact_existing,
+        artifact_paths=artifact_paths,
+        collection_existing=collection_existing,
+        completed_stages=cast(list[str], journal["completed_stages"]),
+    )
+    if not journal_path.exists():
+        _write_json(journal_path, journal)
     for stage, key in artifact_paths.items():
         if stage in completed and key not in artifact_existing:
             raise RuntimeError(
@@ -460,17 +519,8 @@ def publish_candidate(
         }
         for stage in _STAGE_ORDER:
             if stage == "collection":
-                member_keys = [
-                    artifact_paths[name]
-                    for name in (
-                        "shared-var",
-                        "payload",
-                        "manifest",
-                        "migration-map",
-                        "collection-manifest",
-                    )
-                ]
-                description = "append-only logical sparse-Zarr candidate metadata"
+                member_keys = collection_member_keys
+                description = collection_description
                 if stage not in completed:
                     if collection_existing:
                         collection = _reconcile_collection(
