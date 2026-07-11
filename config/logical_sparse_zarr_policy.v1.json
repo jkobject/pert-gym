@@ -32,6 +32,7 @@
   },
   "obs_provenance": {
     "required": ["source_uri", "source_checksum", "source_row_start", "source_row_end", "ingestion_run_id", "writer_version"],
+    "source_checksum_contract": "source_checksum = sha256-file-bytes/v1:<64-hex SHA-256 digest>; digest hashes the source payload's exact raw bytes.",
     "row_order": "Each obs parquet is the authoritative order for its same-index X chunk; source intervals are half-open and must be preserved.",
     "forbidden": ["silent row reorder", "unrecorded obs concatenation"]
   },
@@ -63,7 +64,7 @@
     "runner": "pert-gym-worker-eu only",
     "shapes": [5000, 10000, 25000],
     "formats": ["csr", "csc"],
-    "required_metrics": ["local_rss_bytes", "wall_seconds", "bytes", "matrix_parity", "obs_parity", "source_row_parity"],
+    "required_metrics": ["case_rss_baseline_bytes", "case_rss_peak_bytes", "case_rss_peak_delta_bytes", "wall_seconds", "bytes", "matrix_parity", "obs_parity", "source_row_parity"],
     "command": "uv run python tools/benchmark_sparse_zarr.py --output artifacts/sparse_zarr_benchmark.json"
   }
 }

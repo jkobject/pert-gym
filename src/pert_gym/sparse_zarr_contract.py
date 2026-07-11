@@ -7,6 +7,7 @@ ambiguous logical datasets before dereferencing an artifact.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Any, Mapping, Sequence
 
@@ -15,12 +16,9 @@ SURFACE_VERSION = 1
 LEGACY_FORMAT = "pert-gym.triplet-h5ad"
 LEGACY_VERSION = 1
 _CHECKSUM_FIELDS = ("data_sha256", "indices_sha256", "indptr_sha256")
-_PROVENANCE_STRING_FIELDS = (
-    "source_uri",
-    "source_checksum",
-    "ingestion_run_id",
-    "writer_version",
-)
+_SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
+_SOURCE_CHECKSUM_PREFIX = "sha256-file-bytes/v1:"
+_PROVENANCE_STRING_FIELDS = ("source_uri", "ingestion_run_id", "writer_version")
 
 
 @dataclass(frozen=True)
@@ -71,6 +69,22 @@ def _nonempty_string(value: Any, field: str) -> str:
     return value
 
 
+def _sha256(value: Any, field: str) -> str:
+    value = _nonempty_string(value, field)
+    if not _SHA256_RE.fullmatch(value):
+        raise ValueError(f"{field} must be an exact 64-hex SHA-256 digest")
+    return value
+
+
+def _source_checksum(value: Any, field: str) -> str:
+    """Validate the versioned source-file checksum contract."""
+    value = _nonempty_string(value, field)
+    if not value.startswith(_SOURCE_CHECKSUM_PREFIX):
+        raise ValueError(f"{field} must use {_SOURCE_CHECKSUM_PREFIX}<64-hex-digest>")
+    _sha256(value.removeprefix(_SOURCE_CHECKSUM_PREFIX), field)
+    return value
+
+
 def _shape(value: Any, field: str) -> tuple[int, int]:
     if (
         not isinstance(value, Sequence)
@@ -88,10 +102,15 @@ def _as_chunk_ranges(
     chunks: Sequence[Mapping[str, Any]], n_vars: int
 ) -> tuple[ChunkRange, ...]:
     result: list[ChunkRange] = []
+    seen_chunk_keys: set[str] = set()
+    seen_obs_keys: set[str] = set()
     for index, chunk in enumerate(chunks):
         if not isinstance(chunk, Mapping):
             raise ValueError(f"chunks[{index}] must be an object")
         key = _nonempty_string(_require(chunk, "key"), f"chunks[{index}].key")
+        if key in seen_chunk_keys:
+            raise ValueError(f"chunks[{index}].key must be unique")
+        seen_chunk_keys.add(key)
         start = _nonnegative_int(_require(chunk, "start"), f"chunks[{index}].start")
         end = _nonnegative_int(_require(chunk, "end"), f"chunks[{index}].end")
         nnz = _nonnegative_int(_require(chunk, "nnz"), f"chunks[{index}].nnz")
@@ -109,14 +128,15 @@ def _as_chunk_ranges(
         if not isinstance(checksums, Mapping):
             raise ValueError(f"chunks[{index}].checksums must be an object")
         for name in _CHECKSUM_FIELDS:
-            _nonempty_string(
-                _require(checksums, name), f"chunks[{index}].checksums.{name}"
-            )
+            _sha256(_require(checksums, name), f"chunks[{index}].checksums.{name}")
 
         obs = _require(chunk, "obs")
         if not isinstance(obs, Mapping):
             raise ValueError(f"chunks[{index}].obs must be an object")
         obs_key = _nonempty_string(_require(obs, "key"), f"chunks[{index}].obs.key")
+        if obs_key in seen_obs_keys:
+            raise ValueError(f"chunks[{index}].obs.key must be unique")
+        seen_obs_keys.add(obs_key)
         provenance = _require(obs, "provenance")
         if not isinstance(provenance, Mapping):
             raise ValueError(f"chunks[{index}].obs.provenance must be an object")
@@ -124,6 +144,10 @@ def _as_chunk_ranges(
             _nonempty_string(
                 _require(provenance, name), f"chunks[{index}].obs.provenance.{name}"
             )
+        _source_checksum(
+            _require(provenance, "source_checksum"),
+            f"chunks[{index}].obs.provenance.source_checksum",
+        )
         source_start = _nonnegative_int(
             _require(provenance, "source_row_start"),
             f"chunks[{index}].obs.provenance.source_row_start",
@@ -198,8 +222,12 @@ def validate_logical_sparse_surface(
     shared_var = _require(manifest, "shared_var")
     if not isinstance(shared_var, Mapping):
         raise ValueError("shared_var must be an object")
-    for key in ("key", "index_sha256", "frame_sha256", "schema_fingerprint"):
-        _nonempty_string(_require(shared_var, key), f"shared_var.{key}")
+    _nonempty_string(_require(shared_var, "key"), "shared_var.key")
+    _sha256(_require(shared_var, "index_sha256"), "shared_var.index_sha256")
+    _sha256(_require(shared_var, "frame_sha256"), "shared_var.frame_sha256")
+    _nonempty_string(
+        _require(shared_var, "schema_fingerprint"), "shared_var.schema_fingerprint"
+    )
 
     return LogicalSparseSurface(
         format=SURFACE_FORMAT,

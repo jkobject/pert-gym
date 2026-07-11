@@ -13,6 +13,8 @@ from pert_gym.sparse_zarr_contract import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+SHA256_A = "a" * 64
+SHA256_B = "B" * 64
 
 
 def manifest() -> dict:
@@ -31,15 +33,15 @@ def manifest() -> dict:
                 "shape": [5, 4],
                 "dtype": "float32",
                 "checksums": {
-                    "data_sha256": "data-0000",
-                    "indices_sha256": "indices-0000",
-                    "indptr_sha256": "indptr-0000",
+                    "data_sha256": SHA256_A,
+                    "indices_sha256": SHA256_A,
+                    "indptr_sha256": SHA256_A,
                 },
                 "obs": {
                     "key": "obs/0000.parquet",
                     "provenance": {
                         "source_uri": "gs://example/source.h5ad",
-                        "source_checksum": "source-hash",
+                        "source_checksum": f"sha256-file-bytes/v1:{SHA256_A}",
                         "source_row_start": 0,
                         "source_row_end": 5,
                         "ingestion_run_id": "run-0000",
@@ -55,15 +57,15 @@ def manifest() -> dict:
                 "shape": [5, 4],
                 "dtype": "float32",
                 "checksums": {
-                    "data_sha256": "data-0001",
-                    "indices_sha256": "indices-0001",
-                    "indptr_sha256": "indptr-0001",
+                    "data_sha256": SHA256_B,
+                    "indices_sha256": SHA256_B,
+                    "indptr_sha256": SHA256_B,
                 },
                 "obs": {
                     "key": "obs/0001.parquet",
                     "provenance": {
                         "source_uri": "gs://example/source.h5ad",
-                        "source_checksum": "source-hash",
+                        "source_checksum": f"sha256-file-bytes/v1:{SHA256_B}",
                         "source_row_start": 5,
                         "source_row_end": 10,
                         "ingestion_run_id": "run-0001",
@@ -74,8 +76,8 @@ def manifest() -> dict:
         ],
         "shared_var": {
             "key": "vars/abc/var.parquet",
-            "index_sha256": "index-hash",
-            "frame_sha256": "frame-hash",
+            "index_sha256": SHA256_A,
+            "frame_sha256": SHA256_B,
             "schema_fingerprint": "schema-v1",
         },
     }
@@ -83,7 +85,6 @@ def manifest() -> dict:
 
 def test_v1_manifest_requires_exact_chunk_denominator_and_nnz_parity() -> None:
     surface = validate_logical_sparse_surface(manifest())
-
     assert surface.shape == (10, 4)
     assert [(chunk.start, chunk.end) for chunk in surface.chunks] == [(0, 5), (5, 10)]
 
@@ -122,9 +123,54 @@ def test_v1_manifest_rejects_missing_chunk_integrity_and_obs_provenance(
 ) -> None:
     invalid = manifest()
     mutate(invalid)
-
     with pytest.raises(ValueError, match=message):
         validate_logical_sparse_surface(invalid)
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (
+            lambda value: value["chunks"][1].update({"key": "chunks/0000.zarr"}),
+            "key must be unique",
+        ),
+        (
+            lambda value: value["chunks"][1]["obs"].update({"key": "obs/0000.parquet"}),
+            "obs.key must be unique",
+        ),
+        (
+            lambda value: value["chunks"][0]["checksums"].update(
+                {"data_sha256": "not-a-sha256"}
+            ),
+            "64-hex",
+        ),
+        (lambda value: value["shared_var"].update({"index_sha256": "short"}), "64-hex"),
+        (
+            lambda value: value["chunks"][0]["obs"]["provenance"].update(
+                {"source_checksum": SHA256_A}
+            ),
+            "sha256-file-bytes/v1",
+        ),
+        (
+            lambda value: value["chunks"][0]["obs"]["provenance"].update(
+                {"source_checksum": "sha256-file-bytes/v1:not-a-sha256"}
+            ),
+            "64-hex",
+        ),
+    ],
+)
+def test_v1_manifest_rejects_duplicate_object_identities_and_invalid_checksums(
+    mutate, message: str
+) -> None:
+    invalid = manifest()
+    mutate(invalid)
+    with pytest.raises(ValueError, match=message):
+        validate_logical_sparse_surface(invalid)
+
+
+def test_v1_manifest_accepts_uppercase_sha256_digests() -> None:
+    surface = validate_logical_sparse_surface(manifest())
+    assert surface.shared_var["frame_sha256"] == SHA256_B
 
 
 def test_v1_manifest_rejects_chunk_shape_and_source_row_mismatches() -> None:
@@ -141,7 +187,6 @@ def test_v1_manifest_rejects_chunk_shape_and_source_row_mismatches() -> None:
 
 def test_balanced_chunks_cover_exact_denominator_without_small_tail() -> None:
     chunks = balanced_row_chunks(n_obs=25_001, target_rows=10_000)
-
     assert chunks[0][0] == 0
     assert chunks[-1][1] == 25_001
     assert (
@@ -160,7 +205,6 @@ def test_adaptive_target_uses_nnz_width_and_rss_bounds() -> None:
         min_rows=5_000,
         max_rows=100_000,
     )
-
     assert 5_000 <= target <= 100_000
     assert target < 100_000
 
@@ -179,7 +223,6 @@ def test_legacy_triplet_loader_is_normalized_to_one_chunk() -> None:
             "var_key": "old/var.parquet",
         }
     )
-
     assert surface.format == LEGACY_FORMAT
     assert [(chunk.start, chunk.end, chunk.nnz) for chunk in surface.chunks] == [
         (0, 3, 4)
@@ -205,7 +248,6 @@ def test_legacy_loader_fails_closed_for_unknown_versions_and_formats(
         "var_key": "old/var.parquet",
     }
     legacy[field] = value
-
     with pytest.raises(ValueError, match=message):
         load_compatible_surface(legacy)
 
@@ -214,12 +256,13 @@ def test_machine_readable_policy_covers_required_families_and_vm_benchmark() -> 
     policy = json.loads(
         (ROOT / "config/logical_sparse_zarr_policy.v1.json").read_text()
     )
-
     assert policy["surface"]["version"] == 1
     assert policy["benchmark"]["runner"] == "pert-gym-worker-eu only"
     assert set(policy["benchmark"]["shapes"]) == {5_000, 10_000, 25_000}
     assert set(policy["benchmark"]["required_metrics"]) == {
-        "local_rss_bytes",
+        "case_rss_baseline_bytes",
+        "case_rss_peak_bytes",
+        "case_rss_peak_delta_bytes",
         "wall_seconds",
         "bytes",
         "matrix_parity",
