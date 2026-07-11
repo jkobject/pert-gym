@@ -20,7 +20,9 @@ class _Records:
 
 
 class _Artifact:
-    def __init__(self, manager: _ArtifactManager, path: Path, *, key: str, description: str):
+    def __init__(
+        self, manager: _ArtifactManager, path: Path, *, key: str, description: str
+    ):
         self.manager = manager
         self.path = path
         self.key = key
@@ -74,14 +76,29 @@ class _Collection:
 
 
 class _Ln:
-    def __init__(self, tmp_path: Path, *, branch: str = "jkobject", existing: list[_Artifact] | None = None):
+    def __init__(
+        self,
+        tmp_path: Path,
+        *,
+        branch: str = "jkobject",
+        existing: list[_Artifact] | None = None,
+    ):
         self.Artifact = _ArtifactManager(tmp_path / "remote", existing)
         self.Collection = _Collection
         self.Collection.existing = []
         self.setup = type(
             "Setup",
             (),
-            {"settings": type("Settings", (), {"instance": type("I", (), {"slug": "laminlabs/pertdata"})(), "branch": type("B", (), {"name": branch})()})()},
+            {
+                "settings": type(
+                    "Settings",
+                    (),
+                    {
+                        "instance": type("I", (), {"slug": "laminlabs/pertdata"})(),
+                        "branch": type("B", (), {"name": branch})(),
+                    },
+                )()
+            },
         )()
 
 
@@ -105,7 +122,9 @@ def _payload(ln: _Ln, key: str) -> _Artifact:
     return next(artifact for artifact in ln.Artifact.created if artifact.key == key)
 
 
-def test_publish_candidate_is_self_contained_append_only_and_remote_readback(tmp_path: Path) -> None:
+def test_publish_candidate_is_self_contained_append_only_and_remote_readback(
+    tmp_path: Path,
+) -> None:
     root, logical_key, revision = _candidate(tmp_path)
     ln = _Ln(tmp_path)
     result = publish_candidate(
@@ -123,13 +142,22 @@ def test_publish_candidate_is_self_contained_append_only_and_remote_readback(tmp
     assert len(ln.Artifact.created) == 6
 
     restored = tmp_path / "restored"
-    shutil.unpack_archive(_payload(ln, str(result["payload_key"])).remote_path, restored)
-    _surface, matrix, _obs, var = read_logical_sparse_revision(restored, logical_key, revision)
+    shutil.unpack_archive(
+        _payload(ln, str(result["payload_key"])).remote_path, restored
+    )
+    _surface, matrix, _obs, var = read_logical_sparse_revision(
+        restored, logical_key, revision
+    )
     assert matrix.shape == (2, 2)
     assert var.index.tolist() == ["g1", "g2"]
 
     ln.Artifact.existing.append(
-        _Artifact(ln.Artifact, Path(__file__), key=str(result["manifest_key"]), description="old")
+        _Artifact(
+            ln.Artifact,
+            Path(__file__),
+            key=str(result["manifest_key"]),
+            description="old",
+        )
     )
     with pytest.raises(RuntimeError, match="duplicate artifacts"):
         publish_candidate(
@@ -143,9 +171,20 @@ def test_publish_candidate_is_self_contained_append_only_and_remote_readback(tmp
 
 
 @pytest.mark.parametrize(
-    "stage", ["shared-var", "payload", "manifest", "migration-map", "collection-manifest", "collection", "promotion"]
+    "stage",
+    [
+        "shared-var",
+        "payload",
+        "manifest",
+        "migration-map",
+        "collection-manifest",
+        "collection",
+        "promotion",
+    ],
 )
-def test_publish_resumes_every_exact_partial_stage_and_rejects_drift(tmp_path: Path, stage: str) -> None:
+def test_publish_resumes_every_exact_partial_stage_and_rejects_drift(
+    tmp_path: Path, stage: str
+) -> None:
     root, logical_key, revision = _candidate(tmp_path)
     ln = _Ln(tmp_path)
     with pytest.raises(RuntimeError, match=f"intentional crash after {stage}"):
@@ -169,7 +208,9 @@ def test_publish_resumes_every_exact_partial_stage_and_rejects_drift(tmp_path: P
     assert result["promotion_key"].endswith("promotions/r1.json")
 
     manifest = root / logical_key / "revisions" / revision / "manifest.json"
-    manifest.write_text(manifest.read_text().replace("legacy-triplets/v1", "drifted-source/v1"))
+    manifest.write_text(
+        manifest.read_text().replace("legacy-triplets/v1", "drifted-source/v1")
+    )
     with pytest.raises(RuntimeError, match="publication journal identity mismatch"):
         publish_candidate(
             ln=ln,
@@ -184,7 +225,9 @@ def test_publish_resumes_every_exact_partial_stage_and_rejects_drift(tmp_path: P
 def test_publication_refuses_collection_collision(tmp_path: Path) -> None:
     root, logical_key, revision = _candidate(tmp_path)
     ln = _Ln(tmp_path)
-    ln.Collection.existing = [_Collection([], key="pert-gym/additions/test-r1", description="old")]
+    ln.Collection.existing = [
+        _Collection([], key="pert-gym/additions/test-r1", description="old")
+    ]
     with pytest.raises(FileExistsError, match="Collection"):
         publish_candidate(
             ln=ln,
@@ -196,7 +239,9 @@ def test_publication_refuses_collection_collision(tmp_path: Path) -> None:
         )
 
 
-def test_publication_refuses_main_and_rollback_is_vm_gated_and_non_colliding(tmp_path: Path) -> None:
+def test_publication_refuses_main_and_rollback_is_vm_gated_and_non_colliding(
+    tmp_path: Path,
+) -> None:
     root, logical_key, revision = _candidate(tmp_path)
     with pytest.raises(RuntimeError, match="jkobject"):
         publish_candidate(

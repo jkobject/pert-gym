@@ -38,7 +38,9 @@ def _sha256_file(path: Path) -> str:
 
 def _sha256_json(value: object) -> str:
     return hashlib.sha256(
-        json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+        json.dumps(
+            value, sort_keys=True, separators=(",", ":"), allow_nan=False
+        ).encode()
     ).hexdigest()
 
 
@@ -72,7 +74,9 @@ def _exact_collections(ln: Any, keys: Iterable[str]) -> list[Any]:
     records = list(collection_type.filter(key__in=requested).all())
     returned = [str(getattr(record, "key", "")) for record in records]
     if len(returned) != len(set(returned)) or set(returned) - set(requested):
-        raise RuntimeError("invalid Collection records returned during no-overwrite preflight")
+        raise RuntimeError(
+            "invalid Collection records returned during no-overwrite preflight"
+        )
     return records
 
 
@@ -112,18 +116,24 @@ def _save_file(ln: Any, path: Path, *, key: str, description: str) -> Any:
 
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(value, sort_keys=True, indent=2) + "\n", encoding="utf-8"
+    )
 
 
 def _journal_path(root: Path, logical_key: str, revision: str) -> Path:
     return root / logical_key / "revisions" / revision / "publication-journal.json"
 
 
-def _load_or_create_journal(path: Path, identity: Mapping[str, object]) -> dict[str, object]:
+def _load_or_create_journal(
+    path: Path, identity: Mapping[str, object]
+) -> dict[str, object]:
     if path.exists():
         journal = json.loads(path.read_text(encoding="utf-8"))
         if journal.get("identity") != identity:
-            raise RuntimeError("publication journal identity mismatch; refusing drifted resume")
+            raise RuntimeError(
+                "publication journal identity mismatch; refusing drifted resume"
+            )
         if not isinstance(journal.get("completed_stages"), list):
             raise RuntimeError("publication journal completed_stages is invalid")
         return journal
@@ -137,7 +147,11 @@ def _load_or_create_journal(path: Path, identity: Mapping[str, object]) -> dict[
 
 
 def _complete_stage(
-    *, journal_path: Path, journal: dict[str, object], stage: str, stop_after_stage: str | None
+    *,
+    journal_path: Path,
+    journal: dict[str, object],
+    stage: str,
+    stop_after_stage: str | None,
 ) -> None:
     completed = cast(list[str], journal["completed_stages"])
     if stage not in completed:
@@ -147,7 +161,9 @@ def _complete_stage(
         raise RuntimeError(f"intentional crash after {stage}")
 
 
-def _build_payload(*, root: Path, logical_key: str, revision: str, target: Path, shared_key: str) -> None:
+def _build_payload(
+    *, root: Path, logical_key: str, revision: str, target: Path, shared_key: str
+) -> None:
     candidate = root / logical_key / "revisions" / revision
     shared = root / shared_key
     if not shared.is_file():
@@ -177,7 +193,9 @@ def publish_candidate(
     assert_jkobject_branch(ln)
     logical_key = _safe_key(logical_key)
     collection_key = _safe_key(collection_key)
-    surface, _matrix, _obs, _var = read_logical_sparse_revision(root, logical_key, revision)
+    surface, _matrix, _obs, _var = read_logical_sparse_revision(
+        root, logical_key, revision
+    )
     candidate = root / logical_key / "revisions" / revision
     manifest_path = candidate / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -228,17 +246,25 @@ def publish_candidate(
     journal_path = _journal_path(root, logical_key, revision)
     journal = _load_or_create_journal(journal_path, identity)
     completed = set(cast(list[str], journal["completed_stages"]))
-    artifact_existing = {record.key: record for record in _exact_artifacts(ln, artifact_paths.values())}
+    artifact_existing = {
+        record.key: record for record in _exact_artifacts(ln, artifact_paths.values())
+    }
     collection_existing = _exact_collections(ln, [collection_key])
     if not completed and collection_existing:
         raise FileExistsError("refusing Collection key collision before publication")
     if not completed and artifact_existing:
-        raise FileExistsError("refusing duplicate/no-overwrite publication without an exact journal")
+        raise FileExistsError(
+            "refusing duplicate/no-overwrite publication without an exact journal"
+        )
     for stage, key in artifact_paths.items():
         if stage in completed and key not in artifact_existing:
-            raise RuntimeError(f"publication journal says {stage} completed but artifact is missing")
+            raise RuntimeError(
+                f"publication journal says {stage} completed but artifact is missing"
+            )
     if "collection" in completed and not collection_existing:
-        raise RuntimeError("publication journal says collection completed but Collection is missing")
+        raise RuntimeError(
+            "publication journal says collection completed but Collection is missing"
+        )
     if "collection" not in completed and collection_existing:
         raise FileExistsError("refusing Collection key collision before publication")
 
@@ -248,28 +274,72 @@ def publish_candidate(
         migration_path = temporary_root / "migration-map.json"
         collection_manifest_path = temporary_root / "collection-manifest.json"
         promotion_path = temporary_root / "promotion.json"
-        _build_payload(root=root, logical_key=logical_key, revision=revision, target=payload_path, shared_key=shared_key)
+        _build_payload(
+            root=root,
+            logical_key=logical_key,
+            revision=revision,
+            target=payload_path,
+            shared_key=shared_key,
+        )
         _write_json(migration_path, migration_map)
         _write_json(collection_manifest_path, collection_manifest)
 
         stage_inputs = {
-            "shared-var": (root / shared_key, artifact_paths["shared-var"], "logical sparse-Zarr shared var"),
-            "payload": (payload_path, artifact_paths["payload"], "logical sparse-Zarr immutable payload"),
-            "manifest": (manifest_path, artifact_paths["manifest"], "logical sparse-Zarr candidate manifest"),
-            "migration-map": (migration_path, artifact_paths["migration-map"], "legacy to logical sparse migration map"),
-            "collection-manifest": (collection_manifest_path, artifact_paths["collection-manifest"], "logical sparse candidate collection manifest"),
-            "promotion": (promotion_path, artifact_paths["promotion"], "atomic logical sparse candidate promotion marker"),
+            "shared-var": (
+                root / shared_key,
+                artifact_paths["shared-var"],
+                "logical sparse-Zarr shared var",
+            ),
+            "payload": (
+                payload_path,
+                artifact_paths["payload"],
+                "logical sparse-Zarr immutable payload",
+            ),
+            "manifest": (
+                manifest_path,
+                artifact_paths["manifest"],
+                "logical sparse-Zarr candidate manifest",
+            ),
+            "migration-map": (
+                migration_path,
+                artifact_paths["migration-map"],
+                "legacy to logical sparse migration map",
+            ),
+            "collection-manifest": (
+                collection_manifest_path,
+                artifact_paths["collection-manifest"],
+                "logical sparse candidate collection manifest",
+            ),
+            "promotion": (
+                promotion_path,
+                artifact_paths["promotion"],
+                "atomic logical sparse candidate promotion marker",
+            ),
         }
         for stage in _STAGE_ORDER:
             if stage == "collection":
                 if stage not in completed:
                     collection = ln.Collection(
-                        [artifact_existing[artifact_paths[name]] for name in ("shared-var", "payload", "manifest", "migration-map", "collection-manifest")],
+                        [
+                            artifact_existing[artifact_paths[name]]
+                            for name in (
+                                "shared-var",
+                                "payload",
+                                "manifest",
+                                "migration-map",
+                                "collection-manifest",
+                            )
+                        ],
                         key=collection_key,
                         description="append-only logical sparse-Zarr candidate metadata",
                     ).save()
                     collection_existing = [collection]
-                    _complete_stage(journal_path=journal_path, journal=journal, stage=stage, stop_after_stage=stop_after_stage)
+                    _complete_stage(
+                        journal_path=journal_path,
+                        journal=journal,
+                        stage=stage,
+                        stop_after_stage=stop_after_stage,
+                    )
                 continue
             if stage not in completed:
                 if stage == "promotion":
@@ -280,15 +350,24 @@ def publish_candidate(
                             "logical_key": logical_key,
                             "revision": revision,
                             "candidate_collection_key": collection_key,
-                            "candidate_collection_uid": _artifact_id(collection_existing[0]),
+                            "candidate_collection_uid": _artifact_id(
+                                collection_existing[0]
+                            ),
                             "manifest_key": artifact_paths["manifest"],
                             "rollback_to": None,
                             "state": "candidate-complete",
                         },
                     )
                 path, key, description = stage_inputs[stage]
-                artifact_existing[key] = _save_file(ln, path, key=key, description=description)
-                _complete_stage(journal_path=journal_path, journal=journal, stage=stage, stop_after_stage=stop_after_stage)
+                artifact_existing[key] = _save_file(
+                    ln, path, key=key, description=description
+                )
+                _complete_stage(
+                    journal_path=journal_path,
+                    journal=journal,
+                    stage=stage,
+                    stop_after_stage=stop_after_stage,
+                )
 
     collection = collection_existing[0]
     promotion = artifact_existing[artifact_paths["promotion"]]
@@ -320,7 +399,12 @@ def record_rollback(
     if not reason:
         raise ValueError("rollback reason must be non-empty")
     logical_key = _safe_key(logical_key)
-    event = {"format": "pert-gym.logical-sparse-zarr.rollback/v1", "revision": revision, "reason": reason, "strategy": "retain-candidate"}
+    event = {
+        "format": "pert-gym.logical-sparse-zarr.rollback/v1",
+        "revision": revision,
+        "reason": reason,
+        "strategy": "retain-candidate",
+    }
     event_id = _sha256_json(event)[:20]
     key = f"{logical_key}/rollbacks/{revision}-{event_id}.json"
     if _exact_artifacts(ln, [key]):
@@ -328,5 +412,7 @@ def record_rollback(
     with tempfile.TemporaryDirectory(prefix="logical_sparse_rollback_") as temporary:
         path = Path(temporary) / "rollback.json"
         _write_json(path, event)
-        artifact = _save_file(ln, path, key=key, description="logical sparse rollback record")
+        artifact = _save_file(
+            ln, path, key=key, description="logical sparse rollback record"
+        )
     return {"key": key, "uid": _artifact_id(artifact)}
