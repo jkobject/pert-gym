@@ -62,7 +62,9 @@ def valid_contract() -> dict[str, object]:
         ],
         "reconstruction": {
             "reproducibility_claimed": True,
-            "immutable_upstream_sources": ["https://example.org/record/1"],
+            "immutable_upstream_sources": [
+                {"uri": "https://example.org/record/1"}
+            ],
             "retained_lamin_raw_artifact": None,
             "safe_to_remove_gcs": False,
             "procedure": "Reacquire immutable upstream payload and rerun recorded script.",
@@ -88,6 +90,69 @@ def test_contract_rejects_reproducibility_claim_backed_only_by_gcs() -> None:
     errors = validate_processing_decisions_contract(contract)
 
     assert any("only an unretained GCS object" in error for error in errors)
+
+
+def test_contract_rejects_malformed_immutable_upstream_sources() -> None:
+    contract = valid_contract()
+    reconstruction = contract["reconstruction"]
+    assert isinstance(reconstruction, dict)
+    reconstruction["immutable_upstream_sources"] = ["https://example.org/record/1"]
+
+    errors = validate_processing_decisions_contract(contract)
+
+    assert any("[0] must be a mapping" in error for error in errors)
+    assert any("only an unretained GCS object" in error for error in errors)
+
+
+def test_contract_rejects_immutable_upstream_source_without_uri() -> None:
+    contract = valid_contract()
+    reconstruction = contract["reconstruction"]
+    assert isinstance(reconstruction, dict)
+    reconstruction["immutable_upstream_sources"] = [{"uri": "  "}]
+
+    errors = validate_processing_decisions_contract(contract)
+
+    assert any("[0].uri must be non-empty" in error for error in errors)
+    assert any("only an unretained GCS object" in error for error in errors)
+
+
+def test_contract_rejects_blank_retained_lamin_artifact_key() -> None:
+    contract = valid_contract()
+    reconstruction = contract["reconstruction"]
+    assert isinstance(reconstruction, dict)
+    reconstruction["immutable_upstream_sources"] = []
+    reconstruction["retained_lamin_raw_artifact"] = {"key": "   ", "uid": "\t"}
+
+    errors = validate_processing_decisions_contract(contract)
+
+    assert any("only an unretained GCS object" in error for error in errors)
+
+
+def test_live_lamin_rejects_mac_and_unknown_hosts(monkeypatch) -> None:
+    contract = valid_contract()
+    runtime = contract["runtime"]
+    assert isinstance(runtime, dict)
+    runtime["live_lamin_query_enabled"] = True
+
+    for hostname in ("mac-mini-de-jkobject", "unknown-host"):
+        monkeypatch.setattr(
+            "pert_gym.processing_decisions.socket.gethostname", lambda: hostname
+        )
+        errors = validate_processing_decisions_contract(contract)
+        assert "live Lamin queries may execute only on pert-gym-worker-eu" in errors
+
+
+def test_live_lamin_accepts_exact_worker_eu_hostname(monkeypatch) -> None:
+    contract = valid_contract()
+    runtime = contract["runtime"]
+    assert isinstance(runtime, dict)
+    runtime["live_lamin_query_enabled"] = True
+    monkeypatch.setattr(
+        "pert_gym.processing_decisions.socket.gethostname",
+        lambda: "pert-gym-worker-eu",
+    )
+
+    assert validate_processing_decisions_contract(contract) == []
 
 
 def test_template_notebook_is_valid_and_metadata_first() -> None:

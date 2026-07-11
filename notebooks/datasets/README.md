@@ -17,8 +17,8 @@ replacement and the prerequisites for `safe_to_remove_gcs`.
 
 A notebook must not claim reproducibility if its only remaining source is an
 unretained GCS object. The helper validation rejects that state. A valid claim
-requires at least one immutable upstream source or a retained Lamin raw artifact
-with a key or UID.
+requires at least one immutable upstream source mapping with a non-empty `uri`,
+or a retained Lamin raw artifact with a non-blank key or UID.
 
 ## How to use the template
 

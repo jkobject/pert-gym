@@ -6,6 +6,7 @@ without fetching Lamin artifacts or GCS payloads.
 
 from __future__ import annotations
 
+import socket
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -75,15 +76,30 @@ def _nonempty_string(value: object) -> bool:
 def _has_retained_lamin_raw_artifact(reconstruction: Mapping[str, Any]) -> bool:
     raw_artifact = reconstruction.get("retained_lamin_raw_artifact")
     if isinstance(raw_artifact, Mapping):
-        return bool(raw_artifact.get("key") or raw_artifact.get("uid"))
+        return _nonempty_string(raw_artifact.get("key")) or _nonempty_string(
+            raw_artifact.get("uid")
+        )
     return _nonempty_string(raw_artifact)
 
 
-def _has_immutable_upstream_source(reconstruction: Mapping[str, Any]) -> bool:
+def _immutable_upstream_source_errors(
+    reconstruction: Mapping[str, Any],
+) -> list[str]:
     sources = reconstruction.get("immutable_upstream_sources", [])
-    return (
-        isinstance(sources, Sequence) and not isinstance(sources, str) and bool(sources)
-    )
+    if not isinstance(sources, Sequence) or isinstance(sources, (str, bytes)):
+        return ["reconstruction.immutable_upstream_sources must be a sequence of mappings"]
+
+    errors: list[str] = []
+    for index, source in enumerate(sources):
+        if not isinstance(source, Mapping):
+            errors.append(
+                f"reconstruction.immutable_upstream_sources[{index}] must be a mapping"
+            )
+        elif not _nonempty_string(source.get("uri")):
+            errors.append(
+                f"reconstruction.immutable_upstream_sources[{index}].uri must be non-empty"
+            )
+    return errors
 
 
 def validate_processing_decisions_contract(contract: Mapping[str, Any]) -> list[str]:
@@ -154,10 +170,15 @@ def validate_processing_decisions_contract(contract: Mapping[str, Any]) -> list[
         errors.append("reconstruction must be a mapping")
     else:
         claimed = reconstruction.get("reproducibility_claimed", False)
+        immutable_source_errors = _immutable_upstream_source_errors(reconstruction)
+        errors.extend(immutable_source_errors)
         if not isinstance(claimed, bool):
             errors.append("reconstruction.reproducibility_claimed must be boolean")
         elif claimed and not (
-            _has_immutable_upstream_source(reconstruction)
+            (
+                not immutable_source_errors
+                and reconstruction.get("immutable_upstream_sources")
+            )
             or _has_retained_lamin_raw_artifact(reconstruction)
         ):
             errors.append(
@@ -176,6 +197,10 @@ def validate_processing_decisions_contract(contract: Mapping[str, Any]) -> list[
             if allowed_hosts != sorted(ALLOWED_LIVE_LAMIN_HOSTS):
                 errors.append(
                     "live Lamin queries must be hard-guarded to pert-gym-worker-eu"
+                )
+            if socket.gethostname() != "pert-gym-worker-eu":
+                errors.append(
+                    "live Lamin queries may execute only on pert-gym-worker-eu"
                 )
         elif "allowed_live_lamin_hosts" not in runtime:
             errors.append("runtime.allowed_live_lamin_hosts is required")
