@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import pytest
@@ -21,6 +22,32 @@ def test_require_heavy_vm_rejects_wrong_host(monkeypatch: pytest.MonkeyPatch) ->
     monkeypatch.setattr(runner.socket, "gethostname", lambda: "untrusted-host")
 
     with pytest.raises(RuntimeError, match="untrusted-host"):
+        runner.require_heavy_vm()
+
+
+def test_require_heavy_vm_requires_pinned_gce_identity(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(runner.platform, "system", lambda: "Linux")
+    monkeypatch.setattr(
+        runner.socket, "gethostname", lambda: f"{runner.EXPECTED_HEAVY_HOST}.internal"
+    )
+    metadata = {
+        "project/project-id": runner.EXPECTED_GCE_PROJECT,
+        "instance/zone": f"projects/1/zones/{runner.EXPECTED_ZONE}",
+        "instance/name": runner.EXPECTED_HEAVY_HOST,
+    }
+    monkeypatch.setattr(runner, "_metadata_value", metadata.__getitem__)
+
+    assert runner.require_heavy_vm() == (
+        runner.EXPECTED_HEAVY_HOST,
+        runner.EXPECTED_GCE_PROJECT,
+        runner.EXPECTED_ZONE,
+        runner.EXPECTED_HEAVY_HOST,
+    )
+
+    metadata["instance/name"] = "lookalike-worker"
+    with pytest.raises(RuntimeError, match="unpinned GCE identity"):
         runner.require_heavy_vm()
 
 
@@ -90,3 +117,77 @@ def test_requester_pays_urls_include_billing_project(
 
     assert upload_url == "https://upload.example/session"
     assert "userProject=jkobject-1549353370965" in seen["post"]
+
+
+def _valid_preflight() -> runner.Preflight:
+    return runner.Preflight(
+        hostname=runner.EXPECTED_HEAVY_HOST,
+        project=runner.EXPECTED_GCE_PROJECT,
+        zone=runner.EXPECTED_ZONE,
+        instance=runner.EXPECTED_HEAVY_HOST,
+        free_disk_bytes=100 * 1024**3,
+        available_memory_bytes=32 * 1024**3,
+        billing_project=runner.BILLING_PROJECT,
+    )
+
+
+def test_cli_rejects_user_host_and_resource_gate_overrides(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(runner, "ROOT", tmp_path)
+    monkeypatch.setattr(runner.platform, "system", lambda: "Linux")
+    monkeypatch.setattr(runner.socket, "gethostname", lambda: "untrusted-host")
+
+    for override in (
+        ("--expected-host", "untrusted-host"),
+        ("--min-free-disk-gb", "0"),
+        ("--min-available-memory-gb", "-1"),
+    ):
+        with pytest.raises(SystemExit, match="2"):
+            runner.main([*override, "--smoke", "10000"])
+        assert not (tmp_path / "artifacts" / "vm_runs").exists()
+
+
+def test_cli_production_command_creates_log_and_periodic_progress(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(runner, "ROOT", tmp_path)
+    monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
+    monkeypatch.setattr(runner, "PRODUCTION_HEARTBEAT_SECONDS", 0.01)
+    writes: list[tuple[Path, object]] = []
+    original_write_json = runner._write_json
+
+    def record_write(path: Path, value: object) -> None:
+        writes.append((path, value))
+        original_write_json(path, value)
+
+    monkeypatch.setattr(runner, "_write_json", record_write)
+
+    assert (
+        runner.main(
+            [
+                "--run-id",
+                "production-test",
+                "--allow-lamin-writes",
+                "--command",
+                sys.executable,
+                "-c",
+                "import time; time.sleep(0.06)",
+            ]
+        )
+        == 0
+    )
+
+    run_dir = tmp_path / "artifacts" / "vm_runs" / "production-test"
+    assert (run_dir / "logs" / "runner.log").exists()
+    checkpoint = json.loads((run_dir / "checkpoints" / "production.json").read_text())
+    assert checkpoint["status"] == "completed"
+    assert checkpoint["run_id"] == "production-test"
+    heartbeat_writes = [path for path, _ in writes if path.name == "heartbeat.json"]
+    checkpoint_writes = [
+        path
+        for path, _ in writes
+        if path == run_dir / "checkpoints" / "production.json"
+    ]
+    assert len(heartbeat_writes) >= 3
+    assert len(checkpoint_writes) >= 3

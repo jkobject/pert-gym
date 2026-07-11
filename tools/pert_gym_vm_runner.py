@@ -15,6 +15,7 @@ import json
 import os
 import platform
 import resource
+import selectors
 import shutil
 import socket
 import subprocess
@@ -24,17 +25,25 @@ from contextlib import contextmanager
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Iterator, Sequence
+from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_HEAVY_HOST = "pert-gym-worker-eu"
+EXPECTED_GCE_PROJECT = "jkobject-1549353370965"
 EXPECTED_ZONE = "europe-west1-b"
 BILLING_PROJECT = "jkobject-1549353370965"
+MIN_FREE_DISK_GB = 50
+MIN_AVAILABLE_MEMORY_GB = 16
+PRODUCTION_HEARTBEAT_SECONDS = 30.0
+METADATA_BASE_URL = "http://metadata.google.internal/computeMetadata/v1"
 
 
 @dataclass(frozen=True)
 class Preflight:
     hostname: str
+    project: str
     zone: str
+    instance: str
     free_disk_bytes: int
     available_memory_bytes: int
     billing_project: str
@@ -54,42 +63,66 @@ def _available_memory_bytes() -> int:
         raise RuntimeError("VM preflight could not read MemAvailable") from exc
 
 
-def require_heavy_vm(*, expected_host: str = EXPECTED_HEAVY_HOST) -> str:
+def _metadata_value(path: str) -> str:
+    """Read a mandatory GCE metadata value or fail closed outside the VM."""
+    request = Request(
+        f"{METADATA_BASE_URL}/{path}", headers={"Metadata-Flavor": "Google"}
+    )
+    try:
+        with urlopen(request, timeout=2) as response:  # nosec B310: fixed GCE endpoint
+            value = response.read().decode("utf-8").strip()
+    except OSError as exc:
+        raise RuntimeError(
+            f"VM identity check could not read GCE metadata {path}"
+        ) from exc
+    if not value:
+        raise RuntimeError(f"VM identity check received empty GCE metadata {path}")
+    return value
+
+
+def require_heavy_vm() -> tuple[str, str, str, str]:
     """Reject local Macs and every host except the dedicated heavy worker."""
     if platform.system() == "Darwin":
         raise RuntimeError("refusing heavy run on Darwin; use pert-gym-worker-eu")
     hostname = socket.gethostname().split(".", maxsplit=1)[0]
-    if hostname != expected_host:
+    if hostname != EXPECTED_HEAVY_HOST:
         raise RuntimeError(
-            f"refusing heavy run on host {hostname!r}; expected {expected_host!r}"
+            f"refusing heavy run on host {hostname!r}; expected {EXPECTED_HEAVY_HOST!r}"
         )
-    return hostname
+    project = _metadata_value("project/project-id")
+    zone = _metadata_value("instance/zone").rsplit("/", maxsplit=1)[-1]
+    instance = _metadata_value("instance/name")
+    expected = {
+        "project": EXPECTED_GCE_PROJECT,
+        "zone": EXPECTED_ZONE,
+        "instance": EXPECTED_HEAVY_HOST,
+    }
+    actual = {"project": project, "zone": zone, "instance": instance}
+    if actual != expected:
+        raise RuntimeError(f"refusing unpinned GCE identity: {actual!r}")
+    return hostname, project, zone, instance
 
 
-def preflight(
-    *,
-    expected_host: str = EXPECTED_HEAVY_HOST,
-    zone: str = EXPECTED_ZONE,
-    min_free_disk_gb: float = 50,
-    min_available_memory_gb: float = 16,
-) -> Preflight:
+def preflight() -> Preflight:
     """Return measured capacity after applying fail-closed host/resource gates."""
-    hostname = require_heavy_vm(expected_host=expected_host)
+    hostname, project, zone, instance = require_heavy_vm()
     free_disk = shutil.disk_usage(ROOT).free
     available_memory = _available_memory_bytes()
-    if free_disk < min_free_disk_gb * 1024**3:
+    if free_disk < MIN_FREE_DISK_GB * 1024**3:
         raise RuntimeError(
             f"insufficient disk: {free_disk / 1024**3:.1f} GiB free; "
-            f"need {min_free_disk_gb:.1f} GiB"
+            f"need {MIN_FREE_DISK_GB:.1f} GiB"
         )
-    if available_memory < min_available_memory_gb * 1024**3:
+    if available_memory < MIN_AVAILABLE_MEMORY_GB * 1024**3:
         raise RuntimeError(
             f"insufficient RAM: {available_memory / 1024**3:.1f} GiB available; "
-            f"need {min_available_memory_gb:.1f} GiB"
+            f"need {MIN_AVAILABLE_MEMORY_GB:.1f} GiB"
         )
     return Preflight(
         hostname=hostname,
+        project=project,
         zone=zone,
+        instance=instance,
         free_disk_bytes=free_disk,
         available_memory_bytes=available_memory,
         billing_project=BILLING_PROJECT,
@@ -171,8 +204,35 @@ def _child_env() -> dict[str, str]:
     return env
 
 
-def run_command(command: Sequence[str], *, log_path: Path) -> int:
-    """Run an explicitly approved command, teeing stdout/stderr into a run log."""
+def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
+    """Run a production child with durable periodic liveness and progress state.
+
+    ``checkpoints/production.json`` is intentionally independent of the child:
+    a silent or stuck command still emits a current timestamp, PID, and observed
+    stdout-line count.  On interruption it remains a durable handoff for an
+    operator to inspect before resuming the ingestion command.
+    """
+    log_path = run_dir / "logs" / "runner.log"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    checkpoint_path = run_dir / "checkpoints" / "production.json"
+    started_at = time.time()
+    stdout_lines = 0
+
+    def publish(status: str, *, exit_code: int | None = None) -> None:
+        state: dict[str, object] = {
+            "status": status,
+            "run_id": run_id,
+            "pid": process.pid,
+            "started_at": started_at,
+            "updated_at": time.time(),
+            "stdout_lines": stdout_lines,
+            "resume_contract": "inspect checkpoint then rerun the approved command",
+        }
+        if exit_code is not None:
+            state["exit_code"] = exit_code
+        _write_json(checkpoint_path, state)
+        _write_json(run_dir / "heartbeat.json", state)
+
     with log_path.open("w", encoding="utf-8") as log:
         process = subprocess.Popen(
             command,
@@ -183,21 +243,39 @@ def run_command(command: Sequence[str], *, log_path: Path) -> int:
             text=True,
         )
         assert process.stdout is not None
-        for line in process.stdout:
-            sys.stdout.write(line)
-            log.write(line)
-        return process.wait()
+        publish("running")
+        selector = selectors.DefaultSelector()
+        selector.register(process.stdout, selectors.EVENT_READ)
+        try:
+            while True:
+                for _, _ in selector.select(timeout=PRODUCTION_HEARTBEAT_SECONDS):
+                    line = process.stdout.readline()
+                    if line:
+                        stdout_lines += 1
+                        sys.stdout.write(line)
+                        log.write(line)
+                        log.flush()
+                exit_code = process.poll()
+                if exit_code is not None:
+                    for line in process.stdout:
+                        stdout_lines += 1
+                        sys.stdout.write(line)
+                        log.write(line)
+                    log.flush()
+                    publish(
+                        "completed" if exit_code == 0 else "failed", exit_code=exit_code
+                    )
+                    return exit_code
+                publish("running")
+        finally:
+            selector.close()
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--expected-host", default=EXPECTED_HEAVY_HOST)
-    parser.add_argument("--zone", default=EXPECTED_ZONE)
     parser.add_argument(
         "--run-id", default=time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     )
-    parser.add_argument("--min-free-disk-gb", type=float, default=50)
-    parser.add_argument("--min-available-memory-gb", type=float, default=16)
     parser.add_argument("--smoke", type=int, choices=(10_000, 25_000), action="append")
     parser.add_argument("--chunk-size", type=int, default=5_000)
     parser.add_argument("--allow-lamin-writes", action="store_true")
@@ -208,12 +286,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command and not args.allow_lamin_writes:
         parser.error("--command requires --allow-lamin-writes")
 
-    preflight_result = preflight(
-        expected_host=args.expected_host,
-        zone=args.zone,
-        min_free_disk_gb=args.min_free_disk_gb,
-        min_available_memory_gb=args.min_available_memory_gb,
-    )
+    preflight_result = preflight()
     run_dir = ROOT / "artifacts" / "vm_runs" / args.run_id
     run_dir.mkdir(parents=True, exist_ok=False)
     _write_json(run_dir / "preflight.json", asdict(preflight_result))
@@ -235,9 +308,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         ]
         _write_json(run_dir / "smoke-summary.json", measurements)
         if args.command:
-            exit_code = run_command(
-                args.command, log_path=run_dir / "logs" / "runner.log"
-            )
+            exit_code = run_command(args.command, run_dir=run_dir, run_id=args.run_id)
             if exit_code:
                 raise RuntimeError(
                     f"command exited {exit_code}; see {run_dir / 'logs' / 'runner.log'}"
