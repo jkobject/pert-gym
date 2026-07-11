@@ -99,6 +99,50 @@ def test_extract_exact_modelid_baseline_rejects_source_checksum_mismatch(
         )
 
 
+def test_extract_exact_modelid_baseline_excludes_known_non_expression_columns(
+    tmp_path,
+) -> None:
+    source = tmp_path / "expression.csv"
+    with source.open("w", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=[
+                "",
+                "SequencingID",
+                "ModelConditionID",
+                "ModelID",
+                "IsDefaultEntryForMC",
+                "IsDefaultEntryForModel",
+                "GENE_A",
+            ],
+        )
+        writer.writeheader()
+        writer.writerow(
+            {
+                "": "0",
+                "SequencingID": "CDS-001",
+                "ModelConditionID": "MC-001",
+                "ModelID": "ACH-1",
+                "IsDefaultEntryForMC": "Yes",
+                "IsDefaultEntryForModel": "Yes",
+                "GENE_A": "1.5",
+            }
+        )
+
+    fixture = extract_exact_modelid_baseline(
+        source_path=source,
+        requested_model_ids={"ACH-1"},
+        source_uri="gs://bucket/depmap.csv",
+        source_generation="123",
+        expected_source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
+        extraction_command="python tools/extract_depmap_baseline_fixture.py ...",
+        commit="deadbeef",
+    )
+
+    assert fixture["feature_names"] == ["GENE_A"]
+    assert fixture["rows"][0]["expression"] == [1.5]
+
+
 def test_validate_fixture_for_manifest_requires_matching_source_provenance(
     tmp_path,
 ) -> None:

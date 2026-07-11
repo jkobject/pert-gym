@@ -9,6 +9,14 @@ from pathlib import Path
 from typing import Any, Iterable
 
 FIXTURE_SCHEMA_VERSION = "depmap_exact_modelid_baseline.v1"
+DEPMAP_26Q1_NON_EXPRESSION_COLUMNS = {
+    "",
+    "SequencingID",
+    "ModelConditionID",
+    "ModelID",
+    "IsDefaultEntryForMC",
+    "IsDefaultEntryForModel",
+}
 
 
 def validate_fixture_for_manifest(
@@ -97,7 +105,11 @@ def extract_exact_modelid_baseline(
             raise ValueError(
                 "canonical DepMap expression CSV must have a ModelID column"
             )
-        feature_names = [name for name in reader.fieldnames if name != "ModelID"]
+        feature_names = [
+            name
+            for name in reader.fieldnames
+            if name not in DEPMAP_26Q1_NON_EXPRESSION_COLUMNS
+        ]
         if not feature_names:
             raise ValueError(
                 "canonical DepMap expression CSV has no expression features"
