@@ -54,11 +54,15 @@ class BenchmarkBatch(EvaluationBatch):
         super().__post_init__()
         if len(self.obs_covariates) != len(self.X):
             raise ValueError("obs_covariates must have one mapping per X row.")
-        if self.target_response is not None and len(self.target_response) != len(self.X):
+        if self.target_response is not None and len(self.target_response) != len(
+            self.X
+        ):
             raise ValueError("target_response must have one row per X row.")
         if self.feature_names and len(self.feature_names) != _n_features(self.X):
             raise ValueError("feature_names must match the number of X columns.")
-        if self.compound_features is not None and len(self.compound_features) != len(self.X):
+        if self.compound_features is not None and len(self.compound_features) != len(
+            self.X
+        ):
             raise ValueError("compound_features must have one row per X row.")
         if self.compound_feature_names and self.compound_features is not None:
             if len(self.compound_feature_names) != _n_features(self.compound_features):
@@ -80,7 +84,9 @@ class BenchmarkDataset:
 
     def __post_init__(self) -> None:
         if self.split_by != "perturbation_identity":
-            raise ValueError("BenchmarkDataset splits must be by perturbation identity.")
+            raise ValueError(
+                "BenchmarkDataset splits must be by perturbation identity."
+            )
         _validate_split_integrity(self.train, self.val, self.test)
         if not any(self.train.controls or []):
             raise ValueError("train split must include at least one control row.")
@@ -88,6 +94,7 @@ class BenchmarkDataset:
             raise ValueError("val split must include at least one control row.")
         if not any(self.test.controls or []):
             raise ValueError("test split must include at least one control row.")
+
 
 @dataclass(frozen=True)
 class ExpressionMemberFilterResult:
@@ -162,8 +169,10 @@ def load_model_ready_v0_or_synthetic(
             "loader": "model_ready_v0_or_synthetic",
             "fallback": "synthetic",
             "manifest_path": str(manifest_path),
-            "model_ready_collection_key": collection.get("key"),
-            "model_ready_member_count": collection.get("member_count"),
+            "model_ready_collection_key": collection.get("key")
+            or DEFAULT_MODEL_READY_COLLECTION_KEY,
+            "model_ready_member_count": collection.get("member_count")
+            or DEFAULT_MODEL_READY_MEMBER_COUNT,
             "model_ready_member_keys": list(expression_members.included),
             "excluded_member_keys": list(expression_members.excluded),
             "excluded_member_reasons": dict(expression_members.excluded_reasons),
@@ -206,6 +215,7 @@ def filter_expression_model_ready_members(
     return ExpressionMemberFilterResult(
         included=included, excluded=excluded, excluded_reasons=reasons
     )
+
 
 def load_response_screen_with_baseline(
     *,
@@ -272,6 +282,7 @@ def load_response_screen_with_baseline(
         target_response=target_response,
         feature_names=tuple(feature_names),
     )
+
 
 def load_chemcpa_drugseq_tiny(
     *,
@@ -457,7 +468,11 @@ def _subset_batch(
     perturbations = [str(obs_rows[idx]["perturbation"]) for idx in indices]
     controls = [_is_control_row(obs_rows[idx]) for idx in indices]
     covariates = [
-        {key: obs_rows[idx].get(key) for key in DEFAULT_CONTEXT_FIELDS if key in obs_rows[idx]}
+        {
+            key: obs_rows[idx].get(key)
+            for key in DEFAULT_CONTEXT_FIELDS
+            if key in obs_rows[idx]
+        }
         for idx in indices
     ]
     compound_features = None
@@ -532,7 +547,9 @@ def _validate_split_integrity(*batches: BenchmarkBatch) -> None:
         non_control_sets.append(
             {
                 perturbation
-                for perturbation, is_control in zip(batch.perturbations, batch.controls or [])
+                for perturbation, is_control in zip(
+                    batch.perturbations, batch.controls or []
+                )
                 if not is_control
             }
         )
@@ -567,6 +584,7 @@ def _dataset_prefix_from_obs_key(key: str) -> str:
         return key[: -len(suffix)]
     return key.split("/", 1)[0]
 
+
 def _stable_depmap_id(value: Any) -> str:
     if value is None:
         return ""
@@ -574,6 +592,7 @@ def _stable_depmap_id(value: Any) -> str:
     if not text:
         return ""
     return text.split("::", 1)[0]
+
 
 def _n_features(X: Matrix) -> int:
     if not X:
