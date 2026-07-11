@@ -17,11 +17,15 @@ LaminDB, or source notebooks.
 - [Lamin audit and branch model](lamin-audit-and-branch-model.md) — how to count
   artifacts, logical datasets, chunks, branches, and triplet integrity without
   conflating old audit counts with current canonical members.
+- [Migration, reproducibility, and GCS exit](migration-reproducibility-and-gcs-exit.md)
+  — durable Lamin/notebook reconstruction contract, EU-VM boundary, safe GCS
+  decommission gate, and publication lessons.
+- [Agent context](agent-context.md) — concise routing rules for workers.
 - [Dataset modalities](dataset-modalities.md) — modality-specific handling for
   scRNA-seq, bulk, screen, temporal, image, multimodal, and auxiliary modality data.
 - [Harmonization roadmap](harmonization-roadmap.md) — phased roadmap and current
   post-P3/model-ready execution order.
-- [Model and benchmark roadmap](model-roadmap.md) — model-ready criteria,
+- [Model environment notes](../../docs/model_environments.md) — model-ready criteria,
   benchmark status, environment decisions, and honest interpretation of smoke
   results.
 - [Deduplication policy](deduplication-policy.md) — duplicate and subduplicate

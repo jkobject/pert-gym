@@ -17,7 +17,12 @@ use the global Lamin CLI for this repo.
 
 ## Counting rules
 
-Count at multiple levels. Never collapse these into one "dataset count".
+Count at multiple levels. Never collapse these into one "dataset count". The
+live branch-delta inventory is the denominator authority for the current
+migration wave: it keeps artifact records, Collection members/chunks, logical
+datasets/families, revisions, typed auxiliaries, aliases/exclusions, and
+model-ready members separate. For operational and exit rules, see
+[migration-reproducibility-and-gcs-exit.md](migration-reproducibility-and-gcs-exit.md).
 
 ### Global pertdata scale
 
@@ -91,3 +96,15 @@ The remaining incomplete prefixes from that old audit were auxiliary, reference,
 demo/model, or orphan review items. Do not repair them blindly as canonical
 triplets; classify or convert them using the typed auxiliary artifact contract
 (`X_<name>/var_<name>` or `obsm_<name>`).
+
+## Current publication and retention boundary
+
+Candidate replacements are append-only and must be published by one writer
+through the crash-recoverable journal/recovery contract. A journal stage never
+substitutes for remote save/readback, and a logical/rollback identity must not
+cross-key hash-deduplicate into another dataset. Retain legacy triplets until
+accepted source parity, readback, Collection/UID evidence, and the executable
+dataset notebook establish an approved replacement. Project-owned GCS is
+temporary staging; its removal is gated only by the reviewed
+`GCS_DECOMMISSION_READY` manifest described in the migration/reproducibility
+contract.
