@@ -20,33 +20,43 @@ def test_require_heavy_vm_rejects_darwin(monkeypatch: pytest.MonkeyPatch) -> Non
         runner.require_heavy_vm()
 
 
-def test_require_heavy_vm_rejects_wrong_host(monkeypatch: pytest.MonkeyPatch) -> None:
+@pytest.mark.parametrize(
+    "hostname",
+    [
+        "pert-gym-worker-eu-v2",
+        "pert-gym-capacity-eu-v2-lookalike",
+        "untrusted-host",
+    ],
+)
+def test_require_heavy_vm_rejects_lookalike_or_unknown_host(
+    monkeypatch: pytest.MonkeyPatch, hostname: str
+) -> None:
     monkeypatch.setattr(runner.platform, "system", lambda: "Linux")
-    monkeypatch.setattr(runner.socket, "gethostname", lambda: "untrusted-host")
+    monkeypatch.setattr(runner.socket, "gethostname", lambda: hostname)
 
-    with pytest.raises(RuntimeError, match="untrusted-host"):
+    with pytest.raises(RuntimeError, match=hostname):
         runner.require_heavy_vm()
 
 
-def test_require_heavy_vm_requires_pinned_gce_identity(
+@pytest.mark.parametrize("hostname", sorted(runner.ALLOWED_HEAVY_HOSTS))
+def test_require_heavy_vm_requires_pinned_gce_identity_for_approved_host(
     monkeypatch: pytest.MonkeyPatch,
+    hostname: str,
 ) -> None:
     monkeypatch.setattr(runner.platform, "system", lambda: "Linux")
-    monkeypatch.setattr(
-        runner.socket, "gethostname", lambda: f"{runner.EXPECTED_HEAVY_HOST}.internal"
-    )
+    monkeypatch.setattr(runner.socket, "gethostname", lambda: f"{hostname}.internal")
     metadata = {
         "project/project-id": runner.EXPECTED_GCE_PROJECT,
         "instance/zone": f"projects/1/zones/{runner.EXPECTED_ZONE}",
-        "instance/name": runner.EXPECTED_HEAVY_HOST,
+        "instance/name": hostname,
     }
     monkeypatch.setattr(runner, "_metadata_value", metadata.__getitem__)
 
     assert runner.require_heavy_vm() == (
-        runner.EXPECTED_HEAVY_HOST,
+        hostname,
         runner.EXPECTED_GCE_PROJECT,
         runner.EXPECTED_ZONE,
-        runner.EXPECTED_HEAVY_HOST,
+        hostname,
     )
 
     metadata["instance/name"] = "lookalike-worker"
@@ -58,7 +68,7 @@ def _writer_metadata(*, run_id: str, pid: int | None = None) -> dict[str, object
     return {
         "run_id": run_id,
         "pid": os.getpid() if pid is None else pid,
-        "host": runner.EXPECTED_HEAVY_HOST,
+        "host": sorted(runner.ALLOWED_HEAVY_HOSTS)[0],
         "project": runner.EXPECTED_GCE_PROJECT,
         "zone": runner.EXPECTED_ZONE,
         "branch": "fix/test",
@@ -328,10 +338,10 @@ def test_requester_pays_urls_include_billing_project(
 
 def _valid_preflight() -> runner.Preflight:
     return runner.Preflight(
-        hostname=runner.EXPECTED_HEAVY_HOST,
+        hostname=sorted(runner.ALLOWED_HEAVY_HOSTS)[0],
         project=runner.EXPECTED_GCE_PROJECT,
         zone=runner.EXPECTED_ZONE,
-        instance=runner.EXPECTED_HEAVY_HOST,
+        instance=sorted(runner.ALLOWED_HEAVY_HOSTS)[0],
         free_disk_bytes=100 * 1024**3,
         available_memory_bytes=32 * 1024**3,
         billing_project=runner.BILLING_PROJECT,
