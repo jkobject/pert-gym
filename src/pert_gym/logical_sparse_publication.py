@@ -107,6 +107,39 @@ def _verify_remote_file(artifact: Any, path: Path, *, key: str) -> None:
             parked.unlink()
 
 
+def _assert_unsaved_addition(record: Any, *, key: str, description: str) -> None:
+    """Reject constructor deduplication and implicit revisions before any save."""
+    if str(getattr(record, "key", "")) != key:
+        raise RuntimeError("constructor returned a record under a foreign key")
+    if getattr(record, "description", None) != description:
+        raise RuntimeError("constructor returned a record with foreign identity")
+    if getattr(record, "revises", None) is not None:
+        raise RuntimeError("refusing implicit revision during publication")
+    state = getattr(record, "_state", None)
+    if state is not None and not getattr(state, "adding", False):
+        raise RuntimeError("constructor reused a saved record during publication")
+    if not _artifact_id(record):
+        raise RuntimeError("constructor returned a record without immutable identity")
+
+
+def _saved_exact_artifact(ln: Any, artifact: Any, *, key: str, description: str) -> Any:
+    records = _exact_artifacts(ln, [key])
+    if len(records) != 1:
+        raise RuntimeError(
+            "artifact save did not produce exactly one expected-key record"
+        )
+    saved = records[0]
+    if _artifact_id(saved) != _artifact_id(artifact):
+        raise RuntimeError("artifact save returned a foreign immutable identity")
+    if str(getattr(saved, "key", "")) != key:
+        raise RuntimeError("artifact save returned a record under a foreign key")
+    if getattr(saved, "description", None) != description:
+        raise RuntimeError("artifact save returned a record with foreign identity")
+    if getattr(saved, "revises", None) is not None:
+        raise RuntimeError("artifact save created an implicit revision")
+    return saved
+
+
 def _save_file(ln: Any, path: Path, *, key: str, description: str) -> Any:
     """Save then checksum a readback while the original upload path is absent.
 
@@ -115,7 +148,12 @@ def _save_file(ln: Any, path: Path, *, key: str, description: str) -> Any:
     adapter compatible with Lamin's generic immutable-file constructor while
     rejecting the same-local-file pseudo-readback that would mask an upload error.
     """
-    artifact = ln.Artifact(path, key=key, description=description).save()
+    artifact = ln.Artifact(
+        path, key=key, description=description, skip_hash_lookup=True
+    )
+    _assert_unsaved_addition(artifact, key=key, description=description)
+    artifact = artifact.save()
+    artifact = _saved_exact_artifact(ln, artifact, key=key, description=description)
     _verify_remote_file(artifact, path, key=key)
     return artifact
 
@@ -129,6 +167,10 @@ def _reconcile_artifact(
     if getattr(artifact, "description", None) != description:
         raise RuntimeError(
             "existing artifact identity does not match publication identity"
+        )
+    if getattr(artifact, "revises", None) is not None:
+        raise RuntimeError(
+            "existing artifact revision does not match publication identity"
         )
     _verify_remote_file(artifact, path, key=key)
     return artifact
@@ -164,6 +206,35 @@ def _reconcile_collection(
             "existing Collection revision does not match publication identity"
         )
     return collection
+
+
+def _save_collection(
+    ln: Any,
+    artifacts: list[Any],
+    *,
+    key: str,
+    description: str,
+    member_keys: Iterable[str],
+) -> Any:
+    collection = ln.Collection(
+        artifacts,
+        key=key,
+        description=description,
+        skip_hash_lookup=True,
+    )
+    _assert_unsaved_addition(collection, key=key, description=description)
+    collection = collection.save()
+    records = _exact_collections(ln, [key])
+    if len(records) != 1:
+        raise RuntimeError(
+            "Collection save did not produce exactly one expected-key record"
+        )
+    saved = records[0]
+    if _artifact_id(saved) != _artifact_id(collection):
+        raise RuntimeError("Collection save returned a foreign immutable identity")
+    return _reconcile_collection(
+        saved, key=key, description=description, member_keys=member_keys
+    )
 
 
 def _crash_after_remote_save(stage: str, stop_after_save_stage: str | None) -> None:
@@ -409,16 +480,13 @@ def publish_candidate(
                             member_keys=member_keys,
                         )
                     else:
-                        collection = ln.Collection(
+                        collection = _save_collection(
+                            ln,
                             [artifact_existing[key] for key in member_keys],
                             key=collection_key,
                             description=description,
+                            member_keys=member_keys,
                         )
-                        if getattr(collection, "revises", None) is not None:
-                            raise RuntimeError(
-                                "refusing implicit Collection revision during publication"
-                            )
-                        collection = collection.save()
                         _crash_after_remote_save(stage, stop_after_save_stage)
                     collection_existing = [collection]
                     _complete_stage(

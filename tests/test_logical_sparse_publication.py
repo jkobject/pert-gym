@@ -21,12 +21,19 @@ class _Records:
 
 class _Artifact:
     def __init__(
-        self, manager: _ArtifactManager, path: Path, *, key: str, description: str
+        self,
+        manager: _ArtifactManager,
+        path: Path,
+        *,
+        key: str,
+        description: str,
+        skip_hash_lookup: bool = False,
     ):
         self.manager = manager
         self.path = path
         self.key = key
         self.description = description
+        self.skip_hash_lookup = skip_hash_lookup
         self.uid = f"uid-{key}"
 
     def save(self) -> _Artifact:
@@ -47,23 +54,62 @@ class _ArtifactManager:
         self.existing = existing or []
         self.created: list[_Artifact] = []
         self.remote_root = remote_root
+        self.foreign_same_content: dict[str, _Artifact] = {}
 
     def filter(self, *, key__in: list[str]) -> _Records:
         return _Records([item for item in self.existing if item.key in key__in])
 
-    def __call__(self, path: Path, *, key: str, description: str) -> _Artifact:
-        artifact = _Artifact(self, path, key=key, description=description)
+    def __call__(
+        self,
+        path: Path,
+        *,
+        key: str,
+        description: str,
+        skip_hash_lookup: bool = False,
+    ) -> _Artifact:
+        if not skip_hash_lookup and key in self.foreign_same_content:
+            foreign = self.foreign_same_content[key]
+            foreign.path = path
+            return foreign
+        artifact = _Artifact(
+            self,
+            path,
+            key=key,
+            description=description,
+            skip_hash_lookup=skip_hash_lookup,
+        )
         self.created.append(artifact)
         return artifact
 
 
 class _Collection:
     existing: list[_Collection] = []
+    foreign_same_membership: _Collection | None = None
 
-    def __init__(self, artifacts: list[_Artifact], *, key: str, description: str):
+    def __new__(
+        cls,
+        artifacts: list[_Artifact],
+        *,
+        key: str,
+        description: str,
+        skip_hash_lookup: bool = False,
+    ) -> _Collection:
+        if not skip_hash_lookup and cls.foreign_same_membership is not None:
+            return cls.foreign_same_membership
+        return super().__new__(cls)
+
+    def __init__(
+        self,
+        artifacts: list[_Artifact],
+        *,
+        key: str,
+        description: str,
+        skip_hash_lookup: bool = False,
+    ):
         self.artifacts = artifacts
         self.key = key
         self.description = description
+        self.skip_hash_lookup = skip_hash_lookup
         self.uid = f"collection-{key}"
 
     @classmethod
@@ -86,6 +132,7 @@ class _Ln:
         self.Artifact = _ArtifactManager(tmp_path / "remote", existing)
         self.Collection = _Collection
         self.Collection.existing = []
+        self.Collection.foreign_same_membership = None
         self.setup = type(
             "Setup",
             (),
@@ -364,6 +411,63 @@ def test_publish_rejects_unjournaled_collection_membership_drift(
             require_vm=lambda: None,
         )
     assert len(ln.Collection.existing) == 1
+
+
+def test_publish_never_reuses_same_content_foreign_key_artifact(
+    tmp_path: Path,
+) -> None:
+    root, logical_key, revision = _candidate(tmp_path)
+    ln = _Ln(tmp_path)
+    expected_key = "family/revisions/r1/payload.tar.gz"
+    foreign = _Artifact(
+        ln.Artifact,
+        root / "foreign-payload.tar.gz",
+        key="foreign/already-present.tar.gz",
+        description="foreign identity",
+    )
+    ln.Artifact.foreign_same_content[expected_key] = foreign
+
+    result = publish_candidate(
+        ln=ln,
+        root=root,
+        logical_key=logical_key,
+        revision=revision,
+        collection_key="pert-gym/additions/test-r1",
+        require_vm=lambda: None,
+    )
+
+    assert foreign.key == "foreign/already-present.tar.gz"
+    assert foreign not in ln.Artifact.existing
+    assert [item.key for item in ln.Artifact.existing].count(expected_key) == 1
+    assert _payload(ln, str(result["payload_key"])).skip_hash_lookup is True
+
+
+def test_publish_never_reuses_same_membership_foreign_key_collection(
+    tmp_path: Path,
+) -> None:
+    root, logical_key, revision = _candidate(tmp_path)
+    ln = _Ln(tmp_path)
+    foreign = _Collection(
+        [], key="foreign/already-present", description="foreign identity"
+    )
+    ln.Collection.foreign_same_membership = foreign
+
+    result = publish_candidate(
+        ln=ln,
+        root=root,
+        logical_key=logical_key,
+        revision=revision,
+        collection_key="pert-gym/additions/test-r1",
+        require_vm=lambda: None,
+    )
+
+    assert foreign.key == "foreign/already-present"
+    assert foreign not in ln.Collection.existing
+    created = [
+        item for item in ln.Collection.existing if item.key == result["collection_key"]
+    ]
+    assert len(created) == 1
+    assert created[0].skip_hash_lookup is True
 
 
 def test_publication_refuses_collection_collision(tmp_path: Path) -> None:
