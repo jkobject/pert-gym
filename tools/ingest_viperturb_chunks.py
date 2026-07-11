@@ -34,6 +34,25 @@ PROGRESS = ROOT / "artifacts/viperturbseq_ingestion_progress.json"
 VIPERTURB_LAMIN_PREFIX = "viperturb"
 
 
+def build_chunk_plan(n_obs: int, chunk_size: int, dataset_name: str) -> list[dict[str, Any]]:
+    """Build deterministic cell ranges and Lamin keys for a chunked dataset."""
+    if n_obs < 0:
+        raise ValueError("n_obs must be non-negative")
+    if chunk_size <= 0:
+        raise ValueError("chunk_size must be positive")
+    if not dataset_name:
+        raise ValueError("dataset_name must not be empty")
+    return [
+        {
+            "chunk_id": f"chunk_{chunk_index:04d}",
+            "start": start,
+            "end": min(n_obs, start + chunk_size),
+            "prefix": f"{VIPERTURB_LAMIN_PREFIX}/{dataset_name}/chunk_{chunk_index:04d}",
+        }
+        for chunk_index, start in enumerate(range(0, n_obs, chunk_size))
+    ]
+
+
 def standardize_viperturb_obs(adata: ad.AnnData) -> ad.AnnData:
     """Map VIPerturbSeq obs columns to the pert-gym schema without Lamin side effects."""
     obs = adata.obs.copy()
