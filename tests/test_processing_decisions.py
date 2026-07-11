@@ -100,7 +100,9 @@ def test_template_notebook_is_valid_and_metadata_first() -> None:
     assert "temporary_gcs_dependencies" in source
     assert "safe_to_remove_gcs" in source
     assert "pert-gym-worker-eu" in source
-    assert all(cell.outputs == [] for cell in notebook.cells if cell.cell_type == "code")
+    assert all(
+        cell.outputs == [] for cell in notebook.cells if cell.cell_type == "code"
+    )
 
 
 def test_template_contract_executes_without_remote_access() -> None:

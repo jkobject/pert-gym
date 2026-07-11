@@ -81,7 +81,9 @@ def _has_retained_lamin_raw_artifact(reconstruction: Mapping[str, Any]) -> bool:
 
 def _has_immutable_upstream_source(reconstruction: Mapping[str, Any]) -> bool:
     sources = reconstruction.get("immutable_upstream_sources", [])
-    return isinstance(sources, Sequence) and not isinstance(sources, str) and bool(sources)
+    return (
+        isinstance(sources, Sequence) and not isinstance(sources, str) and bool(sources)
+    )
 
 
 def validate_processing_decisions_contract(contract: Mapping[str, Any]) -> list[str]:
@@ -114,7 +116,9 @@ def validate_processing_decisions_contract(contract: Mapping[str, Any]) -> list[
     if not isinstance(decisions, Mapping):
         errors.append("processing_decisions must be a mapping")
     else:
-        missing_decisions = _missing_fields(decisions, REQUIRED_PROCESSING_DECISION_FIELDS)
+        missing_decisions = _missing_fields(
+            decisions, REQUIRED_PROCESSING_DECISION_FIELDS
+        )
         if missing_decisions:
             errors.append(
                 f"missing processing decision fields: {', '.join(missing_decisions)}"
