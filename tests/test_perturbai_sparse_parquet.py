@@ -22,13 +22,21 @@ from pert_gym.perturbai_sparse_parquet import (
 )
 
 
-def _write_source(path: Path, *, cells: tuple[str, ...] = ("c0", "c1")) -> None:
+def _write_source(
+    path: Path,
+    *,
+    cells: tuple[str | None, ...] = ("c0", "c1"),
+    genes: list[object] | None = None,
+    expressions: list[object] | None = None,
+) -> None:
     table = pa.table(
         {
             "cell_id": list(cells),
             "batch": ["b"] * len(cells),
-            "genes": [[0, 2], [1]][: len(cells)],
-            "expressions": [[2, 3], [5]][: len(cells)],
+            "genes": genes if genes is not None else [[0, 2], [1]][: len(cells)],
+            "expressions": (
+                expressions if expressions is not None else [[2, 3], [5]][: len(cells)]
+            ),
         }
     )
     pq.write_table(table, path, row_group_size=1)
@@ -175,6 +183,96 @@ def test_adapter_rejects_malformed_sparse_rows_before_candidate_write(
             max_rows=2,
         )
     assert not (tmp_path / "out/perturbai/wholebrain/revisions/r1").exists()
+
+
+@pytest.mark.parametrize(
+    ("genes", "expressions", "error"),
+    [
+        ([[1.9]], [[1]], "gene token must be integer-valued"),
+        ([[0]], [[1.9]], "expression value must be integer-valued"),
+        ([[0]], [[3_000_000_000]], "expression value outside"),
+        ([[0]], [[float("nan")]], "expression value must be finite"),
+        ([[float("inf")]], [[1]], "gene token must be finite"),
+        ([[True]], [[1]], "gene token must not be boolean"),
+        ([None], [[1]], "genes must be a one-dimensional sequence"),
+        ([[0]], [None], "expressions must be a one-dimensional sequence"),
+        ([[[0]]], [[1]], "genes must be a one-dimensional sequence"),
+    ],
+)
+def test_adapter_rejects_invalid_sparse_values_before_coercion(
+    tmp_path: Path, genes: list[object], expressions: list[object], error: str
+) -> None:
+    path = tmp_path / "invalid.parquet"
+    _write_source(path, cells=("c0",), genes=genes, expressions=expressions)
+
+    with pytest.raises(ValueError, match=error):
+        build_perturbai_revision(
+            root=tmp_path / "out",
+            logical_key="perturbai/wholebrain",
+            revision="r1",
+            sources=(_source(path, "WB8588_2_1_part-2"),),
+            var=_var(),
+            schema_fingerprint="perturbai-gene-metadata/v1",
+            ingestion_run_id="test-run",
+            max_rss_bytes=10**12,
+            min_rows=1,
+            max_rows=2,
+        )
+    assert not (tmp_path / "out/perturbai/wholebrain/revisions/r1").exists()
+
+
+@pytest.mark.parametrize(
+    "cells, error",
+    [((None,), "cell_id must be non-null"), ((" ",), "cell_id must be non-blank")],
+)
+def test_adapter_rejects_null_or_blank_cell_ids_before_candidate_write(
+    tmp_path: Path, cells: tuple[str | None, ...], error: str
+) -> None:
+    path = tmp_path / "invalid-cell-id.parquet"
+    _write_source(path, cells=cells, genes=[[0]], expressions=[[1]])
+
+    with pytest.raises(ValueError, match=error):
+        build_perturbai_revision(
+            root=tmp_path / "out",
+            logical_key="perturbai/wholebrain",
+            revision="r1",
+            sources=(_source(path, "WB8588_2_1_part-2"),),
+            var=_var(),
+            schema_fingerprint="perturbai-gene-metadata/v1",
+            ingestion_run_id="test-run",
+            max_rss_bytes=10**12,
+            min_rows=1,
+            max_rows=2,
+        )
+
+
+def test_adapter_accepts_int32_expression_boundary(tmp_path: Path) -> None:
+    path = tmp_path / "boundary.parquet"
+    _write_source(
+        path,
+        cells=("c0",),
+        genes=[[2]],
+        expressions=[[np.iinfo(np.int32).max]],
+    )
+
+    manifest = build_perturbai_revision(
+        root=tmp_path / "out",
+        logical_key="perturbai/wholebrain",
+        revision="r1",
+        sources=(_source(path, "WB8588_2_1_part-2"),),
+        var=_var(),
+        schema_fingerprint="perturbai-gene-metadata/v1",
+        ingestion_run_id="test-run",
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=2,
+    )
+
+    assert manifest["nnz"] == 1
+    _surface, matrix, _obs, _var_frame = read_logical_sparse_revision(
+        tmp_path / "out", "perturbai/wholebrain", "r1"
+    )
+    assert matrix[0, 2] == np.iinfo(np.int32).max
 
 
 def test_adapter_resume_refuses_var_drift_and_overwrite(tmp_path: Path) -> None:
