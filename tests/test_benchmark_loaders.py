@@ -64,7 +64,9 @@ def test_loader_copies_controls_into_each_split_for_baselines() -> None:
 def test_loader_output_is_evaluation_compatible() -> None:
     dataset = load_tiny_benchmark_dataset()
 
-    result = evaluate_model(MeanControlBaseline(), train=dataset.train, test=dataset.test)
+    result = evaluate_model(
+        MeanControlBaseline(), train=dataset.train, test=dataset.test
+    )
 
     assert result.model_name == "mean_control"
     assert result.n_obs == len(dataset.test.X)
@@ -72,7 +74,9 @@ def test_loader_output_is_evaluation_compatible() -> None:
     assert set(result.metrics) == {"mae", "rmse"}
 
 
-def test_model_ready_v0_loader_reads_manifest_metadata_without_heavy_load(tmp_path) -> None:
+def test_model_ready_v0_loader_reads_manifest_metadata_without_heavy_load(
+    tmp_path,
+) -> None:
     manifest = tmp_path / "model_ready.json"
     manifest.write_text(
         json.dumps(
@@ -92,6 +96,7 @@ def test_model_ready_v0_loader_reads_manifest_metadata_without_heavy_load(tmp_pa
     assert dataset.metadata["fallback"] == "synthetic"
     assert dataset.metadata["model_ready_collection_key"] == "pert-gym/model-ready/test"
     assert dataset.metadata["model_ready_member_keys"] == ["tiny/obs.parquet"]
+
 
 def test_model_ready_v0_loader_excludes_broad_prism_empty_response_member(
     tmp_path,
@@ -133,6 +138,7 @@ def test_model_ready_v0_loader_excludes_broad_prism_empty_response_member(
         "broad_prism_repurposing/obs.parquet": "x_semantics=empty response_screen is not expression-model-ready"
     }
 
+
 def test_expression_member_filter_holds_out_broad_prism_even_without_metadata() -> None:
     filtered = filter_expression_model_ready_members(
         [
@@ -147,7 +153,9 @@ def test_expression_member_filter_holds_out_broad_prism_even_without_metadata() 
     assert filtered.excluded == ["broad_prism_repurposing/obs.parquet"]
 
 
-def test_chemcpa_drugseq_tiny_loader_uses_real_expression_and_fingerprints(tmp_path) -> None:
+def test_chemcpa_drugseq_tiny_loader_uses_real_expression_and_fingerprints(
+    tmp_path,
+) -> None:
     artifact = tmp_path / "chemcpa_drugseq.json"
     rows = []
     for perturbation, is_control, value, fp in [
@@ -225,7 +233,9 @@ def test_scgen_viperturb_tiny_loader_uses_real_expression_contract(tmp_path) -> 
                 "rows": rows,
                 "export": {"adata_path": "artifacts/model_benchmarks/tiny.h5ad"},
                 "selection": {"control_value": "control"},
-                "source": {"dataset_prefix": "viperturb/vimentin_screen_chunk_smoke/chunk_0000"},
+                "source": {
+                    "dataset_prefix": "viperturb/vimentin_screen_chunk_smoke/chunk_0000"
+                },
             }
         )
     )
@@ -251,7 +261,6 @@ def test_scgen_viperturb_tiny_loader_uses_real_expression_contract(tmp_path) -> 
     assert split_non_controls[0].isdisjoint(split_non_controls[1])
     assert split_non_controls[0].isdisjoint(split_non_controls[2])
     assert split_non_controls[1].isdisjoint(split_non_controls[2])
-
 
 
 def test_response_screen_loader_joins_rows_to_baseline_by_stable_depmap_id() -> None:
@@ -289,6 +298,57 @@ def test_response_screen_loader_joins_rows_to_baseline_by_stable_depmap_id() -> 
         {"depmap_id": "ACH-000002", "response_metric": "lfc"},
     )
 
+
+def test_response_screen_loader_accepts_identical_duplicate_baselines_in_any_order() -> (
+    None
+):
+    response_rows = [
+        {
+            "depmap_id": "ACH-000001::P103::PR500A::REP1M",
+            "perturbation": "BRD-A",
+            "response_metric": "lfc",
+            "response_value": "-0.5",
+        }
+    ]
+    baseline_rows = [
+        {"depmap_id": "ACH-000001", "expression": [1.0, 2.0]},
+        {"ach_id": "ACH-000001", "expression": [1.0, 2.0]},
+    ]
+
+    forward = load_response_screen_with_baseline(
+        response_rows=response_rows,
+        baseline_rows=baseline_rows,
+        feature_names=["gene_a", "gene_b"],
+    )
+    reverse = load_response_screen_with_baseline(
+        response_rows=response_rows,
+        baseline_rows=list(reversed(baseline_rows)),
+        feature_names=["gene_a", "gene_b"],
+    )
+
+    assert forward.X == [[1.0, 2.0]]
+    assert reverse.X == forward.X
+
+
+def test_response_screen_loader_rejects_non_identical_duplicate_baselines() -> None:
+    with pytest.raises(ValueError, match="non-identical baseline RNA expression"):
+        load_response_screen_with_baseline(
+            response_rows=[
+                {
+                    "depmap_id": "ACH-000001",
+                    "perturbation": "BRD-A",
+                    "response_metric": "lfc",
+                    "response_value": "-0.5",
+                }
+            ],
+            baseline_rows=[
+                {"depmap_id": "ACH-000001", "expression": [1.0, 2.0]},
+                {"depmap_id": "ACH-000001", "expression": [3.0, 4.0]},
+            ],
+            feature_names=["gene_a", "gene_b"],
+        )
+
+
 def test_response_screen_loader_rejects_missing_or_malformed_response_semantics() -> (
     None
 ):
@@ -309,6 +369,7 @@ def test_response_screen_loader_rejects_missing_or_malformed_response_semantics(
             feature_names=["gene_a", "gene_b"],
         )
 
+
 def test_response_screen_loader_requires_separate_baseline_expression() -> None:
     with pytest.raises(ValueError, match="baseline RNA expression"):
         load_response_screen_with_baseline(
@@ -324,6 +385,7 @@ def test_response_screen_loader_requires_separate_baseline_expression() -> None:
             baseline_rows=[],
             feature_names=["gene_a", "gene_b"],
         )
+
 
 def test_benchmark_artifact_summary_written(tmp_path) -> None:
     dataset = load_tiny_benchmark_dataset()

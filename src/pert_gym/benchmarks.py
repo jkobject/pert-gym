@@ -229,7 +229,7 @@ def load_response_screen_with_baseline(
         raise ValueError(
             "response-screen loaders require separate baseline RNA expression"
         )
-    baseline_by_id: dict[str, Sequence[Any]] = {}
+    baseline_by_id: dict[str, tuple[float, ...]] = {}
     for idx, row in enumerate(baseline_rows):
         stable_id = _stable_depmap_id(row.get("depmap_id") or row.get("ach_id"))
         if not stable_id:
@@ -237,7 +237,21 @@ def load_response_screen_with_baseline(
         expression = row.get("expression")
         if expression is None:
             raise ValueError(f"baseline row {idx} is missing baseline RNA expression")
-        baseline_by_id[stable_id] = expression
+        try:
+            expression_values = tuple(float(value) for value in expression)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"baseline row {idx} has malformed baseline RNA expression"
+            ) from exc
+        existing_expression = baseline_by_id.get(stable_id)
+        if existing_expression is not None:
+            if expression_values != existing_expression:
+                raise ValueError(
+                    f"baseline row {idx} has non-identical baseline RNA expression "
+                    f"for duplicate {stable_id}"
+                )
+            continue
+        baseline_by_id[stable_id] = expression_values
 
     X: list[list[float]] = []
     target_response: list[list[float]] = []
@@ -264,7 +278,7 @@ def load_response_screen_with_baseline(
             ) from exc
         if response_metric in {"", "missing", "none", "nan"}:
             raise ValueError(f"response row {idx} is missing response_metric")
-        X.append([float(value) for value in baseline_by_id[stable_id]])
+        X.append(list(baseline_by_id[stable_id]))
         target_response.append([numeric_response])
         perturbations.append(str(row.get("perturbation", row.get("broad_id", ""))))
         controls.append(_is_control_row(row))

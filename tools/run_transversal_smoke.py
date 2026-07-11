@@ -106,12 +106,50 @@ def main() -> None:
     started = time.monotonic()
     baseline_payload = json.loads(args.prism_baselines.read_text())
     prism_manifest = json.loads(args.prism_manifest.read_text())
-    batches = load_transversal_batches(
-        prism_subset_path=args.prism_subset,
-        prism_baseline_rows=baseline_payload["rows"],
-        prism_baseline_feature_names=baseline_payload["feature_names"],
-        strand_join_path=args.strand_join,
-    )
+    inputs = {
+        "prism_subset": {
+            "path": str(args.prism_subset),
+            "sha256": _sha256(args.prism_subset),
+        },
+        "prism_manifest": {
+            "path": str(args.prism_manifest),
+            "sha256": _sha256(args.prism_manifest),
+        },
+        "prism_baselines": {
+            "path": str(args.prism_baselines),
+            "sha256": _sha256(args.prism_baselines),
+        },
+        "strand_join": {
+            "path": str(args.strand_join),
+            "sha256": _sha256(args.strand_join),
+        },
+    }
+    try:
+        batches = load_transversal_batches(
+            prism_subset_path=args.prism_subset,
+            prism_baseline_rows=baseline_payload["rows"],
+            prism_baseline_feature_names=baseline_payload["feature_names"],
+            strand_join_path=args.strand_join,
+        )
+    except ValueError as exc:
+        report = {
+            "schema_version": "transversal_multitask_smoke.v1",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "status": "rejected",
+            "inputs": inputs,
+            "prism_immutable_manifest": prism_manifest,
+            "rejection": {
+                "type": type(exc).__name__,
+                "message": str(exc),
+                "policy": "non-identical duplicate baseline RNA vectors fail closed",
+            },
+            "commands": [" ".join(sys.argv)],
+            "runtime_seconds": time.monotonic() - started,
+            "runtime": {"python": sys.version, "platform": platform.platform()},
+        }
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
+        raise
     summaries = {
         split: [_batch_summary(batch) for batch in split_batches]
         for split, split_batches in batches.by_split.items()
@@ -130,25 +168,9 @@ def main() -> None:
     report = {
         "schema_version": "transversal_multitask_smoke.v1",
         "created_at": datetime.now(timezone.utc).isoformat(),
+        "status": "passed",
         "seed": 0,
-        "inputs": {
-            "prism_subset": {
-                "path": str(args.prism_subset),
-                "sha256": _sha256(args.prism_subset),
-            },
-            "prism_manifest": {
-                "path": str(args.prism_manifest),
-                "sha256": _sha256(args.prism_manifest),
-            },
-            "prism_baselines": {
-                "path": str(args.prism_baselines),
-                "sha256": _sha256(args.prism_baselines),
-            },
-            "strand_join": {
-                "path": str(args.strand_join),
-                "sha256": _sha256(args.strand_join),
-            },
-        },
+        "inputs": inputs,
         "contract": dict(batches.metadata),
         "prism_immutable_manifest": prism_manifest,
         "splits": summaries,
