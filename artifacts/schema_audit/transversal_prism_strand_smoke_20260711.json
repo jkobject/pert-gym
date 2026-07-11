@@ -1,0 +1,86 @@
+{
+  "commands": [
+    "tools/run_transversal_smoke.py --prism-subset /tmp/t_d18f8eab_prism/subset.tsv --prism-manifest /tmp/t_d18f8eab_prism/manifest.json --prism-baselines /tmp/t_d18f8eab_prism_baselines.json --strand-join /tmp/t_d18f8eab_strand_join.tsv --out artifacts/schema_audit/transversal_prism_strand_smoke_20260711.json"
+  ],
+  "created_at": "2026-07-11T02:08:59.129803+00:00",
+  "inputs": {
+    "prism_baselines": {
+      "path": "/tmp/t_d18f8eab_prism_baselines.json",
+      "sha256": "2f3ba5aa40f3b1782095a2688db196dd6d06259229bc5582dd83aeacb634598c"
+    },
+    "prism_manifest": {
+      "path": "/tmp/t_d18f8eab_prism/manifest.json",
+      "sha256": "a7fa4054f2f6785a1f9e0abe18e05f2b534eb65b34ffb903b92543107deefa2c"
+    },
+    "prism_subset": {
+      "path": "/tmp/t_d18f8eab_prism/subset.tsv",
+      "sha256": "b4f9abda6162d3e8a13149f384417a26a7589acd840a32bb47abfc9deeba51a1"
+    },
+    "strand_join": {
+      "path": "/tmp/t_d18f8eab_strand_join.tsv",
+      "sha256": "c24640dd5df6b51ab8ef90833e3d2267bf97ff63b4c97b5cd1f40ea067b21095"
+    }
+  },
+  "prism_immutable_manifest": {
+    "baseline": {
+      "generation": "1781122665212682",
+      "sha256": "0377be80c525fde98cbd2c6e8b06bdf2a4014a9683eb70182c1f8649d711021a",
+      "uri": "gs://scperturb/pert-gym/staging/data/main/depmap_ccle/OmicsExpressionTPMLogp1HumanProteinCodingGenes.csv"
+    },
+    "denominator_discrepancy_note": "Earlier 122-unique-ModelID claim was disproven by direct immutable TSV audit; corrected approved contract is 128/120 source to 126/118 retained.",
+    "exclusion": {
+      "model_ids": [
+        "ACH-000658",
+        "ACH-001212"
+      ],
+      "reason": "missing_release_matched_baseline",
+      "rows": 2,
+      "unique_model_ids": 2
+    },
+    "execution": {
+      "exact_baseline_join": true,
+      "host": "pert-gym-worker-eu",
+      "loader_commit": "fbfff78ac3eff98d7201a5b1289703f78e46807c",
+      "zone": "europe-west1-b"
+    },
+    "limitations": [
+      "Not full PRISM or global model-ready approval.",
+      "No approval of trt_poscon, dose units, or LFC_cb."
+    ],
+    "mac_bulk_source_scan": false,
+    "no_lamin_write": true,
+    "no_overwrite": true,
+    "retained": {
+      "direct_response_semantics": "lfc",
+      "rows": 126,
+      "split_counts": {
+        "test": 25,
+        "train": 82,
+        "val": 19
+      },
+      "unique_model_ids": 118,
+      "zero_compound_split_leakage": true,
+      "zero_source_row_split_leakage": true
+    },
+    "source": {
+      "generation": "1783731204876900",
+      "rows": 128,
+      "sha256": "8b27514e9aa3232718b651fda75157715ffcc246d85ad4b6899b4a6aadb7d108",
+      "unique_model_ids": 120,
+      "uri": "gs://scperturb/pert-gym/staging/executions/t_e6bad67f/20260711T004540+0000-29566d46/projection.tsv"
+    },
+    "status": "loader_projectable_subset_only"
+  },
+  "rejection": {
+    "message": "baseline row 71 has non-identical baseline RNA expression for duplicate ACH-000019",
+    "policy": "non-identical duplicate baseline RNA vectors fail closed",
+    "type": "ValueError"
+  },
+  "runtime": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "python": "3.11.15 (main, Jun 11 2026, 04:04:09) [Clang 22.1.3 ]"
+  },
+  "runtime_seconds": 0.2609160419087857,
+  "schema_version": "transversal_multitask_smoke.v1",
+  "status": "rejected"
+}
