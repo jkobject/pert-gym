@@ -28,7 +28,7 @@ from typing import Iterator, Sequence, TextIO
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
-ALLOWED_HEAVY_HOSTS = frozenset({"pert-gym-worker-eu", "pert-gym-capacity-eu-v2"})
+ALLOWED_HEAVY_HOSTS = frozenset({"pert-gym-worker-eu"})
 EXPECTED_GCE_PROJECT = "jkobject-1549353370965"
 EXPECTED_ZONE = "europe-west1-b"
 BILLING_PROJECT = "jkobject-1549353370965"

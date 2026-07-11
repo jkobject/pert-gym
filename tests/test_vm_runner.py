@@ -24,6 +24,7 @@ def test_require_heavy_vm_rejects_darwin(monkeypatch: pytest.MonkeyPatch) -> Non
     "hostname",
     [
         "pert-gym-worker-eu-v2",
+        "pert-gym-capacity-eu-v2",
         "pert-gym-capacity-eu-v2-lookalike",
         "untrusted-host",
     ],
@@ -33,6 +34,12 @@ def test_require_heavy_vm_rejects_lookalike_or_unknown_host(
 ) -> None:
     monkeypatch.setattr(runner.platform, "system", lambda: "Linux")
     monkeypatch.setattr(runner.socket, "gethostname", lambda: hostname)
+    metadata = {
+        "project/project-id": runner.EXPECTED_GCE_PROJECT,
+        "instance/zone": f"projects/1/zones/{runner.EXPECTED_ZONE}",
+        "instance/name": hostname,
+    }
+    monkeypatch.setattr(runner, "_metadata_value", metadata.__getitem__)
 
     with pytest.raises(RuntimeError, match=hostname):
         runner.require_heavy_vm()
