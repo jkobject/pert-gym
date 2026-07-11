@@ -10,8 +10,19 @@ from pert_gym.depmap_baseline_fixture import (
 
 
 def _write_expression_csv(path, rows) -> None:
+    rows = [
+        {
+            "SequencingID": "CDS-default",
+            "ModelConditionID": "MC-default",
+            "IsDefaultEntryForMC": "Yes",
+            "IsDefaultEntryForModel": "Yes",
+            **row,
+        }
+        for row in rows
+    ]
     with path.open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["ModelID", "GENE_A", "GENE_B"])
+        fieldnames = list(dict.fromkeys(key for row in rows for key in row))
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
 
@@ -21,9 +32,33 @@ def test_extract_exact_modelid_baseline_records_source_row_provenance(tmp_path) 
     _write_expression_csv(
         source,
         [
-            {"ModelID": "ACH-2", "GENE_A": "2.0", "GENE_B": "3.0"},
-            {"ModelID": "ACH-1", "GENE_A": "1.0", "GENE_B": "4.0"},
-            {"ModelID": "ACH-3", "GENE_A": "5.0", "GENE_B": "6.0"},
+            {
+                "ModelID": "ACH-2",
+                "SequencingID": "CDS-2",
+                "ModelConditionID": "MC-2",
+                "IsDefaultEntryForMC": "Yes",
+                "IsDefaultEntryForModel": "Yes",
+                "GENE_A": "2.0",
+                "GENE_B": "3.0",
+            },
+            {
+                "ModelID": "ACH-1",
+                "SequencingID": "CDS-1",
+                "ModelConditionID": "MC-1",
+                "IsDefaultEntryForMC": "Yes",
+                "IsDefaultEntryForModel": "Yes",
+                "GENE_A": "1.0",
+                "GENE_B": "4.0",
+            },
+            {
+                "ModelID": "ACH-3",
+                "SequencingID": "CDS-3",
+                "ModelConditionID": "MC-3",
+                "IsDefaultEntryForMC": "Yes",
+                "IsDefaultEntryForModel": "Yes",
+                "GENE_A": "5.0",
+                "GENE_B": "6.0",
+            },
         ],
     )
 
@@ -37,7 +72,7 @@ def test_extract_exact_modelid_baseline_records_source_row_provenance(tmp_path) 
         commit="deadbeef",
     )
 
-    assert fixture["schema_version"] == "depmap_exact_modelid_baseline.v1"
+    assert fixture["schema_version"] == "depmap_default_model_entry_baseline.v2"
     assert fixture["feature_names"] == ["GENE_A", "GENE_B"]
     assert [row["depmap_id"] for row in fixture["rows"]] == ["ACH-1", "ACH-2"]
     assert fixture["rows"][0]["source_data_row"] == 2
@@ -46,25 +81,40 @@ def test_extract_exact_modelid_baseline_records_source_row_provenance(tmp_path) 
         "generation": "123",
         "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
     }
-    assert fixture["provenance"]["extraction"]["canonical_model_id_unique"] is True
+    assert fixture["provenance"]["extraction"]["selection_contract"] == (
+        "exactly_one_IsDefaultEntryForModel_Yes_per_requested_ModelID"
+    )
     assert fixture["provenance"]["extraction"]["source_data_rows"] == 3
     assert fixture["provenance"]["extraction"]["matched_rows"] == 2
 
 
-def test_extract_exact_modelid_baseline_rejects_duplicate_canonical_model_ids(
+def test_extract_exact_modelid_baseline_rejects_multiple_native_model_defaults(
     tmp_path,
 ) -> None:
     source = tmp_path / "expression.csv"
     _write_expression_csv(
         source,
         [
-            {"ModelID": "ACH-1", "GENE_A": "1.0", "GENE_B": "2.0"},
-            {"ModelID": "ACH-2", "GENE_A": "3.0", "GENE_B": "4.0"},
-            {"ModelID": "ACH-1", "GENE_A": "5.0", "GENE_B": "6.0"},
+            {
+                "ModelID": "ACH-1",
+                "SequencingID": "CDS-1",
+                "ModelConditionID": "MC-1",
+                "IsDefaultEntryForMC": "Yes",
+                "IsDefaultEntryForModel": "Yes",
+                "GENE_A": "1.0",
+            },
+            {
+                "ModelID": "ACH-1",
+                "SequencingID": "CDS-2",
+                "ModelConditionID": "MC-2",
+                "IsDefaultEntryForMC": "Yes",
+                "IsDefaultEntryForModel": "Yes",
+                "GENE_A": "2.0",
+            },
         ],
     )
 
-    with pytest.raises(ValueError, match="duplicate ModelID") as exc_info:
+    with pytest.raises(ValueError, match="exactly one IsDefaultEntryForModel=Yes"):
         extract_exact_modelid_baseline(
             source_path=source,
             requested_model_ids={"ACH-1"},
@@ -75,8 +125,86 @@ def test_extract_exact_modelid_baseline_rejects_duplicate_canonical_model_ids(
             commit="deadbeef",
         )
 
-    assert "ACH-1" in str(exc_info.value)
-    assert "rows [1, 3]" in str(exc_info.value)
+
+def test_extract_exact_modelid_baseline_selects_only_native_model_default(
+    tmp_path,
+) -> None:
+    source = tmp_path / "expression.csv"
+    _write_expression_csv(
+        source,
+        [
+            {
+                "ModelID": "ACH-1",
+                "SequencingID": "CDS-nondefault",
+                "ModelConditionID": "MC-1",
+                "IsDefaultEntryForMC": "Yes",
+                "IsDefaultEntryForModel": "No",
+                "GENE_A": "1.0",
+            },
+            {
+                "ModelID": "ACH-1",
+                "SequencingID": "CDS-model-default",
+                "ModelConditionID": "MC-2",
+                "IsDefaultEntryForMC": "No",
+                "IsDefaultEntryForModel": "Yes",
+                "GENE_A": "2.0",
+            },
+        ],
+    )
+
+    fixture = extract_exact_modelid_baseline(
+        source_path=source,
+        requested_model_ids={"ACH-1"},
+        source_uri="gs://bucket/depmap.csv",
+        source_generation="123",
+        expected_source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
+        extraction_command="python tools/extract_depmap_baseline_fixture.py ...",
+        commit="deadbeef",
+    )
+
+    assert fixture["rows"] == [
+        {
+            "depmap_id": "ACH-1",
+            "expression": [2.0],
+            "source_data_row": 2,
+            "source_model_id": "ACH-1",
+            "sequencing_id": "CDS-model-default",
+            "model_condition_id": "MC-2",
+            "is_default_entry_for_mc": "No",
+            "is_default_entry_for_model": "Yes",
+            "vector_sha256": hashlib.sha256(b"2.0").hexdigest(),
+        }
+    ]
+
+
+def test_extract_exact_modelid_baseline_rejects_missing_native_model_default(
+    tmp_path,
+) -> None:
+    source = tmp_path / "expression.csv"
+    _write_expression_csv(
+        source,
+        [
+            {
+                "ModelID": "ACH-1",
+                "SequencingID": "CDS-mc-default-only",
+                "ModelConditionID": "MC-1",
+                "IsDefaultEntryForMC": "Yes",
+                "IsDefaultEntryForModel": "No",
+                "GENE_A": "1.0",
+            }
+        ],
+    )
+
+    with pytest.raises(ValueError, match="exactly one IsDefaultEntryForModel=Yes"):
+        extract_exact_modelid_baseline(
+            source_path=source,
+            requested_model_ids={"ACH-1"},
+            source_uri="gs://bucket/depmap.csv",
+            source_generation="123",
+            expected_source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
+            extraction_command="python tools/extract_depmap_baseline_fixture.py ...",
+            commit="deadbeef",
+        )
 
 
 def test_extract_exact_modelid_baseline_rejects_source_checksum_mismatch(
@@ -160,6 +288,7 @@ def test_validate_fixture_for_manifest_requires_matching_source_provenance(
         extraction_command="python tools/extract_depmap_baseline_fixture.py ...",
         commit="deadbeef",
     )
+    fixture["provenance"]["inputs"] = {"prism_subset_sha256": "subset-sha"}
     manifest = {
         "baseline": {
             "uri": "gs://bucket/depmap.csv",
