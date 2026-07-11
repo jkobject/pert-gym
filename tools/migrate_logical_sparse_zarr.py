@@ -15,7 +15,6 @@ import json
 from pathlib import Path
 
 import anndata as ad
-from scipy import sparse
 
 from pert_gym.logical_sparse_zarr import write_logical_sparse_revision
 from tools.pert_gym_vm_runner import require_heavy_vm
@@ -54,10 +53,6 @@ def main() -> int:
     source = ad.read_h5ad(args.source_h5ad, backed="r")
     try:
         matrix = source.X
-        if not sparse.isspmatrix_csr(matrix) and not sparse.isspmatrix_csc(matrix):
-            raise TypeError(
-                "source X must already be CSR or CSC; conversion is explicit and out of scope"
-            )
         manifest = write_logical_sparse_revision(
             root=args.output_root,
             logical_key=args.logical_key,

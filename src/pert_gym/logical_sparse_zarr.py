@@ -85,7 +85,8 @@ class VarIdentity:
 
     @property
     def key(self) -> str:
-        return f"{self.index_sha256}-{self.frame_sha256}-{self.schema_fingerprint}"
+        schema_digest = _sha256_bytes(self.schema_fingerprint.encode("utf-8"))
+        return f"{self.index_sha256}-{self.frame_sha256}-{schema_digest}"
 
 
 def shared_var_identity(var: pd.DataFrame, *, schema_fingerprint: str) -> VarIdentity:
@@ -108,6 +109,22 @@ def shared_var_identity(var: pd.DataFrame, *, schema_fingerprint: str) -> VarIde
         index_sha256=_sha256_bytes(index_bytes),
         frame_sha256=_sha256_bytes(frame_bytes),
         schema_fingerprint=schema_fingerprint,
+    )
+
+
+def _index_sha256(frame: pd.DataFrame) -> str:
+    """Hash the exact UTF-8 index order used to bind an obs resume."""
+    return _sha256_bytes(
+        ("\n".join(str(value) for value in frame.index) + "\n").encode("utf-8")
+    )
+
+
+def _frame_sha256(frame: pd.DataFrame) -> str:
+    """Bind a resume to exact obs values as well as its index/order."""
+    values = pd.util.hash_pandas_object(frame, index=True, categorize=True).values
+    schema = "\n".join(f"{column}:{dtype}" for column, dtype in frame.dtypes.items())
+    return _sha256_bytes(
+        np.ascontiguousarray(values).tobytes() + schema.encode("utf-8")
     )
 
 
@@ -136,6 +153,56 @@ def _matrix_components(
     matrix: CompressedMatrix,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     return matrix.data, matrix.indices, matrix.indptr
+
+
+def _source_sparse_format(matrix: object) -> str:
+    if sparse.isspmatrix_csr(matrix):
+        return "csr"
+    if sparse.isspmatrix_csc(matrix):
+        return "csc"
+    sparse_format = getattr(matrix, "format", None)
+    if sparse_format in {"csr", "csc"} and hasattr(matrix, "__getitem__"):
+        return sparse_format
+    raise TypeError("matrix must be CSR or CSC; format conversion must be explicit")
+
+
+def _source_nnz(matrix: object) -> int:
+    nnz = getattr(matrix, "nnz", None)
+    if nnz is not None:
+        return int(nnz)
+    indptr = getattr(matrix, "_indptr", None)
+    if indptr is not None and len(indptr):
+        return int(indptr[-1])
+    raise TypeError("backed sparse matrix must expose nnz or _indptr")
+
+
+def _materialize_rows(
+    matrix: object, start: int, end: int, sparse_format: str
+) -> CompressedMatrix:
+    """Materialize only one logical obs interval from an in-memory or backed X."""
+    chunk = matrix[start:end]  # type: ignore[index]
+    if sparse_format == "csr" and sparse.isspmatrix_csr(chunk):
+        return chunk.copy()
+    if sparse_format == "csc" and sparse.isspmatrix_csc(chunk):
+        return chunk.copy()
+    raise TypeError("backed sparse row access did not preserve declared orientation")
+
+
+def _assert_source_readback_parity(
+    source: CompressedMatrix,
+    loaded: CompressedMatrix,
+    source_obs: pd.DataFrame,
+    loaded_obs: pd.DataFrame,
+) -> None:
+    if source.shape != loaded.shape or source.nnz != loaded.nnz:
+        raise RuntimeError("source/readback matrix shape or nnz mismatch")
+    for source_values, loaded_values in zip(
+        _matrix_components(source), _matrix_components(loaded)
+    ):
+        if _sha256_array(source_values) != _sha256_array(loaded_values):
+            raise RuntimeError("source/readback sparse payload mismatch")
+    if not source_obs.equals(loaded_obs):
+        raise RuntimeError("source/readback obs identity or order mismatch")
 
 
 def _write_matrix(
@@ -201,6 +268,12 @@ def _checkpoint_base(
     nnz: int,
     sparse_format: str,
     source_checksum: str,
+    source_uri: str,
+    source_row_start: int,
+    ingestion_run_id: str,
+    var_identity: VarIdentity,
+    obs_index_sha256: str,
+    obs_frame_sha256: str,
     chunks: tuple[tuple[int, int], ...],
 ) -> dict[str, object]:
     return {
@@ -212,6 +285,14 @@ def _checkpoint_base(
         "nnz": nnz,
         "sparse_format": sparse_format,
         "source_checksum": source_checksum,
+        "source_uri": source_uri,
+        "source_row_start": source_row_start,
+        "ingestion_run_id": ingestion_run_id,
+        "var_index_sha256": var_identity.index_sha256,
+        "var_frame_sha256": var_identity.frame_sha256,
+        "schema_fingerprint": var_identity.schema_fingerprint,
+        "obs_index_sha256": obs_index_sha256,
+        "obs_frame_sha256": obs_frame_sha256,
         "planned_chunks": [list(chunk) for chunk in chunks],
         "completed_chunks": [],
         "status": "in_progress",
@@ -234,6 +315,14 @@ def _load_or_create_checkpoint(
         "nnz",
         "sparse_format",
         "source_checksum",
+        "source_uri",
+        "source_row_start",
+        "ingestion_run_id",
+        "var_index_sha256",
+        "var_frame_sha256",
+        "schema_fingerprint",
+        "obs_index_sha256",
+        "obs_frame_sha256",
         "planned_chunks",
     ):
         if checkpoint.get(field) != expected[field]:
@@ -268,22 +357,23 @@ def _ensure_shared_var(root: Path, identity: VarIdentity, var: pd.DataFrame) -> 
 
 
 def _observed_target_rows(
-    matrix: CompressedMatrix,
+    matrix: object,
     *,
+    sparse_format: str,
     target_rows: int,
     max_rss_bytes: int,
     min_rows: int,
     max_rows: int,
 ) -> int:
     """Sample materialization before writes so the final plan remains balanced."""
-    sample_end = min(matrix.shape[0], target_rows)
-    _ = matrix[:sample_end].copy()
+    sample_end = min(matrix.shape[0], target_rows)  # type: ignore[attr-defined]
+    sample = _materialize_rows(matrix, 0, sample_end, sparse_format)
     observed = _peak_rss_bytes()
-    del _
+    del sample
     if observed <= max_rss_bytes:
         return target_rows
     scaled = max(min_rows, int(target_rows * max_rss_bytes / observed))
-    return max(min_rows, min(max_rows, scaled, matrix.shape[0]))
+    return max(min_rows, min(max_rows, scaled, matrix.shape[0]))  # type: ignore[attr-defined]
 
 
 def write_logical_sparse_revision(
@@ -291,7 +381,7 @@ def write_logical_sparse_revision(
     root: Path,
     logical_key: str,
     revision: str,
-    matrix: CompressedMatrix,
+    matrix: object,
     obs: pd.DataFrame,
     var: pd.DataFrame,
     schema_fingerprint: str,
@@ -315,27 +405,26 @@ def write_logical_sparse_revision(
         raise ValueError(
             "source_checksum must use sha256-file-bytes/v1:<64-hex-digest>"
         )
-    if matrix.shape != (len(obs), len(var)):
+    shape = getattr(matrix, "shape", None)
+    if not isinstance(shape, tuple) or len(shape) != 2:
+        raise TypeError("matrix must expose a two-dimensional shape")
+    if shape != (len(obs), len(var)):
         raise ValueError("matrix shape must match obs and var row counts")
     if source_row_start < 0:
         raise ValueError("source_row_start must be non-negative")
-    if sparse.isspmatrix_csr(matrix):
-        sparse_format = "csr"
-    elif sparse.isspmatrix_csc(matrix):
-        sparse_format = "csc"
-    else:
-        raise TypeError("matrix must be CSR or CSC; format conversion must be explicit")
+    sparse_format = _source_sparse_format(matrix)
+    matrix_nnz = _source_nnz(matrix)
     candidate = _candidate_root(root, logical_key, revision)
     checkpoint_path = _checkpoint_path(root, logical_key, revision)
     lock_path = candidate / ".writer.lock"
     identity = shared_var_identity(var, schema_fingerprint=schema_fingerprint)
-    if matrix.shape[0] == 0:
+    if shape[0] == 0:
         chunks = ()
     else:
         initial_target = adaptive_target_rows(
-            n_obs=matrix.shape[0],
-            n_vars=matrix.shape[1],
-            nnz=matrix.nnz,
+            n_obs=shape[0],
+            n_vars=shape[1],
+            nnz=matrix_nnz,
             max_rss_bytes=max_rss_bytes,
             min_rows=min_rows,
             max_rows=max_rows,
@@ -344,19 +433,26 @@ def write_logical_sparse_revision(
         )
         target_rows = _observed_target_rows(
             matrix,
+            sparse_format=sparse_format,
             target_rows=initial_target,
             max_rss_bytes=max_rss_bytes,
             min_rows=min_rows,
             max_rows=max_rows,
         )
-        chunks = balanced_row_chunks(matrix.shape[0], target_rows)
+        chunks = balanced_row_chunks(shape[0], target_rows)
     expected = _checkpoint_base(
         logical_key=logical_key,
         revision=revision,
-        shape=matrix.shape,
-        nnz=int(matrix.nnz),
+        shape=shape,
+        nnz=matrix_nnz,
         sparse_format=sparse_format,
         source_checksum=source_checksum,
+        source_uri=source_uri,
+        source_row_start=source_row_start,
+        ingestion_run_id=ingestion_run_id,
+        var_identity=identity,
+        obs_index_sha256=_index_sha256(obs),
+        obs_frame_sha256=_frame_sha256(obs),
         chunks=chunks,
     )
     with _exclusive_lock(lock_path):
@@ -379,20 +475,29 @@ def write_logical_sparse_revision(
             obs_key = f"obs/chunk_{index:06d}.parquet"
             chunk_path = candidate / chunk_key
             obs_path = candidate / obs_key
+            source_chunk = _materialize_rows(matrix, start, end, sparse_format)
+            source_obs = obs.iloc[start:end]
+            payload_exists = chunk_path.exists()
+            obs_exists = obs_path.exists()
             if index in completed:
-                if not chunk_path.exists() or not obs_path.exists():
+                if not payload_exists or not obs_exists:
                     raise RuntimeError(
                         f"checkpoint says chunk {index} completed but payload is missing"
                     )
-            else:
-                chunk = matrix[start:end].copy()
-                _write_matrix(chunk_path, chunk, sparse_format)
-                obs_path.parent.mkdir(parents=True, exist_ok=True)
-                if obs_path.exists():
-                    raise FileExistsError(
-                        f"refusing to overwrite existing obs sidecar: {obs_path}"
+            elif payload_exists or obs_exists:
+                if not payload_exists or not obs_exists:
+                    raise RuntimeError(
+                        f"incomplete pre-checkpoint payload for chunk {index}; refusing overwrite"
                     )
-                obs.iloc[start:end].to_parquet(obs_path)
+                completed.add(index)
+                checkpoint["completed_chunks"] = sorted(completed)
+                checkpoint["last_completed_end"] = end
+                checkpoint["updated_at"] = time.time()
+                _atomic_json(checkpoint_path, checkpoint)
+            else:
+                _write_matrix(chunk_path, source_chunk, sparse_format)
+                obs_path.parent.mkdir(parents=True, exist_ok=True)
+                source_obs.to_parquet(obs_path)
                 completed.add(index)
                 checkpoint["completed_chunks"] = sorted(completed)
                 checkpoint["last_completed_end"] = end
@@ -406,6 +511,8 @@ def write_logical_sparse_revision(
                         f"interrupted after chunk {index} for resume test"
                     )
             loaded = _read_matrix(chunk_path, sparse_format)
+            loaded_obs = pd.read_parquet(obs_path)
+            _assert_source_readback_parity(source_chunk, loaded, source_obs, loaded_obs)
             data, indices, indptr = _matrix_components(loaded)
             records.append(
                 {
@@ -413,7 +520,7 @@ def write_logical_sparse_revision(
                     "start": start,
                     "end": end,
                     "nnz": int(loaded.nnz),
-                    "shape": [end - start, matrix.shape[1]],
+                    "shape": [end - start, shape[1]],
                     "dtype": str(loaded.dtype),
                     "checksums": {
                         "data_sha256": _sha256_array(data),
@@ -437,8 +544,8 @@ def write_logical_sparse_revision(
             "format": "pert-gym.logical-sparse-zarr",
             "version": 1,
             "revision": revision,
-            "shape": list(matrix.shape),
-            "nnz": int(matrix.nnz),
+            "shape": list(shape),
+            "nnz": matrix_nnz,
             "sparse_format": sparse_format,
             "chunks": records,
             "shared_var": {

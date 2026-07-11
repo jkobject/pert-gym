@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import anndata as ad
 import numpy as np
 import pandas as pd
 import pytest
@@ -127,6 +128,179 @@ def test_resume_reuses_completed_payload_without_overwrite(tmp_path: Path) -> No
     assert (restored != matrix).nnz == 0
     with pytest.raises(RuntimeError, match="already completed"):
         write_logical_sparse_revision(**kwargs)
+
+
+@pytest.mark.parametrize("sparse_format", ["csr", "csc"])
+def test_writer_accepts_bounded_backed_sparse_input_without_format_conversion(
+    tmp_path: Path, sparse_format: str
+) -> None:
+    matrix, obs, var = fixture_data()
+    source_path = tmp_path / f"source-{sparse_format}.h5ad"
+    backed_matrix = matrix if sparse_format == "csr" else matrix.tocsc()
+    ad.AnnData(X=backed_matrix, obs=obs, var=var).write_h5ad(source_path)
+    source = ad.read_h5ad(source_path, backed="r")
+    try:
+        assert not sparse.isspmatrix(source.X)
+        manifest = write_logical_sparse_revision(
+            root=tmp_path / "output",
+            logical_key="surfaces/backed",
+            revision=sparse_format,
+            matrix=source.X,
+            obs=source.obs.copy(),
+            var=source.var.copy(),
+            schema_fingerprint="schema-v1",
+            source_uri="file://source.h5ad",
+            source_checksum=SOURCE_CHECKSUM,
+            ingestion_run_id="backed-test",
+            max_rss_bytes=10**12,
+            min_rows=1,
+            max_rows=4,
+        )
+    finally:
+        source.file.close()
+
+    assert manifest["sparse_format"] == sparse_format
+    _, restored, restored_obs, _ = read_logical_sparse_revision(
+        tmp_path / "output", "surfaces/backed", sparse_format
+    )
+    assert restored.format == sparse_format
+    assert (restored != backed_matrix).nnz == 0
+    assert restored_obs.index.tolist() == obs.index.tolist()
+
+
+def test_resume_rejects_changed_provenance_and_metadata_identity(
+    tmp_path: Path,
+) -> None:
+    matrix, obs, var = fixture_data()
+    kwargs = dict(
+        root=tmp_path,
+        logical_key="surfaces/example",
+        revision="resume-identity",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        schema_fingerprint="schema-v1",
+        source_uri="gs://example/u1.h5ad",
+        source_checksum=SOURCE_CHECKSUM,
+        source_row_start=0,
+        ingestion_run_id="run1",
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=4,
+    )
+    with pytest.raises(MigrationInterrupted):
+        write_logical_sparse_revision(**kwargs, stop_after_chunks=1)
+
+    for changed in (
+        {"source_uri": "gs://example/u2.h5ad"},
+        {"source_row_start": 100},
+        {"ingestion_run_id": "run2"},
+        {"schema_fingerprint": "schema-v2"},
+        {"var": var.rename(index={"g1": "changed"})},
+        {"obs": obs.rename(index={"o0": "changed"})},
+        {"obs": obs.assign(cell="changed")},
+    ):
+        with pytest.raises(RuntimeError, match="checkpoint mismatch"):
+            write_logical_sparse_revision(**(kwargs | changed))
+
+
+def test_writer_rejects_source_or_obs_substitution_before_manifest(
+    tmp_path: Path,
+) -> None:
+    matrix, obs, var = fixture_data()
+    kwargs = dict(
+        root=tmp_path,
+        logical_key="surfaces/example",
+        revision="substitution",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        schema_fingerprint="schema-v1",
+        source_uri="gs://example/source.h5ad",
+        source_checksum=SOURCE_CHECKSUM,
+        ingestion_run_id="test-run",
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=4,
+    )
+    with pytest.raises(MigrationInterrupted):
+        write_logical_sparse_revision(**kwargs, stop_after_chunks=1)
+
+    substituted = matrix.copy()
+    substituted.data *= 7
+    with pytest.raises(RuntimeError, match="source/readback"):
+        write_logical_sparse_revision(**(kwargs | {"matrix": substituted}))
+    assert not (
+        tmp_path / "surfaces/example/revisions/substitution/manifest.json"
+    ).exists()
+
+    obs_path = (
+        tmp_path / "surfaces/example/revisions/substitution/obs/chunk_000000.parquet"
+    )
+    obs.iloc[:3].iloc[::-1].to_parquet(obs_path)
+    with pytest.raises(RuntimeError, match="source/readback"):
+        write_logical_sparse_revision(**kwargs)
+    assert not (
+        tmp_path / "surfaces/example/revisions/substitution/manifest.json"
+    ).exists()
+
+
+def test_resume_recovers_complete_payload_written_before_checkpoint(
+    tmp_path: Path,
+) -> None:
+    matrix, obs, var = fixture_data()
+    kwargs = dict(
+        root=tmp_path,
+        logical_key="surfaces/example",
+        revision="crash-recovery",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        schema_fingerprint="schema-v1",
+        source_uri="gs://example/source.h5ad",
+        source_checksum=SOURCE_CHECKSUM,
+        ingestion_run_id="test-run",
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=4,
+    )
+    with pytest.raises(MigrationInterrupted):
+        write_logical_sparse_revision(**kwargs, stop_after_chunks=1)
+    checkpoint_path = tmp_path / "surfaces/example/checkpoints/crash-recovery.json"
+    checkpoint = json.loads(checkpoint_path.read_text())
+    checkpoint["completed_chunks"] = []
+    checkpoint_path.write_text(json.dumps(checkpoint))
+
+    write_logical_sparse_revision(**kwargs)
+    _, restored, _, _ = read_logical_sparse_revision(
+        tmp_path, "surfaces/example", "crash-recovery"
+    )
+    assert (restored != matrix).nnz == 0
+
+
+def test_shared_var_schema_fingerprint_cannot_escape_storage_identity(
+    tmp_path: Path,
+) -> None:
+    matrix, obs, var = fixture_data()
+    manifest = write_logical_sparse_revision(
+        root=tmp_path,
+        logical_key="surfaces/example",
+        revision="safe-schema-key",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        schema_fingerprint="../../unsafe/schema",
+        source_uri="gs://example/source.h5ad",
+        source_checksum=SOURCE_CHECKSUM,
+        ingestion_run_id="test-run",
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=4,
+    )
+    shared_key = manifest["shared_var"]["key"]
+    assert ".." not in shared_key
+    assert shared_key.count("/") == 2
+    assert (tmp_path / shared_key).is_file()
 
 
 def test_readback_rejects_tampered_sparse_payload(tmp_path: Path) -> None:
