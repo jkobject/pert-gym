@@ -30,8 +30,14 @@ def sha256_file(path: Path) -> str:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source-h5ad", type=Path, required=True)
-    parser.add_argument("--source-uri", required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--source-h5ad", type=Path)
+    source.add_argument(
+        "--legacy-prefix",
+        help="Same-prefix Lamin legacy triplet family, ending before /chunk_NNNN.",
+    )
+    parser.add_argument("--source-uri")
+    parser.add_argument("--legacy-cache-dir", type=Path)
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--logical-key", required=True)
     parser.add_argument("--revision", required=True)
@@ -39,6 +45,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--ingestion-run-id", required=True)
     parser.add_argument("--source-row-start", type=int, default=0)
     parser.add_argument("--max-rss-gib", type=float, default=4.0)
+    parser.add_argument(
+        "--publish-collection-key",
+        help="Append-only candidate Collection key; omitted means local candidate only.",
+    )
     return parser.parse_args()
 
 
@@ -47,34 +57,73 @@ def main() -> int:
     if args.max_rss_gib <= 0:
         raise ValueError("--max-rss-gib must be positive")
     require_heavy_vm()
-    if not args.source_h5ad.is_file():
-        raise FileNotFoundError(args.source_h5ad)
-    source_checksum = f"sha256-file-bytes/v1:{sha256_file(args.source_h5ad)}"
-    source = ad.read_h5ad(args.source_h5ad, backed="r")
-    try:
-        matrix = source.X
-        manifest = write_logical_sparse_revision(
+    if args.source_h5ad is not None:
+        if not args.source_h5ad.is_file():
+            raise FileNotFoundError(args.source_h5ad)
+        if not args.source_uri:
+            raise ValueError("--source-uri is required with --source-h5ad")
+        source_checksum = f"sha256-file-bytes/v1:{sha256_file(args.source_h5ad)}"
+        source = ad.read_h5ad(args.source_h5ad, backed="r")
+        try:
+            manifest = write_logical_sparse_revision(
+                root=args.output_root,
+                logical_key=args.logical_key,
+                revision=args.revision,
+                matrix=source.X,
+                obs=source.obs.copy(),
+                var=source.var.copy(),
+                schema_fingerprint=args.schema_fingerprint,
+                source_uri=args.source_uri,
+                source_checksum=source_checksum,
+                source_row_start=args.source_row_start,
+                ingestion_run_id=args.ingestion_run_id,
+                max_rss_bytes=int(args.max_rss_gib * 1024**3),
+            )
+        finally:
+            source.file.close()
+    else:
+        from pert_gym.legacy_triplet_adapter import (
+            build_legacy_revision,
+            resolve_legacy_triplets,
+        )
+        from tools.lamin_context import connect_pertdata
+
+        if args.legacy_cache_dir is None:
+            raise ValueError("--legacy-cache-dir is required with --legacy-prefix")
+        ln = connect_pertdata()
+        ln.track(path=__file__)
+        triplets = resolve_legacy_triplets(
+            ln=ln, prefix=args.legacy_prefix, cache_dir=args.legacy_cache_dir
+        )
+        manifest = build_legacy_revision(
             root=args.output_root,
             logical_key=args.logical_key,
             revision=args.revision,
-            matrix=matrix,
-            obs=source.obs.copy(),
-            var=source.var.copy(),
+            triplets=triplets,
             schema_fingerprint=args.schema_fingerprint,
-            source_uri=args.source_uri,
-            source_checksum=source_checksum,
-            source_row_start=args.source_row_start,
             ingestion_run_id=args.ingestion_run_id,
             max_rss_bytes=int(args.max_rss_gib * 1024**3),
         )
-    finally:
-        source.file.close()
+    publication = None
+    if args.publish_collection_key:
+        from pert_gym.logical_sparse_publication import publish_candidate
+        from tools.lamin_context import connect_pertdata
+
+        publication = publish_candidate(
+            ln=connect_pertdata(),
+            root=args.output_root,
+            logical_key=args.logical_key,
+            revision=args.revision,
+            collection_key=args.publish_collection_key,
+            require_vm=require_heavy_vm,
+        )
     print(
         json.dumps(
             {
                 "revision": args.revision,
                 "shape": manifest["shape"],
                 "nnz": manifest["nnz"],
+                "publication": publication,
             },
             sort_keys=True,
         )
