@@ -146,6 +146,17 @@ def vm_global_lamin_writer_lock_path(worktree: Path | None = None) -> Path:
     return lock_dir / "lamin-writer.lock"
 
 
+def legacy_lamin_writer_lock_path(worktree: Path | None = None) -> Path:
+    """Return the pre-global-lock location for a worktree during migration.
+
+    Existing runners acquired this inode before the host-global lock existed.
+    New production commands acquire both locks so that an in-flight legacy
+    writer remains mutually exclusive without being stopped or modified.
+    """
+    root = (ROOT if worktree is None else worktree).resolve()
+    return root / "artifacts" / "vm_runs" / "lamin-writer.lock"
+
+
 def _process_start_ticks(pid: int) -> str | None:
     """Return Linux process start ticks, which distinguish a reused PID."""
     try:
@@ -155,7 +166,10 @@ def _process_start_ticks(pid: int) -> str | None:
             .rsplit(")", maxsplit=1)[1]
         )
         # Field 3 is process state; field 22 (starttime) is index 19 after it.
-        return remainder.split()[19]
+        fields = remainder.split()
+        if fields[0] == "Z":
+            return None
+        return fields[19]
     except (FileNotFoundError, IndexError, OSError):
         return None
 
@@ -200,7 +214,12 @@ def _is_live_owner(metadata: dict[str, object]) -> bool:
 
 
 @contextmanager
-def lamin_writer_lock(lock_path: Path, metadata: dict[str, object]) -> Iterator[None]:
+def lamin_writer_lock(
+    lock_path: Path,
+    metadata: dict[str, object],
+    *,
+    check_live_metadata: bool = True,
+) -> Iterator[None]:
     """Hold the non-blocking global Lamin writer lock with PID-reuse-safe recovery.
 
     ``flock`` is the atomic ownership primitive.  Metadata is examined only after
@@ -221,7 +240,11 @@ def lamin_writer_lock(lock_path: Path, metadata: dict[str, object]) -> Iterator[
         acquired = False
         try:
             previous = _read_lock_metadata(handle)
-            if previous is not None and _is_live_owner(previous):
+            if (
+                check_live_metadata
+                and previous is not None
+                and _is_live_owner(previous)
+            ):
                 raise RuntimeError(
                     "refusing to steal Lamin writer lock with live owner metadata"
                 )
@@ -435,11 +458,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     _write_json(run_dir / "smoke-summary.json", measurements)
     if args.command:
         with lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata):
-            exit_code = run_command(args.command, run_dir=run_dir, run_id=args.run_id)
-            if exit_code:
-                raise RuntimeError(
-                    f"command exited {exit_code}; see {run_dir / 'logs' / 'runner.log'}"
+            # A legacy lock's metadata predates PID identity. Its kernel flock
+            # is authoritative: once acquired, no legacy writer is live, so do
+            # not reject a safely recovered legacy inode on stale metadata.
+            with lamin_writer_lock(
+                legacy_lamin_writer_lock_path(),
+                lock_metadata,
+                check_live_metadata=False,
+            ):
+                exit_code = run_command(
+                    args.command, run_dir=run_dir, run_id=args.run_id
                 )
+                if exit_code:
+                    raise RuntimeError(
+                        f"command exited {exit_code}; see {run_dir / 'logs' / 'runner.log'}"
+                    )
     _write_json(
         run_dir / "heartbeat.json", {"status": "completed", "run_id": args.run_id}
     )

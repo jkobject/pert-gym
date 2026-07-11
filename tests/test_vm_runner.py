@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import fcntl
 import json
 import os
 import sys
@@ -89,6 +90,58 @@ def test_vm_global_writer_lock_is_independent_of_worktree(
         with pytest.raises(RuntimeError, match="another Lamin writer"):
             with runner.lamin_writer_lock(second, _writer_metadata(run_id="second")):
                 pass
+
+
+def test_new_writer_refuses_live_legacy_lock_on_distinct_inode(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    legacy_root = tmp_path / "legacy-worktree"
+    global_lock = tmp_path / "host-locks" / "lamin-writer.lock"
+    legacy_lock = runner.legacy_lamin_writer_lock_path(legacy_root)
+    assert legacy_lock != global_lock
+    legacy_lock.parent.mkdir(parents=True)
+    entered = tmp_path / "command-entered"
+
+    monkeypatch.setattr(runner, "ROOT", legacy_root)
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(global_lock.parent))
+    monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
+
+    with legacy_lock.open("a+", encoding="utf-8") as legacy_handle:
+        fcntl.flock(legacy_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        with pytest.raises(RuntimeError, match="another Lamin writer holds"):
+            runner.main(
+                [
+                    "--run-id",
+                    "migration-lock-test",
+                    "--allow-lamin-writes",
+                    "--command",
+                    sys.executable,
+                    "-c",
+                    f"from pathlib import Path; Path({str(entered)!r}).touch()",
+                ]
+            )
+        assert not entered.exists()
+        assert legacy_lock.read_text(encoding="utf-8") == ""
+        fcntl.flock(legacy_handle.fileno(), fcntl.LOCK_UN)
+
+    assert global_lock.exists()
+    assert legacy_lock.exists()
+    assert not os.path.samefile(global_lock, legacy_lock)
+
+
+def test_process_start_ticks_treats_zombie_as_dead(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def zombie_stat(path: Path, *, encoding: str) -> str:
+        assert str(path) == "/proc/123/stat"
+        return "123 (unreaped child) Z " + "0 " * 18 + "4242\n"
+
+    monkeypatch.setattr(Path, "read_text", zombie_stat)
+
+    assert runner._process_start_ticks(123) is None
+    assert not runner._is_live_owner(
+        {"status": "acquired", "pid": 123, "process_start_ticks": "4242"}
+    )
 
 
 def test_writer_lock_recovers_dead_owner_only_after_atomic_acquisition(
