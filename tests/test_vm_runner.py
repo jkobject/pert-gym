@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import fcntl
 import json
+import os
 import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -51,12 +54,216 @@ def test_require_heavy_vm_requires_pinned_gce_identity(
         runner.require_heavy_vm()
 
 
+def _writer_metadata(*, run_id: str, pid: int | None = None) -> dict[str, object]:
+    return {
+        "run_id": run_id,
+        "pid": os.getpid() if pid is None else pid,
+        "host": runner.EXPECTED_HEAVY_HOST,
+        "project": runner.EXPECTED_GCE_PROJECT,
+        "zone": runner.EXPECTED_ZONE,
+        "branch": "fix/test",
+        "started_at": time.time(),
+    }
+
+
 def test_writer_lock_rejects_duplicate_writer(tmp_path: Path) -> None:
     lock_path = tmp_path / "lamin-writer.lock"
-    with runner.lamin_writer_lock(lock_path, {"pid": 1}):
+    with runner.lamin_writer_lock(lock_path, _writer_metadata(run_id="first")):
         with pytest.raises(RuntimeError, match="another Lamin writer"):
-            with runner.lamin_writer_lock(lock_path, {"pid": 2}):
+            with runner.lamin_writer_lock(lock_path, _writer_metadata(run_id="second")):
                 pass
+
+
+def test_vm_global_writer_lock_is_independent_of_worktree(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    lock_dir = tmp_path / "host-locks"
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(lock_dir))
+    first_worktree = tmp_path / "worktree-a"
+    second_worktree = tmp_path / "worktree-b"
+
+    first = runner.vm_global_lamin_writer_lock_path(first_worktree)
+    second = runner.vm_global_lamin_writer_lock_path(second_worktree)
+
+    assert first == second == lock_dir / "lamin-writer.lock"
+    with runner.lamin_writer_lock(first, _writer_metadata(run_id="first")):
+        with pytest.raises(RuntimeError, match="another Lamin writer"):
+            with runner.lamin_writer_lock(second, _writer_metadata(run_id="second")):
+                pass
+
+
+def test_new_writer_refuses_live_legacy_lock_on_distinct_inode(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    legacy_root = tmp_path / "legacy-worktree"
+    global_lock = tmp_path / "host-locks" / "lamin-writer.lock"
+    legacy_lock = runner.legacy_lamin_writer_lock_path(legacy_root)
+    assert legacy_lock != global_lock
+    legacy_lock.parent.mkdir(parents=True)
+    entered = tmp_path / "command-entered"
+
+    monkeypatch.setattr(runner, "ROOT", legacy_root)
+    monkeypatch.setattr(
+        runner,
+        "legacy_lamin_writer_lock_paths",
+        lambda: (legacy_lock,),
+    )
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(global_lock.parent))
+    monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
+
+    with legacy_lock.open("a+", encoding="utf-8") as legacy_handle:
+        fcntl.flock(legacy_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        with pytest.raises(RuntimeError, match="another Lamin writer holds"):
+            runner.main(
+                [
+                    "--run-id",
+                    "migration-lock-test",
+                    "--allow-lamin-writes",
+                    "--command",
+                    sys.executable,
+                    "-c",
+                    f"from pathlib import Path; Path({str(entered)!r}).touch()",
+                ]
+            )
+        assert not entered.exists()
+        assert legacy_lock.read_text(encoding="utf-8") == ""
+        fcntl.flock(legacy_handle.fileno(), fcntl.LOCK_UN)
+
+    assert global_lock.exists()
+    assert legacy_lock.exists()
+    assert not os.path.samefile(global_lock, legacy_lock)
+
+
+def test_new_writer_refuses_live_legacy_lock_in_another_worktree(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    legacy_worktree = tmp_path / "legacy-worktree"
+    command_worktree = tmp_path / "command-worktree"
+    global_lock = tmp_path / "host-locks" / "lamin-writer.lock"
+    legacy_lock = runner.legacy_lamin_writer_lock_path(legacy_worktree)
+    entered = tmp_path / "command-entered"
+
+    monkeypatch.setattr(runner, "ROOT", command_worktree)
+    monkeypatch.setattr(runner, "_git_branch", lambda: "fix/test")
+
+    def registered_worktrees(
+        command: list[str], **kwargs: object
+    ) -> runner.subprocess.CompletedProcess[str]:
+        assert command == [
+            "git",
+            "-C",
+            str(command_worktree),
+            "worktree",
+            "list",
+            "--porcelain",
+        ]
+        return runner.subprocess.CompletedProcess(
+            command,
+            0,
+            f"worktree {legacy_worktree}\n\nworktree {command_worktree}\n",
+            "",
+        )
+
+    monkeypatch.setattr(runner.subprocess, "run", registered_worktrees)
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(global_lock.parent))
+    monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
+    legacy_lock.parent.mkdir(parents=True)
+
+    with legacy_lock.open("a+", encoding="utf-8") as legacy_handle:
+        fcntl.flock(legacy_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        with pytest.raises(RuntimeError, match="another Lamin writer holds"):
+            runner.main(
+                [
+                    "--run-id",
+                    "cross-worktree-migration-lock-test",
+                    "--allow-lamin-writes",
+                    "--command",
+                    sys.executable,
+                    "-c",
+                    f"from pathlib import Path; Path({str(entered)!r}).touch()",
+                ]
+            )
+        assert not entered.exists()
+        assert legacy_lock.read_text(encoding="utf-8") == ""
+        fcntl.flock(legacy_handle.fileno(), fcntl.LOCK_UN)
+
+    assert global_lock.exists()
+    assert legacy_lock.exists()
+    assert not os.path.samefile(global_lock, legacy_lock)
+
+
+def test_process_start_ticks_treats_zombie_as_dead(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def zombie_stat(path: Path, *, encoding: str) -> str:
+        assert str(path) == "/proc/123/stat"
+        return "123 (unreaped child) Z " + "0 " * 18 + "4242\n"
+
+    monkeypatch.setattr(Path, "read_text", zombie_stat)
+
+    assert runner._process_start_ticks(123) is None
+    assert not runner._is_live_owner(
+        {"status": "acquired", "pid": 123, "process_start_ticks": "4242"}
+    )
+
+
+def test_writer_lock_recovers_dead_owner_only_after_atomic_acquisition(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    lock_path = tmp_path / "lamin-writer.lock"
+    dead_owner = _writer_metadata(run_id="dead", pid=999_999)
+    dead_owner["status"] = "acquired"
+    dead_owner["process_start_ticks"] = "old-process"
+    lock_path.write_text(json.dumps(dead_owner) + "\n", encoding="utf-8")
+    monkeypatch.setattr(runner, "_process_start_ticks", lambda pid: None)
+
+    with runner.lamin_writer_lock(lock_path, _writer_metadata(run_id="recovered")):
+        acquired = json.loads(lock_path.read_text(encoding="utf-8"))
+        assert acquired["run_id"] == "recovered"
+        assert acquired["status"] == "acquired"
+
+    released = json.loads(lock_path.read_text(encoding="utf-8"))
+    assert released["status"] == "released"
+
+
+def test_writer_lock_refuses_to_steal_live_owner_metadata(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    lock_path = tmp_path / "lamin-writer.lock"
+    live_owner = _writer_metadata(run_id="live", pid=123)
+    live_owner["status"] = "acquired"
+    live_owner["process_start_ticks"] = "same-process"
+    lock_path.write_text(json.dumps(live_owner) + "\n", encoding="utf-8")
+    monkeypatch.setattr(runner, "_process_start_ticks", lambda pid: "same-process")
+
+    with pytest.raises(RuntimeError, match="live owner"):
+        with runner.lamin_writer_lock(lock_path, _writer_metadata(run_id="new")):
+            pass
+
+
+def test_writer_lock_treats_pid_reuse_as_stale_owner(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    lock_path = tmp_path / "lamin-writer.lock"
+    old_owner = _writer_metadata(run_id="old", pid=123)
+    old_owner["status"] = "acquired"
+    old_owner["process_start_ticks"] = "old-process"
+    lock_path.write_text(json.dumps(old_owner) + "\n", encoding="utf-8")
+    monkeypatch.setattr(runner, "_process_start_ticks", lambda pid: "reused-process")
+
+    with runner.lamin_writer_lock(lock_path, _writer_metadata(run_id="new")):
+        assert json.loads(lock_path.read_text(encoding="utf-8"))["run_id"] == "new"
+
+
+def test_writer_lock_releases_after_exception(tmp_path: Path) -> None:
+    lock_path = tmp_path / "lamin-writer.lock"
+
+    with pytest.raises(ValueError, match="boom"):
+        with runner.lamin_writer_lock(lock_path, _writer_metadata(run_id="failed")):
+            raise ValueError("boom")
+
+    with runner.lamin_writer_lock(lock_path, _writer_metadata(run_id="next")):
+        assert json.loads(lock_path.read_text(encoding="utf-8"))["run_id"] == "next"
 
 
 def test_bounded_smoke_10k_and_25k_leave_checkpoints(tmp_path: Path) -> None:
@@ -152,7 +359,13 @@ def test_cli_production_command_publishes_periodic_progress_during_partial_stdou
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     monkeypatch.setattr(runner, "ROOT", tmp_path)
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(tmp_path / "host-locks"))
     monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
+    monkeypatch.setattr(
+        runner,
+        "legacy_lamin_writer_lock_paths",
+        lambda: (runner.legacy_lamin_writer_lock_path(),),
+    )
     monkeypatch.setattr(runner, "PRODUCTION_HEARTBEAT_SECONDS", 0.01)
     writes: list[tuple[Path, object]] = []
     original_write_json = runner._write_json
@@ -184,6 +397,13 @@ def test_cli_production_command_publishes_periodic_progress_during_partial_stdou
     assert checkpoint["status"] == "completed"
     assert checkpoint["run_id"] == "production-test"
     assert (run_dir / "logs" / "runner.log").read_text() == "partial"
+    lock_metadata = json.loads(
+        (tmp_path / "host-locks" / "lamin-writer.lock").read_text(encoding="utf-8")
+    )
+    assert lock_metadata["status"] == "released"
+    assert {"run_id", "pid", "host", "project", "zone", "branch", "started_at"} <= (
+        lock_metadata.keys()
+    )
     heartbeat_writes = [
         value
         for path, value in writes
