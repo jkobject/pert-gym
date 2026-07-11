@@ -7,7 +7,10 @@ from pathlib import Path
 import anndata as ad
 import numpy as np
 import pandas as pd
+import pytest
 from scipy import sparse
+
+from tools import pert_gym_vm_runner as runner
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location(
@@ -68,3 +71,41 @@ def test_write_x_only_h5ad_preserves_sparse_x_without_copying_layers(
         assert (result.X[:, :].toarray() == matrix.toarray()).all()
     finally:
         result.file.close()
+
+
+def test_main_rejects_capacity_vm_before_building_candidates(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(runner.platform, "system", lambda: "Linux")
+    monkeypatch.setattr(runner.socket, "gethostname", lambda: "pert-gym-capacity-eu-v2")
+    metadata = {
+        "project/project-id": runner.EXPECTED_GCE_PROJECT,
+        "instance/zone": f"projects/1/zones/{runner.EXPECTED_ZONE}",
+        "instance/name": "pert-gym-capacity-eu-v2",
+    }
+    monkeypatch.setattr(runner, "_metadata_value", metadata.__getitem__)
+    monkeypatch.setattr(
+        kolf.sys,
+        "argv",
+        [
+            "ingest_kolf21j_candidates.py",
+            "--source-dir",
+            str(tmp_path / "source"),
+            "--output-root",
+            str(tmp_path / "output"),
+            "--report",
+            str(tmp_path / "report.json"),
+        ],
+    )
+
+    def fail_if_candidate_build_starts(*args: object, **kwargs: object) -> None:
+        raise AssertionError("candidate build must not start on the capacity VM")
+
+    monkeypatch.setattr(kolf, "build_variant", fail_if_candidate_build_starts)
+
+    with pytest.raises(RuntimeError, match="pert-gym-capacity-eu-v2"):
+        kolf.main()
+
+    assert not (tmp_path / "source").exists()
+    assert not (tmp_path / "output").exists()
+    assert not (tmp_path / "report.json").exists()
