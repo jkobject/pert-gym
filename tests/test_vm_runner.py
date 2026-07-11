@@ -103,6 +103,11 @@ def test_new_writer_refuses_live_legacy_lock_on_distinct_inode(
     entered = tmp_path / "command-entered"
 
     monkeypatch.setattr(runner, "ROOT", legacy_root)
+    monkeypatch.setattr(
+        runner,
+        "legacy_lamin_writer_lock_paths",
+        lambda: (legacy_lock,),
+    )
     monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(global_lock.parent))
     monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
 
@@ -113,6 +118,64 @@ def test_new_writer_refuses_live_legacy_lock_on_distinct_inode(
                 [
                     "--run-id",
                     "migration-lock-test",
+                    "--allow-lamin-writes",
+                    "--command",
+                    sys.executable,
+                    "-c",
+                    f"from pathlib import Path; Path({str(entered)!r}).touch()",
+                ]
+            )
+        assert not entered.exists()
+        assert legacy_lock.read_text(encoding="utf-8") == ""
+        fcntl.flock(legacy_handle.fileno(), fcntl.LOCK_UN)
+
+    assert global_lock.exists()
+    assert legacy_lock.exists()
+    assert not os.path.samefile(global_lock, legacy_lock)
+
+
+def test_new_writer_refuses_live_legacy_lock_in_another_worktree(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    legacy_worktree = tmp_path / "legacy-worktree"
+    command_worktree = tmp_path / "command-worktree"
+    global_lock = tmp_path / "host-locks" / "lamin-writer.lock"
+    legacy_lock = runner.legacy_lamin_writer_lock_path(legacy_worktree)
+    entered = tmp_path / "command-entered"
+
+    monkeypatch.setattr(runner, "ROOT", command_worktree)
+    monkeypatch.setattr(runner, "_git_branch", lambda: "fix/test")
+
+    def registered_worktrees(
+        command: list[str], **kwargs: object
+    ) -> runner.subprocess.CompletedProcess[str]:
+        assert command == [
+            "git",
+            "-C",
+            str(command_worktree),
+            "worktree",
+            "list",
+            "--porcelain",
+        ]
+        return runner.subprocess.CompletedProcess(
+            command,
+            0,
+            f"worktree {legacy_worktree}\n\nworktree {command_worktree}\n",
+            "",
+        )
+
+    monkeypatch.setattr(runner.subprocess, "run", registered_worktrees)
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(global_lock.parent))
+    monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
+    legacy_lock.parent.mkdir(parents=True)
+
+    with legacy_lock.open("a+", encoding="utf-8") as legacy_handle:
+        fcntl.flock(legacy_handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        with pytest.raises(RuntimeError, match="another Lamin writer holds"):
+            runner.main(
+                [
+                    "--run-id",
+                    "cross-worktree-migration-lock-test",
                     "--allow-lamin-writes",
                     "--command",
                     sys.executable,
@@ -298,6 +361,11 @@ def test_cli_production_command_publishes_periodic_progress_during_partial_stdou
     monkeypatch.setattr(runner, "ROOT", tmp_path)
     monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(tmp_path / "host-locks"))
     monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
+    monkeypatch.setattr(
+        runner,
+        "legacy_lamin_writer_lock_paths",
+        lambda: (runner.legacy_lamin_writer_lock_path(),),
+    )
     monkeypatch.setattr(runner, "PRODUCTION_HEARTBEAT_SECONDS", 0.01)
     writes: list[tuple[Path, object]] = []
     original_write_json = runner._write_json

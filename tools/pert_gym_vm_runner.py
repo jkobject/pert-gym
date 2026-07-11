@@ -21,7 +21,7 @@ import socket
 import subprocess
 import sys
 import time
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Iterator, Sequence, TextIO
@@ -155,6 +155,35 @@ def legacy_lamin_writer_lock_path(worktree: Path | None = None) -> Path:
     """
     root = (ROOT if worktree is None else worktree).resolve()
     return root / "artifacts" / "vm_runs" / "lamin-writer.lock"
+
+
+def legacy_lamin_writer_lock_paths() -> tuple[Path, ...]:
+    """Return every legacy lock inode for this repository's registered worktrees.
+
+    A runner from before host-global locking may still hold the old lock below
+    any registered worktree. New writers acquire all of those legacy inodes
+    while the migration compatibility path remains active.
+    """
+    result = subprocess.run(
+        ["git", "-C", str(ROOT), "worktree", "list", "--porcelain"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode:
+        raise RuntimeError("could not enumerate worktrees for legacy Lamin locks")
+    worktrees = {
+        Path(line.removeprefix("worktree ")).resolve()
+        for line in result.stdout.splitlines()
+        if line.startswith("worktree ")
+    }
+    worktrees.add(ROOT.resolve())
+    if not worktrees:
+        raise RuntimeError("could not find a worktree for legacy Lamin locks")
+    return tuple(
+        legacy_lamin_writer_lock_path(worktree)
+        for worktree in sorted(worktrees, key=lambda path: str(path))
+    )
 
 
 def _process_start_ticks(pid: int) -> str | None:
@@ -458,14 +487,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     _write_json(run_dir / "smoke-summary.json", measurements)
     if args.command:
         with lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata):
-            # A legacy lock's metadata predates PID identity. Its kernel flock
-            # is authoritative: once acquired, no legacy writer is live, so do
-            # not reject a safely recovered legacy inode on stale metadata.
-            with lamin_writer_lock(
-                legacy_lamin_writer_lock_path(),
-                lock_metadata,
-                check_live_metadata=False,
-            ):
+            with ExitStack() as legacy_locks:
+                # A legacy lock's metadata predates PID identity. Its kernel
+                # flock is authoritative: once acquired, no legacy writer is
+                # live, so do not reject a safely recovered legacy inode on
+                # stale metadata.
+                for legacy_lock_path in legacy_lamin_writer_lock_paths():
+                    legacy_locks.enter_context(
+                        lamin_writer_lock(
+                            legacy_lock_path,
+                            lock_metadata,
+                            check_live_metadata=False,
+                        )
+                    )
                 exit_code = run_command(
                     args.command, run_dir=run_dir, run_id=args.run_id
                 )
