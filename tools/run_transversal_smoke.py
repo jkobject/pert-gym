@@ -28,12 +28,48 @@ from pert_gym.transversal import (
     load_transversal_batches,
 )
 
-EXPECTED_PRISM_SUBSET_SHA256 = (
-    "b4f9abda6162d3e8a13149f384417a26a7589acd840a32bb47abfc9deeba51a1"
-)
-EXPECTED_DEPMAP_FIXTURE_SHA256 = (
-    "2d055813bcd4e00ae7aecd86c00a772e2342a036181cf6107488444e7790d3bf"
-)
+# This contract is intentionally independent from the caller-provided PRISM
+# manifest. It is the reviewed, generation-pinned six-record attestation from
+# t_fef266a1 / t_cd68d140. The local runner verifies every value it reports
+# against these constants before it can emit a passing report.
+REVIEWED_INPUT_PROVENANCE = {
+    "prism_subset": {
+        "uri": "prism_126row_subset.tsv",
+        "generation": "1783849334578024",
+        "sha256": "b4f9abda6162d3e8a13149f384417a26a7589acd840a32bb47abfc9deeba51a1",
+        "size_bytes": 105280,
+    },
+    "prism_manifest": {
+        "uri": "prism_126row_manifest.json",
+        "generation": "1783849336667872",
+        "sha256": "a7fa4054f2f6785a1f9e0abe18e05f2b534eb65b34ffb903b92543107deefa2c",
+        "size_bytes": 1637,
+    },
+    "depmap_fixture": {
+        "uri": "gs://scperturb/pert-gym/staging/executions/t_75fcfe65/20260711T041136Z-8d20d03/depmap_26q1_default_entry_baseline.json",
+        "generation": "1783743276398375",
+        "sha256": "2d055813bcd4e00ae7aecd86c00a772e2342a036181cf6107488444e7790d3bf",
+        "size_bytes": 41343318,
+    },
+    "depmap_source": {
+        "uri": "gs://scperturb/pert-gym/staging/data/main/depmap_ccle/OmicsExpressionTPMLogp1HumanProteinCodingGenes.csv",
+        "generation": "1781122665212682",
+        "sha256": "0377be80c525fde98cbd2c6e8b06bdf2a4014a9683eb70182c1f8649d711021a",
+        "size_bytes": 305007605,
+    },
+    "strand_join": {
+        "uri": "strand_path_b_join.tsv",
+        "generation": "1783849338790865",
+        "sha256": "df012a59fe2469e996660dfa19fd5acabc0b5e4579b7f9d717b347654a651823",
+        "size_bytes": 14209636,
+    },
+    "strand_metadata": {
+        "uri": "strand_metadata.json",
+        "generation": "1783849340784769",
+        "sha256": "75d34a1a0cee72e64a0811f2dd202e1ac6fb8733890cf8e9296c51e48cdcfb1f",
+        "size_bytes": 9731,
+    },
+}
 
 
 def _sha256(path: Path) -> str:
@@ -196,10 +232,18 @@ _REVIEWED_ELOB_EXCLUSIONS = (
 
 def _require_provenance(name: str, actual: dict[str, object], expected: object) -> None:
     if not isinstance(expected, dict):
-        raise ValueError(f"PRISM manifest lacks reviewed {name} provenance")
-    for key, value in actual.items():
-        if expected.get(key) != value:
-            raise ValueError(f"{name} provenance does not match the reviewed manifest")
+        raise ValueError(f"reviewed contract lacks {name} provenance")
+    if actual != expected:
+        raise ValueError(f"{name} provenance does not match the reviewed contract")
+
+
+def _require_manifest_provenance(
+    name: str, actual: object, expected: dict[str, object]
+) -> None:
+    if not isinstance(actual, dict) or any(
+        actual.get(key) != expected[key] for key in ("uri", "generation", "sha256")
+    ):
+        raise ValueError(f"{name} provenance does not match the reviewed contract")
 
 
 def _validate_reviewed_inputs(
@@ -211,23 +255,24 @@ def _validate_reviewed_inputs(
     smoke_provenance = prism_manifest.get("transversal_smoke_provenance")
     if not isinstance(smoke_provenance, dict):
         raise ValueError("PRISM manifest lacks reviewed transversal smoke provenance")
-    for name in (
-        "prism_subset",
-        "depmap_fixture",
-        "depmap_source",
-        "strand_join",
-        "strand_metadata",
-    ):
+    for name in REVIEWED_INPUT_PROVENANCE:
         actual_name = "prism_baseline_fixture" if name == "depmap_fixture" else name
-        _require_provenance(name, inputs[actual_name], smoke_provenance.get(name))
-    if prism_manifest.get("source") != smoke_provenance["prism_subset"]:
-        raise ValueError("PRISM manifest source disagrees with smoke provenance")
-    if prism_manifest.get("baseline") != smoke_provenance["depmap_source"]:
-        raise ValueError("PRISM manifest baseline disagrees with smoke provenance")
-    if inputs["prism_subset"]["sha256"] != EXPECTED_PRISM_SUBSET_SHA256:
-        raise ValueError("PRISM subset SHA256 differs from the reviewed 126-row input")
-    if inputs["prism_baseline_fixture"]["sha256"] != EXPECTED_DEPMAP_FIXTURE_SHA256:
-        raise ValueError("DepMap fixture SHA256 differs from the reviewed input")
+        _require_provenance(name, inputs[actual_name], REVIEWED_INPUT_PROVENANCE[name])
+        if name == "prism_manifest":
+            continue
+        _require_manifest_provenance(
+            name, smoke_provenance.get(name), REVIEWED_INPUT_PROVENANCE[name]
+        )
+    _require_manifest_provenance(
+        "prism_subset",
+        prism_manifest.get("source"),
+        REVIEWED_INPUT_PROVENANCE["prism_subset"],
+    )
+    _require_manifest_provenance(
+        "depmap_source",
+        prism_manifest.get("baseline"),
+        REVIEWED_INPUT_PROVENANCE["depmap_source"],
+    )
 
     strand_counts = strand_metadata.get("counts")
     if not isinstance(strand_counts, dict) or any(
@@ -314,15 +359,19 @@ def main(argv: list[str] | None = None) -> None:
             "uri": args.prism_subset_uri,
             "generation": args.prism_subset_generation,
             "sha256": _sha256(args.prism_subset),
+            "size_bytes": args.prism_subset.stat().st_size,
         },
         "prism_manifest": {
-            "path": str(args.prism_manifest),
+            "uri": REVIEWED_INPUT_PROVENANCE["prism_manifest"]["uri"],
+            "generation": REVIEWED_INPUT_PROVENANCE["prism_manifest"]["generation"],
             "sha256": _sha256(args.prism_manifest),
+            "size_bytes": args.prism_manifest.stat().st_size,
         },
         "prism_baseline_fixture": {
             "uri": args.depmap_fixture_uri,
             "generation": args.depmap_fixture_generation,
             "sha256": _sha256(args.prism_baselines),
+            "size_bytes": args.prism_baselines.stat().st_size,
         },
         "depmap_source": {
             **baseline_payload.get("provenance", {}).get("source", {}),
@@ -331,11 +380,13 @@ def main(argv: list[str] | None = None) -> None:
             "uri": args.strand_join_uri,
             "generation": args.strand_join_generation,
             "sha256": _sha256(args.strand_join),
+            "size_bytes": args.strand_join.stat().st_size,
         },
         "strand_metadata": {
             "uri": args.strand_metadata_uri,
             "generation": args.strand_metadata_generation,
             "sha256": _sha256(args.strand_metadata),
+            "size_bytes": args.strand_metadata.stat().st_size,
         },
     }
     try:

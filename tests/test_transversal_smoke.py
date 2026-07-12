@@ -192,9 +192,36 @@ def _install_passing_runner(
     targets=None,
     features=None,
 ) -> None:
-    monkeypatch.setattr(runner, "EXPECTED_PRISM_SUBSET_SHA256", _sha256(inputs.subset))
+    manifest = json.loads(inputs.manifest.read_text())
+    provenance = manifest["transversal_smoke_provenance"]
     monkeypatch.setattr(
-        runner, "EXPECTED_DEPMAP_FIXTURE_SHA256", _sha256(inputs.baselines)
+        runner,
+        "REVIEWED_INPUT_PROVENANCE",
+        {
+            **provenance,
+            "prism_subset": {
+                **provenance["prism_subset"],
+                "size_bytes": inputs.subset.stat().st_size,
+            },
+            "depmap_fixture": {
+                **provenance["depmap_fixture"],
+                "size_bytes": inputs.baselines.stat().st_size,
+            },
+            "strand_join": {
+                **provenance["strand_join"],
+                "size_bytes": inputs.join.stat().st_size,
+            },
+            "strand_metadata": {
+                **provenance["strand_metadata"],
+                "size_bytes": inputs.metadata.stat().st_size,
+            },
+            "prism_manifest": {
+                "uri": "manifest-uri",
+                "generation": "manifest-gen",
+                "sha256": _sha256(inputs.manifest),
+                "size_bytes": inputs.manifest.stat().st_size,
+            },
+        },
     )
     monkeypatch.setattr(runner, "validate_fixture_for_manifest", lambda *args: None)
     monkeypatch.setattr(runner, "_commit", lambda: "test-commit")
@@ -297,6 +324,96 @@ def test_runner_records_all_bound_provenance_in_a_passed_report(
     }
     assert report["selection"]["prism_rows_selected"] == 126
     assert report["selection"]["prism_unique_model_ids"] == 118
+
+
+def test_reviewed_contract_uses_the_accepted_path_b_join_not_historical_evidence() -> (
+    None
+):
+    runner = _runner_module()
+
+    assert runner.REVIEWED_INPUT_PROVENANCE["strand_join"]["sha256"] == (
+        "df012a59fe2469e996660dfa19fd5acabc0b5e4579b7f9d717b347654a651823"
+    )
+    assert (
+        "65f6f72de46bc5a81e31f47bc80d5a27a04206eca0e57a239cc1c9df134d8983"
+        not in str(runner.REVIEWED_INPUT_PROVENANCE)
+    )
+
+
+@pytest.mark.parametrize(
+    "record",
+    ("depmap_fixture", "depmap_source", "strand_join", "strand_metadata"),
+)
+def test_runner_rejects_matching_manifest_provenance_substitution(
+    tmp_path, monkeypatch: pytest.MonkeyPatch, record: str
+) -> None:
+    runner = _runner_module()
+    inputs = _runner_inputs(tmp_path, runner)
+    _install_passing_runner(monkeypatch, runner, inputs)
+    manifest = json.loads(inputs.manifest.read_text())
+    provenance = manifest["transversal_smoke_provenance"]
+
+    if record == "depmap_fixture":
+        baseline_payload = json.loads(inputs.baselines.read_text())
+        baseline_payload["forged"] = True
+        inputs.baselines.write_text(json.dumps(baseline_payload))
+        inputs.argv[inputs.argv.index("--depmap-fixture-uri") + 1] = (
+            "forged-fixture-uri"
+        )
+        inputs.argv[inputs.argv.index("--depmap-fixture-generation") + 1] = (
+            "forged-fixture-generation"
+        )
+        provenance[record].update(
+            uri="forged-fixture-uri",
+            generation="forged-fixture-generation",
+            sha256=_sha256(inputs.baselines),
+        )
+    elif record == "depmap_source":
+        baseline_payload = json.loads(inputs.baselines.read_text())
+        baseline_payload["provenance"]["source"] = {
+            "uri": "forged-source-uri",
+            "generation": "forged-source-generation",
+            "sha256": "f" * 64,
+        }
+        inputs.baselines.write_text(json.dumps(baseline_payload))
+        provenance["depmap_fixture"]["sha256"] = _sha256(inputs.baselines)
+        provenance[record] = baseline_payload["provenance"]["source"]
+        manifest["baseline"] = provenance[record]
+    elif record == "strand_join":
+        inputs.join.write_text("join_row_id\nforged-strand\n")
+        inputs.argv[inputs.argv.index("--strand-join-uri") + 1] = "forged-join-uri"
+        inputs.argv[inputs.argv.index("--strand-join-generation") + 1] = (
+            "forged-join-generation"
+        )
+        provenance[record].update(
+            uri="forged-join-uri",
+            generation="forged-join-generation",
+            sha256=_sha256(inputs.join),
+        )
+        inputs.metadata_payload["outputs"]["table_tsv_sha256"] = _sha256(inputs.join)
+        inputs.metadata.write_text(json.dumps(inputs.metadata_payload))
+        provenance["strand_metadata"]["sha256"] = _sha256(inputs.metadata)
+    else:
+        inputs.argv[inputs.argv.index("--strand-metadata-uri") + 1] = (
+            "forged-metadata-uri"
+        )
+        inputs.argv[inputs.argv.index("--strand-metadata-generation") + 1] = (
+            "forged-metadata-generation"
+        )
+        inputs.metadata_payload["forged"] = True
+        inputs.metadata.write_text(json.dumps(inputs.metadata_payload))
+        provenance[record].update(
+            uri="forged-metadata-uri",
+            generation="forged-metadata-generation",
+            sha256=_sha256(inputs.metadata),
+        )
+
+    inputs.manifest.write_text(json.dumps(manifest))
+
+    with pytest.raises(ValueError, match="reviewed contract"):
+        runner.main(inputs.argv)
+
+    _rejected_report(inputs)
 
 
 @pytest.mark.parametrize(
