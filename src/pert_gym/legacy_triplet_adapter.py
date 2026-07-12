@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any, Sequence
 
 import anndata as ad
+import numpy as np
 import pandas as pd
 from scipy import sparse
 
@@ -185,6 +186,58 @@ class _LegacyMatrix:
         )
 
 
+class _LegacyObsIndexer:
+    def __init__(self, source: "_LegacyObs"):
+        self.source = source
+
+    def __getitem__(self, selection: object) -> pd.DataFrame:
+        return self.source.slice(selection)
+
+
+class _LegacyObs:
+    """Expose one bounded legacy-obs window at a time to the Zarr writer."""
+
+    def __init__(
+        self,
+        triplets: Sequence[LegacyTriplet],
+        row_ends: Sequence[int],
+        *,
+        index_sha256: str,
+        frame_sha256: str,
+    ):
+        self.triplets = triplets
+        self.row_ends = row_ends
+        self.index_sha256 = index_sha256
+        self.frame_sha256 = frame_sha256
+        self.max_live_obs_rows = 0
+
+    def __len__(self) -> int:
+        return self.row_ends[-1]
+
+    @property
+    def iloc(self) -> _LegacyObsIndexer:
+        return _LegacyObsIndexer(self)
+
+    def logical_sparse_obs_identity(self) -> tuple[str, str]:
+        return self.index_sha256, self.frame_sha256
+
+    def slice(self, selection: object) -> pd.DataFrame:
+        if not isinstance(selection, slice) or selection.step not in (None, 1):
+            raise TypeError("legacy adapter supports contiguous obs slices only")
+        start, end, _ = selection.indices(len(self))
+        parts: list[pd.DataFrame] = []
+        cursor = 0
+        for triplet, stop in zip(self.triplets, self.row_ends):
+            overlap_start, overlap_end = max(start, cursor), min(end, stop)
+            if overlap_start < overlap_end:
+                obs = pd.read_parquet(triplet.obs_path)
+                parts.append(obs.iloc[overlap_start - cursor : overlap_end - cursor])
+            cursor = stop
+        result = pd.concat(parts, axis=0) if parts else pd.DataFrame()
+        self.max_live_obs_rows = max(self.max_live_obs_rows, len(result))
+        return result
+
+
 def build_legacy_revision(
     *,
     root: Path,
@@ -201,9 +254,11 @@ def build_legacy_revision(
     ordered = _ordered_complete(triplets)
     first_var = pd.read_parquet(ordered[0].var_path)
     var_identity = shared_var_identity(first_var, schema_fingerprint=schema_fingerprint)
-    obs_frames: list[pd.DataFrame] = []
     row_ends: list[int] = []
     source_rows: list[dict[str, object]] = []
+    index_digest = hashlib.sha256()
+    frame_digest = hashlib.sha256()
+    obs_dtypes: pd.Series | None = None
     nnz = 0
     total = 0
     for item in ordered:
@@ -214,6 +269,18 @@ def build_legacy_revision(
         ):
             raise ValueError(f"legacy var identity mismatch for chunk {item.chunk_id}")
         obs = pd.read_parquet(item.obs_path)
+        if obs_dtypes is None:
+            obs_dtypes = obs.dtypes
+        elif not obs.dtypes.equals(obs_dtypes):
+            raise ValueError(f"legacy obs schema mismatch for chunk {item.chunk_id}")
+        index_digest.update(
+            ("\n".join(str(value) for value in obs.index) + "\n").encode("utf-8")
+        )
+        frame_digest.update(
+            np.ascontiguousarray(
+                pd.util.hash_pandas_object(obs, index=True, categorize=True).values
+            ).tobytes()
+        )
         source = ad.read_h5ad(item.x_path, backed="r")
         try:
             if source.shape[0] != len(obs) or source.shape[1] != len(first_var):
@@ -230,7 +297,6 @@ def build_legacy_revision(
             source.file.close()
         start, total = total, total + len(obs)
         row_ends.append(total)
-        obs_frames.append(obs)
         source_rows.append(
             {
                 "chunk_id": item.chunk_id,
@@ -247,14 +313,23 @@ def build_legacy_revision(
                 "row_end": total,
             }
         )
+    assert obs_dtypes is not None
+    schema = "\n".join(f"{column}:{dtype}" for column, dtype in obs_dtypes.items())
+    frame_digest.update(schema.encode("utf-8"))
+    streaming_obs = _LegacyObs(
+        ordered,
+        row_ends,
+        index_sha256=index_digest.hexdigest(),
+        frame_sha256=frame_digest.hexdigest(),
+    )
     identity = {"kind": "legacy-triplets/v1", "sources": source_rows}
     family_checksum = hashlib.sha256(repr(identity).encode()).hexdigest()
-    return write_logical_sparse_revision(
+    manifest = write_logical_sparse_revision(
         root=root,
         logical_key=logical_key,
         revision=revision,
         matrix=_LegacyMatrix(ordered, row_ends, len(first_var), nnz),
-        obs=pd.concat(obs_frames),
+        obs=streaming_obs,
         var=first_var,
         schema_fingerprint=schema_fingerprint,
         source_uri=f"lamin://{logical_key}",
@@ -265,3 +340,9 @@ def build_legacy_revision(
         min_rows=min_rows,
         max_rows=max_rows,
     )
+    manifest["assembly"] = {
+        "mode": "streaming-legacy-triplet-metadata/v1",
+        "source_count": len(ordered),
+        "max_live_obs_rows": streaming_obs.max_live_obs_rows,
+    }
+    return manifest

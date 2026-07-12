@@ -43,6 +43,10 @@ class MigrationInterrupted(RuntimeError):
     """A test or operator intentionally stopped a resumable candidate."""
 
 
+class ResourceLimitExceeded(RuntimeError):
+    """The writer stopped itself before an allocation can exhaust the host."""
+
+
 def _atomic_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
@@ -165,6 +169,16 @@ def _exclusive_lock(path: Path) -> Iterator[None]:
 def _peak_rss_bytes() -> int:
     peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     return peak if os.uname().sysname == "Darwin" else peak * 1024
+
+
+def _resident_rss_bytes() -> int:
+    """Read current resident memory; unlike ru_maxrss this can enforce a hard cap."""
+    if os.uname().sysname == "Linux":
+        for line in Path("/proc/self/status").read_text("utf-8").splitlines():
+            if line.startswith("VmRSS:"):
+                return int(line.split()[1]) * 1024
+        raise RuntimeError("/proc/self/status did not expose VmRSS")
+    return _peak_rss_bytes()
 
 
 def _matrix_components(
@@ -314,6 +328,7 @@ def _checkpoint_base(
         "obs_index_sha256": obs_index_sha256,
         "obs_frame_sha256": obs_frame_sha256,
         "planned_chunks": [list(chunk) for chunk in chunks],
+        "planning_status": "pending",
         "completed_chunks": [],
         "status": "in_progress",
         "writer_version": WRITER_VERSION,
@@ -344,7 +359,6 @@ def _load_or_create_checkpoint(
         "schema_fingerprint",
         "obs_index_sha256",
         "obs_frame_sha256",
-        "planned_chunks",
     ):
         if checkpoint.get(field) != expected[field]:
             raise RuntimeError(
@@ -355,6 +369,57 @@ def _load_or_create_checkpoint(
             "candidate is already completed; promote or choose a new revision"
         )
     return checkpoint
+
+
+def _enforce_rss_limit(
+    *,
+    checkpoint_path: Path,
+    checkpoint: dict[str, object],
+    max_rss_bytes: int,
+    phase: str,
+    chunk_index: int | None,
+) -> None:
+    observed = _resident_rss_bytes()
+    if observed <= max_rss_bytes:
+        return
+    checkpoint.update(
+        {
+            "status": "resource_limit_exceeded",
+            "updated_at": time.time(),
+            "error": {
+                "kind": "max_rss_exceeded",
+                "phase": phase,
+                "chunk_index": chunk_index,
+                "observed_rss_bytes": observed,
+                "max_rss_bytes": max_rss_bytes,
+            },
+        }
+    )
+    _atomic_json(checkpoint_path, checkpoint)
+    raise ResourceLimitExceeded(
+        f"max RSS exceeded during {phase}: {observed} > {max_rss_bytes} bytes"
+    )
+
+
+def _record_plan_materialization_failure(
+    *,
+    checkpoint_path: Path,
+    checkpoint: dict[str, object],
+    max_rss_bytes: int,
+) -> None:
+    checkpoint.update(
+        {
+            "status": "resource_limit_exceeded",
+            "updated_at": time.time(),
+            "error": {
+                "kind": "materialization_memory_error",
+                "phase": "plan_materialization",
+                "chunk_index": None,
+                "max_rss_bytes": max_rss_bytes,
+            },
+        }
+    )
+    _atomic_json(checkpoint_path, checkpoint)
 
 
 def _ensure_shared_var(root: Path, identity: VarIdentity, var: pd.DataFrame) -> str:
@@ -380,17 +445,45 @@ def _ensure_shared_var(root: Path, identity: VarIdentity, var: pd.DataFrame) -> 
 def _observed_target_rows(
     matrix: object,
     *,
+    checkpoint_path: Path,
+    checkpoint: dict[str, object],
     sparse_format: str,
     target_rows: int,
     max_rss_bytes: int,
     min_rows: int,
     max_rows: int,
 ) -> int:
-    """Sample materialization before writes so the final plan remains balanced."""
+    """Guarded sample materialization before finalizing balanced chunk boundaries."""
     sample_end = min(matrix.shape[0], target_rows)  # type: ignore[attr-defined]
-    sample = _materialize_rows(matrix, 0, sample_end, sparse_format)
-    observed = _peak_rss_bytes()
-    del sample
+    _enforce_rss_limit(
+        checkpoint_path=checkpoint_path,
+        checkpoint=checkpoint,
+        max_rss_bytes=max_rss_bytes,
+        phase="before_plan_materialization",
+        chunk_index=None,
+    )
+    sample: CompressedMatrix | None = None
+    try:
+        sample = _materialize_rows(matrix, 0, sample_end, sparse_format)
+        observed = _peak_rss_bytes()
+        _enforce_rss_limit(
+            checkpoint_path=checkpoint_path,
+            checkpoint=checkpoint,
+            max_rss_bytes=max_rss_bytes,
+            phase="after_plan_materialization",
+            chunk_index=None,
+        )
+    except MemoryError as error:
+        _record_plan_materialization_failure(
+            checkpoint_path=checkpoint_path,
+            checkpoint=checkpoint,
+            max_rss_bytes=max_rss_bytes,
+        )
+        raise ResourceLimitExceeded(
+            "plan materialization exhausted available memory"
+        ) from error
+    finally:
+        del sample
     if observed <= max_rss_bytes:
         return target_rows
     scaled = max(min_rows, int(target_rows * max_rss_bytes / observed))
@@ -403,7 +496,7 @@ def write_logical_sparse_revision(
     logical_key: str,
     revision: str,
     matrix: object,
-    obs: pd.DataFrame,
+    obs: Any,
     var: pd.DataFrame,
     schema_fingerprint: str,
     source_uri: str,
@@ -442,6 +535,7 @@ def write_logical_sparse_revision(
     lock_path = candidate / ".writer.lock"
     identity = shared_var_identity(var, schema_fingerprint=schema_fingerprint)
     if shape[0] == 0:
+        initial_target = 0
         chunks = ()
     else:
         initial_target = adaptive_target_rows(
@@ -454,15 +548,13 @@ def write_logical_sparse_revision(
             bytes_per_nnz=DEFAULT_BYTES_PER_NNZ,
             materialization_factor=DEFAULT_MATERIALIZATION_FACTOR,
         )
-        target_rows = _observed_target_rows(
-            matrix,
-            sparse_format=sparse_format,
-            target_rows=initial_target,
-            max_rss_bytes=max_rss_bytes,
-            min_rows=min_rows,
-            max_rows=max_rows,
-        )
-        chunks = balanced_row_chunks(shape[0], target_rows)
+        chunks = balanced_row_chunks(shape[0], initial_target)
+    streamed_obs_identity = getattr(obs, "logical_sparse_obs_identity", None)
+    if callable(streamed_obs_identity):
+        obs_index_sha256, obs_frame_sha256 = streamed_obs_identity()
+    else:
+        obs_index_sha256 = _index_sha256(obs)
+        obs_frame_sha256 = _frame_sha256(obs)
     expected = _checkpoint_base(
         logical_key=logical_key,
         revision=revision,
@@ -475,12 +567,62 @@ def write_logical_sparse_revision(
         source_identity=canonical_source_identity,
         ingestion_run_id=ingestion_run_id,
         var_identity=identity,
-        obs_index_sha256=_index_sha256(obs),
-        obs_frame_sha256=_frame_sha256(obs),
+        obs_index_sha256=obs_index_sha256,
+        obs_frame_sha256=obs_frame_sha256,
         chunks=chunks,
     )
     with _exclusive_lock(lock_path):
         checkpoint = _load_or_create_checkpoint(checkpoint_path, expected)
+        _enforce_rss_limit(
+            checkpoint_path=checkpoint_path,
+            checkpoint=checkpoint,
+            max_rss_bytes=max_rss_bytes,
+            phase="candidate_initialization",
+            chunk_index=None,
+        )
+        if shape[0] and checkpoint.get("planning_status", "complete") != "complete":
+            target_rows = _observed_target_rows(
+                matrix,
+                checkpoint_path=checkpoint_path,
+                checkpoint=checkpoint,
+                sparse_format=sparse_format,
+                target_rows=initial_target,
+                max_rss_bytes=max_rss_bytes,
+                min_rows=min_rows,
+                max_rows=max_rows,
+            )
+            chunks = balanced_row_chunks(shape[0], target_rows)
+            checkpoint.update(
+                {
+                    "planned_chunks": [list(chunk) for chunk in chunks],
+                    "planning_status": "complete",
+                    "status": "in_progress",
+                    "updated_at": time.time(),
+                }
+            )
+            checkpoint.pop("error", None)
+            _atomic_json(checkpoint_path, checkpoint)
+        else:
+            planned_chunks = checkpoint.get("planned_chunks")
+            if not isinstance(planned_chunks, list) or any(
+                not isinstance(chunk, list)
+                or len(chunk) != 2
+                or any(
+                    not isinstance(row, int) or isinstance(row, bool) for row in chunk
+                )
+                for chunk in planned_chunks
+            ):
+                raise RuntimeError(
+                    "checkpoint planned_chunks must contain row intervals"
+                )
+            parsed_chunks: list[tuple[int, int]] = []
+            for chunk in planned_chunks:
+                assert isinstance(chunk, list)
+                start, end = chunk
+                assert isinstance(start, int) and not isinstance(start, bool)
+                assert isinstance(end, int) and not isinstance(end, bool)
+                parsed_chunks.append((start, end))
+            chunks = tuple(parsed_chunks)
         shared_key = _ensure_shared_var(root, identity, var)
         completed_raw = checkpoint.get("completed_chunks")
         if not isinstance(completed_raw, list):
@@ -499,8 +641,22 @@ def write_logical_sparse_revision(
             obs_key = f"obs/chunk_{index:06d}.parquet"
             chunk_path = candidate / chunk_key
             obs_path = candidate / obs_key
+            _enforce_rss_limit(
+                checkpoint_path=checkpoint_path,
+                checkpoint=checkpoint,
+                max_rss_bytes=max_rss_bytes,
+                phase="before_chunk_materialization",
+                chunk_index=index,
+            )
             source_chunk = _materialize_rows(matrix, start, end, sparse_format)
             source_obs = obs.iloc[start:end]
+            _enforce_rss_limit(
+                checkpoint_path=checkpoint_path,
+                checkpoint=checkpoint,
+                max_rss_bytes=max_rss_bytes,
+                phase="after_chunk_materialization",
+                chunk_index=index,
+            )
             payload_exists = chunk_path.exists()
             obs_exists = obs_path.exists()
             if index in completed:
