@@ -2,8 +2,9 @@
 """EU-only, read-only inventory of gs://scperturb/pert-gym and Lamin payloads.
 
 Lists object metadata only and queries Lamin metadata on branch jkobject. It never
-writes to Lamin or GCS, never calls a delete command, and only reads an 8-byte
-header from a bounded sample of non-GCS Lamin-backed artifacts.
+writes to Lamin or GCS and never calls a delete command. Every object proposed as
+a SAFE candidate requires its own mandatory 8-byte readback from a durable,
+non-source Lamin-backed storage URI.
 """
 
 from __future__ import annotations
@@ -12,12 +13,14 @@ import argparse
 import csv
 import json
 import os
+import re
 import socket
 import subprocess
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 from tools.lamin_context import connect_pertdata, ensure_project_cache
 
@@ -93,10 +96,62 @@ def artifact_uri(artifact: Any) -> str:
         return ""
 
 
+def normalize_storage_uri(uri: Any) -> str | None:
+    """Return a canonical supported storage URI, otherwise fail closed."""
+    if not isinstance(uri, str) or not uri or uri.strip() != uri:
+        return None
+    try:
+        parsed = urlsplit(uri)
+        port = parsed.port
+    except ValueError:
+        return None
+    if (
+        parsed.username
+        or parsed.password
+        or port is not None
+        or parsed.query
+        or parsed.fragment
+        or not parsed.path.startswith("/")
+    ):
+        return None
+    scheme = parsed.scheme.lower()
+    host = parsed.netloc.lower()
+    if scheme in {"gs", "s3"}:
+        if not host or "/" in host or not re.fullmatch(r"[a-z0-9][a-z0-9._-]*", host):
+            return None
+        return f"{scheme}://{host}{parsed.path}"
+    if scheme != "https":
+        return None
+    if host == "storage.googleapis.com":
+        bucket, separator, object_path = parsed.path.removeprefix("/").partition("/")
+        if not separator or not re.fullmatch(r"[a-z0-9][a-z0-9._-]*", bucket):
+            return None
+        return f"gs://{bucket}/{object_path}"
+    suffix = ".storage.googleapis.com"
+    if host.endswith(suffix):
+        bucket = host.removesuffix(suffix)
+        if (
+            not bucket
+            or "." in bucket
+            or not re.fullmatch(r"[a-z0-9][a-z0-9_-]*", bucket)
+        ):
+            return None
+        return f"gs://{bucket}{parsed.path}"
+    return None
+
+
+def is_scperturb_source_uri(uri: Any) -> bool:
+    """Recognise every supported spelling of the source GCS bucket."""
+    normalized = normalize_storage_uri(uri)
+    return bool(normalized and normalized.startswith("gs://scperturb/"))
+
+
 def read_header(uri: str) -> tuple[bool, str]:
     """Read at most eight bytes through fsspec, never cache/download a payload."""
-    if not uri or uri.startswith("gs://scperturb"):
-        return False, "storage URI missing or points at source GCS"
+    if not normalize_storage_uri(uri):
+        return False, "storage URI missing or unsupported/ambiguous"
+    if is_scperturb_source_uri(uri):
+        return False, "storage URI points at source GCS"
     try:
         import fsspec
 
@@ -113,7 +168,16 @@ def is_exact_known_size(value: Any, expected: int) -> bool:
 
 
 def is_non_scperturb_storage(uri: str) -> bool:
-    return bool(uri) and not uri.startswith("gs://scperturb")
+    return bool(normalize_storage_uri(uri)) and not is_scperturb_source_uri(uri)
+
+
+def gcloud_object_size(value: Any) -> int | None:
+    """Accept only non-negative gcloud JSON integers or ASCII integer strings."""
+    if type(value) is int and value >= 0:
+        return value
+    if isinstance(value, str) and re.fullmatch(r"(?:0|[1-9][0-9]*)", value):
+        return int(value)
+    return None
 
 
 def select_safe_artifact(
@@ -136,7 +200,7 @@ def select_safe_artifact(
     if not durable:
         return None, "no exact-size non-scperturb storage target"
 
-    targets = {artifact_uri(artifact) for artifact in durable}
+    targets = {normalize_storage_uri(artifact_uri(artifact)) for artifact in durable}
     if len(targets) != 1:
         return None, "ambiguous exact-size non-scperturb storage targets"
 
@@ -175,7 +239,11 @@ def build_manifest(
 
     manifest: list[dict[str, Any]] = []
     for prefix, rows in sorted(prefix_rows.items()):
-        total = sum(r["bytes"] for r in rows)
+        total = sum(
+            size
+            for row in rows
+            if (size := gcloud_object_size(row.get("bytes"))) is not None
+        )
         exact: list[str] = []
         storage_ok = True
         size_ok = True
@@ -187,7 +255,15 @@ def build_manifest(
             relative = row["name"].removeprefix("pert-gym/")
             matches = by_key.get(relative, []) + by_key.get(row["name"], [])
             matches = list({getattr(a, "uid", id(a)): a for a in matches}.values())
-            artifact, reason = select_safe_artifact(matches, row["bytes"])
+            expected_size = gcloud_object_size(row.get("bytes"))
+            if expected_size is None:
+                storage_ok = False
+                size_ok = False
+                non_safe_reasons.append(
+                    f"{row['name']}: invalid source object size metadata"
+                )
+                continue
+            artifact, reason = select_safe_artifact(matches, expected_size)
             if artifact is None:
                 storage_ok = False
                 size_ok = False
@@ -254,7 +330,11 @@ def build_manifest(
 def summarize_manifest(
     cleaned: list[dict[str, Any]], manifest: list[dict[str, Any]]
 ) -> dict[str, Any]:
-    total_bytes = sum(r["bytes"] for r in cleaned)
+    total_bytes = sum(
+        size
+        for row in cleaned
+        if (size := gcloud_object_size(row.get("bytes"))) is not None
+    )
     classified_bytes = sum(r["bytes"] for r in manifest)
     safe_bytes = sum(
         r["bytes"] for r in manifest if r["classification"].startswith("SAFE")
@@ -303,7 +383,7 @@ def main() -> None:
                 "name": name,
                 "uri": f"gs://scperturb/{name}",
                 "logical_prefix": logical_prefix(name),
-                "bytes": int(item.get("size") or 0),
+                "bytes": gcloud_object_size(item.get("size")),
                 "updated": item.get("update_time")
                 or item.get("updateTime")
                 or item.get("updated")

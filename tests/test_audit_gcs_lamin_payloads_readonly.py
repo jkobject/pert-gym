@@ -53,6 +53,62 @@ def test_unknown_artifact_size_cannot_complete_exact_match() -> None:
     )
 
 
+def test_invalid_source_object_sizes_fail_closed() -> None:
+    candidate = artifact(
+        "durable", "staging/data/main/adversarial-size.h5ad", uri="s3://durable/file"
+    )
+    invalid_sizes = (None, "", False, 10.0, "10.0", " 10", "-1", "ten")
+
+    for invalid_size in invalid_sizes:
+        row = source_row("adversarial-size.h5ad", size=10)
+        row["bytes"] = invalid_size
+        manifest = MODULE.build_manifest(
+            [row], [candidate], header_reader=lambda _: (True, "ok")
+        )
+
+        assert manifest[0]["classification"] == "KEEP temporary"
+        assert manifest[0]["exact_lamin_object_matches"] == 0
+        assert "invalid source object size metadata" in manifest[0]["non_safe_reasons"]
+
+    assert MODULE.gcloud_object_size(10) == 10
+    assert MODULE.gcloud_object_size("10") == 10
+
+
+def test_scperturb_uri_aliases_and_ambiguous_uris_fail_closed() -> None:
+    source_aliases = (
+        "gs://scperturb/pert-gym/staging/data/main/alias.h5ad",
+        "https://storage.googleapis.com/scperturb/pert-gym/staging/data/main/alias.h5ad",
+        "https://scperturb.storage.googleapis.com/pert-gym/staging/data/main/alias.h5ad",
+    )
+    row = source_row("alias.h5ad")
+    for index, source_alias in enumerate(source_aliases):
+        candidate = artifact(
+            f"source-{index}",
+            "staging/data/main/alias.h5ad",
+            uri=source_alias,
+        )
+        manifest = MODULE.build_manifest(
+            [row], [candidate], header_reader=lambda _: (True, "unexpected")
+        )
+        assert manifest[0]["classification"] == "KEEP temporary"
+        assert manifest[0]["exact_lamin_object_matches"] == 0
+
+    for ambiguous_uri in (
+        "http://storage.googleapis.com/durable/file",
+        "https://example.com/durable/file",
+        "https://storage.googleapis.com/durable/file?token=secret",
+        "file:///durable/file",
+    ):
+        candidate = artifact(
+            "ambiguous", "staging/data/main/alias.h5ad", uri=ambiguous_uri
+        )
+        manifest = MODULE.build_manifest(
+            [row], [candidate], header_reader=lambda _: (True, "unexpected")
+        )
+        assert manifest[0]["classification"] == "KEEP temporary"
+        assert manifest[0]["exact_lamin_object_matches"] == 0
+
+
 def test_every_exact_candidate_requires_its_own_readback_after_old_budget() -> None:
     rows = [source_row(f"object-{index}") for index in range(25)]
     candidates = [
@@ -96,6 +152,27 @@ def test_unique_non_scperturb_target_is_preferred_deterministically() -> None:
     assert manifest[0]["classification"] == "SAFE-CANDIDATE after review"
     assert manifest[0]["lamin_uids"] == "durable-second"
     assert manifest[0]["lamin_storage_uris"] == "s3://durable/preferred.h5ad"
+
+
+def test_equivalent_durable_uri_aliases_select_lowest_uid_deterministically() -> None:
+    row = source_row("equivalent.h5ad")
+    later = artifact(
+        "z-target",
+        "staging/data/main/equivalent.h5ad",
+        uri="https://storage.googleapis.com/durable/equivalent.h5ad",
+    )
+    first = artifact(
+        "a-target",
+        "staging/data/main/equivalent.h5ad",
+        uri="gs://durable/equivalent.h5ad",
+    )
+
+    manifest = MODULE.build_manifest(
+        [row], [later, first], header_reader=lambda _: (True, "ok")
+    )
+
+    assert manifest[0]["classification"] == "SAFE-CANDIDATE after review"
+    assert manifest[0]["lamin_uids"] == "a-target"
 
 
 def test_multiple_non_scperturb_targets_are_ambiguous_and_not_safe() -> None:
