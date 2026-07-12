@@ -1,6 +1,6 @@
 # Current harmonization status
 
-_Historical run log last updated: 2026-06-22 18:07 CEST. The live 2026-07-11
+_Historical run log last updated: 2026-06-22 18:07 CEST. The live 2026-07-12
 dashboard and operating contract supersede historical operational advice below._
 
 ## Live branch
@@ -19,13 +19,28 @@ dashboard and operating contract supersede historical operational advice below._
   for the current Lamin/notebook/GCS-exit contract and publication lessons.
 - Use [agent-context.md](agent-context.md) for concise worker routing.
 
-## Current migration policy — 2026-07-11
+## Current migration policy — 2026-07-12
 
 **CURRENT, not a completion claim:** Lamin is the durable system of record;
 project-owned GCS is temporary staging. All large payload/GCS/broad-Lamin work
-runs on the warm EU VM, never the Mac. Historical references below to Mac GCS
-caches or staging are retained only as evidence of past runs; they are not
-instructions and do not authorize a new Mac cache or a retained GCS dependency.
+runs only on the RUNNING warm `pert-gym-worker-eu` VM, never the Mac. Historical
+references below to Mac GCS caches or staging are retained only as evidence of
+past runs; they are not instructions and do not authorize a new Mac cache or a
+retained GCS dependency.
+
+**CURRENT tooling, not a production result:** merged PR #56 is the
+migration/reproducibility documentation contract and merged PR #60 is the
+PerturbAI sparse-parquet adapter. Neither establishes a candidate, publication,
+remote readback, artifact UID, Collection member, canonical dataset, or final
+completion.
+
+**BLOCKED:** the HEK293T writer completed an exact 4,535-source cache but was
+kernel-OOM-killed during candidate assembly at about 31.9 GiB before candidate
+output or publication. There is no resulting dataset/readback/UID claim. Fresh
+repair begins at `t_d43e7f87`; production remains EU-worker-only and must not be
+restarted from this note. Separately, human capacity choice A (cost/quota packet
+then non-destructive worker expansion) versus C (pause heavy lanes) is pending.
+RxRx3 Auth0/EULA access is an independent human gate.
 
 **PENDING:** GCS cleanup requires a reviewed machine-readable
 `GCS_DECOMMISSION_READY` manifest mapping each removable prefix to accepted

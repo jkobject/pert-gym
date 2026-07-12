@@ -1,6 +1,6 @@
 # pert-gym live migration dashboard
 
-_Last reconciled: 2026-07-11. This is a status dashboard, not a run log. A
+_Last reconciled: 2026-07-12. This is a status dashboard, not a run log. A
 running or staged card is not evidence of completion._
 
 ## Accepted foundations
@@ -12,14 +12,29 @@ guarded EU-VM ingestion runner.
 - **ACCEPTED:** PR [#52](https://github.com/jkobject/pert-gym/pull/52) adds
 VM-only adaptive sparse-Zarr/shared-var migration tooling.
 - **ACCEPTED:** PR [#53](https://github.com/jkobject/pert-gym/pull/53) merges
-crash-recoverable publication from legacy triplets, including the publication
-journal/recovery and stage-order safeguards.
+  crash-recoverable publication from legacy triplets, including the publication
+  journal/recovery and stage-order safeguards.
+- **ACCEPTED (tooling/documentation only):** PR
+  [#56](https://github.com/jkobject/pert-gym/pull/56) defines the
+  migration/reproducibility/GCS-exit contract, and PR
+  [#60](https://github.com/jkobject/pert-gym/pull/60) adds the PerturbAI
+  sparse-parquet logical-Zarr adapter. Neither proves a production dataset,
+  readback, UID, Collection, canonical representation, or final completion.
 
 ## Running or staged dataset lanes
 
 - **CURRENT:** large dataset payload/GCS/Lamin operations are EU-VM-only; keep
-  `pert-gym-worker-eu` warm while the active wave is in progress. The Mac is a
-  control plane and must not cache or materialize large data.
+  `pert-gym-worker-eu` RUNNING and warm while the active wave is in progress.
+  The Mac is a control plane and must not cache or materialize large data.
+- **BLOCKED:** the HEK293T run cached exactly 4,535 source directories, but
+  candidate assembly was kernel-OOM-killed at about 31.9 GiB before candidate
+  output or any publication. No dataset/readback/UID completion exists. The
+  fresh bounded-streaming repair chain starts at `t_d43e7f87`; do not relaunch
+  production from this status note.
+- **BLOCKED:** the heavy-runner capacity decision is awaiting human choice A
+  (cost/quota packet then non-destructive `pert-gym-worker-eu` expansion) or C
+  (pause heavy lanes). No capacity exception, cleanup, promotion, or VM
+  decommission is authorized meanwhile.
 - **PENDING:** XAtlas/Orion HCT116 and HEK293T are separate logical datasets;
   each needs its own accepted source, migration, parity/readback, and reviewer
 gate before it can be called complete.
@@ -27,7 +42,8 @@ gate before it can be called complete.
   own completion/review cards. Do not upgrade status from a writer run, a stage,
   or an old GCS object.
 - **BLOCKED:** RxRx3 access/EULA remains a real external-access blocker. Do not
-  substitute an inferred source, proxy dataset, or metadata-only result.
+  substitute an inferred source, proxy dataset, or metadata-only result; its
+  Auth0/EULA decision is separate from the HEK293T and capacity gates.
 
 ## Notebook and inventory lane
 
