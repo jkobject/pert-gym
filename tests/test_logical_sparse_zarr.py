@@ -120,6 +120,10 @@ def test_resume_reuses_completed_payload_without_overwrite(tmp_path: Path) -> No
         tmp_path / "surfaces/example/revisions/resume/chunks/chunk_000000.zarr/data/0"
     )
     before = first_chunk.read_bytes()
+    checkpoint_path = tmp_path / "surfaces/example/checkpoints/resume.json"
+    checkpoint = json.loads(checkpoint_path.read_text())
+    checkpoint.pop("planning_status")
+    checkpoint_path.write_text(json.dumps(checkpoint))
 
     write_logical_sparse_revision(**kwargs)
 
@@ -430,3 +434,58 @@ def test_hard_rss_guard_records_durable_checkpoint_before_candidate_write(
         max_rows=1,
     )
     assert resumed["shape"] == [2, 3]
+
+
+def test_preplan_materialization_failure_is_checkpointed_and_resumable(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    matrix, obs, var = fixture_data(rows=2)
+    original_materialize = logical_sparse_zarr._materialize_rows
+
+    def fail_planning_sample(
+        matrix: object, start: int, end: int, sparse_format: str
+    ) -> sparse.csr_matrix:
+        raise MemoryError("synthetic pre-plan allocation failure")
+
+    monkeypatch.setattr(logical_sparse_zarr, "_materialize_rows", fail_planning_sample)
+    kwargs = dict(
+        root=tmp_path,
+        logical_key="surfaces/example",
+        revision="preplan-guarded",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        schema_fingerprint="schema-v1",
+        source_uri="gs://example/source.h5ad",
+        source_checksum=SOURCE_CHECKSUM,
+        ingestion_run_id="test-run",
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=1,
+    )
+
+    with pytest.raises(ResourceLimitExceeded, match="plan materialization"):
+        write_logical_sparse_revision(**kwargs)
+
+    checkpoint_path = tmp_path / "surfaces/example/checkpoints/preplan-guarded.json"
+    checkpoint = json.loads(checkpoint_path.read_text())
+    assert checkpoint["status"] == "resource_limit_exceeded"
+    assert checkpoint["error"] == {
+        "kind": "materialization_memory_error",
+        "phase": "plan_materialization",
+        "chunk_index": None,
+        "max_rss_bytes": 10**12,
+    }
+    candidate = tmp_path / "surfaces/example/revisions/preplan-guarded"
+    assert not (candidate / "manifest.json").exists()
+    assert not (candidate / "chunks").exists()
+
+    monkeypatch.setattr(logical_sparse_zarr, "_materialize_rows", original_materialize)
+    resumed = write_logical_sparse_revision(**kwargs)
+    assert resumed["shape"] == [2, 3]
+    assert (
+        read_logical_sparse_revision(tmp_path, "surfaces/example", "preplan-guarded")[
+            1
+        ].nnz
+        == matrix.nnz
+    )
