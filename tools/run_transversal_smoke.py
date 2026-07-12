@@ -176,7 +176,119 @@ def _batch_summary(batch: TaggedBatch) -> dict[str, object]:
     }
 
 
-def main() -> None:
+_REVIEWED_STRAND_COUNTS = {
+    "unmatched_unique_perturbation_rows_before_resolution": 403,
+    "resolved_unique_perturbation_rows": 401,
+    "unresolved_unique_perturbation_rows_after_resolution": 2,
+    "reviewed_alias_policy_keys": 157,
+    "reviewed_alias_policy_per_dataset": {
+        "hepg2": {"accepted_alias_rows": 53, "excluded_rows": 0},
+        "jurkat": {"accepted_alias_rows": 66, "excluded_rows": 0},
+        "k562": {"accepted_alias_rows": 216, "excluded_rows": 2},
+        "rpe1": {"accepted_alias_rows": 66, "excluded_rows": 0},
+    },
+}
+_REVIEWED_ELOB_EXCLUSIONS = (
+    ("k562-de.csv", "ELOB", "ambiguous_multi_target"),
+    ("k562-dir.csv", "ELOB", "ambiguous_multi_target"),
+)
+
+
+def _require_provenance(name: str, actual: dict[str, object], expected: object) -> None:
+    if not isinstance(expected, dict):
+        raise ValueError(f"PRISM manifest lacks reviewed {name} provenance")
+    for key, value in actual.items():
+        if expected.get(key) != value:
+            raise ValueError(f"{name} provenance does not match the reviewed manifest")
+
+
+def _validate_reviewed_inputs(
+    *,
+    inputs: dict[str, dict[str, object]],
+    prism_manifest: dict[str, object],
+    strand_metadata: dict[str, object],
+) -> dict[str, object]:
+    smoke_provenance = prism_manifest.get("transversal_smoke_provenance")
+    if not isinstance(smoke_provenance, dict):
+        raise ValueError("PRISM manifest lacks reviewed transversal smoke provenance")
+    for name in (
+        "prism_subset",
+        "depmap_fixture",
+        "depmap_source",
+        "strand_join",
+        "strand_metadata",
+    ):
+        actual_name = "prism_baseline_fixture" if name == "depmap_fixture" else name
+        _require_provenance(name, inputs[actual_name], smoke_provenance.get(name))
+    if prism_manifest.get("source") != smoke_provenance["prism_subset"]:
+        raise ValueError("PRISM manifest source disagrees with smoke provenance")
+    if prism_manifest.get("baseline") != smoke_provenance["depmap_source"]:
+        raise ValueError("PRISM manifest baseline disagrees with smoke provenance")
+    if inputs["prism_subset"]["sha256"] != EXPECTED_PRISM_SUBSET_SHA256:
+        raise ValueError("PRISM subset SHA256 differs from the reviewed 126-row input")
+    if inputs["prism_baseline_fixture"]["sha256"] != EXPECTED_DEPMAP_FIXTURE_SHA256:
+        raise ValueError("DepMap fixture SHA256 differs from the reviewed input")
+
+    strand_counts = strand_metadata.get("counts")
+    if not isinstance(strand_counts, dict) or any(
+        strand_counts.get(key) != value
+        for key, value in _REVIEWED_STRAND_COUNTS.items()
+    ):
+        raise ValueError(
+            "STRAND metadata does not preserve the reviewed 403/401/2 policy"
+        )
+    exclusions = strand_metadata.get("loader_exclusions", {}).get("unresolved_by_file")
+    records = (
+        tuple(
+            (mapping_file, item.get("perturbation"), item.get("classification"))
+            for mapping_file, items in exclusions.items()
+            if isinstance(items, list)
+            for item in items
+            if isinstance(item, dict)
+        )
+        if isinstance(exclusions, dict)
+        else ()
+    )
+    if len(records) != 2 or sorted(records) != sorted(_REVIEWED_ELOB_EXCLUSIONS):
+        raise ValueError(
+            "STRAND metadata does not preserve exactly two classified k562 ELOB exclusions"
+        )
+    if (
+        strand_metadata.get("outputs", {}).get("table_tsv_sha256")
+        != inputs["strand_join"]["sha256"]
+    ):
+        raise ValueError("STRAND metadata table SHA256 does not match the joined input")
+    return strand_counts
+
+
+def _assert_expected_selection(prism_batches: dict[str, TaggedBatch]) -> None:
+    rows = sum(len(batch.row_ids) for batch in prism_batches.values())
+    if rows != 126:
+        raise ValueError("smoke requires exactly 126 selected PRISM rows")
+    model_ids = set().union(
+        *(set(batch.metadata["model_ids"]) for batch in prism_batches.values())
+    )
+    if len(model_ids) != 118:
+        raise ValueError("smoke requires exactly 118 unique ModelIDs")
+    direct_lfc_targets = sum(
+        len(batch.numeric_targets or ()) for batch in prism_batches.values()
+    )
+    if direct_lfc_targets != 126:
+        raise ValueError("smoke requires exactly 126 direct-LFC targets")
+
+
+def _validate_optimizer_witnesses(optimizer_smoke: dict[str, object]) -> None:
+    for result in optimizer_smoke.values():
+        if not isinstance(result, dict):
+            continue
+        values = tuple(value for value in result.values() if isinstance(value, float))
+        if not all(math.isfinite(value) for value in values):
+            raise ValueError("optimizer smoke did not produce finite witnesses")
+        if result.get("parameter_delta_l2", 0.0) <= 0.0:
+            raise ValueError("optimizer smoke did not produce a nonzero update witness")
+
+
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--prism-subset", type=Path, required=True)
     parser.add_argument("--prism-manifest", type=Path, required=True)
@@ -185,8 +297,14 @@ def main() -> None:
     parser.add_argument("--strand-metadata", type=Path, required=True)
     parser.add_argument("--prism-subset-uri", required=True)
     parser.add_argument("--prism-subset-generation", required=True)
+    parser.add_argument("--depmap-fixture-uri", required=True)
+    parser.add_argument("--depmap-fixture-generation", required=True)
+    parser.add_argument("--strand-join-uri", required=True)
+    parser.add_argument("--strand-join-generation", required=True)
+    parser.add_argument("--strand-metadata-uri", required=True)
+    parser.add_argument("--strand-metadata-generation", required=True)
     parser.add_argument("--out", type=Path, required=True)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     started = time.monotonic()
     baseline_payload = json.loads(args.prism_baselines.read_text())
     prism_manifest = json.loads(args.prism_manifest.read_text())
@@ -202,61 +320,30 @@ def main() -> None:
             "sha256": _sha256(args.prism_manifest),
         },
         "prism_baseline_fixture": {
-            "path": str(args.prism_baselines),
+            "uri": args.depmap_fixture_uri,
+            "generation": args.depmap_fixture_generation,
             "sha256": _sha256(args.prism_baselines),
-            "source": baseline_payload.get("provenance", {}).get("source"),
+        },
+        "depmap_source": {
+            **baseline_payload.get("provenance", {}).get("source", {}),
         },
         "strand_join": {
-            "path": str(args.strand_join),
+            "uri": args.strand_join_uri,
+            "generation": args.strand_join_generation,
             "sha256": _sha256(args.strand_join),
-            "metadata_path": str(args.strand_metadata),
-            "metadata_sha256": _sha256(args.strand_metadata),
+        },
+        "strand_metadata": {
+            "uri": args.strand_metadata_uri,
+            "generation": args.strand_metadata_generation,
+            "sha256": _sha256(args.strand_metadata),
         },
     }
     try:
-        if inputs["prism_subset"]["sha256"] != EXPECTED_PRISM_SUBSET_SHA256:
-            raise ValueError(
-                "PRISM subset SHA256 differs from the reviewed 126-row input"
-            )
-        if inputs["prism_baseline_fixture"]["sha256"] != EXPECTED_DEPMAP_FIXTURE_SHA256:
-            raise ValueError("DepMap fixture SHA256 differs from the reviewed input")
-        strand_counts = strand_metadata.get("counts")
-        if not isinstance(strand_counts, dict) or {
-            "unmatched_unique_perturbation_rows_before_resolution": strand_counts.get(
-                "unmatched_unique_perturbation_rows_before_resolution"
-            ),
-            "resolved_unique_perturbation_rows": strand_counts.get(
-                "resolved_unique_perturbation_rows"
-            ),
-            "unresolved_unique_perturbation_rows_after_resolution": strand_counts.get(
-                "unresolved_unique_perturbation_rows_after_resolution"
-            ),
-        } != {
-            "unmatched_unique_perturbation_rows_before_resolution": 403,
-            "resolved_unique_perturbation_rows": 401,
-            "unresolved_unique_perturbation_rows_after_resolution": 2,
-        }:
-            raise ValueError(
-                "STRAND metadata does not preserve the reviewed 403/401/2 policy"
-            )
-        exclusions = strand_metadata.get("loader_exclusions", {}).get(
-            "unresolved_by_file"
+        strand_counts = _validate_reviewed_inputs(
+            inputs=inputs,
+            prism_manifest=prism_manifest,
+            strand_metadata=strand_metadata,
         )
-        if not isinstance(exclusions, dict) or {
-            (mapping_file, item.get("perturbation"))
-            for mapping_file, items in exclusions.items()
-            for item in items
-        } != {("k562-de.csv", "ELOB"), ("k562-dir.csv", "ELOB")}:
-            raise ValueError(
-                "STRAND metadata does not preserve exactly two k562 ELOB exclusions"
-            )
-        if (
-            strand_metadata.get("outputs", {}).get("table_tsv_sha256")
-            != inputs["strand_join"]["sha256"]
-        ):
-            raise ValueError(
-                "STRAND metadata table SHA256 does not match the joined input"
-            )
         validate_fixture_for_manifest(
             baseline_payload, prism_manifest, args.prism_subset
         )
@@ -305,6 +392,7 @@ def main() -> None:
         )
         for split, split_batches in batches.by_split.items()
     }
+    _assert_expected_selection(prism_batches)
     leakage_checks = _prism_leakage_report(prism_batches)
     optimizer_smoke = {
         "implementation": "stdlib two-head full-batch linear SGD",
@@ -315,20 +403,7 @@ def main() -> None:
             strand_train.features, _strand_proxy_targets(strand_train)
         ),
     }
-    if any(
-        not math.isfinite(value)
-        for result in optimizer_smoke.values()
-        if isinstance(result, dict)
-        for value in result.values()
-        if isinstance(value, float)
-    ) or any(
-        result["parameter_delta_l2"] <= 0.0
-        for result in optimizer_smoke.values()
-        if isinstance(result, dict)
-    ):
-        raise ValueError(
-            "optimizer smoke did not produce finite nonzero update witnesses"
-        )
+    _validate_optimizer_witnesses(optimizer_smoke)
     report = {
         "schema_version": "transversal_multitask_smoke.v2",
         "created_at": datetime.now(timezone.utc).isoformat(),
