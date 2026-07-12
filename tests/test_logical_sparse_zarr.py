@@ -9,8 +9,10 @@ import pandas as pd
 import pytest
 from scipy import sparse
 
+from pert_gym import logical_sparse_zarr
 from pert_gym.logical_sparse_zarr import (
     MigrationInterrupted,
+    ResourceLimitExceeded,
     read_logical_sparse_revision,
     rollback_to_revision,
     shared_var_identity,
@@ -373,3 +375,58 @@ def test_promotion_and_rollback_repoint_alias_without_deletion(tmp_path: Path) -
     assert alias["revision"] == "r1"
     assert json.loads(rollback.read_text())["reason"] == "verified fallback"
     assert (tmp_path / "surfaces/example/revisions/r2/manifest.json").exists()
+
+
+def test_hard_rss_guard_records_durable_checkpoint_before_candidate_write(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    matrix, obs, var = fixture_data(rows=2)
+    monkeypatch.setattr(logical_sparse_zarr, "_resident_rss_bytes", lambda: 11)
+
+    with pytest.raises(ResourceLimitExceeded, match="candidate_initialization"):
+        write_logical_sparse_revision(
+            root=tmp_path,
+            logical_key="surfaces/example",
+            revision="guarded",
+            matrix=matrix,
+            obs=obs,
+            var=var,
+            schema_fingerprint="schema-v1",
+            source_uri="gs://example/source.h5ad",
+            source_checksum=SOURCE_CHECKSUM,
+            ingestion_run_id="test-run",
+            max_rss_bytes=10,
+            min_rows=1,
+            max_rows=1,
+        )
+
+    checkpoint = json.loads(
+        (tmp_path / "surfaces/example/checkpoints/guarded.json").read_text()
+    )
+    assert checkpoint["status"] == "resource_limit_exceeded"
+    assert checkpoint["error"] == {
+        "kind": "max_rss_exceeded",
+        "phase": "candidate_initialization",
+        "chunk_index": None,
+        "observed_rss_bytes": 11,
+        "max_rss_bytes": 10,
+    }
+    assert not (tmp_path / "surfaces/example/revisions/guarded/manifest.json").exists()
+
+    monkeypatch.setattr(logical_sparse_zarr, "_resident_rss_bytes", lambda: 0)
+    resumed = write_logical_sparse_revision(
+        root=tmp_path,
+        logical_key="surfaces/example",
+        revision="guarded",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        schema_fingerprint="schema-v1",
+        source_uri="gs://example/source.h5ad",
+        source_checksum=SOURCE_CHECKSUM,
+        ingestion_run_id="test-run",
+        max_rss_bytes=10,
+        min_rows=1,
+        max_rows=1,
+    )
+    assert resumed["shape"] == [2, 3]
