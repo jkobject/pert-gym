@@ -11,12 +11,14 @@ from __future__ import annotations
 
 import argparse
 import fcntl
+import hashlib
 import json
 import os
 import platform
 import resource
 import selectors
 import shutil
+import signal
 import socket
 import subprocess
 import sys
@@ -367,6 +369,23 @@ def _git_branch() -> str:
     return result.stdout.strip() or "detached-or-unavailable"
 
 
+def command_identity(command: Sequence[str]) -> str:
+    payload = json.dumps(list(command), separators=(",", ":"), ensure_ascii=False)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _pid_is_live(value: object) -> bool:
+    if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
+        return False
+    try:
+        os.kill(value, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
 def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
     """Run a production child with durable periodic liveness and progress state.
 
@@ -381,30 +400,59 @@ def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
     started_at = time.time()
     stdout_lines = 0
 
-    def publish(status: str, *, exit_code: int | None = None) -> None:
+    def publish(
+        status: str,
+        *,
+        exit_code: int | None = None,
+        signal_name: str | None = None,
+    ) -> None:
         state: dict[str, object] = {
             "status": status,
             "run_id": run_id,
-            "pid": process.pid,
             "started_at": started_at,
             "updated_at": time.time(),
             "stdout_lines": stdout_lines,
+            "command": list(command),
+            "command_sha256": command_identity(command),
             "resume_contract": "inspect checkpoint then rerun the approved command",
         }
+        if status == "running":
+            state["pid"] = process.pid
+        else:
+            state["ended_at"] = time.time()
         if exit_code is not None:
             state["exit_code"] = exit_code
+        if signal_name is not None:
+            state["signal"] = signal_name
         _write_json(checkpoint_path, state)
         _write_json(run_dir / "heartbeat.json", state)
 
-    with log_path.open("wb") as log:
+    with log_path.open("ab") as log:
+        child_env = _child_env()
+        child_env["PERT_GYM_VM_RUNNER_LOCK_RUN_ID"] = run_id
         process = subprocess.Popen(
             command,
             cwd=ROOT,
-            env=_child_env(),
+            env=child_env,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
         assert process.stdout is not None
+        received_signal: int | None = None
+        old_handlers: dict[int, object] = {}
+
+        def interrupt(signum: int, _frame: object) -> None:
+            nonlocal received_signal
+            received_signal = signum
+            if process.poll() is None:
+                try:
+                    process.send_signal(signum)
+                except ProcessLookupError:
+                    pass
+
+        for signum in (signal.SIGINT, signal.SIGTERM):
+            old_handlers[signum] = signal.getsignal(signum)
+            signal.signal(signum, interrupt)
         publish("running")
         selector = selectors.DefaultSelector()
         selector.register(process.stdout, selectors.EVENT_READ)
@@ -436,22 +484,54 @@ def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
             while True:
                 for _, _ in selector.select(timeout=PRODUCTION_HEARTBEAT_SECONDS):
                     drain_stdout()
+                if received_signal is not None:
+                    try:
+                        process.wait(timeout=10)
+                    except subprocess.TimeoutExpired:
+                        process.terminate()
+                        process.wait(timeout=5)
+                    drain_stdout()
+                    interrupted_exit = 128 + received_signal
+                    publish(
+                        "interrupted",
+                        exit_code=interrupted_exit,
+                        signal_name=signal.Signals(received_signal).name,
+                    )
+                    return interrupted_exit
                 exit_code = process.poll()
                 if exit_code is not None:
                     drain_stdout()
+                    child_signal = (
+                        signal.Signals(-exit_code).name if exit_code < 0 else None
+                    )
                     publish(
-                        "completed" if exit_code == 0 else "failed", exit_code=exit_code
+                        (
+                            "completed"
+                            if exit_code == 0
+                            else "interrupted"
+                            if exit_code < 0
+                            else "failed"
+                        ),
+                        exit_code=exit_code,
+                        signal_name=child_signal,
                     )
                     return exit_code
                 publish("running")
         finally:
             selector.close()
+            for signum, handler in old_handlers.items():
+                signal.signal(signum, handler)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--run-id", default=time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="resume an existing identity-matched runner directory append-only",
     )
     parser.add_argument("--smoke", type=int, choices=(10_000, 25_000), action="append")
     parser.add_argument("--chunk-size", type=int, default=5_000)
@@ -465,10 +545,61 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     preflight_result = preflight()
     run_dir = ROOT / "artifacts" / "vm_runs" / args.run_id
-    run_dir.mkdir(parents=True, exist_ok=False)
-    _write_json(run_dir / "preflight.json", asdict(preflight_result))
+    if run_dir.exists():
+        if not args.resume:
+            raise RuntimeError(f"run directory already exists: {run_dir}")
+        checkpoint_path = run_dir / "checkpoints" / "production.json"
+        try:
+            checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError) as error:
+            raise RuntimeError(
+                "resume requires a readable production checkpoint"
+            ) from error
+        if checkpoint.get("run_id") != args.run_id or checkpoint.get("status") not in {
+            "running",
+            "failed",
+            "interrupted",
+        }:
+            raise RuntimeError("resume checkpoint identity or status is not resumable")
+        if checkpoint.get("command_sha256") != command_identity(args.command or []):
+            raise RuntimeError("resume command identity mismatch")
+        if checkpoint.get("command") != list(args.command or []):
+            raise RuntimeError("resume command identity mismatch")
+        if checkpoint.get("status") == "running":
+            if _pid_is_live(checkpoint.get("pid")):
+                raise RuntimeError("resume checkpoint PID is still live")
+            stale_path = run_dir / f"stale-checkpoint-{time.time_ns()}.json"
+            _write_json(
+                stale_path,
+                {
+                    **checkpoint,
+                    "stale_detected_at": time.time(),
+                    "stale_pid": checkpoint.get("pid"),
+                },
+            )
+            checkpoint = {
+                key: value for key, value in checkpoint.items() if key != "pid"
+            }
+            checkpoint.update(
+                {
+                    "status": "interrupted",
+                    "ended_at": time.time(),
+                    "signal": "stale_running_checkpoint",
+                }
+            )
+            _write_json(checkpoint_path, checkpoint)
+        _write_json(
+            run_dir / f"resume-preflight-{time.time_ns()}.json",
+            asdict(preflight_result),
+        )
+    else:
+        if args.resume:
+            raise RuntimeError(f"resume run directory does not exist: {run_dir}")
+        run_dir.mkdir(parents=True)
+        _write_json(run_dir / "preflight.json", asdict(preflight_result))
     _write_json(
-        run_dir / "heartbeat.json", {"status": "started", "run_id": args.run_id}
+        run_dir / "heartbeat.json",
+        {"status": "started", "run_id": args.run_id, "resume": args.resume},
     )
 
     lock_metadata = {

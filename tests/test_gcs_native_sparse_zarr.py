@@ -17,12 +17,15 @@ from scipy import sparse
 from typing_extensions import Unpack
 
 from pert_gym.gcs_native_sparse_zarr import (
+    BlockPlanConflict,
     GCSNativeMetrics,
     GCSNativeWriterError,
     assert_cache_budget,
+    calibrated_block_plan,
     promote_gcs_native_revision,
     register_gcs_prefix_with_lamin,
     requester_pays_gcs_filesystem,
+    validate_measured_block,
     write_gcs_native_sparse_revision,
 )
 
@@ -38,18 +41,29 @@ TOOL_SPEC.loader.exec_module(gcs_native_migration_tool)
 class NativeChunk(TypedDict):
     checksums: dict[str, str]
     end: int
+    matrix_key: str
+    peak_rss_bytes: int
+    runtime_seconds: float
     source_generation: str
+    source_checksum: str
     start: int
 
 
 class NativeSource(TypedDict):
+    checksum: str
     row_end: int
     row_start: int
+
+
+class NativeVar(TypedDict):
+    frame_sha256: str
+    index_sha256: str
 
 
 class NativeManifest(TypedDict):
     chunks: list[NativeChunk]
     source: NativeSource
+    var: NativeVar
 
 
 class PromotionMarker(TypedDict):
@@ -57,9 +71,14 @@ class PromotionMarker(TypedDict):
 
 
 class WriteOverrides(TypedDict, total=False):
+    block_size_exception: dict[str, str]
     matrix: object
+    max_block_bytes: int
+    max_rss_bytes: int
     max_rows: int
+    min_block_bytes: int
     obs: pd.DataFrame
+    peak_rss_reader: Any
     source_generation: str
     source_row_end: int | None
     source_row_start: int | None
@@ -74,7 +93,9 @@ class WriteArguments(TypedDict):
     ingestion_run_id: str
     logical_key: str
     matrix: object
+    max_block_bytes: int
     max_rows: int
+    min_block_bytes: int
     min_rows: int
     obs: pd.DataFrame
     revision: str
@@ -110,7 +131,6 @@ def memory_filesystem() -> MemoryFileSystem:
     return cast(MemoryFileSystem, fs)
 
 
-
 def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -130,30 +150,38 @@ def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
         "version_aware": True,
     }
 
+
 def write(
     fs: MemoryFileSystem, cache_dir: Path, **changes: Unpack[WriteOverrides]
 ) -> tuple[NativeManifest, GCSNativeMetrics]:
     matrix, obs, var = source()
-    arguments = cast(WriteArguments, {
-        "fs": fs,
-        "staging_prefix": "bucket/staging",
-        "logical_key": "family/example",
-        "revision": "r1",
-        "matrix": matrix,
-        "obs": obs,
-        "var": var,
-        "source_uri": "gs://source-bucket/immutable.h5ad",
-        "source_generation": "12345",
-        "source_row_start": 0,
-        "source_row_end": 6,
-        "schema_fingerprint": "schema-v1",
-        "ingestion_run_id": "test-run",
-        "cache_dir": cache_dir,
-        "cache_cap_bytes": 1024,
-        "cache_safety_reserve_bytes": 0,
-        "min_rows": 1,
-        "max_rows": 2,
-    } | changes)
+    arguments = cast(
+        WriteArguments,
+        {
+            "fs": fs,
+            "staging_prefix": "bucket/staging",
+            "logical_key": "family/example",
+            "revision": "r1",
+            "matrix": matrix,
+            "obs": obs,
+            "var": var,
+            "source_uri": "gs://source-bucket/immutable.h5ad",
+            "source_generation": "12345",
+            "source_checksum": "sha256-file-bytes/v1:" + "a" * 64,
+            "source_row_start": 0,
+            "source_row_end": 6,
+            "schema_fingerprint": "schema-v1",
+            "ingestion_run_id": "test-run",
+            "cache_dir": cache_dir,
+            "cache_cap_bytes": 1024,
+            "cache_safety_reserve_bytes": 0,
+            "min_block_bytes": 1,
+            "max_block_bytes": 10_000,
+            "min_rows": 1,
+            "max_rows": 2,
+        }
+        | changes,
+    )
     manifest, metrics = write_gcs_native_sparse_revision(**arguments)
     return cast(NativeManifest, manifest), metrics
 
@@ -179,21 +207,32 @@ def test_remote_writer_resumes_direct_object_store_chunks_and_promotes_last(
         "12345"
     ] * 3
     assert all(record["checksums"]["data_sha256"] for record in manifest["chunks"])
+    assert all(
+        record["source_checksum"].endswith("a" * 64) for record in manifest["chunks"]
+    )
+    assert all(record["runtime_seconds"] >= 0 for record in manifest["chunks"])
+    assert all(record["peak_rss_bytes"] > 0 for record in manifest["chunks"])
+    assert manifest["source"]["checksum"].endswith("a" * 64)
+    assert manifest["var"]["index_sha256"]
+    assert manifest["var"]["frame_sha256"]
 
-    marker = cast(PromotionMarker, promote_gcs_native_revision(
-        fs=fs,
-        staging_prefix="bucket/staging",
-        logical_key="family/example",
-        revision="r1",
-        manifest=manifest,
-    ))
+    marker = cast(
+        PromotionMarker,
+        promote_gcs_native_revision(
+            fs=fs,
+            staging_prefix="bucket/staging",
+            logical_key="family/example",
+            revision="r1",
+            manifest=manifest,
+        ),
+    )
     assert marker["promotion_key"].endswith("promotions/r1.json")
     assert json.loads(fs.cat(marker["promotion_key"]))["manifest_key"].endswith(
         "manifest.json"
     )
 
 
-def test_remote_writer_rejects_resume_source_generation_drift_and_orphan(
+def test_remote_writer_rejects_resume_source_drift_and_recovers_partial_orphan(
     tmp_path: Path,
 ) -> None:
     fs = memory_filesystem()
@@ -207,8 +246,38 @@ def test_remote_writer_rejects_resume_source_generation_drift_and_orphan(
         "bucket/staging/family/example/temporary-revisions/r1/chunks/chunk_000000.zarr/orphan",
         b"x",
     )
-    with pytest.raises(GCSNativeWriterError, match="orphan or partial"):
-        write(other, tmp_path / "other-cache")
+    manifest, _ = write(other, tmp_path / "other-cache")
+
+    assert (
+        other.cat(
+            "bucket/staging/family/example/temporary-revisions/r1/chunks/chunk_000000.zarr/orphan"
+        )
+        == b"x"
+    )
+    assert manifest["chunks"][0]["matrix_key"].endswith(
+        "recovery/chunk_000000/attempt_000000/matrix.zarr"
+    )
+
+
+def test_remote_writer_skips_partial_recovery_attempt_without_overwrite(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    canonical_orphan = f"{base}/chunks/chunk_000000.zarr/orphan"
+    first_recovery_orphan = (
+        f"{base}/recovery/chunk_000000/attempt_000000/matrix.zarr/orphan"
+    )
+    fs.pipe(canonical_orphan, b"canonical")
+    fs.pipe(first_recovery_orphan, b"recovery-0")
+
+    manifest, _ = write(fs, tmp_path / "cache")
+
+    assert fs.cat(canonical_orphan) == b"canonical"
+    assert fs.cat(first_recovery_orphan) == b"recovery-0"
+    assert manifest["chunks"][0]["matrix_key"].endswith(
+        "recovery/chunk_000000/attempt_000001/matrix.zarr"
+    )
 
 
 def test_cache_budget_refuses_unsafe_cap_and_lamin_prefix_reference_fails_closed(
@@ -447,6 +516,9 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
             "row_start": 0,
             "row_end": 1,
             "ingestion_run_id": "test-run",
+            "source_checksum": "sha256-file-bytes/v1:" + "a" * 64,
+            "dataset_id": "family/example",
+            "canonical_prefix": "family/example",
             "source_gcs_uri": "gs://bucket/source.h5ad",
             "staging_gcs_prefix": "gs://bucket/staging",
             "logical_key": "family/example",
@@ -457,8 +529,12 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
             "max_rows": 1,
             "promote": True,
             "register_lamin_prefix": False,
+            "migration_map_json": tmp_path / "migration.json",
+            "collection_metadata_json": tmp_path / "collection.json",
         },
     )()
+    args.migration_map_json.write_text("{}", encoding="utf-8")
+    args.collection_metadata_json.write_text("{}", encoding="utf-8")
     capacity = type(
         "Capacity", (), {"hostname": "host", "project": "project", "zone": "zone"}
     )()
@@ -488,7 +564,9 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
         gcs_native_migration_tool, "GCSH5ADCSR", lambda *_args, **_kwargs: object()
     )
     monkeypatch.setattr(
-        gcs_native_migration_tool, "read_elem", lambda _: pd.DataFrame(index=pd.Index(["g"]))
+        gcs_native_migration_tool,
+        "read_elem",
+        lambda _: pd.DataFrame(index=pd.Index(["g"])),
     )
     monkeypatch.setattr(
         gcs_native_migration_tool,
@@ -517,3 +595,239 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
         "exit:legacy",
         "exit:global",
     ]
+
+
+def test_calibration_selects_feasible_measured_intervals_and_records_identity() -> None:
+    plan = calibrated_block_plan(
+        identity={"source_generation": "123", "source_checksum": "checksum"},
+        n_obs=1_000,
+        probe_rows=100,
+        measured_bytes=250,
+        measured_peak_rss_bytes=400,
+        min_block_bytes=500,
+        max_block_bytes=750,
+        max_rss_bytes=1_000,
+        max_rows=500,
+        calibration_objects=[{"key": "probe", "generation": "9", "size": 250}],
+    )
+
+    assert plan["planned_chunks"] == [[0, 250], [250, 500], [500, 750], [750, 1000]]
+    assert plan["calibration"]["identity"]["source_generation"] == "123"
+    assert plan["calibration"]["objects"][0]["generation"] == "9"
+    assert plan["thresholds"] == {
+        "min_block_bytes": 500,
+        "max_block_bytes": 750,
+        "max_rss_bytes": 1_000,
+    }
+
+
+def test_calibration_fails_closed_when_byte_minimum_conflicts_with_rss() -> None:
+    with pytest.raises(BlockPlanConflict) as caught:
+        calibrated_block_plan(
+            identity={"source_generation": "123"},
+            n_obs=1_000,
+            probe_rows=100,
+            measured_bytes=100,
+            measured_peak_rss_bytes=900,
+            min_block_bytes=500,
+            max_block_bytes=750,
+            max_rss_bytes=1_000,
+            max_rows=1_000,
+            calibration_objects=[],
+        )
+
+    assert caught.value.evidence["kind"] == "byte_rss_conflict"
+    assert caught.value.evidence["rows_required_for_min_bytes"] == 500
+    assert caught.value.evidence["rows_allowed_by_rss"] == 111
+
+    with pytest.raises(BlockPlanConflict, match="cannot satisfy") as row_cap:
+        calibrated_block_plan(
+            identity={"source_generation": "123"},
+            n_obs=1_000,
+            probe_rows=100,
+            measured_bytes=100,
+            measured_peak_rss_bytes=100,
+            min_block_bytes=500,
+            max_block_bytes=750,
+            max_rss_bytes=10_000,
+            max_rows=400,
+            calibration_objects=[],
+        )
+    assert row_cap.value.evidence["rows_required_for_min_bytes"] == 500
+    assert row_cap.value.evidence["max_rows"] == 400
+
+    granular = calibrated_block_plan(
+        identity={"source_generation": "123"},
+        n_obs=10,
+        probe_rows=3,
+        measured_bytes=1_000,
+        measured_peak_rss_bytes=100,
+        min_block_bytes=500,
+        max_block_bytes=750,
+        max_rss_bytes=10_000,
+        max_rows=10,
+        calibration_objects=[],
+    )
+    assert granular["chosen_rows"] == 2
+
+    with pytest.raises(BlockPlanConflict, match="cannot satisfy"):
+        calibrated_block_plan(
+            identity={"source_generation": "123"},
+            n_obs=115,
+            probe_rows=36,
+            measured_bytes=99_309,
+            measured_peak_rss_bytes=40_301,
+            min_block_bytes=898,
+            max_block_bytes=1_673,
+            max_rss_bytes=204_683,
+            max_rows=86,
+            calibration_objects=[],
+        )
+
+    with pytest.raises(BlockPlanConflict) as hard_rss:
+        calibrated_block_plan(
+            identity={"source_generation": "123"},
+            n_obs=100,
+            probe_rows=100,
+            measured_bytes=100,
+            measured_peak_rss_bytes=1_001,
+            min_block_bytes=500,
+            max_block_bytes=750,
+            max_rss_bytes=1_000,
+            max_rows=100,
+            calibration_objects=[],
+            explicit_exception={"id": "cannot-waive-rss"},
+        )
+    assert hard_rss.value.evidence["kind"] == "calibration_rss_conflict"
+
+
+def test_measured_block_validation_rejects_small_non_tail_and_hard_rss() -> None:
+    with pytest.raises(BlockPlanConflict, match="measured block contract") as small:
+        validate_measured_block(
+            start=0,
+            end=100,
+            n_obs=300,
+            measured_bytes=499,
+            measured_peak_rss_bytes=900,
+            min_block_bytes=500,
+            max_block_bytes=750,
+            max_rss_bytes=1_000,
+        )
+    assert small.value.evidence["violations"] == ["bytes_below_minimum"]
+
+    with pytest.raises(BlockPlanConflict) as rss:
+        validate_measured_block(
+            start=0,
+            end=100,
+            n_obs=300,
+            measured_bytes=600,
+            measured_peak_rss_bytes=1_001,
+            min_block_bytes=500,
+            max_block_bytes=750,
+            max_rss_bytes=1_000,
+            explicit_exception={"id": "reviewed-byte-exception"},
+        )
+    assert rss.value.evidence["violations"] == ["rss_above_maximum"]
+
+
+def test_measured_block_validation_records_tail_small_and_explicit_exceptions() -> None:
+    tail = validate_measured_block(
+        start=200,
+        end=250,
+        n_obs=250,
+        measured_bytes=100,
+        measured_peak_rss_bytes=400,
+        min_block_bytes=500,
+        max_block_bytes=750,
+        max_rss_bytes=1_000,
+    )
+    small = validate_measured_block(
+        start=0,
+        end=100,
+        n_obs=100,
+        measured_bytes=100,
+        measured_peak_rss_bytes=400,
+        min_block_bytes=500,
+        max_block_bytes=750,
+        max_rss_bytes=1_000,
+    )
+    explicit = validate_measured_block(
+        start=0,
+        end=100,
+        n_obs=300,
+        measured_bytes=100,
+        measured_peak_rss_bytes=400,
+        min_block_bytes=500,
+        max_block_bytes=750,
+        max_rss_bytes=1_000,
+        explicit_exception={"id": "approved-1", "reason": "reviewed"},
+    )
+
+    assert tail["exception"]["kind"] == "final_tail_below_minimum"
+    assert small["exception"]["kind"] == "whole_dataset_below_minimum"
+    assert explicit["exception"]["id"] == "approved-1"
+
+
+def test_hct116_observed_records_regress_as_byte_and_rss_contract_failure() -> None:
+    evidence = json.loads(
+        (
+            Path(__file__).parent / "fixtures" / "hct116_observed_block_metrics.json"
+        ).read_text()
+    )
+
+    assert evidence["record_count"] == 10
+    assert evidence["bytes_written_max"] < 2 * 1024**3
+    assert evidence["peak_rss_bytes_max"] > evidence["configured_max_rss_bytes"]
+
+
+def test_writer_calibrates_before_immutable_plan_and_refuses_plan_drift(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(
+            fs,
+            tmp_path / "cache",
+            min_block_bytes=1,
+            max_block_bytes=10_000,
+            stop_after_chunks=1,
+        )
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    plan = json.loads(fs.cat(f"{base}/plan.json"))
+
+    assert fs.exists(f"{base}/calibration/probe.json")
+    assert plan["calibration"]["measured_bytes"] > 0
+    with pytest.raises(GCSNativeWriterError, match="immutable plan"):
+        write(
+            fs,
+            tmp_path / "cache",
+            min_block_bytes=2,
+            max_block_bytes=10_000,
+        )
+
+
+def test_writer_persists_terminal_evidence_and_stops_before_next_block(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    rss = iter([100, 200, 200])
+
+    with pytest.raises(BlockPlanConflict, match="measured block contract"):
+        write(
+            fs,
+            tmp_path / "cache",
+            min_block_bytes=1,
+            max_block_bytes=10_000,
+            max_rows=2,
+            max_rss_bytes=150,
+            peak_rss_reader=lambda: next(rss),
+        )
+
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    record = json.loads(fs.cat(f"{base}/chunk-records/chunk_000000.json"))
+    failure = json.loads(fs.cat(f"{base}/failure.json"))
+    assert record["block_validation"]["status"] == "failed"
+    assert record["block_validation"]["violations"] == ["rss_above_maximum"]
+    assert failure["requires_new_revision"] is True
+    assert not fs.exists(f"{base}/chunks/chunk_000001.zarr")
+    assert not fs.exists(f"{base}/manifest.json")
