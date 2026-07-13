@@ -3,8 +3,8 @@
 
 Lists object metadata only and queries Lamin metadata on branch jkobject. It never
 writes to Lamin or GCS and never calls a delete command. Every object proposed as
-a SAFE candidate requires its own mandatory 8-byte readback from a durable,
-non-source Lamin-backed storage URI.
+a SAFE candidate requires an immutable source generation, an exact-size durable
+target, and its own bounded readback bound to the durable identity where supported.
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ import csv
 import json
 import os
 import re
+import shlex
 import socket
 import subprocess
 from collections import defaultdict
@@ -145,18 +146,53 @@ def is_scperturb_source_uri(uri: Any) -> bool:
     return bool(normalized and normalized.startswith("gs://scperturb/"))
 
 
+def gcloud_object_generation(value: Any) -> str | None:
+    """Accept only a positive immutable GCS object generation."""
+    if type(value) is int and value > 0:
+        return str(value)
+    if isinstance(value, str) and re.fullmatch(r"[1-9][0-9]*", value):
+        return value
+    return None
+
+
+def pinned_gcs_uri(uri: str, generation: Any) -> str | None:
+    """Return a canonical GCS URI pinned to one immutable object generation."""
+    normalized = normalize_storage_uri(uri)
+    immutable_generation = gcloud_object_generation(generation)
+    if not normalized or not normalized.startswith("gs://") or not immutable_generation:
+        return None
+    return f"{normalized}#{immutable_generation}"
+
+
+def split_pinned_gcs_uri(uri: str) -> tuple[str, str] | None:
+    """Split the internal ``gs://bucket/object#generation`` identity form."""
+    base, separator, generation = uri.rpartition("#")
+    if not separator:
+        return None
+    normalized = normalize_storage_uri(base)
+    if not normalized or not normalized.startswith("gs://"):
+        return None
+    if not gcloud_object_generation(generation):
+        return None
+    return normalized, generation
+
+
 def read_header(uri: str) -> tuple[bool, str]:
-    """Read at most eight bytes through fsspec, never cache/download a payload."""
-    if not normalize_storage_uri(uri):
+    """Read at most eight bytes, pinning GCS reads to their recorded generation."""
+    pinned_gcs = split_pinned_gcs_uri(uri)
+    normalized = normalize_storage_uri(uri)
+    if not normalized and not pinned_gcs:
         return False, "storage URI missing or unsupported/ambiguous"
-    if is_scperturb_source_uri(uri):
+    read_uri = pinned_gcs[0] if pinned_gcs else normalized
+    if is_scperturb_source_uri(read_uri):
         return False, "storage URI points at source GCS"
     try:
         import fsspec
 
-        with fsspec.open(uri, "rb") as handle:
+        open_kwargs = {"generation": pinned_gcs[1]} if pinned_gcs else {}
+        with fsspec.open(read_uri, "rb", **open_kwargs) as handle:
             header = handle.read(8)
-        return bool(header), f"header:{header.hex()}"
+        return bool(header), f"identity:{uri};header:{header.hex()}"
     except Exception as exc:  # evidence is fail-closed
         return False, f"header_error:{type(exc).__name__}:{str(exc)[:160]}"
 
@@ -179,9 +215,22 @@ def gcloud_object_size(value: Any) -> int | None:
     return None
 
 
+def immutable_durable_uri(artifact: Any) -> tuple[str | None, str]:
+    """Return a readback identity; require a generation for versioned GCS."""
+    normalized = normalize_storage_uri(artifact_uri(artifact))
+    if not normalized or is_scperturb_source_uri(normalized):
+        return None, "no exact-size non-scperturb storage target"
+    if normalized.startswith("gs://"):
+        pinned = pinned_gcs_uri(normalized, getattr(artifact, "generation", None))
+        if not pinned:
+            return None, "durable GCS target lacks immutable GCS generation"
+        return pinned, ""
+    return normalized, ""
+
+
 def select_safe_artifact(
     matches: list[Any], expected_size: int
-) -> tuple[Any | None, str]:
+) -> tuple[Any | None, str | None, str]:
     """Choose exactly one durable exact-size target, otherwise fail closed."""
     exact_size = [
         artifact
@@ -189,23 +238,31 @@ def select_safe_artifact(
         if is_exact_known_size(getattr(artifact, "size", None), expected_size)
     ]
     if not exact_size:
-        return None, "no exact known-size Lamin match"
+        return None, None, "no exact known-size Lamin match"
 
-    durable = [
-        artifact
-        for artifact in exact_size
-        if is_non_scperturb_storage(artifact_uri(artifact))
-    ]
+    durable: list[tuple[Any, str]] = []
+    rejected_reasons: list[str] = []
+    for artifact in exact_size:
+        durable_uri, reason = immutable_durable_uri(artifact)
+        if durable_uri:
+            durable.append((artifact, durable_uri))
+        else:
+            rejected_reasons.append(reason)
     if not durable:
-        return None, "no exact-size non-scperturb storage target"
+        return (
+            None,
+            None,
+            rejected_reasons[0] if rejected_reasons else "no durable target",
+        )
 
-    targets = {normalize_storage_uri(artifact_uri(artifact)) for artifact in durable}
+    targets = {durable_uri for _, durable_uri in durable}
     if len(targets) != 1:
-        return None, "ambiguous exact-size non-scperturb storage targets"
+        return None, None, "ambiguous exact-size non-scperturb storage targets"
 
-    return sorted(durable, key=lambda artifact: str(getattr(artifact, "uid", "")))[
-        0
-    ], ""
+    artifact, durable_uri = sorted(
+        durable, key=lambda pair: str(getattr(pair[0], "uid", ""))
+    )[0]
+    return artifact, durable_uri, ""
 
 
 def source_hash_evidence(row: dict[str, Any]) -> str:
@@ -249,6 +306,9 @@ def build_manifest(
         uid_values: list[str] = []
         storage_values: list[str] = []
         headers: list[str] = []
+        source_generations: list[str] = []
+        source_immutable_uris: list[str] = []
+        delete_commands: list[str] = []
         non_safe_reasons: list[str] = []
         for row in rows:
             relative = row["name"].removeprefix("pert-gym/")
@@ -262,22 +322,44 @@ def build_manifest(
                     f"{row['name']}: invalid source object size metadata"
                 )
                 continue
-            artifact, reason = select_safe_artifact(matches, expected_size)
+            generation = gcloud_object_generation(row.get("generation"))
+            if generation is None:
+                storage_ok = False
+                size_ok = False
+                non_safe_reasons.append(
+                    f"{row['name']}: invalid source object generation metadata"
+                )
+                continue
+            artifact, durable_uri, reason = select_safe_artifact(matches, expected_size)
             if artifact is None:
                 storage_ok = False
                 size_ok = False
                 non_safe_reasons.append(f"{row['name']}: {reason}")
                 continue
 
-            uri = artifact_uri(artifact)
-            ok, detail = header_reader(uri)
+            assert durable_uri is not None
+            ok, detail = header_reader(durable_uri)
             headers.append(f"{row['name']}={detail}")
             if not ok:
                 storage_ok = False
                 non_safe_reasons.append(f"{row['name']}: readback failed")
             exact.append(row["name"])
             uid_values.append(str(getattr(artifact, "uid", "")))
-            storage_values.append(uri)
+            storage_values.append(durable_uri)
+            source_generations.append(generation)
+            source_uri = f"gs://scperturb/{row['name']}"
+            source_immutable_uri = pinned_gcs_uri(source_uri, generation)
+            if source_immutable_uri is None:
+                storage_ok = False
+                non_safe_reasons.append(f"{row['name']}: invalid source object URI")
+                continue
+            source_immutable_uris.append(source_immutable_uri)
+            delete_commands.append(
+                "gcloud storage rm "
+                f"--if-generation-match={generation} "
+                f"--billing-project={BILLING_PROJECT} "
+                f"{shlex.quote(source_uri)}"
+            )
 
         exact_complete = (
             bool(rows) and len(exact) == len(rows) and size_ok and storage_ok
@@ -311,13 +393,15 @@ def build_manifest(
                 "lamin_uids": ";".join(sorted(set(uid_values))),
                 "lamin_storage_uris": ";".join(sorted(set(storage_values))),
                 "readback_evidence": ";".join(headers),
+                "source_generation_evidence": ";".join(source_generations),
+                "source_immutable_uris": ";".join(source_immutable_uris),
                 "source_hash_evidence": ";".join(
                     source_hash_evidence(row) for row in rows
                 ),
                 "non_safe_reasons": ";".join(non_safe_reasons),
                 "rationale": rationale,
                 "proposed_delete_command_not_executed": (
-                    f"gcloud storage rm --recursive --billing-project={BILLING_PROJECT} gs://scperturb/{prefix}/"
+                    "\n".join(delete_commands)
                     if classification.startswith("SAFE")
                     else ""
                 ),
@@ -383,6 +467,7 @@ def main() -> None:
                 "uri": f"gs://scperturb/{name}",
                 "logical_prefix": logical_prefix(name),
                 "bytes": gcloud_object_size(item.get("size")),
+                "generation": gcloud_object_generation(item.get("generation")),
                 "updated": item.get("update_time")
                 or item.get("updateTime")
                 or item.get("updated")
@@ -439,7 +524,7 @@ def main() -> None:
         / 2**30
         * COST_EUR_PER_GIB_MONTH,
         "cost_assumption_eur_per_gib_month": COST_EUR_PER_GIB_MONTH,
-        "evidence_rule": "SAFE requires every listed object one exact known-size Lamin key match, one non-scperturb storage target, and its own successful bounded readback header; anything else fails closed. Source MD5 is retained when present, otherwise CRC32C is recorded without synthesizing MD5.",
+        "evidence_rule": "SAFE requires every listed object a valid immutable source generation, one exact known-size Lamin key match, one non-scperturb durable identity (GCS targets must include their immutable generation), and its own successful bounded readback. Proposed deletes are per-object and use --if-generation-match. Anything else fails closed. Source MD5 is retained when present, otherwise CRC32C is recorded without synthesizing MD5.",
         "files": [str(object_tsv), str(prefix_tsv), str(report_md)],
     }
     report_json.write_text(
@@ -479,16 +564,16 @@ def main() -> None:
                         for r in safe
                     ]
                     or [
-                        "- None. No prefix passed the full exact-key + non-GCS storage + bounded readback gate."
+                        "- None. No prefix passed the immutable-generation + exact-key + durable-identity + bounded-readback gate."
                     ]
                 ),
                 "",
                 "## Future lifecycle policy",
                 "",
                 "1. Keep immutable raw/source prefixes indefinitely until independently catalogued with source checksum/license/provenance.",
-                "2. Put staging prefixes behind an explicit 30-day TTL only after a manifest records source URI/checksum, target Lamin UIDs, non-GCS storage URI, and successful bounded readback; retain a 14-day quarantine tag before deletion.",
+                "2. Put staging prefixes behind an explicit 30-day TTL only after a manifest records each source URI/generation/checksum, target Lamin UIDs, immutable durable storage identity, and successful bounded readback; retain a 14-day quarantine tag before deletion.",
                 "3. Never apply lifecycle deletion to `canonical/`, `model-ready/`, `sources/`, or `raw/` by wildcard; require prefix-level reviewer approval and a fresh audit.",
-                "4. Run this metadata-only audit before each cleanup and fail closed on missing object metadata, key mismatch, external `gs://scperturb` storage, failed readback, or unexplained byte delta.",
+                "4. Run this metadata-only audit before each cleanup and fail closed on missing/invalid generation or object metadata, key mismatch, external `gs://scperturb` storage, unpinned durable GCS target, failed readback, or unexplained byte delta. Never replace the listed per-object generation-match commands with a recursive deletion.",
                 "",
                 "## Files",
                 "",
