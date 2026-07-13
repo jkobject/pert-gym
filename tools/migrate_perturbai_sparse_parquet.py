@@ -22,7 +22,11 @@ from pert_gym.perturbai_sparse_parquet import (
     requester_pays_storage_options,
 )
 from tools.lamin_context import connect_pertdata
-from tools.pert_gym_vm_runner import require_heavy_vm
+from tools.pert_gym_vm_runner import (
+    global_lamin_writer_lease,
+    require_heavy_vm,
+    writer_lock_metadata,
+)
 
 
 def _var(path: Path) -> pd.DataFrame:
@@ -62,7 +66,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    require_heavy_vm()
+    hostname, project, zone, _ = require_heavy_vm()
     requester_pays_storage_options(args.billing_project)
     if args.max_rss_gib <= 0 or args.parquet_batch_rows <= 0:
         raise ValueError("memory and parquet batch limits must be positive")
@@ -97,14 +101,21 @@ def main() -> int:
     )
     publication = None
     if args.publish_collection_key:
-        publication = publish_candidate(
-            ln=connect_pertdata(),
-            root=args.output_root,
-            logical_key=args.logical_key,
-            revision=args.revision,
-            collection_key=args.publish_collection_key,
-            require_vm=require_heavy_vm,
+        lock_metadata = writer_lock_metadata(
+            run_id=args.ingestion_run_id,
+            hostname=hostname,
+            project=project,
+            zone=zone,
         )
+        with global_lamin_writer_lease(lock_metadata):
+            publication = publish_candidate(
+                ln=connect_pertdata(),
+                root=args.output_root,
+                logical_key=args.logical_key,
+                revision=args.revision,
+                collection_key=args.publish_collection_key,
+                require_vm=require_heavy_vm,
+            )
     print(
         json.dumps(
             {
