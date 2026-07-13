@@ -414,6 +414,7 @@ def write_gcs_native_sparse_revision(
         remote_var, schema_fingerprint=schema_fingerprint
     ) != shared_var_identity(var, schema_fingerprint=schema_fingerprint):
         raise GCSNativeWriterError("remote shared var readback identity mismatch")
+    var_identity = shared_var_identity(var, schema_fingerprint=schema_fingerprint)
     manifest: dict[str, object] = {
         "format": FORMAT,
         "logical_key": logical_key,
@@ -430,7 +431,13 @@ def write_gcs_native_sparse_revision(
         "sparse_format": sparse_format,
         "ingestion_run_id": ingestion_run_id,
         "chunks": records,
-        "var": {"key": var_key, "generation": var_object["generation"]},
+        "var": {
+            "key": var_key,
+            "generation": var_object["generation"],
+            "index_sha256": var_identity.index_sha256,
+            "frame_sha256": var_identity.frame_sha256,
+            "schema_fingerprint": var_identity.schema_fingerprint,
+        },
     }
     manifest_key = _path(candidate_prefix, "manifest.json")
     manifest_object = _write_exclusive(fs, manifest_key, _json_bytes(manifest))

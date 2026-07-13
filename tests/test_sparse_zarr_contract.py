@@ -290,3 +290,10 @@ def test_machine_readable_policy_covers_required_families_and_vm_benchmark() -> 
         "temporal_and_spatial",
         "perturbai",
     }
+    assert policy["production_block_policy"] == {
+        "minimum_bytes": 2 * 1024**3,
+        "target_bytes": 5 * 1024**3 // 2,
+        "maximum_bytes": 3 * 1024**3,
+        "exceptions": ["one_final_tail", "genuinely_smaller_dataset"],
+        "var_reference": "every block resolves the manifest's one full-hash shared_var",
+    }

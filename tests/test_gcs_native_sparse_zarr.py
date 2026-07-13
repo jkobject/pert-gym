@@ -25,6 +25,7 @@ from pert_gym.gcs_native_sparse_zarr import (
     requester_pays_gcs_filesystem,
     write_gcs_native_sparse_revision,
 )
+from pert_gym.logical_sparse_zarr import shared_var_identity
 
 TOOL_PATH = Path(__file__).parents[1] / "tools" / "migrate_gcs_native_sparse_zarr.py"
 TOOL_SPEC = importlib.util.spec_from_file_location(
@@ -47,9 +48,18 @@ class NativeSource(TypedDict):
     row_start: int
 
 
+class NativeVar(TypedDict):
+    frame_sha256: str
+    generation: str
+    index_sha256: str
+    key: str
+    schema_fingerprint: str
+
+
 class NativeManifest(TypedDict):
     chunks: list[NativeChunk]
     source: NativeSource
+    var: NativeVar
 
 
 class PromotionMarker(TypedDict):
@@ -191,6 +201,21 @@ def test_remote_writer_resumes_direct_object_store_chunks_and_promotes_last(
     assert json.loads(fs.cat(marker["promotion_key"]))["manifest_key"].endswith(
         "manifest.json"
     )
+
+
+def test_remote_manifest_exposes_one_full_hash_shared_var(tmp_path: Path) -> None:
+    fs = memory_filesystem()
+    manifest, _ = write(fs, tmp_path / "cache")
+    _, _, var = source()
+    identity = shared_var_identity(var, schema_fingerprint="schema-v1")
+
+    assert manifest["var"] == {
+        "key": "bucket/staging/family/example/temporary-revisions/r1/var.parquet",
+        "generation": "",
+        "index_sha256": identity.index_sha256,
+        "frame_sha256": identity.frame_sha256,
+        "schema_fingerprint": "schema-v1",
+    }
 
 
 def test_remote_writer_rejects_resume_source_generation_drift_and_orphan(
