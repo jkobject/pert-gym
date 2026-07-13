@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+from typing import Any, TypedDict, cast
 
 import fsspec
 import gcsfs
@@ -11,9 +12,12 @@ import numpy as np
 import pandas as pd
 import pytest
 from anndata import AnnData
+from fsspec.implementations.memory import MemoryFileSystem
 from scipy import sparse
+from typing_extensions import Unpack
 
 from pert_gym.gcs_native_sparse_zarr import (
+    GCSNativeMetrics,
     GCSNativeWriterError,
     assert_cache_budget,
     promote_gcs_native_revision,
@@ -31,6 +35,58 @@ gcs_native_migration_tool = importlib.util.module_from_spec(TOOL_SPEC)
 TOOL_SPEC.loader.exec_module(gcs_native_migration_tool)
 
 
+class NativeChunk(TypedDict):
+    checksums: dict[str, str]
+    end: int
+    source_generation: str
+    start: int
+
+
+class NativeSource(TypedDict):
+    row_end: int
+    row_start: int
+
+
+class NativeManifest(TypedDict):
+    chunks: list[NativeChunk]
+    source: NativeSource
+
+
+class PromotionMarker(TypedDict):
+    promotion_key: str
+
+
+class WriteOverrides(TypedDict, total=False):
+    matrix: object
+    max_rows: int
+    obs: pd.DataFrame
+    source_generation: str
+    source_row_end: int | None
+    source_row_start: int | None
+    stop_after_chunks: int | None
+
+
+class WriteArguments(TypedDict):
+    cache_cap_bytes: int
+    cache_dir: Path
+    cache_safety_reserve_bytes: int
+    fs: Any
+    ingestion_run_id: str
+    logical_key: str
+    matrix: object
+    max_rows: int
+    min_rows: int
+    obs: pd.DataFrame
+    revision: str
+    schema_fingerprint: str
+    source_generation: str
+    source_row_end: int | None
+    source_row_start: int | None
+    source_uri: str
+    staging_prefix: str
+    var: pd.DataFrame
+
+
 def source() -> tuple[sparse.csr_matrix, pd.DataFrame, pd.DataFrame]:
     matrix = sparse.csr_matrix(
         (
@@ -40,17 +96,18 @@ def source() -> tuple[sparse.csr_matrix, pd.DataFrame, pd.DataFrame]:
         shape=(6, 3),
     )
     obs = pd.DataFrame(
-        {"cell": [f"cell-{i}" for i in range(6)]}, index=[f"o{i}" for i in range(6)]
+        {"cell": [f"cell-{i}" for i in range(6)]},
+        index=pd.Index([f"o{i}" for i in range(6)]),
     )
-    var = pd.DataFrame({"kind": ["gene"] * 3}, index=["g1", "g2", "g3"])
+    var = pd.DataFrame({"kind": ["gene"] * 3}, index=pd.Index(["g1", "g2", "g3"]))
     return matrix, obs, var
 
 
-def memory_filesystem() -> object:
+def memory_filesystem() -> MemoryFileSystem:
     fs = fsspec.filesystem("memory")
     fs.store.clear()
     fs.pseudo_dirs[:] = [""]
-    return fs
+    return cast(MemoryFileSystem, fs)
 
 
 
@@ -74,10 +131,10 @@ def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
     }
 
 def write(
-    fs: object, cache_dir: Path, **changes: object
-) -> tuple[dict[str, object], object]:
+    fs: MemoryFileSystem, cache_dir: Path, **changes: Unpack[WriteOverrides]
+) -> tuple[NativeManifest, GCSNativeMetrics]:
     matrix, obs, var = source()
-    arguments = {
+    arguments = cast(WriteArguments, {
         "fs": fs,
         "staging_prefix": "bucket/staging",
         "logical_key": "family/example",
@@ -96,8 +153,9 @@ def write(
         "cache_safety_reserve_bytes": 0,
         "min_rows": 1,
         "max_rows": 2,
-    } | changes
-    return write_gcs_native_sparse_revision(**arguments)
+    } | changes)
+    manifest, metrics = write_gcs_native_sparse_revision(**arguments)
+    return cast(NativeManifest, manifest), metrics
 
 
 def test_remote_writer_resumes_direct_object_store_chunks_and_promotes_last(
@@ -122,13 +180,13 @@ def test_remote_writer_resumes_direct_object_store_chunks_and_promotes_last(
     ] * 3
     assert all(record["checksums"]["data_sha256"] for record in manifest["chunks"])
 
-    marker = promote_gcs_native_revision(
+    marker = cast(PromotionMarker, promote_gcs_native_revision(
         fs=fs,
         staging_prefix="bucket/staging",
         logical_key="family/example",
         revision="r1",
         manifest=manifest,
-    )
+    ))
     assert marker["promotion_key"].endswith("promotions/r1.json")
     assert json.loads(fs.cat(marker["promotion_key"]))["manifest_key"].endswith(
         "manifest.json"
@@ -430,12 +488,12 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
         gcs_native_migration_tool, "GCSH5ADCSR", lambda *_args, **_kwargs: object()
     )
     monkeypatch.setattr(
-        gcs_native_migration_tool, "read_elem", lambda _: pd.DataFrame(index=["g"])
+        gcs_native_migration_tool, "read_elem", lambda _: pd.DataFrame(index=pd.Index(["g"]))
     )
     monkeypatch.setattr(
         gcs_native_migration_tool,
         "_read_h5ad_dataframe_rows",
-        lambda *_args, **_kwargs: pd.DataFrame(index=["cell"]),
+        lambda *_args, **_kwargs: pd.DataFrame(index=pd.Index(["cell"])),
     )
     monkeypatch.setattr(
         gcs_native_migration_tool,
