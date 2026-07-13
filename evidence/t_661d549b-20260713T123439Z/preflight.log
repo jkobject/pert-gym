@@ -1,0 +1,67 @@
+run_id=t_661d549b-20260713T123439Z
+accepted_head=6be5852570bca843aa4aae914730efe5b76c2916
+utc_pre=2026-07-13T12:34:39Z
+hostname=pert-gym-worker-eu
+project=jkobject-1549353370965
+zone=europe-west1-b
+instance=pert-gym-worker-eu
+machine_type=e2-highmem-4
+billing_project=jkobject-1549353370965
+tmux_count=0
+python_pids=none
+tmux_begin
+no server running on /tmp/tmux-1001/default
+tmux_end
+processes_begin
+    PID    PPID USER     ELAPSED %CPU %MEM   RSS COMMAND         COMMAND
+  49396     865 root           1  2.0  0.0 10900 sshd            sshd: jkobject [priv]
+  49295       1 jkobject       7  1.7  0.0  9880 systemd         /lib/systemd/systemd --user
+  45763       2 root        7996  0.7  0.0     0 kworker/2:2-cgr [kworker/2:2-cgroup_release]
+  46995       2 root        1027  0.3  0.0     0 kworker/u8:0-fl [kworker/u8:0-flush-8:0]
+     64       2 root      148526  0.1  0.0     0 kswapd0         [kswapd0]
+      1       0 root      148526  0.0  0.0 11196 systemd         /sbin/init
+      2       0 root      148526  0.0  0.0     0 kthreadd        [kthreadd]
+      3       2 root      148526  0.0  0.0     0 pool_workqueue_ [pool_workqueue_release]
+      4       2 root      148526  0.0  0.0     0 kworker/R-rcu_g [kworker/R-rcu_g]
+      5       2 root      148526  0.0  0.0     0 kworker/R-rcu_p [kworker/R-rcu_p]
+      6       2 root      148526  0.0  0.0     0 kworker/R-slub_ [kworker/R-slub_]
+      7       2 root      148526  0.0  0.0     0 kworker/R-netns [kworker/R-netns]
+     10       2 root      148526  0.0  0.0     0 kworker/0:0H-kb [kworker/0:0H-kblockd]
+     12       2 root      148526  0.0  0.0     0 kworker/R-mm_pe [kworker/R-mm_pe]
+     13       2 root      148526  0.0  0.0     0 rcu_tasks_rude_ [rcu_tasks_rude_kthread]
+     14       2 root      148526  0.0  0.0     0 rcu_tasks_trace [rcu_tasks_trace_kthread]
+     15       2 root      148526  0.0  0.0     0 ksoftirqd/0     [ksoftirqd/0]
+     16       2 root      148526  0.0  0.0     0 rcu_sched       [rcu_sched]
+     17       2 root      148526  0.0  0.0     0 migration/0     [migration/0]
+     18       2 root      148526  0.0  0.0     0 idle_inject/0   [idle_inject/0]
+     19       2 root      148526  0.0  0.0     0 cpuhp/0         [cpuhp/0]
+     20       2 root      148526  0.0  0.0     0 cpuhp/1         [cpuhp/1]
+     21       2 root      148526  0.0  0.0     0 idle_inject/1   [idle_inject/1]
+     22       2 root      148526  0.0  0.0     0 migration/1     [migration/1]
+     23       2 root      148526  0.0  0.0     0 ksoftirqd/1     [ksoftirqd/1]
+     25       2 root      148526  0.0  0.0     0 kworker/1:0H-ev [kworker/1:0H-events_highpri]
+     26       2 root      148526  0.0  0.0     0 cpuhp/2         [cpuhp/2]
+     27       2 root      148526  0.0  0.0     0 idle_inject/2   [idle_inject/2]
+     28       2 root      148526  0.0  0.0     0 migration/2     [migration/2]
+     29       2 root      148526  0.0  0.0     0 ksoftirqd/2     [ksoftirqd/2]
+     31       2 root      148526  0.0  0.0     0 kworker/2:0H-ev [kworker/2:0H-events_highpri]
+     32       2 root      148526  0.0  0.0     0 cpuhp/3         [cpuhp/3]
+     33       2 root      148526  0.0  0.0     0 idle_inject/3   [idle_inject/3]
+     34       2 root      148526  0.0  0.0     0 migration/3     [migration/3]
+     35       2 root      148526  0.0  0.0     0 ksoftirqd/3     [ksoftirqd/3]
+     37       2 root      148526  0.0  0.0     0 kworker/3:0H-ev [kworker/3:0H-events_highpri]
+     38       2 root      148526  0.0  0.0     0 kdevtmpfs       [kdevtmpfs]
+     39       2 root      148526  0.0  0.0     0 kworker/R-inet_ [kworker/R-inet_]
+     40       2 root      148526  0.0  0.0     0 kauditd         [kauditd]
+processes_end
+lamin_writer_lock_holder=0
+disk_begin
+Filesystem        1B-blocks         Used   Available Use% Mounted on
+/dev/root      520120602624 465324539904 54779285504  90% /
+/dev/root      520120602624 465324539904 54779285504  90% /
+disk_end
+ram_begin
+               total        used        free      shared  buff/cache   available
+Mem:     33653407744   372424704 30156480512      991232  3124502528 32793493504
+Swap:              0           0           0
+ram_end

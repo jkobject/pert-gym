@@ -1,0 +1,90 @@
+{
+  "evidence_kind": "pert-gym.sparse-zarr.eu-vm-benchmark-execution.v1",
+  "task_id": "t_661d549b",
+  "run_id": "t_661d549b-20260713T123439Z",
+  "prerequisites": {
+    "pr_50": {
+      "state": "MERGED",
+      "accepted_head": "6be5852570bca843aa4aae914730efe5b76c2916",
+      "merge_commit": "7dc490be524acf2b629c64a778808a7d121a3987"
+    },
+    "pr_51": {
+      "state": "MERGED",
+      "accepted_head": "fc6e77647a59ec634742db253ddd1a864a37d8bf",
+      "merge_commit": "7f2232216603c522cef0060cce3d40cd08c9c3a7"
+    }
+  },
+  "execution": {
+    "accepted_repo_head": "6be5852570bca843aa4aae914730efe5b76c2916",
+    "runner": "tools/pert_gym_vm_runner.py",
+    "benchmark": "tools/benchmark_sparse_zarr.py",
+    "host": "pert-gym-worker-eu",
+    "instance": "pert-gym-worker-eu",
+    "project": "jkobject-1549353370965",
+    "zone": "europe-west1-b",
+    "machine_type": "e2-highmem-4",
+    "billing_project": "jkobject-1549353370965",
+    "started_utc": "2026-07-13T12:34:39Z",
+    "finished_utc": "2026-07-13T12:34:59Z",
+    "runner_exit_code": 0,
+    "local_store_only": true,
+    "production_lamin_writes": 0,
+    "gcs_payload_scan": false,
+    "mac_benchmark_substituted": false
+  },
+  "safety_preflight": {
+    "tmux_sessions": 0,
+    "python_heavy_processes": 0,
+    "lamin_writer_lock_holder": 0,
+    "free_disk_bytes": 54779285504,
+    "available_memory_bytes": 32793493504,
+    "raw_log": "preflight.log"
+  },
+  "resource_postflight": {
+    "free_disk_bytes": 54761082880,
+    "available_memory_bytes": 28313075712,
+    "total_memory_bytes": 33653407744,
+    "raw_log": "postflight.log"
+  },
+  "results": {
+    "status": "PASS",
+    "case_count": 6,
+    "required_cases": [
+      "5000-csr",
+      "5000-csc",
+      "10000-csr",
+      "10000-csc",
+      "25000-csr",
+      "25000-csc"
+    ],
+    "all_matrix_parity": true,
+    "all_obs_parity": true,
+    "all_source_row_parity": true,
+    "total_wall_seconds": 19.895819328987272,
+    "machine_readable_cases": "benchmark.json"
+  },
+  "runner_state": {
+    "heartbeat": "heartbeat.json",
+    "checkpoint": "checkpoints/production.json",
+    "runner_log": "logs/runner.log",
+    "control_log": "control.log",
+    "verification": "verification.json"
+  },
+  "raw_paths": {
+    "local_copy": "/Users/jkobject/.openclaw/workspace/work/pert-gym/.worktrees/architecture-v3/artifacts/vm_evidence/t_661d549b-20260713T123439Z/t_661d549b-20260713T123439Z",
+    "vm_run": "/home/jkobject/work/benchmark-t_661d549b/artifacts/vm_runs/t_661d549b-20260713T123439Z",
+    "vm_control": "/home/jkobject/work/benchmark-controls/t_661d549b-20260713T123439Z"
+  },
+  "integrity": {
+    "benchmark_json_sha256": "ec6cde8f0a91d892cbfe1d4906d709992bee8d989e26ba2a17e423ccff6c646a",
+    "preflight_json_sha256": "6c7f2bf527d30648095844fefa56e2645b91e13db1a00ea2c5d28412e7ee56c0",
+    "heartbeat_json_sha256": "f1e8e1369947dd407c6088546afac20abbb3e53bb64c52cbf7b30e435d55358d",
+    "checkpoint_json_sha256": "ab087a5020ea358ac395fc65b2854a3b25edbd5e160adbd72df0f9f356946a86",
+    "runner_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sha256_manifest": "SHA256SUMS"
+  },
+  "final_vm_state": {
+    "status": "TERMINATED",
+    "last_stop_timestamp": "2026-07-13T05:37:10.110-07:00"
+  }
+}

@@ -1,0 +1,23 @@
+run_id=t_661d549b-20260713T123439Z
+utc_post=2026-07-13T12:34:59Z
+runner_exit_code=0
+hostname=pert-gym-worker-eu
+project=jkobject-1549353370965
+zone=europe-west1-b
+instance=pert-gym-worker-eu
+machine_type=e2-highmem-4
+tmux_begin
+no server running on /tmp/tmux-1001/default
+tmux_end
+python_pids=
+lamin_writer_lock_holder=0
+disk_begin
+Filesystem        1B-blocks         Used   Available Use% Mounted on
+/dev/root      520120602624 465342742528 54761082880  90% /
+/dev/root      520120602624 465342742528 54761082880  90% /
+disk_end
+ram_begin
+               total        used        free      shared  buff/cache   available
+Mem:     33653407744  4852830208 25657401344     1003520  3143176192 28313075712
+Swap:              0           0           0
+ram_end

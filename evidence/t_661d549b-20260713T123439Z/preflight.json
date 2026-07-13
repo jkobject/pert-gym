@@ -1,0 +1,9 @@
+{
+  "available_memory_bytes": 32779362304,
+  "billing_project": "jkobject-1549353370965",
+  "free_disk_bytes": 54779281408,
+  "hostname": "pert-gym-worker-eu",
+  "instance": "pert-gym-worker-eu",
+  "project": "jkobject-1549353370965",
+  "zone": "europe-west1-b"
+}

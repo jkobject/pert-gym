@@ -1,0 +1,10 @@
+{
+  "exit_code": 0,
+  "pid": 49480,
+  "resume_contract": "inspect checkpoint then rerun the approved command",
+  "run_id": "t_661d549b-20260713T123439Z",
+  "started_at": 1783946079.4269729,
+  "status": "completed",
+  "stdout_lines": 0,
+  "updated_at": 1783946099.4178739
+}
