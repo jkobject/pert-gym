@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
 
 import fsspec
+import h5py
 import numpy as np
 import pandas as pd
 import pytest
+from anndata import AnnData
 from scipy import sparse
 
 from pert_gym.gcs_native_sparse_zarr import (
@@ -16,6 +19,14 @@ from pert_gym.gcs_native_sparse_zarr import (
     register_gcs_prefix_with_lamin,
     write_gcs_native_sparse_revision,
 )
+
+TOOL_PATH = Path(__file__).parents[1] / "tools" / "migrate_gcs_native_sparse_zarr.py"
+TOOL_SPEC = importlib.util.spec_from_file_location(
+    "gcs_native_migration_tool", TOOL_PATH
+)
+assert TOOL_SPEC is not None and TOOL_SPEC.loader is not None
+gcs_native_migration_tool = importlib.util.module_from_spec(TOOL_SPEC)
+TOOL_SPEC.loader.exec_module(gcs_native_migration_tool)
 
 
 def source() -> tuple[sparse.csr_matrix, pd.DataFrame, pd.DataFrame]:
@@ -205,3 +216,202 @@ def test_remote_writer_rejects_invalid_or_ambiguous_source_row_bounds(
             source_row_start=row_start,
             source_row_end=row_end,
         )
+
+
+def test_generation_is_an_api_kwarg_never_part_of_the_gcs_object_key() -> None:
+    class RecordingFS:
+        def __init__(self) -> None:
+            self.info_calls: list[tuple[str, dict[str, object]]] = []
+            self.open_calls: list[tuple[str, str, dict[str, object]]] = []
+
+        def info(self, path: str, **kwargs: object) -> dict[str, str]:
+            self.info_calls.append((path, kwargs))
+            return {"generation": "123456"}
+
+        def open(self, path: str, mode: str, **kwargs: object) -> object:
+            self.open_calls.append((path, mode, kwargs))
+            return object()
+
+    fs = RecordingFS()
+    generation, handle = gcs_native_migration_tool.open_generation_pinned_source(
+        fs, "bucket/source.h5ad"
+    )
+
+    assert generation == "123456"
+    assert handle is not None
+    assert fs.info_calls == [
+        ("bucket/source.h5ad", {}),
+        ("bucket/source.h5ad", {"generation": "123456"}),
+    ]
+    assert fs.open_calls == [
+        (
+            "bucket/source.h5ad",
+            "rb",
+            {
+                "generation": "123456",
+                "block_size": 8 * 1024**2,
+                "cache_type": "readahead",
+            },
+        )
+    ]
+
+
+def test_generation_pinned_source_rejects_resolved_generation_drift() -> None:
+    class DriftingFS:
+        def info(self, _path: str, **kwargs: object) -> dict[str, str]:
+            return {"generation": "new" if kwargs else "old"}
+
+    with pytest.raises(RuntimeError, match="did not resolve requested generation"):
+        gcs_native_migration_tool.open_generation_pinned_source(
+            DriftingFS(), "bucket/source.h5ad"
+        )
+
+
+def test_bounded_obs_decode_never_reads_rows_outside_requested_window(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "source.h5ad"
+    obs = pd.DataFrame(
+        {
+            "number": np.arange(8),
+            "category": pd.Categorical(["a", "b"] * 4, ordered=True),
+        },
+        index=pd.Index([f"cell-{row}" for row in range(8)], name="cell_id"),
+    )
+    AnnData(X=sparse.eye(8, format="csr"), obs=obs).write_h5ad(path)
+    reads: dict[str, list[object]] = {}
+    original_getitem = h5py.Dataset.__getitem__
+
+    def record_getitem(dataset: h5py.Dataset, selection: object) -> object:
+        if dataset.name in {"/obs/cell_id", "/obs/number", "/obs/category/codes"}:
+            reads.setdefault(dataset.name, []).append(selection)
+        return original_getitem(dataset, selection)
+
+    monkeypatch.setattr(h5py.Dataset, "__getitem__", record_getitem)
+    with h5py.File(path, "r") as h5:
+        result = gcs_native_migration_tool._read_h5ad_dataframe_rows(
+            h5["obs"], row_start=2, row_end=5
+        )
+
+    pd.testing.assert_frame_equal(result, obs.iloc[2:5])
+    assert reads == {
+        "/obs/cell_id": [slice(2, 5, None)],
+        "/obs/number": [slice(2, 5, None)],
+        "/obs/category/codes": [slice(2, 5, None)],
+    }
+
+
+def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    events: list[str] = []
+    held: set[str] = set()
+
+    class Lock:
+        def __init__(self, name: str) -> None:
+            self.name = name
+
+        def __enter__(self) -> None:
+            held.add(self.name)
+            events.append(f"enter:{self.name}")
+
+        def __exit__(self, *_: object) -> None:
+            events.append(f"exit:{self.name}")
+            held.remove(self.name)
+
+    class Handle:
+        def __enter__(self) -> object:
+            return object()
+
+        def __exit__(self, *_: object) -> None:
+            return None
+
+    class H5:
+        def __enter__(self) -> dict[str, object]:
+            return {"obs": object(), "var": object()}
+
+        def __exit__(self, *_: object) -> None:
+            return None
+
+    class Metrics:
+        __dict__ = {"chunk_count": 1}
+
+    args = type(
+        "Args",
+        (),
+        {
+            "cache_cap_gib": 1.0,
+            "max_rss_gib": 1.0,
+            "row_start": 0,
+            "row_end": 1,
+            "ingestion_run_id": "test-run",
+            "source_gcs_uri": "gs://bucket/source.h5ad",
+            "staging_gcs_prefix": "gs://bucket/staging",
+            "logical_key": "family/example",
+            "revision": "r1",
+            "schema_fingerprint": "schema",
+            "cache_dir": tmp_path / "cache",
+            "min_rows": 1,
+            "max_rows": 1,
+            "promote": True,
+            "register_lamin_prefix": False,
+        },
+    )()
+    capacity = type(
+        "Capacity", (), {"hostname": "host", "project": "project", "zone": "zone"}
+    )()
+    monkeypatch.setattr(gcs_native_migration_tool, "parse_args", lambda: args)
+    monkeypatch.setattr(gcs_native_migration_tool, "preflight", lambda: capacity)
+    monkeypatch.setattr(
+        gcs_native_migration_tool, "vm_global_lamin_writer_lock_path", lambda: "global"
+    )
+    monkeypatch.setattr(
+        gcs_native_migration_tool, "legacy_lamin_writer_lock_paths", lambda: ("legacy",)
+    )
+    monkeypatch.setattr(
+        gcs_native_migration_tool,
+        "lamin_writer_lock",
+        lambda path, *_args, **_kwargs: Lock(path),
+    )
+    monkeypatch.setattr(
+        gcs_native_migration_tool, "requester_pays_gcs_filesystem", lambda _: object()
+    )
+    monkeypatch.setattr(
+        gcs_native_migration_tool,
+        "open_generation_pinned_source",
+        lambda *_args: ("123", Handle()),
+    )
+    monkeypatch.setattr(gcs_native_migration_tool.h5py, "File", lambda *_args: H5())
+    monkeypatch.setattr(
+        gcs_native_migration_tool, "GCSH5ADCSR", lambda *_args, **_kwargs: object()
+    )
+    monkeypatch.setattr(
+        gcs_native_migration_tool, "read_elem", lambda _: pd.DataFrame(index=["g"])
+    )
+    monkeypatch.setattr(
+        gcs_native_migration_tool,
+        "_read_h5ad_dataframe_rows",
+        lambda *_args, **_kwargs: pd.DataFrame(index=["cell"]),
+    )
+    monkeypatch.setattr(
+        gcs_native_migration_tool,
+        "write_gcs_native_sparse_revision",
+        lambda **_kwargs: ({"candidate_prefix": "bucket/staging/candidate"}, Metrics()),
+    )
+
+    def promote(**_kwargs: object) -> dict[str, str]:
+        assert held == {"global", "legacy"}
+        events.append("remote:promotion")
+        return {"promotion_key": "promotion"}
+
+    monkeypatch.setattr(
+        gcs_native_migration_tool, "promote_gcs_native_revision", promote
+    )
+    assert gcs_native_migration_tool.main() == 0
+    assert events == [
+        "enter:global",
+        "enter:legacy",
+        "remote:promotion",
+        "exit:legacy",
+        "exit:global",
+    ]
