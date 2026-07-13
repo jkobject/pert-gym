@@ -17,7 +17,7 @@ import shutil
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence, cast
 
 import fsspec
 import numpy as np
@@ -45,6 +45,10 @@ from pert_gym.sparse_zarr_contract import adaptive_target_rows, balanced_row_chu
 DEFAULT_CACHE_CAP_BYTES = 20 * 1024**3
 DEFAULT_CACHE_SAFETY_RESERVE_BYTES = 20 * 1024**3
 FORMAT = "pert-gym.gcs-native-logical-sparse-zarr/v1"
+GIB = 1024**3
+PRODUCTION_BLOCK_MIN_BYTES = 2 * GIB
+PRODUCTION_BLOCK_TARGET_BYTES = 5 * GIB // 2
+PRODUCTION_BLOCK_MAX_BYTES = 3 * GIB
 
 
 class GCSNativeWriterError(RuntimeError):
@@ -200,6 +204,59 @@ def _read_parquet(fs: Any, key: str) -> pd.DataFrame:
     return pd.read_parquet(io.BytesIO(_read_bytes(fs, key)))
 
 
+def plan_production_blocks(
+    compressed_chunk_bytes: Sequence[int],
+    *,
+    min_bytes: int = PRODUCTION_BLOCK_MIN_BYTES,
+    target_bytes: int = PRODUCTION_BLOCK_TARGET_BYTES,
+    max_bytes: int = PRODUCTION_BLOCK_MAX_BYTES,
+) -> tuple[tuple[int, int], ...]:
+    """Group measured compressed physical chunks into bounded logical blocks."""
+    if min_bytes <= 0 or not min_bytes <= target_bytes <= max_bytes:
+        raise ValueError("block policy must satisfy 0 < min <= target <= max")
+    sizes = tuple(compressed_chunk_bytes)
+    if any(
+        not isinstance(value, int) or isinstance(value, bool) or value < 0
+        for value in sizes
+    ):
+        raise ValueError("compressed chunk sizes must be non-negative integers")
+    if not sizes:
+        return ()
+    if any(value > max_bytes for value in sizes):
+        raise ValueError("one measured chunk exceeds the production block ceiling")
+    if sum(sizes) <= max_bytes:
+        return ((0, len(sizes)),)
+
+    suffix_bytes = [0] * (len(sizes) + 1)
+    for index in range(len(sizes) - 1, -1, -1):
+        suffix_bytes[index] = suffix_bytes[index + 1] + sizes[index]
+    result: list[tuple[int, int]] = []
+    start = 0
+    while start < len(sizes):
+        end = start
+        size = 0
+        while end < len(sizes) and size + sizes[end] <= target_bytes:
+            size += sizes[end]
+            end += 1
+        if end == start:
+            size = sizes[end]
+            end += 1
+        while size < min_bytes and end < len(sizes) and size + sizes[end] <= max_bytes:
+            size += sizes[end]
+            end += 1
+        remaining = suffix_bytes[end]
+        if remaining and remaining < min_bytes and size + remaining <= max_bytes:
+            end = len(sizes)
+            size += remaining
+        if end < len(sizes) and size < min_bytes:
+            raise ValueError(
+                "measured chunk sizes cannot satisfy production block policy"
+            )
+        result.append((start, end))
+        start = end
+    return tuple(result)
+
+
 def _checkpoint_identity(
     *,
     logical_key: str,
@@ -234,19 +291,23 @@ def _load_plan(
     key: str,
     identity: Mapping[str, object],
     chunks: tuple[tuple[int, int], ...],
+    production_block_policy: Mapping[str, int],
 ) -> dict[str, object]:
     if not fs.exists(key):
         plan: dict[str, object] = {
             "format": FORMAT,
             "identity": dict(identity),
             "planned_chunks": [list(x) for x in chunks],
+            "production_block_policy": dict(production_block_policy),
         }
         _write_exclusive(fs, key, _json_bytes(plan))
         return plan
     plan = json.loads(_read_bytes(fs, key))
-    if plan.get("identity") != dict(identity) or plan.get("planned_chunks") != [
-        list(x) for x in chunks
-    ]:
+    if (
+        plan.get("identity") != dict(identity)
+        or plan.get("planned_chunks") != [list(x) for x in chunks]
+        or plan.get("production_block_policy") != dict(production_block_policy)
+    ):
         raise GCSNativeWriterError(
             "remote plan identity mismatch; refusing resume drift"
         )
@@ -275,6 +336,9 @@ def write_gcs_native_sparse_revision(
     min_rows: int = DEFAULT_MIN_ROWS,
     max_rows: int = DEFAULT_MAX_ROWS,
     stop_after_chunks: int | None = None,
+    production_block_min_bytes: int = PRODUCTION_BLOCK_MIN_BYTES,
+    production_block_target_bytes: int = PRODUCTION_BLOCK_TARGET_BYTES,
+    production_block_max_bytes: int = PRODUCTION_BLOCK_MAX_BYTES,
 ) -> tuple[dict[str, object], GCSNativeMetrics]:
     """Write bounded CSR/CSC tranches directly to a versioned temporary GCS prefix.
 
@@ -336,7 +400,12 @@ def write_gcs_native_sparse_revision(
         var=var,
         schema_fingerprint=schema_fingerprint,
     )
-    _load_plan(fs, plan_key, identity, chunks)
+    production_block_policy = {
+        "minimum_bytes": production_block_min_bytes,
+        "target_bytes": production_block_target_bytes,
+        "maximum_bytes": production_block_max_bytes,
+    }
+    _load_plan(fs, plan_key, identity, chunks, production_block_policy)
     if fs.exists(_path(candidate_prefix, "manifest.json")):
         raise GCSNativeWriterError(
             "remote candidate is already completed; choose a new revision"
@@ -367,10 +436,12 @@ def write_gcs_native_sparse_revision(
                 raise GCSNativeWriterError(
                     f"orphan or partial remote chunk {index}; refusing overwrite"
                 )
-            bytes_written += _write_remote_matrix(
+            matrix_compressed_bytes = _write_remote_matrix(
                 fs, matrix_key, source_chunk, sparse_format
             )
+            bytes_written += matrix_compressed_bytes
             obs_object = _write_parquet(fs, obs_key, source_obs)
+            bytes_written += int(obs_object["size"])
             remote = _read_remote_matrix(fs, matrix_key, sparse_format)
             remote_obs = _read_parquet(fs, obs_key)
             _assert_source_readback_parity(source_chunk, remote, source_obs, remote_obs)
@@ -389,6 +460,8 @@ def write_gcs_native_sparse_revision(
                 "matrix_key": matrix_key,
                 "obs_key": obs_key,
                 "obs_generation": obs_object["generation"],
+                "compressed_bytes": matrix_compressed_bytes,
+                "obs_compressed_bytes": int(obs_object["size"]),
                 "checksums": checksums,
                 "source_generation": source_generation,
             }
@@ -402,6 +475,15 @@ def write_gcs_native_sparse_revision(
         record = json.loads(_read_bytes(fs, record_key))
         if record.get("source_generation") != source_generation:
             raise GCSNativeWriterError(f"chunk source generation mismatch: {index}")
+        measured_bytes = record.get("compressed_bytes")
+        if (
+            not isinstance(measured_bytes, int)
+            or isinstance(measured_bytes, bool)
+            or measured_bytes < 0
+        ):
+            raise GCSNativeWriterError(
+                f"chunk compressed byte measurement missing: {index}"
+            )
         records.append(record)
     var_key = _path(candidate_prefix, "var.parquet")
     if fs.exists(var_key):
@@ -415,6 +497,33 @@ def write_gcs_native_sparse_revision(
     ) != shared_var_identity(var, schema_fingerprint=schema_fingerprint):
         raise GCSNativeWriterError("remote shared var readback identity mismatch")
     var_identity = shared_var_identity(var, schema_fingerprint=schema_fingerprint)
+    var_manifest: dict[str, object] = {
+        "key": var_key,
+        "generation": var_object["generation"],
+        "index_sha256": var_identity.index_sha256,
+        "frame_sha256": var_identity.frame_sha256,
+        "schema_fingerprint": var_identity.schema_fingerprint,
+    }
+    block_ranges = plan_production_blocks(
+        [cast(int, record["compressed_bytes"]) for record in records],
+        min_bytes=production_block_min_bytes,
+        target_bytes=production_block_target_bytes,
+        max_bytes=production_block_max_bytes,
+    )
+    production_blocks = [
+        {
+            "index": block_index,
+            "start": records[first]["start"],
+            "end": records[last - 1]["end"],
+            "chunk_indexes": list(range(first, last)),
+            "compressed_bytes": sum(
+                cast(int, records[index]["compressed_bytes"])
+                for index in range(first, last)
+            ),
+            "var": dict(var_manifest),
+        }
+        for block_index, (first, last) in enumerate(block_ranges)
+    ]
     manifest: dict[str, object] = {
         "format": FORMAT,
         "logical_key": logical_key,
@@ -431,13 +540,9 @@ def write_gcs_native_sparse_revision(
         "sparse_format": sparse_format,
         "ingestion_run_id": ingestion_run_id,
         "chunks": records,
-        "var": {
-            "key": var_key,
-            "generation": var_object["generation"],
-            "index_sha256": var_identity.index_sha256,
-            "frame_sha256": var_identity.frame_sha256,
-            "schema_fingerprint": var_identity.schema_fingerprint,
-        },
+        "production_block_policy": production_block_policy,
+        "blocks": production_blocks,
+        "var": var_manifest,
     }
     manifest_key = _path(candidate_prefix, "manifest.json")
     manifest_object = _write_exclusive(fs, manifest_key, _json_bytes(manifest))

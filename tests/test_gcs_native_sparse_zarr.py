@@ -38,6 +38,7 @@ TOOL_SPEC.loader.exec_module(gcs_native_migration_tool)
 
 class NativeChunk(TypedDict):
     checksums: dict[str, str]
+    compressed_bytes: int
     end: int
     source_generation: str
     start: int
@@ -57,6 +58,7 @@ class NativeVar(TypedDict):
 
 
 class NativeManifest(TypedDict):
+    blocks: list[dict[str, object]]
     chunks: list[NativeChunk]
     source: NativeSource
     var: NativeVar
@@ -74,6 +76,9 @@ class WriteOverrides(TypedDict, total=False):
     source_row_end: int | None
     source_row_start: int | None
     stop_after_chunks: int | None
+    production_block_max_bytes: int
+    production_block_min_bytes: int
+    production_block_target_bytes: int
 
 
 class WriteArguments(TypedDict):
@@ -120,7 +125,6 @@ def memory_filesystem() -> MemoryFileSystem:
     return cast(MemoryFileSystem, fs)
 
 
-
 def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -140,30 +144,35 @@ def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
         "version_aware": True,
     }
 
+
 def write(
     fs: MemoryFileSystem, cache_dir: Path, **changes: Unpack[WriteOverrides]
 ) -> tuple[NativeManifest, GCSNativeMetrics]:
     matrix, obs, var = source()
-    arguments = cast(WriteArguments, {
-        "fs": fs,
-        "staging_prefix": "bucket/staging",
-        "logical_key": "family/example",
-        "revision": "r1",
-        "matrix": matrix,
-        "obs": obs,
-        "var": var,
-        "source_uri": "gs://source-bucket/immutable.h5ad",
-        "source_generation": "12345",
-        "source_row_start": 0,
-        "source_row_end": 6,
-        "schema_fingerprint": "schema-v1",
-        "ingestion_run_id": "test-run",
-        "cache_dir": cache_dir,
-        "cache_cap_bytes": 1024,
-        "cache_safety_reserve_bytes": 0,
-        "min_rows": 1,
-        "max_rows": 2,
-    } | changes)
+    arguments = cast(
+        WriteArguments,
+        {
+            "fs": fs,
+            "staging_prefix": "bucket/staging",
+            "logical_key": "family/example",
+            "revision": "r1",
+            "matrix": matrix,
+            "obs": obs,
+            "var": var,
+            "source_uri": "gs://source-bucket/immutable.h5ad",
+            "source_generation": "12345",
+            "source_row_start": 0,
+            "source_row_end": 6,
+            "schema_fingerprint": "schema-v1",
+            "ingestion_run_id": "test-run",
+            "cache_dir": cache_dir,
+            "cache_cap_bytes": 1024,
+            "cache_safety_reserve_bytes": 0,
+            "min_rows": 1,
+            "max_rows": 2,
+        }
+        | changes,
+    )
     manifest, metrics = write_gcs_native_sparse_revision(**arguments)
     return cast(NativeManifest, manifest), metrics
 
@@ -190,13 +199,16 @@ def test_remote_writer_resumes_direct_object_store_chunks_and_promotes_last(
     ] * 3
     assert all(record["checksums"]["data_sha256"] for record in manifest["chunks"])
 
-    marker = cast(PromotionMarker, promote_gcs_native_revision(
-        fs=fs,
-        staging_prefix="bucket/staging",
-        logical_key="family/example",
-        revision="r1",
-        manifest=manifest,
-    ))
+    marker = cast(
+        PromotionMarker,
+        promote_gcs_native_revision(
+            fs=fs,
+            staging_prefix="bucket/staging",
+            logical_key="family/example",
+            revision="r1",
+            manifest=manifest,
+        ),
+    )
     assert marker["promotion_key"].endswith("promotions/r1.json")
     assert json.loads(fs.cat(marker["promotion_key"]))["manifest_key"].endswith(
         "manifest.json"
@@ -216,6 +228,61 @@ def test_remote_manifest_exposes_one_full_hash_shared_var(tmp_path: Path) -> Non
         "frame_sha256": identity.frame_sha256,
         "schema_fingerprint": "schema-v1",
     }
+
+
+def test_writer_measures_and_enforces_production_blocks_bound_to_shared_var(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import pert_gym.gcs_native_sparse_zarr as writer
+
+    fs = memory_filesystem()
+    original = writer._write_remote_matrix
+
+    def measured_matrix(fs: Any, key: str, matrix: object, sparse_format: str) -> int:
+        original(fs, key, cast(Any, matrix), sparse_format)
+        return 100
+
+    monkeypatch.setattr(writer, "_write_remote_matrix", measured_matrix)
+    manifest, _ = write(
+        fs,
+        tmp_path / "cache",
+        production_block_min_bytes=150,
+        production_block_target_bytes=200,
+        production_block_max_bytes=250,
+    )
+
+    assert [chunk["compressed_bytes"] for chunk in manifest["chunks"]] == [100] * 3
+    assert [block["compressed_bytes"] for block in manifest["blocks"]] == [200, 100]
+    assert [block["chunk_indexes"] for block in manifest["blocks"]] == [[0, 1], [2]]
+    assert [(block["start"], block["end"]) for block in manifest["blocks"]] == [
+        (0, 4),
+        (4, 6),
+    ]
+    assert all(block["var"] == manifest["var"] for block in manifest["blocks"])
+
+
+def test_writer_rejects_measured_chunk_above_production_block_ceiling(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import pert_gym.gcs_native_sparse_zarr as writer
+
+    fs = memory_filesystem()
+    original = writer._write_remote_matrix
+
+    def oversized_matrix(fs: Any, key: str, matrix: object, sparse_format: str) -> int:
+        original(fs, key, cast(Any, matrix), sparse_format)
+        return 251
+
+    monkeypatch.setattr(writer, "_write_remote_matrix", oversized_matrix)
+
+    with pytest.raises(ValueError, match="exceeds the production block ceiling"):
+        write(
+            fs,
+            tmp_path / "cache",
+            production_block_min_bytes=150,
+            production_block_target_bytes=200,
+            production_block_max_bytes=250,
+        )
 
 
 def test_remote_writer_rejects_resume_source_generation_drift_and_orphan(
@@ -513,7 +580,9 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
         gcs_native_migration_tool, "GCSH5ADCSR", lambda *_args, **_kwargs: object()
     )
     monkeypatch.setattr(
-        gcs_native_migration_tool, "read_elem", lambda _: pd.DataFrame(index=pd.Index(["g"]))
+        gcs_native_migration_tool,
+        "read_elem",
+        lambda _: pd.DataFrame(index=pd.Index(["g"])),
     )
     monkeypatch.setattr(
         gcs_native_migration_tool,

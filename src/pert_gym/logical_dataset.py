@@ -15,7 +15,7 @@ import json
 import posixpath
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterator, Mapping, Sequence, cast
+from typing import Any, Iterator, Mapping, Sequence, TypeAlias, cast
 
 import anndata as ad
 import fsspec
@@ -24,7 +24,16 @@ import pandas as pd
 import zarr
 from scipy import sparse
 
-from pert_gym.gcs_native_sparse_zarr import FORMAT as GCS_NATIVE_FORMAT
+from pert_gym.gcs_native_sparse_zarr import (
+    FORMAT as GCS_NATIVE_FORMAT,
+)
+from pert_gym.gcs_native_sparse_zarr import (
+    GIB,
+    PRODUCTION_BLOCK_MAX_BYTES,
+    PRODUCTION_BLOCK_MIN_BYTES,
+    PRODUCTION_BLOCK_TARGET_BYTES,
+    plan_production_blocks,
+)
 from pert_gym.logical_sparse_zarr import (
     _matrix_components,
     _sha256_array,
@@ -37,12 +46,7 @@ from pert_gym.sparse_zarr_contract import (
     load_compatible_surface,
 )
 
-GIB = 1024**3
-PRODUCTION_BLOCK_MIN_BYTES = 2 * GIB
-PRODUCTION_BLOCK_TARGET_BYTES = 5 * GIB // 2
-PRODUCTION_BLOCK_MAX_BYTES = 3 * GIB
-
-CompressedMatrix = sparse.csr_matrix | sparse.csc_matrix
+CompressedMatrix: TypeAlias = sparse.csr_matrix | sparse.csc_matrix
 
 
 @dataclass(frozen=True)
@@ -61,6 +65,7 @@ class LogicalBatch:
 @dataclass(frozen=True)
 class _BlockSpec:
     index: int
+    production_block_index: int
     start: int
     end: int
     matrix_key: str
@@ -134,9 +139,13 @@ class LogicalDataset:
         self._surface: LogicalSparseSurface | None = None
 
         if self._gcs_native:
-            self._shape, self._nnz, self._sparse_format, self._blocks = (
-                _normalize_gcs_native_manifest(self._manifest)
-            )
+            (
+                self._shape,
+                self._nnz,
+                self._sparse_format,
+                self._blocks,
+                self._production_block_count,
+            ) = _normalize_gcs_native_manifest(self._manifest)
             var = _require_mapping(self._manifest, "var")
             self._var_key = _nonempty_string(var.get("key"), "var.key")
             self._var_generation = str(var.get("generation", ""))
@@ -152,6 +161,7 @@ class LogicalDataset:
             self._blocks = tuple(
                 _BlockSpec(
                     index=index,
+                    production_block_index=index,
                     start=chunk.start,
                     end=chunk.end,
                     matrix_key=chunk.key,
@@ -160,6 +170,7 @@ class LogicalDataset:
                 )
                 for index, chunk in enumerate(self._surface.chunks)
             )
+            self._production_block_count = len(self._blocks)
             self._var_key = str(self._surface.shared_var["key"])
             self._var_generation = ""
             if self._surface.format == SURFACE_FORMAT:
@@ -189,7 +200,7 @@ class LogicalDataset:
 
     @property
     def block_count(self) -> int:
-        return len(self._blocks)
+        return self._production_block_count
 
     @property
     def var(self) -> pd.DataFrame:
@@ -244,12 +255,15 @@ class LogicalDataset:
             f"shared var {self._var_key!r} is not reachable from manifest root {self._root!r}"
         )
 
-    def _read_block(self, block: _BlockSpec) -> tuple[CompressedMatrix, pd.DataFrame]:
+    def _read_block(
+        self, block: _BlockSpec, *, local_start: int, local_end: int
+    ) -> tuple[CompressedMatrix, pd.DataFrame]:
         if self._legacy:
             matrix = _read_legacy_matrix(
                 self._fs,
                 self._resolve_key(block.matrix_key),
                 sparse_format=self.sparse_format,
+                rows=slice(local_start, local_end),
             )
         else:
             matrix = _read_zarr_matrix(
@@ -271,8 +285,12 @@ class LogicalDataset:
             self._resolve_key(block.obs_key),
             generation=block.obs_generation,
         )
-        expected_shape = (block.end - block.start, self.shape[1])
-        if matrix.shape != expected_shape or len(obs) != expected_shape[0]:
+        expected_matrix_rows = (
+            local_end - local_start if self._legacy else block.end - block.start
+        )
+        if matrix.shape != (expected_matrix_rows, self.shape[1]) or len(obs) != (
+            block.end - block.start
+        ):
             raise ValueError(f"block {block.index} matrix/obs shape mismatch")
         return matrix, obs
 
@@ -284,23 +302,29 @@ class LogicalDataset:
     ) -> Iterator[LogicalBatch]:
         """Yield selected physical blocks, each bounded to the requested row slice."""
         start, end = _normalize_rows(rows, self.shape[0])
-        selected = _normalize_block_indexes(blocks, len(self._blocks))
+        selected = _normalize_block_indexes(blocks, self.block_count)
         for block in self._blocks:
-            if block.index not in selected:
+            if block.production_block_index not in selected:
                 continue
             overlap_start = max(start, block.start)
             overlap_end = min(end, block.end)
             if overlap_start >= overlap_end:
                 continue
-            matrix, obs = self._read_block(block)
             local_start = overlap_start - block.start
             local_end = overlap_end - block.start
+            matrix, obs = self._read_block(
+                block, local_start=local_start, local_end=local_end
+            )
             yield LogicalBatch(
                 dataset=self.name,
                 start=overlap_start,
                 end=overlap_end,
-                block_indexes=(block.index,),
-                X=matrix[local_start:local_end].copy(),
+                block_indexes=(block.production_block_index,),
+                X=(
+                    matrix.copy()
+                    if self._legacy
+                    else matrix[local_start:local_end].copy()
+                ),
                 obs=obs.iloc[local_start:local_end].copy(),
                 var=self.var,
             )
@@ -312,6 +336,20 @@ class LogicalDataset:
         blocks: Sequence[int] | None = None,
     ) -> LogicalBatch:
         """Materialize only selected blocks/slices, never the unselected dataset."""
+        if rows is None and blocks is None:
+            raise ValueError(
+                "read() requires a bounded row or block selection; use iter_blocks() to stream the dataset"
+            )
+        row_start, row_end = _normalize_rows(rows, self.shape[0])
+        selected_blocks = _normalize_block_indexes(blocks, self.block_count)
+        if (
+            self.block_count > 1
+            and (row_start, row_end) == (0, self.shape[0])
+            and selected_blocks == set(range(self.block_count))
+        ):
+            raise ValueError(
+                "full-dataset materialization is forbidden; use iter_blocks() to stream logical blocks"
+            )
         batches = list(self.iter_blocks(blocks=blocks, rows=rows))
         constructor = (
             sparse.csr_matrix if self.sparse_format == "csr" else sparse.csc_matrix
@@ -331,7 +369,9 @@ class LogicalDataset:
             start=start,
             end=end,
             block_indexes=tuple(
-                index for batch in batches for index in batch.block_indexes
+                dict.fromkeys(
+                    index for batch in batches for index in batch.block_indexes
+                )
             ),
             X=matrix,
             obs=obs,
@@ -345,11 +385,15 @@ class LogicalDataset:
         blocks: Sequence[int] | None = None,
     ) -> pd.DataFrame:
         """Read bounded obs sidecars without materializing matrix payloads."""
+        if rows is None and blocks is None:
+            raise ValueError(
+                "read_obs() requires a bounded row or block selection; stream explicit logical blocks instead"
+            )
         start, end = _normalize_rows(rows, self.shape[0])
-        selected = _normalize_block_indexes(blocks, len(self._blocks))
+        selected = _normalize_block_indexes(blocks, self.block_count)
         frames: list[pd.DataFrame] = []
         for block in self._blocks:
-            if block.index not in selected:
+            if block.production_block_index not in selected:
                 continue
             overlap_start = max(start, block.start)
             overlap_end = min(end, block.end)
@@ -464,66 +508,9 @@ def open_logical_dataset(
     )
 
 
-def plan_production_blocks(
-    row_payload_bytes: Sequence[int],
-    *,
-    min_bytes: int = PRODUCTION_BLOCK_MIN_BYTES,
-    target_bytes: int = PRODUCTION_BLOCK_TARGET_BYTES,
-    max_bytes: int = PRODUCTION_BLOCK_MAX_BYTES,
-) -> tuple[tuple[int, int], ...]:
-    """Group exact per-row sparse bytes into 2–3 GiB blocks plus one final tail.
-
-    ``row_payload_bytes`` should include each row's data/index bytes and its share
-    of indptr overhead. A dataset whose complete sparse payload is at most 3 GiB
-    is genuinely small and remains one block. No non-final undersized block is
-    emitted; a row larger than the 3 GiB ceiling fails closed.
-    """
-    if min_bytes <= 0 or not min_bytes <= target_bytes <= max_bytes:
-        raise ValueError("block policy must satisfy 0 < min <= target <= max")
-    rows = tuple(row_payload_bytes)
-    if any(
-        not isinstance(value, int) or isinstance(value, bool) or value < 0
-        for value in rows
-    ):
-        raise ValueError("row payload sizes must be non-negative integers")
-    if not rows:
-        return ()
-    if any(value > max_bytes for value in rows):
-        raise ValueError("one sparse row exceeds the production block ceiling")
-    if sum(rows) <= max_bytes:
-        return ((0, len(rows)),)
-    suffix_bytes = [0] * (len(rows) + 1)
-    for index in range(len(rows) - 1, -1, -1):
-        suffix_bytes[index] = suffix_bytes[index + 1] + rows[index]
-
-    result: list[tuple[int, int]] = []
-    start = 0
-    while start < len(rows):
-        end = start
-        size = 0
-        while end < len(rows) and size + rows[end] <= target_bytes:
-            size += rows[end]
-            end += 1
-        if end == start:
-            size = rows[end]
-            end += 1
-        while size < min_bytes and end < len(rows) and size + rows[end] <= max_bytes:
-            size += rows[end]
-            end += 1
-        remaining = suffix_bytes[end]
-        if remaining and remaining < min_bytes and size + remaining <= max_bytes:
-            end = len(rows)
-            size += remaining
-        if end < len(rows) and size < min_bytes:
-            raise ValueError("row sizes cannot satisfy the production block policy")
-        result.append((start, end))
-        start = end
-    return tuple(result)
-
-
 def _normalize_gcs_native_manifest(
     manifest: Mapping[str, Any],
-) -> tuple[tuple[int, int], int, str, tuple[_BlockSpec, ...]]:
+) -> tuple[tuple[int, int], int, str, tuple[_BlockSpec, ...], int]:
     if manifest.get("format") != GCS_NATIVE_FORMAT:
         raise ValueError("unsupported GCS-native format")
     shape_raw = manifest.get("shape")
@@ -545,7 +532,7 @@ def _normalize_gcs_native_manifest(
     raw_chunks = manifest.get("chunks")
     if not isinstance(raw_chunks, list):
         raise ValueError("GCS-native chunks must be a list")
-    blocks: list[_BlockSpec] = []
+    chunks_without_blocks: list[dict[str, object]] = []
     expected = source_start
     for index, raw in enumerate(raw_chunks):
         if not isinstance(raw, Mapping):
@@ -555,24 +542,125 @@ def _normalize_gcs_native_manifest(
         if start != expected or end <= start:
             raise ValueError("GCS-native chunks must contiguously tile source rows")
         checksums = _require_mapping(raw, "checksums")
-        blocks.append(
-            _BlockSpec(
-                index=index,
-                start=start - source_start,
-                end=end - source_start,
-                matrix_key=_nonempty_string(raw.get("matrix_key"), "matrix_key"),
-                obs_key=_nonempty_string(raw.get("obs_key"), "obs_key"),
-                checksums={
+        compressed_bytes = _nonnegative_int(
+            raw.get("compressed_bytes"), f"chunks[{index}].compressed_bytes"
+        )
+        chunks_without_blocks.append(
+            {
+                "index": index,
+                "start": start - source_start,
+                "end": end - source_start,
+                "matrix_key": _nonempty_string(raw.get("matrix_key"), "matrix_key"),
+                "obs_key": _nonempty_string(raw.get("obs_key"), "obs_key"),
+                "checksums": {
                     key: _nonempty_string(checksums.get(key), f"checksums.{key}")
                     for key in ("data_sha256", "indices_sha256", "indptr_sha256")
                 },
-                obs_generation=str(raw.get("obs_generation", "")),
-            )
+                "obs_generation": str(raw.get("obs_generation", "")),
+                "compressed_bytes": compressed_bytes,
+            }
         )
         expected = end
-    if expected != source_end or (shape[0] and not blocks):
+    if expected != source_end or (shape[0] and not chunks_without_blocks):
         raise ValueError("GCS-native chunk denominator mismatch")
-    return shape, nnz, sparse_format, tuple(blocks)
+    raw_blocks = manifest.get("blocks")
+    if not isinstance(raw_blocks, list):
+        raise ValueError("GCS-native blocks must be a list")
+    policy = _require_mapping(manifest, "production_block_policy")
+    minimum_bytes = _nonnegative_int(
+        policy.get("minimum_bytes"), "production_block_policy.minimum_bytes"
+    )
+    target_bytes = _nonnegative_int(
+        policy.get("target_bytes"), "production_block_policy.target_bytes"
+    )
+    maximum_bytes = _nonnegative_int(
+        policy.get("maximum_bytes"), "production_block_policy.maximum_bytes"
+    )
+    try:
+        expected_block_ranges = plan_production_blocks(
+            [
+                _nonnegative_int(
+                    chunk["compressed_bytes"], f"chunks[{index}].compressed_bytes"
+                )
+                for index, chunk in enumerate(chunks_without_blocks)
+            ],
+            min_bytes=minimum_bytes,
+            target_bytes=target_bytes,
+            max_bytes=maximum_bytes,
+        )
+    except ValueError as error:
+        raise ValueError(
+            "GCS-native production block layout violates measured policy"
+        ) from error
+    observed_block_ranges: list[tuple[int, int]] = []
+    for raw_block in raw_blocks:
+        if not isinstance(raw_block, Mapping):
+            raise ValueError("GCS-native blocks must contain objects")
+        indexes = raw_block.get("chunk_indexes")
+        if not isinstance(indexes, list) or not indexes:
+            raise ValueError("GCS-native block chunk_indexes must be non-empty")
+        observed_block_ranges.append((indexes[0], indexes[-1] + 1))
+    if tuple(observed_block_ranges) != expected_block_ranges:
+        raise ValueError("GCS-native production block layout violates measured policy")
+    manifest_var = _require_mapping(manifest, "var")
+    physical_to_production: dict[int, int] = {}
+    expected_chunk_index = 0
+    for block_index, raw_block in enumerate(raw_blocks):
+        if not isinstance(raw_block, Mapping):
+            raise ValueError(f"blocks[{block_index}] must be an object")
+        if raw_block.get("index") != block_index:
+            raise ValueError("GCS-native block indexes must be contiguous")
+        chunk_indexes = raw_block.get("chunk_indexes")
+        if not isinstance(chunk_indexes, list) or not chunk_indexes:
+            raise ValueError("GCS-native block chunk_indexes must be non-empty")
+        expected_indexes = list(
+            range(expected_chunk_index, expected_chunk_index + len(chunk_indexes))
+        )
+        if chunk_indexes != expected_indexes:
+            raise ValueError("GCS-native blocks must contiguously tile chunks")
+        expected_block_start = source_start + _nonnegative_int(
+            chunks_without_blocks[expected_indexes[0]]["start"], "chunk.start"
+        )
+        expected_block_end = source_start + _nonnegative_int(
+            chunks_without_blocks[expected_indexes[-1]]["end"], "chunk.end"
+        )
+        if (
+            raw_block.get("start") != expected_block_start
+            or raw_block.get("end") != expected_block_end
+        ):
+            raise ValueError("GCS-native block row bounds do not match its chunks")
+        measured = sum(
+            _nonnegative_int(
+                chunks_without_blocks[index]["compressed_bytes"],
+                f"chunks[{index}].compressed_bytes",
+            )
+            for index in expected_indexes
+        )
+        if raw_block.get("compressed_bytes") != measured:
+            raise ValueError("GCS-native block compressed byte measurement mismatch")
+        if raw_block.get("var") != manifest_var:
+            raise ValueError("GCS-native block must reference manifest shared var")
+        for index in expected_indexes:
+            physical_to_production[index] = block_index
+        expected_chunk_index += len(chunk_indexes)
+    if expected_chunk_index != len(chunks_without_blocks):
+        raise ValueError("GCS-native block denominator mismatch")
+    blocks = tuple(
+        _BlockSpec(
+            index=_nonnegative_int(raw["index"], "chunk.index"),
+            production_block_index=physical_to_production[
+                _nonnegative_int(raw["index"], "chunk.index")
+            ],
+            start=_nonnegative_int(raw["start"], "chunk.start"),
+            end=_nonnegative_int(raw["end"], "chunk.end"),
+            matrix_key=str(raw["matrix_key"]),
+            obs_key=str(raw["obs_key"]),
+            checksums=cast(Mapping[str, str], raw["checksums"]),
+            obs_generation=str(raw["obs_generation"]),
+        )
+        for raw in chunks_without_blocks
+    )
+    return shape, nnz, sparse_format, blocks, len(raw_blocks)
 
 
 def _read_zarr_matrix(fs: Any, key: str, sparse_format: str) -> CompressedMatrix:
@@ -592,7 +680,9 @@ def _read_zarr_matrix(fs: Any, key: str, sparse_format: str) -> CompressedMatrix
         store.close()
 
 
-def _read_legacy_matrix(fs: Any, key: str, *, sparse_format: str) -> CompressedMatrix:
+def _read_legacy_matrix(
+    fs: Any, key: str, *, sparse_format: str, rows: slice
+) -> CompressedMatrix:
     if getattr(fs, "protocol", "file") not in {"file", ("file", "local")}:
         raise ValueError(
             "remote legacy H5AD requires an explicit local cache; sparse Zarr is required for large remote datasets"
@@ -600,7 +690,7 @@ def _read_legacy_matrix(fs: Any, key: str, *, sparse_format: str) -> CompressedM
     source = ad.read_h5ad(key, backed="r")
     try:
         matrix_source = cast(Any, source.X)
-        matrix = matrix_source[:]
+        matrix = matrix_source[rows]
         if isinstance(matrix, np.ndarray):
             constructor = (
                 sparse.csr_matrix if sparse_format == "csr" else sparse.csc_matrix

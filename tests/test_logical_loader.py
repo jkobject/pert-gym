@@ -102,6 +102,32 @@ def test_open_is_lazy_and_slice_reads_only_overlapping_blocks(
     assert batch.var.index.tolist() == ["g0", "g1", "g2"]
 
 
+def test_unrestricted_read_fails_before_opening_any_matrix_block(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    manifest_path, _ = _write_logical(tmp_path)
+    import pert_gym.logical_dataset as loader
+
+    opened: list[str] = []
+    monkeypatch.setattr(
+        loader,
+        "_read_zarr_matrix",
+        lambda *_args, **_kwargs: opened.append("opened"),
+    )
+    dataset = open_logical_dataset(manifest_path)
+
+    with pytest.raises(ValueError, match="bounded row or block selection"):
+        dataset.read()
+    with pytest.raises(ValueError, match="full-dataset materialization"):
+        dataset.read(rows=slice(None))
+    with pytest.raises(ValueError, match="full-dataset materialization"):
+        dataset.read(blocks=list(range(dataset.block_count)))
+    with pytest.raises(ValueError, match="bounded row or block selection"):
+        dataset.read_obs()
+
+    assert opened == []
+
+
 def test_block_selection_reuses_one_verified_dataset_level_var(tmp_path: Path) -> None:
     manifest_path, _ = _write_logical(tmp_path)
     dataset = open_logical_dataset(manifest_path)
@@ -149,6 +175,53 @@ def test_legacy_h5ad_triplet_is_backed_and_sliceable(tmp_path: Path) -> None:
     assert batch.obs.index.tolist() == ["obs-1", "obs-2", "obs-3"]
     assert np.array_equal(batch.X.toarray(), matrix[1:4].toarray())
     assert batch.var.index.tolist() == var.index.tolist()
+
+
+def test_legacy_h5ad_reads_only_the_selected_source_row_window(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    matrix, obs, var = _frames()
+    obs.to_parquet(tmp_path / "obs.parquet")
+    var.to_parquet(tmp_path / "var.parquet")
+    import pert_gym.logical_dataset as loader
+
+    selections: list[object] = []
+
+    class MatrixSource:
+        def __getitem__(self, selection: object) -> sparse.csr_matrix:
+            selections.append(selection)
+            if selection == slice(None):
+                raise AssertionError("full legacy matrix access is forbidden")
+            return matrix[selection]
+
+    class File:
+        def close(self) -> None:
+            return None
+
+    class Backed:
+        X = MatrixSource()
+        file = File()
+
+    monkeypatch.setattr(loader.ad, "read_h5ad", lambda *_args, **_kwargs: Backed())
+    dataset = open_logical_dataset(
+        {
+            "format": LEGACY_FORMAT,
+            "version": 1,
+            "n_obs": len(obs),
+            "n_vars": len(var),
+            "nnz": matrix.nnz,
+            "sparse_format": "csr",
+            "x_key": "X.h5ad",
+            "obs_key": "obs.parquet",
+            "var_key": "var.parquet",
+        },
+        root=tmp_path,
+    )
+
+    batch = dataset.read(rows=slice(2, 5))
+
+    assert selections == [slice(2, 5)]
+    assert np.array_equal(batch.X.toarray(), matrix[2:5].toarray())
 
 
 def test_small_dense_legacy_h5ad_is_exposed_as_sparse_without_full_open(
@@ -250,6 +323,119 @@ def test_remote_promotion_marker_opens_verified_manifest_and_bounded_slice(
     assert dataset.shape == matrix.shape
     assert batch.obs.index.tolist() == ["obs-2", "obs-3", "obs-4"]
     assert np.array_equal(batch.X.toarray(), matrix[2:5].toarray())
+
+
+def test_loader_block_selection_uses_measured_production_blocks(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import pert_gym.gcs_native_sparse_zarr as writer
+    import pert_gym.logical_dataset as loader
+
+    fs = fsspec.filesystem("memory")
+    fs.store.clear()
+    matrix, obs, var = _frames(rows=6)
+    original_writer = writer._write_remote_matrix
+
+    def measured_writer(fs, key, payload, sparse_format):
+        original_writer(fs, key, payload, sparse_format)
+        return 100
+
+    monkeypatch.setattr(writer, "_write_remote_matrix", measured_writer)
+    manifest, _ = write_gcs_native_sparse_revision(
+        fs=fs,
+        staging_prefix="bucket/staging",
+        logical_key="datasets/blocks",
+        revision="r1",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        source_uri="gs://source/immutable.h5ad",
+        source_generation="123",
+        source_row_start=0,
+        source_row_end=len(obs),
+        schema_fingerprint="genes-v1",
+        ingestion_run_id="block-loader-test",
+        cache_dir=tmp_path / "cache",
+        cache_cap_bytes=1024,
+        cache_safety_reserve_bytes=0,
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=2,
+        production_block_min_bytes=150,
+        production_block_target_bytes=200,
+        production_block_max_bytes=250,
+    )
+    opened: list[str] = []
+    original_reader = loader._read_zarr_matrix
+
+    def recording_reader(fs, key, sparse_format):
+        opened.append(key)
+        return original_reader(fs, key, sparse_format)
+
+    monkeypatch.setattr(loader, "_read_zarr_matrix", recording_reader)
+
+    dataset = open_logical_dataset(manifest, filesystem=fs)
+    batches = list(dataset.iter_blocks(blocks=[1]))
+
+    assert dataset.block_count == 2
+    assert [(batch.start, batch.end, batch.block_indexes) for batch in batches] == [
+        (4, 6, (1,))
+    ]
+    assert opened == [manifest["chunks"][2]["matrix_key"]]
+
+
+def test_loader_rejects_manifest_block_layout_that_violates_measured_policy(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import pert_gym.gcs_native_sparse_zarr as writer
+
+    fs = fsspec.filesystem("memory")
+    fs.store.clear()
+    matrix, obs, var = _frames(rows=6)
+    original_writer = writer._write_remote_matrix
+
+    def measured_writer(fs, key, payload, sparse_format):
+        original_writer(fs, key, payload, sparse_format)
+        return 100
+
+    monkeypatch.setattr(writer, "_write_remote_matrix", measured_writer)
+    manifest, _ = write_gcs_native_sparse_revision(
+        fs=fs,
+        staging_prefix="bucket/staging",
+        logical_key="datasets/invalid-blocks",
+        revision="r1",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        source_uri="gs://source/immutable.h5ad",
+        source_generation="123",
+        source_row_start=0,
+        source_row_end=len(obs),
+        schema_fingerprint="genes-v1",
+        ingestion_run_id="invalid-block-loader-test",
+        cache_dir=tmp_path / "cache",
+        cache_cap_bytes=1024,
+        cache_safety_reserve_bytes=0,
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=2,
+        production_block_min_bytes=150,
+        production_block_target_bytes=200,
+        production_block_max_bytes=250,
+    )
+    manifest["blocks"] = [
+        {
+            "index": 0,
+            "start": 0,
+            "end": 6,
+            "chunk_indexes": [0, 1, 2],
+            "compressed_bytes": 300,
+            "var": manifest["var"],
+        }
+    ]
+
+    with pytest.raises(ValueError, match="production block layout"):
+        open_logical_dataset(manifest, filesystem=fs)
 
 
 def test_remote_parquet_generation_uses_version_aware_path() -> None:

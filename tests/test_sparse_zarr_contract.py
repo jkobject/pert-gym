@@ -295,5 +295,7 @@ def test_machine_readable_policy_covers_required_families_and_vm_benchmark() -> 
         "target_bytes": 5 * 1024**3 // 2,
         "maximum_bytes": 3 * 1024**3,
         "exceptions": ["one_final_tail", "genuinely_smaller_dataset"],
+        "measurement": "post-write compressed matrix object bytes summed over contiguous physical chunks",
+        "manifest_enforcement": "immutable plan pins the policy; every chunk records compressed_bytes; manifest records and readback recomputes logical block groupings",
         "var_reference": "every block resolves the manifest's one full-hash shared_var",
     }

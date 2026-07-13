@@ -71,14 +71,15 @@ match, and PRISM shares only after normalization proves identity.
 
 ### 3a. Production block and loader contract
 
-Production logical blocks target 2.5 GiB of exact sparse payload and must stay
+Production logical blocks target 2.5 GiB of measured compressed matrix bytes and must stay
 between 2 GiB and 3 GiB. The only size exceptions are one final tail and a
 dataset whose complete sparse payload is genuinely smaller than 2 GiB. The
 planner `pert_gym.logical_dataset.plan_production_blocks()` consumes exact
-per-row sparse byte sizes, preserves row order, and fails closed when a single
-row cannot fit below the 3 GiB ceiling. Physical writer chunks may remain
-smaller for bounded I/O; a production block is the manifest-level grouping used
-for scheduling and selection.
+post-write physical-chunk measurements, preserves row order, and fails closed
+when one measured chunk exceeds the 3 GiB ceiling or the chunks cannot satisfy
+the policy. Physical writer chunks may remain smaller for bounded I/O. The
+writer records each measurement and the resulting production-block grouping in
+the immutable plan and manifest; readback recomputes and validates the grouping.
 
 Every block resolves the same dataset-level shared var declaration. Logical
 Zarr and GCS-native manifests carry the complete order-sensitive var index hash,
@@ -92,6 +93,9 @@ reads metadata only. `iter_blocks(blocks=..., rows=...)` materializes one
 selected block at a time; `read(rows=...)`, `dataset.X[start:end]`, and
 `dataset.obs.iloc[start:end]` provide bounded slices while preserving the exact
 obs index and columns such as target-level train/validation/test splits.
+Unrestricted `read()` and equivalent all-block reads fail closed; callers stream
+with `iter_blocks()` instead. Legacy backed H5AD reads apply the requested row
+window directly to `X` rather than loading `X[:]` first.
 `LogicalCollection` adds lazy dataset selection without dereferencing payloads.
 Unknown formats, promotion hash drift, matrix checksums, or shared-var identity
 drift fail closed. See `tools/example_logical_loader.py` for an executable
