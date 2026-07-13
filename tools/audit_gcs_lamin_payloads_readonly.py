@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
 
+from tools import pert_gym_vm_runner
 from tools.lamin_context import connect_pertdata, ensure_project_cache
 
 BILLING_PROJECT = "jkobject-1549353370965"
@@ -38,10 +39,8 @@ def run(cmd: list[str]) -> str:
 
 
 def assert_eu_worker() -> None:
-    if "pert-gym-worker-eu" not in socket.gethostname():
-        raise RuntimeError(
-            f"refusing outside pert-gym-worker-eu: {socket.gethostname()!r}"
-        )
+    """Require the pinned GCE identity before reading audit metadata."""
+    pert_gym_vm_runner.require_heavy_vm()
 
 
 def logical_prefix(name: str) -> str:
