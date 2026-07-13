@@ -54,6 +54,8 @@ def write(
         "var": var,
         "source_uri": "gs://source-bucket/immutable.h5ad",
         "source_generation": "12345",
+        "source_row_start": 0,
+        "source_row_end": 6,
         "schema_fingerprint": "schema-v1",
         "ingestion_run_id": "test-run",
         "cache_dir": cache_dir,
@@ -155,4 +157,51 @@ def test_manifest_or_promotion_is_immutable(tmp_path: Path) -> None:
             logical_key="family/example",
             revision="r1",
             manifest=manifest,
+        )
+
+
+def test_remote_writer_records_absolute_bounded_source_rows_and_rejects_resume_drift(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    matrix, obs, _ = source()
+    manifest, _ = write(
+        fs,
+        tmp_path / "cache",
+        matrix=matrix[2:5],
+        obs=obs.iloc[2:5],
+        source_row_start=2,
+        source_row_end=5,
+    )
+
+    assert manifest["source"]["row_start"] == 2
+    assert manifest["source"]["row_end"] == 5
+    assert [(record["start"], record["end"]) for record in manifest["chunks"]] == [
+        (2, 4),
+        (4, 5),
+    ]
+    with pytest.raises(GCSNativeWriterError, match="remote plan identity mismatch"):
+        write(
+            fs,
+            tmp_path / "cache",
+            matrix=matrix[1:4],
+            obs=obs.iloc[1:4],
+            source_row_start=1,
+            source_row_end=4,
+        )
+
+
+@pytest.mark.parametrize(
+    ("row_start", "row_end"),
+    [(None, 3), (0, None), (-1, 2), (2, 2), (2, 7)],
+)
+def test_remote_writer_rejects_invalid_or_ambiguous_source_row_bounds(
+    tmp_path: Path, row_start: int | None, row_end: int | None
+) -> None:
+    with pytest.raises(ValueError, match="source row bounds"):
+        write(
+            memory_filesystem(),
+            tmp_path / "cache",
+            source_row_start=row_start,
+            source_row_end=row_end,
         )

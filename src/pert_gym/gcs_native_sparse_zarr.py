@@ -204,6 +204,8 @@ def _checkpoint_identity(
     revision: str,
     source_uri: str,
     source_generation: str,
+    source_row_start: int,
+    source_row_end: int,
     shape: tuple[int, int],
     sparse_format: str,
     var: pd.DataFrame,
@@ -215,6 +217,8 @@ def _checkpoint_identity(
         "revision": revision,
         "source_uri": source_uri,
         "source_generation": source_generation,
+        "source_row_start": source_row_start,
+        "source_row_end": source_row_end,
         "shape": list(shape),
         "sparse_format": sparse_format,
         "var_index_sha256": identity.index_sha256,
@@ -258,6 +262,8 @@ def write_gcs_native_sparse_revision(
     var: pd.DataFrame,
     source_uri: str,
     source_generation: str,
+    source_row_start: int | None,
+    source_row_end: int | None,
     schema_fingerprint: str,
     ingestion_run_id: str,
     cache_dir: Path,
@@ -283,11 +289,22 @@ def write_gcs_native_sparse_revision(
         raise ValueError(
             "source_uri must be gs:// and source_generation must be non-empty"
         )
+    if (
+        not isinstance(source_row_start, int)
+        or isinstance(source_row_start, bool)
+        or not isinstance(source_row_end, int)
+        or isinstance(source_row_end, bool)
+        or source_row_start < 0
+        or source_row_end <= source_row_start
+    ):
+        raise ValueError("source row bounds must be non-negative, explicit, and non-empty")
     if not ingestion_run_id:
         raise ValueError("ingestion_run_id must be non-empty")
     shape = getattr(matrix, "shape", None)
     if not isinstance(shape, tuple) or len(shape) != 2 or shape != (len(obs), len(var)):
         raise ValueError("matrix shape must match obs and var")
+    if source_row_end - source_row_start != shape[0]:
+        raise ValueError("source row bounds must exactly match matrix and obs rows")
     sparse_format = _source_sparse_format(matrix)
     nnz = _source_nnz(matrix)
     target_rows = adaptive_target_rows(
@@ -308,16 +325,18 @@ def write_gcs_native_sparse_revision(
         revision=revision,
         source_uri=source_uri,
         source_generation=source_generation,
+        source_row_start=source_row_start,
+        source_row_end=source_row_end,
         shape=shape,
         sparse_format=sparse_format,
         var=var,
         schema_fingerprint=schema_fingerprint,
     )
+    _load_plan(fs, plan_key, identity, chunks)
     if fs.exists(_path(candidate_prefix, "manifest.json")):
         raise GCSNativeWriterError(
             "remote candidate is already completed; choose a new revision"
         )
-    _load_plan(fs, plan_key, identity, chunks)
     completed = {
         index
         for index in range(len(chunks))
@@ -361,8 +380,8 @@ def write_gcs_native_sparse_revision(
             }
             record = {
                 "index": index,
-                "start": start,
-                "end": end,
+                "start": source_row_start + start,
+                "end": source_row_start + end,
                 "matrix_key": matrix_key,
                 "obs_key": obs_key,
                 "obs_generation": obs_object["generation"],
@@ -396,7 +415,12 @@ def write_gcs_native_sparse_revision(
         "logical_key": logical_key,
         "revision": revision,
         "candidate_prefix": candidate_prefix,
-        "source": {"uri": source_uri, "generation": source_generation},
+        "source": {
+            "uri": source_uri,
+            "generation": source_generation,
+            "row_start": source_row_start,
+            "row_end": source_row_end,
+        },
         "shape": list(shape),
         "nnz": nnz,
         "sparse_format": sparse_format,
