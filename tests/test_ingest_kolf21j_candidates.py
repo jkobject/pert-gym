@@ -520,3 +520,111 @@ def test_main_rejects_capacity_vm_before_building_candidates(
     assert not (tmp_path / "source").exists()
     assert not (tmp_path / "output").exists()
     assert not (tmp_path / "report.json").exists()
+
+
+def _valid_preflight() -> runner.Preflight:
+    return runner.Preflight(
+        hostname=sorted(runner.ALLOWED_HEAVY_HOSTS)[0],
+        project=runner.EXPECTED_GCE_PROJECT,
+        zone=runner.EXPECTED_ZONE,
+        instance=sorted(runner.ALLOWED_HEAVY_HOSTS)[0],
+        free_disk_bytes=100 * 1024**3,
+        available_memory_bytes=32 * 1024**3,
+        billing_project=runner.BILLING_PROJECT,
+    )
+
+
+def _configure_kolf_writer_lease(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> Path:
+    global_lock_dir = tmp_path / "host-locks"
+    legacy_lock = (
+        tmp_path / "legacy-worktree" / "artifacts" / "vm_runs" / "lamin-writer.lock"
+    )
+    monkeypatch.setattr(
+        kolf, "require_heavy_vm", lambda: ("host", "project", "zone", "host")
+    )
+    monkeypatch.setattr(runner, "preflight", _valid_preflight)
+    monkeypatch.setattr(runner, "_git_branch", lambda: "fix/test")
+    monkeypatch.setattr(
+        runner, "legacy_lamin_writer_lock_paths", lambda: (legacy_lock,)
+    )
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(global_lock_dir))
+    monkeypatch.setattr(
+        kolf.sys,
+        "argv",
+        [
+            "ingest_kolf21j_candidates.py",
+            "--source-dir",
+            str(tmp_path / "source"),
+            "--output-root",
+            str(tmp_path / "output"),
+            "--report",
+            str(tmp_path / "report.json"),
+        ],
+    )
+    return legacy_lock
+
+
+def test_build_variant_rejects_non_dry_run_without_writer_lease(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(
+        kolf,
+        "download_verified",
+        lambda *_args, **_kwargs: pytest.fail("unleased publication must not download"),
+    )
+
+    with pytest.raises(RuntimeError, match="active writer lease"):
+        kolf.build_variant(
+            kolf.VARIANTS[0],
+            source_dir=tmp_path / "source",
+            output_root=tmp_path / "output",
+            dry_run=False,
+        )
+
+
+def test_direct_kolf_publication_rejects_runner_held_legacy_writer_lock(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    legacy_lock = _configure_kolf_writer_lease(monkeypatch, tmp_path)
+    legacy_lock.parent.mkdir(parents=True)
+    monkeypatch.setattr(
+        kolf,
+        "build_variant",
+        lambda *_args, **_kwargs: pytest.fail(
+            "KOLF must reject lock contention before building"
+        ),
+    )
+
+    with runner.lamin_writer_lock(
+        legacy_lock,
+        {
+            "run_id": "runner",
+            "pid": os.getpid(),
+            "host": sorted(runner.ALLOWED_HEAVY_HOSTS)[0],
+            "project": runner.EXPECTED_GCE_PROJECT,
+            "zone": runner.EXPECTED_ZONE,
+            "branch": "fix/test",
+            "started_at": 0.0,
+        },
+    ):
+        with pytest.raises(RuntimeError, match="another Lamin writer holds"):
+            kolf.main()
+
+
+def test_direct_kolf_publication_releases_writer_lease_after_build_failure(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    _configure_kolf_writer_lease(monkeypatch, tmp_path)
+
+    def fail_build(*_args: object, **_kwargs: object) -> dict[str, object]:
+        raise ValueError("intentional build failure")
+
+    monkeypatch.setattr(kolf, "build_variant", fail_build)
+
+    with pytest.raises(ValueError, match="intentional build failure"):
+        kolf.main()
+
+    with runner.lamin_writer_lease(run_id="next") as lease:
+        assert runner.has_lamin_writer_lease(lease)

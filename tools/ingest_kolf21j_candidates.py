@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -30,6 +31,7 @@ from scipy import sparse
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from tools import pert_gym_vm_runner as vm_runner  # noqa: E402
 from tools.lamin_context import connect_pertdata  # noqa: E402
 from tools.pert_gym_vm_runner import require_heavy_vm  # noqa: E402
 
@@ -656,8 +658,15 @@ def register_triplet(
 
 
 def build_variant(
-    variant: Variant, *, source_dir: Path, output_root: Path, dry_run: bool
+    variant: Variant,
+    *,
+    source_dir: Path,
+    output_root: Path,
+    dry_run: bool,
+    writer_lease: vm_runner.LaminWriterLease | None = None,
 ) -> dict[str, Any]:
+    if not dry_run and not vm_runner.has_lamin_writer_lease(writer_lease):
+        raise RuntimeError("KOLF Lamin publication requires an active writer lease")
     source_path = download_verified(variant, source_dir)
     source = ad.read_h5ad(source_path, backed="r")
     try:
@@ -710,15 +719,29 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     require_heavy_vm()
-    reports = [
-        build_variant(
-            v,
-            source_dir=args.source_dir,
-            output_root=args.output_root,
-            dry_run=args.dry_run,
-        )
-        for v in VARIANTS
-    ]
+    if args.dry_run:
+        reports = [
+            build_variant(
+                v,
+                source_dir=args.source_dir,
+                output_root=args.output_root,
+                dry_run=True,
+            )
+            for v in VARIANTS
+        ]
+    else:
+        run_id = f"kolf21j-{os.getpid()}-{int(time.time())}"
+        with vm_runner.lamin_writer_lease(run_id=run_id) as writer_lease:
+            reports = [
+                build_variant(
+                    v,
+                    source_dir=args.source_dir,
+                    output_root=args.output_root,
+                    dry_run=False,
+                    writer_lease=writer_lease,
+                )
+                for v in VARIANTS
+            ]
     payload = {
         "schema": "pert-gym.kolf21j-candidates.v1",
         "dry_run": args.dry_run,

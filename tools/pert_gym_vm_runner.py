@@ -43,6 +43,7 @@ LAMIN_WRITER_LOCK_DIR_ENV = "PERT_GYM_LAMIN_WRITER_LOCK_DIR"
 _LOCK_METADATA_FIELDS = frozenset(
     {"run_id", "pid", "host", "project", "zone", "branch", "started_at"}
 )
+_LEASE_TOKEN = object()
 
 
 @dataclass(frozen=True)
@@ -54,6 +55,19 @@ class Preflight:
     free_disk_bytes: int
     available_memory_bytes: int
     billing_project: str
+
+
+@dataclass
+class LaminWriterLease:
+    """Capability issued only while this process holds every writer lock."""
+
+    run_id: str
+    _token: object | None = None
+
+
+def has_lamin_writer_lease(lease: LaminWriterLease | None) -> bool:
+    """Return whether ``lease`` was issued by the active shared lock contract."""
+    return isinstance(lease, LaminWriterLease) and lease._token is _LEASE_TOKEN
 
 
 def _available_memory_bytes() -> int:
@@ -301,6 +315,40 @@ def lamin_writer_lock(
                     _write_lock_metadata(handle, released)
             finally:
                 fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+@contextmanager
+def lamin_writer_lease(
+    *, run_id: str, preflight_result: Preflight | None = None
+) -> Iterator[LaminWriterLease]:
+    """Acquire the host-global and every legacy Lamin writer lock together."""
+    result = preflight() if preflight_result is None else preflight_result
+    metadata = {
+        "pid": os.getpid(),
+        "run_id": run_id,
+        "host": result.hostname,
+        "project": result.project,
+        "zone": result.zone,
+        "branch": _git_branch(),
+        "started_at": time.time(),
+        **asdict(result),
+    }
+    lease = LaminWriterLease(run_id=run_id)
+    with lamin_writer_lock(vm_global_lamin_writer_lock_path(), metadata):
+        with ExitStack() as legacy_locks:
+            # A legacy lock's metadata predates PID identity. Its kernel flock
+            # is authoritative: after acquisition, stale metadata is safe.
+            for legacy_lock_path in legacy_lamin_writer_lock_paths():
+                legacy_locks.enter_context(
+                    lamin_writer_lock(
+                        legacy_lock_path, metadata, check_live_metadata=False
+                    )
+                )
+            lease._token = _LEASE_TOKEN
+            try:
+                yield lease
+            finally:
+                lease._token = None
 
 
 def _write_json(path: Path, value: object) -> None:
@@ -602,43 +650,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         {"status": "started", "run_id": args.run_id, "resume": args.resume},
     )
 
-    lock_metadata = {
-        "pid": os.getpid(),
-        "run_id": args.run_id,
-        "host": preflight_result.hostname,
-        "project": preflight_result.project,
-        "zone": preflight_result.zone,
-        "branch": _git_branch(),
-        "started_at": time.time(),
-        **asdict(preflight_result),
-    }
     measurements = [
         run_bounded_smoke(run_dir=run_dir, cells=cells, chunk_size=args.chunk_size)
         for cells in args.smoke or []
     ]
     _write_json(run_dir / "smoke-summary.json", measurements)
     if args.command:
-        with lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata):
-            with ExitStack() as legacy_locks:
-                # A legacy lock's metadata predates PID identity. Its kernel
-                # flock is authoritative: once acquired, no legacy writer is
-                # live, so do not reject a safely recovered legacy inode on
-                # stale metadata.
-                for legacy_lock_path in legacy_lamin_writer_lock_paths():
-                    legacy_locks.enter_context(
-                        lamin_writer_lock(
-                            legacy_lock_path,
-                            lock_metadata,
-                            check_live_metadata=False,
-                        )
-                    )
-                exit_code = run_command(
-                    args.command, run_dir=run_dir, run_id=args.run_id
+        with lamin_writer_lease(run_id=args.run_id, preflight_result=preflight_result):
+            exit_code = run_command(args.command, run_dir=run_dir, run_id=args.run_id)
+            if exit_code:
+                raise RuntimeError(
+                    f"command exited {exit_code}; see {run_dir / 'logs' / 'runner.log'}"
                 )
-                if exit_code:
-                    raise RuntimeError(
-                        f"command exited {exit_code}; see {run_dir / 'logs' / 'runner.log'}"
-                    )
     _write_json(
         run_dir / "heartbeat.json", {"status": "completed", "run_id": args.run_id}
     )
