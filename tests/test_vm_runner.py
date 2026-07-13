@@ -3,10 +3,12 @@ from __future__ import annotations
 import fcntl
 import json
 import os
+import subprocess
 import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -165,7 +167,7 @@ def _distributed_lease(
     )
 
 
-def test_distributed_lease_allows_exactly_one_of_two_approved_hosts() -> None:
+def test_distributed_lease_allows_exactly_one_of_two_distinct_hosts() -> None:
     backend = _MemoryGcsLeaseBackend()
     first = _distributed_lease(backend, host="pert-gym-worker-eu")
     second = _distributed_lease(backend, host="pert-gym-capacity-eu-v2")
@@ -233,6 +235,42 @@ def test_distributed_lease_renewal_failure_revokes_local_ownership() -> None:
         lease.renew()  # type: ignore[attr-defined]
 
     assert not lease.held  # type: ignore[attr-defined]
+
+
+def test_run_command_terminates_live_child_when_renewal_fails(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    real_popen = subprocess.Popen
+    children: list[Any] = []
+
+    def observe_child(*args: Any, **kwargs: Any) -> Any:
+        child = real_popen(*args, **kwargs)
+        children.append(child)
+        return child
+
+    renewals = 0
+
+    def fail_second_renewal() -> None:
+        nonlocal renewals
+        renewals += 1
+        if renewals == 2:
+            assert children and children[0].poll() is None
+            raise RuntimeError("renewal could not be proven")
+
+    monkeypatch.setattr(runner.subprocess, "Popen", observe_child)
+    monkeypatch.setattr(runner, "PRODUCTION_HEARTBEAT_SECONDS", 0.01)
+
+    with pytest.raises(RuntimeError, match="renewal could not be proven"):
+        runner.run_command(
+            [sys.executable, "-c", "import time; time.sleep(60)"],
+            run_dir=tmp_path,
+            run_id="renewal-termination-test",
+            renew_writer_lease=fail_second_renewal,
+        )
+
+    assert renewals == 2
+    assert len(children) == 1
+    assert children[0].poll() is not None
 
 
 def test_distributed_lease_release_never_deletes_replaced_owner() -> None:

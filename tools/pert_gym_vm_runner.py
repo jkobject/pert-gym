@@ -29,7 +29,11 @@ from typing import Callable, Iterator, Protocol, Sequence, TextIO
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
-ALLOWED_HEAVY_HOSTS = frozenset({"pert-gym-worker-eu", "pert-gym-capacity-eu-v2"})
+# Production execution is intentionally pinned to the sole active worker.
+# Capacity VMs may exist for future operations but must remain dormant: reject
+# them before the runner constructs candidates, touches GCS/Lamin, or acquires
+# a distributed writer lease.
+ALLOWED_HEAVY_HOSTS = frozenset({"pert-gym-worker-eu"})
 EXPECTED_GCE_PROJECT = "jkobject-1549353370965"
 EXPECTED_ZONE = "europe-west1-b"
 BILLING_PROJECT = "jkobject-1549353370965"
