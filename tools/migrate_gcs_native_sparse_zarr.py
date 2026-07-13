@@ -22,6 +22,7 @@ import h5py
 import numpy as np
 import pandas as pd
 from anndata._io.specs import read_elem
+from anndata._io.specs.methods import read_elem_partial
 from scipy import sparse
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -108,6 +109,44 @@ def _gcs_key(uri: str) -> str:
     return uri.removeprefix("gs://")
 
 
+def open_generation_pinned_source(fs: Any, source_key: str) -> tuple[str, Any]:
+    """Preflight and open one immutable GCS generation using gcsfs API kwargs."""
+    source_info = fs.info(source_key)
+    generation = str(source_info.get("generation", ""))
+    if not generation:
+        raise RuntimeError("GCS source lacks immutable generation metadata")
+    pinned_info = fs.info(source_key, generation=generation)
+    if str(pinned_info.get("generation", "")) != generation:
+        raise RuntimeError("GCS generation-qualified source did not resolve requested generation")
+    return generation, fs.open(
+        source_key,
+        "rb",
+        generation=generation,
+        block_size=8 * 1024**2,
+        cache_type="readahead",
+    )
+
+
+def _read_h5ad_dataframe_rows(
+    group: h5py.Group, *, row_start: int, row_end: int
+) -> pd.DataFrame:
+    """Decode a bounded AnnData dataframe window without reading every obs row.
+
+    AnnData's partial reader slices every row-backed index/column dataset. For a
+    categorical column it may read the complete categories vocabulary, whose size
+    is bounded by category cardinality rather than source row count, while its
+    row-aligned codes remain restricted to ``[row_start, row_end)``.
+    """
+    if row_start < 0 or row_end <= row_start:
+        raise ValueError("source row bounds must be non-negative and non-empty")
+    value = read_elem_partial(
+        group, indices=(slice(row_start, row_end), slice(None))
+    )
+    if not isinstance(value, pd.DataFrame):
+        raise ValueError("GCS source obs must be an AnnData dataframe encoding")
+    return value
+
+
 def main() -> int:
     args = parse_args()
     if args.cache_cap_gib <= 0 or args.max_rss_gib <= 0:
@@ -132,28 +171,18 @@ def main() -> int:
                 )
             fs = requester_pays_gcs_filesystem("jkobject-1549353370965")
             source_key = _gcs_key(args.source_gcs_uri)
-            source_info = fs.info(source_key)
-            generation = str(source_info.get("generation", ""))
-            if not generation:
-                raise RuntimeError("GCS source lacks immutable generation metadata")
-            pinned_source_key = f"{source_key}#{generation}"
-            pinned_info = fs.info(pinned_source_key)
-            if str(pinned_info.get("generation", "")) != generation:
-                raise RuntimeError("GCS generation-qualified source did not resolve requested generation")
-            with fs.open(
-                pinned_source_key, "rb", block_size=8 * 1024**2, cache_type="readahead"
-            ) as handle:
+            generation, handle = open_generation_pinned_source(fs, source_key)
+            with handle:
                 with h5py.File(handle, "r") as h5:
                     matrix = GCSH5ADCSR(
                         h5, row_start=args.row_start, row_end=args.row_end
                     )
-                    obs_value = read_elem(h5["obs"])
                     var = read_elem(h5["var"])
-                    if not isinstance(obs_value, pd.DataFrame) or not isinstance(
-                        var, pd.DataFrame
-                    ):
-                        raise ValueError("GCS source obs and var must be dataframes")
-                    obs = obs_value.iloc[args.row_start : args.row_end]
+                    if not isinstance(var, pd.DataFrame):
+                        raise ValueError("GCS source var must be a dataframe")
+                    obs = _read_h5ad_dataframe_rows(
+                        h5["obs"], row_start=args.row_start, row_end=args.row_end
+                    )
                     manifest, metrics = write_gcs_native_sparse_revision(
                         fs=fs,
                         staging_prefix=_gcs_key(args.staging_gcs_prefix),
@@ -174,20 +203,25 @@ def main() -> int:
                         min_rows=args.min_rows,
                         max_rows=args.max_rows,
                     )
-    result: dict[str, Any] = {"manifest": manifest, "metrics": metrics.__dict__}
-    if args.promote:
-        result["promotion"] = promote_gcs_native_revision(
-            fs=fs,
-            staging_prefix=_gcs_key(args.staging_gcs_prefix),
-            logical_key=args.logical_key,
-            revision=args.revision,
-            manifest=manifest,
-        )
-    if args.register_lamin_prefix:
-        prefix = f"gs://{manifest['candidate_prefix']}"
-        result["lamin"] = str(
-            register_gcs_prefix_with_lamin(ln=connect_pertdata(), prefix_uri=prefix)
-        )
+            result: dict[str, Any] = {
+                "manifest": manifest,
+                "metrics": metrics.__dict__,
+            }
+            if args.promote:
+                result["promotion"] = promote_gcs_native_revision(
+                    fs=fs,
+                    staging_prefix=_gcs_key(args.staging_gcs_prefix),
+                    logical_key=args.logical_key,
+                    revision=args.revision,
+                    manifest=manifest,
+                )
+            if args.register_lamin_prefix:
+                prefix = f"gs://{manifest['candidate_prefix']}"
+                result["lamin"] = str(
+                    register_gcs_prefix_with_lamin(
+                        ln=connect_pertdata(), prefix_uri=prefix
+                    )
+                )
     print(json.dumps(result, sort_keys=True, default=str))
     return 0
 
