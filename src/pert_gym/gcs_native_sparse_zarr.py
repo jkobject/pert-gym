@@ -63,7 +63,9 @@ class GCSNativeMetrics:
 
 def requester_pays_gcs_filesystem(billing_project: str) -> Any:
     """Create the only permitted requester-pays GCS filesystem configuration."""
-    return fsspec.filesystem("gcs", **requester_pays_storage_options(billing_project))
+    return fsspec.filesystem(
+        "gcs", version_aware=True, **requester_pays_storage_options(billing_project)
+    )
 
 
 def assert_cache_budget(

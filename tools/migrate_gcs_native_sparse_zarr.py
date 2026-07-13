@@ -110,21 +110,39 @@ def _gcs_key(uri: str) -> str:
 
 
 def open_generation_pinned_source(fs: Any, source_key: str) -> tuple[str, Any]:
-    """Preflight and open one immutable GCS generation using gcsfs API kwargs."""
+    """Preflight and open one immutable GCS generation through gcsfs' path API.
+
+    gcsfs 2025.12.0 accepts ``generation=`` in ``GCSFileSystem._open`` but
+    drops it while constructing ``GCSFile``. Its documented version-aware path
+    (``bucket/object#generation``) survives to every ``cat_file`` range request,
+    so use that concrete request path rather than the ineffective kwarg.
+    """
+    if not bool(getattr(fs, "version_aware", False)):
+        raise RuntimeError("GCS source filesystem must enable version-aware paths")
+    if "#" in source_key:
+        raise RuntimeError("GCS source key must not already contain a generation fragment")
     source_info = fs.info(source_key)
     generation = str(source_info.get("generation", ""))
-    if not generation:
-        raise RuntimeError("GCS source lacks immutable generation metadata")
-    pinned_info = fs.info(source_key, generation=generation)
+    if not generation or not generation.isdecimal():
+        raise RuntimeError("GCS source lacks a valid immutable generation metadata")
+    pinned_key = f"{source_key}#{generation}"
+    pinned_info = fs.info(pinned_key)
     if str(pinned_info.get("generation", "")) != generation:
         raise RuntimeError("GCS generation-qualified source did not resolve requested generation")
-    return generation, fs.open(
-        source_key,
+    handle = fs.open(
+        pinned_key,
         "rb",
-        generation=generation,
         block_size=8 * 1024**2,
         cache_type="readahead",
     )
+    try:
+        opened_info = handle.info()
+        if str(opened_info.get("generation", "")) != generation:
+            raise RuntimeError("opened GCS source did not resolve requested generation")
+    except BaseException:
+        handle.close()
+        raise
+    return generation, handle
 
 
 def _read_h5ad_dataframe_rows(

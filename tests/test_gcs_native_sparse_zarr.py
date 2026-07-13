@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import fsspec
+import gcsfs
 import h5py
 import numpy as np
 import pandas as pd
@@ -17,6 +18,7 @@ from pert_gym.gcs_native_sparse_zarr import (
     assert_cache_budget,
     promote_gcs_native_revision,
     register_gcs_prefix_with_lamin,
+    requester_pays_gcs_filesystem,
     write_gcs_native_sparse_revision,
 )
 
@@ -50,6 +52,26 @@ def memory_filesystem() -> object:
     fs.pseudo_dirs[:] = [""]
     return fs
 
+
+
+def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    created: dict[str, object] = {}
+
+    def filesystem(protocol: str, **kwargs: object) -> object:
+        created.update({"protocol": protocol, **kwargs})
+        return object()
+
+    monkeypatch.setattr("pert_gym.gcs_native_sparse_zarr.fsspec.filesystem", filesystem)
+    requester_pays_gcs_filesystem("jkobject-1549353370965")
+
+    assert created == {
+        "protocol": "gcs",
+        "project": "jkobject-1549353370965",
+        "requester_pays": True,
+        "version_aware": True,
+    }
 
 def write(
     fs: object, cache_dir: Path, **changes: object
@@ -218,48 +240,70 @@ def test_remote_writer_rejects_invalid_or_ambiguous_source_row_bounds(
         )
 
 
-def test_generation_is_an_api_kwarg_never_part_of_the_gcs_object_key() -> None:
-    class RecordingFS:
-        def __init__(self) -> None:
-            self.info_calls: list[tuple[str, dict[str, object]]] = []
-            self.open_calls: list[tuple[str, str, dict[str, object]]] = []
+def test_generation_pinned_source_uses_gcsfs_versioned_range_request() -> None:
+    """Reject the old false-green ``generation=`` path that returned current bytes.
 
-        def info(self, path: str, **kwargs: object) -> dict[str, str]:
-            self.info_calls.append((path, kwargs))
-            return {"generation": "123456"}
+    This uses an actual gcsfs ``GCSFile``. The mocked backend intentionally
+    emulates 2025.12.0's bug: a ``generation=`` kwarg can report the old version
+    during info preflight while an unversioned ``cat_file`` read returns new bytes.
+    Only the documented ``#generation`` path reaches the versioned range request.
+    """
+    fs = gcsfs.GCSFileSystem(token="anon", version_aware=True)
+    source_key = "bucket/source.h5ad"
+    pinned_key = f"{source_key}#123456"
+    info_calls: list[tuple[str, dict[str, object]]] = []
+    reads: list[str] = []
 
-        def open(self, path: str, mode: str, **kwargs: object) -> object:
-            self.open_calls.append((path, mode, kwargs))
-            return object()
+    def info(path: str, **kwargs: object) -> dict[str, object]:
+        info_calls.append((path, kwargs))
+        if path not in {source_key, pinned_key}:
+            raise AssertionError(f"unexpected info path: {path}")
+        return {"generation": "123456", "size": 20}
 
-    fs = RecordingFS()
+    def cat_file(path: str, **_kwargs: object) -> bytes:
+        reads.append(path)
+        return b"old-generation-bytes" if path == pinned_key else b"current-bytes"
+
+    fs.info = info  # type: ignore[method-assign]
+    fs.cat_file = cat_file  # type: ignore[method-assign]
     generation, handle = gcs_native_migration_tool.open_generation_pinned_source(
-        fs, "bucket/source.h5ad"
+        fs, source_key
     )
+    try:
+        assert generation == "123456"
+        assert handle.read() == b"old-generation-bytes"
+    finally:
+        handle.close()
 
-    assert generation == "123456"
-    assert handle is not None
-    assert fs.info_calls == [
-        ("bucket/source.h5ad", {}),
-        ("bucket/source.h5ad", {"generation": "123456"}),
+    assert info_calls == [
+        (source_key, {}),
+        (pinned_key, {}),
+        (pinned_key, {"generation": "123456"}),
     ]
-    assert fs.open_calls == [
-        (
-            "bucket/source.h5ad",
-            "rb",
-            {
-                "generation": "123456",
-                "block_size": 8 * 1024**2,
-                "cache_type": "readahead",
-            },
+    assert reads == [pinned_key]
+
+
+def test_generation_pinned_source_rejects_generation_fragment_in_source_key() -> None:
+    fs = type("VersionAwareFS", (), {"version_aware": True})()
+    with pytest.raises(RuntimeError, match="must not already contain"):
+        gcs_native_migration_tool.open_generation_pinned_source(
+            fs, "bucket/source.h5ad#123456"
         )
-    ]
+
+
+def test_generation_pinned_source_rejects_non_version_aware_filesystem() -> None:
+    with pytest.raises(RuntimeError, match="must enable version-aware"):
+        gcs_native_migration_tool.open_generation_pinned_source(
+            gcsfs.GCSFileSystem(token="anon"), "bucket/source.h5ad"
+        )
 
 
 def test_generation_pinned_source_rejects_resolved_generation_drift() -> None:
     class DriftingFS:
-        def info(self, _path: str, **kwargs: object) -> dict[str, str]:
-            return {"generation": "new" if kwargs else "old"}
+        version_aware = True
+
+        def info(self, path: str, **_kwargs: object) -> dict[str, str]:
+            return {"generation": "456" if "#" in path else "123"}
 
     with pytest.raises(RuntimeError, match="did not resolve requested generation"):
         gcs_native_migration_tool.open_generation_pinned_source(
