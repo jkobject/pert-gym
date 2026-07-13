@@ -15,6 +15,7 @@ import io
 import json
 import shutil
 import time
+from bisect import bisect_left, bisect_right
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping, Sequence, cast
@@ -211,7 +212,13 @@ def plan_production_blocks(
     target_bytes: int = PRODUCTION_BLOCK_TARGET_BYTES,
     max_bytes: int = PRODUCTION_BLOCK_MAX_BYTES,
 ) -> tuple[tuple[int, int], ...]:
-    """Group measured compressed physical chunks into bounded logical blocks."""
+    """Group measured chunks into a complete, target-biased contiguous partition.
+
+    Existing valid target-greedy layouts remain canonical. If that fast path
+    would reject, dynamic programming minimizes total target distance and then
+    block count. Range-min trees keep the complete fallback at O(n log n) time
+    and O(n) memory rather than enumerating exponentially many cut sets.
+    """
     if min_bytes <= 0 or not min_bytes <= target_bytes <= max_bytes:
         raise ValueError("block policy must satisfy 0 < min <= target <= max")
     sizes = tuple(compressed_chunk_bytes)
@@ -227,31 +234,147 @@ def plan_production_blocks(
     if sum(sizes) <= max_bytes:
         return ((0, len(sizes)),)
 
-    suffix_bytes = [0] * (len(sizes) + 1)
-    for index in range(len(sizes) - 1, -1, -1):
-        suffix_bytes[index] = suffix_bytes[index + 1] + sizes[index]
+    prefix_bytes = [0]
+    for size in sizes:
+        prefix_bytes.append(prefix_bytes[-1] + size)
+    greedy_result: list[tuple[int, int]] = []
+    greedy_start = 0
+    while greedy_start < len(sizes):
+        greedy_end = greedy_start
+        greedy_size = 0
+        while (
+            greedy_end < len(sizes) and greedy_size + sizes[greedy_end] <= target_bytes
+        ):
+            greedy_size += sizes[greedy_end]
+            greedy_end += 1
+        if greedy_end == greedy_start:
+            greedy_size = sizes[greedy_end]
+            greedy_end += 1
+        while (
+            greedy_size < min_bytes
+            and greedy_end < len(sizes)
+            and greedy_size + sizes[greedy_end] <= max_bytes
+        ):
+            greedy_size += sizes[greedy_end]
+            greedy_end += 1
+        remaining = prefix_bytes[-1] - prefix_bytes[greedy_end]
+        if remaining and remaining < min_bytes and greedy_size + remaining <= max_bytes:
+            greedy_end = len(sizes)
+        if greedy_end < len(sizes) and greedy_size < min_bytes:
+            break
+        greedy_result.append((greedy_start, greedy_end))
+        greedy_start = greedy_end
+    else:
+        return tuple(greedy_result)
+
+    coordinates = sorted(set(prefix_bytes[:-1]))
+    leaf_count = 1
+    while leaf_count < len(coordinates):
+        leaf_count *= 2
+    tree_size = 2 * leaf_count
+    lower_tree: list[tuple[int, int, int] | None] = [None] * tree_size
+    upper_tree: list[tuple[int, int, int] | None] = [None] * tree_size
+
+    def update(
+        tree: list[tuple[int, int, int] | None],
+        coordinate: int,
+        entry: tuple[int, int, int],
+    ) -> None:
+        position = leaf_count + bisect_left(coordinates, coordinate)
+        current = tree[position]
+        if current is not None and current <= entry:
+            return
+        tree[position] = entry
+        position //= 2
+        while position:
+            left = tree[2 * position]
+            right = tree[2 * position + 1]
+            tree[position] = (
+                right if left is None else left if right is None else min(left, right)
+            )
+            position //= 2
+
+    def range_minimum(
+        tree: list[tuple[int, int, int] | None], left: int, right: int
+    ) -> tuple[int, int, int] | None:
+        result: tuple[int, int, int] | None = None
+        left += leaf_count
+        right += leaf_count
+        while left < right:
+            if left % 2:
+                result = (
+                    tree[left] if result is None else min(result, tree[left] or result)
+                )
+                left += 1
+            if right % 2:
+                right -= 1
+                result = (
+                    tree[right]
+                    if result is None
+                    else min(result, tree[right] or result)
+                )
+            left //= 2
+            right //= 2
+        return result
+
+    chunk_count = len(sizes)
+    best_cost: list[int | None] = [None] * chunk_count
+    best_block_count = [0] * chunk_count
+    next_boundary = [-1] * chunk_count
+    for start in range(chunk_count - 1, -1, -1):
+        start_bytes = prefix_bytes[start]
+        candidates: list[tuple[int, int, int, int]] = []
+        final_size = prefix_bytes[-1] - start_bytes
+        if final_size <= max_bytes:
+            final_distance = abs(final_size - target_bytes)
+            candidates.append((final_distance, 1, final_distance, chunk_count))
+
+        lower = bisect_left(coordinates, start_bytes + min_bytes)
+        target_right = bisect_right(coordinates, start_bytes + target_bytes)
+        lower_entry = range_minimum(lower_tree, lower, target_right)
+        if lower_entry is not None:
+            end = lower_entry[2]
+            distance = start_bytes + target_bytes - prefix_bytes[end]
+            candidates.append(
+                (
+                    lower_entry[0] + start_bytes + target_bytes,
+                    lower_entry[1] + 1,
+                    distance,
+                    end,
+                )
+            )
+
+        target_left = bisect_left(coordinates, start_bytes + target_bytes)
+        upper = bisect_right(coordinates, start_bytes + max_bytes)
+        upper_entry = range_minimum(upper_tree, target_left, upper)
+        if upper_entry is not None:
+            end = upper_entry[2]
+            distance = prefix_bytes[end] - start_bytes - target_bytes
+            candidates.append(
+                (
+                    upper_entry[0] - start_bytes - target_bytes,
+                    upper_entry[1] + 1,
+                    distance,
+                    end,
+                )
+            )
+
+        if not candidates:
+            continue
+        cost, block_count, _, end = min(candidates)
+        best_cost[start] = cost
+        best_block_count[start] = block_count
+        next_boundary[start] = end
+        coordinate = prefix_bytes[start]
+        update(lower_tree, coordinate, (cost - coordinate, block_count, start))
+        update(upper_tree, coordinate, (cost + coordinate, block_count, start))
+
+    if best_cost[0] is None:
+        raise ValueError("measured chunk sizes cannot satisfy production block policy")
     result: list[tuple[int, int]] = []
     start = 0
-    while start < len(sizes):
-        end = start
-        size = 0
-        while end < len(sizes) and size + sizes[end] <= target_bytes:
-            size += sizes[end]
-            end += 1
-        if end == start:
-            size = sizes[end]
-            end += 1
-        while size < min_bytes and end < len(sizes) and size + sizes[end] <= max_bytes:
-            size += sizes[end]
-            end += 1
-        remaining = suffix_bytes[end]
-        if remaining and remaining < min_bytes and size + remaining <= max_bytes:
-            end = len(sizes)
-            size += remaining
-        if end < len(sizes) and size < min_bytes:
-            raise ValueError(
-                "measured chunk sizes cannot satisfy production block policy"
-            )
+    while start < chunk_count:
+        end = next_boundary[start]
         result.append((start, end))
         start = end
     return tuple(result)

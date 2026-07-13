@@ -20,6 +20,7 @@ from pert_gym.gcs_native_sparse_zarr import (
     GCSNativeMetrics,
     GCSNativeWriterError,
     assert_cache_budget,
+    plan_production_blocks,
     promote_gcs_native_revision,
     register_gcs_prefix_with_lamin,
     requester_pays_gcs_filesystem,
@@ -123,6 +124,102 @@ def memory_filesystem() -> MemoryFileSystem:
     fs.store.clear()
     fs.pseudo_dirs[:] = [""]
     return cast(MemoryFileSystem, fs)
+
+
+def _has_valid_contiguous_partition(
+    sizes: tuple[int, ...], *, minimum: int, maximum: int
+) -> bool:
+    if not sizes:
+        return True
+    for cut_mask in range(1 << (len(sizes) - 1)):
+        boundaries = [0]
+        boundaries.extend(
+            index for index in range(1, len(sizes)) if cut_mask & (1 << (index - 1))
+        )
+        boundaries.append(len(sizes))
+        block_sizes = [
+            sum(sizes[start:end]) for start, end in zip(boundaries, boundaries[1:])
+        ]
+        if all(minimum <= size <= maximum for size in block_sizes[:-1]) and (
+            block_sizes[-1] <= maximum
+        ):
+            return True
+    return False
+
+
+def test_production_block_planner_rebalances_for_valid_contiguous_partition() -> None:
+    gib = 1024**3
+
+    assert plan_production_blocks([2 * gib, gib, 5 * gib // 2]) == (
+        (0, 2),
+        (2, 3),
+    )
+
+
+def test_production_block_planner_preserves_existing_canonical_layouts() -> None:
+    assert plan_production_blocks(
+        [4, 2, 2, 3], min_bytes=4, target_bytes=5, max_bytes=6
+    ) == ((0, 1), (1, 3), (3, 4))
+
+
+def test_production_block_planner_matches_scaled_exhaustive_oracle() -> None:
+    minimum, target, maximum = 4, 5, 6
+    for length in range(6):
+        for encoded in range(8**length):
+            value = encoded
+            sizes = []
+            for _ in range(length):
+                sizes.append(value % 8)
+                value //= 8
+            expected = _has_valid_contiguous_partition(
+                tuple(sizes), minimum=minimum, maximum=maximum
+            ) and all(size <= maximum for size in sizes)
+            try:
+                blocks = plan_production_blocks(
+                    sizes,
+                    min_bytes=minimum,
+                    target_bytes=target,
+                    max_bytes=maximum,
+                )
+            except ValueError:
+                assert not expected, sizes
+                continue
+
+            assert expected, sizes
+            if not sizes:
+                assert blocks == ()
+                continue
+            assert blocks[0][0] == 0
+            assert blocks[-1][1] == len(sizes)
+            assert all(left[1] == right[0] for left, right in zip(blocks, blocks[1:]))
+            block_sizes = [sum(sizes[start:end]) for start, end in blocks]
+            assert all(minimum <= size <= maximum for size in block_sizes[:-1])
+            assert block_sizes[-1] <= maximum
+
+
+def test_production_block_planner_validates_input_boundaries() -> None:
+    assert plan_production_blocks([], min_bytes=4, target_bytes=5, max_bytes=6) == ()
+    assert plan_production_blocks([0, 0], min_bytes=4, target_bytes=5, max_bytes=6) == (
+        (0, 2),
+    )
+    with pytest.raises(ValueError, match="exceeds the production block ceiling"):
+        plan_production_blocks([7], min_bytes=4, target_bytes=5, max_bytes=6)
+    for invalid_sizes in ([-1], [True], [1.5]):
+        with pytest.raises(ValueError, match="non-negative integers"):
+            plan_production_blocks(
+                cast(Any, invalid_sizes),
+                min_bytes=4,
+                target_bytes=5,
+                max_bytes=6,
+            )
+    for minimum, target, maximum in ((0, 5, 6), (4, 3, 6), (4, 7, 6)):
+        with pytest.raises(ValueError, match="0 < min <= target <= max"):
+            plan_production_blocks(
+                [1],
+                min_bytes=minimum,
+                target_bytes=target,
+                max_bytes=maximum,
+            )
 
 
 def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
