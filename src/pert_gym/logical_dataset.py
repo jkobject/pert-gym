@@ -335,13 +335,27 @@ class LogicalDataset:
         rows: slice | None = None,
         blocks: Sequence[int] | None = None,
     ) -> LogicalBatch:
-        """Materialize only selected blocks/slices, never the unselected dataset."""
+        """Materialize one bounded, contiguous batch.
+
+        GCS-native reads may cover at most one measured production block. The
+        older logical surface has no measured block metadata, so it retains the
+        small compatibility allowance for at most one chunk's row capacity,
+        including a slice crossing one chunk boundary. Larger selections must
+        use :meth:`iter_blocks`.
+        """
         if rows is None and blocks is None:
             raise ValueError(
                 "read() requires a bounded row or block selection; use iter_blocks() to stream the dataset"
             )
         row_start, row_end = _normalize_rows(rows, self.shape[0])
         selected_blocks = _normalize_block_indexes(blocks, self.block_count)
+        if blocks is not None and selected_blocks:
+            first_block = min(selected_blocks)
+            last_block = max(selected_blocks)
+            if selected_blocks != set(range(first_block, last_block + 1)):
+                raise ValueError(
+                    "read() requires contiguous blocks for one LogicalBatch; use iter_blocks() for non-contiguous selections"
+                )
         if (
             self.block_count > 1
             and (row_start, row_end) == (0, self.shape[0])
@@ -350,6 +364,27 @@ class LogicalDataset:
             raise ValueError(
                 "full-dataset materialization is forbidden; use iter_blocks() to stream logical blocks"
             )
+        overlapping = tuple(
+            block
+            for block in self._blocks
+            if block.production_block_index in selected_blocks
+            and max(row_start, block.start) < min(row_end, block.end)
+        )
+        overlapping_blocks = {block.production_block_index for block in overlapping}
+        if self._gcs_native and len(overlapping_blocks) > 1:
+            raise ValueError(
+                "bounded selection exceeds the read() limit of 1 measured production block; use iter_blocks() to stream logical blocks"
+            )
+        if not self._gcs_native and overlapping:
+            materialized_rows = sum(
+                min(row_end, block.end) - max(row_start, block.start)
+                for block in overlapping
+            )
+            maximum_chunk_rows = max(block.end - block.start for block in self._blocks)
+            if len(overlapping) > 2 or materialized_rows > maximum_chunk_rows:
+                raise ValueError(
+                    "bounded selection exceeds one logical chunk's row capacity; use iter_blocks() to stream logical blocks"
+                )
         batches = list(self.iter_blocks(blocks=blocks, rows=rows))
         constructor = (
             sparse.csr_matrix if self.sparse_format == "csr" else sparse.csc_matrix
@@ -364,6 +399,10 @@ class LogicalDataset:
             )
             obs = pd.concat([batch.obs for batch in batches], axis=0)
             start, end = batches[0].start, batches[-1].end
+        if end - start != matrix.shape[0] or matrix.shape[0] != len(obs):
+            raise ValueError(
+                "LogicalBatch row coordinates do not match materialized rows"
+            )
         return LogicalBatch(
             dataset=self.name,
             start=start,

@@ -128,6 +128,77 @@ def test_unrestricted_read_fails_before_opening_any_matrix_block(
     assert opened == []
 
 
+def test_read_rejects_noncontiguous_blocks_before_opening_payloads(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    manifest_path, _ = _write_logical(tmp_path)
+    import pert_gym.logical_dataset as loader
+
+    opened: list[str] = []
+    dataset = open_logical_dataset(manifest_path)
+    monkeypatch.setattr(
+        loader,
+        "_read_zarr_matrix",
+        lambda *_args, **_kwargs: opened.append("matrix"),
+    )
+    monkeypatch.setattr(
+        loader,
+        "_read_parquet",
+        lambda *_args, **_kwargs: opened.append("parquet"),
+    )
+
+    with pytest.raises(ValueError, match="contiguous blocks"):
+        dataset.read(blocks=[0, 2])
+
+    assert opened == []
+
+
+@pytest.mark.parametrize("row_end", [6, 8])
+def test_near_full_read_fails_before_opening_or_stacking_payloads(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, row_end: int
+) -> None:
+    manifest_path, _ = _write_logical(tmp_path)
+    import pert_gym.logical_dataset as loader
+
+    opened: list[str] = []
+    stacked: list[str] = []
+    dataset = open_logical_dataset(manifest_path)
+    monkeypatch.setattr(
+        loader,
+        "_read_zarr_matrix",
+        lambda *_args, **_kwargs: opened.append("matrix"),
+    )
+    monkeypatch.setattr(
+        loader,
+        "_read_parquet",
+        lambda *_args, **_kwargs: opened.append("parquet"),
+    )
+    monkeypatch.setattr(
+        loader.sparse,
+        "vstack",
+        lambda *_args, **_kwargs: stacked.append("vstack"),
+    )
+
+    with pytest.raises(ValueError, match="bounded selection"):
+        dataset.read(rows=slice(0, row_end))
+
+    assert opened == []
+    assert stacked == []
+
+
+def test_cross_chunk_read_coordinates_match_materialized_rows(
+    tmp_path: Path,
+) -> None:
+    manifest_path, _ = _write_logical(tmp_path)
+    dataset = open_logical_dataset(manifest_path)
+
+    batch = dataset.read(rows=slice(2, 5))
+
+    assert (batch.start, batch.end) == (2, 5)
+    assert batch.end - batch.start == batch.X.shape[0] == len(batch.obs)
+    assert batch.block_indexes == (0, 1)
+
+
 def test_block_selection_reuses_one_verified_dataset_level_var(tmp_path: Path) -> None:
     manifest_path, _ = _write_logical(tmp_path)
     dataset = open_logical_dataset(manifest_path)
@@ -382,6 +453,11 @@ def test_loader_block_selection_uses_measured_production_blocks(
         (4, 6, (1,))
     ]
     assert opened == [manifest["chunks"][2]["matrix_key"]]
+
+    opened_before_rejected_read = list(opened)
+    with pytest.raises(ValueError, match="1 measured production block"):
+        dataset.read(rows=slice(0, 5))
+    assert opened == opened_before_rejected_read
 
 
 def test_loader_rejects_manifest_block_layout_that_violates_measured_policy(
