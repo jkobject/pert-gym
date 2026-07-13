@@ -237,7 +237,47 @@ def test_distributed_lease_renewal_failure_revokes_local_ownership() -> None:
     assert not lease.held  # type: ignore[attr-defined]
 
 
-def test_run_command_terminates_live_child_when_renewal_fails(
+def test_run_command_reaps_live_child_when_first_renewal_fails(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    real_popen = subprocess.Popen
+    children: list[Any] = []
+
+    def observe_child(*args: Any, **kwargs: Any) -> Any:
+        child = real_popen(*args, **kwargs)
+        children.append(child)
+        return child
+
+    renewals = 0
+
+    def fail_first_renewal() -> None:
+        nonlocal renewals
+        renewals += 1
+        assert children and children[0].poll() is None
+        raise RuntimeError("renewal could not be proven")
+
+    monkeypatch.setattr(runner.subprocess, "Popen", observe_child)
+    monkeypatch.setattr(runner, "PRODUCTION_HEARTBEAT_SECONDS", 0.01)
+
+    try:
+        with pytest.raises(RuntimeError, match="renewal could not be proven"):
+            runner.run_command(
+                [sys.executable, "-c", "import time; time.sleep(60)"],
+                run_dir=tmp_path,
+                run_id="renewal-termination-test",
+                renew_writer_lease=fail_first_renewal,
+            )
+        assert renewals == 1
+        assert len(children) == 1
+        assert children[0].poll() is not None
+    finally:
+        for child in children:
+            if child.poll() is None:
+                child.terminate()
+                child.wait(timeout=10)
+
+
+def test_run_command_terminates_live_child_when_later_renewal_fails(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     real_popen = subprocess.Popen

@@ -640,35 +640,38 @@ def run_command(
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
-        assert process.stdout is not None
-        publish("running")
-        selector = selectors.DefaultSelector()
-        selector.register(process.stdout, selectors.EVENT_READ)
-        stdout_fd = process.stdout.fileno()
-        os.set_blocking(stdout_fd, False)
-
-        def drain_stdout() -> None:
-            """Copy only currently available child bytes without delaying liveness."""
-            nonlocal stdout_lines
-            while True:
-                try:
-                    output = os.read(stdout_fd, 64 * 1024)
-                except BlockingIOError:
-                    return
-                if not output:
-                    return
-                stdout_lines += output.count(b"\n")
-                log.write(output)
-                log.flush()
-                stdout_buffer = getattr(sys.stdout, "buffer", None)
-                if stdout_buffer is not None:
-                    stdout_buffer.write(output)
-                    stdout_buffer.flush()
-                else:
-                    sys.stdout.write(output.decode("utf-8", errors="surrogateescape"))
-                    sys.stdout.flush()
-
+        selector: selectors.BaseSelector | None = None
         try:
+            assert process.stdout is not None
+            publish("running")
+            selector = selectors.DefaultSelector()
+            selector.register(process.stdout, selectors.EVENT_READ)
+            stdout_fd = process.stdout.fileno()
+            os.set_blocking(stdout_fd, False)
+
+            def drain_stdout() -> None:
+                """Copy only currently available child bytes without delaying liveness."""
+                nonlocal stdout_lines
+                while True:
+                    try:
+                        output = os.read(stdout_fd, 64 * 1024)
+                    except BlockingIOError:
+                        return
+                    if not output:
+                        return
+                    stdout_lines += output.count(b"\n")
+                    log.write(output)
+                    log.flush()
+                    stdout_buffer = getattr(sys.stdout, "buffer", None)
+                    if stdout_buffer is not None:
+                        stdout_buffer.write(output)
+                        stdout_buffer.flush()
+                    else:
+                        sys.stdout.write(
+                            output.decode("utf-8", errors="surrogateescape")
+                        )
+                        sys.stdout.flush()
+
             while True:
                 for _, _ in selector.select(timeout=PRODUCTION_HEARTBEAT_SECONDS):
                     drain_stdout()
@@ -692,7 +695,8 @@ def run_command(
                     process.wait()
             raise
         finally:
-            selector.close()
+            if selector is not None:
+                selector.close()
 
 
 def main(argv: Sequence[str] | None = None) -> int:
