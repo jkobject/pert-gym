@@ -20,6 +20,7 @@ from pert_gym.perturbai_sparse_parquet import (
     requester_pays_storage_options,
     validate_perturbai_sources,
 )
+from tools.migrate_perturbai_sparse_parquet import _var as read_perturbai_var
 
 
 def _write_source(
@@ -57,6 +58,52 @@ def _var() -> pd.DataFrame:
         {"gene_token_id": [0, 1, 2], "gene_name": ["a", "b", "c"]},
         index=["g0", "g1", "g2"],
     )
+
+
+@pytest.mark.parametrize(
+    ("gene_token_ids", "error"),
+    [
+        ([0.0, 1.9, 2.0], "integer-valued"),
+        ([0.0, None, 2.0], "non-null"),
+        ([False, True, False], "must not be boolean"),
+        ([0.0, float("nan"), 2.0], "finite"),
+        ([0.0, float("inf"), 2.0], "finite"),
+        ([0, -1, 2], "non-negative"),
+        ([0, float(2**63), 2], "supported range"),
+        ([0, 1, 1], "duplicate"),
+        ([0, 2, 3], "contiguous"),
+    ],
+)
+def test_migration_rejects_lossy_or_invalid_gene_token_ids(
+    tmp_path: Path, gene_token_ids: list[object], error: str
+) -> None:
+    metadata = tmp_path / "genes.parquet"
+    pd.DataFrame(
+        {
+            "gene_token_id": gene_token_ids,
+            "gene_name": ["a", "b", "c"],
+            "gene_ids": ["g0", "g1", "g2"],
+        }
+    ).to_parquet(metadata)
+
+    with pytest.raises(ValueError, match=error):
+        read_perturbai_var(metadata)
+
+
+def test_migration_accepts_exact_integer_valued_gene_token_ids(tmp_path: Path) -> None:
+    metadata = tmp_path / "genes.parquet"
+    pd.DataFrame(
+        {
+            "gene_token_id": [0.0, 1, np.int64(2)],
+            "gene_name": ["a", "b", "c"],
+            "gene_ids": ["g0", "g1", "g2"],
+        }
+    ).to_parquet(metadata)
+
+    var = read_perturbai_var(metadata)
+
+    assert var["gene_token_id"].tolist() == [0, 1, 2]
+    assert var.index.tolist() == ["g0", "g1", "g2"]
 
 
 def test_source_validation_accepts_non_numeric_stems_in_exact_part_order(
