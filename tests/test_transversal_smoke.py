@@ -340,6 +340,57 @@ def test_reviewed_contract_uses_the_accepted_path_b_join_not_historical_evidence
     )
 
 
+def test_reviewed_contract_accepts_depmap_source_provenance_emitted_by_fixture() -> (
+    None
+):
+    runner = _runner_module()
+    reviewed = runner.REVIEWED_INPUT_PROVENANCE
+    provenance_fields = ("uri", "generation", "sha256")
+    manifest_provenance = {
+        name: {key: record[key] for key in provenance_fields}
+        for name, record in reviewed.items()
+        if name != "prism_manifest"
+    }
+    inputs = {
+        "prism_subset": dict(reviewed["prism_subset"]),
+        "prism_manifest": dict(reviewed["prism_manifest"]),
+        "prism_baseline_fixture": dict(reviewed["depmap_fixture"]),
+        # build_fixture() records only this accepted source identity because the
+        # source CSV is attested, not a local runner input whose size is observed.
+        "depmap_source": manifest_provenance["depmap_source"],
+        "strand_join": dict(reviewed["strand_join"]),
+        "strand_metadata": dict(reviewed["strand_metadata"]),
+    }
+    prism_manifest = {
+        "source": manifest_provenance["prism_subset"],
+        "baseline": manifest_provenance["depmap_source"],
+        "transversal_smoke_provenance": manifest_provenance,
+    }
+    strand_metadata = {
+        "counts": {
+            **runner._REVIEWED_STRAND_COUNTS,
+            "table_rows": 16_446,
+        },
+        "loader_exclusions": {
+            "unresolved_by_file": {
+                mapping_file: [
+                    {"perturbation": perturbation, "classification": classification}
+                ]
+                for mapping_file, perturbation, classification in runner._REVIEWED_ELOB_EXCLUSIONS
+            }
+        },
+        "outputs": {"table_tsv_sha256": reviewed["strand_join"]["sha256"]},
+    }
+
+    counts = runner._validate_reviewed_inputs(
+        inputs=inputs,
+        prism_manifest=prism_manifest,
+        strand_metadata=strand_metadata,
+    )
+
+    assert counts["unmatched_unique_perturbation_rows_before_resolution"] == 403
+
+
 @pytest.mark.parametrize(
     "record",
     ("depmap_fixture", "depmap_source", "strand_join", "strand_metadata"),

@@ -257,7 +257,18 @@ def _validate_reviewed_inputs(
         raise ValueError("PRISM manifest lacks reviewed transversal smoke provenance")
     for name in REVIEWED_INPUT_PROVENANCE:
         actual_name = "prism_baseline_fixture" if name == "depmap_fixture" else name
-        _require_provenance(name, inputs[actual_name], REVIEWED_INPUT_PROVENANCE[name])
+        if name == "depmap_source":
+            # The runner observes the fixture's attested source identity, not the
+            # 305 MB source CSV itself. Its emitted provenance therefore has no
+            # locally observed size, but URI/generation/SHA remain independently
+            # bound to the reviewed contract below.
+            _require_manifest_provenance(
+                name, inputs[actual_name], REVIEWED_INPUT_PROVENANCE[name]
+            )
+        else:
+            _require_provenance(
+                name, inputs[actual_name], REVIEWED_INPUT_PROVENANCE[name]
+            )
         if name == "prism_manifest":
             continue
         _require_manifest_provenance(
