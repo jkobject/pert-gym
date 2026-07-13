@@ -297,7 +297,9 @@ def write_gcs_native_sparse_revision(
         or source_row_start < 0
         or source_row_end <= source_row_start
     ):
-        raise ValueError("source row bounds must be non-negative, explicit, and non-empty")
+        raise ValueError(
+            "source row bounds must be non-negative, explicit, and non-empty"
+        )
     if not ingestion_run_id:
         raise ValueError("ingestion_run_id must be non-empty")
     shape = getattr(matrix, "shape", None)
