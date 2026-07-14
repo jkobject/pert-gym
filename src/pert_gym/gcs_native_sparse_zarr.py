@@ -189,15 +189,19 @@ def calibrated_block_plan(
             },
         }
         raise BlockPlanConflict("calibration exceeded hard RSS ceiling", evidence)
-    conflict = (
+    whole_small_hard_limit_conflict = small_dataset and n_obs > min(
+        max_rows, rows_allowed_by_rss
+    )
+    byte_target_conflict = (
         not small_dataset
         and not explicit_exception
         and rows_required_for_min
         > min(n_obs, max_rows, rows_allowed_by_bytes, rows_allowed_by_rss)
     )
-    if conflict:
+    if whole_small_hard_limit_conflict or byte_target_conflict:
         evidence = {
             "kind": "byte_rss_conflict",
+            "whole_dataset_below_minimum": small_dataset,
             "rows_required_for_min_bytes": rows_required_for_min,
             "rows_allowed_by_rss": rows_allowed_by_rss,
             "rows_allowed_by_max_bytes": rows_allowed_by_bytes,

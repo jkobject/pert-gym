@@ -701,6 +701,46 @@ def test_calibration_fails_closed_when_byte_minimum_conflicts_with_rss() -> None
     assert hard_rss.value.evidence["kind"] == "calibration_rss_conflict"
 
 
+def test_whole_small_calibration_cannot_waive_modeled_rss_ceiling() -> None:
+    with pytest.raises(BlockPlanConflict, match="cannot satisfy") as caught:
+        calibrated_block_plan(
+            identity={"source_generation": "captured-generation"},
+            n_obs=6_721,
+            probe_rows=2_547,
+            measured_bytes=33_293,
+            measured_peak_rss_bytes=58_303,
+            min_block_bytes=99_032,
+            max_block_bytes=173_636,
+            max_rss_bytes=116_955,
+            max_rows=6_721,
+            calibration_objects=[],
+        )
+
+    assert caught.value.evidence["kind"] == "byte_rss_conflict"
+    assert caught.value.evidence["whole_dataset_below_minimum"] is True
+    assert caught.value.evidence["rows_allowed_by_rss"] == 5_109
+
+
+def test_whole_small_calibration_cannot_waive_max_rows() -> None:
+    with pytest.raises(BlockPlanConflict, match="cannot satisfy") as caught:
+        calibrated_block_plan(
+            identity={"source_generation": "captured-generation"},
+            n_obs=6_721,
+            probe_rows=2_547,
+            measured_bytes=33_293,
+            measured_peak_rss_bytes=58_303,
+            min_block_bytes=99_032,
+            max_block_bytes=173_636,
+            max_rss_bytes=1_000_000,
+            max_rows=1_228,
+            calibration_objects=[],
+        )
+
+    assert caught.value.evidence["kind"] == "byte_rss_conflict"
+    assert caught.value.evidence["whole_dataset_below_minimum"] is True
+    assert caught.value.evidence["max_rows"] == 1_228
+
+
 def test_measured_block_validation_rejects_small_non_tail_and_hard_rss() -> None:
     with pytest.raises(BlockPlanConflict, match="measured block contract") as small:
         validate_measured_block(
