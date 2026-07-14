@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import ctypes
 import importlib.util
 import json
+import weakref
 from pathlib import Path
 from typing import Any, TypedDict, cast
 
@@ -16,6 +18,7 @@ from fsspec.implementations.memory import MemoryFileSystem
 from scipy import sparse
 from typing_extensions import Unpack
 
+import pert_gym.gcs_native_sparse_zarr as gcs_native_sparse_zarr
 from pert_gym.gcs_native_sparse_zarr import (
     BlockPlanConflict,
     GCSNativeMetrics,
@@ -151,6 +154,38 @@ def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
     }
 
 
+def test_release_block_memory_collects_and_best_effort_trims_linux(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    events: list[object] = []
+
+    class Trim:
+        argtypes: list[object] = []
+        restype: object = None
+
+        def __call__(self, value: int) -> None:
+            events.append(("trim", value))
+
+    class Libc:
+        malloc_trim = Trim()
+
+    monkeypatch.setattr(
+        gcs_native_sparse_zarr.gc, "collect", lambda: events.append("gc")
+    )
+    monkeypatch.setattr(gcs_native_sparse_zarr.sys, "platform", "linux")
+    monkeypatch.setattr(gcs_native_sparse_zarr.ctypes, "CDLL", lambda _: Libc())
+
+    gcs_native_sparse_zarr._release_block_memory()
+
+    assert events == ["gc", ("trim", 0)]
+    assert Libc.malloc_trim.argtypes == [ctypes.c_size_t]
+    assert Libc.malloc_trim.restype is ctypes.c_int
+
+    monkeypatch.setattr(gcs_native_sparse_zarr.ctypes, "CDLL", lambda _: object())
+    gcs_native_sparse_zarr._release_block_memory()
+    assert events[-1] == "gc"
+
+
 def write(
     fs: MemoryFileSystem, cache_dir: Path, **changes: Unpack[WriteOverrides]
 ) -> tuple[NativeManifest, GCSNativeMetrics]:
@@ -230,6 +265,54 @@ def test_remote_writer_resumes_direct_object_store_chunks_and_promotes_last(
     assert json.loads(fs.cat(marker["promotion_key"]))["manifest_key"].endswith(
         "manifest.json"
     )
+
+
+def test_remote_writer_releases_previous_block_only_after_record_is_durable(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    refs_by_block: list[tuple[weakref.ReferenceType[object], ...]] = []
+    original_materialize = gcs_native_sparse_zarr._materialize_rows
+    original_parity = gcs_native_sparse_zarr._assert_source_readback_parity
+    original_release = gcs_native_sparse_zarr._release_block_memory
+    original_write_exclusive = gcs_native_sparse_zarr._write_exclusive
+
+    def materialize(matrix: object, start: int, end: int, sparse_format: str) -> Any:
+        if refs_by_block:
+            assert all(ref() is None for ref in refs_by_block[-1])
+        return original_materialize(matrix, start, end, sparse_format)
+
+    def parity(
+        source_matrix: Any,
+        remote_matrix: Any,
+        source_frame: pd.DataFrame,
+        remote_frame: pd.DataFrame,
+    ) -> None:
+        values = (source_matrix, remote_matrix, source_frame, remote_frame)
+        original_parity(*values)
+        refs_by_block.append(tuple(weakref.ref(value) for value in values))
+
+    def write_exclusive(fs: Any, key: str, payload: bytes) -> dict[str, str | int]:
+        if "/chunk-records/" in key:
+            assert refs_by_block
+            assert all(ref() is not None for ref in refs_by_block[-1])
+        return original_write_exclusive(fs, key, payload)
+
+    def release() -> None:
+        assert refs_by_block
+        assert all(ref() is None for ref in refs_by_block[-1])
+        original_release()
+
+    monkeypatch.setattr(gcs_native_sparse_zarr, "_materialize_rows", materialize)
+    monkeypatch.setattr(
+        gcs_native_sparse_zarr, "_assert_source_readback_parity", parity
+    )
+    monkeypatch.setattr(gcs_native_sparse_zarr, "_release_block_memory", release)
+    monkeypatch.setattr(gcs_native_sparse_zarr, "_write_exclusive", write_exclusive)
+
+    manifest, _ = write(memory_filesystem(), tmp_path / "cache")
+
+    assert len(manifest["chunks"]) == 3
+    assert len(refs_by_block) == 4
 
 
 def test_remote_writer_rejects_resume_source_drift_and_recovers_partial_orphan(

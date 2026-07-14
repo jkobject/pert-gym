@@ -10,11 +10,14 @@ promotion marker and then its manifest.
 
 from __future__ import annotations
 
+import ctypes
+import gc
 import hashlib
 import io
 import json
 import math
 import shutil
+import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -51,6 +54,20 @@ DEFAULT_CACHE_SAFETY_RESERVE_BYTES = 20 * 1024**3
 DEFAULT_MIN_BLOCK_BYTES = 2 * 1024**3
 DEFAULT_MAX_BLOCK_BYTES = 3 * 1024**3
 FORMAT = "pert-gym.gcs-native-logical-sparse-zarr/v1"
+
+
+def _release_block_memory() -> None:
+    """Return unreachable per-block buffers to Python and, on glibc, the OS."""
+    gc.collect()
+    if not sys.platform.startswith("linux"):
+        return
+    try:
+        malloc_trim = ctypes.CDLL(None).malloc_trim
+        malloc_trim.argtypes = [ctypes.c_size_t]
+        malloc_trim.restype = ctypes.c_int
+        malloc_trim(0)
+    except (AttributeError, OSError):
+        pass
 
 
 class GCSNativeWriterError(RuntimeError):
@@ -880,6 +897,8 @@ def write_gcs_native_sparse_revision(
         record_key = _path(candidate_prefix, "chunk-records", f"chunk_{index:06d}.json")
         source_chunk = _materialize_rows(matrix, start, end, sparse_format)
         source_obs = obs.iloc[start:end]
+        remote = None
+        remote_obs = None
         bytes_read += sum(values.nbytes for values in _matrix_components(source_chunk))
         peak_rss = max(peak_rss, peak_rss_reader())
         if index not in completed:
@@ -998,6 +1017,8 @@ def write_gcs_native_sparse_revision(
                 f"chunk {index} lacks accepted measured block evidence; choose a new revision"
             )
         records.append(record)
+        del source_chunk, source_obs, remote, remote_obs
+        _release_block_memory()
     var_key = _path(candidate_prefix, "var.parquet")
     if fs.exists(var_key):
         var_object = fs.info(var_key)
