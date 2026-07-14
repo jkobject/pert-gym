@@ -189,16 +189,45 @@ def calibrated_block_plan(
             },
         }
         raise BlockPlanConflict("calibration exceeded hard RSS ceiling", evidence)
-    whole_small_hard_limit_conflict = small_dataset and n_obs > min(
-        max_rows, rows_allowed_by_rss
-    )
+    whole_small_active_constraints = [
+        constraint
+        for constraint, violated in (
+            ("max_rows", n_obs > max_rows),
+            ("rss_row_ceiling", n_obs > rows_allowed_by_rss),
+        )
+        if small_dataset and violated
+    ]
+    if whole_small_active_constraints:
+        evidence = {
+            "kind": "whole_small_hard_limit_conflict",
+            "active_constraints": whole_small_active_constraints,
+            "whole_dataset_below_minimum": True,
+            "rows_required_for_min_bytes": rows_required_for_min,
+            "rows_allowed_by_rss": rows_allowed_by_rss,
+            "rows_allowed_by_max_bytes": rows_allowed_by_bytes,
+            "max_rows": max_rows,
+            "measured_bytes": measured_bytes,
+            "measured_peak_rss_bytes": measured_peak_rss_bytes,
+            "thresholds": {
+                "min_block_bytes": min_block_bytes,
+                "max_block_bytes": max_block_bytes,
+                "max_rss_bytes": max_rss_bytes,
+            },
+        }
+        active_constraints = ", ".join(whole_small_active_constraints)
+        raise BlockPlanConflict(
+            "whole dataset below byte minimum exceeds hard constraints: "
+            f"{active_constraints}",
+            evidence,
+        )
+
     byte_target_conflict = (
         not small_dataset
         and not explicit_exception
         and rows_required_for_min
         > min(n_obs, max_rows, rows_allowed_by_bytes, rows_allowed_by_rss)
     )
-    if whole_small_hard_limit_conflict or byte_target_conflict:
+    if byte_target_conflict:
         evidence = {
             "kind": "byte_rss_conflict",
             "whole_dataset_below_minimum": small_dataset,
