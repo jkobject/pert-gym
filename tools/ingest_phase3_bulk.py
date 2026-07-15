@@ -55,6 +55,7 @@ import scipy.sparse as sp
 
 _sys.path.insert(0, str(Path(__file__).parent.parent))
 from tools.convert_triplet_artifacts import migrate_h5ad_to_triplet  # noqa: E402
+from tools.depmap_genetic_dependencies import validate_baseline_rna_obs_contract  # noqa: E402
 from tools.lamin_context import connect_pertdata  # noqa: E402
 
 
@@ -587,18 +588,20 @@ def depmap_ccle_to_anndata(files: dict[str, Path]) -> ad.AnnData:
 
     gene_mask = df_expr.columns.to_series().str.match(r"^.+? \(.+?\)$", na=False)
     gene_cols = df_expr.columns[gene_mask.to_numpy()]
-    meta_cols = df_expr.columns[~gene_mask.to_numpy()]
-
     gene_names = gene_cols.str.extract(r"^(.+?) \((.+?)\)$")
     var_df = pd.DataFrame(
         {"gene_symbol": gene_names[0].values, "entrez_id": gene_names[1].values},
         index=gene_cols,
     )
-    obs_df = df_expr.loc[:, meta_cols].copy()
-    if "ModelID" in obs_df.columns:
-        obs_df["depmap_id"] = obs_df["ModelID"]
+    obs_df = pd.DataFrame(index=df_expr.index)
+    if "ModelID" in df_expr.columns:
+        obs_df["depmap_id"] = df_expr["ModelID"].astype(str)
     else:
         obs_df["depmap_id"] = df_expr.index.astype(str)
+    obs_df["model_id"] = obs_df["depmap_id"]
+    obs_df["baseline_join_id"] = obs_df["depmap_id"]
+    if "CellLineName" in df_expr.columns:
+        obs_df["cell_line"] = df_expr["CellLineName"].astype(str)
 
     adata = ad.AnnData(
         X=sp.csr_matrix(df_expr.loc[:, gene_cols].values.astype(np.float32)),
@@ -614,6 +617,10 @@ def depmap_ccle_to_anndata(files: dict[str, Path]) -> ad.AnnData:
 
     adata.obs["perturbation_type"] = "baseline"
     adata.obs["organism"] = "human"
+    adata.obs["dataset_release"] = DEPMAP_RELEASE
+    adata.obs["baseline_lamin_prefix"] = DEPMAP_LAMIN_PREFIX
+    adata.obs["artifact_role"] = "matched_baseline_expression"
+    validate_baseline_rna_obs_contract(adata.obs)
 
     return adata
 
