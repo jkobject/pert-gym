@@ -20,11 +20,13 @@ from pert_gym.gcs_native_sparse_zarr import (
     GCSNativeMetrics,
     GCSNativeWriterError,
     assert_cache_budget,
+    plan_production_blocks,
     promote_gcs_native_revision,
     register_gcs_prefix_with_lamin,
     requester_pays_gcs_filesystem,
     write_gcs_native_sparse_revision,
 )
+from pert_gym.logical_sparse_zarr import shared_var_identity
 
 TOOL_PATH = Path(__file__).parents[1] / "tools" / "migrate_gcs_native_sparse_zarr.py"
 TOOL_SPEC = importlib.util.spec_from_file_location(
@@ -37,6 +39,7 @@ TOOL_SPEC.loader.exec_module(gcs_native_migration_tool)
 
 class NativeChunk(TypedDict):
     checksums: dict[str, str]
+    compressed_bytes: int
     end: int
     source_generation: str
     start: int
@@ -47,9 +50,19 @@ class NativeSource(TypedDict):
     row_start: int
 
 
+class NativeVar(TypedDict):
+    frame_sha256: str
+    generation: str
+    index_sha256: str
+    key: str
+    schema_fingerprint: str
+
+
 class NativeManifest(TypedDict):
+    blocks: list[dict[str, object]]
     chunks: list[NativeChunk]
     source: NativeSource
+    var: NativeVar
 
 
 class PromotionMarker(TypedDict):
@@ -64,6 +77,9 @@ class WriteOverrides(TypedDict, total=False):
     source_row_end: int | None
     source_row_start: int | None
     stop_after_chunks: int | None
+    production_block_max_bytes: int
+    production_block_min_bytes: int
+    production_block_target_bytes: int
 
 
 class WriteArguments(TypedDict):
@@ -110,6 +126,101 @@ def memory_filesystem() -> MemoryFileSystem:
     return cast(MemoryFileSystem, fs)
 
 
+def _has_valid_contiguous_partition(
+    sizes: tuple[int, ...], *, minimum: int, maximum: int
+) -> bool:
+    if not sizes:
+        return True
+    for cut_mask in range(1 << (len(sizes) - 1)):
+        boundaries = [0]
+        boundaries.extend(
+            index for index in range(1, len(sizes)) if cut_mask & (1 << (index - 1))
+        )
+        boundaries.append(len(sizes))
+        block_sizes = [
+            sum(sizes[start:end]) for start, end in zip(boundaries, boundaries[1:])
+        ]
+        if all(minimum <= size <= maximum for size in block_sizes[:-1]) and (
+            block_sizes[-1] <= maximum
+        ):
+            return True
+    return False
+
+
+def test_production_block_planner_rebalances_for_valid_contiguous_partition() -> None:
+    gib = 1024**3
+
+    assert plan_production_blocks([2 * gib, gib, 5 * gib // 2]) == (
+        (0, 2),
+        (2, 3),
+    )
+
+
+def test_production_block_planner_preserves_existing_canonical_layouts() -> None:
+    assert plan_production_blocks(
+        [4, 2, 2, 3], min_bytes=4, target_bytes=5, max_bytes=6
+    ) == ((0, 1), (1, 3), (3, 4))
+
+
+def test_production_block_planner_matches_scaled_exhaustive_oracle() -> None:
+    minimum, target, maximum = 4, 5, 6
+    for length in range(6):
+        for encoded in range(8**length):
+            value = encoded
+            sizes = []
+            for _ in range(length):
+                sizes.append(value % 8)
+                value //= 8
+            expected = _has_valid_contiguous_partition(
+                tuple(sizes), minimum=minimum, maximum=maximum
+            ) and all(size <= maximum for size in sizes)
+            try:
+                blocks = plan_production_blocks(
+                    sizes,
+                    min_bytes=minimum,
+                    target_bytes=target,
+                    max_bytes=maximum,
+                )
+            except ValueError:
+                assert not expected, sizes
+                continue
+
+            assert expected, sizes
+            if not sizes:
+                assert blocks == ()
+                continue
+            assert blocks[0][0] == 0
+            assert blocks[-1][1] == len(sizes)
+            assert all(left[1] == right[0] for left, right in zip(blocks, blocks[1:]))
+            block_sizes = [sum(sizes[start:end]) for start, end in blocks]
+            assert all(minimum <= size <= maximum for size in block_sizes[:-1])
+            assert block_sizes[-1] <= maximum
+
+
+def test_production_block_planner_validates_input_boundaries() -> None:
+    assert plan_production_blocks([], min_bytes=4, target_bytes=5, max_bytes=6) == ()
+    assert plan_production_blocks([0, 0], min_bytes=4, target_bytes=5, max_bytes=6) == (
+        (0, 2),
+    )
+    with pytest.raises(ValueError, match="exceeds the production block ceiling"):
+        plan_production_blocks([7], min_bytes=4, target_bytes=5, max_bytes=6)
+    for invalid_sizes in ([-1], [True], [1.5]):
+        with pytest.raises(ValueError, match="non-negative integers"):
+            plan_production_blocks(
+                cast(Any, invalid_sizes),
+                min_bytes=4,
+                target_bytes=5,
+                max_bytes=6,
+            )
+    for minimum, target, maximum in ((0, 5, 6), (4, 3, 6), (4, 7, 6)):
+        with pytest.raises(ValueError, match="0 < min <= target <= max"):
+            plan_production_blocks(
+                [1],
+                min_bytes=minimum,
+                target_bytes=target,
+                max_bytes=maximum,
+            )
+
 
 def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
     monkeypatch: pytest.MonkeyPatch,
@@ -130,30 +241,35 @@ def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
         "version_aware": True,
     }
 
+
 def write(
     fs: MemoryFileSystem, cache_dir: Path, **changes: Unpack[WriteOverrides]
 ) -> tuple[NativeManifest, GCSNativeMetrics]:
     matrix, obs, var = source()
-    arguments = cast(WriteArguments, {
-        "fs": fs,
-        "staging_prefix": "bucket/staging",
-        "logical_key": "family/example",
-        "revision": "r1",
-        "matrix": matrix,
-        "obs": obs,
-        "var": var,
-        "source_uri": "gs://source-bucket/immutable.h5ad",
-        "source_generation": "12345",
-        "source_row_start": 0,
-        "source_row_end": 6,
-        "schema_fingerprint": "schema-v1",
-        "ingestion_run_id": "test-run",
-        "cache_dir": cache_dir,
-        "cache_cap_bytes": 1024,
-        "cache_safety_reserve_bytes": 0,
-        "min_rows": 1,
-        "max_rows": 2,
-    } | changes)
+    arguments = cast(
+        WriteArguments,
+        {
+            "fs": fs,
+            "staging_prefix": "bucket/staging",
+            "logical_key": "family/example",
+            "revision": "r1",
+            "matrix": matrix,
+            "obs": obs,
+            "var": var,
+            "source_uri": "gs://source-bucket/immutable.h5ad",
+            "source_generation": "12345",
+            "source_row_start": 0,
+            "source_row_end": 6,
+            "schema_fingerprint": "schema-v1",
+            "ingestion_run_id": "test-run",
+            "cache_dir": cache_dir,
+            "cache_cap_bytes": 1024,
+            "cache_safety_reserve_bytes": 0,
+            "min_rows": 1,
+            "max_rows": 2,
+        }
+        | changes,
+    )
     manifest, metrics = write_gcs_native_sparse_revision(**arguments)
     return cast(NativeManifest, manifest), metrics
 
@@ -180,17 +296,90 @@ def test_remote_writer_resumes_direct_object_store_chunks_and_promotes_last(
     ] * 3
     assert all(record["checksums"]["data_sha256"] for record in manifest["chunks"])
 
-    marker = cast(PromotionMarker, promote_gcs_native_revision(
-        fs=fs,
-        staging_prefix="bucket/staging",
-        logical_key="family/example",
-        revision="r1",
-        manifest=manifest,
-    ))
+    marker = cast(
+        PromotionMarker,
+        promote_gcs_native_revision(
+            fs=fs,
+            staging_prefix="bucket/staging",
+            logical_key="family/example",
+            revision="r1",
+            manifest=manifest,
+        ),
+    )
     assert marker["promotion_key"].endswith("promotions/r1.json")
     assert json.loads(fs.cat(marker["promotion_key"]))["manifest_key"].endswith(
         "manifest.json"
     )
+
+
+def test_remote_manifest_exposes_one_full_hash_shared_var(tmp_path: Path) -> None:
+    fs = memory_filesystem()
+    manifest, _ = write(fs, tmp_path / "cache")
+    _, _, var = source()
+    identity = shared_var_identity(var, schema_fingerprint="schema-v1")
+
+    assert manifest["var"] == {
+        "key": "bucket/staging/family/example/temporary-revisions/r1/var.parquet",
+        "generation": "",
+        "index_sha256": identity.index_sha256,
+        "frame_sha256": identity.frame_sha256,
+        "schema_fingerprint": "schema-v1",
+    }
+
+
+def test_writer_measures_and_enforces_production_blocks_bound_to_shared_var(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import pert_gym.gcs_native_sparse_zarr as writer
+
+    fs = memory_filesystem()
+    original = writer._write_remote_matrix
+
+    def measured_matrix(fs: Any, key: str, matrix: object, sparse_format: str) -> int:
+        original(fs, key, cast(Any, matrix), sparse_format)
+        return 100
+
+    monkeypatch.setattr(writer, "_write_remote_matrix", measured_matrix)
+    manifest, _ = write(
+        fs,
+        tmp_path / "cache",
+        production_block_min_bytes=150,
+        production_block_target_bytes=200,
+        production_block_max_bytes=250,
+    )
+
+    assert [chunk["compressed_bytes"] for chunk in manifest["chunks"]] == [100] * 3
+    assert [block["compressed_bytes"] for block in manifest["blocks"]] == [200, 100]
+    assert [block["chunk_indexes"] for block in manifest["blocks"]] == [[0, 1], [2]]
+    assert [(block["start"], block["end"]) for block in manifest["blocks"]] == [
+        (0, 4),
+        (4, 6),
+    ]
+    assert all(block["var"] == manifest["var"] for block in manifest["blocks"])
+
+
+def test_writer_rejects_measured_chunk_above_production_block_ceiling(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import pert_gym.gcs_native_sparse_zarr as writer
+
+    fs = memory_filesystem()
+    original = writer._write_remote_matrix
+
+    def oversized_matrix(fs: Any, key: str, matrix: object, sparse_format: str) -> int:
+        original(fs, key, cast(Any, matrix), sparse_format)
+        return 251
+
+    monkeypatch.setattr(writer, "_write_remote_matrix", oversized_matrix)
+
+    with pytest.raises(ValueError, match="exceeds the production block ceiling"):
+        write(
+            fs,
+            tmp_path / "cache",
+            production_block_min_bytes=150,
+            production_block_target_bytes=200,
+            production_block_max_bytes=250,
+        )
 
 
 def test_remote_writer_rejects_resume_source_generation_drift_and_orphan(
@@ -488,7 +677,9 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
         gcs_native_migration_tool, "GCSH5ADCSR", lambda *_args, **_kwargs: object()
     )
     monkeypatch.setattr(
-        gcs_native_migration_tool, "read_elem", lambda _: pd.DataFrame(index=pd.Index(["g"]))
+        gcs_native_migration_tool,
+        "read_elem",
+        lambda _: pd.DataFrame(index=pd.Index(["g"])),
     )
     monkeypatch.setattr(
         gcs_native_migration_tool,
