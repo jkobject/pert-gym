@@ -24,47 +24,72 @@ import h5py
 import numpy as np
 import pandas as pd
 import parquet_frame_parity as frame_parity
+import writer_contract
 import zarr
 from anndata._io.specs import read_elem
 from scipy import sparse
 
 ROOT = Path.home() / "work" / "pert-gym"
 sys.path.insert(0, str(ROOT))
+from tools.lamin_context import connect_pertdata  # noqa: E402
 from tools.pert_gym_vm_runner import (  # noqa: E402
     lamin_writer_lock,
     legacy_lamin_writer_lock_paths,
     vm_global_lamin_writer_lock_path,
 )
 
-from tools.lamin_context import connect_pertdata  # noqa: E402
+TASK_ID: str
+URL: str
+API_URL: str
+LOGICAL: str
+GCS_ROOT: str
+BILLING_PROJECT: str
+SOURCE: dict[str, str]
+EXPECTED_HEAD: dict[str, object]
+EXPECTED_API: dict[str, object]
+N_OBS: int
+N_VARS: int
+MAX_RSS: int
+MIN_AVAILABLE: int
+OUT: Path
+REVISION_PREFIX: str
+EXECUTION_TIMEOUT_SECONDS: int
+ACTIVE_CONFIG: dict[str, Any]
 
-TASK_ID = "t_be513f9a"
-URL = "https://datasets.cellxgene.cziscience.com/081fef14-662c-430d-888f-b87a701d86b3.h5ad"
-API_URL = "https://api.cellxgene.cziscience.com/curation/v1/collections/73cf6939-3caa-4105-bc57-e073ee885a28"
-LOGICAL = "pert-gym/logical/temporal/cell_culture_differentiation_and_proliferation_conditions_influence_the_in_vitro"
-GCS_ROOT = "scperturb/pert-gym/staging"
-BILLING_PROJECT = "jkobject-1549353370965"
-SOURCE = {
-    "collection_id": "73cf6939-3caa-4105-bc57-e073ee885a28",
-    "collection_version_id": "3276a66a-af66-44fe-a861-de39e390b789",
-    "dataset_id": "c69fb6cd-fc4d-4216-85cb-8d80e7771786",
-    "dataset_version_id": "081fef14-662c-430d-888f-b87a701d86b3",
-    "asset_id": "081fef14-662c-430d-888f-b87a701d86b3",
-}
-EXPECTED_HEAD = {
-    "content_length": 173402098,
-    "etag": '"9cdf52749874c93f5d0a15753b8945e3-21"',
-    "last_modified": "Wed, 10 Jun 2026 00:53:03 GMT",
-    "version_id": "TrS2SHWxRaxA211Ef8Icqel7OJHjT3fJ",
-}
-N_OBS = 10224
-N_VARS = 35552
-MAX_RSS = 24 * 1024**3
-MIN_AVAILABLE = 4 * 1024**3
-TIMEPOINT_MINUTES = 40320
-OUT = Path("/tmp/temporal-v4-099-t_be513f9a")
-FAILED_REVISION = "temporal-v4-099-20260715T135852Z-d36b0c6d"
-EXECUTION_TIMEOUT_SECONDS = 7200
+
+def apply_contract(contract: Any) -> None:
+    """Populate runtime values only from a fully validated bound contract."""
+    global TASK_ID, URL, API_URL, LOGICAL, GCS_ROOT, BILLING_PROJECT
+    global SOURCE, EXPECTED_HEAD, EXPECTED_API, N_OBS, N_VARS
+    global MAX_RSS, MIN_AVAILABLE, OUT, REVISION_PREFIX
+    global EXECUTION_TIMEOUT_SECONDS, ACTIVE_CONFIG
+
+    config = contract.config
+    ACTIVE_CONFIG = config
+    TASK_ID = config["task_id"]
+    URL = config["source"]["url"]
+    API_URL = config["source"]["api_url"]
+    SOURCE = {
+        key: config["source"][key]
+        for key in (
+            "collection_id",
+            "collection_version_id",
+            "dataset_id",
+            "dataset_version_id",
+            "asset_id",
+        )
+    }
+    EXPECTED_HEAD = config["source_head"]
+    EXPECTED_API = config["api_identity"]
+    N_OBS, N_VARS = config["shape"]
+    LOGICAL = config["logical_key"]
+    GCS_ROOT = config["storage"]["gcs_root"]
+    BILLING_PROJECT = config["execution"]["billing_project"]
+    MAX_RSS = config["execution"]["max_rss_bytes"]
+    MIN_AVAILABLE = config["execution"]["min_available_bytes"]
+    OUT = Path(config["execution"]["output_directory"])
+    REVISION_PREFIX = config["revision"]["prefix"]
+    EXECUTION_TIMEOUT_SECONDS = config["execution"]["timeout_seconds"]
 
 
 def now() -> float:
@@ -120,7 +145,7 @@ def rss_bytes(pid: int) -> int:
     return 0
 
 
-def source_head() -> dict[str, object]:
+def source_head(contract: Any) -> dict[str, object]:
     request = urllib.request.Request(URL, method="HEAD")
     with urllib.request.urlopen(request, timeout=30) as response:
         result = {
@@ -132,12 +157,12 @@ def source_head() -> dict[str, object]:
             "version_id": response.headers.get("x-amz-version-id"),
         }
     observed = {key: result[key] for key in EXPECTED_HEAD}
-    if observed != EXPECTED_HEAD or result["status"] != 200 or result["final_url"] != URL:
+    if observed != EXPECTED_HEAD:
         raise RuntimeError(f"source HEAD drift: {result}")
     return result
 
 
-def source_api() -> dict[str, object]:
+def source_api(contract: Any) -> dict[str, object]:
     with urllib.request.urlopen(API_URL, timeout=30) as response:
         collection = json.load(response)
     datasets = [row for row in collection["datasets"] if row["dataset_id"] == SOURCE["dataset_id"]]
@@ -156,18 +181,24 @@ def source_api() -> dict[str, object]:
         "organism": dataset["organism"],
         "assay": dataset["assay"],
         "tombstone": dataset["tombstone"],
+        "is_primary_data": dataset.get("is_primary_data"),
+        "public": collection.get("visibility") == "PUBLIC",
     }
-    if (
-        observed["collection_id"] != SOURCE["collection_id"]
-        or observed["collection_version_id"] != SOURCE["collection_version_id"]
-        or observed["dataset_version_id"] != SOURCE["dataset_version_id"]
-        or observed["asset_url"] != URL
-        or observed["n_obs"] != N_OBS
-        or observed["n_vars"] != N_VARS
-        or observed["organism"] != [{"label": "Homo sapiens", "ontology_term_id": "NCBITaxon:9606"}]
-        or observed["assay"] != [{"label": "10x 3' v2", "ontology_term_id": "EFO:0009899"}]
-        or observed["tombstone"] is not False
-    ):
+    expected = {
+        "collection_id": SOURCE["collection_id"],
+        "collection_version_id": SOURCE["collection_version_id"],
+        "dataset_id": SOURCE["dataset_id"],
+        "dataset_version_id": SOURCE["dataset_version_id"],
+        "asset_url": URL,
+        "n_obs": N_OBS,
+        "n_vars": N_VARS,
+        "organism": [EXPECTED_API["organism"]],
+        "assay": EXPECTED_API["assays"],
+        "tombstone": EXPECTED_API["tombstone"],
+        "is_primary_data": EXPECTED_API["is_primary_data"],
+        "public": EXPECTED_API["public"],
+    }
+    if observed != expected:
         raise RuntimeError(f"source API drift: {observed}")
     return observed
 
@@ -191,8 +222,8 @@ def hash_source() -> tuple[str, float, int]:
 
 def duplicate_probe() -> dict[str, object]:
     ln = connect_pertdata()
-    assert ln.setup.settings.instance.slug == "laminlabs/pertdata"
-    assert ln.setup.settings.branch.name == "jkobject"
+    assert ln.setup.settings.instance.slug == ACTIVE_CONFIG["execution"]["lamin_instance"]
+    assert ln.setup.settings.branch.name == ACTIVE_CONFIG["execution"]["lamin_branch"]
     candidates: dict[str, dict[str, object]] = {}
     queries: list[dict[str, object]] = []
 
@@ -233,8 +264,8 @@ def duplicate_probe() -> dict[str, object]:
             tuple_hits.append({**row, "source_tuple_presence": presence})
     result = {
         "observed_at": now(),
-        "instance": "laminlabs/pertdata",
-        "branch": "jkobject",
+        "instance": ACTIVE_CONFIG["execution"]["lamin_instance"],
+        "branch": ACTIVE_CONFIG["execution"]["lamin_branch"],
         "queries": queries,
         "candidate_rows_returned": len(candidates),
         "exact_logical_key_prefix_hits": logical_hits,
@@ -250,41 +281,42 @@ def duplicate_probe() -> dict[str, object]:
 def map_obs(source: pd.DataFrame, organism: str) -> pd.DataFrame:
     if len(source) != N_OBS or not source.index.is_unique or source.index.isna().any():
         raise RuntimeError("source obs identity failed")
-    required = ["medium", "sample", "donor_id", "development_stage", "development_stage_ontology_term_id", "assay", "assay_ontology_term_id"]
+    mapper = ACTIVE_CONFIG["obs"]
+    required = mapper["required_non_null"]
     for column in required:
         if column not in source or source[column].isna().any():
             raise RuntimeError(f"required obs field failed: {column}")
-    if set(map(str, source["medium"].unique())) != {"Pneuma-ALI", "Clancy", "H&H", "BEGM-ALI"}:
-        raise RuntimeError("condition vocabulary drift")
-    if not source["sample"].astype(str).str.contains("ALI28", regex=False).all():
-        raise RuntimeError("row-level sample no longer proves ALI28")
-    if not source["donor_id"].astype(str).str.contains("ALI28", regex=False).all():
-        raise RuntimeError("row-level donor metadata no longer proves ALI28")
+    for predicate in mapper["predicates"]:
+        values = source[predicate["column"]].astype(str)
+        if predicate["op"] == "domain_equals":
+            passed = set(values.unique()) == set(predicate["values"])
+        elif predicate["op"] == "all_contains":
+            passed = values.str.contains(predicate["value"], regex=False).all()
+        elif predicate["op"] == "all_equals":
+            passed = values.eq(str(predicate["value"])).all()
+        else:
+            raise RuntimeError(f"unknown OBS predicate: {predicate['op']}")
+        if not passed:
+            raise RuntimeError(f"required OBS predicate failed: {predicate}")
     obs = source.copy()
-    obs.insert(0, "dataset", LOGICAL)
-    obs.insert(1, "cell_id", source.index.astype(str))
-    obs["organism"] = organism
-    obs["technology"] = "10x 3' v2"
-    obs["modality"] = "scRNA-seq"
-    obs["media"] = obs["medium"].astype(str)
-    obs["condition"] = obs["medium"].astype(str)
-    obs["source_timepoint"] = "ALI28"
-    obs["source_timepoint_unit"] = "days"
-    obs["timepoint"] = TIMEPOINT_MINUTES
-    obs["day"] = 28
-    obs["trajectory_id"] = obs["donor_id"].astype(str) + "|" + obs["medium"].astype(str)
-    obs["is_baseline"] = False
-    obs["age"] = obs["development_stage"].astype(str)
-    obs["treatment"] = "not_applicable"
-    obs["perturbation"] = "none"
-    obs["perturbation_type"] = "none"
-    obs["is_control"] = True
-    obs["dose"] = pd.Series(pd.NA, index=obs.index, dtype="Float64")
-    obs["dose_unit"] = "not_applicable"
-    obs["n_counts"] = obs["nCount_RNA"]
-    obs["n_genes"] = obs["nFeature_RNA"]
-    obs["pct_mito"] = obs["percent.mito"]
-    obs["pct_ribo"] = obs["percent.ribo"]
+    for assignment in mapper["assignments"]:
+        target = assignment["target"]
+        if assignment["op"] == "literal":
+            obs[target] = assignment["value"]
+        elif assignment["op"] == "index":
+            obs[target] = source.index.astype(str)
+        elif assignment["op"] == "copy":
+            obs[target] = source[assignment["source"]]
+        elif assignment["op"] == "concat":
+            parts = [source[column].astype(str) for column in assignment["sources"]]
+            value = parts[0]
+            for part in parts[1:]:
+                value = value + assignment["separator"] + part
+            obs[target] = value
+        elif assignment["op"] == "nullable_float":
+            obs[target] = pd.Series(pd.NA, index=obs.index, dtype="Float64")
+        else:
+            raise RuntimeError(f"unknown OBS assignment: {assignment['op']}")
     return obs
 
 
@@ -294,7 +326,9 @@ def map_var(source: pd.DataFrame, organism: str) -> tuple[pd.DataFrame, str]:
         raise RuntimeError("source var identity failed")
     if not all(value.startswith("ENSG") and value[4:].isdigit() for value in ids):
         raise RuntimeError("source var namespace is not stable Homo sapiens Ensembl Gene ID")
-    if not (source["feature_reference"].astype(str) == "NCBITaxon:9606").all():
+    reference_column = ACTIVE_CONFIG["ordered_var"]["feature_reference_column"]
+    expected_organism = ACTIVE_CONFIG["ordered_var"]["organism_ontology_id"]
+    if not (source[reference_column].astype(str) == expected_organism).all():
         raise RuntimeError("source var organism namespace drift")
     var = source.copy()
     var["ensembl_id"] = ids
@@ -304,7 +338,7 @@ def map_var(source: pd.DataFrame, organism: str) -> tuple[pd.DataFrame, str]:
     var["author_gene_id"] = ids
     var["author_gene_symbol"] = var["feature_name"].astype(str)
     identity = ordered_var_identity(ids)
-    if identity != "878f431e4a709fb43d0ededbcc35511b16048e369e58984bad77fcf16600db4b":
+    if identity != ACTIVE_CONFIG["ordered_var"]["identity_sha256"]:
         raise RuntimeError(f"ordered var identity drift: {identity}")
     return var, identity
 
@@ -354,6 +388,7 @@ def watcher(pid: int, stop: mp.synchronize.Event, output: str) -> None:  # type:
     path = Path(output)
     status = "running"
     exit_code = 0
+    started = time.monotonic()
     while not stop.is_set():
         sample = {"observed_at": now(), "pid": pid, "rss_bytes": rss_bytes(pid), "mem_available_bytes": mem_available()}
         with path.open("a", encoding="utf-8") as handle:
@@ -361,6 +396,14 @@ def watcher(pid: int, stop: mp.synchronize.Event, output: str) -> None:  # type:
         if sample["rss_bytes"] > MAX_RSS or sample["mem_available_bytes"] < MIN_AVAILABLE:
             status = "resource_breach"
             exit_code = 2
+            try:
+                os.kill(pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+            break
+        if time.monotonic() - started > EXECUTION_TIMEOUT_SECONDS:
+            status = "execution_timeout"
+            exit_code = 4
             try:
                 os.kill(pid, signal.SIGTERM)
             except ProcessLookupError:
@@ -402,8 +445,10 @@ class Heartbeats:
         with self.lock:
             sequence = self.sequence
             self.sequence += 1
+            ledger = ACTIVE_CONFIG["accepted_components"]
+            execution = ACTIVE_CONFIG["execution"]
             record = {
-                "intent_key": "pert-gym|publication-wave1|temporal-v4-099|single-component-writer|v1",
+                "intent_key": f"pert-gym|publication-wave1|{REVISION_PREFIX}|single-component-writer|v1",
                 "revision_uuid": self.revision,
                 "lease_id": self.lease_id,
                 "product_execution": {
@@ -411,9 +456,9 @@ class Heartbeats:
                     "pid": os.getpid(),
                     "phase": self.phase,
                     "payload_heartbeat_at": now(),
-                    "metric": "accepted_components",
-                    "current": 2,
-                    "denominator": 153,
+                    "metric": execution["heartbeat_metric"],
+                    "current": ledger["current"],
+                    "denominator": ledger["denominator"],
                 },
                 "rows_completed": self.rows,
                 "checkpoint": self.checkpoint,
@@ -430,7 +475,7 @@ class Heartbeats:
 
     def _loop(self) -> None:
         self.emit()
-        while not self.stop_event.wait(50):
+        while not self.stop_event.wait(ACTIVE_CONFIG["execution"]["heartbeat_interval_seconds"]):
             self.emit()
 
     def start(self) -> None:
@@ -445,57 +490,29 @@ class Heartbeats:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--authorization", type=Path, required=True)
     args = parser.parse_args()
+    contract = writer_contract.load_bound_contract(
+        args.config,
+        args.authorization,
+        writer_path=Path(__file__),
+        helper_path=Path(__file__).with_name("parquet_frame_parity.py"),
+        require_execution=False,
+    )
+    writer_contract.require_execution_authorized(contract)
+    apply_contract(contract)
     started = time.monotonic()
     OUT.mkdir(parents=True, exist_ok=True)
-    authorization = json.loads(args.authorization.read_text())
-    required_authorization = {
-        "protocol": "temporal-v4-099-category-safe-parquet-parity/v2",
-        "source": SOURCE,
-        "source_head": EXPECTED_HEAD,
-        "shape": [N_OBS, N_VARS],
-        "accepted_components": {"current": 2, "denominator": 153},
-        "failed_candidate_denylist": [FAILED_REVISION],
-        "fresh_immutable_revision_required": True,
-        "writer_host": "pert-gym-worker-eu",
-        "writer_region": "europe-west1-b",
-        "single_writer_lease": "global-plus-legacy-exclusive",
-        "manifest_last": True,
-        "forbidden_actions": [
-            "cleanup",
-            "deletion",
-            "promotion",
-            "collection_mutation",
-        ],
-        "execution_timeout_seconds": EXECUTION_TIMEOUT_SECONDS,
-        "max_rss_bytes": MAX_RSS,
-        "min_available_bytes": MIN_AVAILABLE,
-        "accepted_components_credit": 0,
-    }
-    for key, expected in required_authorization.items():
-        if authorization.get(key) != expected:
-            raise RuntimeError(
-                f"authorization mismatch for {key}: "
-                f"expected {expected!r}, got {authorization.get(key)!r}"
-            )
-    writer_sha256 = sha256_bytes(Path(__file__).read_bytes())
-    helper_sha256 = sha256_bytes(Path(__file__).with_name("parquet_frame_parity.py").read_bytes())
-    if authorization.get("writer_sha256") != writer_sha256:
-        raise RuntimeError("authorization writer SHA-256 does not match exact script")
-    if authorization.get("parquet_frame_parity_sha256") != helper_sha256:
-        raise RuntimeError("authorization helper SHA-256 does not match exact helper")
-    if authorization.get("parent_task_status") != "completed" or authorization.get("parent_task_id") != "t_d08ef390":
-        raise RuntimeError("ledger authorization is not bound to completed parent")
-    if socket.gethostname().split(".")[0] != "pert-gym-worker-eu":
-        raise RuntimeError("writer is not on pert-gym-worker-eu")
+    if socket.gethostname().split(".")[0] != ACTIVE_CONFIG["execution"]["host"]:
+        raise RuntimeError("writer is not on the exact authorized host")
     if mem_available() < MIN_AVAILABLE:
         raise RuntimeError("preflight MemAvailable below 4 GiB")
 
-    pre_api = source_api()
-    pre_head = source_head()
+    pre_api = source_api(contract)
+    pre_head = source_head(contract)
     source_sha256, raw_hash_seconds, source_bytes = hash_source()
-    if source_head() != pre_head:
+    if source_head(contract) != pre_head:
         raise RuntimeError("source changed during complete hash")
 
     http = fsspec.filesystem("http")
@@ -523,15 +540,15 @@ def main() -> int:
     if matrix.nnz != len(data) or matrix.shape != shape:
         raise RuntimeError("source sparse structure mismatch")
 
+    selected_columns = sorted(
+        set(ACTIVE_CONFIG["obs"]["required_non_null"])
+        | {assignment["target"] for assignment in ACTIVE_CONFIG["obs"]["assignments"]}
+    )
     semantics = {
-        "verdict": "accepted",
-        "basis": {
-            "row_level_condition": "source obs.medium; four non-null values",
-            "row_level_time": "source obs.sample and donor_id contain ALI28 on every row",
-            "unit_proof": "PMC11376247 figure 1: ALI28 is 28 days of differentiation; GSE243045 metadata Timepoint=ALI28 for the exact eight samples and counts",
-            "mapping": {"day": 28, "timepoint_minutes": TIMEPOINT_MINUTES, "condition": "medium", "perturbation": "none"},
-        },
-        "selected_fields": inventory_frame(obs, ["sample", "donor_id", "medium", "condition", "source_timepoint", "timepoint", "day", "development_stage", "development_stage_ontology_term_id", "assay", "assay_ontology_term_id"]),
+        **ACTIVE_CONFIG["obs"]["semantic_evidence"],
+        "predicates": ACTIVE_CONFIG["obs"]["predicates"],
+        "assignments": ACTIVE_CONFIG["obs"]["assignments"],
+        "selected_fields": inventory_frame(obs, selected_columns),
     }
     preflight = {
         "observed_at": now(),
@@ -558,11 +575,11 @@ def main() -> int:
 
     lock_metadata = {
         "pid": os.getpid(),
-        "run_id": f"{TASK_ID}-temporal-v4-099",
-        "host": "pert-gym-worker-eu",
+        "run_id": f"{TASK_ID}-{REVISION_PREFIX}",
+        "host": ACTIVE_CONFIG["execution"]["host"],
         "project": BILLING_PROJECT,
-        "zone": "europe-west1-b",
-        "branch": "jkobject-readonly-metadata-gcs-candidate",
+        "zone": ACTIVE_CONFIG["execution"]["zone"],
+        "branch": ACTIVE_CONFIG["execution"]["lamin_branch"],
         "started_at": now(),
     }
     with ExitStack() as locks:
@@ -573,8 +590,8 @@ def main() -> int:
         duplicate = duplicate_probe()
         (OUT / "duplicate-probe-under-lease.json").write_bytes(json_bytes(duplicate))
 
-        revision = f"temporal-v4-099-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}-{os.urandom(4).hex()}"
-        if revision in authorization["failed_candidate_denylist"]:
+        revision = f"{REVISION_PREFIX}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}-{os.urandom(4).hex()}"
+        if revision in ACTIVE_CONFIG["revision"]["failed_candidate_denylist"]:
             raise RuntimeError("generated revision is denylisted")
         prefix = f"{GCS_ROOT}/{LOGICAL}/revisions/{revision}"
         var_key = f"{GCS_ROOT}/{LOGICAL}/var/{ordered_var_sha}/var.parquet"
@@ -589,7 +606,11 @@ def main() -> int:
         hb.start()
         stop_watch = mp.Event()
         watcher_path = str(OUT / "resource-samples.jsonl")
-        watch = mp.Process(target=watcher, args=(os.getpid(), stop_watch, watcher_path), name="temporal-v4-099-watcher")
+        watch = mp.Process(
+            target=watcher,
+            args=(os.getpid(), stop_watch, watcher_path),
+            name=f"{REVISION_PREFIX}-watcher",
+        )
         watch.start()
         if not watch.is_alive():
             raise RuntimeError("resource watcher failed to start")
@@ -667,8 +688,8 @@ def main() -> int:
             if not all(item["equal"] for item in sample_parity):
                 raise RuntimeError("sample/boundary sparse parity mismatch")
 
-            post_api = source_api()
-            post_head = source_head()
+            post_api = source_api(contract)
+            post_head = source_head(contract)
             if post_api != pre_api or post_head != pre_head:
                 raise RuntimeError("source inventory changed during writer")
             hb.update("checkpointing", N_OBS, "source-inventory-unchanged")
@@ -768,7 +789,7 @@ def main() -> int:
                 "verification": verification,
                 "terminal": terminal,
                 "forbidden_actions_performed": {"collection_mutation": False, "lamin_main_write": False, "lamin_registration": False, "promotion": False, "legacy_mutation_or_deletion": False, "vm_lifecycle_change": False},
-                "accepted_components_credit": 0,
+                "accepted_components_credit": ACTIVE_CONFIG["accepted_components"]["credit"],
             }
             manifest_key = f"{prefix}/manifest.json"
             manifest_payload = json_bytes(manifest)
