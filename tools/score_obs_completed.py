@@ -51,6 +51,14 @@ def _is_nonblank_string(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def _is_nonempty_nonblank_string_list(value: Any) -> bool:
+    return (
+        isinstance(value, list)
+        and bool(value)
+        and all(_is_nonblank_string(item) for item in value)
+    )
+
+
 def _check_bool(
     name: str,
     value: Any,
@@ -104,9 +112,7 @@ def _score_var_ensembl_species(evidence: dict[str, Any] | None) -> dict[str, Any
         provenance = var_evidence.get("provenance")
         if not isinstance(provenance, list):
             blocked.append("var_ensembl_species.provenance.evidence_missing")
-        elif not provenance or not all(
-            _is_nonblank_string(item) for item in provenance
-        ):
+        elif not _is_nonempty_nonblank_string_list(provenance):
             failed.append("var_ensembl_species.provenance.empty")
 
     failed = sorted(set(failed))
@@ -157,11 +163,9 @@ def _score_dataset(
             if state == "not_applicable":
                 fields_applicable -= 1
                 provenance = item.get("provenance")
-                has_provenance = _is_nonblank_string(provenance) or (
-                    isinstance(provenance, list)
-                    and bool(provenance)
-                    and all(_is_nonblank_string(value) for value in provenance)
-                )
+                has_provenance = _is_nonblank_string(
+                    provenance
+                ) or _is_nonempty_nonblank_string_list(provenance)
                 if not _is_nonblank_string(item.get("source")) and not has_provenance:
                     failed.append(f"{prefix}.missing_source")
                 continue
@@ -171,7 +175,7 @@ def _score_dataset(
             if state == "manifest_only":
                 blocked.append(f"{prefix}.manifest_only")
                 continue
-            if not str(item.get("source", "")).strip():
+            if not _is_nonblank_string(item.get("source")):
                 failed.append(f"{prefix}.missing_source")
                 continue
             non_null = item.get("non_null_rows")
@@ -211,7 +215,7 @@ def _score_dataset(
 
     for name in ("citations", "provenance"):
         value = dataset_checks.get(name)
-        if isinstance(value, list) and value:
+        if _is_nonempty_nonblank_string_list(value):
             checks[name] = "pass"
         elif isinstance(value, list):
             checks[name] = "fail"

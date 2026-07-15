@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from tools.score_obs_completed import (
     load_contract,
     score_manifest,
@@ -146,6 +148,39 @@ def test_alias_requires_provenance_and_full_non_null_coverage() -> None:
     assert dataset["OBS_COMPLETED"] == "false"
     assert "fields.cell_type.incomplete_coverage:1/2" in dataset["failed_checks"]
     assert "fields.tissue_type.missing_source" in dataset["failed_checks"]
+
+
+@pytest.mark.parametrize("state", ["present", "alias_only"])
+@pytest.mark.parametrize("source", [[], 123, True])
+def test_applicable_field_rejects_non_string_source(state: str, source: object) -> None:
+    contract = load_contract(CONTRACT_PATH)
+    evidence = complete_evidence(contract)
+    evidence["members"]["dataset/a/obs.parquet"]["fields"]["molecule_sequence"] = {
+        "state": state,
+        "source": source,
+        "non_null_rows": 2,
+        "total_rows": 2,
+    }
+
+    dataset = score_manifest([manifest_row()], [evidence], contract)["datasets"][0]
+
+    assert dataset["OBS_COMPLETED"] == "false"
+    assert "fields.molecule_sequence.missing_source" in dataset["failed_checks"]
+
+
+@pytest.mark.parametrize("name", ["citations", "provenance"])
+@pytest.mark.parametrize("entry", ["   ", 123, None])
+def test_dataset_provenance_lists_reject_invalid_entries(
+    name: str, entry: object
+) -> None:
+    contract = load_contract(CONTRACT_PATH)
+    evidence = complete_evidence(contract)
+    evidence["dataset_checks"][name] = [entry]
+
+    dataset = score_manifest([manifest_row()], [evidence], contract)["datasets"][0]
+
+    assert dataset["OBS_COMPLETED"] == "false"
+    assert f"{name}.empty" in dataset["failed_checks"]
 
 
 def test_manifest_without_obs_evidence_is_blocked_not_missing() -> None:
