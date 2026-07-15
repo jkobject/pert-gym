@@ -109,16 +109,14 @@ Repository backlog:
 
 ## Remaining final project graph
 
-The durable six-stage convergence path remains:
+The durable convergence dependency graph is:
 
-1. publication macro-gate `t_12667244` — complete/reconcile executable components;
-2. Collection build `t_fc3d4794`;
-3. exhaustive Collection/shared-var/Zarr/loader test `t_17ec66d9`;
-4. terminal acceptance `t_61847c4c`;
-5. compact final gate `t_3df00bdb`;
-6. separate human-only RxRx3 access/EULA gate `t_e8f9c88c`.
+- publication macro-gate `t_12667244` → Collection build `t_fc3d4794` → exhaustive Collection/shared-var/Zarr/loader test `t_17ec66d9`;
+- the separate human-only RxRx3 access/EULA gate `t_e8f9c88c` runs in parallel with that path;
+- test `t_17ec66d9` and RxRx3 gate `t_e8f9c88c` converge into terminal acceptance `t_61847c4c`;
+- compact final gate `t_3df00bdb` follows terminal acceptance and retains all six direct canonical parents: denominator `t_04b761eb`, loader contract `t_0cff18c2`, publication `t_12667244`, Collection `t_fc3d4794`, test `t_17ec66d9`, and terminal acceptance `t_61847c4c`.
 
-RxRx3 is the only known genuine human gate. It must not serialize other accessible dataset work.
+RxRx3 is the only known genuine human gate. It must not serialize other accessible dataset work before convergence at terminal acceptance.
 
 ## Operating rules
 

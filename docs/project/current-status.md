@@ -86,14 +86,12 @@ Superseded cards are historical only and are not progress or current dependencie
 
 Card `t_c56390c3` is classifying every open PR. A PR may be merged only if exact-head independent acceptance exists and no later finding contradicts it. CI-green alone is insufficient. Stale/superseded PRs should be closed with their canonical successor named.
 
-## Final convergence chain
+## Final convergence graph
 
-1. `t_12667244`: publication/reconciliation macro-gate;
-2. `t_fc3d4794`: complete versioned logical Collection;
-3. `t_17ec66d9`: exhaustive denominator/shared-var/Zarr/loader/Collection test;
-4. `t_61847c4c`: terminal Definition-of-Done acceptance;
-5. `t_3df00bdb`: compact final project gate;
-6. `t_e8f9c88c`: separate RxRx3 human access/EULA gate.
+- Publication/reconciliation macro-gate `t_12667244` → complete versioned logical Collection `t_fc3d4794` → exhaustive denominator/shared-var/Zarr/loader/Collection test `t_17ec66d9`.
+- Separate RxRx3 human access/EULA gate `t_e8f9c88c` runs in parallel with that path.
+- Test `t_17ec66d9` and RxRx3 gate `t_e8f9c88c` converge into terminal Definition-of-Done acceptance `t_61847c4c`.
+- Compact final project gate `t_3df00bdb` follows terminal acceptance and retains all six direct canonical parents: denominator `t_04b761eb`, loader contract `t_0cff18c2`, publication `t_12667244`, Collection `t_fc3d4794`, test `t_17ec66d9`, and terminal acceptance `t_61847c4c`.
 
 ## Safety
 
