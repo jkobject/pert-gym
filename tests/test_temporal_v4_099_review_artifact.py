@@ -19,14 +19,18 @@ def test_review_artifact_is_bound_to_exact_writer_and_helper() -> None:
 
     assert authorization["writer_sha256"] == sha256(writer)
     assert authorization["parquet_frame_parity_sha256"] == sha256(helper)
-    assert helper.read_bytes() == (
-        ROOT / "src/pert_gym/parquet_frame_parity.py"
-    ).read_bytes()
+    assert (
+        helper.read_bytes()
+        == (ROOT / "src/pert_gym/parquet_frame_parity.py").read_bytes()
+    )
 
 
 def test_review_authorization_is_fail_closed_and_bounded() -> None:
     authorization = json.loads((REVIEW / "authorization.json").read_text())
 
+    assert (
+        authorization["protocol"] == "temporal-v4-099-category-safe-parquet-parity/v2"
+    )
     assert authorization["shape"] == [10224, 35552]
     assert authorization["accepted_components"] == {
         "current": 2,
@@ -55,8 +59,14 @@ def test_review_authorization_is_fail_closed_and_bounded() -> None:
 def test_writer_records_obs_and_shared_var_parity_without_dataframe_equals() -> None:
     writer = (REVIEW / "write_component.py").read_text()
 
-    assert "obs_parity = frame_parity.assert_parquet_frame_parity(obs, remote_obs)" in writer
-    assert "var_parity = frame_parity.assert_parquet_frame_parity(var, remote_var)" in writer
+    assert (
+        "obs_parity = frame_parity.assert_parquet_frame_parity(obs, remote_obs)"
+        in writer
+    )
+    assert (
+        "var_parity = frame_parity.assert_parquet_frame_parity(var, remote_var)"
+        in writer
+    )
     assert (
         "existing_shared_var_parity = frame_parity.assert_parquet_frame_parity(var, remote_var)"
         in writer

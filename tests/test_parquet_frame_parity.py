@@ -48,9 +48,9 @@ def test_actual_parquet_round_trip_allows_only_integer_category_decoding() -> No
         "cluster_l1": "int64",
         "score": "float64",
     }
-    assert verdict["semantic_sha256"]["source"] == verdict["semantic_sha256"][
-        "readback"
-    ]
+    assert (
+        verdict["semantic_sha256"]["source"] == verdict["semantic_sha256"]["readback"]
+    )
     assert verdict["allowlisted_normalizations"] == [
         {
             "column": "hash.ID",
@@ -58,7 +58,8 @@ def test_actual_parquet_round_trip_allows_only_integer_category_decoding() -> No
             "readback_dtype": "int64",
             "decoded_dtype": "int64",
             "decoded_domain": [2, 5, 6],
-            "rule": "category[int]->identical-integer-dtype/v1",
+            "readback_domain": [2, 6, 5],
+            "rule": "unordered-category[int]->identical-integer-dtype/v2",
         },
         {
             "column": "cluster_l1",
@@ -66,9 +67,25 @@ def test_actual_parquet_round_trip_allows_only_integer_category_decoding() -> No
             "readback_dtype": "int64",
             "decoded_dtype": "int64",
             "decoded_domain": [0, 1, 2],
-            "rule": "category[int]->identical-integer-dtype/v1",
+            "readback_domain": [2, 1, 0],
+            "rule": "unordered-category[int]->identical-integer-dtype/v2",
         },
     ]
+
+
+def test_actual_parquet_round_trip_rejects_ordered_integer_category() -> None:
+    source = pd.DataFrame(
+        {"category": pd.Categorical([2, 1, 2], categories=[2, 1], ordered=True)}
+    )
+    readback = read_parquet_bytes(parquet_bytes(source))
+
+    assert str(readback["category"].dtype) == "int64"
+    verdict = assert_rejected(source, readback)
+
+    assert verdict["allowlisted_normalizations"] == []
+    mismatches = verdict["mismatches"]
+    assert isinstance(mismatches, list)
+    assert "dtype_mismatch:category:category->int64" in mismatches
 
 
 def test_changed_value_fails_closed() -> None:
@@ -123,9 +140,7 @@ def test_category_label_or_domain_drift_fails_closed(
     source = pd.DataFrame(
         {"category": pd.Categorical(source_values, categories=source_categories)}
     )
-    readback = pd.DataFrame(
-        {"category": pd.Series(readback_values, dtype="int64")}
-    )
+    readback = pd.DataFrame({"category": pd.Series(readback_values, dtype="int64")})
 
     verdict = assert_rejected(source, readback)
     assert not verdict["allowlisted_normalizations"]

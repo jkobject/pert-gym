@@ -451,7 +451,7 @@ def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     authorization = json.loads(args.authorization.read_text())
     required_authorization = {
-        "protocol": "temporal-v4-099-category-safe-parquet-parity/v1",
+        "protocol": "temporal-v4-099-category-safe-parquet-parity/v2",
         "source": SOURCE,
         "source_head": EXPECTED_HEAD,
         "shape": [N_OBS, N_VARS],

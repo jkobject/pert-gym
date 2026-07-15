@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 from pandas.api.types import is_integer_dtype, is_object_dtype
 
-_NORMALIZATION_RULE = "category[int]->identical-integer-dtype/v1"
+_NORMALIZATION_RULE = "unordered-category[int]->identical-integer-dtype/v2"
 
 
 def parquet_bytes(frame: pd.DataFrame) -> bytes:
@@ -50,10 +50,12 @@ def _values_identical(source: pd.Series, readback: pd.Series) -> bool:
 def _integer_category_domain(series: pd.Series) -> list[Any] | None:
     if not isinstance(series.dtype, pd.CategoricalDtype):
         return None
+    if series.cat.ordered:
+        return None
     categories = series.cat.categories
     if not is_integer_dtype(categories.dtype):
         return None
-    return [_python_scalar(value) for value in sorted(categories.tolist())]
+    return [_python_scalar(value) for value in categories.tolist()]
 
 
 def _allowlisted_category_normalization(
@@ -67,10 +69,10 @@ def _allowlisted_category_normalization(
     if str(readback.dtype) != decoded_dtype:
         return None
 
-    readback_domain = [
-        _python_scalar(value) for value in sorted(readback.unique().tolist())
-    ]
-    if domain != readback_domain:
+    readback_domain = [_python_scalar(value) for value in readback.unique().tolist()]
+    if len(domain) != len(readback_domain) or any(
+        value not in domain for value in readback_domain
+    ):
         return None
 
     decoded = source.astype(source.cat.categories.dtype)
@@ -83,6 +85,7 @@ def _allowlisted_category_normalization(
         "readback_dtype": str(readback.dtype),
         "decoded_dtype": decoded_dtype,
         "decoded_domain": domain,
+        "readback_domain": readback_domain,
         "rule": _NORMALIZATION_RULE,
     }
 
