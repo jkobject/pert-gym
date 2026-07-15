@@ -215,6 +215,18 @@ def test_authorization_identity_is_exactly_bound_to_config(
             "dataset_version_id conflicts with asset_id",
         ),
         (
+            lambda c: c["source"].__setitem__(
+                "dataset_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "source dataset_id conflicts with approved revision identity",
+        ),
+        (
+            lambda c: c["source"].__setitem__(
+                "collection_version_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "source collection_version_id conflicts with approved revision identity",
+        ),
+        (
             lambda c: c["revision"].__setitem__("prefix", "temporal-v4-013"),
             "revision prefix conflicts with output/task identity",
         ),
@@ -278,8 +290,27 @@ def write_contract_files(
             "dataset_version_id conflicts with asset_id",
         ),
         (
+            lambda c, a: c["source"].__setitem__(
+                "dataset_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "source dataset_id conflicts with approved revision identity",
+        ),
+        (
+            lambda c, a: c["source"].__setitem__(
+                "collection_version_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "source collection_version_id conflicts with approved revision identity",
+        ),
+        (
             lambda c, a: c["revision"].__setitem__("prefix", "temporal-v4-013"),
             "revision prefix conflicts with output/task identity",
+        ),
+        (
+            lambda c, a: (
+                c["authorization_binding"].__setitem__("parent_task_id", "t_fake"),
+                a.__setitem__("parent_task_id", "t_fake"),
+            ),
+            "authorization parent task conflicts with approved revision identity",
         ),
         (lambda c, a: a.__setitem__("parent_task_id", "t_fake"), "parent task"),
         (
@@ -299,6 +330,18 @@ def test_contract_conflicts_reject_before_instrumented_boundaries(
     mutation(config, authorization)
     config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
     calls = instrument_external_boundaries(monkeypatch, writer)
+    execution = config["execution"]
+    assert isinstance(execution, dict)
+    monkeypatch.setattr(
+        writer.socket,
+        "gethostname",
+        lambda: str(execution["host"]),
+    )
+    monkeypatch.setattr(
+        writer,
+        "mem_available",
+        lambda: int(execution["min_available_bytes"]),
+    )
     monkeypatch.setattr(
         sys,
         "argv",

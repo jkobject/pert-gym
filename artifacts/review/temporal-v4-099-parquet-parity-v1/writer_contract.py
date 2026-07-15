@@ -100,6 +100,28 @@ _REQUIRED_FORBIDDEN = {
 }
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+_APPROVED_IDENTITY_SHA256_BY_REVISION = {
+    "temporal-v4-099": {
+        "url": "149c627d7823db36ab6c432bf1faccb1a98883e90232ae1f4ca0fd9440477efd",
+        "api_url": "479a202a2c70d316e47473d3a3566c24ec35b49686f59639837ab9f0be186e07",
+        "collection_id": "e61b846f0af210f6c779684d72d8d6fae3e53996fb39b68bda6cfe84d6047fc6",
+        "collection_version_id": "bcf4139c398073252873b10388ca765d1e918386690d1dffc410f787f8b734f9",
+        "dataset_id": "9ec066750e10998bc049c79a96373a3f012484331e3b7cb522f8b20abb711b16",
+        "dataset_version_id": "0d3439c839c4204f6c6770e6484740bf0ed38212dc5a3bec6805533dc80a13a3",
+        "asset_id": "0d3439c839c4204f6c6770e6484740bf0ed38212dc5a3bec6805533dc80a13a3",
+        "parent_task_id": "cd25835ac1c731f3d0c94f2dcaebeb1921a37286033e159211aff8403da2083a",
+    },
+    "temporal-v4-013": {
+        "url": "2f0d259aecfd4bfeec86673f1a39b3fb6769f9284b665cb4445e3deb15d528d3",
+        "api_url": "826846acf2f2ae1cdba6d81c5e6f5738c2bc3b44d387474efec7fe592ac88662",
+        "collection_id": "22d9cf6e60a760b2245b0e99f2ec2c6b05e436f0538aec12ec4f26132419c02d",
+        "collection_version_id": "9d64257e5a04477f8bc032c90d99f147870774fcbcf573665e3af5b170cbb413",
+        "dataset_id": "9e0bccc4c100a3deebc0b755ee1909433479ffe06ececf4586eef7b1aafdb5c3",
+        "dataset_version_id": "f372b7b0be24c172c2db73306c6dd4d2ed97ce5eeea9617e8ad5c17ff4fea968",
+        "asset_id": "f372b7b0be24c172c2db73306c6dd4d2ed97ce5eeea9617e8ad5c17ff4fea968",
+        "parent_task_id": "5caef2b5a179f45a82ebb0ab12b1fcca6921ce35a5ae828f464430f4377c8fe8",
+    },
+}
 
 
 def _exact_keys(value: Any, expected: set[str], label: str) -> dict[str, Any]:
@@ -290,6 +312,14 @@ def _validate_config(config: dict[str, Any]) -> None:
     ):
         raise ValueError("revision prefix conflicts with output/task identity")
 
+    approved_identity = _APPROVED_IDENTITY_SHA256_BY_REVISION.get(revision["prefix"])
+    if approved_identity is None:
+        raise ValueError("revision has no intrinsically approved identity binding")
+    for key in sorted(_SOURCE_KEYS):
+        observed_sha256 = hashlib.sha256(source[key].encode()).hexdigest()
+        if observed_sha256 != approved_identity[key]:
+            raise ValueError(f"source {key} conflicts with approved revision identity")
+
     authorization_binding = _exact_keys(
         config["authorization_binding"],
         _AUTHORIZATION_BINDING_KEYS,
@@ -297,6 +327,13 @@ def _validate_config(config: dict[str, Any]) -> None:
     )
     for key in _AUTHORIZATION_BINDING_KEYS:
         _nonempty(authorization_binding[key], f"authorization_binding.{key}")
+    parent_task_sha256 = hashlib.sha256(
+        authorization_binding["parent_task_id"].encode()
+    ).hexdigest()
+    if parent_task_sha256 != approved_identity["parent_task_id"]:
+        raise ValueError(
+            "authorization parent task conflicts with approved revision identity"
+        )
     if authorization_binding["correction_task_id"] != config["task_id"]:
         raise ValueError("authorization correction task conflicts with config task_id")
     if authorization_binding["approved_parent_protocol"] != (
