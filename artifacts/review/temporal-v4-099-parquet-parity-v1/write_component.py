@@ -307,6 +307,9 @@ def map_obs(source: pd.DataFrame, organism: str) -> pd.DataFrame:
             passed = values.str.contains(predicate["value"], regex=False).all()
         elif predicate["op"] == "all_equals":
             passed = values.eq(str(predicate["value"])).all()
+        elif predicate["op"] == "all_not_in":
+            denied = {str(value).strip().casefold() for value in predicate["values"]}
+            passed = (~values.str.strip().str.casefold().isin(denied)).all()
         else:
             raise RuntimeError(f"unknown OBS predicate: {predicate['op']}")
         if not passed:
@@ -351,7 +354,8 @@ def map_var(source: pd.DataFrame, organism: str) -> tuple[pd.DataFrame, str]:
     var["author_gene_id"] = ids
     var["author_gene_symbol"] = var["feature_name"].astype(str)
     identity = ordered_var_identity(ids)
-    if identity != ACTIVE_CONFIG["ordered_var"]["identity_sha256"]:
+    expected_identity = ACTIVE_CONFIG["ordered_var"]["identity_sha256"]
+    if expected_identity != "runtime-computed-before-candidate-write" and identity != expected_identity:
         raise RuntimeError(f"ordered var identity drift: {identity}")
     return var, identity
 

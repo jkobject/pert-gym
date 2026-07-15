@@ -8,6 +8,7 @@ import json
 import sys
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 ROOT = Path(__file__).parents[1]
@@ -16,6 +17,8 @@ CONTRACT_PATH = REVIEW / "writer_contract.py"
 ROW_99_CONFIG = REVIEW / "row-99-config.json"
 ROW_99_AUTHORIZATION = REVIEW / "authorization.json"
 ROW_13_CONFIG = REVIEW / "row-13-prewrite-fixture.json"
+ROW_7_CONFIG = REVIEW / "row-7-config.json"
+ROW_7_AUTHORIZATION = REVIEW / "row-7-authorization.json"
 WRITER = REVIEW / "write_component.py"
 HELPER = REVIEW / "parquet_frame_parity.py"
 
@@ -122,6 +125,127 @@ def test_distinct_row_13_fixture_reaches_generic_preflight_boundary() -> None:
     )
     assert plan["accepted_components"] == {"current": 3, "denominator": 153}
     assert plan["execution_authorized"] is False
+    with pytest.raises(RuntimeError, match="not execution-authorized"):
+        contract.require_execution_authorized(validated)
+
+
+def test_row_7_exact_contract_is_intrinsically_bound_and_execution_authorized() -> None:
+    contract = load_contract_module()
+    config = load_json(ROW_7_CONFIG)
+    authorization = load_json(ROW_7_AUTHORIZATION)
+    validated = contract.load_bound_contract(
+        ROW_7_CONFIG,
+        ROW_7_AUTHORIZATION,
+        writer_path=WRITER,
+        helper_path=HELPER,
+        require_execution=True,
+    )
+
+    assert config["catalogue_record"] == "temporal_v4_007_a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s"
+    assert config["revision"]["prefix"] == "temporal-v4-007"
+    assert config["shape"] == [9619, 35461]
+    assert config["accepted_components"] == {"current": 3, "denominator": 153, "credit": 0}
+    assert config["ordered_var"]["identity_sha256"] == "runtime-computed-before-candidate-write"
+    assert authorization["config_sha256"] == sha256(ROW_7_CONFIG)
+    assert authorization["writer_sha256"] == sha256(WRITER)
+    assert authorization["writer_contract_sha256"] == sha256(CONTRACT_PATH)
+    assert authorization["parquet_frame_parity_sha256"] == sha256(HELPER)
+    assert authorization["execution_authorized"] is True
+    assert validated.config == config
+
+
+@pytest.mark.parametrize(
+    ("mutation", "match"),
+    [
+        (lambda c: c.__setitem__("catalogue_record", "wrong"), "catalogue_record"),
+        (lambda c: c.__setitem__("logical_key", "pert-gym/logical/temporal/wrong"), "logical_key"),
+        (lambda c: c["source"].__setitem__("collection_id", "00000000-0000-0000-0000-000000000000"), "collection_id"),
+        (lambda c: c["source"].__setitem__("collection_version_id", "00000000-0000-0000-0000-000000000000"), "collection_version_id"),
+        (lambda c: c["source"].__setitem__("dataset_id", "00000000-0000-0000-0000-000000000000"), "dataset_id"),
+        (lambda c: c["source"].__setitem__("dataset_version_id", "00000000-0000-0000-0000-000000000000"), "dataset_version_id"),
+        (lambda c: c["source"].__setitem__("asset_id", "00000000-0000-0000-0000-000000000000"), "asset_id"),
+        (lambda c: c["source"].__setitem__("url", "https://datasets.cellxgene.cziscience.com/00000000-0000-0000-0000-000000000000.h5ad"), "URL|url"),
+        (lambda c: c["source_head"].__setitem__("content_length", 1), "source_head"),
+        (lambda c: c["source_head"].__setitem__("etag", "wrong"), "source_head"),
+        (lambda c: c["source_head"].__setitem__("last_modified", "wrong"), "source_head"),
+        (lambda c: c.__setitem__("shape", [1, 35461]), "shape"),
+        (lambda c: c["api_identity"].__setitem__("organism", {"label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090"}), "Homo sapiens"),
+        (lambda c: c["api_identity"].__setitem__("assays", [{"label": "wrong", "ontology_term_id": "EFO:0000000"}]), "assays"),
+        (lambda c: c["ordered_var"].__setitem__("identity_sha256", "f" * 64), "ordered[_-]var"),
+    ],
+)
+def test_row_7_rebound_config_identity_mismatches_fail_closed(mutation, match: str) -> None:
+    config = load_json(ROW_7_CONFIG)
+    mutation(config)
+    authorization = load_json(ROW_7_AUTHORIZATION)
+    authorization["config_sha256"] = hashlib.sha256(
+        (json.dumps(config, indent=2, sort_keys=True) + "\n").encode()
+    ).hexdigest()
+
+    with pytest.raises((RuntimeError, ValueError), match=match):
+        validate(config, authorization)
+
+
+def test_row_7_runtime_semantic_preflight_rejects_placeholder_development_stage() -> None:
+    writer = load_writer_module()
+    writer.ACTIVE_CONFIG = load_json(ROW_7_CONFIG)
+    writer.N_OBS = 2
+    source = pd.DataFrame(
+        {
+            "development_stage": ["unknown", "unknown"],
+            "development_stage_ontology_term_id": ["unknown", "unknown"],
+            "assay": ["10x 5' v1", "10x 5' v1"],
+            "assay_ontology_term_id": ["EFO:0011025", "EFO:0011025"],
+        },
+        index=["cell-1", "cell-2"],
+    )
+    with pytest.raises(RuntimeError, match="required OBS predicate failed"):
+        writer.map_obs(source, "Homo sapiens")
+
+
+def test_row_7_runtime_ordered_var_identity_is_computed_before_candidate_write() -> None:
+    writer = load_writer_module()
+    writer.ACTIVE_CONFIG = load_json(ROW_7_CONFIG)
+    writer.N_VARS = 2
+    source = pd.DataFrame(
+        {
+            "feature_reference": ["NCBITaxon:9606", "NCBITaxon:9606"],
+            "feature_name": ["GENE1", "GENE2"],
+        },
+        index=["ENSG1", "ENSG2"],
+    )
+    _var, identity = writer.map_var(source, "Homo sapiens")
+    assert identity == writer.ordered_var_identity(["ENSG1", "ENSG2"])
+
+
+@pytest.mark.parametrize(
+    ("mutation", "match"),
+    [
+        (lambda c, a: a.__setitem__("config_sha256", "0" * 64), "config SHA-256"),
+        (lambda c, a: a.__setitem__("writer_sha256", "0" * 64), "writer SHA-256"),
+        (lambda c, a: a.__setitem__("parent_task_status", "running"), "not completed"),
+        (lambda c, a: (c["authorization_binding"].__setitem__("parent_task_id", "t_rebound"), a.__setitem__("parent_task_id", "t_rebound")), "approved revision identity"),
+        (lambda c, a: (c.__setitem__("dataset_config_status", "prewrite-fixture"), c["obs"]["semantic_evidence"].__setitem__("verdict", "pending-prewrite"), c["ordered_var"].__setitem__("identity_sha256", None)), "dataset_config_status"),
+    ],
+)
+def test_row_7_stale_or_rebound_authorization_fails_closed(mutation, match: str) -> None:
+    config = load_json(ROW_7_CONFIG)
+    authorization = load_json(ROW_7_AUTHORIZATION)
+    mutation(config, authorization)
+    if authorization["config_sha256"] != "0" * 64:
+        authorization["config_sha256"] = hashlib.sha256(
+            (json.dumps(config, indent=2, sort_keys=True) + "\n").encode()
+        ).hexdigest()
+    with pytest.raises((RuntimeError, ValueError), match=match):
+        validate(config, authorization)
+
+
+def test_row_7_execution_false_is_not_authorized() -> None:
+    contract = load_contract_module()
+    config = load_json(ROW_7_CONFIG)
+    authorization = load_json(ROW_7_AUTHORIZATION)
+    authorization["execution_authorized"] = False
+    validated = validate(config, authorization)
     with pytest.raises(RuntimeError, match="not execution-authorized"):
         contract.require_execution_authorized(validated)
 
@@ -273,6 +397,32 @@ def write_contract_files(
     authorization["config_sha256"] = sha256(config_path)
     authorization_path.write_text(json.dumps(authorization, indent=2, sort_keys=True) + "\n")
     return config_path, authorization_path
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        lambda c: c["revision"].__setitem__("prefix", "temporal-v4-008"),
+        lambda c: c["source"].__setitem__("url", "https://datasets.cellxgene.cziscience.com/00000000-0000-0000-0000-000000000000.h5ad"),
+    ],
+)
+def test_row_7_unauthorized_source_or_revision_rejects_before_side_effects(
+    monkeypatch, tmp_path: Path, mutation
+) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_7_CONFIG)
+    authorization = load_json(ROW_7_AUTHORIZATION)
+    mutation(config)
+    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+    )
+    with pytest.raises((RuntimeError, ValueError)):
+        writer.main()
+    assert calls == []
 
 
 def executable_row_13_contract() -> tuple[dict[str, object], dict[str, object]]:
