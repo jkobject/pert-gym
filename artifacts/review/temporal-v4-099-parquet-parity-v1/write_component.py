@@ -145,6 +145,11 @@ def rss_bytes(pid: int) -> int:
     return 0
 
 
+def heartbeat_progress_rows(n_obs: int) -> range:
+    """Return intermediate row checkpoints strictly below the configured shape."""
+    return range(2048, n_obs, 1024)
+
+
 def source_head(contract: Any) -> dict[str, object]:
     request = urllib.request.Request(URL, method="HEAD")
     with urllib.request.urlopen(request, timeout=30) as response:
@@ -503,11 +508,11 @@ def main() -> int:
     writer_contract.require_execution_authorized(contract)
     apply_contract(contract)
     started = time.monotonic()
-    OUT.mkdir(parents=True, exist_ok=True)
     if socket.gethostname().split(".")[0] != ACTIVE_CONFIG["execution"]["host"]:
         raise RuntimeError("writer is not on the exact authorized host")
     if mem_available() < MIN_AVAILABLE:
         raise RuntimeError("preflight MemAvailable below 4 GiB")
+    OUT.mkdir(parents=True, exist_ok=True)
 
     pre_api = source_api(contract)
     pre_head = source_head(contract)
@@ -654,7 +659,7 @@ def main() -> int:
             with rollback.open("a", encoding="utf-8") as handle:
                 for obj in x_objects:
                     handle.write(json.dumps({"action": "created", **obj}, sort_keys=True) + "\n")
-            for rows in range(2048, 10241, 1024):
+            for rows in heartbeat_progress_rows(N_OBS):
                 hb.update("writing", rows, f"rows-0-{rows}")
             hb.update("checkpointing", N_OBS, "full-source-readback-parity")
 

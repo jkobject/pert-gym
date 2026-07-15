@@ -18,6 +18,7 @@ _CONFIG_KEYS = {
     "config_version",
     "protocol",
     "task_id",
+    "authorization_binding",
     "dataset_config_status",
     "source",
     "source_head",
@@ -45,6 +46,11 @@ _AUTHORIZATION_KEYS = {
     "correction_task_id",
     "review_scope",
     "execution_authorized",
+}
+_AUTHORIZATION_BINDING_KEYS = {
+    "parent_task_id",
+    "approved_parent_protocol",
+    "correction_task_id",
 }
 _SOURCE_KEYS = {
     "url",
@@ -143,6 +149,8 @@ def _validate_config(config: dict[str, Any]) -> None:
         raise ValueError("source URL is not bound to asset_id")
     if not str(source["api_url"]).endswith(f"/{source['collection_id']}"):
         raise ValueError("source API URL is not bound to collection_id")
+    if source["dataset_version_id"] != source["asset_id"]:
+        raise ValueError("source dataset_version_id conflicts with asset_id")
 
     head = _exact_keys(config["source_head"], _HEAD_KEYS, "source_head")
     if head["status"] != 200 or head["final_url"] != source["url"]:
@@ -213,6 +221,15 @@ def _validate_config(config: dict[str, Any]) -> None:
         if target in targets:
             raise ValueError("duplicate OBS assignment target")
         targets.add(target)
+    dataset_assignments = [
+        assignment
+        for assignment in obs["assignments"]
+        if assignment["target"] == "dataset"
+    ]
+    if dataset_assignments != [
+        {"target": "dataset", "op": "literal", "value": config["logical_key"]}
+    ]:
+        raise ValueError("logical_key conflicts with OBS dataset assignment")
     _exact_keys(obs["semantic_evidence"], {"verdict", "basis"}, "obs.semantic_evidence")
     expected_verdict = (
         "accepted"
@@ -268,6 +285,24 @@ def _validate_config(config: dict[str, Any]) -> None:
         if execution[key] != expected:
             raise ValueError(f"execution.{key} conflicts with approved bound {expected!r}")
     _nonempty(execution["output_directory"], "execution.output_directory")
+    if Path(execution["output_directory"]).name != (
+        f"{revision['prefix']}-{config['task_id']}"
+    ):
+        raise ValueError("revision prefix conflicts with output/task identity")
+
+    authorization_binding = _exact_keys(
+        config["authorization_binding"],
+        _AUTHORIZATION_BINDING_KEYS,
+        "authorization_binding",
+    )
+    for key in _AUTHORIZATION_BINDING_KEYS:
+        _nonempty(authorization_binding[key], f"authorization_binding.{key}")
+    if authorization_binding["correction_task_id"] != config["task_id"]:
+        raise ValueError("authorization correction task conflicts with config task_id")
+    if authorization_binding["approved_parent_protocol"] != (
+        f"{revision['prefix']}-parquet-parity-parent/v1"
+    ):
+        raise ValueError("authorization parent protocol conflicts with revision identity")
 
     storage = _exact_keys(config["storage"], _STORAGE_KEYS, "storage")
     expected_storage = {
@@ -309,8 +344,14 @@ def validate_bound_contract(
         raise RuntimeError("authorization helper SHA-256 does not match exact helper")
     if authorization["parent_task_status"] != "completed":
         raise RuntimeError("authorization parent task is not completed")
-    for key in ("parent_task_id", "approved_parent_protocol", "correction_task_id", "review_scope"):
-        _nonempty(authorization[key], f"authorization.{key}")
+    binding = config["authorization_binding"]
+    if authorization["parent_task_id"] != binding["parent_task_id"]:
+        raise RuntimeError("authorization parent task is not bound to config")
+    if authorization["approved_parent_protocol"] != binding["approved_parent_protocol"]:
+        raise RuntimeError("authorization parent protocol is not bound to config")
+    if authorization["correction_task_id"] != binding["correction_task_id"]:
+        raise RuntimeError("authorization correction task is not bound to config task")
+    _nonempty(authorization["review_scope"], "authorization.review_scope")
     if authorization["review_scope"] != "exact-head-independent-review-before-any-execution":
         raise RuntimeError("authorization review scope is not exact-head independent review")
     if not isinstance(authorization["execution_authorized"], bool):

@@ -19,6 +19,11 @@
     "public": true,
     "tombstone": false
   },
+  "authorization_binding": {
+    "approved_parent_protocol": "temporal-v4-099-parquet-parity-parent/v1",
+    "correction_task_id": "t_be513f9a",
+    "parent_task_id": "t_d08ef390"
+  },
   "config_version": "cellxgene-logical-component-config/v1",
   "dataset_config_status": "reviewed-executable",
   "execution": {
