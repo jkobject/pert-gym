@@ -109,6 +109,9 @@ def test_distinct_row_13_fixture_reaches_generic_preflight_boundary() -> None:
     authorization["execution_authorized"] = False
     binding = config["authorization_binding"]
     assert isinstance(binding, dict)
+    assert binding["parent_task_id"] == "t_0c090cdd"
+    assert binding["parent_task_id"] != config["task_id"]
+    assert binding["correction_task_id"] == config["task_id"] == "t_b8dacd9d"
     authorization.update(binding)
 
     validated = validate(config, authorization)
@@ -337,6 +340,61 @@ def test_contract_conflicts_reject_before_instrumented_boundaries(
         "gethostname",
         lambda: str(execution["host"]),
     )
+    monkeypatch.setattr(
+        writer,
+        "mem_available",
+        lambda: int(execution["min_available_bytes"]),
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+    )
+
+    with pytest.raises((RuntimeError, ValueError), match=match):
+        writer.main()
+
+    assert calls == []
+
+
+@pytest.mark.parametrize(
+    ("parent_task_id", "parent_task_status", "match"),
+    [
+        ("t_0c090cdd", "running", "parent task is not completed"),
+        ("t_0c090cdd", "reviewed", "parent task is not completed"),
+        (
+            "t_b8dacd9d",
+            "completed",
+            "authorization parent task conflicts with approved revision identity",
+        ),
+        (
+            "t_arbitrary",
+            "completed",
+            "authorization parent task conflicts with approved revision identity",
+        ),
+    ],
+)
+def test_row_13_invalid_parent_authorization_rejects_before_instrumented_boundaries(
+    monkeypatch,
+    tmp_path: Path,
+    parent_task_id: str,
+    parent_task_status: str,
+    match: str,
+) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_13_CONFIG)
+    binding = config["authorization_binding"]
+    assert isinstance(binding, dict)
+    binding["parent_task_id"] = parent_task_id
+    authorization = bound_authorization(config)
+    authorization.update(binding)
+    authorization["parent_task_status"] = parent_task_status
+    authorization["execution_authorized"] = True
+    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    execution = config["execution"]
+    assert isinstance(execution, dict)
+    monkeypatch.setattr(writer.socket, "gethostname", lambda: str(execution["host"]))
     monkeypatch.setattr(
         writer,
         "mem_available",

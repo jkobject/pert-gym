@@ -119,7 +119,7 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "dataset_id": "9e0bccc4c100a3deebc0b755ee1909433479ffe06ececf4586eef7b1aafdb5c3",
         "dataset_version_id": "f372b7b0be24c172c2db73306c6dd4d2ed97ce5eeea9617e8ad5c17ff4fea968",
         "asset_id": "f372b7b0be24c172c2db73306c6dd4d2ed97ce5eeea9617e8ad5c17ff4fea968",
-        "parent_task_id": "5caef2b5a179f45a82ebb0ab12b1fcca6921ce35a5ae828f464430f4377c8fe8",
+        "parent_task_id": "90bfe728fa4ee245f47ef2af876c728f4f14a37d77d6fdf4e29e800c9111d74e",
     },
 }
 
