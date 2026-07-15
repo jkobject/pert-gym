@@ -13,7 +13,7 @@
   "authorization_binding": {
     "approved_parent_protocol": "temporal-v4-013-parquet-parity-parent/v1",
     "correction_task_id": "t_b8dacd9d",
-    "parent_task_id": "t_b8dacd9d"
+    "parent_task_id": "t_0c090cdd"
   },
   "config_version": "cellxgene-logical-component-config/v1",
   "dataset_config_status": "prewrite-fixture",
