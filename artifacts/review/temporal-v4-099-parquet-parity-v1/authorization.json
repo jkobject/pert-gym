@@ -1,0 +1,48 @@
+{
+  "accepted_components": {
+    "current": 2,
+    "denominator": 153
+  },
+  "accepted_components_credit": 0,
+  "correction_task_id": "t_be513f9a",
+  "execution_timeout_seconds": 7200,
+  "failed_candidate_denylist": [
+    "temporal-v4-099-20260715T135852Z-d36b0c6d"
+  ],
+  "forbidden_actions": [
+    "cleanup",
+    "deletion",
+    "promotion",
+    "collection_mutation"
+  ],
+  "fresh_immutable_revision_required": true,
+  "manifest_last": true,
+  "max_rss_bytes": 25769803776,
+  "min_available_bytes": 4294967296,
+  "parent_task_id": "t_d08ef390",
+  "parent_task_status": "completed",
+  "parquet_frame_parity_sha256": "5f705a3a36596339e6535c990b018da97aa00de89c555f3461b2875dd088a73a",
+  "protocol": "temporal-v4-099-category-safe-parquet-parity/v1",
+  "review_scope": "exact-head-independent-review-before-any-execution",
+  "single_writer_lease": "global-plus-legacy-exclusive",
+  "shape": [
+    10224,
+    35552
+  ],
+  "source": {
+    "asset_id": "081fef14-662c-430d-888f-b87a701d86b3",
+    "collection_id": "73cf6939-3caa-4105-bc57-e073ee885a28",
+    "collection_version_id": "3276a66a-af66-44fe-a861-de39e390b789",
+    "dataset_id": "c69fb6cd-fc4d-4216-85cb-8d80e7771786",
+    "dataset_version_id": "081fef14-662c-430d-888f-b87a701d86b3"
+  },
+  "source_head": {
+    "content_length": 173402098,
+    "etag": "\"9cdf52749874c93f5d0a15753b8945e3-21\"",
+    "last_modified": "Wed, 10 Jun 2026 00:53:03 GMT",
+    "version_id": "TrS2SHWxRaxA211Ef8Icqel7OJHjT3fJ"
+  },
+  "writer_host": "pert-gym-worker-eu",
+  "writer_region": "europe-west1-b",
+  "writer_sha256": "173e8c3ff41dce2657f529ee9e9b68466969b721653206007e3ed81b5acf9be6"
+}
