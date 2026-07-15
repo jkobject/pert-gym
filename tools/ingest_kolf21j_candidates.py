@@ -164,17 +164,111 @@ def write_x_only_h5ad(source_path: Path, output_path: Path) -> None:
         source.file.close()
 
 
+def _index_identity(index: pd.Index) -> str:
+    digest = hashlib.sha256()
+    for value in index.astype(str):
+        encoded = value.encode("utf-8")
+        digest.update(len(encoded).to_bytes(8, "big"))
+        digest.update(encoded)
+    return digest.hexdigest()
+
+
+def _h5ad_identity(path: Path, *, label: str) -> dict[str, object]:
+    try:
+        payload = ad.read_h5ad(path, backed="r")
+    except (KeyError, OSError, TypeError, ValueError) as error:
+        raise RuntimeError(f"KOLF {label} H5AD is invalid or torn: {path}") from error
+    try:
+        return {
+            "shape": [int(payload.n_obs), int(payload.n_vars)],
+            "obs_index_sha256": _index_identity(payload.obs_names),
+            "var_index_sha256": _index_identity(payload.var_names),
+        }
+    finally:
+        payload.file.close()
+
+
+def _x_provenance_path(x_path: Path) -> Path:
+    return x_path.with_name("X.provenance.json")
+
+
+def _source_identity(source_path: Path) -> dict[str, object]:
+    return {
+        "source_sha256": _sha256_file(source_path),
+        **_h5ad_identity(source_path, label="source"),
+    }
+
+
+def _candidate_provenance(source_path: Path, x_path: Path) -> dict[str, object]:
+    return {
+        "format": "pert-gym.kolf21j-x-candidate-provenance/v1",
+        "source": _source_identity(source_path),
+        "x": {
+            **_h5ad_identity(x_path, label="X candidate"),
+            "sha256": _sha256_file(x_path),
+        },
+    }
+
+
+def _load_x_provenance(path: Path) -> dict[str, object]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError(
+            "KOLF X candidate provenance is malformed or torn"
+        ) from error
+    if (
+        not isinstance(payload, dict)
+        or payload.get("format") != "pert-gym.kolf21j-x-candidate-provenance/v1"
+        or not isinstance(payload.get("source"), dict)
+        or not isinstance(payload.get("x"), dict)
+    ):
+        raise RuntimeError("KOLF X candidate provenance is malformed or torn")
+    return payload
+
+
+def _validate_x_candidate(source_path: Path, x_path: Path) -> None:
+    provenance = _load_x_provenance(_x_provenance_path(x_path))
+    source = _source_identity(source_path)
+    if provenance["source"] != source:
+        raise RuntimeError("KOLF X candidate source identity mismatch")
+
+    candidate = _h5ad_identity(x_path, label="X candidate")
+    expected = provenance["x"]
+    if not isinstance(expected, dict):
+        raise RuntimeError("KOLF X candidate provenance is malformed or torn")
+    if candidate["shape"] != source["shape"]:
+        raise RuntimeError("KOLF X candidate shape mismatch")
+    if candidate["obs_index_sha256"] != source["obs_index_sha256"]:
+        raise RuntimeError("KOLF X candidate obs index order mismatch")
+    if candidate["var_index_sha256"] != source["var_index_sha256"]:
+        raise RuntimeError("KOLF X candidate var index order mismatch")
+    if any(expected.get(key) != value for key, value in candidate.items()):
+        raise RuntimeError("KOLF X candidate provenance structure mismatch")
+    if expected.get("sha256") != _sha256_file(x_path):
+        raise RuntimeError("KOLF X candidate content provenance mismatch")
+
+
 def prepare_x_candidate(source_path: Path, output_dir: Path) -> Path:
-    """Create X once, then retain it unchanged for an interrupted publication resume."""
+    """Create a source-bound X candidate or validate it before a resume."""
     x_path = output_dir / "X.h5ad"
     if output_dir.exists():
-        if not output_dir.is_dir() or not x_path.is_file():
+        provenance_path = _x_provenance_path(x_path)
+        if (
+            not output_dir.is_dir()
+            or not x_path.is_file()
+            or not provenance_path.is_file()
+        ):
             raise RuntimeError(
                 f"incomplete KOLF output directory cannot resume: {output_dir}"
             )
+        _validate_x_candidate(source_path, x_path)
         return x_path
     output_dir.mkdir(parents=True)
     write_x_only_h5ad(source_path, x_path)
+    _write_journal(
+        _x_provenance_path(x_path), _candidate_provenance(source_path, x_path)
+    )
     return x_path
 
 
