@@ -2,7 +2,8 @@
   "accepted_components": {
     "credit": 0,
     "current": 3,
-    "denominator": 153
+    "denominator": 153,
+    "metric": "accepted_components"
   },
   "api_identity": {
     "assays": [

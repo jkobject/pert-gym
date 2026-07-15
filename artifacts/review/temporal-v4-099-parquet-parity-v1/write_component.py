@@ -11,11 +11,12 @@ import os
 import resource
 import signal
 import socket
+import sqlite3
 import sys
 import threading
 import time
 import urllib.request
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager, nullcontext
 from pathlib import Path
 from typing import Any
 
@@ -291,6 +292,108 @@ def duplicate_probe() -> dict[str, object]:
     return result
 
 
+def _validated_accepted_components_delta(
+    value: object, *, task_id: str, run_id: int, ended_at: int
+) -> dict[str, object]:
+    expected_keys = {
+        "before",
+        "after",
+        "denominator",
+        "unit",
+        "mismatch",
+        "live_readback",
+    }
+    if not isinstance(value, dict) or set(value) != expected_keys:
+        raise RuntimeError("accepted-components ledger record is malformed")
+    before = value["before"]
+    after = value["after"]
+    denominator = value["denominator"]
+    if (
+        not isinstance(before, int)
+        or isinstance(before, bool)
+        or not isinstance(after, int)
+        or isinstance(after, bool)
+        or not isinstance(denominator, int)
+        or isinstance(denominator, bool)
+    ):
+        raise RuntimeError("accepted-components ledger integers are malformed")
+    if (
+        denominator != 153
+        or not 0 <= before <= denominator
+        or not 0 <= after <= denominator
+        or (not (before == after == 0) and after != before + 1)
+        or value["unit"] != "components"
+        or value["mismatch"] != 0
+        or not isinstance(value["live_readback"], str)
+        or not value["live_readback"].strip()
+    ):
+        raise RuntimeError("accepted-components ledger record is incoherent")
+    return {
+        "metric": "accepted_components",
+        "current": after,
+        "denominator": denominator,
+        "source": "hermes-kanban-completed-product-deltas/v1",
+        "task_id": task_id,
+        "run_id": run_id,
+        "ended_at": ended_at,
+        "before": before,
+        "after": after,
+        "mismatch": 0,
+        "live_readback": value["live_readback"],
+    }
+
+
+def read_live_accepted_components_ledger() -> dict[str, object]:
+    """Read the authoritative completed-product-delta chain from Hermes Kanban."""
+    database = os.environ.get("HERMES_KANBAN_DB")
+    if not database or not Path(database).is_file():
+        raise RuntimeError("accepted-components ledger unavailable: HERMES_KANBAN_DB")
+    try:
+        connection = sqlite3.connect(database, timeout=30)
+        connection.execute("PRAGMA query_only = ON")
+        rows = connection.execute(
+            """
+            SELECT r.id, r.task_id, r.ended_at, r.metadata
+            FROM task_runs AS r
+            JOIN tasks AS t ON t.id = r.task_id
+            WHERE t.status = 'done'
+              AND r.status = 'done'
+              AND r.outcome = 'completed'
+              AND r.metadata IS NOT NULL
+            ORDER BY r.ended_at, r.id
+            """
+        ).fetchall()
+        connection.close()
+    except (OSError, sqlite3.Error) as error:
+        raise RuntimeError(
+            f"accepted-components ledger unavailable: {type(error).__name__}"
+        ) from error
+
+    records: list[dict[str, object]] = []
+    for run_id, task_id, ended_at, raw_metadata in rows:
+        try:
+            metadata = json.loads(raw_metadata)
+            metrics = metadata["product_delta"]["metrics"]
+        except (json.JSONDecodeError, KeyError, TypeError):
+            continue
+        if "accepted_components" not in metrics:
+            continue
+        records.append(
+            _validated_accepted_components_delta(
+                metrics["accepted_components"],
+                task_id=str(task_id),
+                run_id=int(run_id),
+                ended_at=int(ended_at),
+            )
+        )
+    if not records:
+        raise RuntimeError("accepted-components ledger has no completed record")
+    for previous, current in zip(records, records[1:], strict=False):
+        if current["before"] != previous["after"]:
+            raise RuntimeError("accepted-components ledger chain is incoherent")
+    return records[-1]
+
+
 def map_obs(source: pd.DataFrame, organism: str) -> pd.DataFrame:
     if len(source) != N_OBS or not source.index.is_unique or source.index.isna().any():
         raise RuntimeError("source obs identity failed")
@@ -438,13 +541,23 @@ def watcher(pid: int, stop: mp.synchronize.Event, output: str) -> None:  # type:
 
 
 class Heartbeats:
-    def __init__(self, fs: Any, prefix: str, revision: str, lease_id: str, created: list[dict[str, object]], rollback: Path) -> None:
+    def __init__(
+        self,
+        fs: Any,
+        prefix: str,
+        revision: str,
+        lease_id: str,
+        created: list[dict[str, object]],
+        rollback: Path,
+        live_ledger: dict[str, object],
+    ) -> None:
         self.fs = fs
         self.prefix = prefix
         self.revision = revision
         self.lease_id = lease_id
         self.created = created
         self.rollback = rollback
+        self.live_ledger = live_ledger
         self.phase = "preflight"
         self.rows = 0
         self.checkpoint = "lease-acquired"
@@ -462,7 +575,7 @@ class Heartbeats:
         with self.lock:
             sequence = self.sequence
             self.sequence += 1
-            ledger = ACTIVE_CONFIG["accepted_components"]
+            ledger = self.live_ledger
             execution = ACTIVE_CONFIG["execution"]
             record = {
                 "intent_key": f"pert-gym|publication-wave1|{REVISION_PREFIX}|single-component-writer|v1",
@@ -479,6 +592,7 @@ class Heartbeats:
                 },
                 "rows_completed": self.rows,
                 "checkpoint": self.checkpoint,
+                "accepted_components_ledger": ledger,
                 "rss_bytes": rss_bytes(os.getpid()),
                 "mem_available_bytes": mem_available(),
             }
@@ -505,6 +619,19 @@ class Heartbeats:
             raise RuntimeError("heartbeat thread did not stop")
 
 
+@contextmanager
+def acquired_writer_leases(lock_metadata: dict[str, object]):
+    with ExitStack() as locks:
+        locks.enter_context(
+            lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata)
+        )
+        for path in legacy_lamin_writer_lock_paths():
+            locks.enter_context(
+                lamin_writer_lock(path, lock_metadata, check_live_metadata=False)
+            )
+        yield now()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
@@ -524,6 +651,48 @@ def main() -> int:
         raise RuntimeError("writer is not on the exact authorized host")
     if mem_available() < MIN_AVAILABLE:
         raise RuntimeError("preflight MemAvailable below 4 GiB")
+    lock_metadata = {
+        "pid": os.getpid(),
+        "run_id": f"{TASK_ID}-{REVISION_PREFIX}",
+        "host": ACTIVE_CONFIG["execution"]["host"],
+        "project": BILLING_PROJECT,
+        "zone": ACTIVE_CONFIG["execution"]["zone"],
+        "branch": ACTIVE_CONFIG["execution"]["lamin_branch"],
+        "started_at": now(),
+    }
+    if REVISION_PREFIX == "temporal-v4-007":
+        with acquired_writer_leases(lock_metadata) as lease_acquired:
+            live_ledger = read_live_accepted_components_ledger()
+            return _execute_authorized_contract(
+                contract,
+                started=started,
+                lease_acquired=lease_acquired,
+                live_ledger=live_ledger,
+                lock_metadata=lock_metadata,
+            )
+    static_ledger = ACTIVE_CONFIG["accepted_components"]
+    return _execute_authorized_contract(
+        contract,
+        started=started,
+        lease_acquired=None,
+        live_ledger={
+            "metric": ACTIVE_CONFIG["execution"]["heartbeat_metric"],
+            "current": static_ledger["current"],
+            "denominator": static_ledger["denominator"],
+            "source": "intrinsically-bound-config/v1",
+        },
+        lock_metadata=lock_metadata,
+    )
+
+
+def _execute_authorized_contract(
+    contract: Any,
+    *,
+    started: float,
+    lease_acquired: float | None,
+    live_ledger: dict[str, object],
+    lock_metadata: dict[str, object],
+) -> int:
     pre_api = source_api(contract)
     OUT.mkdir(parents=True, exist_ok=True)
     pre_head = source_head(contract)
@@ -586,23 +755,16 @@ def main() -> int:
         "semantics": semantics,
         "var": {"n_vars": len(var), "ordered_var_identity_sha256": ordered_var_sha, "namespace": "Ensembl Gene ID", "unique": var.index.is_unique, "nulls": int(var.index.isna().sum())},
         "resources": {"mem_available_bytes": mem_available(), "estimated_rss_bytes": estimated_rss_bytes, "max_rss_bytes": MAX_RSS},
+        "accepted_components": live_ledger,
     }
     (OUT / "prewrite-preflight.json").write_bytes(json_bytes(preflight))
 
-    lock_metadata = {
-        "pid": os.getpid(),
-        "run_id": f"{TASK_ID}-{REVISION_PREFIX}",
-        "host": ACTIVE_CONFIG["execution"]["host"],
-        "project": BILLING_PROJECT,
-        "zone": ACTIVE_CONFIG["execution"]["zone"],
-        "branch": ACTIVE_CONFIG["execution"]["lamin_branch"],
-        "started_at": now(),
-    }
-    with ExitStack() as locks:
-        locks.enter_context(lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata))
-        for path in legacy_lamin_writer_lock_paths():
-            locks.enter_context(lamin_writer_lock(path, lock_metadata, check_live_metadata=False))
-        lease_acquired = now()
+    lease_context = (
+        nullcontext(lease_acquired)
+        if lease_acquired is not None
+        else acquired_writer_leases(lock_metadata)
+    )
+    with lease_context as active_lease_acquired:
         duplicate = duplicate_probe()
         (OUT / "duplicate-probe-under-lease.json").write_bytes(json_bytes(duplicate))
 
@@ -617,8 +779,12 @@ def main() -> int:
         created: list[dict[str, object]] = []
         rollback = OUT / "rollback-map.jsonl"
         rollback.write_text("", encoding="utf-8")
-        lease_id = sha256_bytes(f"{revision}|{lease_acquired}|{os.getpid()}".encode())[:24]
-        hb = Heartbeats(fs, prefix, revision, lease_id, created, rollback)
+        lease_id = sha256_bytes(
+            f"{revision}|{active_lease_acquired}|{os.getpid()}".encode()
+        )[:24]
+        hb = Heartbeats(
+            fs, prefix, revision, lease_id, created, rollback, live_ledger
+        )
         hb.start()
         stop_watch = mp.Event()
         watcher_path = str(OUT / "resource-samples.jsonl")
@@ -777,7 +943,7 @@ def main() -> int:
             }
             terminal = {
                 "runtime_seconds_before_manifest": time.monotonic() - started,
-                "lease": {"id": lease_id, "acquired_at": lease_acquired},
+                "lease": {"id": lease_id, "acquired_at": active_lease_acquired},
                 "safety": safety,
                 "source_inventory_unchanged": True,
                 "writer_exit_expected": 0,
@@ -805,6 +971,7 @@ def main() -> int:
                 "verification": verification,
                 "terminal": terminal,
                 "forbidden_actions_performed": {"collection_mutation": False, "lamin_main_write": False, "lamin_registration": False, "promotion": False, "legacy_mutation_or_deletion": False, "vm_lifecycle_change": False},
+                "accepted_components": live_ledger,
                 "accepted_components_credit": ACTIVE_CONFIG["accepted_components"]["credit"],
             }
             manifest_key = f"{prefix}/manifest.json"
@@ -821,6 +988,7 @@ def main() -> int:
                 "revision": revision,
                 "verification": verification,
                 "terminal": terminal,
+                "accepted_components": live_ledger,
                 "manifest_last": True,
                 "manifest_newer_than_all_candidate_objects": True,
             }

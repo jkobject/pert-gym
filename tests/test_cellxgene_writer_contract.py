@@ -5,7 +5,9 @@ import hashlib
 import importlib.util
 import io
 import json
+import sqlite3
 import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 import pandas as pd
@@ -144,7 +146,12 @@ def test_row_7_exact_contract_is_intrinsically_bound_and_execution_authorized() 
     assert config["catalogue_record"] == "temporal_v4_007_a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s"
     assert config["revision"]["prefix"] == "temporal-v4-007"
     assert config["shape"] == [9619, 35461]
-    assert config["accepted_components"] == {"current": 3, "denominator": 153, "credit": 0}
+    assert config["accepted_components"] == {
+        "metric": "accepted_components",
+        "current": 3,
+        "denominator": 153,
+        "credit": 0,
+    }
     assert config["ordered_var"]["identity_sha256"] == "runtime-computed-before-candidate-write"
     assert authorization["config_sha256"] == sha256(ROW_7_CONFIG)
     assert authorization["writer_sha256"] == sha256(WRITER)
@@ -152,6 +159,281 @@ def test_row_7_exact_contract_is_intrinsically_bound_and_execution_authorized() 
     assert authorization["parquet_frame_parity_sha256"] == sha256(HELPER)
     assert authorization["execution_authorized"] is True
     assert validated.config == config
+
+
+def test_row_7_stale_snapshot_does_not_bind_live_ledger_current() -> None:
+    config = load_json(ROW_7_CONFIG)
+    authorization = load_json(ROW_7_AUTHORIZATION)
+    config["accepted_components"]["current"] = 4
+    authorization["config_sha256"] = hashlib.sha256(
+        (json.dumps(config, indent=2, sort_keys=True) + "\n").encode()
+    ).hexdigest()
+    authorization["writer_sha256"] = sha256(WRITER)
+    authorization["writer_contract_sha256"] = sha256(CONTRACT_PATH)
+
+    validated = validate(config, authorization)
+
+    assert validated.config["accepted_components"]["current"] == 4
+
+
+def write_live_ledger_db(path: Path, records: list[object]) -> None:
+    connection = sqlite3.connect(path)
+    connection.executescript(
+        """
+        CREATE TABLE tasks (id TEXT PRIMARY KEY, status TEXT NOT NULL);
+        CREATE TABLE task_runs (
+            id INTEGER PRIMARY KEY,
+            task_id TEXT NOT NULL,
+            status TEXT NOT NULL,
+            outcome TEXT,
+            ended_at INTEGER,
+            metadata TEXT
+        );
+        """
+    )
+    for index, record in enumerate(records, start=1):
+        task_id = f"t_credit_{index}"
+        metadata = {"product_delta": {"metrics": {"accepted_components": record}}}
+        connection.execute("INSERT INTO tasks VALUES (?, 'done')", (task_id,))
+        connection.execute(
+            "INSERT INTO task_runs VALUES (?, ?, 'done', 'completed', ?, ?)",
+            (index, task_id, index, json.dumps(metadata)),
+        )
+    connection.commit()
+    connection.close()
+
+
+def accepted_components_delta(before: object, after: object) -> dict[str, object]:
+    return {
+        "before": before,
+        "after": after,
+        "denominator": 153,
+        "unit": "components",
+        "mismatch": 0,
+        "live_readback": "gs://scperturb/example/manifest.json",
+    }
+
+
+def test_live_accepted_components_reader_uses_latest_completed_delta(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer = load_writer_module()
+    database = tmp_path / "kanban.db"
+    write_live_ledger_db(
+        database,
+        [accepted_components_delta(3, 4), accepted_components_delta(4, 5)],
+    )
+    monkeypatch.setenv("HERMES_KANBAN_DB", str(database))
+
+    observed = writer.read_live_accepted_components_ledger()
+
+    assert observed["metric"] == "accepted_components"
+    assert observed["current"] == 5
+    assert observed["denominator"] == 153
+    assert observed["source"] == "hermes-kanban-completed-product-deltas/v1"
+
+
+@pytest.mark.parametrize(
+    "record",
+    [
+        None,
+        {},
+        accepted_components_delta(3, "4"),
+        accepted_components_delta(-1, 0),
+        accepted_components_delta(153, 154),
+        {**accepted_components_delta(3, 4), "denominator": 152},
+        {**accepted_components_delta(3, 4), "metric": "wrong"},
+    ],
+)
+def test_live_accepted_components_reader_rejects_malformed_records(
+    monkeypatch, tmp_path: Path, record: object
+) -> None:
+    writer = load_writer_module()
+    database = tmp_path / "kanban.db"
+    write_live_ledger_db(database, [record])
+    monkeypatch.setenv("HERMES_KANBAN_DB", str(database))
+
+    with pytest.raises(RuntimeError, match="accepted-components ledger"):
+        writer.read_live_accepted_components_ledger()
+
+
+def test_live_accepted_components_reader_rejects_unavailable_ledger(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer = load_writer_module()
+    monkeypatch.setenv("HERMES_KANBAN_DB", str(tmp_path / "missing.db"))
+
+    with pytest.raises(RuntimeError, match="accepted-components ledger unavailable"):
+        writer.read_live_accepted_components_ledger()
+
+
+def executable_row_7_contract() -> tuple[dict[str, object], dict[str, object]]:
+    config = load_json(ROW_7_CONFIG)
+    authorization = load_json(ROW_7_AUTHORIZATION)
+    authorization["config_sha256"] = hashlib.sha256(
+        (json.dumps(config, indent=2, sort_keys=True) + "\n").encode()
+    ).hexdigest()
+    authorization["writer_sha256"] = sha256(WRITER)
+    authorization["writer_contract_sha256"] = sha256(CONTRACT_PATH)
+    return config, authorization
+
+
+def configure_row_7_lease_boundary(monkeypatch, tmp_path: Path):
+    writer = load_writer_module()
+    config, authorization = executable_row_7_contract()
+    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    monkeypatch.setattr(writer.socket, "gethostname", lambda: config["execution"]["host"])
+    monkeypatch.setattr(
+        writer, "mem_available", lambda: config["execution"]["min_available_bytes"]
+    )
+    monkeypatch.setattr(writer, "vm_global_lamin_writer_lock_path", lambda: Path("global"))
+    monkeypatch.setattr(writer, "legacy_lamin_writer_lock_paths", lambda: [Path("family")])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+    )
+    return writer
+
+
+def test_row_7_live_ledger_is_observed_under_both_leases_before_external_calls(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer = configure_row_7_lease_boundary(monkeypatch, tmp_path)
+    calls: list[str] = []
+
+    @contextmanager
+    def lease(path, *args, **kwargs):
+        calls.append(f"lease:{path}")
+        yield
+
+    def live_ledger():
+        calls.append("live-ledger:4")
+        return {
+            "metric": "accepted_components",
+            "current": 4,
+            "denominator": 153,
+            "source": "hermes-kanban-completed-product-deltas/v1",
+        }
+
+    def next_boundary(*args, **kwargs):
+        calls.append("source-api")
+        raise RuntimeError("next external boundary")
+
+    monkeypatch.setattr(writer, "lamin_writer_lock", lease)
+    monkeypatch.setattr(writer, "read_live_accepted_components_ledger", live_ledger)
+    monkeypatch.setattr(writer, "source_api", next_boundary)
+    monkeypatch.setattr(Path, "mkdir", lambda *args, **kwargs: calls.append("mkdir"))
+
+    with pytest.raises(RuntimeError, match="next external boundary"):
+        writer.main()
+
+    assert calls == ["lease:global", "lease:family", "live-ledger:4", "source-api"]
+
+
+def test_row_7_live_ledger_failure_releases_leases_before_all_external_boundaries(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer = configure_row_7_lease_boundary(monkeypatch, tmp_path)
+    lease_events: list[str] = []
+
+    @contextmanager
+    def lease(path, *args, **kwargs):
+        lease_events.append(f"enter:{path}")
+        try:
+            yield
+        finally:
+            lease_events.append(f"exit:{path}")
+
+    monkeypatch.setattr(writer, "lamin_writer_lock", lease)
+    monkeypatch.setattr(
+        writer,
+        "read_live_accepted_components_ledger",
+        lambda: (_ for _ in ()).throw(RuntimeError("accepted-components ledger malformed")),
+    )
+    external_calls = instrument_external_boundaries(monkeypatch, writer)
+
+    with pytest.raises(RuntimeError, match="accepted-components ledger malformed"):
+        writer.main()
+
+    assert external_calls == []
+    assert lease_events == [
+        "enter:global",
+        "enter:family",
+        "exit:family",
+        "exit:global",
+    ]
+
+
+@pytest.mark.parametrize(
+    "record",
+    [
+        None,
+        {},
+        accepted_components_delta(3, "4"),
+        accepted_components_delta(-1, 0),
+        accepted_components_delta(153, 154),
+        {**accepted_components_delta(3, 4), "denominator": 152},
+        {**accepted_components_delta(3, 4), "metric": "wrong"},
+        "unavailable",
+    ],
+)
+def test_row_7_each_invalid_live_ledger_rejects_before_external_boundaries(
+    monkeypatch, tmp_path: Path, record: object
+) -> None:
+    writer = configure_row_7_lease_boundary(monkeypatch, tmp_path)
+    database = tmp_path / "kanban.db"
+    if record != "unavailable":
+        write_live_ledger_db(database, [record])
+    monkeypatch.setenv("HERMES_KANBAN_DB", str(database))
+
+    @contextmanager
+    def lease(*args, **kwargs):
+        yield
+
+    monkeypatch.setattr(writer, "lamin_writer_lock", lease)
+    external_calls = instrument_external_boundaries(monkeypatch, writer)
+
+    with pytest.raises(RuntimeError, match="accepted-components ledger"):
+        writer.main()
+
+    assert external_calls == []
+
+
+def test_heartbeat_uses_the_single_lease_protected_live_ledger_observation(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer = load_writer_module()
+    writer.ACTIVE_CONFIG = load_json(ROW_7_CONFIG)
+    writer.REVISION_PREFIX = "temporal-v4-007"
+    writer.OUT = tmp_path
+    monkeypatch.setattr(writer.socket, "gethostname", lambda: "pert-gym-worker-eu")
+    monkeypatch.setattr(writer, "rss_bytes", lambda pid: 1)
+    monkeypatch.setattr(writer, "mem_available", lambda: 2)
+    payloads: list[dict[str, object]] = []
+
+    def capture(_fs, key, payload):
+        payloads.append(json.loads(payload))
+        return {"key": key, "generation": "1", "size": len(payload), "sha256": "f" * 64}
+
+    monkeypatch.setattr(writer, "exclusive_bytes", capture)
+    rollback = tmp_path / "rollback.jsonl"
+    rollback.write_text("")
+    live_ledger = {
+        "metric": "accepted_components",
+        "current": 4,
+        "denominator": 153,
+        "source": "hermes-kanban-completed-product-deltas/v1",
+    }
+    heartbeats = writer.Heartbeats(
+        object(), "prefix", "revision", "lease", [], rollback, live_ledger
+    )
+
+    heartbeats.emit()
+
+    assert payloads[0]["product_execution"]["current"] == 4
+    assert payloads[0]["product_execution"]["denominator"] == 153
+    assert payloads[0]["accepted_components_ledger"] == live_ledger
 
 
 @pytest.mark.parametrize(

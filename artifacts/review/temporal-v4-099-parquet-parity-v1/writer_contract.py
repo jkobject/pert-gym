@@ -72,6 +72,7 @@ _ORDERED_VAR_KEYS = {
     "feature_reference_column",
 }
 _LEDGER_KEYS = {"current", "denominator", "credit"}
+_ROW_7_LEDGER_KEYS = _LEDGER_KEYS | {"metric"}
 _REVISION_KEYS = {"prefix", "failed_candidate_denylist", "fresh_immutable_required"}
 _EXECUTION_KEYS = {
     "host",
@@ -120,7 +121,7 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "assays": "8051c05ee8991d6476c5b9526dac01661cd5d6599d4eef55cbc191023696638a",
         "ordered_var": "6e24c720e545edd8d21246fb3976fb89b97e11af64be3bc76600899faa3d7de8",
         "obs": "9b51b2a7a19d58a3d818ff72d4c545c16bbdb86db3ccec1ab09bf242b80359d9",
-        "accepted_components": "983b1464cf3972ffffdd4d9c92a0f7c5b4faaa6b0dc03ce08751489ebba9a40b",
+        "accepted_components": "b670b692eb51e511baab82cf947fafbc81dd2b9327126c6bc72dcf2ad0b97fa2",
         "execution": "047a2c6b9dedd3c4aff5c738cf3e2a9fb249e4f9c0fab3c066a8de5a4c7f9d4a",
         "storage": "7c870891e7c79024b91c2b590dd2638a13884d5a06ee7e79e50a17c65507565d",
         "forbidden_actions": "fb95b232b7d39710c7fc7d03f921b922190986e5a8149d7b426030455ecca847",
@@ -166,6 +167,12 @@ def _nonempty(value: Any, label: str) -> str:
 def _positive_int(value: Any, label: str) -> int:
     if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
         raise ValueError(f"{label} must be a positive integer")
+    return value
+
+
+def _nonnegative_int(value: Any, label: str) -> int:
+    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+        raise ValueError(f"{label} must be a non-negative integer")
     return value
 
 
@@ -314,11 +321,16 @@ def _validate_config(config: dict[str, Any]) -> None:
         raise ValueError("ordered-var normalization version is not approved")
     _nonempty(ordered_var["feature_reference_column"], "ordered_var.feature_reference_column")
 
-    ledger = _exact_keys(config["accepted_components"], _LEDGER_KEYS, "accepted_components")
-    current = _positive_int(ledger["current"], "accepted_components.current")
+    ledger_keys = _ROW_7_LEDGER_KEYS if row_7 else _LEDGER_KEYS
+    ledger = _exact_keys(config["accepted_components"], ledger_keys, "accepted_components")
+    current = _nonnegative_int(ledger["current"], "accepted_components.current")
     denominator = _positive_int(ledger["denominator"], "accepted_components.denominator")
-    if current >= denominator or ledger["credit"] != 0:
+    if current > denominator or ledger["credit"] != 0:
         raise ValueError("accepted-components bounds/credit are invalid")
+    if row_7 and (
+        ledger["metric"] != "accepted_components" or denominator != 153
+    ):
+        raise ValueError("accepted-components metric/denominator are not approved")
 
     revision = _exact_keys(config["revision"], _REVISION_KEYS, "revision")
     if re.fullmatch(r"temporal-v4-[0-9]{3}", str(revision["prefix"])) is None:
@@ -377,7 +389,15 @@ def _validate_config(config: dict[str, Any]) -> None:
         "assays": config["api_identity"]["assays"],
         "ordered_var": config["ordered_var"],
         "obs": config["obs"],
-        "accepted_components": config["accepted_components"],
+        "accepted_components": (
+            {
+                "metric": ledger["metric"],
+                "denominator": denominator,
+                "credit": ledger["credit"],
+            }
+            if row_7
+            else config["accepted_components"]
+        ),
         "execution": config["execution"],
         "storage": config["storage"],
         "forbidden_actions": config["forbidden_actions"],
