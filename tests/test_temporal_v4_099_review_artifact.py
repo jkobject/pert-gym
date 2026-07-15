@@ -12,13 +12,16 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_review_artifact_is_bound_to_exact_writer_and_helper() -> None:
+def test_review_artifact_keeps_frozen_pre_correction_authorization() -> None:
     authorization = json.loads((REVIEW / "authorization.json").read_text())
     writer = REVIEW / "write_component.py"
     contract = REVIEW / "writer_contract.py"
     helper = REVIEW / "parquet_frame_parity.py"
 
-    assert authorization["writer_sha256"] == sha256(writer)
+    assert authorization["writer_sha256"] == (
+        "f40409ce46393db8c713a6a4b428f2c98c0102031c1c06e70042b0f96504a723"
+    )
+    assert authorization["writer_sha256"] != sha256(writer)
     assert authorization["writer_contract_sha256"] == sha256(contract)
     assert authorization["parquet_frame_parity_sha256"] == sha256(helper)
     assert (

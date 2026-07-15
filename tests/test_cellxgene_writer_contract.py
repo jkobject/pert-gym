@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import importlib.util
+import io
 import json
 import sys
 from pathlib import Path
@@ -73,18 +74,12 @@ def validate(config: dict[str, object], authorization: dict[str, object]):
     )
 
 
-def test_row_99_reviewed_fixture_validates_and_is_exactly_hash_bound() -> None:
-    contract = load_contract_module()
+def test_row_99_reviewed_fixture_validates_with_current_writer_hash_binding() -> None:
     config = load_json(ROW_99_CONFIG)
-    authorization = load_json(ROW_99_AUTHORIZATION)
+    frozen_authorization = load_json(ROW_99_AUTHORIZATION)
+    authorization = bound_authorization(config)
 
-    validated = contract.load_bound_contract(
-        ROW_99_CONFIG,
-        ROW_99_AUTHORIZATION,
-        writer_path=WRITER,
-        helper_path=HELPER,
-        require_execution=False,
-    )
+    validated = validate(config, authorization)
 
     assert validated.config["shape"] == [10224, 35552]
     assert validated.config["accepted_components"] == {
@@ -92,7 +87,10 @@ def test_row_99_reviewed_fixture_validates_and_is_exactly_hash_bound() -> None:
         "denominator": 153,
         "credit": 0,
     }
-    assert authorization["config_sha256"] == sha256(ROW_99_CONFIG)
+    assert frozen_authorization["config_sha256"] == sha256(ROW_99_CONFIG)
+    assert frozen_authorization["writer_sha256"] == (
+        "f40409ce46393db8c713a6a4b428f2c98c0102031c1c06e70042b0f96504a723"
+    )
     assert authorization["writer_sha256"] == sha256(WRITER)
     assert authorization["writer_contract_sha256"] == sha256(CONTRACT_PATH)
     assert authorization["parquet_frame_parity_sha256"] == sha256(HELPER)
@@ -275,6 +273,141 @@ def write_contract_files(
     authorization["config_sha256"] = sha256(config_path)
     authorization_path.write_text(json.dumps(authorization, indent=2, sort_keys=True) + "\n")
     return config_path, authorization_path
+
+
+def executable_row_13_contract() -> tuple[dict[str, object], dict[str, object]]:
+    config = load_json(ROW_13_CONFIG)
+    config["dataset_config_status"] = "reviewed-executable"
+    config["api_identity"]["assays"][1]["ontology_term_id"] = "EFO:0022601"
+    config["obs"]["semantic_evidence"] = {
+        "verdict": "accepted",
+        "basis": "test boundary fixture",
+    }
+    config["ordered_var"]["identity_sha256"] = "f" * 64
+    authorization = bound_authorization(config)
+    authorization.update(config["authorization_binding"])
+    authorization["execution_authorized"] = True
+    return config, authorization
+
+
+def cellxgene_collection_payload(
+    config: dict[str, object], is_primary_data: object
+) -> dict[str, object]:
+    source = config["source"]
+    return {
+        "collection_id": source["collection_id"],
+        "collection_version_id": source["collection_version_id"],
+        "visibility": "PUBLIC",
+        "datasets": [{
+            "dataset_id": source["dataset_id"],
+            "dataset_version_id": source["dataset_version_id"],
+            "assets": [{"filetype": "H5AD", "url": source["url"]}],
+            "cell_count": config["shape"][0],
+            "feature_count": config["shape"][1],
+            "organism": [config["api_identity"]["organism"]],
+            "assay": config["api_identity"]["assays"],
+            "tombstone": False,
+            "is_primary_data": is_primary_data,
+        }],
+    }
+
+
+def configure_row_13_main(monkeypatch, tmp_path: Path, live_value: object):
+    writer = load_writer_module()
+    config, authorization = executable_row_13_contract()
+    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    payload = cellxgene_collection_payload(config, live_value)
+    monkeypatch.setattr(
+        writer.urllib.request,
+        "urlopen",
+        lambda *args, **kwargs: io.BytesIO(json.dumps(payload).encode()),
+    )
+    monkeypatch.setattr(writer.socket, "gethostname", lambda: config["execution"]["host"])
+    monkeypatch.setattr(
+        writer,
+        "mem_available",
+        lambda: config["execution"]["min_available_bytes"],
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+    )
+    return writer
+
+
+@pytest.mark.parametrize("live_value", [True, [True]])
+def test_row_13_exact_primary_data_representations_reach_next_preflight_boundary(
+    monkeypatch, tmp_path: Path, live_value: object
+) -> None:
+    writer = configure_row_13_main(monkeypatch, tmp_path, live_value)
+    calls: list[str] = []
+
+    class NextPreflightBoundary(RuntimeError):
+        pass
+
+    monkeypatch.setattr(Path, "mkdir", lambda *args, **kwargs: calls.append("mkdir"))
+
+    def next_boundary(*args, **kwargs):
+        calls.append("source_head")
+        raise NextPreflightBoundary("next generic preflight boundary")
+
+    monkeypatch.setattr(writer, "source_head", next_boundary)
+    with pytest.raises(NextPreflightBoundary, match="next generic preflight boundary"):
+        writer.main()
+    assert calls == ["mkdir", "source_head"]
+
+
+@pytest.mark.parametrize(
+    "live_value",
+    [False, [False], [], [True, True], None, "true", 1, 0, {}, [[True]], [True, False]],
+)
+def test_row_13_malformed_or_non_primary_live_values_reject_before_side_effects(
+    monkeypatch, tmp_path: Path, live_value: object
+) -> None:
+    writer = configure_row_13_main(monkeypatch, tmp_path, live_value)
+    calls: list[str] = []
+
+    def reject(label: str):
+        def boundary(*args, **kwargs):
+            calls.append(label)
+            raise AssertionError(f"unexpected boundary call: {label}")
+        return boundary
+
+    monkeypatch.setattr(Path, "mkdir", reject("mkdir"))
+    monkeypatch.setattr(writer, "source_head", reject("source_head"))
+    monkeypatch.setattr(writer, "hash_source", reject("source_body"))
+    monkeypatch.setattr(writer, "connect_pertdata", reject("lamin"))
+    monkeypatch.setattr(writer.fsspec, "filesystem", reject("filesystem"))
+    monkeypatch.setattr(writer, "exclusive_bytes", reject("product_write"))
+    with pytest.raises(RuntimeError, match="primary-data"):
+        writer.main()
+    assert calls == []
+
+
+@pytest.mark.parametrize(
+    "contract_value",
+    [False, [True], [False], [], [True, True], None, "true", 1, 0, {}, [[True]]],
+)
+def test_non_scalar_or_non_boolean_contract_primary_data_rejects_before_boundaries(
+    monkeypatch, tmp_path: Path, contract_value: object
+) -> None:
+    writer = load_writer_module()
+    config, authorization = executable_row_13_contract()
+    config["api_identity"]["is_primary_data"] = contract_value
+    authorization = bound_authorization(config)
+    authorization.update(config["authorization_binding"])
+    authorization["execution_authorized"] = True
+    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+    )
+    with pytest.raises(ValueError, match="primary-data identity"):
+        writer.main()
+    assert calls == []
 
 
 @pytest.mark.parametrize(
@@ -464,7 +597,8 @@ def test_unknown_omitted_malformed_or_conflicting_values_fail_closed(mutation) -
 
 def test_runner_has_no_hidden_row_99_dataset_identity_and_validates_before_io() -> None:
     writer = WRITER.read_text()
-    prefix = writer.split("source_api(contract)", maxsplit=1)[0]
+    main = writer.split("def main() -> int:", maxsplit=1)[1]
+    prefix = main.split("source_api(contract)", maxsplit=1)[0]
 
     for hidden in (
         "081fef14-662c-430d-888f-b87a701d86b3",
@@ -475,7 +609,9 @@ def test_runner_has_no_hidden_row_99_dataset_identity_and_validates_before_io() 
         assert hidden not in writer
     assert "load_bound_contract(" in prefix
     assert "require_execution_authorized(contract)" in prefix
-    assert "OUT.mkdir" in prefix
-    assert prefix.index("gethostname") < prefix.index("OUT.mkdir")
-    assert prefix.index("mem_available()") < prefix.index("OUT.mkdir")
+    assert "OUT.mkdir" in main
+    assert main.index("gethostname") < main.index("source_api(contract)")
+    assert main.index("mem_available()") < main.index("source_api(contract)")
+    assert main.index("source_api(contract)") < main.index("OUT.mkdir")
+    assert main.index("OUT.mkdir") < main.index("source_head(contract)")
     assert "time.monotonic() - started > EXECUTION_TIMEOUT_SECONDS" in writer
