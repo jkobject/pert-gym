@@ -110,6 +110,20 @@ def test_missing_expected_field_is_false_but_not_applicable_is_excluded() -> Non
     assert dataset["denominators"]["canonical_fields_covered"] == 40
 
 
+def test_not_applicable_field_requires_nonblank_provenance() -> None:
+    contract = load_contract(CONTRACT_PATH)
+    evidence = complete_evidence(contract)
+    evidence["members"]["dataset/a/obs.parquet"]["fields"]["molecule_sequence"] = {
+        "state": "not_applicable"
+    }
+
+    dataset = score_manifest([manifest_row()], [evidence], contract)["datasets"][0]
+
+    assert dataset["OBS_COMPLETED"] == "false"
+    assert "fields.molecule_sequence.missing_source" in dataset["failed_checks"]
+    assert dataset["denominators"]["canonical_fields_applicable"] == 41
+
+
 def test_alias_requires_provenance_and_full_non_null_coverage() -> None:
     contract = load_contract(CONTRACT_PATH)
     evidence = complete_evidence(contract)
@@ -217,6 +231,20 @@ def test_missing_var_evidence_is_blocked_without_blocking_obs() -> None:
     assert dataset["VAR_ENSEMBL_SPECIES_COMPLETED"] == "blocked"
     assert dataset["var_ensembl_species_blocked_checks"] == [
         "var_ensembl_species.evidence_missing"
+    ]
+
+
+def test_var_provenance_rejects_blank_only_strings() -> None:
+    contract = load_contract(CONTRACT_PATH)
+    evidence = complete_evidence(contract)
+    evidence["var_ensembl_species"]["provenance"] = ["   "]
+
+    dataset = score_manifest([manifest_row()], [evidence], contract)["datasets"][0]
+
+    assert dataset["OBS_COMPLETED"] == "true"
+    assert dataset["VAR_ENSEMBL_SPECIES_COMPLETED"] == "false"
+    assert dataset["var_ensembl_species_failed_checks"] == [
+        "var_ensembl_species.provenance.empty"
     ]
 
 

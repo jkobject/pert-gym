@@ -47,6 +47,10 @@ def _int(value: Any) -> int:
         return 0
 
 
+def _is_nonblank_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
 def _check_bool(
     name: str,
     value: Any,
@@ -100,7 +104,9 @@ def _score_var_ensembl_species(evidence: dict[str, Any] | None) -> dict[str, Any
         provenance = var_evidence.get("provenance")
         if not isinstance(provenance, list):
             blocked.append("var_ensembl_species.provenance.evidence_missing")
-        elif not provenance:
+        elif not provenance or not all(
+            _is_nonblank_string(item) for item in provenance
+        ):
             failed.append("var_ensembl_species.provenance.empty")
 
     failed = sorted(set(failed))
@@ -150,6 +156,14 @@ def _score_dataset(
                 continue
             if state == "not_applicable":
                 fields_applicable -= 1
+                provenance = item.get("provenance")
+                has_provenance = _is_nonblank_string(provenance) or (
+                    isinstance(provenance, list)
+                    and bool(provenance)
+                    and all(_is_nonblank_string(value) for value in provenance)
+                )
+                if not _is_nonblank_string(item.get("source")) and not has_provenance:
+                    failed.append(f"{prefix}.missing_source")
                 continue
             if state == "missing":
                 failed.append(f"{prefix}.missing")
