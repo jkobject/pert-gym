@@ -167,6 +167,14 @@ def source_head(contract: Any) -> dict[str, object]:
     return result
 
 
+def normalize_live_primary_data(value: object) -> bool:
+    if value is True:
+        return True
+    if isinstance(value, list) and len(value) == 1 and value[0] is True:
+        return True
+    raise RuntimeError("source API primary-data identity is not exact true or [true]")
+
+
 def source_api(contract: Any) -> dict[str, object]:
     with urllib.request.urlopen(API_URL, timeout=30) as response:
         collection = json.load(response)
@@ -186,7 +194,7 @@ def source_api(contract: Any) -> dict[str, object]:
         "organism": dataset["organism"],
         "assay": dataset["assay"],
         "tombstone": dataset["tombstone"],
-        "is_primary_data": dataset.get("is_primary_data"),
+        "is_primary_data": normalize_live_primary_data(dataset.get("is_primary_data")),
         "public": collection.get("visibility") == "PUBLIC",
     }
     expected = {
@@ -512,9 +520,8 @@ def main() -> int:
         raise RuntimeError("writer is not on the exact authorized host")
     if mem_available() < MIN_AVAILABLE:
         raise RuntimeError("preflight MemAvailable below 4 GiB")
-    OUT.mkdir(parents=True, exist_ok=True)
-
     pre_api = source_api(contract)
+    OUT.mkdir(parents=True, exist_ok=True)
     pre_head = source_head(contract)
     source_sha256, raw_hash_seconds, source_bytes = hash_source()
     if source_head(contract) != pre_head:
