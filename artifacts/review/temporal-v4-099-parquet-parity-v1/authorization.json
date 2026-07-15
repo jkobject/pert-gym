@@ -1,48 +1,14 @@
 {
-  "accepted_components": {
-    "current": 2,
-    "denominator": 153
-  },
-  "accepted_components_credit": 0,
+  "approved_parent_protocol": "temporal-v4-099-parquet-parity-parent/v1",
+  "authorization_version": "cellxgene-logical-component-authorization/v1",
+  "config_sha256": "54068b220cab6a2284f6b5b05d3caaf8048dd82c41667ff9596ac3f17306096f",
   "correction_task_id": "t_be513f9a",
-  "execution_timeout_seconds": 7200,
-  "failed_candidate_denylist": [
-    "temporal-v4-099-20260715T135852Z-d36b0c6d"
-  ],
-  "forbidden_actions": [
-    "cleanup",
-    "deletion",
-    "promotion",
-    "collection_mutation"
-  ],
-  "fresh_immutable_revision_required": true,
-  "manifest_last": true,
-  "max_rss_bytes": 25769803776,
-  "min_available_bytes": 4294967296,
+  "execution_authorized": false,
   "parent_task_id": "t_d08ef390",
   "parent_task_status": "completed",
   "parquet_frame_parity_sha256": "f2827eca688dd2581a6ede51be77c4ae0b9327bacc66116e8ec1b1cc5420e976",
-  "protocol": "temporal-v4-099-category-safe-parquet-parity/v2",
+  "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
   "review_scope": "exact-head-independent-review-before-any-execution",
-  "single_writer_lease": "global-plus-legacy-exclusive",
-  "shape": [
-    10224,
-    35552
-  ],
-  "source": {
-    "asset_id": "081fef14-662c-430d-888f-b87a701d86b3",
-    "collection_id": "73cf6939-3caa-4105-bc57-e073ee885a28",
-    "collection_version_id": "3276a66a-af66-44fe-a861-de39e390b789",
-    "dataset_id": "c69fb6cd-fc4d-4216-85cb-8d80e7771786",
-    "dataset_version_id": "081fef14-662c-430d-888f-b87a701d86b3"
-  },
-  "source_head": {
-    "content_length": 173402098,
-    "etag": "\"9cdf52749874c93f5d0a15753b8945e3-21\"",
-    "last_modified": "Wed, 10 Jun 2026 00:53:03 GMT",
-    "version_id": "TrS2SHWxRaxA211Ef8Icqel7OJHjT3fJ"
-  },
-  "writer_host": "pert-gym-worker-eu",
-  "writer_region": "europe-west1-b",
-  "writer_sha256": "8747d5a89483627c2d679c4c988f3b70fa391a368d83559b066605967671b51b"
+  "writer_contract_sha256": "4365a0395340f868b65db4a5b59bc4ddfc3da46a9fb74161f5f3fcc5761d0148",
+  "writer_sha256": "f40409ce46393db8c713a6a4b428f2c98c0102031c1c06e70042b0f96504a723"
 }
