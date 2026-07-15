@@ -8,14 +8,14 @@ The executable contract is `config/obs_completed_contract_v1.json`; the read-onl
 
 The following requirements are recovered from the 17 June definition and the later schema/identity audits:
 
-1. The canonical observation surface has exactly 44 fields, from `dataset` through `is_low_quality`, listed in the machine contract. Combination perturbations repeat the ten perturbation/dose fields as `_2..._N` and carry `combination_size` and `combination_id`.
+1. The canonical observation surface has exactly 42 fields, from `dataset` through `is_low_quality`, listed in the machine contract. `guide_sequence` records the actual guide sequence. `molecule_sequence` records a molecular or chemical perturbation sequence when applicable, with explicit state, coverage, and provenance. Combination perturbations repeat the eight fields listed by `combination_suffix_fields` as `_2..._N` and carry `combination_size` and `combination_id`.
 2. A column name alone is not completion. Evidence records state, named source/alias/provenance, and non-null numerator/denominator coverage.
 3. Every field has one of `present`, `alias_only`, `manifest_only`, `missing`, or `not_applicable`. `missing` and `not_applicable` are never interchangeable.
 4. Every member preserves row count/order and `original_obs_index`; `obs_uuid` is present and unique within the member and globally.
 5. `modality`, `assay`, `x_semantics`, and modality-required observation fields are explicit. The scorer records semantics only; it does not inspect `X`.
 6. Control evidence distinguishes strict, relaxed, dataset-level, and no-control cases in the relevant biological context.
 7. Applicability and completion are explicit for pseudobulk, LFC versus control, QC (`n_counts`, `n_genes`, `pct_mito`, `pct_ribo`, `is_low_quality`), temporal (`timepoint` in minutes, trajectory, pseudotime, baseline), response/sensitivity, and combination outputs.
-8. Duplicate/subduplicate status, `loader_projectable`, `model_ready`, and quality status are explicit.
+8. Quality status is explicit.
 9. Citations and provenance are present, and evidence explicitly asserts that values were not fabricated.
 
 A proven failed requirement yields `OBS_COMPLETED=false`. If there is no proven failure but required evidence is absent or inconclusive, the result is `blocked`. Only complete passing evidence yields `true`.
@@ -41,6 +41,12 @@ The following are never OBS_COMPLETED criteria:
 - source identity of `X`.
 
 Those belong to storage, triplet, shared-var, or matrix-semantics contracts. The scorer neither reads nor resolves `X` or `var`.
+
+## Separate VAR verdict
+
+Every dataset result also exposes `VAR_ENSEMBL_SPECIES_COMPLETED` as an adjacent, independent `true`, `false`, or `blocked` verdict. It passes only when reviewed evidence provides a positive biological-feature denominator, proves that every biological feature has a stable Ensembl ID, proves that every biological feature is mapped to the correct species, and names the provenance of that audit.
+
+This verdict is mandatory in the report but is never an OBS criterion: its failures and evidence gaps cannot change `OBS_COMPLETED`. Its evidence lives under `var_ensembl_species`, outside `dataset_checks`.
 
 ## Evidence input
 
@@ -80,13 +86,16 @@ The canonical manifest is a TSV with one member per row and `logical_dataset`, `
     "derived_applicability_declared": true,
     "derived_outputs_complete": true,
     "combination_semantics": true,
-    "duplicate_status": "unique",
-    "loader_projectable": true,
-    "model_ready": true,
     "quality_flag": "ok",
     "citations": ["doi:..."],
     "provenance": ["source release + transformation report"],
     "fabricated_values": false
+  },
+  "var_ensembl_species": {
+    "biological_features_total": 1000,
+    "stable_ensembl_id_features": 1000,
+    "correct_species_features": 1000,
+    "provenance": ["reviewed var audit v1"]
   }
 }
 ```
@@ -104,14 +113,15 @@ uv run python tools/score_obs_completed.py \
 
 Omit `--evidence` for an inventory-only fail-closed run. This proves the denominator and emits `blocked` rather than pretending that absent evidence passed or failed.
 
-The checked 2026-06-21 manifest run produced `artifacts/schema_audit/obs_completed_score_20260715.json`: 1,056 members aggregate to exactly 120 logical datasets; all 120 are `blocked` because no per-member evidence packet was supplied. That output is a baseline evidence-gap inventory, not a claim that observation metadata is absent.
+The checked 2026-06-21 manifest run produced `artifacts/schema_audit/obs_completed_score_20260715.json`: 1,056 members aggregate to exactly 120 logical datasets; all 120 OBS verdicts and all 120 separate VAR verdicts are `blocked` because no reviewed evidence packet was supplied. That output is a baseline evidence-gap inventory, not a claim that observation metadata or VAR mappings are absent.
 
 Each dataset output contains:
 
 - `OBS_COMPLETED`: `true`, `false`, or `blocked`;
 - `failed_checks` and `blocked_checks`;
 - denominators for manifest members/rows, canonical fields, applicable fields, covered fields, and identity-passing members;
-- the status of each dataset-level check.
+- the status of each dataset-level check;
+- the independent `VAR_ENSEMBL_SPECIES_COMPLETED` verdict, its own failed/blocked checks, and its biological-feature denominators.
 
 ## Safety
 

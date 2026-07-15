@@ -15,9 +15,11 @@ FIELD_STATES = {"present", "alias_only", "manifest_only", "missing", "not_applic
 
 def load_contract(path: str | Path) -> dict[str, Any]:
     contract = json.loads(Path(path).read_text(encoding="utf-8"))
-    if len(contract.get("canonical_obs_columns", [])) != 44:
+    expected = contract.get("canonical_obs_column_count")
+    actual = len(contract.get("canonical_obs_columns", []))
+    if not isinstance(expected, int) or actual != expected:
         raise ValueError(
-            "OBS_COMPLETED contract must contain exactly 44 canonical obs columns"
+            "OBS_COMPLETED canonical_obs_column_count must match canonical_obs_columns"
         )
     return contract
 
@@ -60,6 +62,56 @@ def _check_bool(
     else:
         checks[name] = "blocked"
         blocked.append(f"{name}.evidence_missing")
+
+
+def _score_var_ensembl_species(evidence: dict[str, Any] | None) -> dict[str, Any]:
+    failed: list[str] = []
+    blocked: list[str] = []
+    var_evidence = (evidence or {}).get("var_ensembl_species")
+    count_names = (
+        "biological_features_total",
+        "stable_ensembl_id_features",
+        "correct_species_features",
+    )
+    denominators: dict[str, int | None] = {name: None for name in count_names}
+
+    if not isinstance(var_evidence, dict):
+        blocked.append("var_ensembl_species.evidence_missing")
+    else:
+        for name in count_names:
+            value = var_evidence.get(name)
+            if isinstance(value, int) and value >= 0:
+                denominators[name] = value
+            else:
+                blocked.append(f"{name}.evidence_missing_or_invalid")
+
+        total = denominators["biological_features_total"]
+        if total == 0:
+            blocked.append("biological_features_total.zero")
+        elif isinstance(total, int):
+            for name in (
+                "stable_ensembl_id_features",
+                "correct_species_features",
+            ):
+                count = denominators[name]
+                if isinstance(count, int) and count != total:
+                    failed.append(f"{name}.incomplete:{count}/{total}")
+
+        provenance = var_evidence.get("provenance")
+        if not isinstance(provenance, list):
+            blocked.append("var_ensembl_species.provenance.evidence_missing")
+        elif not provenance:
+            failed.append("var_ensembl_species.provenance.empty")
+
+    failed = sorted(set(failed))
+    blocked = sorted(set(blocked))
+    status = "false" if failed else "blocked" if blocked else "true"
+    return {
+        "VAR_ENSEMBL_SPECIES_COMPLETED": status,
+        "var_ensembl_species_failed_checks": failed,
+        "var_ensembl_species_blocked_checks": blocked,
+        "var_ensembl_species_denominators": denominators,
+    }
 
 
 def _score_dataset(
@@ -133,19 +185,6 @@ def _score_dataset(
     for name in contract["required_dataset_checks"]:
         _check_bool(name, dataset_checks.get(name), failed, blocked, checks)
 
-    duplicate = dataset_checks.get("duplicate_status")
-    if duplicate in contract["duplicate_status_pass"]:
-        checks["duplicate_status"] = "pass"
-    elif duplicate in {"duplicate", "subduplicate", "excluded"}:
-        checks["duplicate_status"] = "fail"
-        failed.append(f"duplicate_status.{duplicate}")
-    else:
-        checks["duplicate_status"] = "blocked"
-        blocked.append("duplicate_status.evidence_missing_or_unchecked")
-
-    for name in ("loader_projectable", "model_ready"):
-        _check_bool(name, dataset_checks.get(name), failed, blocked, checks)
-
     quality = dataset_checks.get("quality_flag")
     if quality in contract["quality_flag_pass"]:
         checks["quality_flag"] = "pass"
@@ -180,7 +219,7 @@ def _score_dataset(
     failed = sorted(set(failed))
     blocked = sorted(set(blocked))
     status = "false" if failed else "blocked" if blocked else "true"
-    return {
+    result = {
         "logical_dataset": logical_dataset,
         "OBS_COMPLETED": status,
         "failed_checks": failed,
@@ -201,6 +240,8 @@ def _score_dataset(
         },
         "checks": checks,
     }
+    result.update(_score_var_ensembl_species(evidence))
+    return result
 
 
 def score_manifest(
@@ -227,6 +268,7 @@ def score_manifest(
         for name in sorted(grouped)
     ]
     counts = Counter(item["OBS_COMPLETED"] for item in datasets)
+    var_counts = Counter(item["VAR_ENSEMBL_SPECIES_COMPLETED"] for item in datasets)
     return {
         "contract_id": contract["contract_id"],
         "read_only": True,
@@ -237,6 +279,12 @@ def score_manifest(
             "true": counts["true"],
             "false": counts["false"],
             "blocked": counts["blocked"],
+        },
+        "var_ensembl_species_summary": {
+            "datasets_total": len(datasets),
+            "true": var_counts["true"],
+            "false": var_counts["false"],
+            "blocked": var_counts["blocked"],
         },
     }
 
@@ -254,7 +302,9 @@ def main() -> None:
     parser.add_argument(
         "--manifest", required=True, help="Canonical member manifest TSV"
     )
-    parser.add_argument("--evidence", help="Optional OBS evidence JSON")
+    parser.add_argument(
+        "--evidence", help="Optional reviewed OBS and VAR evidence JSON"
+    )
     parser.add_argument(
         "--contract",
         default="config/obs_completed_contract_v1.json",

@@ -58,13 +58,16 @@ def complete_evidence(contract: dict, logical_dataset: str = "dataset/a") -> dic
             "derived_applicability_declared": True,
             "derived_outputs_complete": True,
             "combination_semantics": True,
-            "duplicate_status": "unique",
-            "loader_projectable": True,
-            "model_ready": True,
             "quality_flag": "ok",
             "citations": ["doi:10.example/example"],
             "provenance": ["source manifest v1"],
             "fabricated_values": False,
+        },
+        "var_ensembl_species": {
+            "biological_features_total": 100,
+            "stable_ensembl_id_features": 100,
+            "correct_species_features": 100,
+            "provenance": ["reviewed var audit v1"],
         },
     }
 
@@ -80,9 +83,10 @@ def test_complete_evidence_scores_true_with_explicit_denominators() -> None:
     assert dataset["blocked_checks"] == []
     assert dataset["denominators"]["members_total"] == 1
     assert dataset["denominators"]["rows_manifest"] == 2
-    assert dataset["denominators"]["canonical_fields_total"] == 44
-    assert dataset["denominators"]["canonical_fields_applicable"] == 44
-    assert dataset["denominators"]["canonical_fields_covered"] == 44
+    assert dataset["denominators"]["canonical_fields_total"] == 42
+    assert dataset["denominators"]["canonical_fields_applicable"] == 42
+    assert dataset["denominators"]["canonical_fields_covered"] == 42
+    assert dataset["VAR_ENSEMBL_SPECIES_COMPLETED"] == "true"
 
 
 def test_missing_expected_field_is_false_but_not_applicable_is_excluded() -> None:
@@ -102,8 +106,8 @@ def test_missing_expected_field_is_false_but_not_applicable_is_excluded() -> Non
     assert dataset["OBS_COMPLETED"] == "false"
     assert "fields.organism.missing" in dataset["failed_checks"]
     assert all("dose" not in item for item in dataset["failed_checks"])
-    assert dataset["denominators"]["canonical_fields_applicable"] == 43
-    assert dataset["denominators"]["canonical_fields_covered"] == 42
+    assert dataset["denominators"]["canonical_fields_applicable"] == 41
+    assert dataset["denominators"]["canonical_fields_covered"] == 40
 
 
 def test_alias_requires_provenance_and_full_non_null_coverage() -> None:
@@ -159,6 +163,61 @@ def test_cli_output_never_treats_storage_contract_terms_as_checks(
     for forbidden in contract["explicitly_excluded_criteria"]:
         assert forbidden not in result["datasets"][0]["checks"]
     assert "OBS_COMPLETED" in rendered
+
+
+def test_contract_matches_authoritative_obs_field_correction() -> None:
+    contract = load_contract(CONTRACT_PATH)
+    forbidden = {
+        "perturbation_target",
+        "perturbation_target_id",
+        "timepoint_unit",
+        "model_ready",
+        "loader_projectable",
+        "harmonization_level",
+        "duplicate_status",
+        "guide_id",
+    }
+
+    assert len(contract["canonical_obs_columns"]) == 42
+    assert forbidden.isdisjoint(contract["canonical_obs_columns"])
+    assert forbidden.isdisjoint(contract["required_dataset_checks"])
+    assert "guide_sequence" in contract["canonical_obs_columns"]
+    assert "molecule_sequence" in contract["canonical_obs_columns"]
+    assert "molecule_sequence" in contract["combination_suffix_fields"]
+
+
+def test_var_verdict_is_separate_and_cannot_change_obs_verdict() -> None:
+    contract = load_contract(CONTRACT_PATH)
+    evidence = complete_evidence(contract)
+    evidence["var_ensembl_species"]["stable_ensembl_id_features"] = 99
+
+    result = score_manifest([manifest_row()], [evidence], contract)
+    dataset = result["datasets"][0]
+
+    assert dataset["OBS_COMPLETED"] == "true"
+    assert dataset["VAR_ENSEMBL_SPECIES_COMPLETED"] == "false"
+    assert dataset["var_ensembl_species_failed_checks"] == [
+        "stable_ensembl_id_features.incomplete:99/100"
+    ]
+    assert dataset["var_ensembl_species_denominators"] == {
+        "biological_features_total": 100,
+        "correct_species_features": 100,
+        "stable_ensembl_id_features": 99,
+    }
+
+
+def test_missing_var_evidence_is_blocked_without_blocking_obs() -> None:
+    contract = load_contract(CONTRACT_PATH)
+    evidence = complete_evidence(contract)
+    del evidence["var_ensembl_species"]
+
+    dataset = score_manifest([manifest_row()], [evidence], contract)["datasets"][0]
+
+    assert dataset["OBS_COMPLETED"] == "true"
+    assert dataset["VAR_ENSEMBL_SPECIES_COMPLETED"] == "blocked"
+    assert dataset["var_ensembl_species_blocked_checks"] == [
+        "var_ensembl_species.evidence_missing"
+    ]
 
 
 def test_write_result_creates_output_parent_directory(tmp_path: Path) -> None:

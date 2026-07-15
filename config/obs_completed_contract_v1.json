@@ -13,14 +13,20 @@
     "cell_line", "disease", "tissue_type", "organism", "sex", "age",
     "ethnicity", "sequencer", "technology", "assay", "modality", "media",
     "is_bulk", "is_pseudobulk", "perturbation", "perturbation_type",
-    "perturbation_technology", "perturbation_library", "guide_id",
-    "guide_sequence", "perturbation_target", "perturbation_target_id",
+    "perturbation_technology", "perturbation_library", "guide_sequence",
+    "molecule_sequence",
     "is_control", "dose", "dose_unit", "timepoint", "trajectory_id",
     "pseudotime", "is_baseline", "sensitivity", "response_metric",
     "response_value", "response_source", "n_counts", "n_genes", "pct_mito",
     "pct_ribo", "is_low_quality"
   ],
-  "combination_suffix_rule": "Repeat perturbation, perturbation_type, perturbation_technology, perturbation_library, guide_id, guide_sequence, perturbation_target, perturbation_target_id, dose and dose_unit as _2..._N; require combination_size and combination_id when N > 1.",
+  "canonical_obs_column_count": 42,
+  "combination_suffix_fields": [
+    "perturbation", "perturbation_type", "perturbation_technology",
+    "perturbation_library", "guide_sequence", "molecule_sequence", "dose",
+    "dose_unit"
+  ],
+  "combination_suffix_rule": "Repeat the combination_suffix_fields as _2..._N; require combination_size and combination_id when N > 1.",
   "field_states": ["present", "alias_only", "manifest_only", "missing", "not_applicable"],
   "field_state_scoring": {
     "present": "requires source plus exact non-null numerator/denominator coverage",
@@ -55,8 +61,19 @@
     "strict_control_available", "relaxed_control_available",
     "dataset_control_available", "no_control_found"
   ],
-  "duplicate_status_pass": ["unique", "waived"],
   "quality_flag_pass": ["ok", "waived"],
+  "separate_var_verdict": {
+    "name": "VAR_ENSEMBL_SPECIES_COMPLETED",
+    "obs_criterion": false,
+    "evidence_key": "var_ensembl_species",
+    "required_counts": [
+      "biological_features_total",
+      "stable_ensembl_id_features",
+      "correct_species_features"
+    ],
+    "requires_provenance": true,
+    "pass_condition": "Every biological feature has a stable Ensembl ID mapped to the correct species, with explicit provenance."
+  },
   "explicitly_excluded_criteria": [
     "zarr", "chunk_count", "chunk_size", "var_duplication",
     "x_payload_completeness", "x_source_identity"
