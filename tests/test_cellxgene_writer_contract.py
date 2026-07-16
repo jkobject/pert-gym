@@ -96,12 +96,17 @@ def validate(config: dict[str, object], authorization: dict[str, object]):
     )
 
 
-def test_row_99_reviewed_fixture_validates_with_current_writer_hash_binding() -> None:
+def test_row_99_frozen_contract_loads_with_current_hash_bindings() -> None:
+    contract = load_contract_module()
     config = load_json(ROW_99_CONFIG)
-    frozen_authorization = load_json(ROW_99_AUTHORIZATION)
-    authorization = bound_authorization(config)
-
-    validated = validate(config, authorization)
+    authorization = load_json(ROW_99_AUTHORIZATION)
+    validated = contract.load_bound_contract(
+        ROW_99_CONFIG,
+        ROW_99_AUTHORIZATION,
+        writer_path=WRITER,
+        helper_path=HELPER,
+        require_execution=False,
+    )
 
     assert validated.config["shape"] == [10224, 35552]
     assert validated.config["accepted_components"] == {
@@ -109,17 +114,44 @@ def test_row_99_reviewed_fixture_validates_with_current_writer_hash_binding() ->
         "denominator": 153,
         "credit": 0,
     }
-    assert frozen_authorization["config_sha256"] == sha256(ROW_99_CONFIG)
-    assert frozen_authorization["writer_sha256"] == (
-        "f40409ce46393db8c713a6a4b428f2c98c0102031c1c06e70042b0f96504a723"
-    )
+    assert authorization["config_sha256"] == sha256(ROW_99_CONFIG)
     assert authorization["writer_sha256"] == sha256(WRITER)
     assert authorization["writer_contract_sha256"] == sha256(CONTRACT_PATH)
     assert authorization["parquet_frame_parity_sha256"] == sha256(HELPER)
     assert authorization["execution_authorized"] is False
+    assert validated.config == config
     assert str(config["logical_key"]).endswith(
         "cell_culture_differentiation_and_proliferation_conditions_influence_the_in_vitro"
     )
+
+
+def test_row_99_stale_writer_hash_rejects_before_external_io(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_99_CONFIG)
+    authorization = load_json(ROW_99_AUTHORIZATION)
+    authorization["writer_sha256"] = "0" * 64
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
+    )
+
+    with pytest.raises(RuntimeError, match="writer SHA-256"):
+        writer.main()
+
+    assert calls == []
 
 
 def test_distinct_row_13_fixture_reaches_generic_preflight_boundary() -> None:
