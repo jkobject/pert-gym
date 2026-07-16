@@ -86,7 +86,25 @@ FAILED_PREDECESSORS = [
             }
         ],
         "policy": "preserve immutable for audit; never resume, overwrite, promote, or count",
-    }
+    },
+    {
+        "revision": "stt0000071-20260716T163421Z-9b1a2db2",
+        "revision_uri": (
+            f"{GCS_OUTPUT_ROOT}/{LOGICAL_KEY}/revisions/"
+            "stt0000071-20260716T163421Z-9b1a2db2"
+        ),
+        "status": "external_vm_stop_no_objects_no_manifest_no_credit_no_resume",
+        "accepted_components_credit": 0,
+        "manifest_present": False,
+        "objects": [],
+        "failure": {
+            "kind": "external_vm_stop",
+            "audit_timestamp": "2026-07-16T16:40:41.800551Z",
+            "principal": "jkobject@gmail.com",
+            "observed_phase": "source_identity_validation_before_materialization",
+        },
+        "policy": "never resume or count; every retry uses a fresh absent revision",
+    },
 ]
 
 
@@ -110,6 +128,23 @@ def sha256_json(value: object) -> str:
     return hashlib.sha256(
         json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
     ).hexdigest()
+
+
+def product_heartbeat(path: Path, **values: object) -> None:
+    payload = {
+        "format": "pert-gym.product-execution-heartbeat/v1",
+        "host": socket.gethostname().split(".")[0],
+        "pid": os.getpid(),
+        "payload_heartbeat_at": time.time(),
+        "metric": "accepted_components",
+        "current": 4,
+        "denominator": 153,
+        **values,
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_bytes(json_bytes(payload))
+    temporary.replace(path)
 
 
 def load_json(path: Path) -> Any:
@@ -553,12 +588,14 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
     built_root.mkdir()
     readback_root.mkdir()
     global_lock = vm_global_lamin_writer_lock_path()
+    heartbeat_path = args.evidence_out.with_name("product-execution.json")
     with ExitStack() as locks:
         lease_acquired = time.time()
         locks.enter_context(lamin_writer_lock(global_lock, lock_metadata))
         for path in legacy_lamin_writer_lock_paths():
             locks.enter_context(lamin_writer_lock(path, lock_metadata, check_live_metadata=False))
         ln.track()
+        product_heartbeat(heartbeat_path, phase="preflight", revision=revision, completed=0, total=138)
         source_identities: list[dict[str, Any]] = []
         for index, row in enumerate(staging["rows"], 1):
             identity = describe_gcs(generation_uri(row))
@@ -576,6 +613,7 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
             )
             if index % 20 == 0:
                 print(f"source identity {index}/138", flush=True)
+                product_heartbeat(heartbeat_path, phase="source-identity", revision=revision, completed=index, total=138)
         local_sources: dict[str, dict[str, Any]] = {}
         all_genes: set[str] = set()
         for index, section in enumerate(sections, 1):
@@ -588,6 +626,7 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
             genes = pd.read_csv(gem_path, sep="\t", usecols=["geneID"])["geneID"].astype(str)
             all_genes.update(genes.unique())
             print(f"source materialized {index}/46 genes={len(all_genes)}", flush=True)
+            product_heartbeat(heartbeat_path, phase="source-materialization", revision=revision, completed=index, total=46)
         genes = sorted(all_genes)
         var = pd.DataFrame(
             {
@@ -648,6 +687,7 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
                 }
             )
             print(f"section built {index}/46 n_obs={stats['n_obs']} nnz={stats['nnz']}", flush=True)
+            product_heartbeat(heartbeat_path, phase="writing", revision=revision, completed=index, total=46, n_obs=total_obs, nnz=total_nnz)
         for identity in source_identities:
             local = local_sources.get(identity["relative_path"])
             if local:
@@ -732,6 +772,7 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
             readback_nnz += int(matrix.nnz)
             readback_counts += int(matrix.sum())
             readback_sections.append({"chunk_index": section["chunk_index"], "section_id": section["section_id"], "shape": list(matrix.shape), "nnz": int(matrix.nnz), "sum": int(matrix.sum()), "obs_index_sha256": hashlib.sha256(("\n".join(map(str, obs.index)) + "\n").encode()).hexdigest()})
+            product_heartbeat(heartbeat_path, phase="readback", revision=revision, completed=len(readback_sections), total=46, n_obs=readback_obs, nnz=readback_nnz)
         var_readback_path = readback_root / "shared-var.parquet"
         readback_object(var_identity, var_readback_path)
         var_readback = pd.read_parquet(var_readback_path)
@@ -808,6 +849,7 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
         }
         args.evidence_out.parent.mkdir(parents=True, exist_ok=True)
         args.evidence_out.write_bytes(json_bytes(final))
+        product_heartbeat(heartbeat_path, phase="completed", revision=revision, completed=46, total=46, n_obs=total_obs, nnz=total_nnz, manifest=manifest_identity)
         print(json.dumps(final, indent=2, sort_keys=True))
     return 0
 
