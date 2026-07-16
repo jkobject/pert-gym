@@ -4,7 +4,7 @@
   "config_sha256": "ad9c0e2855c62f2354f4889d897367ad4dcc02352336091b821b8f803a0994c9",
   "correction_task_id": "t_5a683225",
   "execution_authorized": true,
-  "live_ledger_control_plane_sha256": "9c0ef2048f9496e25f0c144bd4ed32771ae835d4e2e2d3146ed1aed1d18649ab",
+  "live_ledger_control_plane_sha256": "f37cc8159f660d2474533befcd10e8989694bd932a290169781c556efd471f11",
   "parent_task_id": "t_536f36cd",
   "parent_task_status": "completed",
   "parquet_frame_parity_sha256": "f2827eca688dd2581a6ede51be77c4ae0b9327bacc66116e8ec1b1cc5420e976",
