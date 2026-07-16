@@ -25,6 +25,7 @@ ROW_7_AUTHORIZATION = REVIEW / "row-7-authorization.json"
 WRITER = REVIEW / "write_component.py"
 HELPER = REVIEW / "parquet_frame_parity.py"
 LEDGER_HELPER = REVIEW / "live_ledger_control_plane.py"
+ROW_7_SOURCE_VERSION_ID = "YipoWdKvKlXR9hHaku1ta0iAGqNr8w_m"
 
 
 def sha256(path: Path) -> str:
@@ -159,6 +160,9 @@ def test_row_7_exact_contract_is_intrinsically_bound_and_execution_authorized() 
     assert config["catalogue_record"] == "temporal_v4_007_a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s"
     assert config["revision"]["prefix"] == "temporal-v4-007"
     assert config["shape"] == [9619, 35461]
+    source_head = config["source_head"]
+    assert isinstance(source_head, dict)
+    assert source_head["version_id"] == ROW_7_SOURCE_VERSION_ID
     assert config["accepted_components"] == {
         "metric": "accepted_components",
         "current": 3,
@@ -867,6 +871,165 @@ def test_row_7_unauthorized_source_or_revision_rejects_before_side_effects(
     with pytest.raises((RuntimeError, ValueError)):
         writer.main()
     assert calls == []
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        lambda head: head.pop("version_id"),
+        lambda head: head.__setitem__("version_id", None),
+        lambda head: head.__setitem__("version_id", "wrong-version"),
+        lambda head: head.__setitem__("version_id", "rebound-version"),
+    ],
+)
+def test_row_7_absent_null_wrong_or_rebound_config_version_rejects_before_leases_or_side_effects(
+    monkeypatch, tmp_path: Path, mutation
+) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_7_CONFIG)
+    authorization = load_json(ROW_7_AUTHORIZATION)
+    source_head = config["source_head"]
+    assert isinstance(source_head, dict)
+    mutation(source_head)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
+    lease_events: list[str] = []
+
+    @contextmanager
+    def lease(path, *args, **kwargs):
+        lease_events.append(f"enter:{path}")
+        try:
+            yield
+        finally:
+            lease_events.append(f"exit:{path}")
+
+    monkeypatch.setattr(writer, "lamin_writer_lock", lease)
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
+    )
+
+    with pytest.raises((RuntimeError, ValueError), match="source_head"):
+        writer.main()
+
+    assert calls == []
+    assert lease_events == []
+
+
+class SourceHeadResponse(io.BytesIO):
+    def __init__(self, version_id: object, *, include_header: bool = True) -> None:
+        super().__init__()
+        self.status = 200
+        self.url = "https://datasets.cellxgene.cziscience.com/89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8.h5ad"
+        self.headers: dict[str, object] = {
+            "Content-Length": "181024331",
+            "ETag": '"f5d444de645d745875bb1cee2113f20a-22"',
+            "Last-Modified": "Wed, 10 Jun 2026 16:14:51 GMT",
+        }
+        if include_header:
+            self.headers["x-amz-version-id"] = version_id
+
+
+def configure_row_7_source_head_boundary(monkeypatch, tmp_path: Path):
+    writer = configure_row_7_lease_boundary(monkeypatch, tmp_path)
+    lease_events: list[str] = []
+
+    @contextmanager
+    def lease(path, *args, **kwargs):
+        lease_events.append(f"enter:{path}")
+        try:
+            yield
+        finally:
+            lease_events.append(f"exit:{path}")
+
+    monkeypatch.setattr(writer, "lamin_writer_lock", lease)
+    monkeypatch.setattr(
+        writer,
+        "read_live_accepted_components_ledger",
+        lambda: {
+            "metric": "accepted_components",
+            "current": 4,
+            "denominator": 153,
+            "source": "hermes-kanban-completed-product-deltas/v1",
+        },
+    )
+    monkeypatch.setattr(writer, "source_api", lambda contract: {"identity": "exact"})
+    return writer, lease_events
+
+
+def test_row_7_exact_observed_source_version_reaches_local_output_only_after_head(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer, lease_events = configure_row_7_source_head_boundary(monkeypatch, tmp_path)
+    calls: list[str] = []
+    monkeypatch.setattr(
+        writer.urllib.request,
+        "urlopen",
+        lambda *args, **kwargs: SourceHeadResponse(ROW_7_SOURCE_VERSION_ID),
+    )
+
+    def next_boundary(*args, **kwargs):
+        calls.append("mkdir")
+        raise RuntimeError("next local-output boundary")
+
+    monkeypatch.setattr(Path, "mkdir", next_boundary)
+    monkeypatch.setattr(
+        writer,
+        "hash_source",
+        lambda: (_ for _ in ()).throw(AssertionError("source body")),
+    )
+
+    with pytest.raises(RuntimeError, match="next local-output boundary"):
+        writer.main()
+
+    assert calls == ["mkdir"]
+    assert lease_events == [
+        "enter:global",
+        "enter:family",
+        "exit:family",
+        "exit:global",
+    ]
+
+
+@pytest.mark.parametrize(
+    ("version_id", "include_header"),
+    [(None, False), (None, True), ("wrong-version", True)],
+)
+def test_row_7_absent_null_or_wrong_observed_source_version_releases_leases_before_side_effects(
+    monkeypatch, tmp_path: Path, version_id: object, include_header: bool
+) -> None:
+    writer, lease_events = configure_row_7_source_head_boundary(monkeypatch, tmp_path)
+    real_source_head = writer.source_head
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(writer, "source_head", real_source_head)
+    monkeypatch.setattr(
+        writer.urllib.request,
+        "urlopen",
+        lambda *args, **kwargs: SourceHeadResponse(
+            version_id, include_header=include_header
+        ),
+    )
+    monkeypatch.setattr(writer, "source_api", lambda contract: {"identity": "exact"})
+
+    with pytest.raises(RuntimeError, match="source HEAD drift"):
+        writer.main()
+
+    assert calls == []
+    assert lease_events == [
+        "enter:global",
+        "enter:family",
+        "exit:family",
+        "exit:global",
+    ]
 
 
 def executable_row_13_contract() -> tuple[dict[str, object], dict[str, object]]:
