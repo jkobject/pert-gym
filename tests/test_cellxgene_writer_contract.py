@@ -371,6 +371,41 @@ def write_live_ledger_db(path: Path, records: list[object]) -> None:
     connection.close()
 
 
+def write_live_ledger_metadata_db(
+    path: Path, records: list[tuple[str, dict[str, object]]]
+) -> None:
+    connection = sqlite3.connect(path)
+    connection.executescript(
+        """
+        CREATE TABLE tasks (id TEXT PRIMARY KEY, status TEXT NOT NULL);
+        CREATE TABLE task_runs (
+            id INTEGER PRIMARY KEY,
+            task_id TEXT NOT NULL,
+            status TEXT NOT NULL,
+            outcome TEXT,
+            ended_at INTEGER,
+            metadata TEXT
+        );
+        """
+    )
+    for index, (task_id, metadata) in enumerate(records, start=1):
+        if task_id == "t_664e9dc0":
+            run_id = 2978
+        elif task_id == "t_9d02f2dc":
+            run_id = 3012
+        elif index > 6:
+            run_id = 3012 + index - 6
+        else:
+            run_id = index
+        connection.execute("INSERT INTO tasks VALUES (?, 'done')", (task_id,))
+        connection.execute(
+            "INSERT INTO task_runs VALUES (?, ?, 'done', 'completed', ?, ?)",
+            (run_id, task_id, run_id, json.dumps(metadata)),
+        )
+    connection.commit()
+    connection.close()
+
+
 def accepted_components_delta(before: object, after: object) -> dict[str, object]:
     manifest = immutable_manifest()
     return {
@@ -381,6 +416,139 @@ def accepted_components_delta(before: object, after: object) -> dict[str, object
         "mismatch": 0,
         "live_readback": manifest["uri"],
     }
+
+
+def exact_live_six_record_fixture() -> list[tuple[str, dict[str, object]]]:
+    tasks = ["t_zero", "t_one", "t_two", "t_three", "t_664e9dc0"]
+    records: list[tuple[str, dict[str, object]]] = []
+    for index, task_id in enumerate(tasks):
+        before = 0 if index == 0 else index - 1
+        records.append(
+            (
+                task_id,
+                {
+                    "product_delta": {
+                        "metrics": {
+                            "accepted_components": accepted_components_delta(before, index)
+                        }
+                    },
+                    "manifest": immutable_manifest(),
+                },
+            )
+        )
+    records.append(
+        (
+            "t_9d02f2dc",
+            {
+                "product_delta": {
+                    "metrics": {"accepted_components": accepted_components_delta(3, 4)}
+                },
+                "manifest": immutable_manifest(),
+                "independent_gates": {
+                    "administrative_credit_task": "t_664e9dc0",
+                },
+            },
+        )
+    )
+    return records
+
+
+def test_control_plane_helper_ignores_exact_bound_administrative_credit_replay(
+    monkeypatch, tmp_path: Path
+) -> None:
+    helper = load_ledger_helper_module()
+    database = tmp_path / "kanban.db"
+    write_live_ledger_metadata_db(database, exact_live_six_record_fixture())
+    monkeypatch.setattr(helper, "DATABASE", database)
+
+    observed = helper.build_response("a" * 64, issued_at=100.0)
+
+    assert len(observed["chain"]) == 5
+    assert observed["latest_owner"]["task_id"] == "t_664e9dc0"
+    assert observed["latest_owner"]["run_id"] == 2978
+    assert observed["latest_owner"]["current"] == 4
+    assert observed["latest_owner"]["denominator"] == 153
+
+
+def regress_administrative_replay(records) -> None:
+    delta = records[-1][1]["product_delta"]["metrics"]["accepted_components"]
+    delta["before"] = 2
+    delta["after"] = 3
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        lambda records: records[-1][1].pop("independent_gates"),
+        lambda records: records[-1][1].__setitem__("independent_gates", []),
+        lambda records: records[-1][1]["independent_gates"].__setitem__(
+            "administrative_credit_task", "t_three"
+        ),
+        lambda records: records[-1][1]["manifest"].__setitem__(
+            "uri", immutable_manifest("conflicting")["uri"]
+        ),
+        lambda records: records[-1][1]["manifest"].__setitem__("generation", "1"),
+        lambda records: records[-1][1]["manifest"].__setitem__("sha256", "8" * 64),
+        lambda records: records[-1][1]["product_delta"]["metrics"][
+            "accepted_components"
+        ].__setitem__("before", 2),
+        lambda records: records[-1][1]["product_delta"]["metrics"][
+            "accepted_components"
+        ].__setitem__("after", 3),
+        lambda records: records[-1][1]["product_delta"]["metrics"][
+            "accepted_components"
+        ].__setitem__("denominator", 152),
+        lambda records: records[-1][1]["product_delta"]["metrics"][
+            "accepted_components"
+        ].__setitem__("unit", "datasets"),
+        lambda records: records[-1][1]["product_delta"]["metrics"][
+            "accepted_components"
+        ].__setitem__("mismatch", 1),
+        regress_administrative_replay,
+        lambda records: records.insert(
+            3,
+            (
+                "t_gap",
+                {
+                    "product_delta": {
+                        "metrics": {
+                            "accepted_components": accepted_components_delta(3, 4)
+                        }
+                    },
+                    "manifest": immutable_manifest(),
+                },
+            ),
+        ),
+        lambda records: records.append(
+            (
+                "t_second_outcome",
+                {
+                    "product_delta": {
+                        "metrics": {
+                            "accepted_components": accepted_components_delta(3, 4)
+                        }
+                    },
+                    "manifest": immutable_manifest("second-outcome"),
+                    "independent_gates": {
+                        "administrative_credit_task": "t_664e9dc0"
+                    },
+                },
+            )
+        ),
+    ],
+)
+def test_control_plane_helper_rejects_non_exact_administrative_credit_replay(
+    monkeypatch, tmp_path: Path, mutation
+) -> None:
+    helper = load_ledger_helper_module()
+    records = exact_live_six_record_fixture()
+    mutation(records)
+    database = tmp_path / "kanban.db"
+    write_live_ledger_metadata_db(database, records)
+    monkeypatch.setattr(helper, "DATABASE", database)
+
+    with pytest.raises(RuntimeError, match="accepted-components"):
+        helper.build_response("a" * 64)
 
 
 def response_fixture(writer, *, current: int = 4, issued_at: float = 100.0):

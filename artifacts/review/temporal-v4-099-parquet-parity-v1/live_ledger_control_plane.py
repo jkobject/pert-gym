@@ -13,7 +13,7 @@ import sqlite3
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from urllib.parse import quote
 
 BOARD = "pert-gym"
@@ -75,9 +75,10 @@ def _validated_delta(
 ) -> dict[str, object]:
     if not isinstance(value, dict) or set(value) != _DELTA_KEYS:
         raise RuntimeError("accepted-components ledger record is malformed")
-    before = _integer(value["before"], "before")
-    after = _integer(value["after"], "after")
-    denominator = _integer(value["denominator"], "denominator")
+    delta = cast(dict[str, object], value)
+    before = _integer(delta["before"], "before")
+    after = _integer(delta["after"], "after")
+    denominator = _integer(delta["denominator"], "denominator")
     run = _integer(run_id, "run identity")
     ended = _integer(ended_at, "completion timestamp")
     if (
@@ -87,10 +88,10 @@ def _validated_delta(
         or not 0 <= before <= denominator
         or not 0 <= after <= denominator
         or (not (before == after == 0) and after != before + 1)
-        or value["unit"] != "components"
-        or value["mismatch"] != 0
-        or not isinstance(value["live_readback"], str)
-        or not value["live_readback"].strip()
+        or delta["unit"] != "components"
+        or delta["mismatch"] != 0
+        or not isinstance(delta["live_readback"], str)
+        or not delta["live_readback"].strip()
         or run <= 0
         or ended <= 0
     ):
@@ -156,6 +157,32 @@ def _read_completed_metadata() -> list[tuple[int, str, int, dict[str, Any]]]:
     return result
 
 
+def _validate_administrative_credit_replay(
+    metadata: dict[str, Any],
+    *,
+    owner: dict[str, object],
+    owner_metadata: dict[str, Any],
+) -> None:
+    gates = metadata.get("independent_gates")
+    if not isinstance(gates, dict):
+        raise RuntimeError("accepted-components administrative replay binding is malformed")
+    owner_task_id = owner["task_id"]
+    if gates.get("administrative_credit_task") != owner_task_id:
+        raise RuntimeError(
+            "accepted-components administrative replay is not bound to the latest owner"
+        )
+    delta = metadata["_delta"]
+    owner_delta = owner_metadata["_delta"]
+    if any(delta[key] != owner_delta[key] for key in _DELTA_KEYS):
+        raise RuntimeError("accepted-components administrative replay delta conflicts")
+    manifest = _manifest_identity(metadata, delta["live_readback"])
+    owner_manifest = _manifest_identity(
+        owner_metadata, owner_delta["live_readback"]
+    )
+    if manifest != owner_manifest:
+        raise RuntimeError("accepted-components administrative replay manifest conflicts")
+
+
 def build_response(nonce: str, *, issued_at: float | None = None) -> dict[str, object]:
     """Return only the validated metric chain and latest immutable owner identity."""
     if _NONCE.fullmatch(nonce) is None:
@@ -163,6 +190,9 @@ def build_response(nonce: str, *, issued_at: float | None = None) -> dict[str, o
     rows = _read_completed_metadata()
     chain: list[dict[str, object]] = []
     metadata_by_run: dict[int, dict[str, Any]] = {}
+    seen_task_ids: set[str] = set()
+    seen_run_ids: set[int] = set()
+    last_ended_at: int | None = None
     for run_id, task_id, ended_at, metadata in rows:
         record = _validated_delta(
             metadata["_delta"],
@@ -170,23 +200,32 @@ def build_response(nonce: str, *, issued_at: float | None = None) -> dict[str, o
             run_id=run_id,
             ended_at=ended_at,
         )
-        if record in chain:
-            raise RuntimeError("accepted-components ledger contains a duplicate record")
+        record_task_id = record["task_id"]
+        if not isinstance(record_task_id, str):
+            raise RuntimeError("accepted-components ledger task identity is malformed")
+        record_run_id = _integer(record["run_id"], "run identity")
+        if record_task_id in seen_task_ids or record_run_id in seen_run_ids:
+            raise RuntimeError("accepted-components ledger owner identity is duplicated")
+        seen_task_ids.add(record_task_id)
+        seen_run_ids.add(record_run_id)
+        current_ended = _integer(record["ended_at"], "completion timestamp")
+        if last_ended_at is not None and current_ended <= last_ended_at:
+            raise RuntimeError("accepted-components ledger completion order is regressive")
+        last_ended_at = current_ended
+        if chain:
+            latest = chain[-1]
+            if record["before"] != latest["after"]:
+                latest_run_id = _integer(latest["run_id"], "run identity")
+                _validate_administrative_credit_replay(
+                    metadata,
+                    owner=latest,
+                    owner_metadata=metadata_by_run[latest_run_id],
+                )
+                continue
         chain.append(record)
-        metadata_by_run[run_id] = metadata
+        metadata_by_run[record_run_id] = metadata
     if not chain:
         raise RuntimeError("accepted-components ledger has no completed record")
-    if len({row["task_id"] for row in chain}) != len(chain) or len(
-        {row["run_id"] for row in chain}
-    ) != len(chain):
-        raise RuntimeError("accepted-components ledger owner identity is duplicated")
-    for previous, current in zip(chain, chain[1:]):
-        if current["before"] != previous["after"]:
-            raise RuntimeError("accepted-components ledger chain is discontinuous")
-        current_ended = _integer(current["ended_at"], "completion timestamp")
-        previous_ended = _integer(previous["ended_at"], "completion timestamp")
-        if current_ended <= previous_ended:
-            raise RuntimeError("accepted-components ledger completion order is regressive")
     latest = chain[-1]
     latest_run_id = _integer(latest["run_id"], "run identity")
     latest_metadata = metadata_by_run[latest_run_id]
