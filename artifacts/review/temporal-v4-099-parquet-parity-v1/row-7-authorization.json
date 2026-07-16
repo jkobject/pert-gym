@@ -4,11 +4,12 @@
   "config_sha256": "5ee56d17a1d69ddccd3a8698571e1778860864964d855528a8410a64f952b244",
   "correction_task_id": "t_5a683225",
   "execution_authorized": true,
+  "live_ledger_control_plane_sha256": "9c0ef2048f9496e25f0c144bd4ed32771ae835d4e2e2d3146ed1aed1d18649ab",
   "parent_task_id": "t_536f36cd",
   "parent_task_status": "completed",
   "parquet_frame_parity_sha256": "f2827eca688dd2581a6ede51be77c4ae0b9327bacc66116e8ec1b1cc5420e976",
   "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
   "review_scope": "exact-head-independent-review-before-any-execution",
-  "writer_contract_sha256": "fc1a33bc79eae1f13a21732b4c7e3067432e2d24dea043d0d6da5354d3cdd81c",
-  "writer_sha256": "f5000128f8e7ed66d0a9af5a8b3f36764db833796080473ff996d92e5c026476"
+  "writer_contract_sha256": "4998912d19c9d96790e728abb1abd461efaa76bbda919ca3c309f7d9e1d3fa9f",
+  "writer_sha256": "9b9b4582cf060241bcb354d0f21827ab58948f5689f8749f554dd78aeb5e662c"
 }

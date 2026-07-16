@@ -8,10 +8,11 @@ import io
 import json
 import multiprocessing as mp
 import os
+import re
 import resource
+import secrets
 import signal
 import socket
-import sqlite3
 import sys
 import threading
 import time
@@ -19,6 +20,7 @@ import urllib.request
 from contextlib import ExitStack, contextmanager, nullcontext
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import fsspec
 import h5py
@@ -292,106 +294,188 @@ def duplicate_probe() -> dict[str, object]:
     return result
 
 
-def _validated_accepted_components_delta(
-    value: object, *, task_id: str, run_id: int, ended_at: int
+LEDGER_PROTOCOL = "pert-gym-accepted-components-loopback/v1"
+LEDGER_PATH = "/v1/accepted-components"
+LEDGER_MAX_AGE_SECONDS = 5.0
+_SHA256 = re.compile(r"^[0-9a-f]{64}$")
+_IMMUTABLE_MANIFEST = re.compile(
+    r"^gs://scperturb/pert-gym/staging/.+/revisions/[^/]+/manifest\.json$"
+)
+_CHAIN_KEYS = {"task_id", "run_id", "ended_at", "before", "after"}
+
+
+def _ledger_integer(value: object, label: str) -> int:
+    if not isinstance(value, int) or isinstance(value, bool):
+        raise RuntimeError(f"accepted-components ledger {label} is not an integer")
+    return value
+
+
+def _validate_live_ledger_response(
+    value: object, *, nonce: str, requested_at: float, received_at: float
 ) -> dict[str, object]:
     expected_keys = {
-        "before",
-        "after",
+        "protocol",
+        "board",
+        "metric",
+        "request_nonce",
+        "issued_at",
+        "chain",
+        "latest_owner",
+    }
+    if not isinstance(value, dict) or set(value) != expected_keys:
+        raise RuntimeError("accepted-components control-plane response is malformed")
+    issued_at = value["issued_at"]
+    if (
+        value["protocol"] != LEDGER_PROTOCOL
+        or value["board"] != "pert-gym"
+        or value["metric"] != "accepted_components"
+        or value["request_nonce"] != nonce
+        or not isinstance(issued_at, (int, float))
+        or isinstance(issued_at, bool)
+        or issued_at < requested_at - LEDGER_MAX_AGE_SECONDS
+        or received_at - issued_at > LEDGER_MAX_AGE_SECONDS
+        or issued_at > received_at + 2.0
+    ):
+        raise RuntimeError("accepted-components control-plane response is stale or rebound")
+    chain = value["chain"]
+    if not isinstance(chain, list) or not chain:
+        raise RuntimeError("accepted-components ledger chain is absent")
+    validated_chain: list[dict[str, object]] = []
+    for item in chain:
+        if not isinstance(item, dict) or set(item) != _CHAIN_KEYS:
+            raise RuntimeError("accepted-components ledger chain record is malformed")
+        before = _ledger_integer(item["before"], "before")
+        after = _ledger_integer(item["after"], "after")
+        run_id = _ledger_integer(item["run_id"], "run identity")
+        ended_at = _ledger_integer(item["ended_at"], "completion timestamp")
+        if (
+            not isinstance(item["task_id"], str)
+            or not item["task_id"].startswith("t_")
+            or not 0 <= before <= 153
+            or not 0 <= after <= 153
+            or (not (before == after == 0) and after != before + 1)
+            or run_id <= 0
+            or ended_at <= 0
+        ):
+            raise RuntimeError("accepted-components ledger chain record is incoherent")
+        validated_chain.append(dict(item))
+    if len({item["task_id"] for item in validated_chain}) != len(validated_chain) or len(
+        {item["run_id"] for item in validated_chain}
+    ) != len(validated_chain):
+        raise RuntimeError("accepted-components ledger chain owner is duplicated")
+    for previous, current in zip(validated_chain, validated_chain[1:]):
+        if current["before"] != previous["after"]:
+            raise RuntimeError("accepted-components ledger chain is discontinuous")
+        current_ended = _ledger_integer(current["ended_at"], "completion timestamp")
+        previous_ended = _ledger_integer(previous["ended_at"], "completion timestamp")
+        if current_ended <= previous_ended:
+            raise RuntimeError("accepted-components ledger chain is regressive")
+
+    owner = value["latest_owner"]
+    owner_keys = _CHAIN_KEYS | {
+        "current",
         "denominator",
         "unit",
         "mismatch",
         "live_readback",
+        "manifest",
     }
-    if not isinstance(value, dict) or set(value) != expected_keys:
-        raise RuntimeError("accepted-components ledger record is malformed")
-    before = value["before"]
-    after = value["after"]
-    denominator = value["denominator"]
+    if not isinstance(owner, dict) or set(owner) != owner_keys:
+        raise RuntimeError("accepted-components latest owner is malformed")
+    if {key: owner[key] for key in _CHAIN_KEYS} != validated_chain[-1]:
+        raise RuntimeError("accepted-components latest owner does not match the chain")
+    manifest = owner["manifest"]
+    if not isinstance(manifest, dict) or set(manifest) != {"uri", "generation", "sha256"}:
+        raise RuntimeError("accepted-components immutable manifest identity is malformed")
+    manifest_uri = manifest["uri"]
+    generation = manifest["generation"]
+    manifest_sha256 = manifest["sha256"]
     if (
-        not isinstance(before, int)
-        or isinstance(before, bool)
-        or not isinstance(after, int)
-        or isinstance(after, bool)
-        or not isinstance(denominator, int)
-        or isinstance(denominator, bool)
+        owner["current"] != owner["after"]
+        or owner["denominator"] != 153
+        or owner["unit"] != "components"
+        or owner["mismatch"] != 0
+        or not isinstance(manifest_uri, str)
+        or owner["live_readback"] != manifest_uri
+        or _IMMUTABLE_MANIFEST.fullmatch(manifest_uri) is None
+        or not isinstance(generation, str)
+        or not generation.isdigit()
+        or not isinstance(manifest_sha256, str)
+        or _SHA256.fullmatch(manifest_sha256) is None
     ):
-        raise RuntimeError("accepted-components ledger integers are malformed")
-    if (
-        denominator != 153
-        or not 0 <= before <= denominator
-        or not 0 <= after <= denominator
-        or (not (before == after == 0) and after != before + 1)
-        or value["unit"] != "components"
-        or value["mismatch"] != 0
-        or not isinstance(value["live_readback"], str)
-        or not value["live_readback"].strip()
-    ):
-        raise RuntimeError("accepted-components ledger record is incoherent")
+        raise RuntimeError("accepted-components immutable manifest identity is incoherent")
     return {
         "metric": "accepted_components",
-        "current": after,
-        "denominator": denominator,
-        "source": "hermes-kanban-completed-product-deltas/v1",
-        "task_id": task_id,
-        "run_id": run_id,
-        "ended_at": ended_at,
-        "before": before,
-        "after": after,
+        "current": owner["current"],
+        "denominator": 153,
+        "source": LEDGER_PROTOCOL,
+        "task_id": owner["task_id"],
+        "run_id": owner["run_id"],
+        "ended_at": owner["ended_at"],
+        "before": owner["before"],
+        "after": owner["after"],
         "mismatch": 0,
-        "live_readback": value["live_readback"],
+        "live_readback": manifest_uri,
+        "manifest_generation": generation,
+        "manifest_sha256": manifest_sha256,
+        "request_nonce": nonce,
+        "observed_at": issued_at,
     }
 
 
 def read_live_accepted_components_ledger() -> dict[str, object]:
-    """Read the authoritative completed-product-delta chain from Hermes Kanban."""
-    database = os.environ.get("HERMES_KANBAN_DB")
-    if not database or not Path(database).is_file():
-        raise RuntimeError("accepted-components ledger unavailable: HERMES_KANBAN_DB")
+    """Fetch exactly one fresh response through the remote loopback tunnel."""
+    endpoint = os.environ.get("PERT_GYM_LEDGER_URL", "")
+    token = os.environ.get("PERT_GYM_LEDGER_BEARER_TOKEN", "")
     try:
-        connection = sqlite3.connect(database, timeout=30)
-        connection.execute("PRAGMA query_only = ON")
-        rows = connection.execute(
-            """
-            SELECT r.id, r.task_id, r.ended_at, r.metadata
-            FROM task_runs AS r
-            JOIN tasks AS t ON t.id = r.task_id
-            WHERE t.status = 'done'
-              AND r.status = 'done'
-              AND r.outcome = 'completed'
-              AND r.metadata IS NOT NULL
-            ORDER BY r.ended_at, r.id
-            """
-        ).fetchall()
-        connection.close()
-    except (OSError, sqlite3.Error) as error:
+        parsed = urlsplit(endpoint)
+        port = parsed.port
+    except ValueError as error:
+        raise RuntimeError("accepted-components loopback endpoint is malformed") from error
+    if (
+        parsed.scheme != "http"
+        or parsed.hostname != "127.0.0.1"
+        or port is None
+        or not 1 <= port <= 65535
+        or parsed.path != LEDGER_PATH
+        or parsed.query
+        or parsed.fragment
+        or parsed.username is not None
+        or parsed.password is not None
+        or len(token) < 32
+    ):
+        raise RuntimeError("accepted-components loopback tunnel or bearer is unavailable")
+    nonce = secrets.token_hex(32)
+    payload = json.dumps({"request_nonce": nonce}, separators=(",", ":")).encode()
+    request = urllib.request.Request(
+        endpoint,
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    requested_at = time.time()
+    try:
+        with urllib.request.urlopen(request, timeout=5) as response:
+            if response.status != 200:
+                raise RuntimeError("accepted-components helper returned a non-200 status")
+            raw = response.read(1024 * 1024 + 1)
+    except (OSError, TimeoutError) as error:
         raise RuntimeError(
-            f"accepted-components ledger unavailable: {type(error).__name__}"
+            f"accepted-components loopback request failed: {type(error).__name__}"
         ) from error
-
-    records: list[dict[str, object]] = []
-    for run_id, task_id, ended_at, raw_metadata in rows:
-        try:
-            metadata = json.loads(raw_metadata)
-            metrics = metadata["product_delta"]["metrics"]
-        except (json.JSONDecodeError, KeyError, TypeError):
-            continue
-        if "accepted_components" not in metrics:
-            continue
-        records.append(
-            _validated_accepted_components_delta(
-                metrics["accepted_components"],
-                task_id=str(task_id),
-                run_id=int(run_id),
-                ended_at=int(ended_at),
-            )
-        )
-    if not records:
-        raise RuntimeError("accepted-components ledger has no completed record")
-    for previous, current in zip(records, records[1:], strict=False):
-        if current["before"] != previous["after"]:
-            raise RuntimeError("accepted-components ledger chain is incoherent")
-    return records[-1]
+    received_at = time.time()
+    if len(raw) > 1024 * 1024:
+        raise RuntimeError("accepted-components control-plane response is oversized")
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError as error:
+        raise RuntimeError("accepted-components control-plane response is not JSON") from error
+    return _validate_live_ledger_response(
+        value, nonce=nonce, requested_at=requested_at, received_at=received_at
+    )
 
 
 def map_obs(source: pd.DataFrame, organism: str) -> pd.DataFrame:
@@ -636,6 +720,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--authorization", type=Path, required=True)
+    parser.add_argument("--ledger-probe-only", action="store_true")
     args = parser.parse_args()
     contract = writer_contract.load_bound_contract(
         args.config,
@@ -663,6 +748,9 @@ def main() -> int:
     if REVISION_PREFIX == "temporal-v4-007":
         with acquired_writer_leases(lock_metadata) as lease_acquired:
             live_ledger = read_live_accepted_components_ledger()
+            if args.ledger_probe_only:
+                print(json.dumps(live_ledger, indent=2, sort_keys=True))
+                return 0
             return _execute_authorized_contract(
                 contract,
                 started=started,
@@ -670,6 +758,8 @@ def main() -> int:
                 live_ledger=live_ledger,
                 lock_metadata=lock_metadata,
             )
+    if args.ledger_probe_only:
+        raise RuntimeError("ledger probe is authorized only for temporal-v4 row 7")
     static_ledger = ACTIVE_CONFIG["accepted_components"]
     return _execute_authorized_contract(
         contract,

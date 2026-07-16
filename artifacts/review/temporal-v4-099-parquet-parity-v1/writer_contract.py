@@ -47,6 +47,7 @@ _AUTHORIZATION_KEYS = {
     "review_scope",
     "execution_authorized",
 }
+_ROW_7_AUTHORIZATION_KEYS = _AUTHORIZATION_KEYS | {"live_ledger_control_plane_sha256"}
 _AUTHORIZATION_BINDING_KEYS = {
     "parent_task_id",
     "approved_parent_protocol",
@@ -454,10 +455,13 @@ def validate_bound_contract(
     writer_sha256: str,
     helper_sha256: str,
     contract_sha256: str,
+    ledger_helper_sha256: str | None = None,
 ) -> SimpleNamespace:
     """Validate all data and hash bindings without performing any I/O."""
     _validate_config(config)
-    _exact_keys(authorization, _AUTHORIZATION_KEYS, "authorization")
+    row_7 = config["revision"]["prefix"] == "temporal-v4-007"
+    authorization_keys = _ROW_7_AUTHORIZATION_KEYS if row_7 else _AUTHORIZATION_KEYS
+    _exact_keys(authorization, authorization_keys, "authorization")
     if authorization["authorization_version"] != AUTHORIZATION_VERSION:
         raise ValueError("unsupported authorization version")
     if authorization["protocol"] != config["protocol"]:
@@ -470,6 +474,13 @@ def validate_bound_contract(
         raise RuntimeError("authorization contract SHA-256 does not match exact helper")
     if authorization["parquet_frame_parity_sha256"] != helper_sha256:
         raise RuntimeError("authorization helper SHA-256 does not match exact helper")
+    if row_7 and (
+        ledger_helper_sha256 is None
+        or authorization["live_ledger_control_plane_sha256"] != ledger_helper_sha256
+    ):
+        raise RuntimeError(
+            "authorization live-ledger helper SHA-256 does not match exact helper"
+        )
     if authorization["parent_task_status"] != "completed":
         raise RuntimeError("authorization parent task is not completed")
     binding = config["authorization_binding"]
@@ -507,6 +518,9 @@ def load_bound_contract(
         writer_sha256=hashlib.sha256(writer_path.read_bytes()).hexdigest(),
         helper_sha256=hashlib.sha256(helper_path.read_bytes()).hexdigest(),
         contract_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        ledger_helper_sha256=hashlib.sha256(
+            Path(__file__).with_name("live_ledger_control_plane.py").read_bytes()
+        ).hexdigest(),
     )
     if require_execution:
         require_execution_authorized(result)

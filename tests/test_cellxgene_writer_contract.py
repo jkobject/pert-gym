@@ -7,6 +7,7 @@ import io
 import json
 import sqlite3
 import sys
+import threading
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -23,6 +24,7 @@ ROW_7_CONFIG = REVIEW / "row-7-config.json"
 ROW_7_AUTHORIZATION = REVIEW / "row-7-authorization.json"
 WRITER = REVIEW / "write_component.py"
 HELPER = REVIEW / "parquet_frame_parity.py"
+LEDGER_HELPER = REVIEW / "live_ledger_control_plane.py"
 
 
 def sha256(path: Path) -> str:
@@ -47,6 +49,16 @@ def load_writer_module():
         return module
     finally:
         sys.path.remove(str(REVIEW))
+
+
+def load_ledger_helper_module():
+    spec = importlib.util.spec_from_file_location(
+        "cellxgene_live_ledger_control_plane", LEDGER_HELPER
+    )
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def load_json(path: Path) -> dict[str, object]:
@@ -76,6 +88,7 @@ def validate(config: dict[str, object], authorization: dict[str, object]):
         writer_sha256=sha256(WRITER),
         helper_sha256=sha256(HELPER),
         contract_sha256=sha256(CONTRACT_PATH),
+        ledger_helper_sha256=sha256(LEDGER_HELPER),
     )
 
 
@@ -176,6 +189,14 @@ def test_row_7_stale_snapshot_does_not_bind_live_ledger_current() -> None:
     assert validated.config["accepted_components"]["current"] == 4
 
 
+def immutable_manifest(revision: str = "temporal-v4-013-test") -> dict[str, str]:
+    uri = (
+        "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/test/"
+        f"revisions/{revision}/manifest.json"
+    )
+    return {"uri": uri, "generation": "1784150946597762", "sha256": "9" * 64}
+
+
 def write_live_ledger_db(path: Path, records: list[object]) -> None:
     connection = sqlite3.connect(path)
     connection.executescript(
@@ -194,6 +215,11 @@ def write_live_ledger_db(path: Path, records: list[object]) -> None:
     for index, record in enumerate(records, start=1):
         task_id = f"t_credit_{index}"
         metadata = {"product_delta": {"metrics": {"accepted_components": record}}}
+        if index == len(records) and isinstance(record, dict):
+            metadata["manifest"] = {
+                **immutable_manifest(),
+                "uri": record.get("live_readback"),
+            }
         connection.execute("INSERT INTO tasks VALUES (?, 'done')", (task_id,))
         connection.execute(
             "INSERT INTO task_runs VALUES (?, ?, 'done', 'completed', ?, ?)",
@@ -204,33 +230,74 @@ def write_live_ledger_db(path: Path, records: list[object]) -> None:
 
 
 def accepted_components_delta(before: object, after: object) -> dict[str, object]:
+    manifest = immutable_manifest()
     return {
         "before": before,
         "after": after,
         "denominator": 153,
         "unit": "components",
         "mismatch": 0,
-        "live_readback": "gs://scperturb/example/manifest.json",
+        "live_readback": manifest["uri"],
     }
 
 
-def test_live_accepted_components_reader_uses_latest_completed_delta(
+def response_fixture(writer, *, current: int = 4, issued_at: float = 100.0):
+    chain = [
+        {"task_id": "t_zero", "run_id": 1, "ended_at": 1, "before": 0, "after": 0}
+    ]
+    for value in range(1, current + 1):
+        chain.append(
+            {
+                "task_id": f"t_credit_{value}",
+                "run_id": value + 1,
+                "ended_at": value + 1,
+                "before": value - 1,
+                "after": value,
+            }
+        )
+    manifest = immutable_manifest(f"temporal-v4-{current:03d}-test")
+    return {
+        "protocol": writer.LEDGER_PROTOCOL,
+        "board": "pert-gym",
+        "metric": "accepted_components",
+        "request_nonce": "a" * 64,
+        "issued_at": issued_at,
+        "chain": chain,
+        "latest_owner": {
+            **chain[-1],
+            "current": current,
+            "denominator": 153,
+            "unit": "components",
+            "mismatch": 0,
+            "live_readback": manifest["uri"],
+            "manifest": manifest,
+        },
+    }
+
+
+def test_control_plane_helper_uses_latest_completed_delta(
     monkeypatch, tmp_path: Path
 ) -> None:
-    writer = load_writer_module()
+    helper = load_ledger_helper_module()
     database = tmp_path / "kanban.db"
     write_live_ledger_db(
         database,
-        [accepted_components_delta(3, 4), accepted_components_delta(4, 5)],
+        [
+            accepted_components_delta(0, 0),
+            accepted_components_delta(0, 1),
+            accepted_components_delta(1, 2),
+            accepted_components_delta(2, 3),
+            accepted_components_delta(3, 4),
+        ],
     )
-    monkeypatch.setenv("HERMES_KANBAN_DB", str(database))
+    monkeypatch.setattr(helper, "DATABASE", database)
 
-    observed = writer.read_live_accepted_components_ledger()
+    observed = helper.build_response("a" * 64, issued_at=100.0)
 
     assert observed["metric"] == "accepted_components"
-    assert observed["current"] == 5
-    assert observed["denominator"] == 153
-    assert observed["source"] == "hermes-kanban-completed-product-deltas/v1"
+    assert observed["latest_owner"]["current"] == 4
+    assert observed["latest_owner"]["denominator"] == 153
+    assert observed["latest_owner"]["manifest"] == immutable_manifest()
 
 
 @pytest.mark.parametrize(
@@ -245,26 +312,82 @@ def test_live_accepted_components_reader_uses_latest_completed_delta(
         {**accepted_components_delta(3, 4), "metric": "wrong"},
     ],
 )
-def test_live_accepted_components_reader_rejects_malformed_records(
+def test_control_plane_helper_rejects_malformed_records(
     monkeypatch, tmp_path: Path, record: object
 ) -> None:
-    writer = load_writer_module()
+    helper = load_ledger_helper_module()
     database = tmp_path / "kanban.db"
     write_live_ledger_db(database, [record])
-    monkeypatch.setenv("HERMES_KANBAN_DB", str(database))
+    monkeypatch.setattr(helper, "DATABASE", database)
 
-    with pytest.raises(RuntimeError, match="accepted-components ledger"):
-        writer.read_live_accepted_components_ledger()
+    with pytest.raises(RuntimeError, match="accepted-components"):
+        helper.build_response("a" * 64)
 
 
-def test_live_accepted_components_reader_rejects_unavailable_ledger(
+def test_control_plane_helper_rejects_unavailable_ledger(
     monkeypatch, tmp_path: Path
 ) -> None:
-    writer = load_writer_module()
-    monkeypatch.setenv("HERMES_KANBAN_DB", str(tmp_path / "missing.db"))
+    helper = load_ledger_helper_module()
+    monkeypatch.setattr(helper, "DATABASE", tmp_path / "missing.db")
 
-    with pytest.raises(RuntimeError, match="accepted-components ledger unavailable"):
-        writer.read_live_accepted_components_ledger()
+    with pytest.raises((RuntimeError, OSError)):
+        helper.build_response("a" * 64)
+
+
+def test_writer_accepts_fresh_immutable_live_4_and_later_live_5() -> None:
+    writer = load_writer_module()
+    for current in (4, 5):
+        observed = writer._validate_live_ledger_response(
+            response_fixture(writer, current=current),
+            nonce="a" * 64,
+            requested_at=99.0,
+            received_at=101.0,
+        )
+        assert observed["current"] == current
+        assert observed["denominator"] == 153
+        assert observed["manifest_sha256"] == "9" * 64
+
+
+def test_loopback_helper_enforces_bearer_and_writer_fetches_one_fresh_response(
+    monkeypatch, tmp_path: Path
+) -> None:
+    helper = load_ledger_helper_module()
+    writer = load_writer_module()
+    database = tmp_path / "kanban.db"
+    write_live_ledger_db(
+        database,
+        [
+            accepted_components_delta(0, 0),
+            accepted_components_delta(0, 1),
+            accepted_components_delta(1, 2),
+            accepted_components_delta(2, 3),
+            accepted_components_delta(3, 4),
+        ],
+    )
+    monkeypatch.setattr(helper, "DATABASE", database)
+    token = "ephemeral-test-token-which-is-never-persisted"
+    server = helper._Server(("127.0.0.1", 0), token)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    endpoint = f"http://127.0.0.1:{server.server_port}{helper.REQUEST_PATH}"
+    monkeypatch.setenv("PERT_GYM_LEDGER_URL", endpoint)
+    monkeypatch.setenv("PERT_GYM_LEDGER_BEARER_TOKEN", "wrong-token-with-at-least-thirty-two-bytes")
+
+    try:
+        with pytest.raises(RuntimeError, match="loopback request failed"):
+            writer.read_live_accepted_components_ledger()
+
+        monkeypatch.setenv("PERT_GYM_LEDGER_BEARER_TOKEN", token)
+        observed = writer.read_live_accepted_components_ledger()
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
+
+    assert observed["current"] == 4
+    assert observed["task_id"] == "t_credit_5"
+    assert observed["manifest_generation"].isdigit()
+    assert not thread.is_alive()
 
 
 def executable_row_7_contract() -> tuple[dict[str, object], dict[str, object]]:
@@ -366,38 +489,77 @@ def test_row_7_live_ledger_failure_releases_leases_before_all_external_boundarie
 
 
 @pytest.mark.parametrize(
-    "record",
+    "mutation",
     [
-        None,
-        {},
-        accepted_components_delta(3, "4"),
-        accepted_components_delta(-1, 0),
-        accepted_components_delta(153, 154),
-        {**accepted_components_delta(3, 4), "denominator": 152},
-        {**accepted_components_delta(3, 4), "metric": "wrong"},
-        "unavailable",
+        lambda value: value.__setitem__("board", "wrong"),
+        lambda value: value.__setitem__("metric", "wrong"),
+        lambda value: value.__setitem__("request_nonce", "b" * 64),
+        lambda value: value.__setitem__("issued_at", 90.0),
+        lambda value: value["chain"][2].__setitem__("before", 0),
+        lambda value: value["chain"][2].__setitem__(
+            "task_id", value["chain"][1]["task_id"]
+        ),
+        lambda value: value["latest_owner"].__setitem__("task_id", "t_rebound"),
+        lambda value: value["latest_owner"].__setitem__("current", True),
+        lambda value: value["latest_owner"].__setitem__("denominator", 152),
+        lambda value: value["latest_owner"].__setitem__("mismatch", 1),
+        lambda value: value["latest_owner"].__setitem__("live_readback", "mutable"),
+        lambda value: value["latest_owner"]["manifest"].__setitem__(
+            "uri", immutable_manifest("rebound")["uri"]
+        ),
+        lambda value: value["latest_owner"]["manifest"].__setitem__(
+            "generation", ""
+        ),
+        lambda value: value["latest_owner"]["manifest"].__setitem__(
+            "sha256", "not-a-sha"
+        ),
     ],
 )
-def test_row_7_each_invalid_live_ledger_rejects_before_external_boundaries(
-    monkeypatch, tmp_path: Path, record: object
+def test_control_plane_response_rejects_freshness_replay_chain_and_immutability(
+    mutation,
+) -> None:
+    writer = load_writer_module()
+    response = response_fixture(writer)
+    mutation(response)
+
+    with pytest.raises(RuntimeError, match="accepted-components"):
+        writer._validate_live_ledger_response(
+            response,
+            nonce="a" * 64,
+            requested_at=99.0,
+            received_at=101.0,
+        )
+
+
+def test_row_7_missing_tunnel_releases_leases_before_external_boundaries(
+    monkeypatch, tmp_path: Path
 ) -> None:
     writer = configure_row_7_lease_boundary(monkeypatch, tmp_path)
-    database = tmp_path / "kanban.db"
-    if record != "unavailable":
-        write_live_ledger_db(database, [record])
-    monkeypatch.setenv("HERMES_KANBAN_DB", str(database))
+    lease_events: list[str] = []
 
     @contextmanager
-    def lease(*args, **kwargs):
-        yield
+    def lease(path, *args, **kwargs):
+        lease_events.append(f"enter:{path}")
+        try:
+            yield
+        finally:
+            lease_events.append(f"exit:{path}")
 
+    monkeypatch.delenv("PERT_GYM_LEDGER_URL", raising=False)
+    monkeypatch.delenv("PERT_GYM_LEDGER_BEARER_TOKEN", raising=False)
     monkeypatch.setattr(writer, "lamin_writer_lock", lease)
     external_calls = instrument_external_boundaries(monkeypatch, writer)
 
-    with pytest.raises(RuntimeError, match="accepted-components ledger"):
+    with pytest.raises(RuntimeError, match="loopback tunnel or bearer"):
         writer.main()
 
     assert external_calls == []
+    assert lease_events == [
+        "enter:global",
+        "enter:family",
+        "exit:family",
+        "exit:global",
+    ]
 
 
 def test_heartbeat_uses_the_single_lease_protected_live_ledger_observation(
