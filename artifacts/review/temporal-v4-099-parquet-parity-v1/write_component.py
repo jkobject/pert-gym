@@ -784,8 +784,12 @@ def _execute_authorized_contract(
     lock_metadata: dict[str, object],
 ) -> int:
     pre_api = source_api(contract)
-    OUT.mkdir(parents=True, exist_ok=True)
-    pre_head = source_head(contract)
+    if REVISION_PREFIX != "temporal-v4-007":
+        OUT.mkdir(parents=True, exist_ok=True)
+        pre_head = source_head(contract)
+    else:
+        pre_head = source_head(contract)
+        OUT.mkdir(parents=True, exist_ok=True)
     source_sha256, raw_hash_seconds, source_bytes = hash_source()
     if source_head(contract) != pre_head:
         raise RuntimeError("source changed during complete hash")

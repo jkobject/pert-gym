@@ -116,7 +116,7 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "logical_key": "65b7a9faa3c057652fe3a088fe2a334764b19c9de1e3d2a88362c58f24e5c938",
         "task_id": "afe61339315b188e3cb52cf2f604461e98b0d7e1cd4a9408146e901e3518c5a4",
         "dataset_config_status": "37b3e8e87620d7677456ce9c6e141224d53138d0434eae66ccd2d3af8c61a80e",
-        "source_head": "7feae14a428745e1a8f6a8c2cdc1e395e1d9d1dcfad1f01cd732e31b2678d400",
+        "source_head": "c1b2e078d3f86ad0cfd0bf37823435f9ca663fac63c5bca599e8f8fefbd1dbb0",
         "shape": "0d46c9d78835827da45529f2a0b7dec0e1b4b61521aae419e454830295269714",
         "organism": "4ac6e019aa2207b1bbe041031c02191143ed61de9f357eb790708ded9de52145",
         "assays": "8051c05ee8991d6476c5b9526dac01661cd5d6599d4eef55cbc191023696638a",
@@ -223,7 +223,9 @@ def _validate_config(config: dict[str, Any]) -> None:
     _positive_int(head["content_length"], "source_head.content_length")
     for key in ("etag", "last_modified"):
         _nonempty(head[key], f"source_head.{key}")
-    if head["version_id"] is not None:
+    if row_7:
+        _nonempty(head["version_id"], "source_head.version_id")
+    elif head["version_id"] is not None:
         _nonempty(head["version_id"], "source_head.version_id")
 
     api = _exact_keys(config["api_identity"], _API_KEYS, "api_identity")
