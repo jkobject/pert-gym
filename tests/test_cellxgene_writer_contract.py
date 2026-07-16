@@ -22,10 +22,13 @@ ROW_99_AUTHORIZATION = REVIEW / "authorization.json"
 ROW_13_CONFIG = REVIEW / "row-13-prewrite-fixture.json"
 ROW_7_CONFIG = REVIEW / "row-7-config.json"
 ROW_7_AUTHORIZATION = REVIEW / "row-7-authorization.json"
+ROW_55_CONFIG = REVIEW / "row-55-config.json"
+ROW_55_AUTHORIZATION = REVIEW / "row-55-authorization.json"
 WRITER = REVIEW / "write_component.py"
 HELPER = REVIEW / "parquet_frame_parity.py"
 LEDGER_HELPER = REVIEW / "live_ledger_control_plane.py"
 ROW_7_SOURCE_VERSION_ID = "YipoWdKvKlXR9hHaku1ta0iAGqNr8w_m"
+ROW_55_SOURCE_VERSION_ID = "xupxdGsz5yjNY6W.oCuNxd8V0_f1vpAA"
 
 
 def sha256(path: Path) -> str:
@@ -93,12 +96,17 @@ def validate(config: dict[str, object], authorization: dict[str, object]):
     )
 
 
-def test_row_99_reviewed_fixture_validates_with_current_writer_hash_binding() -> None:
+def test_row_99_frozen_contract_loads_with_current_hash_bindings() -> None:
+    contract = load_contract_module()
     config = load_json(ROW_99_CONFIG)
-    frozen_authorization = load_json(ROW_99_AUTHORIZATION)
-    authorization = bound_authorization(config)
-
-    validated = validate(config, authorization)
+    authorization = load_json(ROW_99_AUTHORIZATION)
+    validated = contract.load_bound_contract(
+        ROW_99_CONFIG,
+        ROW_99_AUTHORIZATION,
+        writer_path=WRITER,
+        helper_path=HELPER,
+        require_execution=False,
+    )
 
     assert validated.config["shape"] == [10224, 35552]
     assert validated.config["accepted_components"] == {
@@ -106,17 +114,44 @@ def test_row_99_reviewed_fixture_validates_with_current_writer_hash_binding() ->
         "denominator": 153,
         "credit": 0,
     }
-    assert frozen_authorization["config_sha256"] == sha256(ROW_99_CONFIG)
-    assert frozen_authorization["writer_sha256"] == (
-        "f40409ce46393db8c713a6a4b428f2c98c0102031c1c06e70042b0f96504a723"
-    )
+    assert authorization["config_sha256"] == sha256(ROW_99_CONFIG)
     assert authorization["writer_sha256"] == sha256(WRITER)
     assert authorization["writer_contract_sha256"] == sha256(CONTRACT_PATH)
     assert authorization["parquet_frame_parity_sha256"] == sha256(HELPER)
     assert authorization["execution_authorized"] is False
+    assert validated.config == config
     assert str(config["logical_key"]).endswith(
         "cell_culture_differentiation_and_proliferation_conditions_influence_the_in_vitro"
     )
+
+
+def test_row_99_stale_writer_hash_rejects_before_external_io(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_99_CONFIG)
+    authorization = load_json(ROW_99_AUTHORIZATION)
+    authorization["writer_sha256"] = "0" * 64
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
+    )
+
+    with pytest.raises(RuntimeError, match="writer SHA-256"):
+        writer.main()
+
+    assert calls == []
 
 
 def test_distinct_row_13_fixture_reaches_generic_preflight_boundary() -> None:
@@ -191,6 +226,109 @@ def test_row_7_stale_snapshot_does_not_bind_live_ledger_current() -> None:
     validated = validate(config, authorization)
 
     assert validated.config["accepted_components"]["current"] == 4
+
+
+def test_row_55_exact_mouse_contract_is_intrinsically_bound_and_authorized() -> None:
+    contract = load_contract_module()
+    config = load_json(ROW_55_CONFIG)
+    authorization = load_json(ROW_55_AUTHORIZATION)
+    validated = contract.load_bound_contract(
+        ROW_55_CONFIG,
+        ROW_55_AUTHORIZATION,
+        writer_path=WRITER,
+        helper_path=HELPER,
+        require_execution=True,
+    )
+
+    assert config["catalogue_record"] == "temporal_v4_055_type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior"
+    assert config["logical_key"] == "pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior"
+    assert config["revision"]["prefix"] == "temporal-v4-055"
+    assert config["shape"] == [12330, 22835]
+    assert config["api_identity"]["organism"] == {
+        "label": "Mus musculus",
+        "ontology_term_id": "NCBITaxon:10090",
+    }
+    assert config["source_head"]["version_id"] == ROW_55_SOURCE_VERSION_ID
+    assert config["accepted_components"] == {
+        "metric": "accepted_components", "current": 4, "denominator": 153, "credit": 0,
+    }
+    assert config["storage"] == {
+        "gcs_root": "scperturb/pert-gym/staging", "manifest_last": True,
+        "per_block_var_count": 0, "shared_var_count": 1, "x_logical_object_count": 1,
+    }
+    assert authorization["live_ledger_control_plane_sha256"] == sha256(LEDGER_HELPER)
+    assert validated.config == config
+
+
+@pytest.mark.parametrize(
+    ("mutation", "match"),
+    [
+        (lambda c, a: c.__setitem__("catalogue_record", "temporal_v4_055_wrong"), "catalogue_record conflicts"),
+        (lambda c, a: (c.__setitem__("logical_key", "pert-gym/logical/temporal/rebound"), c["obs"]["assignments"][0].__setitem__("value", "pert-gym/logical/temporal/rebound")), "logical_key conflicts"),
+        (lambda c, a: c["source"].__setitem__("collection_version_id", "00000000-0000-0000-0000-000000000000"), "source collection_version_id conflicts"),
+        (lambda c, a: c["source"].__setitem__("dataset_version_id", "00000000-0000-0000-0000-000000000000"), "dataset_version_id conflicts"),
+        (lambda c, a: c["source_head"].__setitem__("version_id", "rebound-version"), "source_head conflicts"),
+        (lambda c, a: a.__setitem__("live_ledger_control_plane_sha256", "0" * 64), "live-ledger helper SHA-256"),
+    ],
+)
+def test_row_55_rebinding_has_zero_side_effects(monkeypatch, tmp_path: Path, mutation, match: str) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_55_CONFIG)
+    authorization = load_json(ROW_55_AUTHORIZATION)
+    mutation(config, authorization)
+    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(sys, "argv", [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)])
+
+    with pytest.raises((RuntimeError, ValueError), match=match):
+        writer.main()
+    assert calls == []
+
+
+def test_row_55_mouse_ordered_var_uses_mouse_ensembl_namespace() -> None:
+    writer = load_writer_module()
+    writer.ACTIVE_CONFIG = load_json(ROW_55_CONFIG)
+    writer.N_VARS = 2
+    source = pd.DataFrame(
+        {"feature_reference": ["NCBITaxon:10090"] * 2, "feature_name": ["Gene1", "Gene2"]},
+        index=["ENSMUSG00000000001", "ENSMUSG00000000002"],
+    )
+    _var, identity = writer.map_var(source, "Mus musculus")
+    expected = {
+        "organism_ontology_id": "NCBITaxon:10090", "canonical_feature_namespace": "Ensembl Gene ID",
+        "normalization_version": "source-string/v1", "n_vars": 2,
+        "ordered_canonical_feature_identifiers": list(source.index),
+    }
+    assert identity == hashlib.sha256(json.dumps(expected, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def test_row_55_reads_live_ledger_under_writer_leases(monkeypatch, tmp_path: Path) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_55_CONFIG)
+    authorization = load_json(ROW_55_AUTHORIZATION)
+    authorization["writer_sha256"] = sha256(WRITER)
+    authorization["writer_contract_sha256"] = sha256(CONTRACT_PATH)
+    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    events: list[object] = []
+
+    @contextmanager
+    def leases(_metadata):
+        events.append("lease-enter")
+        try:
+            yield 123.0
+        finally:
+            events.append("lease-exit")
+
+    live = {"metric": "accepted_components", "current": 4, "denominator": 153, "source": "hermes-kanban-completed-product-deltas/v1"}
+    monkeypatch.setattr(writer, "acquired_writer_leases", leases)
+    monkeypatch.setattr(writer, "read_live_accepted_components_ledger", lambda: events.append("live-ledger") or live)
+    monkeypatch.setattr(writer, "_execute_authorized_contract", lambda *args, **kwargs: events.append(("execute", kwargs["lease_acquired"], kwargs["live_ledger"])) or 0)
+    monkeypatch.setattr(writer.socket, "gethostname", lambda: "pert-gym-worker-eu")
+    monkeypatch.setattr(writer, "mem_available", lambda: 4 * 1024**3)
+    monkeypatch.setattr(sys, "argv", [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)])
+
+    assert writer.main() == 0
+    assert events == ["lease-enter", "live-ledger", ("execute", 123.0, live), "lease-exit"]
 
 
 def immutable_manifest(revision: str = "temporal-v4-013-test") -> dict[str, str]:

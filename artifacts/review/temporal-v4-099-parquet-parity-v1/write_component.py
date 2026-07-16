@@ -121,7 +121,7 @@ def index_sha256(frame: pd.DataFrame) -> str:
 
 def ordered_var_identity(ids: list[str]) -> str:
     value = {
-        "organism_ontology_id": "NCBITaxon:9606",
+        "organism_ontology_id": ACTIVE_CONFIG["ordered_var"]["organism_ontology_id"],
         "canonical_feature_namespace": "Ensembl Gene ID",
         "normalization_version": "source-string/v1",
         "n_vars": len(ids),
@@ -527,10 +527,17 @@ def map_var(source: pd.DataFrame, organism: str) -> tuple[pd.DataFrame, str]:
     ids = [str(value) for value in source.index]
     if len(ids) != N_VARS or source.index.isna().any() or not source.index.is_unique:
         raise RuntimeError("source var identity failed")
-    if not all(value.startswith("ENSG") and value[4:].isdigit() for value in ids):
-        raise RuntimeError("source var namespace is not stable Homo sapiens Ensembl Gene ID")
-    reference_column = ACTIVE_CONFIG["ordered_var"]["feature_reference_column"]
     expected_organism = ACTIVE_CONFIG["ordered_var"]["organism_ontology_id"]
+    ensembl_prefix = {
+        "NCBITaxon:9606": "ENSG",
+        "NCBITaxon:10090": "ENSMUSG",
+    }.get(expected_organism)
+    if ensembl_prefix is None or not all(
+        value.startswith(ensembl_prefix) and value[len(ensembl_prefix) :].isdigit()
+        for value in ids
+    ):
+        raise RuntimeError("source var namespace is not the approved species Ensembl Gene ID")
+    reference_column = ACTIVE_CONFIG["ordered_var"]["feature_reference_column"]
     if not (source[reference_column].astype(str) == expected_organism).all():
         raise RuntimeError("source var organism namespace drift")
     var = source.copy()
@@ -745,7 +752,7 @@ def main() -> int:
         "branch": ACTIVE_CONFIG["execution"]["lamin_branch"],
         "started_at": now(),
     }
-    if REVISION_PREFIX == "temporal-v4-007":
+    if REVISION_PREFIX in {"temporal-v4-007", "temporal-v4-055"}:
         with acquired_writer_leases(lock_metadata) as lease_acquired:
             live_ledger = read_live_accepted_components_ledger()
             if args.ledger_probe_only:
@@ -759,7 +766,7 @@ def main() -> int:
                 lock_metadata=lock_metadata,
             )
     if args.ledger_probe_only:
-        raise RuntimeError("ledger probe is authorized only for temporal-v4 row 7")
+        raise RuntimeError("ledger probe is authorized only for live-ledger temporal rows")
     static_ledger = ACTIVE_CONFIG["accepted_components"]
     return _execute_authorized_contract(
         contract,
@@ -784,7 +791,7 @@ def _execute_authorized_contract(
     lock_metadata: dict[str, object],
 ) -> int:
     pre_api = source_api(contract)
-    if REVISION_PREFIX != "temporal-v4-007":
+    if REVISION_PREFIX not in {"temporal-v4-007", "temporal-v4-055"}:
         OUT.mkdir(parents=True, exist_ok=True)
         pre_head = source_head(contract)
     else:
