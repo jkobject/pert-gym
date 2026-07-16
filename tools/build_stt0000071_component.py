@@ -62,6 +62,32 @@ TIMEPOINT_MINUTES = {
 }
 CELL_BIN = re.compile(r"\.(?:50|70)\.gem\.gz$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
+FAILED_PREDECESSORS = [
+    {
+        "revision": "stt0000071-20260716T162204Z-02688128",
+        "revision_uri": (
+            f"{GCS_OUTPUT_ROOT}/{LOGICAL_KEY}/revisions/"
+            "stt0000071-20260716T162204Z-02688128"
+        ),
+        "status": "immutable_partial_no_manifest_no_credit_no_resume",
+        "accepted_components_credit": 0,
+        "manifest_present": False,
+        "failure": "metadata_schema_drift_before_first_section_payload",
+        "objects": [
+            {
+                "role": "shared_var",
+                "uri": (
+                    f"{GCS_OUTPUT_ROOT}/{LOGICAL_KEY}/revisions/"
+                    "stt0000071-20260716T162204Z-02688128/shared-var.parquet"
+                ),
+                "generation": "1784219494302293",
+                "size": 440_278,
+                "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+            }
+        ],
+        "policy": "preserve immutable for audit; never resume, overwrite, promote, or count",
+    }
+]
 
 
 def run(command: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -201,7 +227,7 @@ def copy_generation(row: dict[str, Any], destination: Path) -> dict[str, Any]:
 
 
 def coordinate_keys(frame: pd.DataFrame) -> list[tuple[float, float]]:
-    return list(zip(frame["x"].round(10), frame["y"].round(10)))
+    return list(zip(frame["x"].round(9), frame["y"].round(9)))
 
 
 def convert_section(
@@ -216,10 +242,10 @@ def convert_section(
         sep="\t",
         dtype={"geneID": "string", "x": "float64", "y": "float64", "MIDCounts": "int64"},
     )
-    metadata = pd.read_csv(metadata_path, sep="\t")
+    source_metadata = pd.read_csv(metadata_path, sep="\t")
     if list(gem.columns) != ["geneID", "x", "y", "MIDCounts"]:
         raise RuntimeError("cell-bin GEM schema drift")
-    required_metadata = [
+    late_metadata = [
         "x",
         "y",
         "nGenes",
@@ -232,9 +258,54 @@ def convert_section(
         "cellname",
         "cid",
     ]
-    if list(metadata.columns) != required_metadata:
+    early_metadata = [
+        "orig.ident",
+        "nCount_Spatial",
+        "nFeature_Spatial",
+        "x",
+        "y",
+        "grid_x",
+        "grid_y",
+        "isolate",
+        "cid",
+        "time_points",
+        "annotation",
+    ]
+    if list(source_metadata.columns) == late_metadata:
+        metadata = source_metadata.copy()
+        metadata_schema = "reconstructed_3d_cell_metadata/v1"
+        metadata["spatial_3d_missingness_reason"] = pd.Series(
+            pd.NA, index=metadata.index, dtype="string"
+        )
+    elif list(source_metadata.columns) == early_metadata:
+        if not source_metadata.index.is_unique or source_metadata.index.isna().any():
+            raise RuntimeError("early section metadata source index is not a cell identity")
+        metadata = pd.DataFrame(
+            {
+                "x": source_metadata["grid_x"],
+                "y": source_metadata["grid_y"],
+                "nGenes": source_metadata["nFeature_Spatial"],
+                "nUMI": source_metadata["nCount_Spatial"],
+                "sid": source_metadata["isolate"],
+                "3D_x": pd.Series(pd.NA, index=source_metadata.index, dtype="Float64"),
+                "3D_y": pd.Series(pd.NA, index=source_metadata.index, dtype="Float64"),
+                "3D_z": pd.Series(pd.NA, index=source_metadata.index, dtype="Float64"),
+                "annotation": source_metadata["annotation"],
+                "cellname": source_metadata.index.astype(str),
+                "cid": source_metadata["cid"],
+                "source_orig_ident": source_metadata["orig.ident"],
+                "source_x": source_metadata["x"],
+                "source_y": source_metadata["y"],
+                "source_time_points": source_metadata["time_points"],
+                "spatial_3d_missingness_reason": "source_not_reported",
+            },
+            index=source_metadata.index,
+        )
+        metadata_schema = "seurat_spatial_cell_metadata/v1"
+    else:
         raise RuntimeError("section metadata schema drift")
-    if metadata[required_metadata].isna().any().any() or not metadata["cellname"].is_unique:
+    required_non_null = ["x", "y", "nGenes", "nUMI", "sid", "annotation", "cellname", "cid"]
+    if metadata[required_non_null].isna().any().any() or not metadata["cellname"].is_unique:
         raise RuntimeError("section metadata identity or non-null contract failed")
     meta_keys = coordinate_keys(metadata)
     if len(meta_keys) != len(set(meta_keys)):
@@ -284,6 +355,7 @@ def convert_section(
     obs["is_low_quality"] = pd.Series(pd.NA, index=obs.index, dtype="boolean")
     obs["quality_missingness_reason"] = "source_has_n_counts_and_n_genes_but_no_accepted_quality_threshold"
     stats = {
+        "metadata_schema": metadata_schema,
         "n_obs": int(matrix.shape[0]),
         "n_vars": int(matrix.shape[1]),
         "section_present_genes": int(gem["geneID"].nunique()),
@@ -619,6 +691,16 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
                 "reason": "source_uses_gene_symbols_without_ensembl_ids",
                 "excluded": False,
             },
+            "source_metadata_schemas": {
+                "seurat_spatial_cell_metadata/v1": 24,
+                "reconstructed_3d_cell_metadata/v1": 22,
+            },
+            "spatial_3d_coordinates": {
+                "available_sections": 22,
+                "missing_sections": 24,
+                "reason": "source_not_reported_for_seurat_spatial_sections",
+                "excluded": False,
+            },
             "images": {"count": 46, "status": "explicitly_excluded_from_this_expression_component", "reason": "frozen workload requires no TIFF canonical ingestion"},
         }
         missingness_path = built_root / "metadata-quality-missingness.json"
@@ -702,6 +784,7 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
                 "proposed_delta_if_independently_accepted": {"before": 4, "after": 5, "denominator": 153, "unit": "components", "mismatch": 0},
                 "self_accepted": False,
             },
+            "failed_predecessors": FAILED_PREDECESSORS,
             "forbidden_actions_observed": {"promotion": False, "collection_mutation": False, "cleanup": False, "deletion": False, "lamin_main": False},
         }
         manifest_path = built_root / "manifest.json"

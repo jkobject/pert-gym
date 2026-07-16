@@ -91,6 +91,7 @@ def test_convert_section_preserves_coordinate_obs_x_parity(tmp_path: Path) -> No
     assert list(matrix.shape) == [2, 2]
     assert matrix.toarray().tolist() == [[1, 2], [4, 0]]
     assert stats == {
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
         "n_obs": 2,
         "n_vars": 2,
         "section_present_genes": 2,
@@ -102,6 +103,42 @@ def test_convert_section_preserves_coordinate_obs_x_parity(tmp_path: Path) -> No
     assert obs["age"].isna().all()
     assert set(obs["age_missingness_reason"]) == {"source_not_reported"}
     assert obs["timepoint"].tolist() == [0, 0]
+
+
+def test_convert_early_section_uses_grid_coordinates_and_source_index(tmp_path: Path) -> None:
+    module = load_module()
+    gem = pd.DataFrame(
+        {"geneID": ["g1", "g2"], "x": [1.25, 2.5], "y": [3.75, 4.5], "MIDCounts": [4, 5]}
+    )
+    source = pd.DataFrame(
+        {
+            "orig.ident": ["sample", "sample"],
+            "nCount_Spatial": [4, 5],
+            "nFeature_Spatial": [1, 1],
+            "x": [100.0, 200.0],
+            "y": [300.0, 400.0],
+            "grid_x": [1.25, 2.5],
+            "grid_y": [3.75, 4.5],
+            "isolate": ["isolate", "isolate"],
+            "cid": ["section", "section"],
+            "time_points": ["uninjured", "uninjured"],
+            "annotation": ["A", "B"],
+        },
+        index=["source-cell-1", "source-cell-2"],
+    )
+    gem_path = tmp_path / "section.70.gem.gz"
+    metadata_path = tmp_path / "section.70.tsv.gz"
+    gem.to_csv(gem_path, sep="\t", index=False, compression="gzip")
+    source.to_csv(metadata_path, sep="\t", index=True, index_label=False, compression="gzip")
+    section = {"sample_id": "STSA0000734", "section_id": "STTS0001152", "timepoint": "uninjured_1"}
+    obs, matrix, stats = module.convert_section(
+        gem_path, metadata_path, genes=["g1", "g2"], section=section
+    )
+    assert stats["metadata_schema"] == "seurat_spatial_cell_metadata/v1"
+    assert obs.index.tolist() == ["source-cell-1", "source-cell-2"]
+    assert obs[["x", "y"]].values.tolist() == [[1.25, 3.75], [2.5, 4.5]]
+    assert obs[["3D_x", "3D_y", "3D_z"]].isna().all().all()
+    assert matrix.toarray().tolist() == [[4, 0], [0, 5]]
 
 
 def test_sparse_zarr_zip_roundtrip(tmp_path: Path) -> None:
