@@ -8,16 +8,19 @@ import io
 import json
 import multiprocessing as mp
 import os
+import re
 import resource
+import secrets
 import signal
 import socket
 import sys
 import threading
 import time
 import urllib.request
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager, nullcontext
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import fsspec
 import h5py
@@ -291,6 +294,190 @@ def duplicate_probe() -> dict[str, object]:
     return result
 
 
+LEDGER_PROTOCOL = "pert-gym-accepted-components-loopback/v1"
+LEDGER_PATH = "/v1/accepted-components"
+LEDGER_MAX_AGE_SECONDS = 5.0
+_SHA256 = re.compile(r"^[0-9a-f]{64}$")
+_IMMUTABLE_MANIFEST = re.compile(
+    r"^gs://scperturb/pert-gym/staging/.+/revisions/[^/]+/manifest\.json$"
+)
+_CHAIN_KEYS = {"task_id", "run_id", "ended_at", "before", "after"}
+
+
+def _ledger_integer(value: object, label: str) -> int:
+    if not isinstance(value, int) or isinstance(value, bool):
+        raise RuntimeError(f"accepted-components ledger {label} is not an integer")
+    return value
+
+
+def _validate_live_ledger_response(
+    value: object, *, nonce: str, requested_at: float, received_at: float
+) -> dict[str, object]:
+    expected_keys = {
+        "protocol",
+        "board",
+        "metric",
+        "request_nonce",
+        "issued_at",
+        "chain",
+        "latest_owner",
+    }
+    if not isinstance(value, dict) or set(value) != expected_keys:
+        raise RuntimeError("accepted-components control-plane response is malformed")
+    issued_at = value["issued_at"]
+    if (
+        value["protocol"] != LEDGER_PROTOCOL
+        or value["board"] != "pert-gym"
+        or value["metric"] != "accepted_components"
+        or value["request_nonce"] != nonce
+        or not isinstance(issued_at, (int, float))
+        or isinstance(issued_at, bool)
+        or issued_at < requested_at - LEDGER_MAX_AGE_SECONDS
+        or received_at - issued_at > LEDGER_MAX_AGE_SECONDS
+        or issued_at > received_at + 2.0
+    ):
+        raise RuntimeError("accepted-components control-plane response is stale or rebound")
+    chain = value["chain"]
+    if not isinstance(chain, list) or not chain:
+        raise RuntimeError("accepted-components ledger chain is absent")
+    validated_chain: list[dict[str, object]] = []
+    for item in chain:
+        if not isinstance(item, dict) or set(item) != _CHAIN_KEYS:
+            raise RuntimeError("accepted-components ledger chain record is malformed")
+        before = _ledger_integer(item["before"], "before")
+        after = _ledger_integer(item["after"], "after")
+        run_id = _ledger_integer(item["run_id"], "run identity")
+        ended_at = _ledger_integer(item["ended_at"], "completion timestamp")
+        if (
+            not isinstance(item["task_id"], str)
+            or not item["task_id"].startswith("t_")
+            or not 0 <= before <= 153
+            or not 0 <= after <= 153
+            or (not (before == after == 0) and after != before + 1)
+            or run_id <= 0
+            or ended_at <= 0
+        ):
+            raise RuntimeError("accepted-components ledger chain record is incoherent")
+        validated_chain.append(dict(item))
+    if len({item["task_id"] for item in validated_chain}) != len(validated_chain) or len(
+        {item["run_id"] for item in validated_chain}
+    ) != len(validated_chain):
+        raise RuntimeError("accepted-components ledger chain owner is duplicated")
+    for previous, current in zip(validated_chain, validated_chain[1:]):
+        if current["before"] != previous["after"]:
+            raise RuntimeError("accepted-components ledger chain is discontinuous")
+        current_ended = _ledger_integer(current["ended_at"], "completion timestamp")
+        previous_ended = _ledger_integer(previous["ended_at"], "completion timestamp")
+        if current_ended <= previous_ended:
+            raise RuntimeError("accepted-components ledger chain is regressive")
+
+    owner = value["latest_owner"]
+    owner_keys = _CHAIN_KEYS | {
+        "current",
+        "denominator",
+        "unit",
+        "mismatch",
+        "live_readback",
+        "manifest",
+    }
+    if not isinstance(owner, dict) or set(owner) != owner_keys:
+        raise RuntimeError("accepted-components latest owner is malformed")
+    if {key: owner[key] for key in _CHAIN_KEYS} != validated_chain[-1]:
+        raise RuntimeError("accepted-components latest owner does not match the chain")
+    manifest = owner["manifest"]
+    if not isinstance(manifest, dict) or set(manifest) != {"uri", "generation", "sha256"}:
+        raise RuntimeError("accepted-components immutable manifest identity is malformed")
+    manifest_uri = manifest["uri"]
+    generation = manifest["generation"]
+    manifest_sha256 = manifest["sha256"]
+    if (
+        owner["current"] != owner["after"]
+        or owner["denominator"] != 153
+        or owner["unit"] != "components"
+        or owner["mismatch"] != 0
+        or not isinstance(manifest_uri, str)
+        or owner["live_readback"] != manifest_uri
+        or _IMMUTABLE_MANIFEST.fullmatch(manifest_uri) is None
+        or not isinstance(generation, str)
+        or not generation.isdigit()
+        or not isinstance(manifest_sha256, str)
+        or _SHA256.fullmatch(manifest_sha256) is None
+    ):
+        raise RuntimeError("accepted-components immutable manifest identity is incoherent")
+    return {
+        "metric": "accepted_components",
+        "current": owner["current"],
+        "denominator": 153,
+        "source": LEDGER_PROTOCOL,
+        "task_id": owner["task_id"],
+        "run_id": owner["run_id"],
+        "ended_at": owner["ended_at"],
+        "before": owner["before"],
+        "after": owner["after"],
+        "mismatch": 0,
+        "live_readback": manifest_uri,
+        "manifest_generation": generation,
+        "manifest_sha256": manifest_sha256,
+        "request_nonce": nonce,
+        "observed_at": issued_at,
+    }
+
+
+def read_live_accepted_components_ledger() -> dict[str, object]:
+    """Fetch exactly one fresh response through the remote loopback tunnel."""
+    endpoint = os.environ.get("PERT_GYM_LEDGER_URL", "")
+    token = os.environ.get("PERT_GYM_LEDGER_BEARER_TOKEN", "")
+    try:
+        parsed = urlsplit(endpoint)
+        port = parsed.port
+    except ValueError as error:
+        raise RuntimeError("accepted-components loopback endpoint is malformed") from error
+    if (
+        parsed.scheme != "http"
+        or parsed.hostname != "127.0.0.1"
+        or port is None
+        or not 1 <= port <= 65535
+        or parsed.path != LEDGER_PATH
+        or parsed.query
+        or parsed.fragment
+        or parsed.username is not None
+        or parsed.password is not None
+        or len(token) < 32
+    ):
+        raise RuntimeError("accepted-components loopback tunnel or bearer is unavailable")
+    nonce = secrets.token_hex(32)
+    payload = json.dumps({"request_nonce": nonce}, separators=(",", ":")).encode()
+    request = urllib.request.Request(
+        endpoint,
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    requested_at = time.time()
+    try:
+        with urllib.request.urlopen(request, timeout=5) as response:
+            if response.status != 200:
+                raise RuntimeError("accepted-components helper returned a non-200 status")
+            raw = response.read(1024 * 1024 + 1)
+    except (OSError, TimeoutError) as error:
+        raise RuntimeError(
+            f"accepted-components loopback request failed: {type(error).__name__}"
+        ) from error
+    received_at = time.time()
+    if len(raw) > 1024 * 1024:
+        raise RuntimeError("accepted-components control-plane response is oversized")
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError as error:
+        raise RuntimeError("accepted-components control-plane response is not JSON") from error
+    return _validate_live_ledger_response(
+        value, nonce=nonce, requested_at=requested_at, received_at=received_at
+    )
+
+
 def map_obs(source: pd.DataFrame, organism: str) -> pd.DataFrame:
     if len(source) != N_OBS or not source.index.is_unique or source.index.isna().any():
         raise RuntimeError("source obs identity failed")
@@ -307,6 +494,9 @@ def map_obs(source: pd.DataFrame, organism: str) -> pd.DataFrame:
             passed = values.str.contains(predicate["value"], regex=False).all()
         elif predicate["op"] == "all_equals":
             passed = values.eq(str(predicate["value"])).all()
+        elif predicate["op"] == "all_not_in":
+            denied = {str(value).strip().casefold() for value in predicate["values"]}
+            passed = (~values.str.strip().str.casefold().isin(denied)).all()
         else:
             raise RuntimeError(f"unknown OBS predicate: {predicate['op']}")
         if not passed:
@@ -351,7 +541,8 @@ def map_var(source: pd.DataFrame, organism: str) -> tuple[pd.DataFrame, str]:
     var["author_gene_id"] = ids
     var["author_gene_symbol"] = var["feature_name"].astype(str)
     identity = ordered_var_identity(ids)
-    if identity != ACTIVE_CONFIG["ordered_var"]["identity_sha256"]:
+    expected_identity = ACTIVE_CONFIG["ordered_var"]["identity_sha256"]
+    if expected_identity != "runtime-computed-before-candidate-write" and identity != expected_identity:
         raise RuntimeError(f"ordered var identity drift: {identity}")
     return var, identity
 
@@ -434,13 +625,23 @@ def watcher(pid: int, stop: mp.synchronize.Event, output: str) -> None:  # type:
 
 
 class Heartbeats:
-    def __init__(self, fs: Any, prefix: str, revision: str, lease_id: str, created: list[dict[str, object]], rollback: Path) -> None:
+    def __init__(
+        self,
+        fs: Any,
+        prefix: str,
+        revision: str,
+        lease_id: str,
+        created: list[dict[str, object]],
+        rollback: Path,
+        live_ledger: dict[str, object],
+    ) -> None:
         self.fs = fs
         self.prefix = prefix
         self.revision = revision
         self.lease_id = lease_id
         self.created = created
         self.rollback = rollback
+        self.live_ledger = live_ledger
         self.phase = "preflight"
         self.rows = 0
         self.checkpoint = "lease-acquired"
@@ -458,7 +659,7 @@ class Heartbeats:
         with self.lock:
             sequence = self.sequence
             self.sequence += 1
-            ledger = ACTIVE_CONFIG["accepted_components"]
+            ledger = self.live_ledger
             execution = ACTIVE_CONFIG["execution"]
             record = {
                 "intent_key": f"pert-gym|publication-wave1|{REVISION_PREFIX}|single-component-writer|v1",
@@ -475,6 +676,7 @@ class Heartbeats:
                 },
                 "rows_completed": self.rows,
                 "checkpoint": self.checkpoint,
+                "accepted_components_ledger": ledger,
                 "rss_bytes": rss_bytes(os.getpid()),
                 "mem_available_bytes": mem_available(),
             }
@@ -501,10 +703,24 @@ class Heartbeats:
             raise RuntimeError("heartbeat thread did not stop")
 
 
+@contextmanager
+def acquired_writer_leases(lock_metadata: dict[str, object]):
+    with ExitStack() as locks:
+        locks.enter_context(
+            lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata)
+        )
+        for path in legacy_lamin_writer_lock_paths():
+            locks.enter_context(
+                lamin_writer_lock(path, lock_metadata, check_live_metadata=False)
+            )
+        yield now()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--authorization", type=Path, required=True)
+    parser.add_argument("--ledger-probe-only", action="store_true")
     args = parser.parse_args()
     contract = writer_contract.load_bound_contract(
         args.config,
@@ -520,6 +736,53 @@ def main() -> int:
         raise RuntimeError("writer is not on the exact authorized host")
     if mem_available() < MIN_AVAILABLE:
         raise RuntimeError("preflight MemAvailable below 4 GiB")
+    lock_metadata = {
+        "pid": os.getpid(),
+        "run_id": f"{TASK_ID}-{REVISION_PREFIX}",
+        "host": ACTIVE_CONFIG["execution"]["host"],
+        "project": BILLING_PROJECT,
+        "zone": ACTIVE_CONFIG["execution"]["zone"],
+        "branch": ACTIVE_CONFIG["execution"]["lamin_branch"],
+        "started_at": now(),
+    }
+    if REVISION_PREFIX == "temporal-v4-007":
+        with acquired_writer_leases(lock_metadata) as lease_acquired:
+            live_ledger = read_live_accepted_components_ledger()
+            if args.ledger_probe_only:
+                print(json.dumps(live_ledger, indent=2, sort_keys=True))
+                return 0
+            return _execute_authorized_contract(
+                contract,
+                started=started,
+                lease_acquired=lease_acquired,
+                live_ledger=live_ledger,
+                lock_metadata=lock_metadata,
+            )
+    if args.ledger_probe_only:
+        raise RuntimeError("ledger probe is authorized only for temporal-v4 row 7")
+    static_ledger = ACTIVE_CONFIG["accepted_components"]
+    return _execute_authorized_contract(
+        contract,
+        started=started,
+        lease_acquired=None,
+        live_ledger={
+            "metric": ACTIVE_CONFIG["execution"]["heartbeat_metric"],
+            "current": static_ledger["current"],
+            "denominator": static_ledger["denominator"],
+            "source": "intrinsically-bound-config/v1",
+        },
+        lock_metadata=lock_metadata,
+    )
+
+
+def _execute_authorized_contract(
+    contract: Any,
+    *,
+    started: float,
+    lease_acquired: float | None,
+    live_ledger: dict[str, object],
+    lock_metadata: dict[str, object],
+) -> int:
     pre_api = source_api(contract)
     OUT.mkdir(parents=True, exist_ok=True)
     pre_head = source_head(contract)
@@ -582,23 +845,16 @@ def main() -> int:
         "semantics": semantics,
         "var": {"n_vars": len(var), "ordered_var_identity_sha256": ordered_var_sha, "namespace": "Ensembl Gene ID", "unique": var.index.is_unique, "nulls": int(var.index.isna().sum())},
         "resources": {"mem_available_bytes": mem_available(), "estimated_rss_bytes": estimated_rss_bytes, "max_rss_bytes": MAX_RSS},
+        "accepted_components": live_ledger,
     }
     (OUT / "prewrite-preflight.json").write_bytes(json_bytes(preflight))
 
-    lock_metadata = {
-        "pid": os.getpid(),
-        "run_id": f"{TASK_ID}-{REVISION_PREFIX}",
-        "host": ACTIVE_CONFIG["execution"]["host"],
-        "project": BILLING_PROJECT,
-        "zone": ACTIVE_CONFIG["execution"]["zone"],
-        "branch": ACTIVE_CONFIG["execution"]["lamin_branch"],
-        "started_at": now(),
-    }
-    with ExitStack() as locks:
-        locks.enter_context(lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata))
-        for path in legacy_lamin_writer_lock_paths():
-            locks.enter_context(lamin_writer_lock(path, lock_metadata, check_live_metadata=False))
-        lease_acquired = now()
+    lease_context = (
+        nullcontext(lease_acquired)
+        if lease_acquired is not None
+        else acquired_writer_leases(lock_metadata)
+    )
+    with lease_context as active_lease_acquired:
         duplicate = duplicate_probe()
         (OUT / "duplicate-probe-under-lease.json").write_bytes(json_bytes(duplicate))
 
@@ -613,8 +869,12 @@ def main() -> int:
         created: list[dict[str, object]] = []
         rollback = OUT / "rollback-map.jsonl"
         rollback.write_text("", encoding="utf-8")
-        lease_id = sha256_bytes(f"{revision}|{lease_acquired}|{os.getpid()}".encode())[:24]
-        hb = Heartbeats(fs, prefix, revision, lease_id, created, rollback)
+        lease_id = sha256_bytes(
+            f"{revision}|{active_lease_acquired}|{os.getpid()}".encode()
+        )[:24]
+        hb = Heartbeats(
+            fs, prefix, revision, lease_id, created, rollback, live_ledger
+        )
         hb.start()
         stop_watch = mp.Event()
         watcher_path = str(OUT / "resource-samples.jsonl")
@@ -773,7 +1033,7 @@ def main() -> int:
             }
             terminal = {
                 "runtime_seconds_before_manifest": time.monotonic() - started,
-                "lease": {"id": lease_id, "acquired_at": lease_acquired},
+                "lease": {"id": lease_id, "acquired_at": active_lease_acquired},
                 "safety": safety,
                 "source_inventory_unchanged": True,
                 "writer_exit_expected": 0,
@@ -801,6 +1061,7 @@ def main() -> int:
                 "verification": verification,
                 "terminal": terminal,
                 "forbidden_actions_performed": {"collection_mutation": False, "lamin_main_write": False, "lamin_registration": False, "promotion": False, "legacy_mutation_or_deletion": False, "vm_lifecycle_change": False},
+                "accepted_components": live_ledger,
                 "accepted_components_credit": ACTIVE_CONFIG["accepted_components"]["credit"],
             }
             manifest_key = f"{prefix}/manifest.json"
@@ -817,6 +1078,7 @@ def main() -> int:
                 "revision": revision,
                 "verification": verification,
                 "terminal": terminal,
+                "accepted_components": live_ledger,
                 "manifest_last": True,
                 "manifest_newer_than_all_candidate_objects": True,
             }
