@@ -1,0 +1,35 @@
+{
+  "candidate_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2",
+  "dimensions": {
+    "n_obs": 260139,
+    "n_vars": 29747,
+    "nnz": 132879334,
+    "sum_counts": 525246132
+  },
+  "format": "pert-gym.independent-component-readback/v1",
+  "live_objects": 96,
+  "manifest": {
+    "generation": "1784221380010648",
+    "manifest_last": true,
+    "payload_latest_time_created": "2026-07-16T17:00:14.170000+00:00",
+    "sha256": "0054f000aace5c259c9cf4e47f67dd3efbeff0634909f5210c3f4888c5dc4f67",
+    "time_created": "2026-07-16T17:03:00.018000+00:00",
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/manifest.json"
+  },
+  "metadata_schemas": [
+    "reconstructed_3d_cell_metadata/v1",
+    "seurat_spatial_cell_metadata/v1"
+  ],
+  "mismatch": 0,
+  "missingness": {
+    "age": "source_not_reported",
+    "images": "explicitly_excluded_from_this_expression_component",
+    "quality": "source_not_reported_or_no_reviewed_threshold"
+  },
+  "physical_payloads_verified": 95,
+  "sections_verified": 46,
+  "shared_var_rows": 29747,
+  "source_identities_bound": 138,
+  "status": "PASS",
+  "zero_write": true
+}

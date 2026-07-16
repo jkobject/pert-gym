@@ -1,0 +1,3902 @@
+{
+  "accepted_ledger": {
+    "precondition": {
+      "after": 4,
+      "before": 3,
+      "current": 4,
+      "denominator": 153,
+      "ended_at": 1784152951,
+      "live_readback": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/revisions/temporal-v4-013-20260715T212836Z-a4b6c94d/manifest.json",
+      "manifest": {
+        "generation": "1784150946597762",
+        "sha256": "935a41963af1addba7b0b13a779ceefcbe7ddb1ba527da1b531f8f9019881d6c",
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/revisions/temporal-v4-013-20260715T212836Z-a4b6c94d/manifest.json"
+      },
+      "mismatch": 0,
+      "run_id": 2978,
+      "task_id": "t_664e9dc0",
+      "unit": "components"
+    },
+    "producer_credit": 0,
+    "proposed_delta_if_independently_accepted": {
+      "after": 5,
+      "before": 4,
+      "denominator": 153,
+      "mismatch": 0,
+      "unit": "components"
+    },
+    "self_accepted": false
+  },
+  "branch": "jkobject",
+  "candidate_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2",
+  "catalogue_row_id": 150,
+  "component": "zebrafish heart regeneration",
+  "dimensions": {
+    "n_obs": 260139,
+    "n_vars": 29747,
+    "nnz": 132879334,
+    "samples": 9,
+    "sections": 46,
+    "sum_counts": 525246132,
+    "timepoints": 9
+  },
+  "duplicate_preflight": {
+    "candidates": [],
+    "query_counts": {
+      "component_description": 0,
+      "logical_key_prefix": 0,
+      "record_id_description": 0
+    }
+  },
+  "failed_predecessors": [
+    {
+      "accepted_components_credit": 0,
+      "failure": "metadata_schema_drift_before_first_section_payload",
+      "manifest_present": false,
+      "objects": [
+        {
+          "generation": "1784219494302293",
+          "role": "shared_var",
+          "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+          "size": 440278,
+          "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T162204Z-02688128/shared-var.parquet"
+        }
+      ],
+      "policy": "preserve immutable for audit; never resume, overwrite, promote, or count",
+      "revision": "stt0000071-20260716T162204Z-02688128",
+      "revision_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T162204Z-02688128",
+      "status": "immutable_partial_no_manifest_no_credit_no_resume"
+    },
+    {
+      "accepted_components_credit": 0,
+      "failure": {
+        "audit_timestamp": "2026-07-16T16:40:41.800551Z",
+        "kind": "external_vm_stop",
+        "observed_phase": "source_identity_validation_before_materialization",
+        "principal": "jkobject@gmail.com"
+      },
+      "manifest_present": false,
+      "objects": [],
+      "policy": "never resume or count; every retry uses a fresh absent revision",
+      "revision": "stt0000071-20260716T163421Z-9b1a2db2",
+      "revision_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T163421Z-9b1a2db2",
+      "status": "external_vm_stop_no_objects_no_manifest_no_credit_no_resume"
+    }
+  ],
+  "forbidden_actions_observed": {
+    "cleanup": false,
+    "collection_mutation": false,
+    "deletion": false,
+    "lamin_main": false,
+    "promotion": false
+  },
+  "format": "pert-gym.frozen-logical-component-manifest/v1",
+  "instance": "laminlabs/pertdata",
+  "logical_key": "pert-gym/logical/stt0000071",
+  "manifest_last": true,
+  "metadata_quality_missingness": {
+    "identity": {
+      "crc32c_base64": null,
+      "generation": "1784221214158726",
+      "md5_base64": null,
+      "role": "metadata_quality_missingness",
+      "sha256": "dd7523322482fcf12393af0b93dc1d5e8b29154d84402d33a1c6ff3c416ca18f",
+      "size": 1417,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/metadata-quality-missingness.json"
+    },
+    "summary": {
+      "dataset_age": {
+        "excluded": false,
+        "reason": "source_not_reported",
+        "value": null
+      },
+      "donor_id": {
+        "excluded": false,
+        "reason": "source_sections_not_donor-resolved",
+        "value": null
+      },
+      "ethnicity": {
+        "excluded": false,
+        "reason": "not_applicable_non_human",
+        "value": null
+      },
+      "format": "pert-gym.metadata-quality-missingness/v1",
+      "images": {
+        "count": 46,
+        "reason": "frozen workload requires no TIFF canonical ingestion",
+        "status": "explicitly_excluded_from_this_expression_component"
+      },
+      "quality": {
+        "available": [
+          "n_counts",
+          "n_genes"
+        ],
+        "excluded": false,
+        "missing": [
+          "pct_mito",
+          "pct_ribo",
+          "accepted_is_low_quality_threshold"
+        ],
+        "reason": "source_not_reported_or_no_reviewed_threshold"
+      },
+      "record_id": "stt0000071",
+      "sex": {
+        "excluded": false,
+        "reason": "source_not_reported",
+        "value": null
+      },
+      "source_metadata_schemas": {
+        "reconstructed_3d_cell_metadata/v1": 22,
+        "seurat_spatial_cell_metadata/v1": 24
+      },
+      "spatial_3d_coordinates": {
+        "available_sections": 22,
+        "excluded": false,
+        "missing_sections": 24,
+        "reason": "source_not_reported_for_seurat_spatial_sections"
+      },
+      "var": {
+        "ensembl_gene_id": null,
+        "excluded": false,
+        "gene_symbol": "complete_source_axis",
+        "reason": "source_uses_gene_symbols_without_ensembl_ids"
+      }
+    }
+  },
+  "physical_outputs": [
+    {
+      "crc32c_base64": null,
+      "generation": "1784220670152770",
+      "md5_base64": null,
+      "role": "shared_var",
+      "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+      "size": 440278,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220679329438",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "864ec3358dd4bc60c1ef154cd97718f73c3734f6eb7423c1b87fac861841690c",
+      "size": 616343,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0000-STTS0001152/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220682738879",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "50d17f523ad98c7c29e9184ffb676aeb44a96abf7bf947ab81d70744561949e8",
+      "size": 7530865,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0000-STTS0001152/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220695121187",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "6f3671c16b0512a50176862c85e3737e898593164343a9a561eb640bd6add495",
+      "size": 699432,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0001-STTS0001153/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220698697603",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "765c81dd85c10a57814685df50172cce290f91e022ae6525d0730d5f3cceaeb1",
+      "size": 11192694,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0001-STTS0001153/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220709467251",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "f41f2b4c35eddfdad09f4a9b5297b5f5bdf109552d122340f38a7f5a657477e9",
+      "size": 713213,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0002-STTS0001154/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220712748461",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "a5529c4222d831a8644972321f4bca32decb13b86616549a77b73af0d7ce17f2",
+      "size": 9978509,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0002-STTS0001154/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220722701297",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "9ef538c5bc0bf821d07071e18aa2a3831acb24ed33f5d64b94c99aa23f8a2360",
+      "size": 352320,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0003-STTS0001155/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220726178971",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "fc47dcc4d818246aaab64c5937de0cd3e5906ad502ba331031a402982622f9b4",
+      "size": 8410556,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0003-STTS0001155/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220735377802",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "4f8478ebfd9b32940bbc3ba45287fe2bc852e84b8312f3172366bc2f81282f97",
+      "size": 370653,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0004-STTS0001156/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220738971335",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "bc5b0e61cbf46a25400b6e1cd4cdf1016457a42a325bbfbb1a8e0d0c89a02e10",
+      "size": 7468607,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0004-STTS0001156/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220751240841",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "ed05f70363042a1d9f217a5da0ffce9a02a57d475f42ad5b8008a037cb81224a",
+      "size": 416657,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0005-STTS0001157/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220754824159",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "874a2a7032bc3f7f0fbefb12a180b55b05778e81f1f57cf4c83d72854bc5bccf",
+      "size": 11184020,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0005-STTS0001157/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220764405884",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "3aa1a4ef8a63671180c4322858123ab047e6da3f76b2e91828a60b45803e7f9e",
+      "size": 303651,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0006-STTS0001158/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220768086295",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "dafccd6ccf049b4dae09bba2c5a0d42730565205b7b75096a4e5efb3e9b90002",
+      "size": 7852171,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0006-STTS0001158/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220777850711",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "1b7a1b90645cbf2f85d5672af38af2bb77588030f2f9f584068d3aeaa05b28ba",
+      "size": 338453,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0007-STTS0001159/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220781622047",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "0fa826f856855d08ea806b63857f8704e6484620462254f3434ccd057002fcab",
+      "size": 7671399,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0007-STTS0001159/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220790536169",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "cd373a8aca181cb28c11bfd7176ecd3cac8df610bd0c52a0f3383f40e936d9e3",
+      "size": 328043,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0008-STTS0001160/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220794051536",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "b177881537224f24ce54a21dc7b0248e7c6f7bf59a669aeea825d017da8c3857",
+      "size": 6802200,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0008-STTS0001160/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220805350425",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "d58edbf9b1844c72fbffb38749f04b39eab66bca470f08ea140581ffc4fd5c38",
+      "size": 351386,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0009-STTS0001161/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220808787938",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "17efd9849f527c6f7ef21819ab9aff9ee0d0cad8a5631b69ce9108cb07789c9b",
+      "size": 9622277,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0009-STTS0001161/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220819599335",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "1a56f004ac4946eaacefb5b869a2ad2bd52babbcd124cbaf63011a75b647cd0c",
+      "size": 356442,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0010-STTS0001162/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220823157878",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "740569e66e9dfc041bdb3c3c614934a0157055aa00b1628a36bcda6b64527501",
+      "size": 9057322,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0010-STTS0001162/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220834551634",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "658e40358e4c105bc097ddf9247a04459806cf086f8484d97b1f3e2d995b2307",
+      "size": 373915,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0011-STTS0001163/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220837888283",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "d4bae83e61682ae9acdae23d4d26da6abfa467c6a4adde0a5d8db0963bed2d42",
+      "size": 9822968,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0011-STTS0001163/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220845257929",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "ab37a6a5808d0ef55637306406cc8d94a8a3be2a73cdc859d97d8361f3c9c4ef",
+      "size": 358242,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0012-STTS0001164/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220848759839",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "adf6ef0f64346241815d06279b0d0a76ec08504cb52ab85029c4ab55786662a5",
+      "size": 5193194,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0012-STTS0001164/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220855991584",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "bdd75f90e78c5ee57172593931306e38ab832c1dcb7dabcb14947e4dc7e80b05",
+      "size": 326237,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0013-STTS0001165/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220859296217",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "e23b85688cc0135a851108bf968d85fa8ff584f2983b612273b5d10c7f84f498",
+      "size": 5136921,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0013-STTS0001165/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220868560552",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "eb4854d2e9395889f535b2b43888e53c995eba60c3d35dd818dc563fb413d047",
+      "size": 378603,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0014-STTS0001166/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220872012072",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "e54e4ea72c8eb42c1c4d6c126e78aff6d5ec770bbc8860f4155ef7ca6313cdf3",
+      "size": 7164993,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0014-STTS0001166/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220886924210",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "a6f23c44b89587749ead801fb659c62ab0f4bcd1548692014c1de10135804628",
+      "size": 343545,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0015-STTS0001167/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220890418137",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "b98db3ff7ce2d927847dfc9c1aaf820920af7d545d85aed00196e120e1dff527",
+      "size": 13514143,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0015-STTS0001167/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220905623061",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "436b07d9aeb5887ec9ec9b027ea126a81b4495ab64b2c47798555b7f3c45f2db",
+      "size": 368544,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0016-STTS0001168/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220909053167",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "3e0062d30155063eb0fa5e62e19a13595d8060a266db09cba4554bfd2d61ee0d",
+      "size": 14167181,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0016-STTS0001168/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220920437486",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "00fe76ecdaf166444b16a949211ee1f681e878d2660a85cc8a4dd64eef8f455d",
+      "size": 387644,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0017-STTS0001169/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220923806809",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "ec419e3cabe059c4318f114c1ba586c7b367b993f3d2e896a48b45cce515cc45",
+      "size": 9718225,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0017-STTS0001169/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220932819693",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "5b34064dc380ca5b05a5d17f2b8e9576db78af18ccecc965604a5b2dc9dab56c",
+      "size": 455378,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0018-STTS0001170/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220936560450",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "aa484dd6e96c1e9e54c3c8c3a266ffb9ceb27615df8259189fe2538326350d37",
+      "size": 6874161,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0018-STTS0001170/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220947482405",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "c795002775865fb785ac46aae035c32414a47147fbef54a91471589d0b027b7c",
+      "size": 502371,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0019-STTS0001171/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220950985871",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "e1e191b3a48e7ea0e1cd008c37ad4d064d7ea1dccf35df5bb4527b021c186643",
+      "size": 9577512,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0019-STTS0001171/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220959857330",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "ed592b693c33f5d55d345c37d16542a6aa248d33e04aa10cb3680e1a72b50095",
+      "size": 486932,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0020-STTS0001172/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220963647142",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "c37b3a2708b6688644f00df85fe8b31721c733e565d8707adcbdf38f7a6ac496",
+      "size": 7106698,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0020-STTS0001172/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220978047543",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "c48fd6418dce8d072d77fee5a085e2217d1ed749d9d7056a187f36567a95353d",
+      "size": 370324,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0021-STTS0001173/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220981553654",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "87bc473320a20df7a0f015788e77fc1c5de2710e374e8857e6f7b01866f386cc",
+      "size": 12141348,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0021-STTS0001173/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220993506785",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "cfc754fba5c4554f9735a09daf9458e87d670b87d549577207011ddf14595f12",
+      "size": 396846,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0022-STTS0001174/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784220997015906",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "bab5f49c1f851a21c7ab0ab90c933221b90d06a0fee555505100d54990ce8dfe",
+      "size": 10770481,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0022-STTS0001174/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221007774912",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "3c5f5c9378472fcb3da95799c91db7e48f40899f84ccfa559c01e548af83d10e",
+      "size": 406281,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0023-STTS0001175/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221011391366",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "9716430131d2b61e879fc7aea435c2574c45192227faf76d4251cb28ee400241",
+      "size": 9003197,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0023-STTS0001175/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221015042043",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "0a5b2ca02d86cf1784a40a8b899031302e55f8f5bfdb4d7713e3303678e5e97a",
+      "size": 112976,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0024-STTS0001176/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221018458845",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "3d317aa7da2dd2691d9bca8440d88d354e1efdc7a0775b84e1da6dbcb25148ec",
+      "size": 879456,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0024-STTS0001176/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221022534908",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "c1c60c8057cd946eb97c7fb478b586c6d4b25353c235cb0db10213886cc27fbe",
+      "size": 207247,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0025-STTS0001177/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221025904729",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "a61f9e15d1799a2d4a245298122a419e76600ae6af55b105541bb8d6574e34c9",
+      "size": 1172786,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0025-STTS0001177/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221031920188",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "4987efe8f283dfaf1314a0452e16e5b5c9ab4e2e5a1a403f424147017f1982ec",
+      "size": 287023,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0026-STTS0001178/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221035501762",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "62bc7c81c237d13152b3e7625766739f22fb64f14b3d87a541272afe37ccc068",
+      "size": 3542482,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0026-STTS0001178/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221043382691",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "b29b01d4e91082769344906e0b588cc7240918050f17e672f833ec463f6b0ded",
+      "size": 450564,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0027-STTS0001179/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221046993877",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "ad6cf12293acca46a81f04fb1e6830f80d2012e8e50d76973c216668a1e6b535",
+      "size": 6070161,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0027-STTS0001179/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221052804691",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "42a1177ddc7820accafb64a5ddb0611c3e15dc09bd36d17fdd943a134f789bdc",
+      "size": 336865,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0028-STTS0001180/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221056066384",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "3a30a0f4f2e22f5edf5ebc2e97e710522c966cb9ac6310b3807efb9569c27884",
+      "size": 3981425,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0028-STTS0001180/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221065202090",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "e0d92213895d1f1d5db739a3297959e144c58560a254508ff0506c5f88023067",
+      "size": 478441,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0029-STTS0001181/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221068698159",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "9b20880fefece6851d1389b1590c6650b0d970cb10f015bec6d830acf9e26c7a",
+      "size": 8068539,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0029-STTS0001181/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221075276180",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "a45ce722f48fe047bce71641a5348382c1c0b5cac82bc59e64e74b2d94cd8068",
+      "size": 342445,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0030-STTS0001182/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221078643812",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "66ef0a76e63bc102cbe7c37e8ab2beec7afb830ae9d0018db187e592ff36d5e1",
+      "size": 4433660,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0030-STTS0001182/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221083105963",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "c4143eb4ef95379efe221058dbe2d9e2fb725048d160b56200015ffac58bc15e",
+      "size": 163216,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0031-STTS0001183/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221086585912",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "c7568ccd6c9735b5dd7d6be596a9b8e6a7044d8285183ac6a1dd9266efb533cb",
+      "size": 1903139,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0031-STTS0001183/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221095793236",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "cd689826ce050c70e6b6799d7aa9054761d0133342a6ec8f125ebe1441887a4d",
+      "size": 582744,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0032-STTS0001184/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221099322826",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "7487768229ddfc98c5c1af3993add0d292aae10b897382c5d53238fbdfafdfe9",
+      "size": 7791543,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0032-STTS0001184/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221107132519",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "df910d37e6da3741ffa2eeaee50652aa655af06ce1e0280632405b4996a9bb60",
+      "size": 437439,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0033-STTS0001185/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221110351392",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "b5eb3610f1e7c12690b7f433ab899d0f25453af691c1d7077f553ac686b13325",
+      "size": 6231254,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0033-STTS0001185/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221115782836",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "aa56f1cead75b66a8e41ef7d2297a9bfe65be9da80253f9d71f70bc86ee0b934",
+      "size": 357322,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0034-STTS0001186/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221119431612",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "8f7f76f565d6bc351a9fd1a6b888747ec36b2ff6cc4d4a5bfdcc94c4c6f36e41",
+      "size": 3077560,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0034-STTS0001186/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221125953744",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "5cdb0fa7bc5819973b8468c61dcca924d47a1a58d22446b4131b655da59ef584",
+      "size": 462772,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0035-STTS0001187/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221129423275",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "1309486040dd760e1897fcfe6f82d38f23e60b5bfbc78f2d3a51de8604631f73",
+      "size": 4816401,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0035-STTS0001187/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221134911509",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "a0cf343908ded258878a798e05acfe611d8a7a4acc9fd88c5e9de7e0e001613f",
+      "size": 377874,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0036-STTS0001188/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221138281606",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "8d7d0e8583ac070b5438412f0d370f967886619ff6ff71ab05910e7e5fc4907d",
+      "size": 3358188,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0036-STTS0001188/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221144104701",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "fd0a496e6984bc9cfcd08aa27e0ef1606bb085c6c3e2ad31245fc8c281e1ce1d",
+      "size": 360721,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0037-STTS0001189/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221147463439",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "0f251b6dfaa8fbe6629d666d816d10cb919d2bda4ad63010c9b5e8df0e092355",
+      "size": 3355582,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0037-STTS0001189/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221152128455",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "f9ff35a59f42ec432204c4c2582752a6de050ee1f6229071fa48c06db17fbfcf",
+      "size": 225139,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0038-STTS0001190/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221155519182",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "1fd843de4f2ce1816df00d247679656b22bf2145a513ec8660ea4c297ce1955e",
+      "size": 2136212,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0038-STTS0001190/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221159907277",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "a9d11bead125a7e93e17b45ca94c4ec077cf6b87694f1871c6773fb7baeca5e7",
+      "size": 246387,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0039-STTS0001191/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221163294769",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "d886c234df4d2aa58f9b7145ff659e26522396ee84b63638063943a511e614b1",
+      "size": 1578253,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0039-STTS0001191/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221168252326",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "fecec29e3f60038625a82daa458f06bd314967d0ca4e6d01b63672ea100fba2e",
+      "size": 256898,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0040-STTS0001192/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221171361819",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "1bb29eaf142ab610dbaef11128b66e1ca7eada960f5a11205b879eaef9fbdb75",
+      "size": 2321424,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0040-STTS0001192/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221175164082",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "584c43aa479adeb332b71c5f6ee92e8f528c2098672aa7d1ebd540ec237ae7a7",
+      "size": 114284,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0041-STTS0001193/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221178300241",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "02a038f8b6cf03fe76e9b984b5a2f443ec4953adf4026a6fe38ce722fa78394a",
+      "size": 1083553,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0041-STTS0001193/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221182844855",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "10356373fea58a84986acaa70dd73679060087f587a2a5b97af8f8cb1824945d",
+      "size": 165905,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0042-STTS0001194/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221186214474",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "027a0509b776c07d39718b2c5ffd84423b8fa6dd30932dc59321e81714bac758",
+      "size": 1670637,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0042-STTS0001194/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221189926386",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "0306eda76a48887476bf6696c7745c567b0652e6f0477e3e20d2c2420d12ef77",
+      "size": 101373,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0043-STTS0001195/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221193148242",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "106a52f43978ff7d8be5ce6403e79e51c7bf18f4dcfb1990f75bb03b074c8a26",
+      "size": 806641,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0043-STTS0001195/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221197729851",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "b7ed31eec07e47a9aeaa68923f316e87d6484bd3c337041ea85026b71958bfef",
+      "size": 143531,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0044-STTS0001196/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221200816686",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "5efa03548a7971d56eb2a5fe03ba3f8192ee4ca7b16d6c1e889af77916ad16ad",
+      "size": 1732261,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0044-STTS0001196/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221204330126",
+      "md5_base64": null,
+      "role": "canonical_obs",
+      "sha256": "45e7fdde15ac921d9bad4a4be0d670224cdc7ba887c4462a8a86e7efef15c45d",
+      "size": 30865,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0045-STTS0001197/obs.parquet"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221207539520",
+      "md5_base64": null,
+      "role": "canonical_X_sparse_zarr_zip",
+      "sha256": "34ed2b2c0ad261325932f5571a66d96f53fb3b2fb45560eb9d70361d051e17dd",
+      "size": 102104,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0045-STTS0001197/X.zarr.zip"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221210955480",
+      "md5_base64": null,
+      "role": "source_inventory",
+      "sha256": "b1a1d9f28b90af5e7cce8d3022aa46fffbcb041a21342539128766b70ce3e28e",
+      "size": 82131,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/source-inventory.json"
+    },
+    {
+      "crc32c_base64": null,
+      "generation": "1784221214158726",
+      "md5_base64": null,
+      "role": "metadata_quality_missingness",
+      "sha256": "dd7523322482fcf12393af0b93dc1d5e8b29154d84402d33a1c6ff3c416ca18f",
+      "size": 1417,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/metadata-quality-missingness.json"
+    }
+  ],
+  "provenance": {
+    "billing_project": "jkobject-1549353370965",
+    "frozen_publication_manifest_path": "/tmp/stt0000071-t_2ddd92ed/downloadable_logical_publication_manifest_20260713.json",
+    "frozen_publication_manifest_sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+    "frozen_record_sha256": "be5b50a71c8d730fc46aade3ab8bc62fec5ed9b06b086d03cef0f4b3687c9bdf",
+    "host": "pert-gym-worker-eu",
+    "lease_acquired_at": 1784220229.9063659,
+    "producer_task_id": "t_2ddd92ed",
+    "staging_manifest_path": "/tmp/stt0000071-t_2ddd92ed/stt0000071_cngb_gcs_staging_20260630.json",
+    "staging_manifest_sha256": "0e58ef4439755e1e00d2fca952065bb1254b5c2e0d25da4451b04f0ab027f97f",
+    "writer_path": "/tmp/stt0000071-t_2ddd92ed/build_stt0000071_component.py",
+    "writer_sha256": "750f6237345d08fa06244e70662ad63f629d47129efedc5f7c69f6fd57269e0b",
+    "zone": "europe-west1-b"
+  },
+  "readback": {
+    "mismatch": 0,
+    "mode": "generation-pinned-remote-GCS-all-sections",
+    "n_obs": 260139,
+    "n_vars": 29747,
+    "nnz": 132879334,
+    "sections": [
+      {
+        "chunk_index": 0,
+        "nnz": 3356411,
+        "obs_index_sha256": "cf91990615c97aeac9c59d9abdfb0fd1628d98c0fc6b4a5f4bc3fe28a6ffa403",
+        "section_id": "STTS0001152",
+        "shape": [
+          10227,
+          29747
+        ],
+        "sum": 11968641
+      },
+      {
+        "chunk_index": 1,
+        "nnz": 5026446,
+        "obs_index_sha256": "63bb0577d23556ace2c563a3de31fc77a3d9afb1fbe79d9a08ccc9b2d14410be",
+        "section_id": "STTS0001153",
+        "shape": [
+          11558,
+          29747
+        ],
+        "sum": 20379874
+      },
+      {
+        "chunk_index": 2,
+        "nnz": 4477215,
+        "obs_index_sha256": "f6db67a76f8c47048289c0a84a0c0278d1db8bdbc8ad4494da481247e5677675",
+        "section_id": "STTS0001154",
+        "shape": [
+          11898,
+          29747
+        ],
+        "sum": 15133111
+      },
+      {
+        "chunk_index": 3,
+        "nnz": 4022173,
+        "obs_index_sha256": "c106d2ee2396d079bbb827da910a032e9c3e6aa7518fdf1ff6724b4d5d6aa2eb",
+        "section_id": "STTS0001155",
+        "shape": [
+          5517,
+          29747
+        ],
+        "sum": 14307492
+      },
+      {
+        "chunk_index": 4,
+        "nnz": 3476455,
+        "obs_index_sha256": "c8088c15e716ed49a4a6db4f998dee645824eb8b887bf71dd0512ec86b2ae0fe",
+        "section_id": "STTS0001156",
+        "shape": [
+          5845,
+          29747
+        ],
+        "sum": 11980075
+      },
+      {
+        "chunk_index": 5,
+        "nnz": 5353648,
+        "obs_index_sha256": "5dfe64beacbde3e076b6c51e2cf4b08725ee5e67a59d50026a4ee344a9dc0bd4",
+        "section_id": "STTS0001157",
+        "shape": [
+          6548,
+          29747
+        ],
+        "sum": 22269988
+      },
+      {
+        "chunk_index": 6,
+        "nnz": 3793089,
+        "obs_index_sha256": "39517217b7fe557d53a6ba9e55b79a44edb12fa34434ee17aa09aaba60f6c06c",
+        "section_id": "STTS0001158",
+        "shape": [
+          4662,
+          29747
+        ],
+        "sum": 12213996
+      },
+      {
+        "chunk_index": 7,
+        "nnz": 3659498,
+        "obs_index_sha256": "5f12525c65ee74a124611acc2190f00bb76a129a0c60ed82362ef996296aeb6d",
+        "section_id": "STTS0001159",
+        "shape": [
+          5292,
+          29747
+        ],
+        "sum": 11619448
+      },
+      {
+        "chunk_index": 8,
+        "nnz": 3188976,
+        "obs_index_sha256": "5ed390659f25c1771fbbe09fa97b635ffecac605b9d746f7972124680632267e",
+        "section_id": "STTS0001160",
+        "shape": [
+          5127,
+          29747
+        ],
+        "sum": 9758067
+      },
+      {
+        "chunk_index": 9,
+        "nnz": 4603921,
+        "obs_index_sha256": "43d1e4bbfb22e1bfe8b4a758168aec4b4c960bed575266906afc3cf170841206",
+        "section_id": "STTS0001161",
+        "shape": [
+          5444,
+          29747
+        ],
+        "sum": 19883046
+      },
+      {
+        "chunk_index": 10,
+        "nnz": 4324227,
+        "obs_index_sha256": "15bee4ca0718e31335f8daa3b8bb239860257d9d1e0f77701658323b222cc899",
+        "section_id": "STTS0001162",
+        "shape": [
+          5576,
+          29747
+        ],
+        "sum": 15501105
+      },
+      {
+        "chunk_index": 11,
+        "nnz": 4737266,
+        "obs_index_sha256": "c278ec6bf66c0272f873eda1873e6b74269c4abb132860ac882637114f4b268a",
+        "section_id": "STTS0001163",
+        "shape": [
+          5867,
+          29747
+        ],
+        "sum": 16094067
+      },
+      {
+        "chunk_index": 12,
+        "nnz": 2375901,
+        "obs_index_sha256": "b7584950a51c0ecd6da5564f21f1c9edf287bdbddc0208a662231d87746cdc72",
+        "section_id": "STTS0001164",
+        "shape": [
+          5707,
+          29747
+        ],
+        "sum": 8743203
+      },
+      {
+        "chunk_index": 13,
+        "nnz": 2370916,
+        "obs_index_sha256": "d7a3e154af383db5032f90652a6c2375d696e56d49a9202f4dd2e07ae38859ea",
+        "section_id": "STTS0001165",
+        "shape": [
+          5146,
+          29747
+        ],
+        "sum": 8607925
+      },
+      {
+        "chunk_index": 14,
+        "nnz": 3409811,
+        "obs_index_sha256": "e042b8e89c1ab8db0b8368b215a63e15a42c0716772ff05531bffd4de83b0d69",
+        "section_id": "STTS0001166",
+        "shape": [
+          6008,
+          29747
+        ],
+        "sum": 10414931
+      },
+      {
+        "chunk_index": 15,
+        "nnz": 6787604,
+        "obs_index_sha256": "534546f856a7cf847808e6df304d28dc88de8d70c55ebf4e58687d7524dde08e",
+        "section_id": "STTS0001167",
+        "shape": [
+          5273,
+          29747
+        ],
+        "sum": 26354415
+      },
+      {
+        "chunk_index": 16,
+        "nnz": 6993469,
+        "obs_index_sha256": "7677936f6620f90ee460a48bc7be415848936d808bd113d53e826365cf7f85d4",
+        "section_id": "STTS0001168",
+        "shape": [
+          5657,
+          29747
+        ],
+        "sum": 32564044
+      },
+      {
+        "chunk_index": 17,
+        "nnz": 4617867,
+        "obs_index_sha256": "203f40fc8f941962767439ba5103d38e83293ce2ab4366f2b6a514cfebddd289",
+        "section_id": "STTS0001169",
+        "shape": [
+          6105,
+          29747
+        ],
+        "sum": 18077370
+      },
+      {
+        "chunk_index": 18,
+        "nnz": 3061169,
+        "obs_index_sha256": "bdd52159fb61d3c57d87a3f07677310552c93a0f7c8a5e7b32cc46c27c97fdd1",
+        "section_id": "STTS0001170",
+        "shape": [
+          7379,
+          29747
+        ],
+        "sum": 15013042
+      },
+      {
+        "chunk_index": 19,
+        "nnz": 4287718,
+        "obs_index_sha256": "d86f913c12eb9d6fdfe7dc3841aaa89d49ee221c15a500c413c4d0a753e90857",
+        "section_id": "STTS0001171",
+        "shape": [
+          8107,
+          29747
+        ],
+        "sum": 27694551
+      },
+      {
+        "chunk_index": 20,
+        "nnz": 3126314,
+        "obs_index_sha256": "3e187aee333904fef8748a4e6ea24aae5020f0ec5032dc9d1476446af7e00449",
+        "section_id": "STTS0001172",
+        "shape": [
+          7889,
+          29747
+        ],
+        "sum": 19980845
+      },
+      {
+        "chunk_index": 21,
+        "nnz": 6017047,
+        "obs_index_sha256": "39e5f5c50ae1361771aaa9ac0d2a9f1fa1ea9ef9cfcbab6b7e282d5edb45749b",
+        "section_id": "STTS0001173",
+        "shape": [
+          5754,
+          29747
+        ],
+        "sum": 21585739
+      },
+      {
+        "chunk_index": 22,
+        "nnz": 5111017,
+        "obs_index_sha256": "80828c6b8fe7b03327a1272441e4cabd252a72ad53ffe39eed871451623cc9ad",
+        "section_id": "STTS0001174",
+        "shape": [
+          6251,
+          29747
+        ],
+        "sum": 20692101
+      },
+      {
+        "chunk_index": 23,
+        "nnz": 4245326,
+        "obs_index_sha256": "20b85c7a87fa57ef39d1dd2232173b2a41f0a8a2b8b0474ae7f62c326510aa11",
+        "section_id": "STTS0001175",
+        "shape": [
+          6456,
+          29747
+        ],
+        "sum": 15994622
+      },
+      {
+        "chunk_index": 24,
+        "nnz": 373369,
+        "obs_index_sha256": "1c6e0fda412297783192bda69dc6b337ae73aa269cae469c4c3582bc3d74c9fc",
+        "section_id": "STTS0001176",
+        "shape": [
+          1582,
+          29747
+        ],
+        "sum": 1720495
+      },
+      {
+        "chunk_index": 25,
+        "nnz": 483519,
+        "obs_index_sha256": "d798ac9c3fb3e0401b7db7528c80f56e694126058a4f89b0ff9baaaadfd32169",
+        "section_id": "STTS0001177",
+        "shape": [
+          3300,
+          29747
+        ],
+        "sum": 1992751
+      },
+      {
+        "chunk_index": 26,
+        "nnz": 1530921,
+        "obs_index_sha256": "f7ccf07b8a3563754d3734d56575626fe323f6dd4367b0026b8211a4c0df0103",
+        "section_id": "STTS0001178",
+        "shape": [
+          4597,
+          29747
+        ],
+        "sum": 6964343
+      },
+      {
+        "chunk_index": 27,
+        "nnz": 2645576,
+        "obs_index_sha256": "8f6a3be744b9bc865522e20305896bee35171fecf87e61cdec7fa6235e84e752",
+        "section_id": "STTS0001179",
+        "shape": [
+          7529,
+          29747
+        ],
+        "sum": 11495866
+      },
+      {
+        "chunk_index": 28,
+        "nnz": 1754184,
+        "obs_index_sha256": "6b22b50860dab8451936591132c1c2d92e99ae8ad5df1113def2a1ca4d4c1d1e",
+        "section_id": "STTS0001180",
+        "shape": [
+          5491,
+          29747
+        ],
+        "sum": 6540596
+      },
+      {
+        "chunk_index": 29,
+        "nnz": 3552677,
+        "obs_index_sha256": "8e6742db41448e6ed449ee79a0c3c6cba50baf09bcc12bd2afc90568adce6748",
+        "section_id": "STTS0001181",
+        "shape": [
+          7952,
+          29747
+        ],
+        "sum": 16226622
+      },
+      {
+        "chunk_index": 30,
+        "nnz": 1949137,
+        "obs_index_sha256": "7e5b610af18a632dbe922fe337acc3dd9c5b57b56f461584892cf7c00bd35758",
+        "section_id": "STTS0001182",
+        "shape": [
+          5623,
+          29747
+        ],
+        "sum": 6718555
+      },
+      {
+        "chunk_index": 31,
+        "nnz": 836463,
+        "obs_index_sha256": "cc70f375ad62f543fa3efe1212764ca210c2e3382bdeaf714ff234fab16e07d4",
+        "section_id": "STTS0001183",
+        "shape": [
+          2435,
+          29747
+        ],
+        "sum": 3195699
+      },
+      {
+        "chunk_index": 32,
+        "nnz": 3448989,
+        "obs_index_sha256": "98715059460c5bf84ceabad5d6f03623e15d120aaeef990cfa2e7bd267298e64",
+        "section_id": "STTS0001184",
+        "shape": [
+          9742,
+          29747
+        ],
+        "sum": 12713467
+      },
+      {
+        "chunk_index": 33,
+        "nnz": 2724596,
+        "obs_index_sha256": "e5f0a2da47b3539a767c3bef1ebbce618aa3a1e7a7e12387a22ade24d018c62a",
+        "section_id": "STTS0001185",
+        "shape": [
+          7223,
+          29747
+        ],
+        "sum": 11244366
+      },
+      {
+        "chunk_index": 34,
+        "nnz": 1310159,
+        "obs_index_sha256": "70a8d06f0c6f2adf0c93a09e4e83628482cd485c1f8cef3da145a8bf9b875311",
+        "section_id": "STTS0001186",
+        "shape": [
+          5924,
+          29747
+        ],
+        "sum": 4617764
+      },
+      {
+        "chunk_index": 35,
+        "nnz": 2065194,
+        "obs_index_sha256": "6c9230f3bde587a6e00b507d2b151a9ebdf78564517f526f8cc1debce89d9028",
+        "section_id": "STTS0001187",
+        "shape": [
+          7772,
+          29747
+        ],
+        "sum": 7625356
+      },
+      {
+        "chunk_index": 36,
+        "nnz": 1432466,
+        "obs_index_sha256": "c466df5ac8107951db09f06eb291d66ef418afa9cff62f169fc04184a63902a3",
+        "section_id": "STTS0001188",
+        "shape": [
+          6259,
+          29747
+        ],
+        "sum": 4692614
+      },
+      {
+        "chunk_index": 37,
+        "nnz": 1452160,
+        "obs_index_sha256": "642f07602a30376c2a3e877661e3143378a2bb65ea7aa7092dba1678f7cee0c4",
+        "section_id": "STTS0001189",
+        "shape": [
+          5961,
+          29747
+        ],
+        "sum": 4648372
+      },
+      {
+        "chunk_index": 38,
+        "nnz": 923267,
+        "obs_index_sha256": "ff0ff857da6b912cf334cb7f6214fc2c3c264feb8f25caacebe850e382dc55b1",
+        "section_id": "STTS0001190",
+        "shape": [
+          3565,
+          29747
+        ],
+        "sum": 3026881
+      },
+      {
+        "chunk_index": 39,
+        "nnz": 655295,
+        "obs_index_sha256": "eabaedffd521e27c19278546fb6a096dd94e74160ef2a16562c63449d8b71feb",
+        "section_id": "STTS0001191",
+        "shape": [
+          4017,
+          29747
+        ],
+        "sum": 2302662
+      },
+      {
+        "chunk_index": 40,
+        "nnz": 986501,
+        "obs_index_sha256": "3309433c1cc8c88a3ece4e836b2fc3c0edaf098a512c67081c03db9a93c70982",
+        "section_id": "STTS0001192",
+        "shape": [
+          4111,
+          29747
+        ],
+        "sum": 3590955
+      },
+      {
+        "chunk_index": 41,
+        "nnz": 460151,
+        "obs_index_sha256": "b5319b53a8423bcc3b376e54d8145583896cc779ebbdcdfb146b8749c1676c70",
+        "section_id": "STTS0001193",
+        "shape": [
+          1609,
+          29747
+        ],
+        "sum": 1968240
+      },
+      {
+        "chunk_index": 42,
+        "nnz": 708529,
+        "obs_index_sha256": "1329e75890d98179b2dcdfcf6a5be48e5e4e7dca95bf0017da7c8dc39af41af0",
+        "section_id": "STTS0001194",
+        "shape": [
+          2519,
+          29747
+        ],
+        "sum": 3003766
+      },
+      {
+        "chunk_index": 43,
+        "nnz": 351466,
+        "obs_index_sha256": "bf2a1a27008fb832edd20f88ac01a3ed2458828f86c9496fd0db67779c406ffc",
+        "section_id": "STTS0001195",
+        "shape": [
+          1394,
+          29747
+        ],
+        "sum": 1047348
+      },
+      {
+        "chunk_index": 44,
+        "nnz": 768724,
+        "obs_index_sha256": "aff0f00407deb58c0e4bf3c8ead661fd592b6d6ac2e107f890e9e0af7f23bb79",
+        "section_id": "STTS0001196",
+        "shape": [
+          2085,
+          29747
+        ],
+        "sum": 2942982
+      },
+      {
+        "chunk_index": 45,
+        "nnz": 42507,
+        "obs_index_sha256": "23e59c4a29f2b96a53d7b541cbe98d075e94a518597f0a37345d8f82016359d6",
+        "section_id": "STTS0001197",
+        "shape": [
+          156,
+          29747
+        ],
+        "sum": 134734
+      }
+    ],
+    "status": "PASS",
+    "sum_counts": 525246132
+  },
+  "record_id": "stt0000071",
+  "revision": "stt0000071-20260716T164254Z-374d55c2",
+  "sections": [
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220682738879",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "50d17f523ad98c7c29e9184ffb676aeb44a96abf7bf947ab81d70744561949e8",
+        "size": 7530865,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0000-STTS0001152/X.zarr.zip"
+      },
+      "chunk_index": 0,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220679329438",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "864ec3358dd4bc60c1ef154cd97718f73c3734f6eb7423c1b87fac861841690c",
+        "size": 616343,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0000-STTS0001152/obs.parquet"
+      },
+      "sample_id": "STSA0000734",
+      "section_id": "STTS0001152",
+      "source_cell_bin_relative_path": "STSA0000734/STTS0001152/T1_C1.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000734/STTS0001152/T1_C1.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000734/STTS0001152/T1_C1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 11968641,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 10227,
+        "n_vars": 29747,
+        "nnz": 3356411,
+        "section_present_genes": 24992,
+        "sum": 11968641
+      },
+      "timepoint": "uninjured_1",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220698697603",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "765c81dd85c10a57814685df50172cce290f91e022ae6525d0730d5f3cceaeb1",
+        "size": 11192694,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0001-STTS0001153/X.zarr.zip"
+      },
+      "chunk_index": 1,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220695121187",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "6f3671c16b0512a50176862c85e3737e898593164343a9a561eb640bd6add495",
+        "size": 699432,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0001-STTS0001153/obs.parquet"
+      },
+      "sample_id": "STSA0000734",
+      "section_id": "STTS0001153",
+      "source_cell_bin_relative_path": "STSA0000734/STTS0001153/T1_C2.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000734/STTS0001153/T1_C2.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000734/STTS0001153/T1_C2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 20379874,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 11558,
+        "n_vars": 29747,
+        "nnz": 5026446,
+        "section_present_genes": 25637,
+        "sum": 20379874
+      },
+      "timepoint": "uninjured_1",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220712748461",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "a5529c4222d831a8644972321f4bca32decb13b86616549a77b73af0d7ce17f2",
+        "size": 9978509,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0002-STTS0001154/X.zarr.zip"
+      },
+      "chunk_index": 2,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220709467251",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "f41f2b4c35eddfdad09f4a9b5297b5f5bdf109552d122340f38a7f5a657477e9",
+        "size": 713213,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0002-STTS0001154/obs.parquet"
+      },
+      "sample_id": "STSA0000734",
+      "section_id": "STTS0001154",
+      "source_cell_bin_relative_path": "STSA0000734/STTS0001154/T1_C3.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000734/STTS0001154/T1_C3.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000734/STTS0001154/T1_C3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 15133111,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 11898,
+        "n_vars": 29747,
+        "nnz": 4477215,
+        "section_present_genes": 25797,
+        "sum": 15133111
+      },
+      "timepoint": "uninjured_1",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220726178971",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "fc47dcc4d818246aaab64c5937de0cd3e5906ad502ba331031a402982622f9b4",
+        "size": 8410556,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0003-STTS0001155/X.zarr.zip"
+      },
+      "chunk_index": 3,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220722701297",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "9ef538c5bc0bf821d07071e18aa2a3831acb24ed33f5d64b94c99aa23f8a2360",
+        "size": 352320,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0003-STTS0001155/obs.parquet"
+      },
+      "sample_id": "STSA0000735",
+      "section_id": "STTS0001155",
+      "source_cell_bin_relative_path": "STSA0000735/STTS0001155/T2_C1.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000735/STTS0001155/T2_C1.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000735/STTS0001155/T2_C1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 14307492,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5517,
+        "n_vars": 29747,
+        "nnz": 4022173,
+        "section_present_genes": 23889,
+        "sum": 14307492
+      },
+      "timepoint": "6_hpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220738971335",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "bc5b0e61cbf46a25400b6e1cd4cdf1016457a42a325bbfbb1a8e0d0c89a02e10",
+        "size": 7468607,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0004-STTS0001156/X.zarr.zip"
+      },
+      "chunk_index": 4,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220735377802",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "4f8478ebfd9b32940bbc3ba45287fe2bc852e84b8312f3172366bc2f81282f97",
+        "size": 370653,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0004-STTS0001156/obs.parquet"
+      },
+      "sample_id": "STSA0000735",
+      "section_id": "STTS0001156",
+      "source_cell_bin_relative_path": "STSA0000735/STTS0001156/T2_C2.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000735/STTS0001156/T2_C2.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000735/STTS0001156/T2_C2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 11980075,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5845,
+        "n_vars": 29747,
+        "nnz": 3476455,
+        "section_present_genes": 24705,
+        "sum": 11980075
+      },
+      "timepoint": "6_hpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220754824159",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "874a2a7032bc3f7f0fbefb12a180b55b05778e81f1f57cf4c83d72854bc5bccf",
+        "size": 11184020,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0005-STTS0001157/X.zarr.zip"
+      },
+      "chunk_index": 5,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220751240841",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "ed05f70363042a1d9f217a5da0ffce9a02a57d475f42ad5b8008a037cb81224a",
+        "size": 416657,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0005-STTS0001157/obs.parquet"
+      },
+      "sample_id": "STSA0000735",
+      "section_id": "STTS0001157",
+      "source_cell_bin_relative_path": "STSA0000735/STTS0001157/T2_C3.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000735/STTS0001157/T2_C3.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000735/STTS0001157/T2_C3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 22269988,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 6548,
+        "n_vars": 29747,
+        "nnz": 5353648,
+        "section_present_genes": 24712,
+        "sum": 22269988
+      },
+      "timepoint": "6_hpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220768086295",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "dafccd6ccf049b4dae09bba2c5a0d42730565205b7b75096a4e5efb3e9b90002",
+        "size": 7852171,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0006-STTS0001158/X.zarr.zip"
+      },
+      "chunk_index": 6,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220764405884",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "3aa1a4ef8a63671180c4322858123ab047e6da3f76b2e91828a60b45803e7f9e",
+        "size": 303651,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0006-STTS0001158/obs.parquet"
+      },
+      "sample_id": "STSA0000736",
+      "section_id": "STTS0001158",
+      "source_cell_bin_relative_path": "STSA0000736/STTS0001158/T3_C1.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000736/STTS0001158/T3_C1.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000736/STTS0001158/T3_C1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 12213996,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 4662,
+        "n_vars": 29747,
+        "nnz": 3793089,
+        "section_present_genes": 25155,
+        "sum": 12213996
+      },
+      "timepoint": "12_hpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220781622047",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "0fa826f856855d08ea806b63857f8704e6484620462254f3434ccd057002fcab",
+        "size": 7671399,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0007-STTS0001159/X.zarr.zip"
+      },
+      "chunk_index": 7,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220777850711",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "1b7a1b90645cbf2f85d5672af38af2bb77588030f2f9f584068d3aeaa05b28ba",
+        "size": 338453,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0007-STTS0001159/obs.parquet"
+      },
+      "sample_id": "STSA0000736",
+      "section_id": "STTS0001159",
+      "source_cell_bin_relative_path": "STSA0000736/STTS0001159/T3_C2.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000736/STTS0001159/T3_C2.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000736/STTS0001159/T3_C2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 11619448,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5292,
+        "n_vars": 29747,
+        "nnz": 3659498,
+        "section_present_genes": 25326,
+        "sum": 11619448
+      },
+      "timepoint": "12_hpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220794051536",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "b177881537224f24ce54a21dc7b0248e7c6f7bf59a669aeea825d017da8c3857",
+        "size": 6802200,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0008-STTS0001160/X.zarr.zip"
+      },
+      "chunk_index": 8,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220790536169",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "cd373a8aca181cb28c11bfd7176ecd3cac8df610bd0c52a0f3383f40e936d9e3",
+        "size": 328043,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0008-STTS0001160/obs.parquet"
+      },
+      "sample_id": "STSA0000736",
+      "section_id": "STTS0001160",
+      "source_cell_bin_relative_path": "STSA0000736/STTS0001160/T3_C3.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000736/STTS0001160/T3_C3.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000736/STTS0001160/T3_C3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 9758067,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5127,
+        "n_vars": 29747,
+        "nnz": 3188976,
+        "section_present_genes": 25265,
+        "sum": 9758067
+      },
+      "timepoint": "12_hpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220808787938",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "17efd9849f527c6f7ef21819ab9aff9ee0d0cad8a5631b69ce9108cb07789c9b",
+        "size": 9622277,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0009-STTS0001161/X.zarr.zip"
+      },
+      "chunk_index": 9,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220805350425",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "d58edbf9b1844c72fbffb38749f04b39eab66bca470f08ea140581ffc4fd5c38",
+        "size": 351386,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0009-STTS0001161/obs.parquet"
+      },
+      "sample_id": "STSA0000737",
+      "section_id": "STTS0001161",
+      "source_cell_bin_relative_path": "STSA0000737/STTS0001161/T4_C1.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000737/STTS0001161/T4_C1.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000737/STTS0001161/T4_C1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 19883046,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5444,
+        "n_vars": 29747,
+        "nnz": 4603921,
+        "section_present_genes": 24455,
+        "sum": 19883046
+      },
+      "timepoint": "1_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220823157878",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "740569e66e9dfc041bdb3c3c614934a0157055aa00b1628a36bcda6b64527501",
+        "size": 9057322,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0010-STTS0001162/X.zarr.zip"
+      },
+      "chunk_index": 10,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220819599335",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "1a56f004ac4946eaacefb5b869a2ad2bd52babbcd124cbaf63011a75b647cd0c",
+        "size": 356442,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0010-STTS0001162/obs.parquet"
+      },
+      "sample_id": "STSA0000737",
+      "section_id": "STTS0001162",
+      "source_cell_bin_relative_path": "STSA0000737/STTS0001162/T4_C2.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000737/STTS0001162/T4_C2.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000737/STTS0001162/T4_C2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 15501105,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5576,
+        "n_vars": 29747,
+        "nnz": 4324227,
+        "section_present_genes": 24804,
+        "sum": 15501105
+      },
+      "timepoint": "1_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220837888283",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "d4bae83e61682ae9acdae23d4d26da6abfa467c6a4adde0a5d8db0963bed2d42",
+        "size": 9822968,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0011-STTS0001163/X.zarr.zip"
+      },
+      "chunk_index": 11,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220834551634",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "658e40358e4c105bc097ddf9247a04459806cf086f8484d97b1f3e2d995b2307",
+        "size": 373915,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0011-STTS0001163/obs.parquet"
+      },
+      "sample_id": "STSA0000737",
+      "section_id": "STTS0001163",
+      "source_cell_bin_relative_path": "STSA0000737/STTS0001163/T4_C3.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000737/STTS0001163/T4_C3.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000737/STTS0001163/T4_C3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 16094067,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5867,
+        "n_vars": 29747,
+        "nnz": 4737266,
+        "section_present_genes": 24841,
+        "sum": 16094067
+      },
+      "timepoint": "1_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220848759839",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "adf6ef0f64346241815d06279b0d0a76ec08504cb52ab85029c4ab55786662a5",
+        "size": 5193194,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0012-STTS0001164/X.zarr.zip"
+      },
+      "chunk_index": 12,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220845257929",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "ab37a6a5808d0ef55637306406cc8d94a8a3be2a73cdc859d97d8361f3c9c4ef",
+        "size": 358242,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0012-STTS0001164/obs.parquet"
+      },
+      "sample_id": "STSA0000738",
+      "section_id": "STTS0001164",
+      "source_cell_bin_relative_path": "STSA0000738/STTS0001164/T5_C1.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000738/STTS0001164/T5_C1.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000738/STTS0001164/T5_C1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 8743203,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5707,
+        "n_vars": 29747,
+        "nnz": 2375901,
+        "section_present_genes": 23530,
+        "sum": 8743203
+      },
+      "timepoint": "3_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220859296217",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "e23b85688cc0135a851108bf968d85fa8ff584f2983b612273b5d10c7f84f498",
+        "size": 5136921,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0013-STTS0001165/X.zarr.zip"
+      },
+      "chunk_index": 13,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220855991584",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "bdd75f90e78c5ee57172593931306e38ab832c1dcb7dabcb14947e4dc7e80b05",
+        "size": 326237,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0013-STTS0001165/obs.parquet"
+      },
+      "sample_id": "STSA0000738",
+      "section_id": "STTS0001165",
+      "source_cell_bin_relative_path": "STSA0000738/STTS0001165/T5_C2.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000738/STTS0001165/T5_C2.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000738/STTS0001165/T5_C2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 8607925,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5146,
+        "n_vars": 29747,
+        "nnz": 2370916,
+        "section_present_genes": 22948,
+        "sum": 8607925
+      },
+      "timepoint": "3_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220872012072",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "e54e4ea72c8eb42c1c4d6c126e78aff6d5ec770bbc8860f4155ef7ca6313cdf3",
+        "size": 7164993,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0014-STTS0001166/X.zarr.zip"
+      },
+      "chunk_index": 14,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220868560552",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "eb4854d2e9395889f535b2b43888e53c995eba60c3d35dd818dc563fb413d047",
+        "size": 378603,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0014-STTS0001166/obs.parquet"
+      },
+      "sample_id": "STSA0000738",
+      "section_id": "STTS0001166",
+      "source_cell_bin_relative_path": "STSA0000738/STTS0001166/T5_C3.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000738/STTS0001166/T5_C3.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000738/STTS0001166/T5_C3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 10414931,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 6008,
+        "n_vars": 29747,
+        "nnz": 3409811,
+        "section_present_genes": 24451,
+        "sum": 10414931
+      },
+      "timepoint": "3_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220890418137",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "b98db3ff7ce2d927847dfc9c1aaf820920af7d545d85aed00196e120e1dff527",
+        "size": 13514143,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0015-STTS0001167/X.zarr.zip"
+      },
+      "chunk_index": 15,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220886924210",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "a6f23c44b89587749ead801fb659c62ab0f4bcd1548692014c1de10135804628",
+        "size": 343545,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0015-STTS0001167/obs.parquet"
+      },
+      "sample_id": "STSA0000739",
+      "section_id": "STTS0001167",
+      "source_cell_bin_relative_path": "STSA0000739/STTS0001167/T6_C1.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000739/STTS0001167/T6_C1.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000739/STTS0001167/T6_C1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 26354415,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5273,
+        "n_vars": 29747,
+        "nnz": 6787604,
+        "section_present_genes": 25467,
+        "sum": 26354415
+      },
+      "timepoint": "7_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220909053167",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "3e0062d30155063eb0fa5e62e19a13595d8060a266db09cba4554bfd2d61ee0d",
+        "size": 14167181,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0016-STTS0001168/X.zarr.zip"
+      },
+      "chunk_index": 16,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220905623061",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "436b07d9aeb5887ec9ec9b027ea126a81b4495ab64b2c47798555b7f3c45f2db",
+        "size": 368544,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0016-STTS0001168/obs.parquet"
+      },
+      "sample_id": "STSA0000739",
+      "section_id": "STTS0001168",
+      "source_cell_bin_relative_path": "STSA0000739/STTS0001168/T6_C2.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000739/STTS0001168/T6_C2.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000739/STTS0001168/T6_C2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 32564044,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5657,
+        "n_vars": 29747,
+        "nnz": 6993469,
+        "section_present_genes": 25691,
+        "sum": 32564044
+      },
+      "timepoint": "7_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220923806809",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "ec419e3cabe059c4318f114c1ba586c7b367b993f3d2e896a48b45cce515cc45",
+        "size": 9718225,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0017-STTS0001169/X.zarr.zip"
+      },
+      "chunk_index": 17,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220920437486",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "00fe76ecdaf166444b16a949211ee1f681e878d2660a85cc8a4dd64eef8f455d",
+        "size": 387644,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0017-STTS0001169/obs.parquet"
+      },
+      "sample_id": "STSA0000739",
+      "section_id": "STTS0001169",
+      "source_cell_bin_relative_path": "STSA0000739/STTS0001169/T6_C3.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000739/STTS0001169/T6_C3.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000739/STTS0001169/T6_C3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 18077370,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 6105,
+        "n_vars": 29747,
+        "nnz": 4617867,
+        "section_present_genes": 25139,
+        "sum": 18077370
+      },
+      "timepoint": "7_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220936560450",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "aa484dd6e96c1e9e54c3c8c3a266ffb9ceb27615df8259189fe2538326350d37",
+        "size": 6874161,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0018-STTS0001170/X.zarr.zip"
+      },
+      "chunk_index": 18,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220932819693",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "5b34064dc380ca5b05a5d17f2b8e9576db78af18ccecc965604a5b2dc9dab56c",
+        "size": 455378,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0018-STTS0001170/obs.parquet"
+      },
+      "sample_id": "STSA0000740",
+      "section_id": "STTS0001170",
+      "source_cell_bin_relative_path": "STSA0000740/STTS0001170/T7_C1.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000740/STTS0001170/T7_C1.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000740/STTS0001170/T7_C1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 15013042,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 7379,
+        "n_vars": 29747,
+        "nnz": 3061169,
+        "section_present_genes": 24585,
+        "sum": 15013042
+      },
+      "timepoint": "14_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220950985871",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "e1e191b3a48e7ea0e1cd008c37ad4d064d7ea1dccf35df5bb4527b021c186643",
+        "size": 9577512,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0019-STTS0001171/X.zarr.zip"
+      },
+      "chunk_index": 19,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220947482405",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "c795002775865fb785ac46aae035c32414a47147fbef54a91471589d0b027b7c",
+        "size": 502371,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0019-STTS0001171/obs.parquet"
+      },
+      "sample_id": "STSA0000740",
+      "section_id": "STTS0001171",
+      "source_cell_bin_relative_path": "STSA0000740/STTS0001171/T7_C2.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000740/STTS0001171/T7_C2.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000740/STTS0001171/T7_C2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 27694551,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 8107,
+        "n_vars": 29747,
+        "nnz": 4287718,
+        "section_present_genes": 25397,
+        "sum": 27694551
+      },
+      "timepoint": "14_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220963647142",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "c37b3a2708b6688644f00df85fe8b31721c733e565d8707adcbdf38f7a6ac496",
+        "size": 7106698,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0020-STTS0001172/X.zarr.zip"
+      },
+      "chunk_index": 20,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220959857330",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "ed592b693c33f5d55d345c37d16542a6aa248d33e04aa10cb3680e1a72b50095",
+        "size": 486932,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0020-STTS0001172/obs.parquet"
+      },
+      "sample_id": "STSA0000740",
+      "section_id": "STTS0001172",
+      "source_cell_bin_relative_path": "STSA0000740/STTS0001172/T7_C3.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000740/STTS0001172/T7_C3.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000740/STTS0001172/T7_C3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 19980845,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 7889,
+        "n_vars": 29747,
+        "nnz": 3126314,
+        "section_present_genes": 24492,
+        "sum": 19980845
+      },
+      "timepoint": "14_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220981553654",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "87bc473320a20df7a0f015788e77fc1c5de2710e374e8857e6f7b01866f386cc",
+        "size": 12141348,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0021-STTS0001173/X.zarr.zip"
+      },
+      "chunk_index": 21,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220978047543",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "c48fd6418dce8d072d77fee5a085e2217d1ed749d9d7056a187f36567a95353d",
+        "size": 370324,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0021-STTS0001173/obs.parquet"
+      },
+      "sample_id": "STSA0000741",
+      "section_id": "STTS0001173",
+      "source_cell_bin_relative_path": "STSA0000741/STTS0001173/T8_C1.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000741/STTS0001173/T8_C1.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000741/STTS0001173/T8_C1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 21585739,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 5754,
+        "n_vars": 29747,
+        "nnz": 6017047,
+        "section_present_genes": 25558,
+        "sum": 21585739
+      },
+      "timepoint": "28_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784220997015906",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "bab5f49c1f851a21c7ab0ab90c933221b90d06a0fee555505100d54990ce8dfe",
+        "size": 10770481,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0022-STTS0001174/X.zarr.zip"
+      },
+      "chunk_index": 22,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784220993506785",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "cfc754fba5c4554f9735a09daf9458e87d670b87d549577207011ddf14595f12",
+        "size": 396846,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0022-STTS0001174/obs.parquet"
+      },
+      "sample_id": "STSA0000741",
+      "section_id": "STTS0001174",
+      "source_cell_bin_relative_path": "STSA0000741/STTS0001174/T8_C2.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000741/STTS0001174/T8_C2.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000741/STTS0001174/T8_C2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 20692101,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 6251,
+        "n_vars": 29747,
+        "nnz": 5111017,
+        "section_present_genes": 26001,
+        "sum": 20692101
+      },
+      "timepoint": "28_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221011391366",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "9716430131d2b61e879fc7aea435c2574c45192227faf76d4251cb28ee400241",
+        "size": 9003197,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0023-STTS0001175/X.zarr.zip"
+      },
+      "chunk_index": 23,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221007774912",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "3c5f5c9378472fcb3da95799c91db7e48f40899f84ccfa559c01e548af83d10e",
+        "size": 406281,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0023-STTS0001175/obs.parquet"
+      },
+      "sample_id": "STSA0000741",
+      "section_id": "STTS0001175",
+      "source_cell_bin_relative_path": "STSA0000741/STTS0001175/T8_C3.70.gem.gz",
+      "source_metadata_relative_path": "STSA0000741/STTS0001175/T8_C3.70.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000741/STTS0001175/T8_C3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 15994622,
+        "metadata_schema": "seurat_spatial_cell_metadata/v1",
+        "n_obs": 6456,
+        "n_vars": 29747,
+        "nnz": 4245326,
+        "section_present_genes": 24919,
+        "sum": 15994622
+      },
+      "timepoint": "28_dpa",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221018458845",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "3d317aa7da2dd2691d9bca8440d88d354e1efdc7a0775b84e1da6dbcb25148ec",
+        "size": 879456,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0024-STTS0001176/X.zarr.zip"
+      },
+      "chunk_index": 24,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221015042043",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "0a5b2ca02d86cf1784a40a8b899031302e55f8f5bfdb4d7713e3303678e5e97a",
+        "size": 112976,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0024-STTS0001176/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001176",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001176/DP8400016191TL_D1.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001176/DP8400016191TL_D1.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001176/DP8400016191TL_D1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 1720495,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 1582,
+        "n_vars": 29747,
+        "nnz": 373369,
+        "section_present_genes": 9444,
+        "sum": 1720495
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221025904729",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "a61f9e15d1799a2d4a245298122a419e76600ae6af55b105541bb8d6574e34c9",
+        "size": 1172786,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0025-STTS0001177/X.zarr.zip"
+      },
+      "chunk_index": 25,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221022534908",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "c1c60c8057cd946eb97c7fb478b586c6d4b25353c235cb0db10213886cc27fbe",
+        "size": 207247,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0025-STTS0001177/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001177",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001177/DP8400016191TL_D2.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001177/DP8400016191TL_D2.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001177/DP8400016191TL_D2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 1992751,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 3300,
+        "n_vars": 29747,
+        "nnz": 483519,
+        "section_present_genes": 9538,
+        "sum": 1992751
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221035501762",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "62bc7c81c237d13152b3e7625766739f22fb64f14b3d87a541272afe37ccc068",
+        "size": 3542482,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0026-STTS0001178/X.zarr.zip"
+      },
+      "chunk_index": 26,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221031920188",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "4987efe8f283dfaf1314a0452e16e5b5c9ab4e2e5a1a403f424147017f1982ec",
+        "size": 287023,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0026-STTS0001178/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001178",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001178/DP8400016191TL_D3.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001178/DP8400016191TL_D3.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001178/DP8400016191TL_D3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 6964343,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 4597,
+        "n_vars": 29747,
+        "nnz": 1530921,
+        "section_present_genes": 12285,
+        "sum": 6964343
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221046993877",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "ad6cf12293acca46a81f04fb1e6830f80d2012e8e50d76973c216668a1e6b535",
+        "size": 6070161,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0027-STTS0001179/X.zarr.zip"
+      },
+      "chunk_index": 27,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221043382691",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "b29b01d4e91082769344906e0b588cc7240918050f17e672f833ec463f6b0ded",
+        "size": 450564,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0027-STTS0001179/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001179",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001179/DP8400016191TL_D4.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001179/DP8400016191TL_D4.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001179/DP8400016191TL_D4.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 11495866,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 7529,
+        "n_vars": 29747,
+        "nnz": 2645576,
+        "section_present_genes": 12722,
+        "sum": 11495866
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221056066384",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "3a30a0f4f2e22f5edf5ebc2e97e710522c966cb9ac6310b3807efb9569c27884",
+        "size": 3981425,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0028-STTS0001180/X.zarr.zip"
+      },
+      "chunk_index": 28,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221052804691",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "42a1177ddc7820accafb64a5ddb0611c3e15dc09bd36d17fdd943a134f789bdc",
+        "size": 336865,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0028-STTS0001180/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001180",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001180/DP8400016191TL_D5.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001180/DP8400016191TL_D5.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001180/DP8400016191TL_D5.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 6540596,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 5491,
+        "n_vars": 29747,
+        "nnz": 1754184,
+        "section_present_genes": 12293,
+        "sum": 6540596
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221068698159",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "9b20880fefece6851d1389b1590c6650b0d970cb10f015bec6d830acf9e26c7a",
+        "size": 8068539,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0029-STTS0001181/X.zarr.zip"
+      },
+      "chunk_index": 29,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221065202090",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "e0d92213895d1f1d5db739a3297959e144c58560a254508ff0506c5f88023067",
+        "size": 478441,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0029-STTS0001181/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001181",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001181/DP8400016191TL_D6.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001181/DP8400016191TL_D6.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001181/DP8400016191TL_D6.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 16226622,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 7952,
+        "n_vars": 29747,
+        "nnz": 3552677,
+        "section_present_genes": 12999,
+        "sum": 16226622
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221078643812",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "66ef0a76e63bc102cbe7c37e8ab2beec7afb830ae9d0018db187e592ff36d5e1",
+        "size": 4433660,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0030-STTS0001182/X.zarr.zip"
+      },
+      "chunk_index": 30,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221075276180",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "a45ce722f48fe047bce71641a5348382c1c0b5cac82bc59e64e74b2d94cd8068",
+        "size": 342445,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0030-STTS0001182/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001182",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001182/DP8400016191TL_E1.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001182/DP8400016191TL_E1.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001182/DP8400016191TL_E1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 6718555,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 5623,
+        "n_vars": 29747,
+        "nnz": 1949137,
+        "section_present_genes": 12810,
+        "sum": 6718555
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221086585912",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "c7568ccd6c9735b5dd7d6be596a9b8e6a7044d8285183ac6a1dd9266efb533cb",
+        "size": 1903139,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0031-STTS0001183/X.zarr.zip"
+      },
+      "chunk_index": 31,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221083105963",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "c4143eb4ef95379efe221058dbe2d9e2fb725048d160b56200015ffac58bc15e",
+        "size": 163216,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0031-STTS0001183/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001183",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001183/DP8400016191TL_E2.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001183/DP8400016191TL_E2.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001183/DP8400016191TL_E2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 3195699,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 2435,
+        "n_vars": 29747,
+        "nnz": 836463,
+        "section_present_genes": 11921,
+        "sum": 3195699
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221099322826",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "7487768229ddfc98c5c1af3993add0d292aae10b897382c5d53238fbdfafdfe9",
+        "size": 7791543,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0032-STTS0001184/X.zarr.zip"
+      },
+      "chunk_index": 32,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221095793236",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "cd689826ce050c70e6b6799d7aa9054761d0133342a6ec8f125ebe1441887a4d",
+        "size": 582744,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0032-STTS0001184/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001184",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001184/DP8400016191TL_E3.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001184/DP8400016191TL_E3.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001184/DP8400016191TL_E3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 12713467,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 9742,
+        "n_vars": 29747,
+        "nnz": 3448989,
+        "section_present_genes": 12873,
+        "sum": 12713467
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221110351392",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "b5eb3610f1e7c12690b7f433ab899d0f25453af691c1d7077f553ac686b13325",
+        "size": 6231254,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0033-STTS0001185/X.zarr.zip"
+      },
+      "chunk_index": 33,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221107132519",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "df910d37e6da3741ffa2eeaee50652aa655af06ce1e0280632405b4996a9bb60",
+        "size": 437439,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0033-STTS0001185/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001185",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001185/DP8400016191TL_E4.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001185/DP8400016191TL_E4.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001185/DP8400016191TL_E4.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 11244366,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 7223,
+        "n_vars": 29747,
+        "nnz": 2724596,
+        "section_present_genes": 12475,
+        "sum": 11244366
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221119431612",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "8f7f76f565d6bc351a9fd1a6b888747ec36b2ff6cc4d4a5bfdcc94c4c6f36e41",
+        "size": 3077560,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0034-STTS0001186/X.zarr.zip"
+      },
+      "chunk_index": 34,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221115782836",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "aa56f1cead75b66a8e41ef7d2297a9bfe65be9da80253f9d71f70bc86ee0b934",
+        "size": 357322,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0034-STTS0001186/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001186",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001186/DP8400016191TL_E5.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001186/DP8400016191TL_E5.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001186/DP8400016191TL_E5.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 4617764,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 5924,
+        "n_vars": 29747,
+        "nnz": 1310159,
+        "section_present_genes": 11978,
+        "sum": 4617764
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221129423275",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "1309486040dd760e1897fcfe6f82d38f23e60b5bfbc78f2d3a51de8604631f73",
+        "size": 4816401,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0035-STTS0001187/X.zarr.zip"
+      },
+      "chunk_index": 35,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221125953744",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "5cdb0fa7bc5819973b8468c61dcca924d47a1a58d22446b4131b655da59ef584",
+        "size": 462772,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0035-STTS0001187/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001187",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001187/DP8400016191TL_E6.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001187/DP8400016191TL_E6.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001187/DP8400016191TL_E6.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 7625356,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 7772,
+        "n_vars": 29747,
+        "nnz": 2065194,
+        "section_present_genes": 12495,
+        "sum": 7625356
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221138281606",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "8d7d0e8583ac070b5438412f0d370f967886619ff6ff71ab05910e7e5fc4907d",
+        "size": 3358188,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0036-STTS0001188/X.zarr.zip"
+      },
+      "chunk_index": 36,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221134911509",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "a0cf343908ded258878a798e05acfe611d8a7a4acc9fd88c5e9de7e0e001613f",
+        "size": 377874,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0036-STTS0001188/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001188",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001188/DP8400016191TL_F1.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001188/DP8400016191TL_F1.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001188/DP8400016191TL_F1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 4692614,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 6259,
+        "n_vars": 29747,
+        "nnz": 1432466,
+        "section_present_genes": 12410,
+        "sum": 4692614
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221147463439",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "0f251b6dfaa8fbe6629d666d816d10cb919d2bda4ad63010c9b5e8df0e092355",
+        "size": 3355582,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0037-STTS0001189/X.zarr.zip"
+      },
+      "chunk_index": 37,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221144104701",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "fd0a496e6984bc9cfcd08aa27e0ef1606bb085c6c3e2ad31245fc8c281e1ce1d",
+        "size": 360721,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0037-STTS0001189/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001189",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001189/DP8400016191TL_F2.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001189/DP8400016191TL_F2.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001189/DP8400016191TL_F2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 4648372,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 5961,
+        "n_vars": 29747,
+        "nnz": 1452160,
+        "section_present_genes": 12228,
+        "sum": 4648372
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221155519182",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "1fd843de4f2ce1816df00d247679656b22bf2145a513ec8660ea4c297ce1955e",
+        "size": 2136212,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0038-STTS0001190/X.zarr.zip"
+      },
+      "chunk_index": 38,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221152128455",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "f9ff35a59f42ec432204c4c2582752a6de050ee1f6229071fa48c06db17fbfcf",
+        "size": 225139,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0038-STTS0001190/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001190",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001190/DP8400016191TL_F3.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001190/DP8400016191TL_F3.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001190/DP8400016191TL_F3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 3026881,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 3565,
+        "n_vars": 29747,
+        "nnz": 923267,
+        "section_present_genes": 11411,
+        "sum": 3026881
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221163294769",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "d886c234df4d2aa58f9b7145ff659e26522396ee84b63638063943a511e614b1",
+        "size": 1578253,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0039-STTS0001191/X.zarr.zip"
+      },
+      "chunk_index": 39,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221159907277",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "a9d11bead125a7e93e17b45ca94c4ec077cf6b87694f1871c6773fb7baeca5e7",
+        "size": 246387,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0039-STTS0001191/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001191",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001191/DP8400016191TL_F4.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001191/DP8400016191TL_F4.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001191/DP8400016191TL_F4.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 2302662,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 4017,
+        "n_vars": 29747,
+        "nnz": 655295,
+        "section_present_genes": 9949,
+        "sum": 2302662
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221171361819",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "1bb29eaf142ab610dbaef11128b66e1ca7eada960f5a11205b879eaef9fbdb75",
+        "size": 2321424,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0040-STTS0001192/X.zarr.zip"
+      },
+      "chunk_index": 40,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221168252326",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "fecec29e3f60038625a82daa458f06bd314967d0ca4e6d01b63672ea100fba2e",
+        "size": 256898,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0040-STTS0001192/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001192",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001192/DP8400016191TL_F5.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001192/DP8400016191TL_F5.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001192/DP8400016191TL_F5.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 3590955,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 4111,
+        "n_vars": 29747,
+        "nnz": 986501,
+        "section_present_genes": 11561,
+        "sum": 3590955
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221178300241",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "02a038f8b6cf03fe76e9b984b5a2f443ec4953adf4026a6fe38ce722fa78394a",
+        "size": 1083553,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0041-STTS0001193/X.zarr.zip"
+      },
+      "chunk_index": 41,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221175164082",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "584c43aa479adeb332b71c5f6ee92e8f528c2098672aa7d1ebd540ec237ae7a7",
+        "size": 114284,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0041-STTS0001193/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001193",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001193/DP8400016197TL_C1.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001193/DP8400016197TL_C1.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001193/DP8400016197TL_C1.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 1968240,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 1609,
+        "n_vars": 29747,
+        "nnz": 460151,
+        "section_present_genes": 10463,
+        "sum": 1968240
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221186214474",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "027a0509b776c07d39718b2c5ffd84423b8fa6dd30932dc59321e81714bac758",
+        "size": 1670637,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0042-STTS0001194/X.zarr.zip"
+      },
+      "chunk_index": 42,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221182844855",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "10356373fea58a84986acaa70dd73679060087f587a2a5b97af8f8cb1824945d",
+        "size": 165905,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0042-STTS0001194/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001194",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001194/DP8400016197TL_C2.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001194/DP8400016197TL_C2.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001194/DP8400016197TL_C2.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 3003766,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 2519,
+        "n_vars": 29747,
+        "nnz": 708529,
+        "section_present_genes": 10894,
+        "sum": 3003766
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221193148242",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "106a52f43978ff7d8be5ce6403e79e51c7bf18f4dcfb1990f75bb03b074c8a26",
+        "size": 806641,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0043-STTS0001195/X.zarr.zip"
+      },
+      "chunk_index": 43,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221189926386",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "0306eda76a48887476bf6696c7745c567b0652e6f0477e3e20d2c2420d12ef77",
+        "size": 101373,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0043-STTS0001195/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001195",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001195/DP8400016197TL_C3.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001195/DP8400016197TL_C3.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001195/DP8400016197TL_C3.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 1047348,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 1394,
+        "n_vars": 29747,
+        "nnz": 351466,
+        "section_present_genes": 9538,
+        "sum": 1047348
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221200816686",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "5efa03548a7971d56eb2a5fe03ba3f8192ee4ca7b16d6c1e889af77916ad16ad",
+        "size": 1732261,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0044-STTS0001196/X.zarr.zip"
+      },
+      "chunk_index": 44,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221197729851",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "b7ed31eec07e47a9aeaa68923f316e87d6484bd3c337041ea85026b71958bfef",
+        "size": 143531,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0044-STTS0001196/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001196",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001196/DP8400016197TL_C4.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001196/DP8400016197TL_C4.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001196/DP8400016197TL_C4.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 2942982,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 2085,
+        "n_vars": 29747,
+        "nnz": 768724,
+        "section_present_genes": 10632,
+        "sum": 2942982
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    },
+    {
+      "X": {
+        "crc32c_base64": null,
+        "generation": "1784221207539520",
+        "md5_base64": null,
+        "role": "canonical_X_sparse_zarr_zip",
+        "sha256": "34ed2b2c0ad261325932f5571a66d96f53fb3b2fb45560eb9d70361d051e17dd",
+        "size": 102104,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0045-STTS0001197/X.zarr.zip"
+      },
+      "chunk_index": 45,
+      "obs": {
+        "crc32c_base64": null,
+        "generation": "1784221204330126",
+        "md5_base64": null,
+        "role": "canonical_obs",
+        "sha256": "45e7fdde15ac921d9bad4a4be0d670224cdc7ba887c4462a8a86e7efef15c45d",
+        "size": 30865,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/sections/0045-STTS0001197/obs.parquet"
+      },
+      "sample_id": "STSA0000742",
+      "section_id": "STTS0001197",
+      "source_cell_bin_relative_path": "STSA0000742/STTS0001197/DP8400016197TL_C5.50.gem.gz",
+      "source_metadata_relative_path": "STSA0000742/STTS0001197/DP8400016197TL_C5.50.tsv.gz",
+      "source_raw_unbinned_relative_path": "STSA0000742/STTS0001197/DP8400016197TL_C5.gem.gz",
+      "stats": {
+        "metadata_n_counts_sum": 134734,
+        "metadata_schema": "reconstructed_3d_cell_metadata/v1",
+        "n_obs": 156,
+        "n_vars": 29747,
+        "nnz": 42507,
+        "section_present_genes": 6073,
+        "sum": 134734
+      },
+      "timepoint": "uninjured_2",
+      "var": {
+        "crc32c_base64": null,
+        "generation": "1784220670152770",
+        "md5_base64": null,
+        "role": "shared_var",
+        "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+        "size": 440278,
+        "updated": null,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+      }
+    }
+  ],
+  "shared_var": {
+    "identity": {
+      "crc32c_base64": null,
+      "generation": "1784220670152770",
+      "md5_base64": null,
+      "role": "shared_var",
+      "sha256": "5137cff5ae04406969feb0b23b81d92e817ecbbef1ba9556ed8796325981a57a",
+      "size": 440278,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/shared-var.parquet"
+    },
+    "n_vars": 29747,
+    "namespace": "source gene symbol",
+    "ordered_var_sha256": "272915ccfcea5c6595205e823571de71e8f142aafd1800458e528a63e7ebd95f"
+  },
+  "source": {
+    "counts": {
+      "all_non_tiff": 138,
+      "cell_bin_expression": 46,
+      "cell_metadata": 46,
+      "raw_unbinned_expression_provenance": 46,
+      "tiff_explicitly_excluded": 46,
+      "total_staged_bytes": 4406943940
+    },
+    "identity": [
+      "accepted_manifest_identity:STT0000071; CNP0005245|184 analysis files; 138 non-TIFF staged; 46 TIFF skipped"
+    ],
+    "inventory": {
+      "crc32c_base64": null,
+      "generation": "1784221210955480",
+      "md5_base64": null,
+      "role": "source_inventory",
+      "sha256": "b1a1d9f28b90af5e7cce8d3022aa46fffbcb041a21342539128766b70ce3e28e",
+      "size": 82131,
+      "updated": null,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/source-inventory.json"
+    },
+    "object_identity": "184 analysis files; 138 non-TIFF staged; 46 TIFF skipped",
+    "uri": "STT0000071; CNP0005245"
+  }
+}

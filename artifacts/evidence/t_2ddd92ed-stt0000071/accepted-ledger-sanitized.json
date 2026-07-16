@@ -1,0 +1,61 @@
+{
+  "format": "pert-gym.accepted-ledger-pre-post-evidence/v1",
+  "mismatch": 0,
+  "post_run": {
+    "board": "pert-gym",
+    "chain_length": 5,
+    "issued_at": 1784222048.2435799,
+    "latest_owner": {
+      "after": 4,
+      "before": 3,
+      "current": 4,
+      "denominator": 153,
+      "ended_at": 1784152951,
+      "live_readback": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/revisions/temporal-v4-013-20260715T212836Z-a4b6c94d/manifest.json",
+      "manifest": {
+        "generation": "1784150946597762",
+        "sha256": "935a41963af1addba7b0b13a779ceefcbe7ddb1ba527da1b531f8f9019881d6c",
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/revisions/temporal-v4-013-20260715T212836Z-a4b6c94d/manifest.json"
+      },
+      "mismatch": 0,
+      "run_id": 2978,
+      "task_id": "t_664e9dc0",
+      "unit": "components"
+    },
+    "metric": "accepted_components",
+    "protocol": "pert-gym-accepted-components-loopback/v1",
+    "request_nonce_sha256": "bdf28c46e4f4d28ca70ec5e6299366158ad58e58592ce545fe5709ce26701b07"
+  },
+  "precondition": {
+    "board": "pert-gym",
+    "chain_length": 5,
+    "issued_at": 1784220154.174474,
+    "latest_owner": {
+      "after": 4,
+      "before": 3,
+      "current": 4,
+      "denominator": 153,
+      "ended_at": 1784152951,
+      "live_readback": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/revisions/temporal-v4-013-20260715T212836Z-a4b6c94d/manifest.json",
+      "manifest": {
+        "generation": "1784150946597762",
+        "sha256": "935a41963af1addba7b0b13a779ceefcbe7ddb1ba527da1b531f8f9019881d6c",
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/revisions/temporal-v4-013-20260715T212836Z-a4b6c94d/manifest.json"
+      },
+      "mismatch": 0,
+      "run_id": 2978,
+      "task_id": "t_664e9dc0",
+      "unit": "components"
+    },
+    "metric": "accepted_components",
+    "protocol": "pert-gym-accepted-components-loopback/v1",
+    "request_nonce_sha256": "848b5ebd3840b01cca0cc561521962b31c188b13055d60efd125de878c8dc6dd"
+  },
+  "producer_credit": 0,
+  "proposed_delta_if_independently_accepted": {
+    "after": 5,
+    "before": 4,
+    "denominator": 153,
+    "unit": "components"
+  }
+}

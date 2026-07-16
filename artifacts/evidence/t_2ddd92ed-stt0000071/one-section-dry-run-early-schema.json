@@ -1,0 +1,93 @@
+{
+  "branch": "jkobject",
+  "catalogue_row_id": 150,
+  "component": "zebrafish heart regeneration",
+  "duplicate_probe": {
+    "candidates": [],
+    "query_counts": {
+      "component_description": 0,
+      "logical_key_prefix": 0,
+      "record_id_description": 0
+    }
+  },
+  "logical_key": "pert-gym/logical/stt0000071",
+  "mode": "one-section-converter-dry-run",
+  "obs_columns": [
+    "x",
+    "y",
+    "n_genes",
+    "n_counts",
+    "sid",
+    "3D_x",
+    "3D_y",
+    "3D_z",
+    "cell_type",
+    "cell_id",
+    "cid",
+    "source_orig_ident",
+    "source_x",
+    "source_y",
+    "source_time_points",
+    "dataset",
+    "sample",
+    "section_id",
+    "timepoint_label",
+    "timepoint",
+    "trajectory_id",
+    "organism",
+    "tissue_type",
+    "assay",
+    "modality",
+    "perturbation",
+    "perturbation_type",
+    "is_control",
+    "is_baseline",
+    "age",
+    "age_missingness_reason",
+    "sex",
+    "sex_missingness_reason",
+    "disease",
+    "technology",
+    "is_bulk",
+    "is_pseudobulk",
+    "is_low_quality",
+    "quality_missingness_reason"
+  ],
+  "readback": {
+    "matrix_equal": true,
+    "nnz": 3356411,
+    "obs_parquet_equal": true,
+    "shape": [
+      10227,
+      24992
+    ],
+    "sum": 11968641
+  },
+  "record_id": "stt0000071",
+  "section": {
+    "sample_id": "STSA0000734",
+    "section_id": "STTS0001152",
+    "section_label": "T1_C1",
+    "timepoint": "uninjured_1"
+  },
+  "source": {
+    "cell_bin": {
+      "bytes": 61616110,
+      "sha256": "9a0b4a18f004fbbde51624f1b983f79a9aade435ecddc1c129eebdbba779f0fe"
+    },
+    "metadata": {
+      "bytes": 464872,
+      "sha256": "f1d1205e35a7e43dbba1475cf3e1c0d8f6d6039195406220da7680a53e7ba751"
+    }
+  },
+  "stats": {
+    "metadata_n_counts_sum": 11968641,
+    "metadata_schema": "seurat_spatial_cell_metadata/v1",
+    "n_obs": 10227,
+    "n_vars": 24992,
+    "nnz": 3356411,
+    "section_present_genes": 24992,
+    "sum": 11968641
+  },
+  "status": "PASS"
+}
