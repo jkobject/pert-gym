@@ -11,6 +11,8 @@ import re
 from dataclasses import dataclass
 from typing import Any, Mapping, Sequence
 
+import numpy as np
+
 SURFACE_FORMAT = "pert-gym.logical-sparse-zarr"
 SURFACE_VERSION = 1
 LEGACY_FORMAT = "pert-gym.triplet-h5ad"
@@ -19,6 +21,27 @@ _CHECKSUM_FIELDS = ("data_sha256", "indices_sha256", "indptr_sha256")
 _SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 _SOURCE_CHECKSUM_PREFIX = "sha256-file-bytes/v1:"
 _PROVENANCE_STRING_FIELDS = ("source_uri", "ingestion_run_id", "writer_version")
+BENCHMARKED_TARGET_OBJECT_BYTES = frozenset({16 * 1024**2, 32 * 1024**2, 64 * 1024**2})
+
+
+def validate_target_object_bytes(target_object_bytes: int) -> None:
+    """Reject object targets outside the measured 16–64 MiB envelope."""
+    if target_object_bytes not in BENCHMARKED_TARGET_OBJECT_BYTES:
+        raise ValueError("target_object_bytes must be a benchmarked 16, 32, or 64 MiB")
+
+
+def adaptive_component_chunk_length(
+    *, length: int, dtype: np.dtype[Any], target_object_bytes: int
+) -> int:
+    """Choose an array chunk length from bytes, never a fixed element count."""
+    if length < 0:
+        raise ValueError("component length must be non-negative")
+    if target_object_bytes <= 0:
+        raise ValueError("target_object_bytes must be positive")
+    itemsize = int(np.dtype(dtype).itemsize)
+    if itemsize <= 0:
+        raise ValueError("component dtype must have a fixed positive itemsize")
+    return max(1, min(length, target_object_bytes // itemsize))
 
 
 @dataclass(frozen=True)

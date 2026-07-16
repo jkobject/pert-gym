@@ -64,6 +64,9 @@ class GCSH5ADCSR:
         self._row_start = row_start
         self.shape = (row_end - row_start, full_shape[1])
         indptr = group["indptr"]
+        self.data_dtype = np.dtype(group["data"].dtype)
+        self.index_dtype = np.dtype(group["indices"].dtype)
+        self.indptr_dtype = np.dtype(indptr.dtype)
         self.nnz = int(indptr[row_end]) - int(indptr[row_start])
 
     def __getitem__(self, selection: slice) -> sparse.csr_matrix:
@@ -82,6 +85,15 @@ class GCSH5ADCSR:
             ),
             shape=(end - start, self.shape[1]),
         )
+
+    def block_nnz(self, start: int, end: int) -> int:
+        """Return exact interval nnz from two bounded indptr reads."""
+        if start < 0 or end <= start or end > self.shape[0]:
+            raise ValueError("block nnz interval is outside the source range")
+        absolute_start = self._row_start + start
+        absolute_end = self._row_start + end
+        indptr = self._group["indptr"]
+        return int(indptr[absolute_end]) - int(indptr[absolute_start])
 
 
 def parse_args() -> argparse.Namespace:
@@ -109,6 +121,19 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--min-rows", type=int, default=5_000)
     parser.add_argument("--max-rows", type=int, default=100_000)
+    parser.add_argument("--target-object-mib", type=int, default=64)
+    parser.add_argument("--forecast-logical-blocks", type=int, required=True)
+    parser.add_argument("--launch-task-id", required=True)
+    parser.add_argument(
+        "--operation-cost-reviewed-by",
+        required=True,
+        help="reviewer identity bound independently from the exception JSON",
+    )
+    parser.add_argument(
+        "--operation-cost-exception-json",
+        type=Path,
+        help="task-scoped independently reviewed object/request budget exception",
+    )
     parser.add_argument("--row-start", type=int, required=True)
     parser.add_argument("--row-end", type=int, required=True)
     parser.add_argument("--promote", action="store_true")
@@ -236,6 +261,11 @@ def main() -> int:
                     if getattr(args, "block_size_exception_json", None)
                     else None
                 )
+                operation_cost_exception = (
+                    json.loads(args.operation_cost_exception_json.read_text("utf-8"))
+                    if getattr(args, "operation_cost_exception_json", None)
+                    else None
+                )
                 manifest, metrics = write_gcs_native_sparse_revision(
                     fs=fs,
                     staging_prefix=_gcs_key(args.staging_gcs_prefix),
@@ -251,7 +281,12 @@ def main() -> int:
                     source_row_end=args.row_end,
                     schema_fingerprint=args.schema_fingerprint,
                     ingestion_run_id=args.ingestion_run_id,
+                    launch_context={
+                        "task_id": args.launch_task_id,
+                        "reviewed_by": args.operation_cost_reviewed_by,
+                    },
                     cache_dir=args.cache_dir,
+                    forecast_logical_blocks=args.forecast_logical_blocks,
                     candidate_metadata=candidate_metadata,
                     cache_cap_bytes=int(args.cache_cap_gib * 1024**3),
                     max_rss_bytes=int(args.max_rss_gib * 1024**3),
@@ -260,6 +295,10 @@ def main() -> int:
                     block_size_exception=block_size_exception,
                     min_rows=args.min_rows,
                     max_rows=args.max_rows,
+                    target_object_bytes=int(
+                        getattr(args, "target_object_mib", 64) * 1024**2
+                    ),
+                    operation_cost_exception=operation_cost_exception,
                 )
         result: dict[str, Any] = {
             "manifest": manifest,
