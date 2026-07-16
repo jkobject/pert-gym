@@ -523,6 +523,16 @@ def map_obs(source: pd.DataFrame, organism: str) -> pd.DataFrame:
     return obs
 
 
+def dataset_recap() -> dict[str, object]:
+    """Return the canonical dataset-level metadata completeness recap."""
+    return {
+        "dataset_id": ACTIVE_CONFIG["source"]["dataset_id"],
+        "metadata_completeness_findings": ACTIVE_CONFIG.get(
+            "metadata_completeness_findings", []
+        ),
+    }
+
+
 def map_var(source: pd.DataFrame, organism: str) -> tuple[pd.DataFrame, str]:
     ids = [str(value) for value in source.index]
     if len(ids) != N_VARS or source.index.isna().any() or not source.index.is_unique:
@@ -956,6 +966,7 @@ def _execute_authorized_contract(
             "rejection_reason": "backed CSR reuse transfers fewer X bytes and avoids consuming the VM root disk's narrow 50 GiB safety margin",
         },
         "semantics": semantics,
+        "dataset_recap": dataset_recap(),
         "var": {"n_vars": len(var), "ordered_var_identity_sha256": ordered_var_sha, "namespace": "Ensembl Gene ID", "unique": var.index.is_unique, "nulls": int(var.index.isna().sum())},
         "resources": {"mem_available_bytes": mem_available(), "estimated_rss_bytes": estimated_rss_bytes, "max_rss_bytes": MAX_RSS},
         "accepted_components": live_ledger,
@@ -1170,6 +1181,7 @@ def _execute_authorized_contract(
                 },
                 "links": {"obs_to_X": {"from": f"gs://{obs_key}", "to": f"gs://{x_key}"}, "X_to_var": {"from": f"gs://{x_key}", "to": f"gs://{var_key}"}},
                 "preflight": preflight,
+                "dataset_recap": dataset_recap(),
                 "duplicate_probe": duplicate,
                 "verification": verification,
                 "terminal": terminal,

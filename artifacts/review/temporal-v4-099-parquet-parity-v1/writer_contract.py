@@ -71,6 +71,14 @@ _SOURCE_KEYS = {
 _HEAD_KEYS = {"status", "final_url", "content_length", "etag", "last_modified", "version_id"}
 _API_KEYS = {"public", "tombstone", "is_primary_data", "organism", "assays"}
 _OBS_KEYS = {"mapper_version", "required_non_null", "predicates", "assignments", "semantic_evidence"}
+_METADATA_COMPLETENESS_FINDING_KEYS = {
+    "field",
+    "missing_count",
+    "denominator",
+    "evidence_searched",
+    "resolution",
+    "publication_blocking",
+}
 _ORDERED_VAR_KEYS = {
     "identity_sha256",
     "organism_ontology_id",
@@ -170,7 +178,8 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "organism": "4ac6e019aa2207b1bbe041031c02191143ed61de9f357eb790708ded9de52145",
         "assays": "8051c05ee8991d6476c5b9526dac01661cd5d6599d4eef55cbc191023696638a",
         "ordered_var": "6e24c720e545edd8d21246fb3976fb89b97e11af64be3bc76600899faa3d7de8",
-        "obs": "9b51b2a7a19d58a3d818ff72d4c545c16bbdb86db3ccec1ab09bf242b80359d9",
+        "obs": "7e6e1bc0a4615da467b3d4e1bf3a7311b586aa37779cd94295357bd7aff4276d",
+        "metadata_completeness_findings": "93955ffc7806fa76de547e6f10390b0f748ef3999d063c1d28f674f4bacbc84b",
         "accepted_components": "b670b692eb51e511baab82cf947fafbc81dd2b9327126c6bc72dcf2ad0b97fa2",
         "execution": "047a2c6b9dedd3c4aff5c738cf3e2a9fb249e4f9c0fab3c066a8de5a4c7f9d4a",
         "storage": "7c870891e7c79024b91c2b590dd2638a13884d5a06ee7e79e50a17c65507565d",
@@ -476,6 +485,8 @@ def _validate_config(
     )
     live_ledger_revision = requires_live_ledger(config)
     config_keys = _CONFIG_KEYS | ({"catalogue_record"} if live_ledger_revision else set())
+    if "metadata_completeness_findings" in config:
+        config_keys.add("metadata_completeness_findings")
     _exact_keys(config, config_keys, "config")
     if config["config_version"] != CONFIG_VERSION or config["protocol"] != PROTOCOL:
         raise ValueError("unsupported config version or protocol")
@@ -543,6 +554,38 @@ def _validate_config(
     _positive_int(shape[1], "shape[1]")
     if not str(config["logical_key"]).startswith("pert-gym/logical/temporal/"):
         raise ValueError("logical_key must be an explicit temporal logical key")
+
+    findings = config.get("metadata_completeness_findings", [])
+    if not isinstance(findings, list):
+        raise ValueError("metadata_completeness_findings must be a list")
+    for index, finding in enumerate(findings):
+        label = f"metadata_completeness_findings[{index}]"
+        finding = _exact_keys(
+            finding, _METADATA_COMPLETENESS_FINDING_KEYS, label
+        )
+        _nonempty(finding["field"], f"{label}.field")
+        missing_count = _positive_int(
+            finding["missing_count"], f"{label}.missing_count"
+        )
+        denominator = _positive_int(
+            finding["denominator"], f"{label}.denominator"
+        )
+        if denominator != shape[0]:
+            raise ValueError(f"{label}.denominator must equal shape[0] dataset row count")
+        if missing_count > denominator:
+            raise ValueError(f"{label}.missing_count exceeds denominator")
+        evidence = finding["evidence_searched"]
+        if (
+            not isinstance(evidence, list)
+            or not evidence
+            or len(set(evidence)) != len(evidence)
+            or any(not isinstance(item, str) or not item.strip() for item in evidence)
+        ):
+            raise ValueError(f"{label}.evidence_searched must be non-empty and unique")
+        if finding["resolution"] != "source_missing_documented":
+            raise ValueError(f"{label}.resolution is not approved")
+        if finding["publication_blocking"] is not False:
+            raise ValueError(f"{label}.publication_blocking must be false")
 
     obs = _exact_keys(config["obs"], _OBS_KEYS, "obs")
     if obs["mapper_version"] != MAPPER_VERSION:
@@ -695,6 +738,7 @@ def _validate_config(
         "assays": config["api_identity"]["assays"],
         "ordered_var": config["ordered_var"],
         "obs": config["obs"],
+        "metadata_completeness_findings": findings,
         "accepted_components": (
             {
                 "metric": ledger["metric"],
@@ -923,6 +967,12 @@ def preflight_plan(contract: SimpleNamespace) -> dict[str, Any]:
         "source_url": config["source"]["url"],
         "shape": config["shape"],
         "logical_key": config["logical_key"],
+        "dataset_recap": {
+            "dataset_id": config["source"]["dataset_id"],
+            "metadata_completeness_findings": config.get(
+                "metadata_completeness_findings", []
+            ),
+        },
         "accepted_components": {
             "current": config["accepted_components"]["current"],
             "denominator": config["accepted_components"]["denominator"],
