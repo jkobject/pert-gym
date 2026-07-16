@@ -173,6 +173,30 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "storage": "7c870891e7c79024b91c2b590dd2638a13884d5a06ee7e79e50a17c65507565d",
         "forbidden_actions": "fb95b232b7d39710c7fc7d03f921b922190986e5a8149d7b426030455ecca847",
     },
+    "temporal-v4-111": {
+        "url": "6320a41c3901a018adedc2265d23838c57cbb496030a69c74a919edc80f3852a",
+        "api_url": "c06f4c352fc3693e086741909790b35795e727de94d8d08128057172e3b7cf83",
+        "collection_id": "aabf689f26ad8f6ecccd4d0a48713f532be13b40311b42699c4d91a4e393e29d",
+        "collection_version_id": "a5101a1a094b367bbe97ff6fa005312650b6def9e304a34fd5856d6b03fa8e23",
+        "dataset_id": "2c9abc4a954b046d2ca3f4e6c0f033742bffc8d50f0aa99c53078c8e6e380248",
+        "dataset_version_id": "787bc0bead56da6e5d6a4da2b0dc51038c0cde496c80e22596aa5e4a359721c6",
+        "asset_id": "787bc0bead56da6e5d6a4da2b0dc51038c0cde496c80e22596aa5e4a359721c6",
+        "parent_task_id": "e2cb965a1848da8a08a384b9f05d6ea68064682af987866323c0f44dfa8a2754",
+        "catalogue_record": "9fcc504bfd4ccbd96b9344a570e6ae043eae98eb9ac133971241f9f6aa2ade9f",
+        "logical_key": "dd964483fb692fac7e761b4e7dfd900b7c5b30480c73e6a5daf1eb3dba6a3aa0",
+        "task_id": "87edcdbb6a906001884175330c290827806c733b92be6425ec5c764855b6e244",
+        "dataset_config_status": "37b3e8e87620d7677456ce9c6e141224d53138d0434eae66ccd2d3af8c61a80e",
+        "source_head": "245207543432cb5e29f322a931beb2380eda18a134e9c9ce32987c521e0c797d",
+        "shape": "2ce88faf82b02e89b6781d34f7f42112740c194b5f7b39bfa0a894c58dd5520e",
+        "organism": "4ac6e019aa2207b1bbe041031c02191143ed61de9f357eb790708ded9de52145",
+        "assays": "ce8d066cc464d052a79407400c9328cd2960fbc657ccc56dab9d505f5f5dc63e",
+        "ordered_var": "6e24c720e545edd8d21246fb3976fb89b97e11af64be3bc76600899faa3d7de8",
+        "obs": "f8b53a4f9fd9d047340e097959d251dfe9ff5625aa0b3c94d607120bbb37613c",
+        "accepted_components": "b670b692eb51e511baab82cf947fafbc81dd2b9327126c6bc72dcf2ad0b97fa2",
+        "execution": "e2fd27bcd4c0c81d6b501f3eb8ee1308828a1f23a2148d35aedc01854d29a3bc",
+        "storage": "7c870891e7c79024b91c2b590dd2638a13884d5a06ee7e79e50a17c65507565d",
+        "forbidden_actions": "fb95b232b7d39710c7fc7d03f921b922190986e5a8149d7b426030455ecca847",
+    },
 }
 
 
@@ -214,18 +238,28 @@ def _json_sha256(value: Any) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def requires_live_ledger(config: dict[str, Any]) -> bool:
+    """Bind the live gate to the accepted-components metric, never a row list."""
+    ledger = config.get("accepted_components")
+    return isinstance(ledger, dict) and ledger.get("metric") == "accepted_components"
+
+
 def _validate_config(config: dict[str, Any]) -> None:
     revision_prefix = (
         config.get("revision", {}).get("prefix")
         if isinstance(config, dict) and isinstance(config.get("revision"), dict)
         else None
     )
-    live_ledger_revision = revision_prefix in {"temporal-v4-007", "temporal-v4-055"}
+    live_ledger_revision = requires_live_ledger(config)
     config_keys = _CONFIG_KEYS | ({"catalogue_record"} if live_ledger_revision else set())
     _exact_keys(config, config_keys, "config")
     if config["config_version"] != CONFIG_VERSION or config["protocol"] != PROTOCOL:
         raise ValueError("unsupported config version or protocol")
     _nonempty(config["task_id"], "task_id")
+    if live_ledger_revision and re.fullmatch(
+        r"[a-z0-9][a-z0-9_]*", _nonempty(config["catalogue_record"], "catalogue_record")
+    ) is None:
+        raise ValueError("catalogue_record is not a safe exact family identity")
     if config["dataset_config_status"] not in {"reviewed-executable", "prewrite-fixture"}:
         raise ValueError("invalid dataset_config_status")
 
@@ -250,9 +284,7 @@ def _validate_config(config: dict[str, Any]) -> None:
     _positive_int(head["content_length"], "source_head.content_length")
     for key in ("etag", "last_modified"):
         _nonempty(head[key], f"source_head.{key}")
-    if live_ledger_revision:
-        _nonempty(head["version_id"], "source_head.version_id")
-    elif head["version_id"] is not None:
+    if head["version_id"] is not None:
         _nonempty(head["version_id"], "source_head.version_id")
 
     api = _exact_keys(config["api_identity"], _API_KEYS, "api_identity")
@@ -386,7 +418,6 @@ def _validate_config(config: dict[str, Any]) -> None:
         "billing_project": "jkobject-1549353370965",
         "lamin_instance": "laminlabs/pertdata",
         "lamin_branch": "jkobject",
-        "single_writer_lease": "global-plus-legacy-exclusive",
         "timeout_seconds": 7200,
         "max_rss_bytes": 24 * 1024**3,
         "min_available_bytes": 4 * 1024**3,
@@ -398,6 +429,11 @@ def _validate_config(config: dict[str, Any]) -> None:
     for key, expected in fixed.items():
         if execution[key] != expected:
             raise ValueError(f"execution.{key} conflicts with approved bound {expected!r}")
+    if execution["single_writer_lease"] not in {
+        "global-plus-legacy-exclusive",
+        "global-plus-family-plus-legacy-exclusive",
+    }:
+        raise ValueError("execution.single_writer_lease is not an approved exclusive lease")
     if live_ledger_revision and execution["task_timeout_seconds"] != 10800:
         raise ValueError("execution.task_timeout_seconds conflicts with approved bound 10800")
     _nonempty(execution["output_directory"], "execution.output_directory")
@@ -496,10 +532,7 @@ def validate_bound_contract(
 ) -> SimpleNamespace:
     """Validate all data and hash bindings without performing any I/O."""
     _validate_config(config)
-    live_ledger_revision = config["revision"]["prefix"] in {
-        "temporal-v4-007",
-        "temporal-v4-055",
-    }
+    live_ledger_revision = requires_live_ledger(config)
     authorization_keys = (
         _LIVE_LEDGER_AUTHORIZATION_KEYS if live_ledger_revision else _AUTHORIZATION_KEYS
     )

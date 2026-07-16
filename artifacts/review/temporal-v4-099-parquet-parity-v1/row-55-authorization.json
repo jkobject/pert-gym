@@ -10,6 +10,6 @@
   "parquet_frame_parity_sha256": "f2827eca688dd2581a6ede51be77c4ae0b9327bacc66116e8ec1b1cc5420e976",
   "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
   "review_scope": "exact-head-independent-review-before-any-execution",
-  "writer_contract_sha256": "b4f77c06e6d2c62c39f6a07932d9cb9e5e1cc892ce56048467a380b55aefe2db",
-  "writer_sha256": "9f0357931bfc01c7e5cabf066dba9d6b2102fc109f07f6a42835d1ac3e701959"
+  "writer_contract_sha256": "15cc561235f58ae8c728eea639d8a5ff6d82f8589524ec96663a7634d7723099",
+  "writer_sha256": "9077a7396ead7c82261a7a6c361844da6c5784f93cb126435eb67dffd3784166"
 }

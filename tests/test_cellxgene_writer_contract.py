@@ -24,6 +24,8 @@ ROW_7_CONFIG = REVIEW / "row-7-config.json"
 ROW_7_AUTHORIZATION = REVIEW / "row-7-authorization.json"
 ROW_55_CONFIG = REVIEW / "row-55-config.json"
 ROW_55_AUTHORIZATION = REVIEW / "row-55-authorization.json"
+ROW_111_CONFIG = REVIEW / "row-111-config.json"
+ROW_111_AUTHORIZATION = REVIEW / "row-111-authorization.json"
 WRITER = REVIEW / "write_component.py"
 HELPER = REVIEW / "parquet_frame_parity.py"
 LEDGER_HELPER = REVIEW / "live_ledger_control_plane.py"
@@ -258,6 +260,348 @@ def test_row_55_exact_mouse_contract_is_intrinsically_bound_and_authorized() -> 
     }
     assert authorization["live_ledger_control_plane_sha256"] == sha256(LEDGER_HELPER)
     assert validated.config == config
+
+
+def test_row_111_exact_contract_is_intrinsically_bound_and_authorized() -> None:
+    contract = load_contract_module()
+    config = load_json(ROW_111_CONFIG)
+    authorization = load_json(ROW_111_AUTHORIZATION)
+    validated = contract.load_bound_contract(
+        ROW_111_CONFIG,
+        ROW_111_AUTHORIZATION,
+        writer_path=WRITER,
+        helper_path=HELPER,
+        require_execution=True,
+    )
+
+    assert config["catalogue_record"] == (
+        "temporal_v4_111_transcriptomic_analysis_of_air_liquid_interface_culture_"
+        "in_human_lung_organoids"
+    )
+    assert config["task_id"] == "t_71c1be94"
+    assert config["logical_key"] == (
+        "pert-gym/logical/temporal/transcriptomic_analysis_of_air_liquid_interface_"
+        "culture_in_human_lung_organoids"
+    )
+    assert config["revision"]["prefix"] == "temporal-v4-111"
+    assert config["shape"] == [15806, 25229]
+    assert config["accepted_components"] == {
+        "metric": "accepted_components",
+        "current": 4,
+        "denominator": 153,
+        "credit": 0,
+    }
+    assert config["api_identity"] == {
+        "assays": [{"label": "10x 3' v3", "ontology_term_id": "EFO:0009922"}],
+        "is_primary_data": True,
+        "organism": {
+            "label": "Homo sapiens",
+            "ontology_term_id": "NCBITaxon:9606",
+        },
+        "public": True,
+        "tombstone": False,
+    }
+    assert config["obs"]["predicates"] == [
+        {
+            "column": "development_stage",
+            "op": "domain_equals",
+            "values": ["late adult stage", "middle aged stage"],
+        },
+        {
+            "column": "development_stage_ontology_term_id",
+            "op": "domain_equals",
+            "values": ["HsapDv:0000227", "HsapDv:0000267"],
+        },
+    ]
+    assignment_targets = {
+        assignment["target"] for assignment in config["obs"]["assignments"]
+    }
+    assert assignment_targets.isdisjoint(
+        {"timepoint", "day", "treatment", "perturbation", "dose", "is_control"}
+    )
+    assert authorization["config_sha256"] == sha256(ROW_111_CONFIG)
+    assert authorization["writer_sha256"] == sha256(WRITER)
+    assert authorization["writer_contract_sha256"] == sha256(CONTRACT_PATH)
+    assert authorization["parquet_frame_parity_sha256"] == sha256(HELPER)
+    assert authorization["live_ledger_control_plane_sha256"] == sha256(LEDGER_HELPER)
+    assert validated.config == config
+
+
+@pytest.mark.parametrize(
+    ("mutation", "match"),
+    [
+        (lambda c, a: c.__setitem__("catalogue_record", "../row-111"), "catalogue_record"),
+        (lambda c, a: c.__setitem__("task_id", "t_wrong"), "task identity|task_id"),
+        (lambda c, a: c["revision"].__setitem__("prefix", "temporal-v4-110"), "output/task identity|revision"),
+        (lambda c, a: c.__setitem__("logical_key", "pert-gym/logical/temporal/wrong"), "logical_key conflicts"),
+        (lambda c, a: c.__setitem__("shape", [1, 25229]), "shape"),
+        (lambda c, a: c["source"].__setitem__("dataset_id", "00000000-0000-0000-0000-000000000000"), "dataset_id"),
+        (
+            lambda c, a: (
+                c["accepted_components"].pop("metric"),
+                c.pop("catalogue_record"),
+                c["ordered_var"].__setitem__("identity_sha256", "f" * 64),
+                c["execution"].pop("task_timeout_seconds"),
+            ),
+            "catalogue_record|authorization|accepted_components",
+        ),
+        (lambda c, a: a.__setitem__("live_ledger_control_plane_sha256", "0" * 64), "live-ledger helper SHA-256"),
+    ],
+)
+def test_row_111_rebinding_fails_before_external_io(
+    monkeypatch, tmp_path: Path, mutation, match: str
+) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_111_CONFIG)
+    authorization = load_json(ROW_111_AUTHORIZATION)
+    mutation(config, authorization)
+    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+    )
+
+    with pytest.raises((RuntimeError, ValueError), match=match):
+        writer.main()
+
+    assert calls == []
+
+
+def test_live_ledger_semantics_follow_exact_bound_metric_not_row_allowlist() -> None:
+    contract = load_contract_module()
+    config = load_json(ROW_111_CONFIG)
+    authorization = load_json(ROW_111_AUTHORIZATION)
+
+    validated = validate(config, authorization)
+
+    assert contract.requires_live_ledger(validated.config) is True
+    assert contract.requires_live_ledger(load_json(ROW_99_CONFIG)) is False
+
+
+def test_row_111_family_lease_is_deterministic_confined_and_collision_resistant(
+    tmp_path: Path,
+) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_111_CONFIG)
+    root = Path("/var/lock/pert-gym")
+
+    first = writer.writer_family_lease_path(config, lock_root=root)
+    second = writer.writer_family_lease_path(config, lock_root=root)
+    alias = copy.deepcopy(config)
+    alias["catalogue_record"] = config["catalogue_record"] + "_alias"
+
+    assert first == second
+    assert first.parent == (root / "cellxgene-families").resolve()
+    assert first.suffix == ".lock"
+    assert len(first.stem.rsplit("-", maxsplit=1)[-1]) == 64
+    assert writer.writer_family_lease_path(alias, lock_root=root) != first
+    static_config = load_json(ROW_99_CONFIG)
+    static_path = writer.writer_family_lease_path(static_config, lock_root=root)
+    assert static_path.parent == first.parent
+    assert static_path != first
+
+    missing = copy.deepcopy(static_config)
+    missing.pop("logical_key")
+    with pytest.raises(RuntimeError, match="family lease identity"):
+        writer.writer_family_lease_path(missing, lock_root=root)
+    for identity in ("", "../row-111", "row/111", "row\\111", ".", ".."):
+        malformed = copy.deepcopy(config)
+        malformed["catalogue_record"] = identity
+        with pytest.raises(RuntimeError, match="family lease identity"):
+            writer.writer_family_lease_path(malformed, lock_root=root)
+
+    outside = tmp_path.parent / f"{tmp_path.name}-outside"
+    outside.mkdir()
+    (tmp_path / "cellxgene-families").symlink_to(
+        outside, target_is_directory=True
+    )
+    with pytest.raises(RuntimeError, match="escaped|confined"):
+        writer.writer_family_lease_path(config, lock_root=tmp_path)
+
+
+def test_row_111_ledger_probe_uses_bound_prefix_under_global_and_family_leases(
+    monkeypatch, tmp_path: Path, capsys
+) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_111_CONFIG)
+    authorization = load_json(ROW_111_AUTHORIZATION)
+    authorization["writer_sha256"] = sha256(WRITER)
+    authorization["writer_contract_sha256"] = sha256(CONTRACT_PATH)
+    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    events: list[str] = []
+
+    @contextmanager
+    def lease(path, metadata, *args, **kwargs):
+        events.append(f"lease:{path.name}")
+        assert metadata["run_id"] == "t_71c1be94-temporal-v4-111"
+        yield
+
+    live = {
+        "metric": "accepted_components",
+        "current": 4,
+        "denominator": 153,
+        "task_id": "t_664e9dc0",
+    }
+    monkeypatch.setattr(writer, "lamin_writer_lock", lease)
+    monkeypatch.setattr(writer, "vm_global_lamin_writer_lock_path", lambda: tmp_path / "global.lock")
+    monkeypatch.setattr(writer, "legacy_lamin_writer_lock_paths", lambda: ())
+    monkeypatch.setattr(writer, "read_live_accepted_components_ledger", lambda: events.append("ledger") or live)
+    monkeypatch.setattr(writer.socket, "gethostname", lambda: "pert-gym-worker-eu")
+    monkeypatch.setattr(writer, "mem_available", lambda: 4 * 1024**3)
+    external_calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path), "--ledger-probe-only"],
+    )
+
+    assert writer.main() == 0
+    assert json.loads(capsys.readouterr().out) == live
+    assert events[0] == "lease:global.lock"
+    assert events[1].startswith("lease:temporal_v4_111_")
+    assert events[1].endswith(".lock")
+    assert events[2] == "ledger"
+    assert external_calls == []
+
+
+def test_row_111_write_path_uses_global_and_family_leases(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer = load_writer_module()
+    config = load_json(ROW_111_CONFIG)
+    authorization = load_json(ROW_111_AUTHORIZATION)
+    authorization["writer_sha256"] = sha256(WRITER)
+    authorization["writer_contract_sha256"] = sha256(CONTRACT_PATH)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
+    events: list[object] = []
+
+    @contextmanager
+    def lease(path, _metadata, *args, **kwargs):
+        events.append(f"lease-enter:{path.name}")
+        try:
+            yield
+        finally:
+            events.append(f"lease-exit:{path.name}")
+
+    live = {
+        "metric": "accepted_components",
+        "current": 4,
+        "denominator": 153,
+        "task_id": "t_664e9dc0",
+    }
+    monkeypatch.setattr(writer, "lamin_writer_lock", lease)
+    monkeypatch.setattr(
+        writer, "vm_global_lamin_writer_lock_path", lambda: tmp_path / "global.lock"
+    )
+    monkeypatch.setattr(writer, "legacy_lamin_writer_lock_paths", lambda: ())
+    monkeypatch.setattr(
+        writer, "read_live_accepted_components_ledger", lambda: events.append("ledger") or live
+    )
+    monkeypatch.setattr(
+        writer,
+        "_execute_authorized_contract",
+        lambda *args, **kwargs: events.append(
+            ("execute", kwargs["lease_acquired"], kwargs["live_ledger"])
+        )
+        or 0,
+    )
+    monkeypatch.setattr(writer.socket, "gethostname", lambda: "pert-gym-worker-eu")
+    monkeypatch.setattr(writer, "mem_available", lambda: 4 * 1024**3)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
+    )
+
+    assert writer.main() == 0
+    assert events[0] == "lease-enter:global.lock"
+    assert str(events[1]).startswith("lease-enter:temporal_v4_111_")
+    assert events[2] == "ledger"
+    execute_event = events[3]
+    assert isinstance(execute_event, tuple)
+    assert execute_event[0] == "execute"
+    assert execute_event[2] == live
+    assert str(events[4]).startswith("lease-exit:temporal_v4_111_")
+    assert events[5] == "lease-exit:global.lock"
+
+
+def test_row_111_concurrent_family_lease_fails_closed(tmp_path: Path, monkeypatch) -> None:
+    writer = load_writer_module()
+    writer.ACTIVE_CONFIG = load_json(ROW_111_CONFIG)
+    global_path = tmp_path / "global.lock"
+    family_path = writer.writer_family_lease_path(
+        writer.ACTIVE_CONFIG, lock_root=tmp_path
+    )
+    metadata = {
+        "pid": 1,
+        "run_id": "t_71c1be94-temporal-v4-111",
+        "host": "pert-gym-worker-eu",
+        "project": "jkobject-1549353370965",
+        "zone": "europe-west1-b",
+        "branch": "jkobject",
+        "started_at": 1.0,
+    }
+    monkeypatch.setattr(writer, "vm_global_lamin_writer_lock_path", lambda: global_path)
+    monkeypatch.setattr(writer, "legacy_lamin_writer_lock_paths", lambda: ())
+
+    with writer.lamin_writer_lock(family_path, metadata):
+        with pytest.raises(RuntimeError, match="another Lamin writer"):
+            with writer.acquired_writer_leases(metadata):
+                pytest.fail("concurrent family lease was not rejected")
+
+
+def test_static_row_99_acquires_global_and_legacy_leases_without_family_identity(
+    tmp_path: Path, monkeypatch
+) -> None:
+    writer = load_writer_module()
+    writer.ACTIVE_CONFIG = load_json(ROW_99_CONFIG)
+    global_path = tmp_path / "global.lock"
+    legacy_path = tmp_path / "legacy.lock"
+    metadata = {
+        "pid": 1,
+        "run_id": "t_be513f9a-temporal-v4-099",
+        "host": "pert-gym-worker-eu",
+        "project": "jkobject-1549353370965",
+        "zone": "europe-west1-b",
+        "branch": "jkobject",
+        "started_at": 1.0,
+    }
+    events: list[str] = []
+
+    @contextmanager
+    def lease(path, _metadata, *args, **kwargs):
+        events.append(f"enter:{path.name}")
+        try:
+            yield
+        finally:
+            events.append(f"exit:{path.name}")
+
+    monkeypatch.setattr(writer, "lamin_writer_lock", lease)
+    monkeypatch.setattr(writer, "vm_global_lamin_writer_lock_path", lambda: global_path)
+    monkeypatch.setattr(
+        writer, "legacy_lamin_writer_lock_paths", lambda: (legacy_path,)
+    )
+
+    with writer.acquired_writer_leases(metadata):
+        events.append("acquired")
+
+    assert events == [
+        "enter:global.lock",
+        "enter:legacy.lock",
+        "acquired",
+        "exit:legacy.lock",
+        "exit:global.lock",
+    ]
 
 
 @pytest.mark.parametrize(
@@ -719,8 +1063,13 @@ def configure_row_7_lease_boundary(monkeypatch, tmp_path: Path):
     monkeypatch.setattr(
         writer, "mem_available", lambda: config["execution"]["min_available_bytes"]
     )
-    monkeypatch.setattr(writer, "vm_global_lamin_writer_lock_path", lambda: Path("global"))
-    monkeypatch.setattr(writer, "legacy_lamin_writer_lock_paths", lambda: [Path("family")])
+    monkeypatch.setattr(writer, "vm_global_lamin_writer_lock_path", lambda: Path("/global"))
+    monkeypatch.setattr(
+        writer,
+        "writer_family_lease_path",
+        lambda config, lock_root: Path("/family"),
+    )
+    monkeypatch.setattr(writer, "legacy_lamin_writer_lock_paths", lambda: [Path("/legacy")])
     monkeypatch.setattr(
         sys,
         "argv",
@@ -761,7 +1110,9 @@ def test_row_7_live_ledger_is_observed_under_both_leases_before_external_calls(
     with pytest.raises(RuntimeError, match="next external boundary"):
         writer.main()
 
-    assert calls == ["lease:global", "lease:family", "live-ledger:4", "source-api"]
+    assert calls == [
+        "lease:/global", "lease:/family", "lease:/legacy", "live-ledger:4", "source-api"
+    ]
 
 
 def test_row_7_live_ledger_failure_releases_leases_before_all_external_boundaries(
@@ -791,10 +1142,12 @@ def test_row_7_live_ledger_failure_releases_leases_before_all_external_boundarie
 
     assert external_calls == []
     assert lease_events == [
-        "enter:global",
-        "enter:family",
-        "exit:family",
-        "exit:global",
+        "enter:/global",
+        "enter:/family",
+        "enter:/legacy",
+        "exit:/legacy",
+        "exit:/family",
+        "exit:/global",
     ]
 
 
@@ -865,10 +1218,12 @@ def test_row_7_missing_tunnel_releases_leases_before_external_boundaries(
 
     assert external_calls == []
     assert lease_events == [
-        "enter:global",
-        "enter:family",
-        "exit:family",
-        "exit:global",
+        "enter:/global",
+        "enter:/family",
+        "enter:/legacy",
+        "exit:/legacy",
+        "exit:/family",
+        "exit:/global",
     ]
 
 
@@ -1299,10 +1654,12 @@ def test_row_7_exact_observed_source_version_reaches_local_output_only_after_hea
 
     assert calls == ["mkdir"]
     assert lease_events == [
-        "enter:global",
-        "enter:family",
-        "exit:family",
-        "exit:global",
+        "enter:/global",
+        "enter:/family",
+        "enter:/legacy",
+        "exit:/legacy",
+        "exit:/family",
+        "exit:/global",
     ]
 
 
@@ -1331,10 +1688,12 @@ def test_row_7_absent_null_or_wrong_observed_source_version_releases_leases_befo
 
     assert calls == []
     assert lease_events == [
-        "enter:global",
-        "enter:family",
-        "exit:family",
-        "exit:global",
+        "enter:/global",
+        "enter:/family",
+        "enter:/legacy",
+        "exit:/legacy",
+        "exit:/family",
+        "exit:/global",
     ]
 
 
