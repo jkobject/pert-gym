@@ -770,19 +770,55 @@ def writer_family_lease_path(
     return candidate
 
 
+def require_reviewed_manifest_paths(
+    manifest_path: Path, digest_path: Path
+) -> tuple[Path, Path]:
+    """Reject caller-supplied self-signed manifests outside the reviewed tree."""
+    expected_manifest = Path(__file__).with_name(
+        "writer-authorization-manifest.json"
+    ).resolve()
+    expected_digest = Path(__file__).with_name(
+        "writer-authorization-manifest.sha256"
+    ).resolve()
+    observed = (manifest_path.resolve(), digest_path.resolve())
+    if observed != (expected_manifest, expected_digest):
+        raise RuntimeError("writer requires the reviewed in-tree authorization manifest")
+    return observed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
-    parser.add_argument("--authorization", type=Path, required=True)
+    authorization = parser.add_mutually_exclusive_group(required=True)
+    authorization.add_argument("--authorization-manifest", type=Path)
+    authorization.add_argument("--authorization", type=Path)
+    parser.add_argument("--authorization-manifest-sha256", type=Path)
     parser.add_argument("--ledger-probe-only", action="store_true")
     args = parser.parse_args()
-    contract = writer_contract.load_bound_contract(
-        args.config,
-        args.authorization,
-        writer_path=Path(__file__),
-        helper_path=Path(__file__).with_name("parquet_frame_parity.py"),
-        require_execution=False,
-    )
+    if args.authorization_manifest is not None:
+        if args.authorization_manifest_sha256 is None:
+            raise RuntimeError("authorization manifest requires its detached SHA-256")
+        manifest_path, digest_path = require_reviewed_manifest_paths(
+            args.authorization_manifest, args.authorization_manifest_sha256
+        )
+        contract = writer_contract.load_manifest_contract(
+            args.config,
+            manifest_path,
+            digest_path,
+            writer_path=Path(__file__),
+            helper_path=Path(__file__).with_name("parquet_frame_parity.py"),
+            require_execution=False,
+        )
+    else:
+        if args.authorization_manifest_sha256 is not None:
+            raise RuntimeError("detached manifest SHA-256 requires an authorization manifest")
+        contract = writer_contract.load_bound_contract(
+            args.config,
+            args.authorization,
+            writer_path=Path(__file__),
+            helper_path=Path(__file__).with_name("parquet_frame_parity.py"),
+            require_execution=False,
+        )
     writer_contract.require_execution_authorized(contract)
     apply_contract(contract)
     started = time.monotonic()

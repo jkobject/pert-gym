@@ -1,0 +1,550 @@
+{
+  "batch_review": {
+    "reviewer": "github-protected-main",
+    "scope": "migration-of-exact-reviewed-row-authorizations-without-new-write-authority",
+    "status": "completed",
+    "task_id": "github-prs-84-86-88"
+  },
+  "entries": [
+    {
+      "assays": [
+        {
+          "label": "10x 5' v1",
+          "ontology_term_id": "EFO:0011025"
+        }
+      ],
+      "config_identity": {
+        "accepted_components": {
+          "credit": 0,
+          "denominator": 153,
+          "metric": "accepted_components"
+        },
+        "dataset_config_status": "reviewed-executable",
+        "execution": {
+          "billing_project": "jkobject-1549353370965",
+          "heartbeat_denominator": 153,
+          "heartbeat_interval_seconds": 50,
+          "heartbeat_metric": "accepted_components",
+          "host": "pert-gym-worker-eu",
+          "lamin_branch": "jkobject",
+          "lamin_instance": "laminlabs/pertdata",
+          "max_internal_block_rows": 4096,
+          "max_rss_bytes": 25769803776,
+          "min_available_bytes": 4294967296,
+          "output_directory": "/tmp/temporal-v4-007-t_5a683225",
+          "single_writer_lease": "global-plus-legacy-exclusive",
+          "task_timeout_seconds": 10800,
+          "timeout_seconds": 7200,
+          "zone": "europe-west1-b"
+        },
+        "forbidden_actions": [
+          "cleanup",
+          "deletion",
+          "promotion",
+          "collection_mutation",
+          "lamin_main",
+          "vm_lifecycle_change"
+        ],
+        "obs": {
+          "assignments": [
+            {
+              "op": "literal",
+              "target": "dataset",
+              "value": "pert-gym/logical/temporal/a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s"
+            },
+            {
+              "op": "index",
+              "target": "cell_id"
+            },
+            {
+              "op": "literal",
+              "target": "organism",
+              "value": "Homo sapiens"
+            },
+            {
+              "op": "literal",
+              "target": "technology",
+              "value": "10x 5' v1"
+            },
+            {
+              "op": "literal",
+              "target": "modality",
+              "value": "scRNA-seq"
+            },
+            {
+              "op": "copy",
+              "source": "development_stage",
+              "target": "age"
+            },
+            {
+              "op": "literal",
+              "target": "perturbation",
+              "value": "none"
+            },
+            {
+              "op": "literal",
+              "target": "perturbation_type",
+              "value": "none"
+            },
+            {
+              "op": "literal",
+              "target": "is_control",
+              "value": true
+            }
+          ],
+          "mapper_version": "declarative-obs-mapper/v1",
+          "predicates": [
+            {
+              "column": "development_stage",
+              "op": "all_not_in",
+              "values": [
+                "",
+                "na",
+                "none",
+                "not applicable",
+                "not_applicable",
+                "unknown",
+                "unreported"
+              ]
+            },
+            {
+              "column": "development_stage_ontology_term_id",
+              "op": "all_not_in",
+              "values": [
+                "",
+                "na",
+                "none",
+                "unknown",
+                "unreported"
+              ]
+            }
+          ],
+          "required_non_null": [
+            "development_stage",
+            "development_stage_ontology_term_id",
+            "assay",
+            "assay_ontology_term_id"
+          ],
+          "semantic_evidence": {
+            "basis": "Fail-closed runtime preflight requires every source row to carry a non-null, non-placeholder development_stage and development_stage_ontology_term_id before any candidate write; development_stage is preserved as canonical age.",
+            "verdict": "accepted"
+          }
+        },
+        "ordered_var": {
+          "canonical_feature_namespace": "Ensembl Gene ID",
+          "feature_reference_column": "feature_reference",
+          "identity_sha256": "runtime-computed-before-candidate-write",
+          "normalization_version": "source-string/v1",
+          "organism_ontology_id": "NCBITaxon:9606"
+        },
+        "storage": {
+          "gcs_root": "scperturb/pert-gym/staging",
+          "manifest_last": true,
+          "per_block_var_count": 0,
+          "shared_var_count": 1,
+          "x_logical_object_count": 1
+        }
+      },
+      "config_sha256": "ad9c0e2855c62f2354f4889d897367ad4dcc02352336091b821b8f803a0994c9",
+      "execution_authorized": true,
+      "family_lease": "pert-gym/logical/temporal/a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s",
+      "http_identity": {
+        "content_length": 181024331,
+        "etag": "\"f5d444de645d745875bb1cee2113f20a-22\"",
+        "final_url": "https://datasets.cellxgene.cziscience.com/89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8.h5ad",
+        "last_modified": "Wed, 10 Jun 2026 16:14:51 GMT",
+        "status": 200,
+        "version_id": "YipoWdKvKlXR9hHaku1ta0iAGqNr8w_m"
+      },
+      "missingness_policy": {
+        "allowed_unknown_fields": [],
+        "invent_values": false,
+        "mode": "explicit-only/v1"
+      },
+      "record_id": "temporal_v4_007_a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s",
+      "review_provenance": {
+        "correction_task_id": "t_5a683225",
+        "parent_task_id": "t_536f36cd",
+        "reviewed_at": "2026-07-16T00:00:00Z",
+        "reviewer": "github-protected-main-prs-84-85",
+        "scope": "exact-head-independent-review-before-any-execution",
+        "status": "completed"
+      },
+      "revision_prefix": "temporal-v4-007",
+      "shape": [
+        9619,
+        35461
+      ],
+      "source": {
+        "api_url": "https://api.cellxgene.cziscience.com/curation/v1/collections/92db8a7e-8761-4317-873f-15606c016ce5",
+        "asset_id": "89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8",
+        "collection_id": "92db8a7e-8761-4317-873f-15606c016ce5",
+        "collection_version_id": "9526e224-ded6-40f2-8216-8d204cb7da90",
+        "dataset_id": "781cc817-3fd0-487c-a55a-b47b2786a05d",
+        "dataset_version_id": "89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8",
+        "url": "https://datasets.cellxgene.cziscience.com/89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8.h5ad"
+      },
+      "source_packet_sha256": "ad9c0e2855c62f2354f4889d897367ad4dcc02352336091b821b8f803a0994c9",
+      "species": {
+        "label": "Homo sapiens",
+        "ontology_term_id": "NCBITaxon:9606"
+      },
+      "task_id": "t_5a683225",
+      "writer_contract_sha256": "bdd25923c8f6cd2bf1a0fc47df55da383dd1621e556fa021c7d9c9b4e2b879bb"
+    },
+    {
+      "assays": [
+        {
+          "label": "10x 3' v3",
+          "ontology_term_id": "EFO:0009922"
+        }
+      ],
+      "config_identity": {
+        "accepted_components": {
+          "credit": 0,
+          "denominator": 153,
+          "metric": "accepted_components"
+        },
+        "dataset_config_status": "reviewed-executable",
+        "execution": {
+          "billing_project": "jkobject-1549353370965",
+          "heartbeat_denominator": 153,
+          "heartbeat_interval_seconds": 50,
+          "heartbeat_metric": "accepted_components",
+          "host": "pert-gym-worker-eu",
+          "lamin_branch": "jkobject",
+          "lamin_instance": "laminlabs/pertdata",
+          "max_internal_block_rows": 4096,
+          "max_rss_bytes": 25769803776,
+          "min_available_bytes": 4294967296,
+          "output_directory": "/tmp/temporal-v4-055-t_5c375e11",
+          "single_writer_lease": "global-plus-legacy-exclusive",
+          "task_timeout_seconds": 10800,
+          "timeout_seconds": 7200,
+          "zone": "europe-west1-b"
+        },
+        "forbidden_actions": [
+          "cleanup",
+          "deletion",
+          "promotion",
+          "collection_mutation",
+          "lamin_main",
+          "vm_lifecycle_change"
+        ],
+        "obs": {
+          "assignments": [
+            {
+              "op": "literal",
+              "target": "dataset",
+              "value": "pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior"
+            },
+            {
+              "op": "index",
+              "target": "cell_id"
+            },
+            {
+              "op": "literal",
+              "target": "organism",
+              "value": "Mus musculus"
+            },
+            {
+              "op": "literal",
+              "target": "technology",
+              "value": "10x 3' v3"
+            },
+            {
+              "op": "literal",
+              "target": "modality",
+              "value": "scRNA-seq"
+            },
+            {
+              "op": "copy",
+              "source": "development_stage",
+              "target": "age"
+            },
+            {
+              "op": "literal",
+              "target": "perturbation",
+              "value": "none"
+            },
+            {
+              "op": "literal",
+              "target": "perturbation_type",
+              "value": "none"
+            },
+            {
+              "op": "literal",
+              "target": "is_control",
+              "value": true
+            }
+          ],
+          "mapper_version": "declarative-obs-mapper/v1",
+          "predicates": [
+            {
+              "column": "development_stage",
+              "op": "domain_equals",
+              "values": [
+                "5-day-old stage",
+                "7-day-old stage"
+              ]
+            },
+            {
+              "column": "development_stage_ontology_term_id",
+              "op": "all_not_in",
+              "values": [
+                "",
+                "na",
+                "none",
+                "unknown",
+                "unreported"
+              ]
+            }
+          ],
+          "required_non_null": [
+            "development_stage",
+            "development_stage_ontology_term_id",
+            "assay",
+            "assay_ontology_term_id"
+          ],
+          "semantic_evidence": {
+            "basis": "The frozen CELLxGENE collection identity exposes exactly the non-placeholder 5-day-old and 7-day-old development-stage domain; runtime preflight requires that exact domain and non-placeholder ontology identifiers before any candidate write, and preserves development_stage as canonical age.",
+            "verdict": "accepted"
+          }
+        },
+        "ordered_var": {
+          "canonical_feature_namespace": "Ensembl Gene ID",
+          "feature_reference_column": "feature_reference",
+          "identity_sha256": "runtime-computed-before-candidate-write",
+          "normalization_version": "source-string/v1",
+          "organism_ontology_id": "NCBITaxon:10090"
+        },
+        "storage": {
+          "gcs_root": "scperturb/pert-gym/staging",
+          "manifest_last": true,
+          "per_block_var_count": 0,
+          "shared_var_count": 1,
+          "x_logical_object_count": 1
+        }
+      },
+      "config_sha256": "2e7a92b6a88641a504e8e55e6d9c10eb2abcd02fa3c24208c169ea54972f3552",
+      "execution_authorized": true,
+      "family_lease": "pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior",
+      "http_identity": {
+        "content_length": 245070756,
+        "etag": "\"a1ceff738c95fec7115acfa6cf8ae503-30\"",
+        "final_url": "https://datasets.cellxgene.cziscience.com/b85e8f33-1e23-4369-afaa-8bd39edbc667.h5ad",
+        "last_modified": "Wed, 10 Jun 2026 04:06:37 GMT",
+        "status": 200,
+        "version_id": "xupxdGsz5yjNY6W.oCuNxd8V0_f1vpAA"
+      },
+      "missingness_policy": {
+        "allowed_unknown_fields": [],
+        "invent_values": false,
+        "mode": "explicit-only/v1"
+      },
+      "record_id": "temporal_v4_055_type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior",
+      "review_provenance": {
+        "correction_task_id": "t_5c375e11",
+        "parent_task_id": "t_523f452a",
+        "reviewed_at": "2026-07-16T00:00:00Z",
+        "reviewer": "github-protected-main-prs-86",
+        "scope": "exact-head-independent-review-before-any-execution",
+        "status": "completed"
+      },
+      "revision_prefix": "temporal-v4-055",
+      "shape": [
+        12330,
+        22835
+      ],
+      "source": {
+        "api_url": "https://api.cellxgene.cziscience.com/curation/v1/collections/4828d33d-fb26-42e7-bf36-18293b0eec85",
+        "asset_id": "b85e8f33-1e23-4369-afaa-8bd39edbc667",
+        "collection_id": "4828d33d-fb26-42e7-bf36-18293b0eec85",
+        "collection_version_id": "20ba5b27-3e39-427d-89d5-4a51b0fb0df8",
+        "dataset_id": "5dec4249-8459-4df0-8998-37193135754c",
+        "dataset_version_id": "b85e8f33-1e23-4369-afaa-8bd39edbc667",
+        "url": "https://datasets.cellxgene.cziscience.com/b85e8f33-1e23-4369-afaa-8bd39edbc667.h5ad"
+      },
+      "source_packet_sha256": "2e7a92b6a88641a504e8e55e6d9c10eb2abcd02fa3c24208c169ea54972f3552",
+      "species": {
+        "label": "Mus musculus",
+        "ontology_term_id": "NCBITaxon:10090"
+      },
+      "task_id": "t_5c375e11",
+      "writer_contract_sha256": "bdd25923c8f6cd2bf1a0fc47df55da383dd1621e556fa021c7d9c9b4e2b879bb"
+    },
+    {
+      "assays": [
+        {
+          "label": "10x 3' v3",
+          "ontology_term_id": "EFO:0009922"
+        }
+      ],
+      "config_identity": {
+        "accepted_components": {
+          "credit": 0,
+          "denominator": 153,
+          "metric": "accepted_components"
+        },
+        "dataset_config_status": "reviewed-executable",
+        "execution": {
+          "billing_project": "jkobject-1549353370965",
+          "heartbeat_denominator": 153,
+          "heartbeat_interval_seconds": 50,
+          "heartbeat_metric": "accepted_components",
+          "host": "pert-gym-worker-eu",
+          "lamin_branch": "jkobject",
+          "lamin_instance": "laminlabs/pertdata",
+          "max_internal_block_rows": 4096,
+          "max_rss_bytes": 25769803776,
+          "min_available_bytes": 4294967296,
+          "output_directory": "/tmp/temporal-v4-111-t_71c1be94",
+          "single_writer_lease": "global-plus-family-plus-legacy-exclusive",
+          "task_timeout_seconds": 10800,
+          "timeout_seconds": 7200,
+          "zone": "europe-west1-b"
+        },
+        "forbidden_actions": [
+          "cleanup",
+          "deletion",
+          "promotion",
+          "collection_mutation",
+          "lamin_main",
+          "vm_lifecycle_change"
+        ],
+        "obs": {
+          "assignments": [
+            {
+              "op": "literal",
+              "target": "dataset",
+              "value": "pert-gym/logical/temporal/transcriptomic_analysis_of_air_liquid_interface_culture_in_human_lung_organoids"
+            },
+            {
+              "op": "index",
+              "target": "cell_id"
+            },
+            {
+              "op": "literal",
+              "target": "organism",
+              "value": "Homo sapiens"
+            },
+            {
+              "op": "literal",
+              "target": "technology",
+              "value": "10x 3' v3"
+            },
+            {
+              "op": "literal",
+              "target": "modality",
+              "value": "scRNA-seq"
+            },
+            {
+              "op": "copy",
+              "source": "development_stage",
+              "target": "age"
+            }
+          ],
+          "mapper_version": "declarative-obs-mapper/v1",
+          "predicates": [
+            {
+              "column": "development_stage",
+              "op": "domain_equals",
+              "values": [
+                "late adult stage",
+                "middle aged stage"
+              ]
+            },
+            {
+              "column": "development_stage_ontology_term_id",
+              "op": "domain_equals",
+              "values": [
+                "HsapDv:0000227",
+                "HsapDv:0000267"
+              ]
+            }
+          ],
+          "required_non_null": [
+            "development_stage",
+            "development_stage_ontology_term_id",
+            "assay",
+            "assay_ontology_term_id"
+          ],
+          "semantic_evidence": {
+            "basis": "The exact frozen CELLxGENE source exposes only late adult stage (HsapDv:0000227) and middle aged stage (HsapDv:0000267); runtime preflight requires those exact paired source domains and preserves development_stage as canonical age without inferring temporal, perturbation, control, treatment, dose, or timepoint fields from the title.",
+            "verdict": "accepted"
+          }
+        },
+        "ordered_var": {
+          "canonical_feature_namespace": "Ensembl Gene ID",
+          "feature_reference_column": "feature_reference",
+          "identity_sha256": "runtime-computed-before-candidate-write",
+          "normalization_version": "source-string/v1",
+          "organism_ontology_id": "NCBITaxon:9606"
+        },
+        "storage": {
+          "gcs_root": "scperturb/pert-gym/staging",
+          "manifest_last": true,
+          "per_block_var_count": 0,
+          "shared_var_count": 1,
+          "x_logical_object_count": 1
+        }
+      },
+      "config_sha256": "6d4bbeeeab7282d5ee4d50dc33c4869d93268834e980bab77ba2486b75da6611",
+      "execution_authorized": true,
+      "family_lease": "pert-gym/logical/temporal/transcriptomic_analysis_of_air_liquid_interface_culture_in_human_lung_organoids",
+      "http_identity": {
+        "content_length": 638045073,
+        "etag": "\"4ced72fa14acd46482c729596f1d96ed-77\"",
+        "final_url": "https://datasets.cellxgene.cziscience.com/d3b2dfdb-e189-4257-8fab-083f7dbea4e3.h5ad",
+        "last_modified": "Wed, 10 Jun 2026 04:29:21 GMT",
+        "status": 200,
+        "version_id": null
+      },
+      "missingness_policy": {
+        "allowed_unknown_fields": [],
+        "invent_values": false,
+        "mode": "explicit-only/v1"
+      },
+      "record_id": "temporal_v4_111_transcriptomic_analysis_of_air_liquid_interface_culture_in_human_lung_organoids",
+      "review_provenance": {
+        "correction_task_id": "t_71c1be94",
+        "parent_task_id": "t_23e01365",
+        "reviewed_at": "2026-07-16T00:00:00Z",
+        "reviewer": "github-protected-main-prs-88",
+        "scope": "exact-head-independent-review-before-any-execution",
+        "status": "completed"
+      },
+      "revision_prefix": "temporal-v4-111",
+      "shape": [
+        15806,
+        25229
+      ],
+      "source": {
+        "api_url": "https://api.cellxgene.cziscience.com/curation/v1/collections/e9cf4e8d-05ed-4d95-b550-af35ca219390",
+        "asset_id": "d3b2dfdb-e189-4257-8fab-083f7dbea4e3",
+        "collection_id": "e9cf4e8d-05ed-4d95-b550-af35ca219390",
+        "collection_version_id": "3464db4e-9883-41be-ab7c-ccf250800e81",
+        "dataset_id": "ef1a4b05-540c-4f73-8ceb-49dfa800645d",
+        "dataset_version_id": "d3b2dfdb-e189-4257-8fab-083f7dbea4e3",
+        "url": "https://datasets.cellxgene.cziscience.com/d3b2dfdb-e189-4257-8fab-083f7dbea4e3.h5ad"
+      },
+      "source_packet_sha256": "6d4bbeeeab7282d5ee4d50dc33c4869d93268834e980bab77ba2486b75da6611",
+      "species": {
+        "label": "Homo sapiens",
+        "ontology_term_id": "NCBITaxon:9606"
+      },
+      "task_id": "t_71c1be94",
+      "writer_contract_sha256": "bdd25923c8f6cd2bf1a0fc47df55da383dd1621e556fa021c7d9c9b4e2b879bb"
+    }
+  ],
+  "expires_at": "2027-07-16T00:00:00Z",
+  "issued_at": "2026-07-16T00:00:00Z",
+  "manifest_version": "cellxgene-writer-authorization-manifest/v1",
+  "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
+  "writer_contract": {
+    "live_ledger_control_plane_sha256": "f37cc8159f660d2474533befcd10e8989694bd932a290169781c556efd471f11",
+    "parquet_frame_parity_sha256": "f2827eca688dd2581a6ede51be77c4ae0b9327bacc66116e8ec1b1cc5420e976",
+    "writer_contract_sha256": "bdd25923c8f6cd2bf1a0fc47df55da383dd1621e556fa021c7d9c9b4e2b879bb",
+    "writer_sha256": "ecf9291863e089222c4facf666b89763e9f6bef98f9cf56c8379d608b2861117"
+  }
+}
