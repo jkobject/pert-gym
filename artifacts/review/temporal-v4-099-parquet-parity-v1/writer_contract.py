@@ -47,7 +47,9 @@ _AUTHORIZATION_KEYS = {
     "review_scope",
     "execution_authorized",
 }
-_ROW_7_AUTHORIZATION_KEYS = _AUTHORIZATION_KEYS | {"live_ledger_control_plane_sha256"}
+_LIVE_LEDGER_AUTHORIZATION_KEYS = _AUTHORIZATION_KEYS | {
+    "live_ledger_control_plane_sha256"
+}
 _AUTHORIZATION_BINDING_KEYS = {
     "parent_task_id",
     "approved_parent_protocol",
@@ -73,7 +75,7 @@ _ORDERED_VAR_KEYS = {
     "feature_reference_column",
 }
 _LEDGER_KEYS = {"current", "denominator", "credit"}
-_ROW_7_LEDGER_KEYS = _LEDGER_KEYS | {"metric"}
+_LIVE_LEDGER_KEYS = _LEDGER_KEYS | {"metric"}
 _REVISION_KEYS = {"prefix", "failed_candidate_denylist", "fresh_immutable_required"}
 _EXECUTION_KEYS = {
     "host",
@@ -147,6 +149,30 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "asset_id": "f372b7b0be24c172c2db73306c6dd4d2ed97ce5eeea9617e8ad5c17ff4fea968",
         "parent_task_id": "90bfe728fa4ee245f47ef2af876c728f4f14a37d77d6fdf4e29e800c9111d74e",
     },
+    "temporal-v4-055": {
+        "url": "26441043eea01f949f3840c9cba35bf03415210265f36e651705c30b48ce25cd",
+        "api_url": "d39b7ea6b3f57fdc3ac994b8c1227a7f647c2384cdb7bc684d5f77f0408c4ef8",
+        "collection_id": "8b7fca9fb2e6e268ca4506c281e0ec222c81c5d177ba941ac2150290908646a9",
+        "collection_version_id": "c37040c4336a54c96072f5bed9c438c0bb35c95bf050a0770408c87c66f84e77",
+        "dataset_id": "d3c98acb73331eb77fe0ec970ef929eedf580a0d35ad899b9ecbd866582e6886",
+        "dataset_version_id": "47831c433445633ec3dfa582badd2681922dc8aaf44b57aa3d71d668a892dae6",
+        "asset_id": "47831c433445633ec3dfa582badd2681922dc8aaf44b57aa3d71d668a892dae6",
+        "parent_task_id": "e3c2cc03c41879a77ad1e843bf52fcc2a2a5675875cb6c11591a66853ae1523b",
+        "catalogue_record": "c4b7597f0a1a2a9642b80b8790f7cc3443e4b57079996d9f04514e7f20e017db",
+        "logical_key": "5023ee5f3990d88003c771a41643b35c75539b67fa2cd02f8a622a6d0bb0ffa5",
+        "task_id": "aa421573e1e7d46018a99315057d08989adc3c8bc77ba7365b719c13d3c5a9e9",
+        "dataset_config_status": "37b3e8e87620d7677456ce9c6e141224d53138d0434eae66ccd2d3af8c61a80e",
+        "source_head": "036657767fb244f26f7c0ac49aa25d901c75e028997e7844e61b45a813c802a0",
+        "shape": "cc13009cc990d87b27cca499798569fdac5b4833e8bb2bfdf0f10cdf97054f64",
+        "organism": "07d6f77f13045e5e4404a984d81aa8cbbd1993ce74ce1720991072c857e8310d",
+        "assays": "ce8d066cc464d052a79407400c9328cd2960fbc657ccc56dab9d505f5f5dc63e",
+        "ordered_var": "00758a6fb096ced900a0cb1cecd8fe7a082beb8df4344b0697a64488c5d64d61",
+        "obs": "05861fc3673defb1017652411bfd4df76ca464b1549de0eeef63be9b2e399c37",
+        "accepted_components": "b670b692eb51e511baab82cf947fafbc81dd2b9327126c6bc72dcf2ad0b97fa2",
+        "execution": "12b307fc8b0fa31ad0616fd271857e75df43f6f974f79a71af52ae46f1f4fa18",
+        "storage": "7c870891e7c79024b91c2b590dd2638a13884d5a06ee7e79e50a17c65507565d",
+        "forbidden_actions": "fb95b232b7d39710c7fc7d03f921b922190986e5a8149d7b426030455ecca847",
+    },
 }
 
 
@@ -189,12 +215,13 @@ def _json_sha256(value: Any) -> str:
 
 
 def _validate_config(config: dict[str, Any]) -> None:
-    row_7 = (
-        isinstance(config, dict)
-        and isinstance(config.get("revision"), dict)
-        and config["revision"].get("prefix") == "temporal-v4-007"
+    revision_prefix = (
+        config.get("revision", {}).get("prefix")
+        if isinstance(config, dict) and isinstance(config.get("revision"), dict)
+        else None
     )
-    config_keys = _CONFIG_KEYS | ({"catalogue_record"} if row_7 else set())
+    live_ledger_revision = revision_prefix in {"temporal-v4-007", "temporal-v4-055"}
+    config_keys = _CONFIG_KEYS | ({"catalogue_record"} if live_ledger_revision else set())
     _exact_keys(config, config_keys, "config")
     if config["config_version"] != CONFIG_VERSION or config["protocol"] != PROTOCOL:
         raise ValueError("unsupported config version or protocol")
@@ -223,7 +250,7 @@ def _validate_config(config: dict[str, Any]) -> None:
     _positive_int(head["content_length"], "source_head.content_length")
     for key in ("etag", "last_modified"):
         _nonempty(head[key], f"source_head.{key}")
-    if row_7:
+    if live_ledger_revision:
         _nonempty(head["version_id"], "source_head.version_id")
     elif head["version_id"] is not None:
         _nonempty(head["version_id"], "source_head.version_id")
@@ -232,8 +259,13 @@ def _validate_config(config: dict[str, Any]) -> None:
     if api["public"] is not True or api["tombstone"] is not False or api["is_primary_data"] is not True:
         raise ValueError("API visibility/tombstone/primary-data identity must fail closed")
     organism = _exact_keys(api["organism"], {"label", "ontology_term_id"}, "api_identity.organism")
-    if organism != {"label": "Homo sapiens", "ontology_term_id": "NCBITaxon:9606"}:
-        raise ValueError("only exact Homo sapiens identity is approved")
+    expected_organism = (
+        {"label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090"}
+        if revision_prefix == "temporal-v4-055"
+        else {"label": "Homo sapiens", "ontology_term_id": "NCBITaxon:9606"}
+    )
+    if organism != expected_organism:
+        raise ValueError(f"only exact {expected_organism['label']} identity is approved")
     if not isinstance(api["assays"], list) or not api["assays"]:
         raise ValueError("api_identity.assays must be non-empty")
     for index, assay in enumerate(api["assays"]):
@@ -309,7 +341,7 @@ def _validate_config(config: dict[str, Any]) -> None:
 
     ordered_var = _exact_keys(config["ordered_var"], _ORDERED_VAR_KEYS, "ordered_var")
     runtime_ordered_var = (
-        row_7
+        live_ledger_revision
         and ordered_var["identity_sha256"]
         == "runtime-computed-before-candidate-write"
     )
@@ -318,19 +350,22 @@ def _validate_config(config: dict[str, Any]) -> None:
             _sha(ordered_var["identity_sha256"], "ordered_var.identity_sha256")
     elif ordered_var["identity_sha256"] is not None:
         _sha(ordered_var["identity_sha256"], "ordered_var.identity_sha256")
-    if ordered_var["organism_ontology_id"] != "NCBITaxon:9606" or ordered_var["canonical_feature_namespace"] != "Ensembl Gene ID":
+    if (
+        ordered_var["organism_ontology_id"] != organism["ontology_term_id"]
+        or ordered_var["canonical_feature_namespace"] != "Ensembl Gene ID"
+    ):
         raise ValueError("ordered-var organism or namespace is not approved")
     if ordered_var["normalization_version"] != "source-string/v1":
         raise ValueError("ordered-var normalization version is not approved")
     _nonempty(ordered_var["feature_reference_column"], "ordered_var.feature_reference_column")
 
-    ledger_keys = _ROW_7_LEDGER_KEYS if row_7 else _LEDGER_KEYS
+    ledger_keys = _LIVE_LEDGER_KEYS if live_ledger_revision else _LEDGER_KEYS
     ledger = _exact_keys(config["accepted_components"], ledger_keys, "accepted_components")
     current = _nonnegative_int(ledger["current"], "accepted_components.current")
     denominator = _positive_int(ledger["denominator"], "accepted_components.denominator")
     if current > denominator or ledger["credit"] != 0:
         raise ValueError("accepted-components bounds/credit are invalid")
-    if row_7 and (
+    if live_ledger_revision and (
         ledger["metric"] != "accepted_components" or denominator != 153
     ):
         raise ValueError("accepted-components metric/denominator are not approved")
@@ -343,7 +378,7 @@ def _validate_config(config: dict[str, Any]) -> None:
     if revision["fresh_immutable_required"] is not True:
         raise ValueError("fresh immutable revision is required")
 
-    execution_keys = _EXECUTION_KEYS | ({"task_timeout_seconds"} if row_7 else set())
+    execution_keys = _EXECUTION_KEYS | ({"task_timeout_seconds"} if live_ledger_revision else set())
     execution = _exact_keys(config["execution"], execution_keys, "execution")
     fixed = {
         "host": "pert-gym-worker-eu",
@@ -363,7 +398,7 @@ def _validate_config(config: dict[str, Any]) -> None:
     for key, expected in fixed.items():
         if execution[key] != expected:
             raise ValueError(f"execution.{key} conflicts with approved bound {expected!r}")
-    if row_7 and execution["task_timeout_seconds"] != 10800:
+    if live_ledger_revision and execution["task_timeout_seconds"] != 10800:
         raise ValueError("execution.task_timeout_seconds conflicts with approved bound 10800")
     _nonempty(execution["output_directory"], "execution.output_directory")
     if Path(execution["output_directory"]).name != (
@@ -398,7 +433,7 @@ def _validate_config(config: dict[str, Any]) -> None:
                 "denominator": denominator,
                 "credit": ledger["credit"],
             }
-            if row_7
+            if live_ledger_revision
             else config["accepted_components"]
         ),
         "execution": config["execution"],
@@ -461,8 +496,13 @@ def validate_bound_contract(
 ) -> SimpleNamespace:
     """Validate all data and hash bindings without performing any I/O."""
     _validate_config(config)
-    row_7 = config["revision"]["prefix"] == "temporal-v4-007"
-    authorization_keys = _ROW_7_AUTHORIZATION_KEYS if row_7 else _AUTHORIZATION_KEYS
+    live_ledger_revision = config["revision"]["prefix"] in {
+        "temporal-v4-007",
+        "temporal-v4-055",
+    }
+    authorization_keys = (
+        _LIVE_LEDGER_AUTHORIZATION_KEYS if live_ledger_revision else _AUTHORIZATION_KEYS
+    )
     _exact_keys(authorization, authorization_keys, "authorization")
     if authorization["authorization_version"] != AUTHORIZATION_VERSION:
         raise ValueError("unsupported authorization version")
@@ -476,7 +516,7 @@ def validate_bound_contract(
         raise RuntimeError("authorization contract SHA-256 does not match exact helper")
     if authorization["parquet_frame_parity_sha256"] != helper_sha256:
         raise RuntimeError("authorization helper SHA-256 does not match exact helper")
-    if row_7 and (
+    if live_ledger_revision and (
         ledger_helper_sha256 is None
         or authorization["live_ledger_control_plane_sha256"] != ledger_helper_sha256
     ):
