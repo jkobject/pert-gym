@@ -712,15 +712,62 @@ class Heartbeats:
 
 @contextmanager
 def acquired_writer_leases(lock_metadata: dict[str, object]):
+    global_path = vm_global_lamin_writer_lock_path()
     with ExitStack() as locks:
-        locks.enter_context(
-            lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata)
-        )
+        locks.enter_context(lamin_writer_lock(global_path, lock_metadata))
+        if writer_contract.requires_live_ledger(ACTIVE_CONFIG):
+            family_path = writer_family_lease_path(
+                ACTIVE_CONFIG, lock_root=global_path.parent
+            )
+            locks.enter_context(lamin_writer_lock(family_path, lock_metadata))
         for path in legacy_lamin_writer_lock_paths():
             locks.enter_context(
                 lamin_writer_lock(path, lock_metadata, check_live_metadata=False)
             )
         yield now()
+
+
+def writer_family_lease_path(
+    config: dict[str, Any], *, lock_root: Path | None = None
+) -> Path:
+    """Return a path-confined lease for one exact bound config family identity."""
+    catalogue_record = config.get("catalogue_record")
+    if catalogue_record is not None:
+        if (
+            not isinstance(catalogue_record, str)
+            or re.fullmatch(r"[a-z0-9][a-z0-9_]*", catalogue_record) is None
+        ):
+            raise RuntimeError("writer family lease identity is absent or malformed")
+        identity = f"catalogue:{catalogue_record}"
+        filename_identity = catalogue_record
+    else:
+        logical_key = config.get("logical_key")
+        if (
+            not isinstance(logical_key, str)
+            or re.fullmatch(
+                r"pert-gym/logical/temporal/[a-z0-9][a-z0-9_]*", logical_key
+            )
+            is None
+        ):
+            raise RuntimeError("writer family lease identity is absent or malformed")
+        identity = f"logical:{logical_key}"
+        filename_identity = logical_key.rsplit("/", maxsplit=1)[-1]
+    root = (
+        vm_global_lamin_writer_lock_path().parent
+        if lock_root is None
+        else lock_root
+    )
+    if not root.is_absolute():
+        raise RuntimeError("writer family lease root must be absolute")
+    resolved_root = root.resolve()
+    family_root = (resolved_root / "cellxgene-families").resolve()
+    if family_root.parent != resolved_root:
+        raise RuntimeError("writer family lease root is not path-confined")
+    digest = hashlib.sha256(identity.encode()).hexdigest()
+    candidate = family_root / f"{filename_identity}-{digest}.lock"
+    if candidate.parent != family_root or candidate.name in {".", ".."}:
+        raise RuntimeError("writer family lease path escaped its exact root")
+    return candidate
 
 
 def main() -> int:
@@ -752,7 +799,7 @@ def main() -> int:
         "branch": ACTIVE_CONFIG["execution"]["lamin_branch"],
         "started_at": now(),
     }
-    if REVISION_PREFIX in {"temporal-v4-007", "temporal-v4-055"}:
+    if writer_contract.requires_live_ledger(ACTIVE_CONFIG):
         with acquired_writer_leases(lock_metadata) as lease_acquired:
             live_ledger = read_live_accepted_components_ledger()
             if args.ledger_probe_only:
@@ -791,7 +838,7 @@ def _execute_authorized_contract(
     lock_metadata: dict[str, object],
 ) -> int:
     pre_api = source_api(contract)
-    if REVISION_PREFIX not in {"temporal-v4-007", "temporal-v4-055"}:
+    if not writer_contract.requires_live_ledger(ACTIVE_CONFIG):
         OUT.mkdir(parents=True, exist_ok=True)
         pre_head = source_head(contract)
     else:
