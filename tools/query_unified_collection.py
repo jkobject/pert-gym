@@ -33,12 +33,33 @@ import pandas as pd
 DEFAULT_COLLECTION_KEY = "pert-gym/canonical/20260624-shared-var"
 VAR_POLICIES = {"same_prefix", "shared_exact_hash", "shared_alias"}
 SHARED_VAR_POLICIES = {"shared_exact_hash", "shared_alias"}
+DEPMAP_CCLE_BASELINE_PREFIX = "depmap_ccle/26q1"
+DEPMAP_CCLE_BASELINE_SEMANTICS = {
+    "organism": "Homo sapiens",
+    "modality": "bulk_RNA",
+    "assay": "DepMap/CCLE RNA-seq",
+    "perturbation_type": "none",
+    "perturbation_technology": "none",
+    "control_availability": "no_control_found",
+    "x_semantics": "log1p_TPM",
+    "baseline_state": "baseline",
+    "is_baseline": "true",
+    "release_guard": DEPMAP_CCLE_BASELINE_PREFIX,
+    "baseline_join_keys": "depmap_id,ModelID,ModelConditionID,cell_line",
+    "screen_response_policy": (
+        "baseline RNA reference only; keep response_metric/response_value and "
+        "dependency/gene-effect scores in separate screen artifacts; do not copy "
+        "baseline RNA into response-screen X"
+    ),
+}
 DEFAULT_MANIFEST_PATH = (
     Path(__file__).resolve().parents[1]
     / "artifacts"
     / "schema_audit"
     / "unified_collection_manifest_20260624_shared_var.tsv"
 )
+# Backwards-compatible public name used by bounded rollout/audit scripts.
+LATEST_MANIFEST_PATH = DEFAULT_MANIFEST_PATH
 UNKNOWN_TOKENS = {"", "unknown", "nan", "none", "null", "na", "n/a"}
 FILTER_COLUMNS = (
     "source",
@@ -169,7 +190,31 @@ def load_unified_manifest(path: str | Path = DEFAULT_MANIFEST_PATH) -> pd.DataFr
             manifest[column] = manifest[column].map(
                 lambda value: str(value).strip().lower() == "true"
             )
-    return normalize_var_policy_columns(manifest)
+    manifest = normalize_var_policy_columns(manifest)
+    _apply_curated_manifest_semantics(manifest)
+    return manifest
+
+
+def _apply_curated_manifest_semantics(manifest: pd.DataFrame) -> None:
+    """Overlay reviewed semantics that are still stale in frozen manifests."""
+
+    if "prefix" not in manifest.columns:
+        return
+    mask = manifest["prefix"].astype(str).eq(DEPMAP_CCLE_BASELINE_PREFIX)
+    if not mask.any():
+        return
+    for column in (*DEPMAP_CCLE_BASELINE_SEMANTICS, "notes"):
+        if column not in manifest.columns:
+            manifest[column] = ""
+    for column, value in DEPMAP_CCLE_BASELINE_SEMANTICS.items():
+        manifest.loc[mask, column] = value
+    suffix = (
+        "curated baseline RNA semantics overlay: log1p_TPM, no perturbation, "
+        "release_guard=depmap_ccle/26q1; response/dependency scores stay in "
+        "separate artifacts"
+    )
+    existing = manifest.loc[mask, "notes"].astype(str).str.rstrip("; ")
+    manifest.loc[mask, "notes"] = existing.where(existing.eq(""), existing + "; ") + suffix
 
 
 def expected_same_prefix_var_key(prefix: str) -> str:
