@@ -445,6 +445,17 @@ def adapt_model_ready_v2_rows(
         modality = str(row.get("modality", "")).strip()
         x_semantics = str(row.get("x_semantics", "")).strip()
         source = str(row.get("source", row.get("source_family", ""))).strip()
+        has_expression = _as_bool(row.get("has_expression_X"))
+        has_explicit_expression_semantics = x_semantics.lower() in {
+            "raw_counts",
+            "normalized_expression",
+            "log1p_expression",
+            "delta_expression",
+            "signature",
+        }
+        is_expression_row = has_explicit_expression_semantics or (
+            has_expression and not _is_direct_response_row(row)
+        )
 
         if role in MAPPING_ROLES or target_kind == "mapping":
             try:
@@ -458,24 +469,20 @@ def adapt_model_ready_v2_rows(
             except ValueError as exc:
                 skipped[row_id] = str(exc)
             continue
-        if _is_direct_response_row(row):
-            try:
-                responses.append(_response_sample_from_manifest_row(row, row_id))
-            except ValueError as exc:
-                skipped[row_id] = str(exc)
-            continue
-        if _as_bool(row.get("has_expression_X")) or x_semantics.lower() in {
-            "raw_counts",
-            "normalized_expression",
-            "log1p_expression",
-            "delta_expression",
-            "signature",
-        }:
+        # Measured-expression rows with response labels are expression-response
+        # examples, not response tables backed by fake expression.
+        if is_expression_row:
             if x_semantics.lower() in {"", "empty", "unknown"}:
                 skipped[row_id] = "expression-like rows require explicit x_semantics"
                 continue
             try:
                 expressions.append(_expression_sample_from_manifest_row(row, row_id))
+            except ValueError as exc:
+                skipped[row_id] = str(exc)
+            continue
+        if _is_direct_response_row(row):
+            try:
+                responses.append(_response_sample_from_manifest_row(row, row_id))
             except ValueError as exc:
                 skipped[row_id] = str(exc)
             continue

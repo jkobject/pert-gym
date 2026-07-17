@@ -95,6 +95,17 @@ Canonical expression datasets use same-prefix triplets:
 
 ## Role/task routing
 
+Every durable Kanban card must carry a bounded context packet: the biological
+dataset/source, allowed writes, exact Collection and payload target, duplicate
+checks, validation commands, relevant files/docs, expected evidence, and an
+explicit list of repository areas the worker should not read. Missing context is
+a blocker to name precisely, not a reason to browse the whole repository.
+
+Implementation work uses isolated worktrees under
+`/Users/jkobject/.openclaw/worktrees/pert-gym/<task-id>`. Treat the shared checkout
+at `/Users/jkobject/.openclaw/workspace/work/pert-gym` as read-only except for
+cache/materialized-data operations and explicit emergency maintenance.
+
 ### CTO / orchestrator
 
 Read:
