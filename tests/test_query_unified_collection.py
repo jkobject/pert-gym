@@ -3,6 +3,8 @@ from pathlib import Path
 import pandas as pd
 
 from tools.query_unified_collection import (
+    DEFAULT_MANIFEST_PATH,
+    LATEST_MANIFEST_PATH,
     filter_members,
     find_control_datasets,
     get_dataset_members,
@@ -279,3 +281,7 @@ def test_depmap_overlay_preserves_authoritative_non_placeholder_values(tmp_path)
     assert row.modality == "reviewed modality"
     assert row.x_semantics == "normalized_expression"
     assert row.expression_normalization == "log1p_TPM"
+
+
+def test_latest_manifest_path_alias_remains_backwards_compatible():
+    assert LATEST_MANIFEST_PATH == DEFAULT_MANIFEST_PATH

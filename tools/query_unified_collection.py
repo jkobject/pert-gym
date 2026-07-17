@@ -59,6 +59,8 @@ DEFAULT_MANIFEST_PATH = (
     / "schema_audit"
     / "unified_collection_manifest_20260624_shared_var.tsv"
 )
+# Backwards-compatible public name used by bounded rollout/audit scripts.
+LATEST_MANIFEST_PATH = DEFAULT_MANIFEST_PATH
 UNKNOWN_TOKENS = {"", "unknown", "nan", "none", "null", "na", "n/a"}
 FILTER_COLUMNS = (
     "source",

@@ -1,103 +1,89 @@
 # pert-gym current status
 
-_Last verified: 2026-07-15 17:24 CEST. Exact task status lives on Kanban board `pert-gym`; `TODO.md` is the operational source of truth._
+_Last verified: 2026-07-17. Exact task status lives on Kanban board `pert-gym`; `TODO.md` is the operational source of truth._
 
 ## Executive snapshot
 
-- Existing canonical Collection: **120 logical families**, **1,056 physical members**, **142,572,358 observations**.
-- Publication workload manifest: **153 executable components + 60 external exclusions**. The 153 are not 153 new biological datasets.
-- Accepted workload ledger: **2/153 components**.
-- HEK293T: complete, independently tested and approved.
-- Airway temporal-v4 row 99: one fresh immutable retry is running after its category-safe Parquet correction was approved and merged.
-- Existing-dataset metadata audit: base-public 60-component report exists; **9/26** biological/publication reviews are complete and the other 17 are running in two replacement lanes.
-- 60-addition audit exists but needs semantic-placeholder normalization.
-- VAR Ensembl/species report: not yet produced for 120/120; replacement task is ready.
-- Final 120-row OBS+VAR synthesis: dependency-waiting.
-- PR #77 and #79 merged; PR #78 is being corrected on the same branch before independent review/merge.
-- **23 PRs remain open**; a reviewer is classifying all of them against exact-head Kanban evidence.
+- Canonical surface: **70 biological/publication-level datasets**, represented by **120 logical families**, **1,056 physical members**, and **142,572,358 observations**.
+- Publication workload: **153 executable components + 60 external exclusions**. Components are operational publication units, not additional biological datasets.
+- Base-public surface: **26 real datasets**, represented by 60 components and 110,398,202 observations.
+- Latest locally generated pre-remediation dataset-level OBS+VAR evidence: complete and deterministically validated; files are ignored by Git and the durable record is Kanban task `t_a5bf1b1b`.
+- Current VAR baseline: **21 `true`, 45 `false`, 4 `not_applicable`** across exactly 70 `real_dataset_id` rows.
+- Current strict OBS verdict: 70 `false`; missing applicable metadata is documented as `unknown` and does not globally block publication by default.
+- PR #78 is merged at `b6c931e16abb325c5206aaa2fe10a2c4c1544164` after exact-head approval.
+- **22 PRs remain open** at this snapshot.
 - Genuine human blocker: RxRx3 portal/Auth0 + Recursion EULA only.
 
-## Production
+## Dataset-level OBS and VAR report
 
-### Accepted HEK293T
+Latest local generated files (**ignored by Git, not part of a clean clone**):
 
-- shape: 4,534,299 × 38,606;
-- 32 contiguous manifest records;
-- 29,136,391,388 nnz;
-- one shared var and zero per-block vars;
-- source/readback mismatch: 0;
-- independent tester: PASS;
-- independent reviewer: APPROVE;
-- ledger delta: 1/153 → 2/153.
+- `artifacts/schema_audit/final_real_dataset_obs_var_20260717.json`
+- `artifacts/schema_audit/final_real_dataset_obs_var_20260717.tsv`
+- `artifacts/schema_audit/final_real_dataset_obs_var_20260717.md`
+- `artifacts/schema_audit/final_real_dataset_missingness_review_20260717.tsv`
 
-### Running airway component
+Verification procedure: read durable task record `t_a5bf1b1b` on board `pert-gym`, then compare any local copies with `shasum -a 256`. Recorded digests are JSON `60530cc3…`, TSV `de267a96…`, Markdown `3d906840…`, and flat TSV `f2d6a07b…`. Regeneration source is currently outside the tracked repository, so these files are evidence products rather than repository APIs.
 
-Card: `t_d0a2115a`.
+Validated conservation:
 
-- source: CELLxGENE temporal-v4 row 99, human airway epithelium regeneration;
-- shape: 10,224 × 35,552;
-- first candidate stopped before manifest because `hash.ID` and `cluster_l1` changed dtype from integer categorical to `int64` after Parquet roundtrip;
-- failed candidate has no credit and must not be resumed;
-- corrected helper/writer PR #79 passed exact-head independent review and merged to `main` as `ad1cd8c22516993f5a8403837f25fec58ab4abf3`;
-- fresh retry requires ledger precondition 2/153, fresh immutable revision, sole EU writer lease, manifest-last and zero promotion/Collection mutation/cleanup.
+| Unit | Verified |
+|---|---:|
+| Real biological datasets/publications | 70/70 |
+| Logical families | 120/120 |
+| Physical members | 1,056/1,056 |
+| Observations | 142,572,358/142,572,358 |
+| Base-public real datasets | 26/26 |
+| Base-public components | 60/60 |
+| Base-public observations | 110,398,202/110,398,202 |
 
-No ledger increment occurs until complete producer evidence, tester PASS and reviewer APPROVE.
+The flat missingness report contains 1,550 `unknown` and 1,031 `not_applicable` rows. Status vocabulary is exactly `unknown|not_applicable`; source/search evidence is retained separately and no unresolved candidate is represented as recovered.
 
-## Existing 120-family semantic audit
+`OBS_COMPLETED` and `VAR_ENSEMBL_SPECIES_COMPLETED` are orthogonal. Storage/Zarr/chunking/X concerns never determine `OBS_COMPLETED`. Response-axis `not_applicable` for PRISM/GDSC/Sanger is distinct from any separately joined baseline-expression reference.
 
-### Orthogonal verdicts
+## VAR/Ensembl remediation
 
-- `OBS_COMPLETED=true|false|blocked`
-- `VAR_ENSEMBL_SPECIES_COMPLETED=true|false|blocked|not_applicable`
+The remediation owner unit is `real_dataset_id`, never artifact or logical family. The corrected just-in-time chain is:
 
-Storage/Zarr/chunking/X concerns never determine `OBS_COMPLETED`.
+1. dataset-level 70-row baseline contract `t_a8e5b268`;
+2. continuation controller `t_5ec24c1a`;
+3. bounded correction lanes by real dataset;
+4. one independent verifier per outcome, combining exact tests/readback with semantic/provenance review;
+5. final dataset-level JSON/TSV/Markdown certification.
 
-OBS exclusions: `perturbation_target`, `perturbation_target_id`, `timepoint_unit`, `model_ready`, `loader_projectable`, `harmonization_level`, `duplicate_status`, `guide_id`.
-
-Applicable sequence fields: `guide_sequence` and `molecule_sequence`.
-
-### Canonical active cards
-
-| Card | State at snapshot | Outcome |
-|---|---|---|
-| `t_7254400c` | running | Correct existing PR #78 contract/scorer |
-| `t_a0427365` | running | Biological OBS reviews 1–9/26 |
-| `t_9f15f45b` | done | Biological OBS reviews 10–18/26 |
-| `t_993d234c` | running | Biological OBS reviews 19–26/26 |
-| `t_5870e629` | dependency waiting | Consolidate exactly 26 reviews |
-| `t_629bb1d0` | ready | Fix semantic-placeholder handling for 60 additions |
-| `t_c2b5fc6e` | ready | Audit VAR Ensembl/species for exactly 120 families |
-| `t_9f7052fd` | dependency waiting | Final exact 120-row OBS+VAR synthesis |
-
-Superseded cards are historical only and are not progress or current dependencies.
+The superseded 120-family remediation graph is held inert. Existing L01–L04 physical work can contribute evidence but does not define report granularity. `goal_mode` is selective; deterministic verifier cards normally remain single-shot.
 
 ## PR state
 
-### Merged
+Merged critical contracts include:
 
 - #77 → `8030e9f3be46266f7b268af75567ae7b250f89f1`
 - #79 → `ad1cd8c22516993f5a8403837f25fec58ab4abf3`
+- #78 → `b6c931e16abb325c5206aaa2fe10a2c4c1544164`
 
-### Critical open PR
+A PR may merge only with exact-head independent acceptance and no later contradictory finding. CI-green alone is insufficient.
 
-- #78 current old head is CI-green/mergeable at GitHub but violates the corrected OBS field contract. `t_7254400c` is updating the same PR in its clean worktree. Merge only after the corrected exact head receives independent approval.
+## Final convergence chain
 
-### Backlog
+1. `t_12667244`: publication/reconciliation macro-gate;
+2. `t_fc3d4794`: complete versioned logical Collection;
+3. `t_17ec66d9`: exhaustive denominator/shared-var/Zarr/loader/Collection test;
+4. `t_61847c4c`: terminal Definition-of-Done acceptance;
+5. `t_3df00bdb`: compact final project gate;
+6. `t_e8f9c88c`: separate RxRx3 human access/EULA gate.
 
-Card `t_c56390c3` is classifying every open PR. A PR may be merged only if exact-head independent acceptance exists and no later finding contradicts it. CI-green alone is insufficient. Stale/superseded PRs should be closed with their canonical successor named.
+### Bounded publication-wave topology
 
-## Final convergence graph
-
-- Publication/reconciliation macro-gate `t_12667244` → complete versioned logical Collection `t_fc3d4794` → exhaustive denominator/shared-var/Zarr/loader/Collection test `t_17ec66d9`.
-- Separate RxRx3 human access/EULA gate `t_e8f9c88c` runs in parallel with that path.
-- Test `t_17ec66d9` and RxRx3 gate `t_e8f9c88c` converge into terminal Definition-of-Done acceptance `t_61847c4c`.
-- Compact final project gate `t_3df00bdb` follows terminal acceptance and retains all six direct canonical parents: denominator `t_04b761eb`, loader contract `t_0cff18c2`, publication `t_12667244`, Collection `t_fc3d4794`, test `t_17ec66d9`, and terminal acceptance `t_61847c4c`.
+- Lane-3 macro `t_12667244` has 5 direct indispensable parents, replacing 76 historical leaf parents.
+- The 153 executable workload records occur exactly once across 13 waves (12 × 12 + 1 × 9), followed by two bundle gates; macro, wave, and bundle fan-in is at most 12.
+- Immutable final gate `t_3df00bdb` remains at exactly six canonical parents.
+- Missing metadata and quality findings remain dataset-local reports, not exclusions or sibling dependencies.
+- New outcomes normally use one producer → independent-verifier chain. Split tester/reviewer gates only for genuinely distinct evidence or environments.
 
 ## Safety
 
-- Lamin instance `laminlabs/pertdata`, branch `jkobject` only.
-- Never write Lamin `main`.
-- Heavy data operations run on `pert-gym-worker-eu`, not the Mac.
+- Lamin instance `laminlabs/pertdata`, branch `jkobject` only; never write Lamin `main`.
+- Heavy operations run on `pert-gym-worker-eu`, not the Mac.
 - One heavy writer; read-only audits and local PR work may run in parallel.
 - Failed/no-manifest revisions are immutable evidence, not resumable accepted product.
-- Shared checkout is intentionally not reset or broadly cleaned; implementation changes use isolated worktrees.
+- Implementation changes use isolated worktrees; do not broadly reset the shared checkout.
