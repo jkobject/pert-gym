@@ -486,20 +486,17 @@ is_control = true
 
 ## Image datasets
 
-No image datasets have been fully ingested yet. Target convention: do not force
-RxRx/JUMP/Cell Painting-style data into fake scRNA expression. Raw/phenotypic
-images remain external/staged image artifacts; `obs` carries plate/well/site/cell
-and perturbation metadata; typed image-derived matrices carry features or
-embeddings. Preferred extraction path for phenotypic microscopy images is
-scPortrait (`https://mannlabs.github.io/scPortrait/pages/workflow.html`), which
-segments raw microscopy images into single-cell image datasets and supports
-downstream featurization/deep-learning embeddings.
+No image datasets have been fully ingested yet. Do not force Cell Painting,
+RxRx, JUMP, or microscopy payloads into fake expression matrices. Raw images
+remain external/staged artifacts; `obs` carries plate/well/site/cell and
+perturbation metadata; typed image-derived matrices carry features or
+embeddings. scPortrait is the preferred path for segmentation into single-cell
+images and downstream featurization when applicable.
 
-- canonical scRNA-like `X` is absent/empty for pure image datasets;
-- image-derived features use typed payloads such as `X_cellprofiler`,
-  `X_scportrait_embedding`, or `X_recursion_dl_embedding` with matching `var_*`
-  metadata;
-- image metadata and image/cell identifiers live in `obs`.
+- canonical expression `X` is absent/empty for pure image datasets;
+- matrix-like image features use typed payloads such as `X_cellprofiler`,
+  `X_scportrait_embedding`, or `X_recursion_dl_embedding` with matching `var_*`;
+- image identifiers and metadata live in `obs`.
 
 Canonical image fields:
 
@@ -519,24 +516,13 @@ modality = image
 assay = CellPainting | microscopy | RxRx
 ```
 
-## Spatial transcriptomics and temporal modality policy
+## Spatial transcriptomics
 
-User decision 2026-07-02:
-
-- **Visium is expression/spatial transcriptomics**: treat it close to scRNA-seq
-  for pert-gym ingestion/modeling. Store the RNA expression matrix in canonical
-  `X.h5ad` when clear; preserve spot coordinates and image/spatial metadata in
-  `obs` and typed sidecars.
-- **STOmics / Stereo-seq are quasi-scRNA spatial expression**: treat them as
-  expression-like RNA matrices, not image-only data.
-- **Microscopy / live imaging** follows the image contract above, preferably via
-  scPortrait single-cell image extraction and embeddings.
-- **ATAC is out of scope for now**. Do not ingest ATAC subseries into canonical
-  pert-gym artifacts until explicitly reopened.
-- **Large RNA/spatial files are engineering work, not scientific blockers**:
-  process them with backed/chunked converters on the project VM/GCP path
-  (`pert-gym-worker-eu` when applicable), not by full materialization on the Mac
-  mini.
+- Visium and STOmics/Stereo-seq are expression-like spatial transcriptomics,
+  not image-only datasets. Store RNA in canonical `X.h5ad` and coordinates plus
+  image/spatial metadata in `obs` or typed sidecars.
+- Process large spatial/RNA payloads with backed, chunked VM workflows; do not
+  materialize them in full on the Mac.
 
 ## Multimodal and auxiliary matrices
 

@@ -41,7 +41,8 @@ DEPMAP_CCLE_BASELINE_SEMANTICS = {
     "perturbation_type": "none",
     "perturbation_technology": "none",
     "control_availability": "no_control_found",
-    "x_semantics": "log1p_TPM",
+    "x_semantics": "log1p_expression",
+    "expression_normalization": "log1p_TPM",
     "baseline_state": "baseline",
     "is_baseline": "true",
     "release_guard": DEPMAP_CCLE_BASELINE_PREFIX,
@@ -58,8 +59,6 @@ DEFAULT_MANIFEST_PATH = (
     / "schema_audit"
     / "unified_collection_manifest_20260624_shared_var.tsv"
 )
-# Backwards-compatible public name used by bounded rollout/audit scripts.
-LATEST_MANIFEST_PATH = DEFAULT_MANIFEST_PATH
 UNKNOWN_TOKENS = {"", "unknown", "nan", "none", "null", "na", "n/a"}
 FILTER_COLUMNS = (
     "source",
@@ -185,7 +184,12 @@ def load_unified_manifest(path: str | Path = DEFAULT_MANIFEST_PATH) -> pd.DataFr
     for column in ["n_obs", "n_vars", "chunk_index", "harmonization_level_rank"]:
         if column in manifest.columns:
             manifest[column] = pd.to_numeric(manifest[column], errors="coerce")
-    for column in ["has_obs_x_link", "has_x_var_link", "same_prefix_var", "link_verification_checked"]:
+    for column in [
+        "has_obs_x_link",
+        "has_x_var_link",
+        "same_prefix_var",
+        "link_verification_checked",
+    ]:
         if column in manifest.columns:
             manifest[column] = manifest[column].map(
                 lambda value: str(value).strip().lower() == "true"
@@ -207,14 +211,19 @@ def _apply_curated_manifest_semantics(manifest: pd.DataFrame) -> None:
         if column not in manifest.columns:
             manifest[column] = ""
     for column, value in DEPMAP_CCLE_BASELINE_SEMANTICS.items():
-        manifest.loc[mask, column] = value
+        # Repair only frozen placeholders; preserve authoritative newer values.
+        missing = manifest[column].map(_is_missing)
+        manifest.loc[mask & missing, column] = value
     suffix = (
-        "curated baseline RNA semantics overlay: log1p_TPM, no perturbation, "
+        "curated baseline RNA semantics overlay: x_semantics=log1p_expression, "
+        "normalization=log1p_TPM, no perturbation, "
         "release_guard=depmap_ccle/26q1; response/dependency scores stay in "
         "separate artifacts"
     )
     existing = manifest.loc[mask, "notes"].astype(str).str.rstrip("; ")
-    manifest.loc[mask, "notes"] = existing.where(existing.eq(""), existing + "; ") + suffix
+    manifest.loc[mask, "notes"] = (
+        existing.where(existing.eq(""), existing + "; ") + suffix
+    )
 
 
 def expected_same_prefix_var_key(prefix: str) -> str:
@@ -239,7 +248,9 @@ def normalize_var_policy_columns(manifest: pd.DataFrame) -> pd.DataFrame:
     if "var_policy" not in df.columns:
         df["var_policy"] = "same_prefix"
     else:
-        df["var_policy"] = df["var_policy"].astype(str).str.strip().replace("", "same_prefix")
+        df["var_policy"] = (
+            df["var_policy"].astype(str).str.strip().replace("", "same_prefix")
+        )
     if "same_prefix_var" not in df.columns:
         df["same_prefix_var"] = df["var_policy"].eq("same_prefix")
     for column in ["var_key", "var_uid", "var_hash", "var_alias_group"]:
@@ -248,8 +259,12 @@ def normalize_var_policy_columns(manifest: pd.DataFrame) -> pd.DataFrame:
         else:
             df[column] = df[column].fillna("").astype(str)
     if "prefix" in df.columns:
-        missing_same_prefix_keys = df["var_key"].eq("") & df["var_policy"].eq("same_prefix")
-        df.loc[missing_same_prefix_keys, "var_key"] = df.loc[missing_same_prefix_keys, "prefix"].map(expected_same_prefix_var_key)
+        missing_same_prefix_keys = df["var_key"].eq("") & df["var_policy"].eq(
+            "same_prefix"
+        )
+        df.loc[missing_same_prefix_keys, "var_key"] = df.loc[
+            missing_same_prefix_keys, "prefix"
+        ].map(expected_same_prefix_var_key)
     return df
 
 
@@ -269,7 +284,9 @@ def build_shared_var_manifest(
     the read-back `obs -> X -> var` links against the returned rows.
     """
     if policy not in SHARED_VAR_POLICIES:
-        raise ValueError(f"shared policy must be one of {sorted(SHARED_VAR_POLICIES)}, got {policy!r}")
+        raise ValueError(
+            f"shared policy must be one of {sorted(SHARED_VAR_POLICIES)}, got {policy!r}"
+        )
     df = normalize_var_policy_columns(manifest)
     chunks = chunk_metadata.copy()
     candidates = shared_candidates.copy()
@@ -284,15 +301,21 @@ def build_shared_var_manifest(
         row_mask = df["logical_dataset"].astype(str).eq(logical_dataset)
         if not row_mask.any():
             continue
-        family_chunks = chunks.loc[chunks["logical_dataset"].astype(str).eq(logical_dataset)]
+        family_chunks = chunks.loc[
+            chunks["logical_dataset"].astype(str).eq(logical_dataset)
+        ]
         if family_chunks.empty:
             continue
         hashes = sorted(set(family_chunks["var_hash"].dropna().astype(str)) - {""})
         if len(hashes) != 1:
-            raise ValueError(f"{logical_dataset} does not have exactly one var_hash: {hashes}")
+            raise ValueError(
+                f"{logical_dataset} does not have exactly one var_hash: {hashes}"
+            )
         df.loc[row_mask, "same_prefix_var"] = False
         df.loc[row_mask, "var_policy"] = policy
-        df.loc[row_mask, "var_key"] = shared_var_key_for_logical_dataset(logical_dataset)
+        df.loc[row_mask, "var_key"] = shared_var_key_for_logical_dataset(
+            logical_dataset
+        )
         df.loc[row_mask, "var_hash"] = hashes[0]
         df.loc[row_mask, "var_alias_group"] = logical_dataset
         # The shared artifact may be newly created, so var_uid is intentionally
@@ -302,8 +325,13 @@ def build_shared_var_manifest(
     # Fill var hashes for non-shared rows when available from the audit metadata.
     if "artifact_key" in df.columns and not metadata_by_artifact.empty:
         for idx, artifact_key in df["artifact_key"].astype(str).items():
-            if artifact_key in metadata_by_artifact.index and not df.at[idx, "var_hash"]:
-                df.at[idx, "var_hash"] = str(metadata_by_artifact.at[artifact_key, "var_hash"])
+            if (
+                artifact_key in metadata_by_artifact.index
+                and not df.at[idx, "var_hash"]
+            ):
+                df.at[idx, "var_hash"] = str(
+                    metadata_by_artifact.at[artifact_key, "var_hash"]
+                )
     df["collection_version"] = collection_version
     return df
 
@@ -322,27 +350,74 @@ def validate_manifest_var_policy(manifest: pd.DataFrame) -> pd.DataFrame:
         var_key = str(row.get("var_key", "")).strip()
         artifact_key = str(row.get("artifact_key", idx))
         if policy not in VAR_POLICIES:
-            violations.append({"row": idx, "artifact_key": artifact_key, "reason": f"invalid var_policy {policy!r}"})
+            violations.append(
+                {
+                    "row": idx,
+                    "artifact_key": artifact_key,
+                    "reason": f"invalid var_policy {policy!r}",
+                }
+            )
             continue
         if not bool(row.get("has_x_var_link", False)):
-            violations.append({"row": idx, "artifact_key": artifact_key, "reason": "missing X->var link"})
+            violations.append(
+                {
+                    "row": idx,
+                    "artifact_key": artifact_key,
+                    "reason": "missing X->var link",
+                }
+            )
         if policy == "same_prefix":
             if not same_prefix:
-                violations.append({"row": idx, "artifact_key": artifact_key, "reason": "same_prefix policy requires same_prefix_var=True"})
+                violations.append(
+                    {
+                        "row": idx,
+                        "artifact_key": artifact_key,
+                        "reason": "same_prefix policy requires same_prefix_var=True",
+                    }
+                )
             expected = expected_same_prefix_var_key(str(row.get("prefix", "")))
             if var_key and expected != var_key:
-                violations.append({"row": idx, "artifact_key": artifact_key, "reason": f"same_prefix var_key mismatch: {var_key!r} != {expected!r}"})
+                violations.append(
+                    {
+                        "row": idx,
+                        "artifact_key": artifact_key,
+                        "reason": f"same_prefix var_key mismatch: {var_key!r} != {expected!r}",
+                    }
+                )
         else:
             if same_prefix:
-                violations.append({"row": idx, "artifact_key": artifact_key, "reason": f"{policy} requires same_prefix_var=False"})
+                violations.append(
+                    {
+                        "row": idx,
+                        "artifact_key": artifact_key,
+                        "reason": f"{policy} requires same_prefix_var=False",
+                    }
+                )
             if not var_key:
-                violations.append({"row": idx, "artifact_key": artifact_key, "reason": f"{policy} requires explicit var_key"})
-            if not str(row.get("var_hash", "")).strip() and policy == "shared_exact_hash":
-                violations.append({"row": idx, "artifact_key": artifact_key, "reason": "shared_exact_hash requires var_hash"})
+                violations.append(
+                    {
+                        "row": idx,
+                        "artifact_key": artifact_key,
+                        "reason": f"{policy} requires explicit var_key",
+                    }
+                )
+            if (
+                not str(row.get("var_hash", "")).strip()
+                and policy == "shared_exact_hash"
+            ):
+                violations.append(
+                    {
+                        "row": idx,
+                        "artifact_key": artifact_key,
+                        "reason": "shared_exact_hash requires var_hash",
+                    }
+                )
     return pd.DataFrame(violations, columns=["row", "artifact_key", "reason"])
 
 
-def validate_triplet_var_policy(ln: Any, artifact_key_or_row: str | pd.Series) -> dict[str, Any]:
+def validate_triplet_var_policy(
+    ln: Any, artifact_key_or_row: str | pd.Series
+) -> dict[str, Any]:
     """Resolve live Lamin links and verify they match a manifest row's policy.
 
     The live var artifact is always obtained through `obs.features["X"]` then
@@ -362,15 +437,22 @@ def validate_triplet_var_policy(ln: Any, artifact_key_or_row: str | pd.Series) -
         expected_key = str(normalized.get("var_key", "")).strip()
         if expected_key and triplet.var.key != expected_key:
             result["ok"] = False
-            result["errors"].append(f"resolved var_key {triplet.var.key!r} != manifest var_key {expected_key!r}")
+            result["errors"].append(
+                f"resolved var_key {triplet.var.key!r} != manifest var_key {expected_key!r}"
+            )
         expected_uid = str(normalized.get("var_uid", "")).strip()
         if expected_uid and getattr(triplet.var, "uid", None) != expected_uid:
             result["ok"] = False
             result["errors"].append("resolved var_uid does not match manifest var_uid")
         expected_hash = str(normalized.get("var_hash", "")).strip()
-        if expected_hash and getattr(triplet.var, "hash", None) not in (None, expected_hash):
+        if expected_hash and getattr(triplet.var, "hash", None) not in (
+            None,
+            expected_hash,
+        ):
             result["ok"] = False
-            result["errors"].append("resolved var_hash does not match manifest var_hash")
+            result["errors"].append(
+                "resolved var_hash does not match manifest var_hash"
+            )
     return result
 
 
@@ -427,12 +509,16 @@ def filter_members(
             continue
         mask &= df[column].astype(str).str.lower().isin(normalized)
     if dataset_id_contains:
-        mask &= df["dataset_id"].astype(str).str.contains(
-            dataset_id_contains, case=False, na=False, regex=False
+        mask &= (
+            df["dataset_id"]
+            .astype(str)
+            .str.contains(dataset_id_contains, case=False, na=False, regex=False)
         )
     if prefix_contains:
-        mask &= df["prefix"].astype(str).str.contains(
-            prefix_contains, case=False, na=False, regex=False
+        mask &= (
+            df["prefix"]
+            .astype(str)
+            .str.contains(prefix_contains, case=False, na=False, regex=False)
         )
     if require_controls and "control_availability" in df.columns:
         mask &= ~df["control_availability"].map(_is_missing)
@@ -459,8 +545,14 @@ def list_datasets(manifest: pd.DataFrame | None = None) -> pd.DataFrame:
             n_vars_min=("n_vars", "min"),
             n_vars_max=("n_vars", "max"),
             source=("source", lambda values: ", ".join(sorted(set(map(str, values))))),
-            modality=("modality", lambda values: ", ".join(sorted(set(map(str, values))))),
-            organism=("organism", lambda values: ", ".join(sorted(set(map(str, values))))),
+            modality=(
+                "modality",
+                lambda values: ", ".join(sorted(set(map(str, values)))),
+            ),
+            organism=(
+                "organism",
+                lambda values: ", ".join(sorted(set(map(str, values)))),
+            ),
             perturbation_type=(
                 "perturbation_type",
                 lambda values: ", ".join(sorted(set(map(str, values)))),
@@ -497,19 +589,21 @@ def get_dataset_members(
         rows = df.loc[df["dataset_id"].astype(str) == dataset_id]
     else:
         rows = df.loc[
-            df["dataset_id"].astype(str).str.contains(
-                dataset_id, case=False, na=False, regex=False
-            )
-            | df["prefix"].astype(str).str.contains(
-                dataset_id, case=False, na=False, regex=False
-            )
+            df["dataset_id"]
+            .astype(str)
+            .str.contains(dataset_id, case=False, na=False, regex=False)
+            | df["prefix"]
+            .astype(str)
+            .str.contains(dataset_id, case=False, na=False, regex=False)
         ]
     return rows.sort_values(["dataset_id", "chunk_index", "artifact_key"]).reset_index(
         drop=True
     )
 
 
-def get_triplet_artifacts(ln: Any, artifact_key_or_row: str | pd.Series) -> TripletArtifacts:
+def get_triplet_artifacts(
+    ln: Any, artifact_key_or_row: str | pd.Series
+) -> TripletArtifacts:
     """Resolve obs/X/var Lamin artifacts for a manifest row or obs artifact key.
 
     This performs no matrix loading.  It only reads feature links and returns the
@@ -590,8 +684,12 @@ def inspect_obs_controls(
         "examples": {},
     }
     if "is_control" in obs.columns:
-        result["control_count"] = int(obs["is_control"].fillna(False).astype(bool).sum())
+        result["control_count"] = int(
+            obs["is_control"].fillna(False).astype(bool).sum()
+        )
     for column in columns:
-        counts = obs[column].astype(str).value_counts(dropna=False).head(max_unique_values)
+        counts = (
+            obs[column].astype(str).value_counts(dropna=False).head(max_unique_values)
+        )
         result["examples"][column] = {str(k): int(v) for k, v in counts.items()}
     return result

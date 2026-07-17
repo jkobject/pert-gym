@@ -666,6 +666,38 @@ def test_essentiality_screen_loader_rejects_conflicting_duplicate_baselines() ->
         )
 
 
+def test_essentiality_screen_loader_accepts_identical_duplicate_baselines() -> None:
+    batch = load_essentiality_screen_with_baseline(
+        response_rows=[
+            {
+                "sanger_model_id": "SIDM00001",
+                "perturbation_gene": "TP53",
+                "perturbation_type": "CRISPRko",
+                "response_metric": "fold_change",
+                "response_value": -1.25,
+            }
+        ],
+        baseline_rows=[
+            {"model_name": "SIDM00001", "expression": [0.5, 1.5]},
+            {"sanger_model_id": "SIDM00001", "expression": [0.5, 1.5]},
+        ],
+        feature_names=["GAPDH", "ACTB"],
+    )
+
+    assert batch.X == [[0.5, 1.5]]
+
+
+def test_essentiality_screen_loader_rejects_malformed_baseline_expression() -> None:
+    with pytest.raises(ValueError, match="baseline row 0 has malformed"):
+        load_essentiality_screen_with_baseline(
+            response_rows=[],
+            baseline_rows=[
+                {"sanger_model_id": "SIDM00001", "expression": ["not-a-number"]}
+            ],
+            feature_names=["GAPDH"],
+        )
+
+
 def test_model_ready_v2_skips_malformed_expression_and_mapping_rows() -> None:
     adapters = adapt_model_ready_v2_rows(
         [
@@ -719,6 +751,53 @@ def test_model_ready_v2_json_array_manifest_loads(tmp_path) -> None:
         "expression/obs.parquet"
     ]
     assert not adapters.skipped
+
+
+def test_model_ready_v2_json_object_manifest_loads_rows(tmp_path) -> None:
+    manifest = tmp_path / "model_ready_v2.json"
+    manifest.write_text(
+        json.dumps(
+            {
+                "rows": [
+                    {
+                        "manifest_row_id": "expression",
+                        "source": "expression-source",
+                        "has_expression_X": True,
+                        "x_semantics": "raw_counts",
+                        "artifact_key": "expression/obs.parquet",
+                    }
+                ]
+            }
+        )
+    )
+
+    adapters = load_model_ready_v2_adapters(manifest_path=manifest)
+
+    assert [sample.artifact_key for sample in adapters.expressions] == [
+        "expression/obs.parquet"
+    ]
+
+
+def test_model_ready_v2_expression_response_remains_expression_adapter() -> None:
+    adapters = adapt_model_ready_v2_rows(
+        [
+            {
+                "manifest_row_id": "expression_response",
+                "source": "Perturb-seq",
+                "has_expression_X": True,
+                "has_response_label": True,
+                "x_semantics": "raw_counts",
+                "artifact_key": "perturb_seq/obs.parquet",
+                "response_metric": "expression_fitness_proxy",
+                "response_value": -0.5,
+            }
+        ]
+    )
+
+    assert adapters.responses == ()
+    assert len(adapters.expressions) == 1
+    assert adapters.expressions[0].role == "expression_response"
+    assert adapters.skipped == {}
 
 
 def test_model_ready_v2_skips_missing_or_malformed_image_handles() -> None:
@@ -799,9 +878,7 @@ def test_response_loaders_reject_non_finite_targets() -> None:
                     "response_value": "inf",
                 }
             ],
-            baseline_rows=[
-                {"depmap_id": "ACH-000001", "expression": [1.0, 2.0]}
-            ],
+            baseline_rows=[{"depmap_id": "ACH-000001", "expression": [1.0, 2.0]}],
             feature_names=["GAPDH", "ACTB"],
         )
 
@@ -815,8 +892,6 @@ def test_response_loaders_reject_non_finite_targets() -> None:
                     "response_value": "-inf",
                 }
             ],
-            baseline_rows=[
-                {"sanger_model_id": "SIDM00001", "expression": [1.0, 2.0]}
-            ],
+            baseline_rows=[{"sanger_model_id": "SIDM00001", "expression": [1.0, 2.0]}],
             feature_names=["GAPDH", "ACTB"],
         )

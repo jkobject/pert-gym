@@ -3,8 +3,6 @@ from pathlib import Path
 import pandas as pd
 
 from tools.query_unified_collection import (
-    DEFAULT_MANIFEST_PATH,
-    LATEST_MANIFEST_PATH,
     filter_members,
     find_control_datasets,
     get_dataset_members,
@@ -233,10 +231,6 @@ def test_triplet_resolution_uses_explicit_links_and_latest_same_key_artifact():
     }
 
 
-def test_latest_manifest_path_alias_remains_backwards_compatible():
-    assert LATEST_MANIFEST_PATH == DEFAULT_MANIFEST_PATH
-
-
 def test_depmap_baseline_semantics_overlay_is_applied(tmp_path):
     manifest_path = tmp_path / "manifest.tsv"
     pd.DataFrame(
@@ -257,7 +251,31 @@ def test_depmap_baseline_semantics_overlay_is_applied(tmp_path):
     row = load_unified_manifest(manifest_path).iloc[0]
 
     assert row.perturbation_type == "none"
-    assert row.x_semantics == "log1p_TPM"
+    assert row.x_semantics == "log1p_expression"
+    assert row.expression_normalization == "log1p_TPM"
     assert row.baseline_state == "baseline"
     assert row.release_guard == "depmap_ccle/26q1"
     assert "separate screen artifacts" in row.screen_response_policy
+
+
+def test_depmap_overlay_preserves_authoritative_non_placeholder_values(tmp_path):
+    manifest_path = tmp_path / "manifest.tsv"
+    pd.DataFrame(
+        [
+            {
+                "artifact_key": "depmap_ccle/26q1/obs.parquet",
+                "prefix": "depmap_ccle/26q1",
+                "organism": "reviewed organism",
+                "modality": "reviewed modality",
+                "x_semantics": "normalized_expression",
+                "has_x_var_link": True,
+            }
+        ]
+    ).to_csv(manifest_path, sep="\t", index=False)
+
+    row = load_unified_manifest(manifest_path).iloc[0]
+
+    assert row.organism == "reviewed organism"
+    assert row.modality == "reviewed modality"
+    assert row.x_semantics == "normalized_expression"
+    assert row.expression_normalization == "log1p_TPM"
