@@ -1,0 +1,83 @@
+{
+  "schema_version": "pert-gym.independent-consumer-qa-summary/v1",
+  "task_id": "t_51cc7265",
+  "build_task_id": "t_fe451c4d",
+  "review_task_id": "t_f196b29f",
+  "record_id": "temporal_v4_116_perturbase_gse107185",
+  "verdict": "PASS",
+  "recommendation": "Advance to terminal reviewer; retain zero product credit until reviewer approval and administrative acceptance.",
+  "environment": {
+    "host": "pert-gym-worker-eu",
+    "zone": "europe-west1-b",
+    "mode": "read-only real Python consumer of exact-generation GCS manifest, ledger, triplet, and frozen source archive; no mocks or testMode"
+  },
+  "command": "cd ~/work/pert-gym && uv run python /tmp/gse107185-qa-t_51cc7265/qa_gse107185.py --input /tmp/gse107185-qa-t_51cc7265/input --output <run-result.json>",
+  "runs": [
+    {
+      "result": "qa-result-run1.json",
+      "sha256": "b2096d1fc567c5c2ddddb9dab0ee34af53d2319c4dffbbffb10295970e4b1eb0",
+      "verdict": "PASS",
+      "checks": "27/27",
+      "stable_reproducibility_fingerprint": "5e5914a9bd5ffdfb7f51d84d6e22ef66e2640329f0d6047b0f556771e607e52c"
+    },
+    {
+      "result": "qa-result-run2.json",
+      "sha256": "d9f671dcdfa0dc12ae16357fd06bfb837a00aece22fe8084417640e6b0cf81a0",
+      "verdict": "PASS",
+      "checks": "27/27",
+      "stable_reproducibility_fingerprint": "5e5914a9bd5ffdfb7f51d84d6e22ef66e2640329f0d6047b0f556771e607e52c"
+    }
+  ],
+  "executed_script": {
+    "path": "qa_gse107185.py",
+    "sha256": "217f35b81b44671e44de2b1c4483215b0bcf64b132e1c1a05435fde21b0abc98"
+  },
+  "artifact_identity": {
+    "logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+    "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json#1784263868472118",
+    "manifest_sha256": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+    "frozen_publication_manifest_sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+    "frozen_source_sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa",
+    "source_member_sha256": "e8e19bf30b6b028d9bb257907f9bb4a0747478c6b5af24405df2a8da15e18e75"
+  },
+  "observed_accounting": {
+    "catalogue_rows": [116],
+    "bounded_wave": 11,
+    "bounded_wave_assignment_count": 1,
+    "datasets": 1,
+    "triplets": 1,
+    "observations": 8428,
+    "variables": 2000,
+    "nnz": 6377510,
+    "perturbation_labels": 61,
+    "revision_objects": 6,
+    "payload_bytes_read_per_run": 94690115,
+    "product_credit": 0
+  },
+  "quality_findings": {
+    "classification": "non_excluding_missingness",
+    "age_missing_rows": 8428,
+    "donor_id_missing_rows": 8428,
+    "sex_missing_rows": 8428,
+    "ethnicity_missing_rows": 8428,
+    "timepoint_missing_rows": 8428,
+    "is_low_quality_missing_rows": 8428,
+    "var_ensembl_missing_rows": 361,
+    "excluded_observations": 0,
+    "dependency_created": false
+  },
+  "source_refresh_note": "A fresh direct PerturBase HTTP refresh was attempted from both EU worker and Mac. The origin advertised the expected 65,772,471-byte object but delivered no bytes from EU and only about 10 KB/s from Mac, so the partial refresh was aborted and was not used as evidence. Reproducibility was instead executed twice from the immutable generation-pinned source archive, including exact tar-member hash and value-exact source-to-output axis, matrix, and metadata parity.",
+  "checks_covered": [
+    "frozen manifest and wave graph checksums",
+    "exact row 116/component/logical-key scope",
+    "single bounded wave assignment",
+    "manifest/ledger/payload generation pins, sizes, and SHA-256",
+    "complete six-object revision inventory and manifest-last ordering",
+    "real Parquet and sparse Zarr readback",
+    "source archive member readback and source-to-output value parity",
+    "shape, nnz, axis uniqueness/order, metadata integrity, and perturbation counts",
+    "balanced zero-credit ledger accounting",
+    "explicit non-excluding metadata and Ensembl missingness",
+    "two-run stable reproducibility fingerprint equality"
+  ]
+}
