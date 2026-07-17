@@ -1,0 +1,218 @@
+[
+  {
+    "condition": "Control",
+    "filename": "GSE201254_count_mat_Control-NoCrush.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 14956,
+    "n_vars": 23308,
+    "nnz": 50368043,
+    "raw_count_sum": 145347464,
+    "raw_time_label": "NoCrush",
+    "sha256": "2885cda4c82ea6326594bd43dcc1441e57d7b1c3d9a33135bff39c8c4a064d1c",
+    "shape_genes_by_cells": [
+      23308,
+      14956
+    ],
+    "size_bytes": 47057425,
+    "timepoint_day": 0.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_Control-NoCrush.csv.gz"
+  },
+  {
+    "condition": "Control",
+    "filename": "GSE201254_count_mat_Control-ONC2D.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 19562,
+    "n_vars": 23308,
+    "nnz": 74980202,
+    "raw_count_sum": 246042217,
+    "raw_time_label": "ONC2D",
+    "sha256": "e153328e88e80354e02540e673a9e0112da8ce32a7cd5ab3ec522517044cdfd0",
+    "shape_genes_by_cells": [
+      23308,
+      19562
+    ],
+    "size_bytes": 69369454,
+    "timepoint_day": 2.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_Control-ONC2D.csv.gz"
+  },
+  {
+    "condition": "Control",
+    "filename": "GSE201254_count_mat_Control-ONC7d.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 9154,
+    "n_vars": 23308,
+    "nnz": 39242690,
+    "raw_count_sum": 164445040,
+    "raw_time_label": "ONC7d",
+    "sha256": "235516d3b1a78dcaad3304213fa7f038777f8c583a4e07885f1d33e3d6a626d5",
+    "shape_genes_by_cells": [
+      23308,
+      9154
+    ],
+    "size_bytes": 37050911,
+    "timepoint_day": 7.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_Control-ONC7d.csv.gz"
+  },
+  {
+    "condition": "Pten-CNTF",
+    "filename": "GSE201254_count_mat_Pten-CNTF-NoCrush.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 8506,
+    "n_vars": 23308,
+    "nnz": 46551864,
+    "raw_count_sum": 206187425,
+    "raw_time_label": "NoCrush",
+    "sha256": "f01fe15d3b39755c0e9bb244acb3ae14e5a3b23ec719321e53bb9f752e3be356",
+    "shape_genes_by_cells": [
+      23308,
+      8506
+    ],
+    "size_bytes": 41693860,
+    "timepoint_day": 0.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_Pten-CNTF-NoCrush.csv.gz"
+  },
+  {
+    "condition": "Pten-CNTF",
+    "filename": "GSE201254_count_mat_Pten-CNTF-ONC7d.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 6053,
+    "n_vars": 23308,
+    "nnz": 27388175,
+    "raw_count_sum": 153474486,
+    "raw_time_label": "ONC7d",
+    "sha256": "6fd0d322153cd8acbc164df09faf4943a724f93144401aa80db092c2f8e238b1",
+    "shape_genes_by_cells": [
+      23308,
+      6053
+    ],
+    "size_bytes": 28472079,
+    "timepoint_day": 7.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_Pten-CNTF-ONC7d.csv.gz"
+  },
+  {
+    "condition": "Pten",
+    "filename": "GSE201254_count_mat_Pten-NoCrush.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 6780,
+    "n_vars": 23308,
+    "nnz": 19319449,
+    "raw_count_sum": 53241793,
+    "raw_time_label": "NoCrush",
+    "sha256": "8d86aae0ee37966321e7a0aca9da1d0c769835ae2f59b237c2da2dc388f87201",
+    "shape_genes_by_cells": [
+      23308,
+      6780
+    ],
+    "size_bytes": 19676233,
+    "timepoint_day": 0.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_Pten-NoCrush.csv.gz"
+  },
+  {
+    "condition": "Pten",
+    "filename": "GSE201254_count_mat_Pten-ONC2D.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 12206,
+    "n_vars": 23308,
+    "nnz": 42910271,
+    "raw_count_sum": 127280272,
+    "raw_time_label": "ONC2D",
+    "sha256": "72ace06c22565745be8539fee404bdc5dc4b6605a45a44e54ebd9645bb672817",
+    "shape_genes_by_cells": [
+      23308,
+      12206
+    ],
+    "size_bytes": 40874557,
+    "timepoint_day": 2.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_Pten-ONC2D.csv.gz"
+  },
+  {
+    "condition": "Pten",
+    "filename": "GSE201254_count_mat_Pten-ONC7d.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 10260,
+    "n_vars": 23308,
+    "nnz": 47375988,
+    "raw_count_sum": 189902537,
+    "raw_time_label": "ONC7d",
+    "sha256": "0c8352e1cd8e459612409f450eefdcea122fd2ca5861869529d6b1c00b901632",
+    "shape_genes_by_cells": [
+      23308,
+      10260
+    ],
+    "size_bytes": 43502228,
+    "timepoint_day": 7.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_Pten-ONC7d.csv.gz"
+  },
+  {
+    "condition": "PtenSocs3-CNTF",
+    "filename": "GSE201254_count_mat_PtenScos3-CNTF-NoCrush.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 6382,
+    "n_vars": 23308,
+    "nnz": 23218141,
+    "raw_count_sum": 69859380,
+    "raw_time_label": "NoCrush",
+    "sha256": "9f6b892eb14cfe1dbe70a26811f6f97e06db3a2779b058e7f6ff7bb68a0c13bc",
+    "shape_genes_by_cells": [
+      23308,
+      6382
+    ],
+    "size_bytes": 22170567,
+    "timepoint_day": 0.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_PtenScos3-CNTF-NoCrush.csv.gz"
+  },
+  {
+    "condition": "PtenSocs3-CNTF",
+    "filename": "GSE201254_count_mat_PtenScos3-CNTF-ONC21d.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 8203,
+    "n_vars": 23308,
+    "nnz": 37378721,
+    "raw_count_sum": 166725078,
+    "raw_time_label": "ONC21d",
+    "sha256": "ed783b132580c01d352de1ecb5180657f247a29c2d0384a380c9b8ba7dfa2dc4",
+    "shape_genes_by_cells": [
+      23308,
+      8203
+    ],
+    "size_bytes": 35675001,
+    "timepoint_day": 21.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_PtenScos3-CNTF-ONC21d.csv.gz"
+  },
+  {
+    "condition": "PtenSocs3-CNTF",
+    "filename": "GSE201254_count_mat_PtenScos3-CNTF-ONC2D.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 4994,
+    "n_vars": 23308,
+    "nnz": 22982261,
+    "raw_count_sum": 98841788,
+    "raw_time_label": "ONC2D",
+    "sha256": "20816fc7c883e9a645ae58eb1cdd9eaa146eb9aab67399310c1347d30e37ee88",
+    "shape_genes_by_cells": [
+      23308,
+      4994
+    ],
+    "size_bytes": 21712243,
+    "timepoint_day": 2.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_PtenScos3-CNTF-ONC2D.csv.gz"
+  },
+  {
+    "condition": "PtenSocs3-CNTF",
+    "filename": "GSE201254_count_mat_PtenScos3-CNTF-ONC7d.csv.gz",
+    "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+    "n_obs": 22385,
+    "n_vars": 23308,
+    "nnz": 96934050,
+    "raw_count_sum": 396228471,
+    "raw_time_label": "ONC7d",
+    "sha256": "a2814f98acf1d56ce17782fe947c6a61fb0956e63ef568f0334384bb5752f5e7",
+    "shape_genes_by_cells": [
+      23308,
+      22385
+    ],
+    "size_bytes": 91297922,
+    "timepoint_day": 7.0,
+    "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE201nnn/GSE201254/suppl/GSE201254_count_mat_PtenScos3-CNTF-ONC7d.csv.gz"
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "accepted_product_credit_post": 0,
+  "accepted_product_credit_pre": 0,
+  "lamin_writes": 0,
+  "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/manifest.json#1784284536286438",
+  "manifest_sha256": "dc33b1a1e1d24e96f3ce8efce8d052d1b01c2e7102d335a0ebf866ebc63e92a6",
+  "nnz": 528649855,
+  "raw_count_sum": 2017575951,
+  "record_id": "temporal_v4_132_overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "revision": "temporal-v4-132-wave13-5f7d704794fcd538",
+  "runtime_seconds": 570.9777255058289,
+  "shape": [
+    129441,
+    23308
+  ],
+  "verdict": "PASS"
+}

@@ -1,0 +1,33 @@
+{
+  "all_source_members_consumed": true,
+  "condition_counts": {
+    "Control": 43672,
+    "Pten": 29246,
+    "Pten-CNTF": 14559,
+    "PtenSocs3-CNTF": 41964
+  },
+  "control_count": 14956,
+  "excluded_related_ss2_cells": 411,
+  "excluded_related_ss2_reason": "GSE202154 is a distinct Smart-seq2 subseries; frozen SCP1846 denominator equals exactly the twelve GSE201254 matrices",
+  "gene_axis_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+  "manifest_source_n_obs": 129441,
+  "matrix_encoding": "csr_matrix",
+  "nnz": 528649855,
+  "obs_index_sha256": "a179a11b43098b9250990fe863677ed978b3321329e0b239d81264ac7423c110",
+  "raw_count_sum": 2017575951,
+  "shape": [
+    129441,
+    23308
+  ],
+  "source_component_n_obs": 129441,
+  "source_denominator_parity": true,
+  "timepoint_counts": {
+    "NoCrush": 36624,
+    "ONC21d": 8203,
+    "ONC2D": 36762,
+    "ONC7d": 47852
+  },
+  "var_index_sha256": "592183b54ba3f8de545620612e6bde4c9b1c225aa79b8c6e143f2bd5bc738ff7",
+  "verdict": "PASS",
+  "zero_count_cells": 0
+}
