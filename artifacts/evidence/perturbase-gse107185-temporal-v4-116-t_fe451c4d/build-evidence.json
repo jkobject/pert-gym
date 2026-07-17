@@ -1,0 +1,124 @@
+{
+  "schema_version": "pert-gym.build-execution-evidence/v1",
+  "task_id": "t_fe451c4d",
+  "record_id": "temporal_v4_116_perturbase_gse107185",
+  "catalogue_row_ids": [116],
+  "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+  "bounded_wave": {
+    "id": "publication-wave-11-of-13",
+    "number": 11,
+    "assignment_count": 1,
+    "outcome_task_id": "t_f196b29f"
+  },
+  "controls": {
+    "frozen_publication_manifest": {
+      "path": "artifacts/schema_audit/downloadable_logical_publication_manifest_20260713.json",
+      "sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4"
+    },
+    "bounded_wave_graph": {
+      "path": "artifacts/orchestration/kanban_graph_compaction_t_36a3533e_manifest.json",
+      "sha256": "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98"
+    }
+  },
+  "source": {
+    "discovery": "The current PerturBase web bundle exposes processed downloads as static/<dataIndex>/<dataIndex>.filter.tar.gz; the exact row-116 component is dataIndex extend_61, not the five approximately 48.5k-cell GEO aggregate matrices.",
+    "url": "http://www.perturbase.cn/static/extend_61/extend_61.filter.tar.gz",
+    "http_content_length": 65772471,
+    "http_etag": "\"65b51ee2-3eb9bb7\"",
+    "http_last_modified": "Sat, 27 Jan 2024 15:18:58 GMT",
+    "sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa",
+    "archive_member": {
+      "name": "mixscape_hvg_filter.h5ad",
+      "size_bytes": 215672608,
+      "sha256": "e8e19bf30b6b028d9bb257907f9bb4a0747478c6b5af24405df2a8da15e18e75",
+      "shape": [8428, 2000]
+    },
+    "immutable_generation_copy": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/source/extend_61.filter.tar.gz#1784263842756819"
+  },
+  "implementation": {
+    "remote_repository_head": "ad1cd8c22516993f5a8403837f25fec58ab4abf3",
+    "build_script": "build_component.py",
+    "build_script_sha256": "8821ce1387e932de76dccb2db3d42eaa121273ac245487a8dbec81d7a0088e8f",
+    "verification_script": "verify_published.py",
+    "verification_script_sha256": "9de2270c5b77cccc66708cd9f922fba1c91603ef2a573e42f992fda9c283442c",
+    "host": "pert-gym-worker-eu",
+    "zone": "europe-west1-b",
+    "billing_project": "jkobject-1549353370965",
+    "lamin_instance": "laminlabs/pertdata",
+    "lamin_branch": "jkobject",
+    "lamin_payload_writes": 0,
+    "collection_writes": 0
+  },
+  "execution": {
+    "revision": "perturbase-gse107185-20260717T045017Z-8821ce13",
+    "build_command": ".venv/bin/python /tmp/t_fe451c4d-build_component.py --source-archive /tmp/t_fe451c4d-probe/extend_61.filter.tar.gz --revision perturbase-gse107185-20260717T045017Z-8821ce13 --output /tmp/t_fe451c4d-output",
+    "verification_command": ".venv/bin/python /tmp/t_fe451c4d-verify_published.py --manifest-generation-uri gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json#1784263868472118 --manifest-sha256 87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a --output /tmp/t_fe451c4d-independent-readback-rerun.json",
+    "verification_python_exit_code": 0,
+    "initial_attempt": {
+      "status": "failed_before_source_extraction_or_remote_writes",
+      "reason": "writer-lock metadata omitted required run_id/project/branch fields",
+      "remediation": "added required lock metadata and selected a fresh revision; no object exists under the failed candidate revision"
+    }
+  },
+  "output": {
+    "revision_prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13",
+    "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json#1784263868472118",
+    "manifest_sha256": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+    "dataset_prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61",
+    "shape": [8428, 2000],
+    "nnz": 6377510,
+    "perturbation_labels": 61,
+    "media_counts": {
+      "hPSC": 2717,
+      "endothelial": 3961,
+      "multilineage": 1750
+    },
+    "batch_counts": {
+      "sample1": 1315,
+      "sample2": 5820,
+      "sample3": 1293
+    },
+    "payload_objects": 3,
+    "revision_objects": 6,
+    "producer_readback": "remote-output/producer-readback.json",
+    "independent_fresh_process_readback": "independent-readback.json",
+    "independent_verdict": "PASS"
+  },
+  "local_evidence_checksums": {
+    "remote-output/manifest.json": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+    "remote-output/ledger.json": "0f9d4efdf5cbd10c049a8182343fdc8a00311c2cd759b27cec718652bea6cee1",
+    "remote-output/producer-readback.json": "e56e5a2556abc68f3e418f15b503dd8f257fbe3f5a12b095c5024acc1c6e82a1",
+    "remote-output/writer-result.json": "e64022e4e7a606bbdd5662258de590959ad33edacbdf193b2094f3c75e1174ef",
+    "independent-readback.json": "18ccdfd3e6692920b38be5e7324dd8c0edc09fe751b2b3041afaf4f27752d4a1"
+  },
+  "ledger": {
+    "proposal_only": true,
+    "accepted_delta_at_build": 0,
+    "source_component_records": 1,
+    "included_component_records": 1,
+    "excluded_component_records": 0,
+    "materialized_component_records": 1,
+    "source_datasets": 1,
+    "included_datasets": 1,
+    "excluded_datasets": 0,
+    "materialized_triplets": 1,
+    "catalogue_reported_n_obs": 8428,
+    "resolved_eligible_n_obs": 8428,
+    "materialized_n_obs": 8428,
+    "excluded_n_obs": 0,
+    "dropped_n_obs": 0,
+    "product_credit": 0,
+    "credit_state": "materialized_pending_independent_test_review_and_administrative_acceptance"
+  },
+  "missingness": {
+    "non_excluding": true,
+    "dependency_created": false,
+    "age_missing_count": 8428,
+    "donor_id_missing_count": 8428,
+    "sex_missing_count": 8428,
+    "ethnicity_missing_count": 8428,
+    "timepoint_missing_count": 8428,
+    "is_low_quality_missing_count": 8428,
+    "note": "All exact PerturBase QC-pass observations were retained. Missing age/donor/sex/ethnicity/elapsed-time/per-cell-quality fields are findings, not exclusions or sibling dependencies."
+  }
+}
