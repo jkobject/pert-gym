@@ -1,0 +1,31 @@
+{
+  "schema_version": "pert-gym.materialized-evidence-build-manifest/v1",
+  "task_id": "t_8b1ae292",
+  "record_id": "temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "files": {
+    "component.json": {"size_bytes": 2146, "sha256": "b7834b382c9c0f86fa020352703a1def6a79bae1205fc689b2cd399f1e4c7320"},
+    "execution-plan.json": {"size_bytes": 2610, "sha256": "9dd7106c0fbf51a778cde641e128dcbbd222022a5c3e584202c3cbd0df4853b1"},
+    "independent-readback.json": {"size_bytes": 7031, "sha256": "c6ab70b69aa93cf867836cbba48005c23b06cdd6f3d619685b6ebb409680191e"},
+    "ledger-acceptance.json": {"size_bytes": 997, "sha256": "f82599fefe3529f8ea18052b839485730e750db4a0c7eeca4a80237eb8823518"},
+    "ledger.json": {"size_bytes": 2081, "sha256": "848838faa4ee573a423f667f3b7cea6aa444bfde60ba3f2526f2d5094b8a5736"},
+    "materialization-manifest.generation-pinned.json": {"size_bytes": 17194, "sha256": "c96f88c3f925df94c3511f5e3a8792cb5afe9e8af086faa93cf00f1579bf6d10"},
+    "materialization-manifest.json": {"size_bytes": 17194, "sha256": "c96f88c3f925df94c3511f5e3a8792cb5afe9e8af086faa93cf00f1579bf6d10"},
+    "materialize_cellxgene_triplets_gcs.py": {"size_bytes": 20918, "sha256": "fd24f484818f8eb8be862a04fcb26a74dd60281a76103bd61936051aafe31e62"},
+    "materialized-provenance.json": {"size_bytes": 2586, "sha256": "f0294bb7fc292d9f3cbc86ed64a261011d8d21f69fecc5a38919796a0a4d526b"},
+    "missingness.json": {"size_bytes": 2183, "sha256": "ee5f631c33152769823df5d146893141760368f318731015239da148b67915f9"},
+    "output-manifest.json": {"size_bytes": 1734, "sha256": "34141d9171cfa2449b7c41526dad7cef56dd585636e471a6dd0f86bfffc0b97d"},
+    "verify_cellxgene_triplet_gcs.py": {"size_bytes": 7876, "sha256": "05407c49c6d8400b1d9ff766c91baf17d41cd383d1f8dec3d1bbd0791362412b"},
+    "writer-result.json": {"size_bytes": 1143, "sha256": "e3786c3ec86e7813687831e13149411dcfb9acedec5acf5f73adc57028e3791f"}
+  },
+  "remote_product": {
+    "payload_members": 3,
+    "payload_bytes": 372379284,
+    "shape": [108838, 32055],
+    "source_sha256": "c2528b8c1eaea03979b367b86744e5aa2e13de0ac1c9c82f433229e082e9411f",
+    "shared_var_identity_sha256": "2e38a37f56c4e91819f8bbe098118221e2cb1bcd7160d86df0f61101a72ee246",
+    "materialization_manifest_generation": "1784281750307410",
+    "materialization_manifest_sha256": "c96f88c3f925df94c3511f5e3a8792cb5afe9e8af086faa93cf00f1579bf6d10"
+  },
+  "accepted_product_credit": 1,
+  "excluded_records": 0
+}

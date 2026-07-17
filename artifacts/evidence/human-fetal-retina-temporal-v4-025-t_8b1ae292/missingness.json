@@ -1,0 +1,44 @@
+{
+  "schema_version": "pert-gym.dataset-local-missingness/v1",
+  "record_id": "temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "policy": "All six catalogue/API gaps remain explicit reportable dataset-local findings; materialization evidence may resolve their payload state, but none is an exclusion, filter, blocker, or sibling dependency.",
+  "findings": [
+    {
+      "field": "age",
+      "state": "no scalar age in controlling publication record; upstream development-stage values retained without filtering",
+      "materialized_state": "development_stage and timepoint columns retained; no invented scalar age",
+      "excluded_records": 0
+    },
+    {
+      "field": "development_stage",
+      "state": "API did not summarize per-observation missingness",
+      "materialized_state": "development_stage retained for all 108838 observations with measured null_count=0",
+      "excluded_records": 0
+    },
+    {
+      "field": "complete_obs_column_schema",
+      "state": "API did not enumerate the complete obs schema",
+      "materialized_state": "33 ordered obs columns recorded by generation-pinned payload readback",
+      "excluded_records": 0
+    },
+    {
+      "field": "per_record_metadata_nulls",
+      "state": "API did not summarize per-record nulls",
+      "materialized_state": "all obs and var null masks preserved; generation-pinned readback measured total_null_count=0 for both frames",
+      "excluded_records": 0
+    },
+    {
+      "field": "shared_var_identity",
+      "state": "not available from metadata API",
+      "materialized_state": "computed from ordered feature identifiers plus NCBITaxon:9606 and cellxgene_feature_id namespace; sha256=2e38a37f56c4e91819f8bbe098118221e2cb1bcd7160d86df0f61101a72ee246",
+      "excluded_records": 0
+    },
+    {
+      "field": "source_asset_sha256",
+      "state": "not computed on Mac because source exceeds the 500MB guard",
+      "materialized_state": "computed while streaming exact frozen source version on EU worker; sha256=c2528b8c1eaea03979b367b86744e5aa2e13de0ac1c9c82f433229e082e9411f",
+      "excluded_records": 0
+    }
+  ],
+  "excluded_records": 0
+}

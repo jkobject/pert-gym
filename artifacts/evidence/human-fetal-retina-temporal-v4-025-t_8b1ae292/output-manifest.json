@@ -1,0 +1,45 @@
+{
+  "schema_version": "pert-gym.cellxgene-materialized-output/v1",
+  "record_id": "temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "target_logical_key": "pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "status": "materialized_and_generation_pinned_readback_pass",
+  "dataset_count": 1,
+  "observation_count": 108838,
+  "variable_count": 32055,
+  "dataset_version_id": "3fdf264b-40f6-4f5a-b433-bddba1bbebf4",
+  "prefix": "pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4",
+  "members": {
+    "obs.parquet": {
+      "generation": "1784281740674292",
+      "size_bytes": 6355332,
+      "sha256": "71e6350c3a2b6d2ecc594475aee3f247b196159b11981d74a14af9d52e3a32b0"
+    },
+    "X.h5ad": {
+      "generation": "1784281744589276",
+      "size_bytes": 365451315,
+      "sha256": "4f7b8c24f229d469950c93798daa9a9d621619eec5fee56a5f92b0c5a3ac9144"
+    },
+    "var.parquet": {
+      "generation": "1784281745961826",
+      "size_bytes": 572637,
+      "sha256": "32b70fc0585fd3144af932b49ce0550f6149bf8c2612f6709416b2008c3d566a"
+    }
+  },
+  "manifest": {
+    "generation": "1784281750307410",
+    "size_bytes": 17194,
+    "sha256": "c96f88c3f925df94c3511f5e3a8792cb5afe9e8af086faa93cf00f1579bf6d10",
+    "newer_than_every_payload": true
+  },
+  "actual_schema": {
+    "obs_columns": 33,
+    "obs_total_null_count": 0,
+    "var_columns": 6,
+    "var_total_null_count": 0,
+    "obs_index_unique": true,
+    "var_index_unique": true,
+    "obs_to_X_axis_equal": true,
+    "X_to_var_axis_equal": true
+  },
+  "excluded_records": 0
+}

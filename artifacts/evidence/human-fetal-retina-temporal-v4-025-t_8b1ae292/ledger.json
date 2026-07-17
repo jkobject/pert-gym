@@ -1,0 +1,41 @@
+{
+  "schema_version": "pert-gym.publication-ledger/v1",
+  "submission_id": "pert-gym-ledger:materialized:t_8b1ae292:temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "submission_status": "accepted_materialized_product",
+  "record_id": "temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "target_logical_key": "pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "catalogue_row_ids": [25],
+  "publication_denominator": 153,
+  "controlling_packet_ledger_precondition": "2/153",
+  "accepted_product_delta": 1,
+  "receipt_scope": "exact component-local product credit; no claim that the stale controlling-packet denominator is current global ledger state",
+  "record_accounting": {
+    "source_component_records": 1,
+    "included_component_records": 1,
+    "excluded_component_records": 0,
+    "materialized_output_records": 1,
+    "equation": "1 source = 1 included + 0 excluded = 1 materialized output"
+  },
+  "dataset_accounting": {
+    "source_datasets": 1,
+    "included_datasets": 1,
+    "excluded_datasets": 0,
+    "materialized_output_datasets": 1,
+    "equation": "1 source = 1 included + 0 excluded = 1 materialized output"
+  },
+  "observation_accounting": {
+    "source_n_obs": 108838,
+    "materialized_n_obs": 108838,
+    "excluded_n_obs": 0,
+    "equation": "108838 source = 108838 materialized + 0 excluded"
+  },
+  "deduplication_key": "record_id:temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "deduplication_scope_count": 1,
+  "credit_state": "accepted_materialized_product",
+  "accepted_product_credit": 1,
+  "quality_missingness_finding_count": 6,
+  "quality_missingness_is_not_exclusion": true,
+  "materialization_manifest_generation": "1784281750307410",
+  "materialization_manifest_sha256": "c96f88c3f925df94c3511f5e3a8792cb5afe9e8af086faa93cf00f1579bf6d10",
+  "readback_sha256": "c6ab70b69aa93cf867836cbba48005c23b06cdd6f3d619685b6ebb409680191e"
+}
