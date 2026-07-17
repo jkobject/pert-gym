@@ -3,6 +3,8 @@ from pathlib import Path
 import pandas as pd
 
 from tools.query_unified_collection import (
+    DEFAULT_MANIFEST_PATH,
+    LATEST_MANIFEST_PATH,
     filter_members,
     find_control_datasets,
     get_dataset_members,
@@ -15,7 +17,9 @@ from tools.query_unified_collection import (
     validate_triplet_var_policy,
 )
 
-FIXTURE_MANIFEST = Path(__file__).parent / "fixtures" / "unified_collection_manifest_minimal.tsv"
+FIXTURE_MANIFEST = (
+    Path(__file__).parent / "fixtures" / "unified_collection_manifest_minimal.tsv"
+)
 
 
 def load_fixture_manifest():
@@ -85,7 +89,9 @@ def test_legacy_manifest_gets_same_prefix_var_policy_defaults():
     assert set(manifest.var_policy) == {"same_prefix"}
     assert manifest.same_prefix_var.all()
 
-    row = manifest.loc[manifest.artifact_key == "DRUG-seq/GSE120222/obs.parquet"].iloc[0]
+    row = manifest.loc[manifest.artifact_key == "DRUG-seq/GSE120222/obs.parquet"].iloc[
+        0
+    ]
     assert row.var_key == "DRUG-seq/GSE120222/var.parquet"
     assert validate_manifest_var_policy(manifest).empty
 
@@ -108,7 +114,9 @@ def test_shared_alias_policy_allows_non_same_prefix_when_link_is_explicit():
 
     missing_link = row.copy()
     missing_link.loc[0, "has_x_var_link"] = False
-    assert "missing X->var link" in " ".join(validate_manifest_var_policy(missing_link).reason)
+    assert "missing X->var link" in " ".join(
+        validate_manifest_var_policy(missing_link).reason
+    )
 
     bad_same_prefix = row.copy()
     bad_same_prefix.loc[0, "var_policy"] = "same_prefix"
@@ -223,3 +231,33 @@ def test_triplet_resolution_uses_explicit_links_and_latest_same_key_artifact():
         "ok": True,
         "errors": [],
     }
+
+
+def test_latest_manifest_path_alias_remains_backwards_compatible():
+    assert LATEST_MANIFEST_PATH == DEFAULT_MANIFEST_PATH
+
+
+def test_depmap_baseline_semantics_overlay_is_applied(tmp_path):
+    manifest_path = tmp_path / "manifest.tsv"
+    pd.DataFrame(
+        [
+            {
+                "artifact_key": "depmap_ccle/26q1/obs.parquet",
+                "prefix": "depmap_ccle/26q1",
+                "source": "DepMap/CCLE",
+                "modality": "bulk_RNA",
+                "assay": "DepMap/CCLE RNA-seq",
+                "perturbation_type": "unknown",
+                "x_semantics": "unknown",
+                "has_x_var_link": True,
+            }
+        ]
+    ).to_csv(manifest_path, sep="\t", index=False)
+
+    row = load_unified_manifest(manifest_path).iloc[0]
+
+    assert row.perturbation_type == "none"
+    assert row.x_semantics == "log1p_TPM"
+    assert row.baseline_state == "baseline"
+    assert row.release_guard == "depmap_ccle/26q1"
+    assert "separate screen artifacts" in row.screen_response_policy

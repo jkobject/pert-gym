@@ -29,6 +29,7 @@ artifacts/
 logs/
 site/
 coverage.xml
+.coverage
 pert-gym/model-ready-*/
 
 # Broken Git metadata backups kept only for forensic recovery
