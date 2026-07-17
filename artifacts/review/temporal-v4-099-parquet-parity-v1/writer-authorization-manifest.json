@@ -190,7 +190,7 @@
         "ontology_term_id": "NCBITaxon:9606"
       },
       "task_id": "t_5a683225",
-      "writer_contract_sha256": "bdd25923c8f6cd2bf1a0fc47df55da383dd1621e556fa021c7d9c9b4e2b879bb"
+      "writer_contract_sha256": "572e3f14e3caf17989de6df3852084f580659b53f48a992847dd75c87c5bf8f5"
     },
     {
       "assays": [
@@ -371,7 +371,7 @@
         "ontology_term_id": "NCBITaxon:10090"
       },
       "task_id": "t_5c375e11",
-      "writer_contract_sha256": "bdd25923c8f6cd2bf1a0fc47df55da383dd1621e556fa021c7d9c9b4e2b879bb"
+      "writer_contract_sha256": "572e3f14e3caf17989de6df3852084f580659b53f48a992847dd75c87c5bf8f5"
     },
     {
       "assays": [
@@ -534,7 +534,7 @@
         "ontology_term_id": "NCBITaxon:9606"
       },
       "task_id": "t_71c1be94",
-      "writer_contract_sha256": "bdd25923c8f6cd2bf1a0fc47df55da383dd1621e556fa021c7d9c9b4e2b879bb"
+      "writer_contract_sha256": "572e3f14e3caf17989de6df3852084f580659b53f48a992847dd75c87c5bf8f5"
     }
   ],
   "expires_at": "2027-07-16T00:00:00Z",
@@ -544,7 +544,7 @@
   "writer_contract": {
     "live_ledger_control_plane_sha256": "f37cc8159f660d2474533befcd10e8989694bd932a290169781c556efd471f11",
     "parquet_frame_parity_sha256": "f2827eca688dd2581a6ede51be77c4ae0b9327bacc66116e8ec1b1cc5420e976",
-    "writer_contract_sha256": "bdd25923c8f6cd2bf1a0fc47df55da383dd1621e556fa021c7d9c9b4e2b879bb",
-    "writer_sha256": "ecf9291863e089222c4facf666b89763e9f6bef98f9cf56c8379d608b2861117"
+    "writer_contract_sha256": "572e3f14e3caf17989de6df3852084f580659b53f48a992847dd75c87c5bf8f5",
+    "writer_sha256": "67ce2c57c05f0429c1c954619ea34289e25a30f0babfc875d6564590a465a372"
   }
 }

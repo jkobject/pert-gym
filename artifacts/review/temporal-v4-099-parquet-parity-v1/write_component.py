@@ -786,6 +786,22 @@ def require_reviewed_manifest_paths(
     return observed
 
 
+def require_legacy_replay_paths(
+    config_path: Path, authorization_path: Path
+) -> tuple[Path, Path]:
+    """Confine legacy authorization to the canonical non-executable row-99 replay."""
+    expected = (
+        Path(__file__).with_name("row-99-config.json").resolve(),
+        Path(__file__).with_name("authorization.json").resolve(),
+    )
+    observed = (config_path.resolve(), authorization_path.resolve())
+    if observed != expected:
+        raise RuntimeError(
+            "legacy authorization is confined to the canonical row-99 replay"
+        )
+    return observed
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
@@ -812,9 +828,12 @@ def main() -> int:
     else:
         if args.authorization_manifest_sha256 is not None:
             raise RuntimeError("detached manifest SHA-256 requires an authorization manifest")
+        config_path, authorization_path = require_legacy_replay_paths(
+            args.config, args.authorization
+        )
         contract = writer_contract.load_bound_contract(
-            args.config,
-            args.authorization,
+            config_path,
+            authorization_path,
             writer_path=Path(__file__),
             helper_path=Path(__file__).with_name("parquet_frame_parity.py"),
             require_execution=False,

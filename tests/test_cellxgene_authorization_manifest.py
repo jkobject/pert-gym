@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import hashlib
 import importlib.util
 import json
@@ -255,3 +256,76 @@ def test_missingness_is_explicit_authorization_policy_not_invented_metadata(
         "development_stage"
     ]
     assert validated.entries[0]["missingness_policy"]["invent_values"] is False
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "match"),
+    [
+        ("reviewer", "", "non-empty"),
+        ("parent_task_id", "", "non-empty"),
+        ("correction_task_id", "", "non-empty"),
+        ("scope", "", "non-empty"),
+        ("scope", "partial-review", "exact-head independent review"),
+        ("reviewed_at", "2026-07-16T00:00:01Z", "reviewed_at"),
+        ("reviewed_at", "2026-07-17T00:00:00Z", "reviewed_at"),
+    ],
+)
+def test_manifest_rejects_incomplete_or_incoherent_entry_review_provenance(
+    tmp_path: Path, field: str, value: str, match: str
+) -> None:
+    contract = load_contract_module()
+    manifest = load_manifest()
+    manifest["entries"][0]["review_provenance"][field] = value
+    path, digest_path = write_manifest(tmp_path, manifest)
+
+    with pytest.raises((RuntimeError, ValueError), match=match):
+        contract.load_authorization_manifest(
+            path,
+            digest_path,
+            writer_path=WRITER,
+            helper_path=HELPER,
+            ledger_helper_path=LEDGER_HELPER,
+            now="2026-07-16T12:00:00Z",
+        )
+
+
+def test_new_mouse_manifest_entry_needs_no_row_specific_validator_change(
+    tmp_path: Path,
+) -> None:
+    contract = load_contract_module()
+    manifest = load_manifest()
+    config = json.loads((REVIEW / "row-55-config.json").read_text())
+    entry = copy.deepcopy(manifest["entries"][1])
+    record_id = "temporal_v4_056_synthetic_mouse_dataset"
+    task_id = "t_synthetic_mouse"
+    logical_key = "pert-gym/logical/temporal/synthetic_mouse_dataset"
+    config["catalogue_record"] = record_id
+    config["task_id"] = task_id
+    config["authorization_binding"]["approved_parent_protocol"] = "temporal-v4-056-parquet-parity-parent/v1"
+    config["authorization_binding"]["correction_task_id"] = task_id
+    config["logical_key"] = logical_key
+    config["obs"]["assignments"][0]["value"] = logical_key
+    config["revision"]["prefix"] = "temporal-v4-056"
+    config["execution"]["output_directory"] = f"/tmp/temporal-v4-056-{task_id}"
+    config_path = tmp_path / "row-56-config.json"
+    config_path.write_text(json.dumps(config, indent=2, sort_keys=True) + "\n")
+    entry["record_id"] = record_id
+    entry["config_sha256"] = sha256(config_path)
+    entry["source_packet_sha256"] = sha256(config_path)
+    entry["task_id"] = task_id
+    entry["family_lease"] = logical_key
+    entry["revision_prefix"] = "temporal-v4-056"
+    entry["review_provenance"]["correction_task_id"] = task_id
+    entry["config_identity"]["obs"] = copy.deepcopy(config["obs"])
+    entry["config_identity"]["execution"] = copy.deepcopy(config["execution"])
+    manifest["entries"].append(entry)
+    path, digest_path = write_manifest(tmp_path, manifest)
+
+    validated = contract.load_manifest_contract(
+        config_path, path, digest_path,
+        writer_path=WRITER, helper_path=HELPER,
+        require_execution=True, now="2026-07-16T12:00:00Z",
+    )
+    assert validated.manifest_entry["species"] == {
+        "label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090",
+    }

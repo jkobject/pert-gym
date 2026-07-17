@@ -16,6 +16,7 @@ PROTOCOL = "cellxgene-category-safe-logical-sparse-zarr/v1"
 MAPPER_VERSION = "declarative-obs-mapper/v1"
 AUTHORIZATION_MANIFEST_VERSION = "cellxgene-writer-authorization-manifest/v1"
 MISSINGNESS_POLICY_VERSION = "explicit-only/v1"
+EXACT_REVIEW_SCOPE = "exact-head-independent-review-before-any-execution"
 
 _CONFIG_KEYS = {
     "config_version",
@@ -403,7 +404,13 @@ def load_authorization_manifest(
         seen_configs.add(config_sha256)
         _exact_keys(entry["source"], _SOURCE_KEYS, "manifest entry source")
         _exact_keys(entry["http_identity"], _HEAD_KEYS, "manifest entry http_identity")
-        _exact_keys(entry["species"], {"label", "ontology_term_id"}, "manifest entry species")
+        species = _exact_keys(
+            entry["species"],
+            {"label", "ontology_term_id"},
+            "manifest entry species",
+        )
+        for key in ("label", "ontology_term_id"):
+            _nonempty(species[key], f"manifest entry species.{key}")
         if not isinstance(entry["assays"], list) or not entry["assays"]:
             raise ValueError("manifest entry assays must be non-empty")
         if not isinstance(entry["shape"], list) or len(entry["shape"]) != 2:
@@ -427,9 +434,21 @@ def load_authorization_manifest(
             {"parent_task_id", "correction_task_id", "reviewer", "reviewed_at", "status", "scope"},
             "manifest entry review_provenance",
         )
-        _utc_timestamp(provenance["reviewed_at"], "manifest entry reviewed_at")
+        for key in ("parent_task_id", "correction_task_id", "reviewer", "scope"):
+            _nonempty(provenance[key], f"manifest entry review_provenance.{key}")
+        reviewed_at = _utc_timestamp(
+            provenance["reviewed_at"], "manifest entry reviewed_at"
+        )
+        if reviewed_at > issued_at or reviewed_at > observed_at:
+            raise RuntimeError(
+                "manifest entry reviewed_at is later than manifest issuance or validation"
+            )
         if provenance["status"] != "completed":
             raise RuntimeError("manifest entry review provenance is not completed")
+        if provenance["scope"] != EXACT_REVIEW_SCOPE:
+            raise RuntimeError(
+                "manifest entry review scope is not exact-head independent review"
+            )
         if entry["writer_contract_sha256"] != writer_contract["writer_contract_sha256"]:
             raise RuntimeError("manifest entry writer contract SHA-256 is stale")
         if entry["execution_authorized"] is not True:
@@ -497,9 +516,13 @@ def _validate_config(
         raise ValueError("API visibility/tombstone/primary-data identity must fail closed")
     organism = _exact_keys(api["organism"], {"label", "ontology_term_id"}, "api_identity.organism")
     expected_organism = (
-        {"label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090"}
-        if revision_prefix == "temporal-v4-055"
-        else {"label": "Homo sapiens", "ontology_term_id": "NCBITaxon:9606"}
+        manifest_entry["species"]
+        if manifest_entry is not None
+        else (
+            {"label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090"}
+            if revision_prefix == "temporal-v4-055"
+            else {"label": "Homo sapiens", "ontology_term_id": "NCBITaxon:9606"}
+        )
     )
     if organism != expected_organism:
         raise ValueError(f"only exact {expected_organism['label']} identity is approved")
@@ -776,7 +799,7 @@ def validate_bound_contract(
     if authorization["correction_task_id"] != binding["correction_task_id"]:
         raise RuntimeError("authorization correction task is not bound to config task")
     _nonempty(authorization["review_scope"], "authorization.review_scope")
-    if authorization["review_scope"] != "exact-head-independent-review-before-any-execution":
+    if authorization["review_scope"] != EXACT_REVIEW_SCOPE:
         raise RuntimeError("authorization review scope is not exact-head independent review")
     if not isinstance(authorization["execution_authorized"], bool):
         raise ValueError("authorization.execution_authorized must be boolean")
