@@ -566,7 +566,7 @@
   "checks_passed": 27,
   "checks_total": 27,
   "command": "cd ~/work/pert-gym && uv run python /tmp/gse107185-qa-t_51cc7265/qa_gse107185.py --input /tmp/gse107185-qa-t_51cc7265/input --output <result.json>",
-  "executed_script_sha256": "217f35b81b44671e44de2b1c4483215b0bcf64b132e1c1a05435fde21b0abc98",
+  "executed_script_sha256": "62a03704da90978d21d588d4a36d28089276cbbfff1cf54cfb05228f2598caad",
   "failed_checks": [],
   "host": "pert-gym-worker-eu",
   "mode": "read-only exact-generation GCS payloads including frozen source archive; no mocks/testMode; tester-authored",
@@ -579,7 +579,7 @@
   "recommendation": "PASS: advance to terminal reviewer; retain zero product credit until reviewer and administrative acceptance.",
   "record_id": "temporal_v4_116_perturbase_gse107185",
   "review_task_id": "t_f196b29f",
-  "runtime_seconds": 24.665007946001424,
+  "runtime_seconds": 23.854388585998095,
   "schema_version": "pert-gym.independent-consumer-qa/v1",
   "stable_evidence": {
     "checks": {

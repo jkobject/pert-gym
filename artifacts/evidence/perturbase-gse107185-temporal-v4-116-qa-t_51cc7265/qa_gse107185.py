@@ -11,7 +11,6 @@ import subprocess
 import tarfile
 import tempfile
 import time
-
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -272,7 +271,8 @@ def main() -> int:
             check("real_readback_shape_nnz", tuple(matrix.shape) == EXPECTED_SHAPE and matrix.nnz == EXPECTED_NNZ and len(obs) == 8428 and len(var) == 2000, {"shape": list(matrix.shape), "nnz": matrix.nnz, "obs": len(obs), "var": len(var)})
             check("ordered_unique_axes_equal_source", obs.index.is_unique and var.index.is_unique and obs.index.tolist() == source.obs_names.astype(str).tolist() and var.index.tolist() == source.var_names.astype(str).tolist(), {"obs_unique": obs.index.is_unique, "var_unique": var.index.is_unique})
             source_matrix = sparse.csr_matrix(np.asarray(source.X[:, :], dtype=np.float32))
-            source_matrix.sum_duplicates(); source_matrix.sort_indices()
+            source_matrix.sum_duplicates()
+            source_matrix.sort_indices()
             observed_matrix_identity = matrix_identity(matrix)
             check("matrix_value_exact_source_parity", observed_matrix_identity == matrix_identity(source_matrix) == manifest["dataset"]["X"], observed_matrix_identity)
             source_obs_parity = all(normalized_source_series(source.obs[c].copy()).reset_index(drop=True).equals(obs[c].reset_index(drop=True)) for c in source.obs.columns)
