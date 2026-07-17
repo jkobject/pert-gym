@@ -1,0 +1,26 @@
+{
+  "finite_value_sum": 1054824189,
+  "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001137_gse158999/revisions/temporal-v4-095-wave10-c1f63c6ec90e4c24/manifest.json#1784286707609127",
+  "manifest_sha256": "c5b3b786cebb426ebdc50be19ead968fa258d39241264999e910aa4ec63f4e4b",
+  "nnz_stored": 159634893,
+  "revision": "temporal-v4-095-wave10-c1f63c6ec90e4c24",
+  "shape": [
+    30496,
+    23961
+  ],
+  "source_sha256": {
+    "barcodes": "2d4197dec8573dfeda91e9827e64656fff12345379700701511dbcf2d7d2db10",
+    "features": "72819b605d74325c8973cae725c9c90df85e53c96eb25a519b4cc0da962f4445",
+    "matrix": "16475994194e6e7e41be8c6deaef8426f02fda34ba80f12f7d25ec7c2a579d7e",
+    "metadata": "4a4d9046d21250fa1e4001f431fe02ae943ae613a40f9356f7d94c249e3765f3",
+    "soft": "7b03f6390b7777ab5360a271657e5d0dcd7cb74c1869fcd332b017270bacb186"
+  },
+  "verdict": "PASS",
+  "wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-10-of-13",
+    "number": 10,
+    "outcome_task_id": "t_48ac1f74",
+    "singular": true
+  }
+}

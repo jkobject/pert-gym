@@ -1,0 +1,49 @@
+{
+  "accepted_delta_at_build": 0,
+  "catalogue_row_ids": [
+    95
+  ],
+  "debits": {
+    "dropped_observations": 0,
+    "exclusions": 0,
+    "product_credit": 0
+  },
+  "input_accounting": {
+    "accounted_inputs": 8,
+    "controls": 3,
+    "expected_inputs": 8,
+    "source_payload_objects": 5,
+    "upstream_source_objects": 5
+  },
+  "note": "Build submission only; independent test/review is required before accepted publication credit.",
+  "observation_accounting": {
+    "catalogue_source_n_obs_verbatim": 0,
+    "excluded_n_obs": 0,
+    "materialized_n_obs": 30496,
+    "resolved_source_n_obs": 30496
+  },
+  "output_accounting": {
+    "accounted_outputs": 5,
+    "expected_outputs": 5,
+    "ledger_objects": 1,
+    "manifest_objects": 1,
+    "triplet_artifacts": 3
+  },
+  "record_id": "temporal_v4_095_organoiddb_odd001137_gse158999",
+  "sample_accounting": {
+    "geo_samples": 8,
+    "materialized_samples": 8,
+    "matrix_objects": 1
+  },
+  "schema_version": "pert-gym.proposed-publication-ledger/v2",
+  "submission_id": "pert-gym-ledger:materialized-build:t_75558c6a:temporal_v4_095_organoiddb_odd001137_gse158999",
+  "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+  "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001137_gse158999",
+  "wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-10-of-13",
+    "number": 10,
+    "outcome_task_id": "t_48ac1f74",
+    "singular": true
+  }
+}

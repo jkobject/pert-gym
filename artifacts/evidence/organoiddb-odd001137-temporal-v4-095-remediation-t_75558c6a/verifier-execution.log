@@ -1,0 +1,87 @@
+{
+  "control_hashes": {
+    "catalogue": "4d31f341b60163ba1bcf6293746b9f8fe483cbccf6cd975367ed62a30467fdea",
+    "frozen_manifest": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+    "graph": "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98"
+  },
+  "counts": {
+    "finite_value_sum": 1054824189,
+    "nnz_stored": 159634893,
+    "observations": 30496,
+    "variables": 23961
+  },
+  "explicit_missingness_preserved": true,
+  "generation_qualified_ledger_read": true,
+  "generation_qualified_manifest_read": true,
+  "generation_qualified_payloads_read": 3,
+  "independent_source_identity": {
+    "barcodes": {
+      "sha256": "2d4197dec8573dfeda91e9827e64656fff12345379700701511dbcf2d7d2db10",
+      "size_bytes": 157988,
+      "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE158nnn/GSE158999/suppl/GSE158999_barcodes.tsv.gz"
+    },
+    "features": {
+      "sha256": "72819b605d74325c8973cae725c9c90df85e53c96eb25a519b4cc0da962f4445",
+      "size_bytes": 93683,
+      "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE158nnn/GSE158999/suppl/GSE158999_features.tsv.gz"
+    },
+    "matrix": {
+      "sha256": "16475994194e6e7e41be8c6deaef8426f02fda34ba80f12f7d25ec7c2a579d7e",
+      "size_bytes": 497917800,
+      "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE158nnn/GSE158999/suppl/GSE158999_matrix.mtx.gz"
+    },
+    "metadata": {
+      "sha256": "4a4d9046d21250fa1e4001f431fe02ae943ae613a40f9356f7d94c249e3765f3",
+      "size_bytes": 9420602,
+      "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE158nnn/GSE158999/suppl/GSE158999_metadata.tsv.gz"
+    },
+    "soft": {
+      "sha256": "7b03f6390b7777ab5360a271657e5d0dcd7cb74c1869fcd332b017270bacb186",
+      "size_bytes": 2946,
+      "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE158nnn/GSE158999/soft/GSE158999_family.soft.gz"
+    }
+  },
+  "ledger_balanced": true,
+  "logical_key_resolves_to_built_dataset": true,
+  "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001137_gse158999/revisions/temporal-v4-095-wave10-c1f63c6ec90e4c24/manifest.json#1784286707609127",
+  "manifest_sha256": "c5b3b786cebb426ebdc50be19ead968fa258d39241264999e910aa4ec63f4e4b",
+  "ordered_axis_parity": true,
+  "physical_sparse_encoding": {
+    "expected_indptr_length": 23962,
+    "format": "csc",
+    "indptr_length": 23962,
+    "physical_encoding_type": "csc_matrix",
+    "shape": [
+      30496,
+      23961
+    ]
+  },
+  "product_credit": 0,
+  "record_id": "temporal_v4_095_organoiddb_odd001137_gse158999",
+  "schema_version": "pert-gym.independent-generation-readback/v1",
+  "scope": {
+    "catalogue_row_ids": [
+      95
+    ],
+    "datasets": 1,
+    "payload_objects": 3,
+    "samples": 8,
+    "triplets": 1
+  },
+  "source_identity_verified": true,
+  "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001137_gse158999",
+  "timepoint_counts": {
+    "4": 6898,
+    "5": 7783,
+    "6": 8313,
+    "7": 7502
+  },
+  "verdict": "PASS",
+  "wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-10-of-13",
+    "number": 10,
+    "outcome_task_id": "t_48ac1f74",
+    "singular": true
+  }
+}
