@@ -12,6 +12,7 @@ import json
 from collections.abc import Iterable
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 DEPMAP_26Q1_RELEASE = "DepMap Public 26Q1"
@@ -91,6 +92,15 @@ def validate_chronos_gene_effect_rows(rows: pd.DataFrame) -> None:
     missing = set(CHRONOS_REQUIRED_COLUMNS).difference(rows.columns)
     if missing:
         raise ValueError(f"Chronos rows missing required columns: {sorted(missing)}")
+
+    numeric_response = pd.to_numeric(rows["response_value"], errors="coerce")
+    valid_response = numeric_response.notna() & np.isfinite(numeric_response)
+    if not valid_response.all():
+        bad_rows = list(rows.index[~valid_response])
+        raise ValueError(
+            "Chronos response_value must be numeric and finite for every row; "
+            f"bad rows: {bad_rows}"
+        )
 
     required_metadata = (
         "response_direction",

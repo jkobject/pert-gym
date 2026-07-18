@@ -21,6 +21,9 @@ CHECKED_IN_COVERAGE_ARTIFACT = (
     REPO_ROOT
     / "artifacts/schema_audit/model_ready_v2_depmap_chronos_coverage_20260711.json"
 )
+CHECKED_IN_UNMATCHED_MODEL_IDS = CHECKED_IN_COVERAGE_ARTIFACT.with_name(
+    f"{CHECKED_IN_COVERAGE_ARTIFACT.stem}_unmatched_model_ids.tsv"
+)
 
 
 def test_raw_chronos_gene_effect_keeps_negative_values_and_canonical_direction():
@@ -83,6 +86,28 @@ def test_chronos_validator_rejects_null_required_metadata_per_row(column):
     annotated.loc[1, column] = None
 
     with pytest.raises(ValueError, match=f"Chronos {column} must be non-null"):
+        validate_chronos_gene_effect_rows(annotated)
+
+
+@pytest.mark.parametrize(
+    "response_value",
+    [None, float("nan"), float("inf"), float("-inf"), "not-a-number"],
+)
+def test_chronos_validator_rejects_non_finite_or_non_numeric_response_values(
+    response_value,
+):
+    annotated = annotate_raw_chronos_gene_effect(
+        pd.DataFrame(
+            {
+                "model_id": ["ACH-000001", "ACH-000002"],
+                "response_value": [-1.25, response_value],
+            }
+        )
+    )
+
+    with pytest.raises(
+        ValueError, match="Chronos response_value must be numeric and finite"
+    ):
         validate_chronos_gene_effect_rows(annotated)
 
 
@@ -170,6 +195,7 @@ def test_coverage_artifact_is_deterministic_and_exposes_unmatched_sidecar(tmp_pa
 
 def test_checked_in_coverage_decision_records_reviewed_26q1_counts():
     payload = json.loads(CHECKED_IN_COVERAGE_ARTIFACT.read_text(encoding="utf-8"))
+    unmatched = pd.read_csv(CHECKED_IN_UNMATCHED_MODEL_IDS, sep="\t")
 
     assert payload["source"] == {
         "accession": CHRONOS_SOURCE_ACCESSION,
@@ -195,3 +221,13 @@ def test_checked_in_coverage_decision_records_reviewed_26q1_counts():
         payload["deterministic_unmatched_sidecar"]["unmatched_reason"]
         == "missing_exact_26Q1_baseline_ModelID"
     )
+    assert payload["deterministic_unmatched_sidecar"]["filename"] == (
+        CHECKED_IN_UNMATCHED_MODEL_IDS.name
+    )
+    assert unmatched.columns.tolist() == ["ModelID", "reason"]
+    assert len(unmatched) == payload["coverage"]["unmatched_model_ids"]
+    assert unmatched["ModelID"].tolist() == sorted(unmatched["ModelID"].tolist())
+    assert unmatched["ModelID"].is_unique
+    assert set(unmatched["reason"]) == {
+        payload["deterministic_unmatched_sidecar"]["unmatched_reason"]
+    }
