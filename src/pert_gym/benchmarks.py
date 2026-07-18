@@ -25,6 +25,9 @@ DEFAULT_MODEL_READY_MEMBER_COUNT = 1
 EMPTY_RESPONSE_SCREEN_EXCLUSION_REASON = (
     "x_semantics=empty response_screen is not expression-model-ready"
 )
+BROAD_PRISM_EXCLUSION_REASON = (
+    "broad_prism_repurposing is held out from expression-model-ready loaders"
+)
 SANGER_SCORE_EXCLUSION_REASON = "sanger_score_crispr is CRISPRko essentiality/dependency response data, not expression X"
 NON_EXPRESSION_SCORE_SEMANTICS = {"gene_effect", "fold_change", "dependency_score"}
 DIRECT_RESPONSE_SOURCES = {
@@ -533,11 +536,13 @@ def filter_expression_model_ready_members(
                 f"x_semantics={x_semantics} is not expression-model-ready"
             )
             continue
-        if prefix == "broad_prism_repurposing" or (
-            x_semantics == "empty" and "response" in modality
-        ):
+        if x_semantics == "empty" and "response" in modality:
             excluded.append(key_text)
             reasons[key_text] = EMPTY_RESPONSE_SCREEN_EXCLUSION_REASON
+            continue
+        if prefix == "broad_prism_repurposing":
+            excluded.append(key_text)
+            reasons[key_text] = BROAD_PRISM_EXCLUSION_REASON
             continue
         included.append(key_text)
     return ExpressionMemberFilterResult(
@@ -596,8 +601,12 @@ def load_response_screen_with_baseline(
             raise ValueError(
                 f"response row {idx} has no baseline RNA expression for {stable_id}"
             )
-        response_metric = str(row.get("response_metric", "")).strip().lower()
-        response_value = row.get("response_value")
+        if "response_value" in row:
+            response_metric = str(row.get("response_metric", "")).strip().lower()
+            response_value = row.get("response_value")
+        else:
+            response_metric = "lfc" if "lfc" in row else ""
+            response_value = row.get("lfc")
         if response_value is None:
             raise ValueError(f"response row {idx} is missing response_value")
         try:
@@ -608,9 +617,19 @@ def load_response_screen_with_baseline(
             ) from exc
         if response_metric in {"", "missing", "none", "nan"}:
             raise ValueError(f"response row {idx} is missing response_metric")
+        perturbation = str(
+            row.get("perturbation")
+            or row.get("broad_id")
+            or row.get("perturbation_id")
+            or ""
+        ).strip()
+        if not perturbation:
+            raise ValueError(
+                f"response row {idx} is missing perturbation/broad_id/perturbation_id"
+            )
         X.append(list(baseline_by_id[stable_id]))
         target_response.append([numeric_response])
-        perturbations.append(str(row.get("perturbation", row.get("broad_id", ""))))
+        perturbations.append(perturbation)
         controls.append(_is_control_row(row))
         covariates.append({"depmap_id": stable_id, "response_metric": response_metric})
 
@@ -888,6 +907,7 @@ def _build_dataset(
     source: str,
     metadata: Mapping[str, Any],
 ) -> BenchmarkDataset:
+    _validate_compound_fingerprints(obs_rows)
     controls_idx = [idx for idx, row in enumerate(obs_rows) if _is_control_row(row)]
     if not controls_idx:
         raise ValueError("Benchmark loader requires at least one control row.")
@@ -948,6 +968,29 @@ def _subset_batch(
             else ()
         ),
     )
+
+
+def _validate_compound_fingerprints(obs_rows: Sequence[Mapping[str, Any]]) -> None:
+    if not any("compound_fingerprint" in row for row in obs_rows):
+        return
+
+    width: int | None = None
+    for idx, row in enumerate(obs_rows):
+        fingerprint = row.get("compound_fingerprint")
+        if fingerprint is None:
+            raise ValueError(
+                "compound_fingerprint must be present for every row when provided"
+            )
+        try:
+            row_width = len(fingerprint)
+        except TypeError as exc:
+            raise ValueError(
+                f"compound_fingerprint row {idx} must be a sequence"
+            ) from exc
+        if width is None:
+            width = row_width
+        elif row_width != width:
+            raise ValueError("compound_fingerprint rows must have consistent width")
 
 
 def _synthetic_rows() -> tuple[list[dict[str, Any]], list[list[float]], list[str]]:
