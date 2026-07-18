@@ -210,8 +210,6 @@ def _effective_deadline(
     now: datetime,
 ) -> datetime:
     """Preserve a live same-task lease and reject a live foreign task lease."""
-    if instance.get("status") != "RUNNING":
-        return requested
     labels = instance.get("labels")
     if not isinstance(labels, dict):
         return requested
@@ -300,6 +298,8 @@ def launch_heavy_command(
     if payload.returncode:
         return payload.returncode
 
+    immediately_before_stop = _describe(run)
+    _verify_lease(immediately_before_stop, labels)
     _checked(
         run,
         _gcloud("instances", "stop", INSTANCE, "--zone", ZONE, "--quiet"),

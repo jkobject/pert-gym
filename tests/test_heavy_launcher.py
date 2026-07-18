@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import subprocess
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -104,6 +104,7 @@ def test_launcher_publishes_exact_bounded_lease_before_start_and_payload(
         "describe",
         "start",
         "ssh",
+        "describe",
         "stop",
     ]
     assert not local_lease.with_suffix(".json.tmp").exists()
@@ -136,6 +137,32 @@ def test_launcher_refuses_readback_mismatch_before_start_or_payload(
     assert not any("start" in call or "ssh" in call for call in fake.calls)
 
 
+def test_terminated_instance_with_active_foreign_lease_blocks_before_publication(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    fake.instance["labels"].update(
+        {"task": "t-deadbeef", "lease-until": "20260716t080000z"}
+    )
+
+    with pytest.raises(RuntimeError, match="active lease owned by another task"):
+        launcher.launch_heavy_command(
+            task="t_f8501514",
+            eta_hours=1,
+            command=["heavy"],
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 16, tzinfo=timezone.utc),
+            run=fake,
+        )
+
+    assert not any(
+        operation in call
+        for call in fake.calls
+        for operation in ("add-labels", "start", "ssh", "stop")
+    )
+
+
 def test_launcher_stops_only_after_clean_terminal_payload(tmp_path: Path) -> None:
     launcher = _launcher()
     fake = FakeGcloud(initial_status="RUNNING")
@@ -159,6 +186,35 @@ def test_launcher_stops_only_after_clean_terminal_payload(tmp_path: Path) -> Non
     )
     assert not any("stop" in call for call in fake.calls)
     assert fake.instance["labels"]["lease-until"] == "20260716t100000z"
+
+
+def test_expired_lease_replaced_during_payload_prevents_old_owner_stop(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="RUNNING")
+
+    def replacing_payload(command: list[str]) -> subprocess.CompletedProcess[str]:
+        result = fake(command)
+        fake.instance["labels"].update(
+            {"task": "t-deadbeef", "lease-until": "20260717t000000z"}
+        )
+        return result
+
+    with pytest.raises(RuntimeError, match="lease label readback mismatch"):
+        launcher.launch_heavy_command(
+            task="t_f8501514",
+            eta_hours=1,
+            command=["heavy"],
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 16, tzinfo=timezone.utc),
+            run=fake,
+            payload_run=replacing_payload,
+        )
+
+    assert fake.instance["status"] == "RUNNING"
+    assert fake.instance["labels"]["task"] == "t-deadbeef"
+    assert not any("stop" in call for call in fake.calls)
 
 
 def test_payload_uses_long_running_transport_separate_from_bounded_gcloud(
@@ -211,7 +267,7 @@ def test_default_payload_transport_streams_without_python_timeout(
     assert observed.get("timeout") is None
 
 
-def test_clean_terminal_stop_allows_next_task_to_replace_stale_labels(
+def test_clean_terminal_stop_allows_next_task_to_replace_expired_labels(
     tmp_path: Path,
 ) -> None:
     launcher = _launcher()
@@ -236,7 +292,7 @@ def test_clean_terminal_stop_allows_next_task_to_replace_stale_labels(
             eta_hours=1,
             command=["second"],
             local_lease_path=tmp_path / "second.json",
-            now=now,
+            now=now + timedelta(hours=9),
             run=fake,
         )
         == 0
