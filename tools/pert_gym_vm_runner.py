@@ -45,12 +45,15 @@ PRODUCTION_HEARTBEAT_SECONDS = 30.0
 METADATA_BASE_URL = "http://metadata.google.internal/computeMetadata/v1"
 DEFAULT_LAMIN_WRITER_LOCK_DIR = Path("/tmp/pert-gym")
 LAMIN_WRITER_LOCK_DIR_ENV = "PERT_GYM_LAMIN_WRITER_LOCK_DIR"
+LAMIN_WRITER_LEASE_ENV = "PERT_GYM_INHERITED_LAMIN_WRITER_LEASE"
+LAMIN_WRITER_LEASE_ENV_VARS = (LAMIN_WRITER_LEASE_ENV,)
 GCS_LAMIN_WRITER_LOCK_BUCKET = "scperturb"
 GCS_LAMIN_WRITER_LOCK_OBJECT = "pert-gym/locks/lamin-writer-v1.json"
 GCS_LAMIN_WRITER_LEASE_SECONDS = 120.0
 _LOCK_METADATA_FIELDS = frozenset(
     {"run_id", "pid", "host", "project", "zone", "branch", "started_at"}
 )
+_LEASE_TOKEN = object()
 
 
 @dataclass(frozen=True)
@@ -62,6 +65,21 @@ class Preflight:
     free_disk_bytes: int
     available_memory_bytes: int
     billing_project: str
+
+
+@dataclass
+class LaminWriterLease:
+    """Capability issued only while this process holds every writer lock."""
+
+    run_id: str
+    _token: object | None = None
+    _lock_handles: tuple[TextIO, ...] = ()
+    _lock_paths: tuple[Path, ...] = ()
+
+
+def has_lamin_writer_lease(lease: LaminWriterLease | None) -> bool:
+    """Return whether ``lease`` was issued by the active shared lock contract."""
+    return isinstance(lease, LaminWriterLease) and lease._token is _LEASE_TOKEN
 
 
 @dataclass(frozen=True)
@@ -479,7 +497,7 @@ def lamin_writer_lock(
     metadata: dict[str, object],
     *,
     check_live_metadata: bool = True,
-) -> Iterator[None]:
+) -> Iterator[TextIO]:
     """Hold the non-blocking global Lamin writer lock with PID-reuse-safe recovery.
 
     ``flock`` is the atomic ownership primitive.  Metadata is examined only after
@@ -516,7 +534,7 @@ def lamin_writer_lock(
             }
             _write_lock_metadata(handle, acquisition_metadata)
             acquired = True
-            yield
+            yield handle
         finally:
             try:
                 if acquired:
@@ -529,6 +547,166 @@ def lamin_writer_lock(
                     _write_lock_metadata(handle, released)
             finally:
                 fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+@contextmanager
+def lamin_writer_lease(
+    *, run_id: str, preflight_result: Preflight | None = None
+) -> Iterator[LaminWriterLease]:
+    """Acquire the host-global and every legacy Lamin writer lock together."""
+    result = preflight() if preflight_result is None else preflight_result
+    metadata = {
+        "pid": os.getpid(),
+        "run_id": run_id,
+        "host": result.hostname,
+        "project": result.project,
+        "zone": result.zone,
+        "branch": _git_branch(),
+        "started_at": time.time(),
+        **asdict(result),
+    }
+    lease = LaminWriterLease(run_id=run_id)
+    global_lock_path = vm_global_lamin_writer_lock_path()
+    legacy_lock_paths = legacy_lamin_writer_lock_paths()
+    with lamin_writer_lock(global_lock_path, metadata) as global_handle:
+        with ExitStack() as legacy_locks:
+            # A legacy lock's metadata predates PID identity. Its kernel flock
+            # is authoritative: after acquisition, stale metadata is safe.
+            legacy_handles = tuple(
+                legacy_locks.enter_context(
+                    lamin_writer_lock(
+                        legacy_lock_path, metadata, check_live_metadata=False
+                    )
+                )
+                for legacy_lock_path in legacy_lock_paths
+            )
+            lease._lock_handles = (global_handle, *legacy_handles)
+            lease._lock_paths = (global_lock_path, *legacy_lock_paths)
+            lease._token = _LEASE_TOKEN
+            try:
+                yield lease
+            finally:
+                lease._token = None
+                lease._lock_handles = ()
+                lease._lock_paths = ()
+
+
+def _lease_environment(lease: LaminWriterLease) -> dict[str, str]:
+    if not has_lamin_writer_lease(lease) or not lease._lock_handles:
+        raise RuntimeError("cannot inherit an inactive Lamin writer lease")
+    payload = {
+        "run_id": lease.run_id,
+        "owner_pid": os.getpid(),
+        "fds": [handle.fileno() for handle in lease._lock_handles],
+        "paths": [str(path) for path in lease._lock_paths],
+    }
+    return {LAMIN_WRITER_LEASE_ENV: json.dumps(payload, sort_keys=True)}
+
+
+def _attest_inherited_lock(fd: int, path: Path, *, run_id: str, owner_pid: int) -> None:
+    try:
+        descriptor_stat = os.fstat(fd)
+        path_stat = path.stat()
+    except (OSError, ValueError) as exc:
+        raise RuntimeError("invalid inherited Lamin writer lease descriptor") from exc
+    if (descriptor_stat.st_dev, descriptor_stat.st_ino) != (
+        path_stat.st_dev,
+        path_stat.st_ino,
+    ):
+        raise RuntimeError("inherited Lamin writer lease descriptor/path mismatch")
+
+    try:
+        with os.fdopen(os.dup(fd), "r", encoding="utf-8") as handle:
+            metadata = _read_lock_metadata(handle)
+    except OSError as exc:
+        raise RuntimeError("could not read inherited Lamin writer lease") from exc
+    if (
+        metadata is None
+        or metadata.get("status") != "acquired"
+        or metadata.get("run_id") != run_id
+        or metadata.get("pid") != owner_pid
+    ):
+        raise RuntimeError("inherited Lamin writer lease metadata mismatch")
+
+    current_ticks = _process_start_ticks(owner_pid)
+    if (
+        current_ticks is not None
+        and metadata.get("process_start_ticks") != current_ticks
+    ):
+        raise RuntimeError("inherited Lamin writer lease owner is stale")
+    if not _pid_is_live(owner_pid):
+        raise RuntimeError("inherited Lamin writer lease owner is not live")
+
+    with path.open("a+", encoding="utf-8") as probe:
+        try:
+            fcntl.flock(probe.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            pass
+        else:
+            fcntl.flock(probe.fileno(), fcntl.LOCK_UN)
+            raise RuntimeError("inherited Lamin writer lease is not actively held")
+    try:
+        # This succeeds only when ``fd`` shares the parent's locked open-file
+        # description. A separately opened descriptor remains blocked above.
+        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError as exc:
+        raise RuntimeError("inherited Lamin writer lease descriptor is forged") from exc
+
+
+def inherited_lamin_writer_lease() -> LaminWriterLease | None:
+    """Attest a runner-owned lease inherited by this production child, if present."""
+    raw = os.environ.get(LAMIN_WRITER_LEASE_ENV)
+    if raw is None:
+        return None
+    try:
+        payload = json.loads(raw)
+        if not isinstance(payload, dict) or set(payload) != {
+            "run_id",
+            "owner_pid",
+            "fds",
+            "paths",
+        }:
+            raise ValueError
+        run_id = payload["run_id"]
+        owner_pid = payload["owner_pid"]
+        fds = payload["fds"]
+        paths = payload["paths"]
+        if (
+            not isinstance(run_id, str)
+            or not run_id
+            or not isinstance(owner_pid, int)
+            or isinstance(owner_pid, bool)
+            or owner_pid != os.getppid()
+            or not isinstance(fds, list)
+            or not isinstance(paths, list)
+            or len(fds) != len(paths)
+            or len(fds) < 2
+            or any(not isinstance(fd, int) or isinstance(fd, bool) for fd in fds)
+            or any(not isinstance(path, str) or not path for path in paths)
+        ):
+            raise ValueError
+        lock_paths = tuple(Path(path) for path in paths)
+        if not all(path.is_absolute() for path in lock_paths):
+            raise ValueError
+        expected_lock_paths = (
+            vm_global_lamin_writer_lock_path(),
+            *legacy_lamin_writer_lock_paths(),
+        )
+        if (
+            len(set(expected_lock_paths)) != len(expected_lock_paths)
+            or lock_paths != expected_lock_paths
+        ):
+            raise ValueError
+    except (json.JSONDecodeError, TypeError, ValueError) as exc:
+        raise RuntimeError("invalid inherited Lamin writer lease declaration") from exc
+
+    for fd, path in zip(fds, lock_paths, strict=True):
+        _attest_inherited_lock(fd, path, run_id=run_id, owner_pid=owner_pid)
+    return LaminWriterLease(
+        run_id=run_id,
+        _token=_LEASE_TOKEN,
+        _lock_paths=lock_paths,
+    )
 
 
 def _write_json(path: Path, value: object) -> None:
@@ -573,7 +751,7 @@ def run_bounded_smoke(
     return measurement
 
 
-def _child_env() -> dict[str, str]:
+def _child_env(writer_lease: LaminWriterLease | None = None) -> dict[str, str]:
     env = os.environ.copy()
     env.update(
         {
@@ -584,6 +762,10 @@ def _child_env() -> dict[str, str]:
             "LAMIN_SETTINGS_DIR": str(ROOT / ".lamin-pertgym"),
         }
     )
+    if writer_lease is not None:
+        env.update(_lease_environment(writer_lease))
+    else:
+        env.pop(LAMIN_WRITER_LEASE_ENV, None)
     return env
 
 
@@ -619,6 +801,7 @@ def run_command(
     *,
     run_dir: Path,
     run_id: str,
+    writer_lease: LaminWriterLease | None = None,
     renew_writer_lease: Callable[[], None] | None = None,
 ) -> int:
     """Run a production child with durable periodic liveness and progress state.
@@ -664,12 +847,17 @@ def run_command(
         _write_json(run_dir / "heartbeat.json", state)
 
     with log_path.open("ab") as log:
-        child_env = _child_env()
+        child_env = _child_env(writer_lease)
         child_env["PERT_GYM_VM_RUNNER_LOCK_RUN_ID"] = run_id
         process = subprocess.Popen(
             command,
             cwd=ROOT,
             env=child_env,
+            pass_fds=(
+                tuple(handle.fileno() for handle in writer_lease._lock_handles)
+                if writer_lease is not None
+                else ()
+            ),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
@@ -870,30 +1058,20 @@ def main(argv: Sequence[str] | None = None) -> int:
     _write_json(run_dir / "smoke-summary.json", measurements)
     if args.command:
         with distributed_lamin_writer_lease(lock_metadata) as distributed_lease:
-            with lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata):
-                with ExitStack() as legacy_locks:
-                    # A legacy lock's metadata predates PID identity. Its kernel
-                    # flock is authoritative: once acquired, no legacy writer is
-                    # live, so do not reject a safely recovered legacy inode on
-                    # stale metadata.
-                    for legacy_lock_path in legacy_lamin_writer_lock_paths():
-                        legacy_locks.enter_context(
-                            lamin_writer_lock(
-                                legacy_lock_path,
-                                lock_metadata,
-                                check_live_metadata=False,
-                            )
-                        )
-                    exit_code = run_command(
-                        args.command,
-                        run_dir=run_dir,
-                        run_id=args.run_id,
-                        renew_writer_lease=distributed_lease.renew,
+            with lamin_writer_lease(
+                run_id=args.run_id, preflight_result=preflight_result
+            ) as writer_lease:
+                exit_code = run_command(
+                    args.command,
+                    run_dir=run_dir,
+                    run_id=args.run_id,
+                    writer_lease=writer_lease,
+                    renew_writer_lease=distributed_lease.renew,
+                )
+                if exit_code:
+                    raise RuntimeError(
+                        f"command exited {exit_code}; see {run_dir / 'logs' / 'runner.log'}"
                     )
-                    if exit_code:
-                        raise RuntimeError(
-                            f"command exited {exit_code}; see {run_dir / 'logs' / 'runner.log'}"
-                        )
     _write_json(
         run_dir / "heartbeat.json", {"status": "completed", "run_id": args.run_id}
     )
