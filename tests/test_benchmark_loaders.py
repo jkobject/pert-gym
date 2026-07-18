@@ -158,6 +158,21 @@ def test_expression_member_filter_holds_out_broad_prism_even_without_metadata() 
     assert filtered.excluded == ["broad_prism_repurposing/obs.parquet"]
 
 
+def test_expression_member_filter_records_prefix_specific_broad_prism_reason() -> None:
+    key = "broad_prism_repurposing/obs.parquet"
+
+    filtered = filter_expression_model_ready_members(
+        [key],
+        member_metadata={
+            key: {"x_semantics": "expression", "modality": "transcriptomics"}
+        },
+    )
+
+    assert filtered.excluded_reasons[key] == (
+        "broad_prism_repurposing is held out from expression-model-ready loaders"
+    )
+
+
 def test_chemcpa_drugseq_tiny_loader_uses_real_expression_and_fingerprints(
     tmp_path,
 ) -> None:
@@ -304,6 +319,43 @@ def test_response_screen_loader_joins_rows_to_baseline_by_stable_depmap_id() -> 
     )
 
 
+def test_response_screen_loader_accepts_native_prism_lfc_rows() -> None:
+    batch = load_response_screen_with_baseline(
+        response_rows=[
+            {
+                "depmap_id": "ACH-000001",
+                "broad_id": "BRD-A",
+                "lfc": "-0.75",
+                "is_control": False,
+            }
+        ],
+        baseline_rows=[{"depmap_id": "ACH-000001", "expression": [1.0, 2.0]}],
+        feature_names=["gene_a", "gene_b"],
+    )
+
+    assert batch.target_response == [[-0.75]]
+    assert batch.perturbations == ["BRD-A"]
+    assert batch.obs_covariates == (
+        {"depmap_id": "ACH-000001", "response_metric": "lfc"},
+    )
+
+
+def test_response_screen_loader_rejects_empty_perturbation_identity() -> None:
+    with pytest.raises(ValueError, match="missing perturbation/broad_id"):
+        load_response_screen_with_baseline(
+            response_rows=[
+                {
+                    "depmap_id": "ACH-000001",
+                    "perturbation": "  ",
+                    "response_metric": "lfc",
+                    "response_value": -0.5,
+                }
+            ],
+            baseline_rows=[{"depmap_id": "ACH-000001", "expression": [1.0, 2.0]}],
+            feature_names=["gene_a", "gene_b"],
+        )
+
+
 def test_response_screen_loader_accepts_identical_duplicate_baselines_in_any_order() -> (
     None
 ):
@@ -422,6 +474,31 @@ def test_benchmark_batch_validates_covariate_row_count() -> None:
             controls=[True, False],
             obs_covariates=[{}],
         )
+
+
+@pytest.mark.parametrize(
+    ("fingerprints", "message"),
+    [
+        ([None, [1, 0], [0, 1], [1, 1]], "must be present for every row"),
+        ([[1, 0], [1, 0], [0, 1, 0], [1, 1]], "consistent width"),
+    ],
+)
+def test_loader_rejects_mixed_compound_fingerprint_contracts(
+    fingerprints, message
+) -> None:
+    obs_rows = []
+    X = []
+    for idx, (perturbation, is_control) in enumerate(
+        [("control", True), ("pert_a", False), ("pert_b", False), ("pert_c", False)]
+    ):
+        row = {"perturbation": perturbation, "is_control": is_control}
+        if fingerprints[idx] is not None:
+            row["compound_fingerprint"] = fingerprints[idx]
+        obs_rows.append(row)
+        X.append([float(idx)])
+
+    with pytest.raises(ValueError, match=message):
+        load_tiny_benchmark_dataset(obs_rows=obs_rows, X=X, feature_names=["gene_a"])
 
 
 def test_expression_member_filter_holds_out_sanger_score_dependency_member() -> None:
@@ -868,6 +945,19 @@ def test_response_loaders_reject_non_finite_targets() -> None:
     )
     assert not adapters.responses
     assert "must be finite" in adapters.skipped["nan_target"]
+
+    with pytest.raises(ValueError, match="malformed response_value"):
+        load_response_screen_with_baseline(
+            response_rows=[
+                {
+                    "depmap_id": "ACH-000001",
+                    "broad_id": "BRD-A",
+                    "lfc": "nan",
+                }
+            ],
+            baseline_rows=[{"depmap_id": "ACH-000001", "expression": [1.0, 2.0]}],
+            feature_names=["GAPDH", "ACTB"],
+        )
 
     with pytest.raises(ValueError, match="malformed response_value"):
         load_response_screen_with_baseline(
