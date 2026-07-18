@@ -92,7 +92,20 @@ def validate_chronos_gene_effect_rows(rows: pd.DataFrame) -> None:
     if missing:
         raise ValueError(f"Chronos rows missing required columns: {sorted(missing)}")
 
-    directions = set(rows["response_direction"].dropna().astype(str))
+    required_metadata = (
+        "response_direction",
+        "response_metric",
+        "score_source",
+        "response_transform",
+    )
+    for column in required_metadata:
+        if rows[column].isna().any():
+            bad_rows = list(rows.index[rows[column].isna()])
+            raise ValueError(
+                f"Chronos {column} must be non-null for every row; bad rows: {bad_rows}"
+            )
+
+    directions = set(rows["response_direction"].astype(str))
     unknown_directions = directions.difference(CANONICAL_RESPONSE_DIRECTIONS)
     if unknown_directions:
         raise ValueError(
@@ -107,14 +120,14 @@ def validate_chronos_gene_effect_rows(rows: pd.DataFrame) -> None:
         "response_transform": CHRONOS_RESPONSE_TRANSFORM,
     }
     for column, expected in expected_metadata.items():
-        observed = set(rows[column].dropna().astype(str))
+        observed = set(rows[column].astype(str))
         if observed != {expected}:
             raise ValueError(
                 f"Chronos {column} must be {expected!r}, got {sorted(observed)}"
             )
 
-    normalized = rows.loc[:, ["model_id", "depmap_id", "baseline_join_id"]].map(
-        normalize_model_id
+    normalized = rows.loc[:, ["model_id", "depmap_id", "baseline_join_id"]].apply(
+        lambda column: column.map(normalize_model_id)
     )
     disagreements = normalized.nunique(axis=1) != 1
     if disagreements.any():

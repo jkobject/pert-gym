@@ -49,6 +49,43 @@ def test_raw_chronos_gene_effect_keeps_negative_values_and_canonical_direction()
     assert LOWER_MORE_DEPENDENT in CANONICAL_RESPONSE_DIRECTIONS
 
 
+def test_chronos_identity_normalization_does_not_require_dataframe_map(monkeypatch):
+    annotated = annotate_raw_chronos_gene_effect(
+        pd.DataFrame({"model_id": [" ACH-000001 "], "response_value": [-1.25]})
+    )
+
+    def fail_dataframe_map(*_args, **_kwargs):
+        raise AssertionError("DataFrame.map is unavailable on pandas 2.0")
+
+    monkeypatch.setattr(pd.DataFrame, "map", fail_dataframe_map, raising=False)
+
+    validate_chronos_gene_effect_rows(annotated)
+
+
+@pytest.mark.parametrize(
+    "column",
+    [
+        "response_direction",
+        "response_metric",
+        "score_source",
+        "response_transform",
+    ],
+)
+def test_chronos_validator_rejects_null_required_metadata_per_row(column):
+    annotated = annotate_raw_chronos_gene_effect(
+        pd.DataFrame(
+            {
+                "model_id": ["ACH-000001", "ACH-000002"],
+                "response_value": [-1.25, -0.11],
+            }
+        )
+    )
+    annotated.loc[1, column] = None
+
+    with pytest.raises(ValueError, match=f"Chronos {column} must be non-null"):
+        validate_chronos_gene_effect_rows(annotated)
+
+
 def test_release_locked_join_marks_unmatched_without_aliasing_or_dropping():
     chronos = annotate_raw_chronos_gene_effect(
         pd.DataFrame(
