@@ -1,0 +1,87 @@
+{
+  "contract_id": "pert-gym/OBS_COMPLETED/v1",
+  "contract_status": "recovered_with_proposed_fail_closed_scoring",
+  "recovered_from": [
+    "conversation 2026-06-17 (requirements preserved in Kanban t_a6d33134)",
+    "docs/pert_gym_schema.md",
+    "artifacts/obs_var_schema_gap_report.json",
+    "artifacts/scripts/canonical_obs_schema_contract_20260625.py",
+    "artifacts/schema_audit/global_obs_uuid_rollout_validation_20260630_t_2ebc0965.json"
+  ],
+  "canonical_obs_columns": [
+    "dataset", "sample", "cell_id", "donor_id", "batch", "cell_type",
+    "cell_line", "disease", "tissue_type", "organism", "sex", "age",
+    "ethnicity", "sequencer", "technology", "assay", "modality", "media",
+    "is_bulk", "is_pseudobulk", "perturbation", "perturbation_type",
+    "perturbation_technology", "perturbation_library", "guide_sequence",
+    "molecule_sequence",
+    "is_control", "dose", "dose_unit", "timepoint", "trajectory_id",
+    "pseudotime", "is_baseline", "sensitivity", "response_metric",
+    "response_value", "response_source", "n_counts", "n_genes", "pct_mito",
+    "pct_ribo", "is_low_quality"
+  ],
+  "canonical_obs_column_count": 42,
+  "combination_suffix_fields": [
+    "perturbation", "perturbation_type", "perturbation_technology",
+    "perturbation_library", "guide_sequence", "molecule_sequence", "dose",
+    "dose_unit"
+  ],
+  "combination_suffix_rule": "Repeat the combination_suffix_fields as _2..._N; require combination_size and combination_id when N > 1.",
+  "field_states": ["present", "alias_only", "manifest_only", "missing", "not_applicable"],
+  "field_state_scoring": {
+    "present": "requires source plus exact non-null numerator/denominator coverage",
+    "alias_only": "requires named alias source plus exact non-null numerator/denominator coverage",
+    "manifest_only": "blocked until a reviewed dataset-level waiver or row projection proves coverage",
+    "missing": "false when the field is applicable",
+    "not_applicable": "excluded from the applicable denominator; never rewritten as missing"
+  },
+  "required_dataset_checks": [
+    "modality_assay_x_semantics",
+    "modality_required_fields",
+    "control_semantics",
+    "derived_applicability_declared",
+    "derived_outputs_complete",
+    "combination_semantics"
+  ],
+  "required_identity_checks": [
+    "obs_uuid_present",
+    "obs_uuid_unique_within_member",
+    "obs_uuid_global_unique",
+    "original_obs_index_preserved",
+    "row_count_preserved",
+    "row_order_preserved"
+  ],
+  "derived_outputs": [
+    "pseudobulk", "lfc_vs_control", "n_counts", "n_genes", "pct_mito",
+    "pct_ribo", "is_low_quality", "timepoint_minutes", "trajectory_id",
+    "pseudotime", "is_baseline", "response", "sensitivity",
+    "combination_size", "combination_id"
+  ],
+  "control_vocabularies": [
+    "strict_control_available", "relaxed_control_available",
+    "dataset_control_available", "no_control_found"
+  ],
+  "quality_flag_pass": ["ok", "waived"],
+  "separate_var_verdict": {
+    "name": "VAR_ENSEMBL_SPECIES_COMPLETED",
+    "obs_criterion": false,
+    "evidence_key": "var_ensembl_species",
+    "required_counts": [
+      "biological_features_total",
+      "stable_ensembl_id_features",
+      "correct_species_features"
+    ],
+    "requires_provenance": true,
+    "pass_condition": "Every biological feature has a stable Ensembl ID mapped to the correct species, with explicit provenance."
+  },
+  "explicitly_excluded_criteria": [
+    "zarr", "chunk_count", "chunk_size", "var_duplication",
+    "x_payload_completeness", "x_source_identity"
+  ],
+  "scoring_precedence": "Any proven failure => false. Otherwise any missing/inconclusive required evidence => blocked. Otherwise => true.",
+  "proposed_rules": [
+    "Applicable present/alias fields require 100% non-null coverage; no historical threshold was recovered.",
+    "manifest_only evidence blocks rather than passes; no historical waiver policy was recovered.",
+    "All member-level checks must pass before a logical_dataset can pass."
+  ]
+}

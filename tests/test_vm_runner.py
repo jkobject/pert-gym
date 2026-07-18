@@ -3,6 +3,7 @@ from __future__ import annotations
 import fcntl
 import json
 import os
+import signal
 import subprocess
 import sys
 import time
@@ -695,3 +696,162 @@ def test_cli_production_command_publishes_periodic_progress_during_partial_stdou
     ]
     assert len(heartbeat_writes) >= 3
     assert len(checkpoint_writes) >= 3
+
+
+def test_cli_resumes_identity_matched_run_directory_append_only(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(runner, "ROOT", tmp_path)
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(tmp_path / "host-locks"))
+    monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
+    monkeypatch.setattr(
+        runner,
+        "legacy_lamin_writer_lock_paths",
+        lambda: (runner.legacy_lamin_writer_lock_path(),),
+    )
+    run_dir = tmp_path / "artifacts" / "vm_runs" / "resume-test"
+    (run_dir / "checkpoints").mkdir(parents=True)
+    (run_dir / "logs").mkdir()
+    command = [sys.executable, "-c", "print('after')"]
+    (run_dir / "checkpoints" / "production.json").write_text(
+        json.dumps(
+            {
+                "run_id": "resume-test",
+                "status": "running",
+                "pid": 999_999_999,
+                "command": command,
+                "command_sha256": runner.command_identity(command),
+            }
+        ),
+        encoding="utf-8",
+    )
+    (run_dir / "logs" / "runner.log").write_text("before\n", encoding="utf-8")
+
+    assert (
+        runner.main(
+            [
+                "--run-id",
+                "resume-test",
+                "--resume",
+                "--allow-lamin-writes",
+                "--command",
+                *command,
+            ]
+        )
+        == 0
+    )
+
+    assert (run_dir / "logs" / "runner.log").read_text() == "before\nafter\n"
+    assert len(list(run_dir.glob("resume-preflight-*.json"))) == 1
+    assert len(list(run_dir.glob("stale-checkpoint-*.json"))) == 1
+
+
+@pytest.mark.parametrize(
+    ("child", "status", "exit_code", "signal_name"),
+    [
+        ([sys.executable, "-c", "raise SystemExit(7)"], "failed", 7, None),
+        (
+            [
+                sys.executable,
+                "-c",
+                "import os, signal; os.kill(os.getpid(), signal.SIGTERM)",
+            ],
+            "interrupted",
+            -signal.SIGTERM,
+            "SIGTERM",
+        ),
+    ],
+)
+def test_run_command_persists_truthful_terminal_checkpoint(
+    tmp_path: Path,
+    child: list[str],
+    status: str,
+    exit_code: int,
+    signal_name: str | None,
+) -> None:
+    run_dir = tmp_path / "run"
+
+    assert runner.run_command(child, run_dir=run_dir, run_id="terminal") == exit_code
+
+    checkpoint = json.loads(
+        (run_dir / "checkpoints" / "production.json").read_text(encoding="utf-8")
+    )
+    assert checkpoint["status"] == status
+    assert checkpoint["exit_code"] == exit_code
+    assert checkpoint.get("signal") == signal_name
+    assert "ended_at" in checkpoint
+    assert "pid" not in checkpoint
+
+
+def test_resume_rejects_live_pid_and_command_identity_mismatch(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(runner, "ROOT", tmp_path)
+    monkeypatch.setattr(runner, "preflight", lambda: _valid_preflight())
+    run_dir = tmp_path / "artifacts" / "vm_runs" / "resume-reject"
+    checkpoint_path = run_dir / "checkpoints" / "production.json"
+    checkpoint_path.parent.mkdir(parents=True)
+    command = [sys.executable, "-c", "print('same')"]
+    checkpoint = {
+        "run_id": "resume-reject",
+        "status": "running",
+        "pid": os.getpid(),
+        "command": command,
+        "command_sha256": runner.command_identity(command),
+    }
+    checkpoint_path.write_text(json.dumps(checkpoint), encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="still live"):
+        runner.main(
+            [
+                "--run-id",
+                "resume-reject",
+                "--resume",
+                "--allow-lamin-writes",
+                "--command",
+                *command,
+            ]
+        )
+
+    checkpoint["pid"] = 999_999_999
+    checkpoint_path.write_text(json.dumps(checkpoint), encoding="utf-8")
+    with pytest.raises(RuntimeError, match="command identity mismatch"):
+        runner.main(
+            [
+                "--run-id",
+                "resume-reject",
+                "--resume",
+                "--allow-lamin-writes",
+                "--command",
+                sys.executable,
+                "-c",
+                "print('different')",
+            ]
+        )
+
+
+def test_parent_sigint_forwards_and_persists_interrupted_checkpoint(
+    tmp_path: Path,
+) -> None:
+    run_dir = tmp_path / "signal-run"
+    program = (
+        "import sys; from pathlib import Path; "
+        "from tools.pert_gym_vm_runner import run_command; "
+        "raise SystemExit(run_command([sys.executable, '-c', "
+        "'import time; time.sleep(30)'], run_dir=Path(sys.argv[1]), run_id='sigint'))"
+    )
+    process = subprocess.Popen([sys.executable, "-c", program, str(run_dir)])
+    checkpoint_path = run_dir / "checkpoints" / "production.json"
+    deadline = time.monotonic() + 5
+    while not checkpoint_path.exists() and time.monotonic() < deadline:
+        time.sleep(0.01)
+    assert checkpoint_path.exists()
+
+    process.send_signal(signal.SIGINT)
+    assert process.wait(timeout=10) == 128 + signal.SIGINT
+
+    checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+    assert checkpoint["status"] == "interrupted"
+    assert checkpoint["signal"] == "SIGINT"
+    assert checkpoint["exit_code"] == 128 + signal.SIGINT
+    assert "pid" not in checkpoint

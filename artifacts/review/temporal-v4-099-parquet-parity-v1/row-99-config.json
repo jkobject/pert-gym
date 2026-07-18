@@ -1,0 +1,132 @@
+{
+  "accepted_components": {
+    "credit": 0,
+    "current": 2,
+    "denominator": 153
+  },
+  "api_identity": {
+    "assays": [
+      {
+        "label": "10x 3' v2",
+        "ontology_term_id": "EFO:0009899"
+      }
+    ],
+    "is_primary_data": true,
+    "organism": {
+      "label": "Homo sapiens",
+      "ontology_term_id": "NCBITaxon:9606"
+    },
+    "public": true,
+    "tombstone": false
+  },
+  "authorization_binding": {
+    "approved_parent_protocol": "temporal-v4-099-parquet-parity-parent/v1",
+    "correction_task_id": "t_be513f9a",
+    "parent_task_id": "t_d08ef390"
+  },
+  "config_version": "cellxgene-logical-component-config/v1",
+  "dataset_config_status": "reviewed-executable",
+  "execution": {
+    "billing_project": "jkobject-1549353370965",
+    "heartbeat_denominator": 153,
+    "heartbeat_interval_seconds": 50,
+    "heartbeat_metric": "accepted_components",
+    "host": "pert-gym-worker-eu",
+    "lamin_branch": "jkobject",
+    "lamin_instance": "laminlabs/pertdata",
+    "max_internal_block_rows": 4096,
+    "max_rss_bytes": 25769803776,
+    "min_available_bytes": 4294967296,
+    "output_directory": "/tmp/temporal-v4-099-t_be513f9a",
+    "single_writer_lease": "global-plus-legacy-exclusive",
+    "timeout_seconds": 7200,
+    "zone": "europe-west1-b"
+  },
+  "forbidden_actions": [
+    "cleanup",
+    "deletion",
+    "promotion",
+    "collection_mutation",
+    "lamin_main",
+    "vm_lifecycle_change"
+  ],
+  "logical_key": "pert-gym/logical/temporal/cell_culture_differentiation_and_proliferation_conditions_influence_the_in_vitro",
+  "obs": {
+    "assignments": [
+      {"op": "literal", "target": "dataset", "value": "pert-gym/logical/temporal/cell_culture_differentiation_and_proliferation_conditions_influence_the_in_vitro"},
+      {"op": "index", "target": "cell_id"},
+      {"op": "literal", "target": "organism", "value": "Homo sapiens"},
+      {"op": "literal", "target": "technology", "value": "10x 3' v2"},
+      {"op": "literal", "target": "modality", "value": "scRNA-seq"},
+      {"op": "copy", "source": "medium", "target": "media"},
+      {"op": "copy", "source": "medium", "target": "condition"},
+      {"op": "literal", "target": "source_timepoint", "value": "ALI28"},
+      {"op": "literal", "target": "source_timepoint_unit", "value": "days"},
+      {"op": "literal", "target": "timepoint", "value": 40320},
+      {"op": "literal", "target": "day", "value": 28},
+      {"op": "concat", "separator": "|", "sources": ["donor_id", "medium"], "target": "trajectory_id"},
+      {"op": "literal", "target": "is_baseline", "value": false},
+      {"op": "copy", "source": "development_stage", "target": "age"},
+      {"op": "literal", "target": "treatment", "value": "not_applicable"},
+      {"op": "literal", "target": "perturbation", "value": "none"},
+      {"op": "literal", "target": "perturbation_type", "value": "none"},
+      {"op": "literal", "target": "is_control", "value": true},
+      {"op": "nullable_float", "target": "dose"},
+      {"op": "literal", "target": "dose_unit", "value": "not_applicable"},
+      {"op": "copy", "source": "nCount_RNA", "target": "n_counts"},
+      {"op": "copy", "source": "nFeature_RNA", "target": "n_genes"},
+      {"op": "copy", "source": "percent.mito", "target": "pct_mito"},
+      {"op": "copy", "source": "percent.ribo", "target": "pct_ribo"}
+    ],
+    "mapper_version": "declarative-obs-mapper/v1",
+    "predicates": [
+      {"column": "medium", "op": "domain_equals", "values": ["BEGM-ALI", "Clancy", "H&H", "Pneuma-ALI"]},
+      {"column": "sample", "op": "all_contains", "value": "ALI28"},
+      {"column": "donor_id", "op": "all_contains", "value": "ALI28"}
+    ],
+    "required_non_null": ["medium", "sample", "donor_id", "development_stage", "development_stage_ontology_term_id", "assay", "assay_ontology_term_id"],
+    "semantic_evidence": {
+      "basis": "Every source row is bound to ALI28 by sample and donor_id; reviewed source evidence maps ALI28 to day 28 / 40320 minutes, with medium as condition.",
+      "verdict": "accepted"
+    }
+  },
+  "ordered_var": {
+    "canonical_feature_namespace": "Ensembl Gene ID",
+    "feature_reference_column": "feature_reference",
+    "identity_sha256": "878f431e4a709fb43d0ededbcc35511b16048e369e58984bad77fcf16600db4b",
+    "normalization_version": "source-string/v1",
+    "organism_ontology_id": "NCBITaxon:9606"
+  },
+  "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
+  "revision": {
+    "failed_candidate_denylist": ["temporal-v4-099-20260715T135852Z-d36b0c6d"],
+    "fresh_immutable_required": true,
+    "prefix": "temporal-v4-099"
+  },
+  "shape": [10224, 35552],
+  "source": {
+    "api_url": "https://api.cellxgene.cziscience.com/curation/v1/collections/73cf6939-3caa-4105-bc57-e073ee885a28",
+    "asset_id": "081fef14-662c-430d-888f-b87a701d86b3",
+    "collection_id": "73cf6939-3caa-4105-bc57-e073ee885a28",
+    "collection_version_id": "3276a66a-af66-44fe-a861-de39e390b789",
+    "dataset_id": "c69fb6cd-fc4d-4216-85cb-8d80e7771786",
+    "dataset_version_id": "081fef14-662c-430d-888f-b87a701d86b3",
+    "url": "https://datasets.cellxgene.cziscience.com/081fef14-662c-430d-888f-b87a701d86b3.h5ad"
+  },
+  "source_head": {
+    "content_length": 173402098,
+    "etag": "\"9cdf52749874c93f5d0a15753b8945e3-21\"",
+    "final_url": "https://datasets.cellxgene.cziscience.com/081fef14-662c-430d-888f-b87a701d86b3.h5ad",
+    "last_modified": "Wed, 10 Jun 2026 00:53:03 GMT",
+    "status": 200,
+    "version_id": "TrS2SHWxRaxA211Ef8Icqel7OJHjT3fJ"
+  },
+  "storage": {
+    "gcs_root": "scperturb/pert-gym/staging",
+    "manifest_last": true,
+    "per_block_var_count": 0,
+    "shared_var_count": 1,
+    "x_logical_object_count": 1
+  },
+  "task_id": "t_be513f9a"
+}

@@ -22,9 +22,14 @@ data/temporal_pretraining_sources/
 # Local tooling/runtime state
 .omx/
 .r-lib/
+.worktrees/
 
-# Generated artifacts and local model-ready exports
+# Generated artifacts, reports, documentation builds, and local model-ready exports
 artifacts/
+logs/
+site/
+coverage.xml
+.coverage
 pert-gym/model-ready-*/
 
 # Broken Git metadata backups kept only for forensic recovery

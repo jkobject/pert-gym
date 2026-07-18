@@ -19,8 +19,15 @@
     "materialization_factor": 3.0,
     "min_rows": 5000,
     "max_rows": 100000,
-    "balanced_tails": "ceil(n_obs/target_rows) chunks; distribute remainder over leading chunks; row counts differ by at most one",
-    "runtime_gate": "Writer samples/records peak RSS for the first chunk and reduces target_rows before later chunks when peak exceeds max_rss_bytes."
+    "production_intervals": "Fixed calibrated row intervals; only the final interval may be a smaller automatic tail exception.",
+    "runtime_gate": "Before plan publication, the writer persists an identity-bound compressed-byte and OS high-water RSS calibration. It fails before production chunks when byte and RSS bounds conflict, then validates every completed block before starting the next.",
+    "production_block_bytes": {
+      "minimum": 2147483648,
+      "maximum": 3221225472,
+      "automatic_exceptions": ["final tail below minimum", "whole dataset below minimum"],
+      "explicit_exception_rule": "A reviewed JSON exception may waive byte bounds and is recorded in plan and block evidence; it never waives max_rss_bytes."
+    },
+    "immutable_plan_rule": "plan.json is written only after calibration and binds source generation/checksum, var identity, candidate metadata, calibration object generations, measured values, thresholds, chosen intervals, and exceptions. Any drift requires a new revision."
   },
   "shared_var": {
     "key": "vars/<var_identity>/var.parquet",

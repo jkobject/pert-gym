@@ -1,0 +1,58 @@
+{
+  "accepted_delta_at_build": 0,
+  "artifact_accounting": {
+    "ledger_object_count": 1,
+    "manifest_object_count": 1,
+    "payload_object_count": 3,
+    "source_object_count": 1,
+    "triplet_count": 1
+  },
+  "catalogue_row_ids": [
+    116
+  ],
+  "credit_state": "materialized_pending_independent_test_review_and_administrative_acceptance",
+  "credits": {
+    "materialized_component_records": 1,
+    "materialized_observations": 8428,
+    "materialized_triplets": 1
+  },
+  "dataset_accounting": {
+    "excluded_datasets": 0,
+    "included_datasets": 1,
+    "materialized_triplets": 1,
+    "source_datasets": 1
+  },
+  "debits": {
+    "dropped_observations": 0,
+    "exclusions": 0,
+    "product_credit": 0
+  },
+  "deduplication_key": "record_id:temporal_v4_116_perturbase_gse107185",
+  "deduplication_scope_count": 1,
+  "observation_accounting": {
+    "catalogue_reported_n_obs": 8428,
+    "dropped_n_obs": 0,
+    "excluded_n_obs": 0,
+    "materialized_n_obs": 8428,
+    "resolved_eligible_n_obs": 8428
+  },
+  "quality_missingness_is_not_exclusion": true,
+  "record_accounting": {
+    "excluded_component_records": 0,
+    "included_component_records": 1,
+    "materialized_component_records": 1,
+    "source_component_records": 1
+  },
+  "record_id": "temporal_v4_116_perturbase_gse107185",
+  "schema_version": "pert-gym.proposed-publication-ledger/v2",
+  "submission_id": "pert-gym-ledger:materialized-build:t_fe451c4d:temporal_v4_116_perturbase_gse107185",
+  "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+  "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+  "wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-11-of-13",
+    "number": 11,
+    "outcome_task_id": "t_f196b29f",
+    "singular": true
+  }
+}

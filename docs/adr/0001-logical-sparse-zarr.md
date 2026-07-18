@@ -44,11 +44,21 @@ floor((max_rss_bytes - n_vars * 8) /
       ((max(1, nnz / n_obs) * bytes_per_nnz + 8) * materialization_factor))
 ```
 
-The result is clamped to policy min/max rows. The writer measures the first
-chunk's peak RSS and reduces later chunks before they exceed the limit. It must
-not retain materialized prior chunks. The final plan uses
-`ceil(n_obs / target_rows)` chunks and distributes the remainder, so chunks
-have sizes differing by at most one instead of an undersized final tail.
+The result seeds an identity-bound calibration probe; it is not itself a
+production plan. The probe records actual remotely stored compressed bytes,
+object generations, and the operating system's process high-water RSS. Only
+after that evidence can satisfy both the configured RSS ceiling and the default
+2 GiB minimum / 3 GiB maximum production-block bounds may the writer publish
+immutable `plan.json`. The plan binds the source generation/checksum, var and
+candidate identities, calibration objects and measurements, thresholds, chosen
+intervals, and any reviewed explicit byte-bound exception.
+
+Every completed production block is checked from remote stored bytes and OS RSS
+before the next block starts. A final tail below 2 GiB, or a whole dataset whose
+estimated compressed size is below 2 GiB, is an automatic recorded exception.
+No other undersized block is implicit, and RSS has no exception. A conflict or
+post-write violation persists append-only failure evidence and requires a new
+revision; the old plan, calibration, chunks, and records are never rewritten.
 
 CSC is supported for a producer/read workload that needs it, but it still uses
 logical obs intervals and must meet the same parity rules. Matrix orientation

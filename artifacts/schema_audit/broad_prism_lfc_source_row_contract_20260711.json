@@ -1,0 +1,107 @@
+{
+  "audit_date": "2026-07-11",
+  "task_id": "t_0ebae1fd",
+  "scope": "bounded Broad PRISM Repurposing Public 24Q2 LFC source-row contract; no Lamin write or global completion claim",
+  "execution_boundary": {
+    "large_reads_host": "pert-gym-worker-eu",
+    "zone": "europe-west1-b",
+    "mac_bulk_scan_performed": false
+  },
+  "current_lamin_obs_diagnostic": {
+    "artifact_key": "broad_prism_repurposing/obs.parquet",
+    "artifact_uid": "eKrJkcFDb9TEDbte0003",
+    "rows": 22316860,
+    "row_groups": 90,
+    "bytes": 594094912,
+    "bounded_row_group_samples": [0, 45, 89],
+    "sample_rows_per_group": 20,
+    "status": "not_eligible_as_direct_response_source",
+    "reason": "sampled rows use profile_id/LFC/LFC_cb/PASS as broad_id and perturbation labels; stable compound identity is unavailable"
+  },
+  "authoritative_source_files": {
+    "release": "PRISM Primary Repurposing DepMap Public 24Q2",
+    "lfc": {
+      "uri": "gs://scperturb/pert-gym/staging/data/main/broad_prism/Repurposing_Public_24Q2_LFC.csv",
+      "bytes": 479352899,
+      "sha256": "824149f9b9f3821eb520b385a5976e1a9977d86b21caf5d22171763800a40523",
+      "required_columns": ["row_id", "profile_id", "LFC", "PASS"],
+      "chunk_size_rows": 250000
+    },
+    "treatment_metadata": {
+      "uri": "gs://scperturb/pert-gym/staging/data/main/broad_prism/Repurposing_Public_24Q2_Treatment_Meta_Data.csv",
+      "bytes": 1510417,
+      "sha256": "6be6422ba804ad0775e78b457677bdf088707b9354746a03e110ae63f5eb2061",
+      "rows": 11502,
+      "required_columns": ["profile_id", "perturbation_type", "dose", "broad_id", "name"],
+      "profile_id_unique_required": true
+    }
+  },
+  "denominator": {
+    "source_rows": 4463372,
+    "excluded_not_pass": 171944,
+    "eligible_real_lfc_rows_prior_policy": 4291428,
+    "bounded_selection_rows": 128,
+    "bounded_selection_scoring": "smallest SHA-256-derived score of phase2-prism-real-lfc-v1|row_id|profile_id",
+    "selected_compounds": 124,
+    "selected_contexts": 120,
+    "selected_split_counts": {"train": 89, "val": 10, "test": 29}
+  },
+  "eligibility": {
+    "all_of": [
+      "LFC parses to a finite numeric value",
+      "PASS is case-insensitively true",
+      "profile_id joins exactly once to treatment metadata",
+      "broad_id and name are non-empty",
+      "treatment type is approved as a drug-treatment class"
+    ],
+    "prior_treatment_types": ["trt_cp", "trt_poscon"],
+    "default_new_projection_treatment_type": "trt_cp",
+    "trt_poscon": "review-required before inclusion"
+  },
+  "row_contract": {
+    "source_row_identifier": "row_id|profile_id",
+    "compound_identity": {"id": "metadata.broad_id", "display_name": "metadata.name"},
+    "context": {"depmap_id": "first :: component of preserved raw row_id", "context_id": "Homo sapiens|<depmap_id>"},
+    "response": {
+      "metric": "lfc",
+      "value": "finite raw LFC",
+      "source": "Repurposing_Public_24Q2_LFC.csv:LFC joined to Treatment_Meta_Data by profile_id",
+      "transform": "source_lfc_vs_vehicle",
+      "direction": "lower_more_sensitive",
+      "direct": true
+    },
+    "dose": {"value": "metadata.dose", "unit": "source_unit_not_specified unless release-bound source proof is added"},
+    "screen_semantics": {"has_expression_X": false, "x_semantics": "response_table", "model_ready_status": "loader_projectable_only"},
+    "mandatory_provenance": ["source release", "both source URIs and SHA-256 values", "source_row_id", "source_profile_id", "source_row_identifier", "source_file_row_number", "source_row_chunk_index", "source_row_offset_in_chunk"]
+  },
+  "finite_value_policy": {
+    "accept": "float conversion succeeds and math.isfinite(value) is true",
+    "reject": ["missing", "malformed", "NaN", "+Infinity", "-Infinity"],
+    "LFC_cb": "not a substitute response metric; retain only as named source sidecar after review",
+    "PASS": "eligibility indicator, never response value"
+  },
+  "duplicate_policy": {
+    "exact_source_key": ["source_row_identifier"],
+    "measurement_review_key": ["depmap_id", "broad_id", "profile_id"],
+    "display_name_only_deduplication": "forbidden",
+    "no_overwrite": "new local projection/manifest only; no revision of current Lamin obs without explicit row-order/X-link proof and reviewer approval"
+  },
+  "compound_holdout": {
+    "split_unit": "broad_id / perturbation_id",
+    "algorithm": "sha256(phase2-prism-compound-holdout-v1|broad_id) mod 10: 0-1 test, 2 val, 3-9 train",
+    "must_have_zero_overlap": ["broad_id/perturbation_id", "source_row_identifier"],
+    "report_only": ["context_id overlap"],
+    "alias_policy": "aliases sharing broad_id must share a split; distinct broad IDs with identical display names require review"
+  },
+  "review_required": [
+    "Approve or reject trt_poscon inclusion.",
+    "Decide whether LFC_cb can become a separately named secondary target.",
+    "Resolve release-bound dose units; do not infer them.",
+    "Repair/isolate malformed Lamin branch-settings state on the EU worker before a new projection run."
+  ],
+  "supporting_evidence": [
+    "artifacts/schema_audit/broad_prism_response_repair_probe_20260703.json (EU worker)",
+    "artifacts/schema_audit/model_ready_v2_prism_response_rows_phase2_20260710.json (EU worker)",
+    "artifacts/schema_audit/model_ready_v2_prism_response_rows_phase2_20260710_smoke.json (EU worker)"
+  ]
+}

@@ -203,8 +203,13 @@ Important current source states:
   the 2026-06-25 retype, while the preserved score matrix lives in typed
   auxiliary `sanger_score_crispr/X_score.h5ad` plus `var_score.parquet` with
   `x_semantics=essentiality_score`. Loaders must not treat SCORE canonical `X` as
-  model-ready expression. Sanger dual-guide CRC is verified complete as
-  `sanger_dual_guide_crc/mapping_counts` with audit output at
+  model-ready expression. DepMap genetic dependencies are the analogous DepMap
+  CRISPR GeneEffect/GeneDependency score family, but they have not been Lamin
+  written in this task: the reconciled local contract keeps scores in obs+var
+  tables plus a durable source manifest, joins to the separate `depmap_ccle/26q1`
+  baseline RNA expression artifact by stable model IDs, and does not encode
+  dependency scores as expression-like `X.h5ad`. Sanger dual-guide CRC is
+  verified complete as `sanger_dual_guide_crc/mapping_counts` with audit output at
   `../artifacts/schema_audit/sanger_dualguide_crc_verification_20260622.json`.
 - PRoPER-seq remains source-TBD; the legacy GSE150818 substitute is excluded.
 - PerturBase T29 row 113 (`GSE216481` / directed-differentiation TF atlas) is
