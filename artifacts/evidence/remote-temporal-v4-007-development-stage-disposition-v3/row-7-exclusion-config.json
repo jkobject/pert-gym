@@ -1,0 +1,184 @@
+{
+  "accepted_components": {
+    "credit": 0,
+    "current": 3,
+    "denominator": 153,
+    "metric": "accepted_components"
+  },
+  "api_identity": {
+    "assays": [
+      {
+        "label": "10x 5' v1",
+        "ontology_term_id": "EFO:0011025"
+      }
+    ],
+    "is_primary_data": true,
+    "organism": {
+      "label": "Homo sapiens",
+      "ontology_term_id": "NCBITaxon:9606"
+    },
+    "public": true,
+    "tombstone": false
+  },
+  "authorization_binding": {
+    "approved_parent_protocol": "temporal-v4-007-parquet-parity-parent/v1",
+    "correction_task_id": "t_5a683225",
+    "parent_task_id": "t_536f36cd"
+  },
+  "catalogue_record": "temporal_v4_007_a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s",
+  "config_version": "cellxgene-logical-component-config/v1",
+  "dataset_config_status": "reviewed-executable",
+  "execution": {
+    "billing_project": "jkobject-1549353370965",
+    "heartbeat_denominator": 153,
+    "heartbeat_interval_seconds": 50,
+    "heartbeat_metric": "accepted_components",
+    "host": "pert-gym-worker-eu",
+    "lamin_branch": "jkobject",
+    "lamin_instance": "laminlabs/pertdata",
+    "max_internal_block_rows": 4096,
+    "max_rss_bytes": 25769803776,
+    "min_available_bytes": 4294967296,
+    "output_directory": "/tmp/temporal-v4-007-t_5a683225",
+    "single_writer_lease": "global-plus-legacy-exclusive",
+    "task_timeout_seconds": 10800,
+    "timeout_seconds": 7200,
+    "zone": "europe-west1-b"
+  },
+  "forbidden_actions": [
+    "cleanup",
+    "deletion",
+    "promotion",
+    "collection_mutation",
+    "lamin_main",
+    "vm_lifecycle_change"
+  ],
+  "logical_key": "pert-gym/logical/temporal/a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s",
+  "obs": {
+    "assignments": [
+      {
+        "op": "literal",
+        "target": "dataset",
+        "value": "pert-gym/logical/temporal/a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s"
+      },
+      {
+        "op": "index",
+        "target": "cell_id"
+      },
+      {
+        "op": "literal",
+        "target": "organism",
+        "value": "Homo sapiens"
+      },
+      {
+        "op": "literal",
+        "target": "technology",
+        "value": "10x 5' v1"
+      },
+      {
+        "op": "literal",
+        "target": "modality",
+        "value": "scRNA-seq"
+      },
+      {
+        "op": "copy",
+        "source": "development_stage",
+        "target": "age"
+      },
+      {
+        "op": "literal",
+        "target": "perturbation",
+        "value": "none"
+      },
+      {
+        "op": "literal",
+        "target": "perturbation_type",
+        "value": "none"
+      },
+      {
+        "op": "literal",
+        "target": "is_control",
+        "value": true
+      }
+    ],
+    "mapper_version": "declarative-obs-mapper/v1",
+    "predicates": [
+      {
+        "column": "development_stage",
+        "op": "all_not_in",
+        "values": [
+          "",
+          "na",
+          "none",
+          "not applicable",
+          "not_applicable",
+          "unknown",
+          "unreported"
+        ]
+      },
+      {
+        "column": "development_stage_ontology_term_id",
+        "op": "all_not_in",
+        "values": [
+          "",
+          "na",
+          "none",
+          "unknown",
+          "unreported"
+        ]
+      }
+    ],
+    "required_non_null": [
+      "development_stage",
+      "development_stage_ontology_term_id",
+      "assay",
+      "assay_ontology_term_id"
+    ],
+    "semantic_evidence": {
+      "basis": "Fail-closed runtime preflight requires every source row to carry a non-null, non-placeholder development_stage and development_stage_ontology_term_id before any candidate write; development_stage is preserved as canonical age.",
+      "verdict": "accepted"
+    }
+  },
+  "ordered_var": {
+    "canonical_feature_namespace": "Ensembl Gene ID",
+    "feature_reference_column": "feature_reference",
+    "identity_sha256": "runtime-computed-before-candidate-write",
+    "normalization_version": "source-string/v1",
+    "organism_ontology_id": "NCBITaxon:9606"
+  },
+  "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
+  "revision": {
+    "failed_candidate_denylist": [],
+    "fresh_immutable_required": true,
+    "prefix": "temporal-v4-007"
+  },
+  "shape": [
+    9619,
+    35461
+  ],
+  "source": {
+    "api_url": "https://api.cellxgene.cziscience.com/curation/v1/collections/92db8a7e-8761-4317-873f-15606c016ce5",
+    "asset_id": "89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8",
+    "collection_id": "92db8a7e-8761-4317-873f-15606c016ce5",
+    "collection_version_id": "9526e224-ded6-40f2-8216-8d204cb7da90",
+    "dataset_id": "781cc817-3fd0-487c-a55a-b47b2786a05d",
+    "dataset_version_id": "89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8",
+    "url": "https://datasets.cellxgene.cziscience.com/89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8.h5ad"
+  },
+  "source_head": {
+    "content_length": 181024331,
+    "etag": "\"f5d444de645d745875bb1cee2113f20a-22\"",
+    "final_url": "https://datasets.cellxgene.cziscience.com/89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8.h5ad",
+    "last_modified": "Wed, 10 Jun 2026 16:14:51 GMT",
+    "status": 200,
+    "version_id": "YipoWdKvKlXR9hHaku1ta0iAGqNr8w_m"
+  },
+  "storage": {
+    "gcs_root": "scperturb/pert-gym/staging",
+    "manifest_last": true,
+    "per_block_var_count": 0,
+    "shared_var_count": 1,
+    "x_logical_object_count": 1
+  },
+  "task_id": "t_5a683225"
+}

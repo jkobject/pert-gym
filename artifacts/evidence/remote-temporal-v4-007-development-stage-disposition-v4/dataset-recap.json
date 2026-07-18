@@ -14,6 +14,9 @@
       "resolution": "source_missing_documented"
     }
   ],
-  "supersedes": "artifacts/evidence/remote-temporal-v4-007-development-stage-disposition-v3/",
+  "supersedes": {
+    "path": "artifacts/evidence/remote-temporal-v4-007-development-stage-disposition-v3/row-7-exclusion-config.json",
+    "sha256": "ad9c0e2855c62f2354f4889d897367ad4dcc02352336091b821b8f803a0994c9"
+  },
   "supersession_mode": "append_only"
 }

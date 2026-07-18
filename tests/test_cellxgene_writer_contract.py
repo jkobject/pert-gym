@@ -1662,10 +1662,75 @@ def test_row_7_dataset_recap_append_only_supersedes_exclusion_overlay() -> None:
     assert recap["metadata_completeness_findings"] == config[
         "metadata_completeness_findings"
     ]
-    assert recap["supersedes"] == (
-        "artifacts/evidence/remote-temporal-v4-007-development-stage-disposition-v3/"
-    )
+    supersedes = recap["supersedes"]
+    assert isinstance(supersedes, dict)
+    assert set(supersedes) == {"path", "sha256"}
+    predecessor = ROOT / supersedes["path"]
+    assert predecessor.is_file()
+    assert sha256(predecessor) == supersedes["sha256"]
+    predecessor_config = load_json(predecessor)
+    assert predecessor_config["source"]["dataset_id"] == config["source"]["dataset_id"]
+    assert predecessor_config["revision"] == config["revision"]
+    assert predecessor_config["obs"]["predicates"] == [
+        {
+            "column": "development_stage",
+            "op": "all_not_in",
+            "values": [
+                "",
+                "na",
+                "none",
+                "not applicable",
+                "not_applicable",
+                "unknown",
+                "unreported",
+            ],
+        },
+        {
+            "column": "development_stage_ontology_term_id",
+            "op": "all_not_in",
+            "values": ["", "na", "none", "unknown", "unreported"],
+        },
+    ]
     assert recap["supersession_mode"] == "append_only"
+
+
+@pytest.mark.parametrize(
+    "config_path",
+    [ROW_99_CONFIG, ROW_13_CONFIG, ROW_7_CONFIG, ROW_55_CONFIG, ROW_111_CONFIG],
+)
+def test_every_approved_revision_hash_binds_explicit_or_empty_findings(
+    config_path: Path,
+) -> None:
+    contract = load_contract_module()
+    config = load_json(config_path)
+    revision = config["revision"]["prefix"]
+
+    approved = contract._APPROVED_IDENTITY_SHA256_BY_REVISION[revision]
+
+    assert approved["metadata_completeness_findings"] == contract._json_sha256(
+        config.get("metadata_completeness_findings", [])
+    )
+
+
+def test_row_55_fabricated_finding_fails_after_authorization_rebind() -> None:
+    config = load_json(ROW_55_CONFIG)
+    config["metadata_completeness_findings"] = [
+        {
+            "field": "fabricated",
+            "missing_count": 1,
+            "denominator": config["shape"][0],
+            "evidence_searched": ["fabricated evidence"],
+            "resolution": "source_missing_documented",
+            "publication_blocking": False,
+        }
+    ]
+    authorization = load_json(ROW_55_AUTHORIZATION)
+    authorization["config_sha256"] = hashlib.sha256(
+        (json.dumps(config, indent=2, sort_keys=True) + "\n").encode()
+    ).hexdigest()
+
+    with pytest.raises(ValueError, match="metadata_completeness_findings"):
+        validate(config, authorization)
 
 
 @pytest.mark.parametrize(
