@@ -22,11 +22,7 @@ from pert_gym.perturbai_sparse_parquet import (
     requester_pays_storage_options,
 )
 from tools.lamin_context import connect_pertdata
-from tools.pert_gym_vm_runner import (
-    global_lamin_writer_lease,
-    require_heavy_vm,
-    writer_lock_metadata,
-)
+from tools.pert_gym_vm_runner import lamin_writer_lease, require_heavy_vm
 
 
 def _var(path: Path) -> pd.DataFrame:
@@ -66,7 +62,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    hostname, project, zone, _ = require_heavy_vm()
+    require_heavy_vm()
     requester_pays_storage_options(args.billing_project)
     if args.max_rss_gib <= 0 or args.parquet_batch_rows <= 0:
         raise ValueError("memory and parquet batch limits must be positive")
@@ -101,13 +97,7 @@ def main() -> int:
     )
     publication = None
     if args.publish_collection_key:
-        lock_metadata = writer_lock_metadata(
-            run_id=args.ingestion_run_id,
-            hostname=hostname,
-            project=project,
-            zone=zone,
-        )
-        with global_lamin_writer_lease(lock_metadata):
+        with lamin_writer_lease(run_id=args.ingestion_run_id):
             publication = publish_candidate(
                 ln=connect_pertdata(),
                 root=args.output_root,
