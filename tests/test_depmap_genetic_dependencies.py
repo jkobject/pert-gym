@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from tools.depmap_genetic_dependencies import (
     BASELINE_RNA_CONTRACT,
@@ -135,6 +136,20 @@ def test_depmap_matrix_to_obs_var_essentiality_contract(tmp_path: Path):
     assert tp53_ovcar["score_type"] == "effect_score"
 
 
+def test_depmap_matrix_rejects_malformed_gene_labels_explicitly(tmp_path: Path):
+    matrix = tmp_path / "CRISPRGeneEffect.csv"
+    matrix.write_text(
+        ",A1BG (1),MALFORMED_GENE_LABEL\nACH-000001,-0.11,-1.25\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="Malformed DepMap gene labels.*MALFORMED_GENE_LABEL",
+    ):
+        depmap_matrix_to_obs_var(matrix, score_column="GeneEffect")
+
+
 def test_depmap_readout_modality_distinguishes_effect_and_dependency_scores(tmp_path: Path):
     assert infer_depmap_readout_modality("effect_score") == "essentiality"
     assert infer_depmap_readout_modality("dependency_score") == "dependency"
@@ -148,6 +163,16 @@ def test_depmap_readout_modality_distinguishes_effect_and_dependency_scores(tmp_
 
     assert set(dependency_obs["readout_modality"]) == {"dependency"}
     assert "pooled_CRISPR_screen" not in set(dependency_obs["readout_modality"])
+
+
+@pytest.mark.parametrize("score_column", ["GeneEffect", "CRISPRGeneEffect"])
+def test_gene_effect_score_spellings_select_effect_assay(tmp_path: Path, score_column: str):
+    matrix = tmp_path / "CRISPRGeneEffect.csv"
+    matrix.write_text(",A1BG (1)\nACH-000001,-0.11\n", encoding="utf-8")
+
+    obs, _var = depmap_matrix_to_obs_var(matrix, score_column=score_column)
+
+    assert set(obs["assay"]) == {"Chronos_CRISPR_gene_effect"}
 
 
 def test_no_fake_x_output_for_essentiality_converter(tmp_path: Path):
@@ -200,6 +225,31 @@ def test_baseline_rna_obs_contract_has_stable_join_ids_and_no_scores():
         assert "must not contain essentiality score columns" in str(exc)
     else:  # pragma: no cover - should fail before here
         raise AssertionError("validator accepted score columns in baseline RNA obs")
+
+
+@pytest.mark.parametrize(
+    ("column", "invalid_value"),
+    [
+        ("baseline_join_id", None),
+        ("model_id", "   "),
+        ("depmap_id", "ACH-999999"),
+    ],
+)
+def test_baseline_rna_obs_contract_rejects_invalid_or_inconsistent_ids(
+    column: str,
+    invalid_value: object,
+):
+    obs = pd.DataFrame(
+        {
+            "baseline_join_id": ["ACH-000001"],
+            "model_id": ["ACH-000001"],
+            "depmap_id": ["ACH-000001"],
+        }
+    )
+    obs.loc[0, column] = invalid_value
+
+    with pytest.raises(ValueError, match="Baseline RNA stable join fields"):
+        validate_baseline_rna_obs_contract(obs)
 
 
 def test_sanger_score_contract_matches_pr38_typed_aux_payload():
