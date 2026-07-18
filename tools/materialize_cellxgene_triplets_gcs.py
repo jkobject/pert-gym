@@ -20,7 +20,7 @@ import tempfile
 import time
 import urllib.request
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping, Sequence, cast
 
 import anndata as ad
 import h5py
@@ -31,6 +31,12 @@ from google.cloud import storage
 
 BUFFER_BYTES = 8 * 1024**2
 COPY_CHUNK_BYTES = 32 * 1024**2
+LEGACY_RECOVERABLE_WRITER_SHA256 = (
+    "fd24f484818f8eb8be862a04fcb26a74dd60281a76103bd61936051aafe31e62"
+)
+LEGACY_RECOVERABLE_PLAN_SHA256 = (
+    "9dd7106c0fbf51a778cde641e128dcbbd222022a5c3e584202c3cbd0df4853b1"
+)
 
 
 def json_bytes(value: object) -> bytes:
@@ -207,6 +213,240 @@ def upload_create_only(bucket: storage.Bucket, name: str, path: Path) -> dict[st
     return identity
 
 
+def _write_json_atomic(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=path.parent
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            json.dump(value, handle, indent=2, sort_keys=True)
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+        try:
+            directory = os.open(path.parent, os.O_RDONLY)
+        except OSError:
+            return
+        try:
+            try:
+                os.fsync(directory)
+            except OSError:
+                pass
+        finally:
+            os.close(directory)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def _write_or_validate_manifest(path: Path, manifest: Mapping[str, object]) -> None:
+    """Keep retry bytes stable while revalidating all non-runtime manifest facts."""
+    if not path.exists():
+        _write_json_atomic(path, manifest)
+        return
+    try:
+        existing = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError("persisted materialization manifest is malformed") from error
+    expected_stable = dict(manifest)
+    existing_stable = dict(existing) if isinstance(existing, dict) else {}
+    expected_stable.pop("runtime", None)
+    existing_stable.pop("runtime", None)
+    if existing_stable != expected_stable:
+        raise RuntimeError("persisted materialization manifest identity drift")
+
+
+def _load_or_create_publication_journal(
+    path: Path, identity: Mapping[str, object], stage_names: Sequence[str]
+) -> dict[str, object]:
+    expected_identity = dict(identity)
+    expected_stages = list(stage_names)
+    if path.exists():
+        try:
+            journal = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            raise RuntimeError("publication journal is malformed or torn") from error
+        if not isinstance(journal, dict) or set(journal) != {
+            "format",
+            "identity",
+            "stage_names",
+            "completed_stages",
+            "objects",
+        }:
+            raise RuntimeError("publication journal is malformed or torn")
+        if journal["format"] != "pert-gym.cellxgene-triplet.publication-journal/v1":
+            raise RuntimeError("publication journal format mismatch")
+        if journal["identity"] != expected_identity:
+            raise RuntimeError(
+                "publication journal identity mismatch; refusing drifted resume"
+            )
+        if journal["stage_names"] != expected_stages:
+            raise RuntimeError("publication journal stage identity mismatch")
+    else:
+        journal = {
+            "format": "pert-gym.cellxgene-triplet.publication-journal/v1",
+            "identity": expected_identity,
+            "stage_names": expected_stages,
+            "completed_stages": [],
+            "objects": {},
+        }
+        _write_json_atomic(path, journal)
+    completed = journal["completed_stages"]
+    objects = journal["objects"]
+    if (
+        not isinstance(completed, list)
+        or completed != expected_stages[: len(completed)]
+        or not isinstance(objects, dict)
+        or set(objects) != set(completed)
+    ):
+        raise RuntimeError("publication journal stages do not form a valid prefix")
+    return cast(dict[str, object], journal)
+
+
+def _verify_remote_object(
+    bucket: storage.Bucket,
+    name: str,
+    path: Path | None,
+    expected: Mapping[str, object] | None = None,
+) -> dict[str, Any]:
+    live = bucket.blob(name)
+    if not live.exists():
+        raise RuntimeError(f"publication object is missing: gs://{bucket.name}/{name}")
+    live.reload()
+    generation = str(live.generation)
+    if expected is not None and generation != str(expected.get("generation")):
+        raise RuntimeError(
+            f"publication generation drift for gs://{bucket.name}/{name}"
+        )
+    if path is None:
+        if expected is None:
+            raise RuntimeError(f"publication stage input is missing for {name}")
+        identity = {
+            "bucket": bucket.name,
+            "name": name,
+            "uri": f"gs://{bucket.name}/{name}",
+            "generation": generation,
+            "generation_uri": f"gs://{bucket.name}/{name}#{generation}",
+            "size_bytes": expected.get("size_bytes"),
+            "sha256": expected.get("sha256"),
+        }
+        if dict(expected) != identity:
+            raise RuntimeError(
+                f"publication identity drift for gs://{bucket.name}/{name}"
+            )
+    else:
+        identity = {
+            "bucket": bucket.name,
+            "name": name,
+            "uri": f"gs://{bucket.name}/{name}",
+            "generation": generation,
+            "generation_uri": f"gs://{bucket.name}/{name}#{generation}",
+            "size_bytes": path.stat().st_size,
+            "sha256": sha256_file(path),
+        }
+        if expected is not None and dict(expected) != identity:
+            raise RuntimeError(
+                f"publication identity drift for gs://{bucket.name}/{name}"
+            )
+    if int(live.size or 0) != identity["size_bytes"]:
+        raise RuntimeError(f"publication size mismatch for gs://{bucket.name}/{name}")
+    with tempfile.TemporaryDirectory(prefix="triplet-stage-readback-") as temporary:
+        destination = Path(temporary) / "object"
+        pinned = bucket.blob(name, generation=int(generation))
+        pinned.download_to_filename(
+            destination,
+            if_generation_match=int(generation),
+            timeout=3600,
+            checksum="crc32c",
+        )
+        if (
+            destination.stat().st_size != identity["size_bytes"]
+            or sha256_file(destination) != identity["sha256"]
+        ):
+            raise RuntimeError(
+                f"publication checksum mismatch for {identity['generation_uri']}"
+            )
+    return identity
+
+
+def publish_create_only_stages(
+    *,
+    bucket: storage.Bucket,
+    journal_path: Path,
+    identity: Mapping[str, object],
+    stage_names: Sequence[str],
+    stage_inputs: Mapping[str, tuple[str, Path]],
+    through_stage: str | None = None,
+    stop_after_remote_stage: str | None = None,
+    stop_after_journal_stage: str | None = None,
+) -> dict[str, dict[str, Any]]:
+    """Resume one immutable create-only publication from its durable stage journal.
+
+    Existing objects are adopted only when their live generation, size, and
+    generation-pinned SHA-256 match the locally rebuilt stage bytes. Remote and
+    journal stages must both be contiguous prefixes; any drift fails before a
+    later object is created. Fault-injection arguments are test-only.
+    """
+    stages = list(stage_names)
+    if not stages or len(stages) != len(set(stages)):
+        raise ValueError("publication stages must be unique and non-empty")
+    if set(stage_inputs) != set(stages):
+        raise ValueError("publication stage inputs must exactly match stage names")
+    if through_stage is None:
+        through_index = len(stages) - 1
+    else:
+        if through_stage not in stages:
+            raise ValueError("unknown publication terminal stage")
+        through_index = stages.index(through_stage)
+    for stop in (stop_after_remote_stage, stop_after_journal_stage):
+        if stop is not None and stop not in stages:
+            raise ValueError("unknown publication fault-injection stage")
+
+    journal = _load_or_create_publication_journal(journal_path, identity, stages)
+    completed = cast(list[str], journal["completed_stages"])
+    objects = cast(dict[str, dict[str, Any]], journal["objects"])
+    remote_stages = [
+        stage for stage in stages if bucket.blob(stage_inputs[stage][0]).exists()
+    ]
+    if remote_stages != stages[: len(remote_stages)]:
+        raise RuntimeError("remote publication stages do not form a contiguous prefix")
+    if len(remote_stages) < len(completed):
+        raise RuntimeError("publication journal references a missing remote stage")
+
+    results: dict[str, dict[str, Any]] = {}
+    for index, stage in enumerate(stages[: through_index + 1]):
+        name, path = stage_inputs[stage]
+        expected = objects.get(stage)
+        available_path = path if path.is_file() else None
+        if available_path is None and expected is None:
+            raise RuntimeError(f"publication stage input is missing: {stage}")
+        if stage in remote_stages:
+            stage_identity = _verify_remote_object(
+                bucket, name, available_path, expected
+            )
+        else:
+            if index != len(remote_stages):
+                raise RuntimeError("refusing publication across a remote stage hole")
+            stage_identity = upload_create_only(bucket, name, path)
+            stage_identity = _verify_remote_object(bucket, name, path, stage_identity)
+            remote_stages.append(stage)
+            if stop_after_remote_stage == stage:
+                raise RuntimeError(f"intentional crash after remote {stage}")
+        if stage not in completed:
+            if index != len(completed):
+                raise RuntimeError("refusing publication across a journal stage hole")
+            objects[stage] = stage_identity
+            completed.append(stage)
+            _write_json_atomic(journal_path, journal)
+        results[stage] = stage_identity
+        if stop_after_journal_stage == stage:
+            raise RuntimeError(f"intentional crash after journal {stage}")
+
+    return results
+
+
 def download_generation(
     bucket: storage.Bucket, identity: dict[str, Any], destination: Path
 ) -> None:
@@ -260,8 +500,13 @@ def shared_var_identity(
     }
 
 
-def check_plan(plan: dict[str, Any]) -> None:
-    if plan["writer_sha256"] != sha256_file(Path(__file__)):
+def check_plan(plan: dict[str, Any], plan_sha256: str) -> None:
+    current_writer = sha256_file(Path(__file__))
+    legacy_recovery = (
+        plan["writer_sha256"] == LEGACY_RECOVERABLE_WRITER_SHA256
+        and plan_sha256 == LEGACY_RECOVERABLE_PLAN_SHA256
+    )
+    if plan["writer_sha256"] != current_writer and not legacy_recovery:
         raise RuntimeError("writer bytes do not match the execution plan")
     if plan["execution"]["host"] != socket.gethostname().split(".")[0]:
         raise RuntimeError("must execute on exact authorized EU worker")
@@ -291,8 +536,8 @@ def main() -> int:
     plan_bytes = args.plan.read_bytes()
     plan = json.loads(plan_bytes)
     plan_sha256 = hashlib.sha256(plan_bytes).hexdigest()
-    check_plan(plan)
-    args.evidence_dir.mkdir(parents=True, exist_ok=False)
+    check_plan(plan, plan_sha256)
+    args.evidence_dir.mkdir(parents=True, exist_ok=True)
     lock_path = Path(plan["execution"]["lock_path"])
     lock_handle = lock_path.open("w")
     fcntl.flock(lock_handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -307,18 +552,21 @@ def main() -> int:
     bucket = client.bucket(
         plan["storage"]["bucket"], user_project=plan["execution"]["billing_project"]
     )
-    existing = []
-    for dataset in plan["datasets"]:
-        for member in ("obs.parquet", "X.h5ad", "var.parquet"):
-            name = f"{plan['storage']['root'].rstrip('/')}/{dataset['prefix'].strip('/')}/{member}"
-            blob = bucket.blob(name)
-            if blob.exists():
-                existing.append(f"gs://{bucket.name}/{name}")
-    if existing:
-        raise RuntimeError(f"create-only preflight found existing objects: {existing}")
 
     started = time.time()
     records: list[dict[str, Any]] = []
+    stage_inputs: dict[str, tuple[str, Path]] = {}
+    manifest_path = args.evidence_dir / "materialization-manifest.json"
+    journal_path = args.evidence_dir / "publication-journal.json"
+    publication_identity = {
+        "execution_plan_sha256": plan_sha256,
+        "execution_writer_sha256": plan["writer_sha256"],
+        "recovery_writer_sha256": sha256_file(Path(__file__)),
+        "task_id": plan["task_id"],
+        "record_id": plan["record_id"],
+        "logical_key": plan["logical_key"],
+        "bucket": plan["storage"]["bucket"],
+    }
     with tempfile.TemporaryDirectory(prefix="row25-triplet-") as temporary:
         temp = Path(temporary)
         for position, dataset in enumerate(plan["datasets"], start=1):
@@ -362,11 +610,20 @@ def main() -> int:
             prefix = (
                 f"{plan['storage']['root'].rstrip('/')}/{dataset['prefix'].strip('/')}"
             )
-            objects = {
-                "obs": upload_create_only(bucket, f"{prefix}/obs.parquet", obs_path),
-                "X": upload_create_only(bucket, f"{prefix}/X.h5ad", x_path),
-                "var": upload_create_only(bucket, f"{prefix}/var.parquet", var_path),
+            stage_inputs = {
+                "obs": (f"{prefix}/obs.parquet", obs_path),
+                "X": (f"{prefix}/X.h5ad", x_path),
+                "var": (f"{prefix}/var.parquet", var_path),
+                "manifest": (plan["storage"]["manifest_name"], manifest_path),
             }
+            objects = publish_create_only_stages(
+                bucket=bucket,
+                journal_path=journal_path,
+                identity=publication_identity,
+                stage_names=("obs", "X", "var", "manifest"),
+                stage_inputs=stage_inputs,
+                through_stage="var",
+            )
             records.append(
                 {
                     "position": position,
@@ -491,11 +748,16 @@ def main() -> int:
             "max_rss_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
         },
     }
-    manifest_path = args.evidence_dir / "materialization-manifest.json"
-    manifest_path.write_bytes(json_bytes(manifest))
-    manifest_identity = upload_create_only(
-        bucket, plan["storage"]["manifest_name"], manifest_path
+    _write_or_validate_manifest(manifest_path, manifest)
+    stage_inputs["manifest"] = (plan["storage"]["manifest_name"], manifest_path)
+    published = publish_create_only_stages(
+        bucket=bucket,
+        journal_path=journal_path,
+        identity=publication_identity,
+        stage_names=("obs", "X", "var", "manifest"),
+        stage_inputs=stage_inputs,
     )
+    manifest_identity = published["manifest"]
     if int(manifest_identity["generation"]) <= max(payload_generations):
         raise RuntimeError(
             "manifest generation is not newer than every payload generation"
