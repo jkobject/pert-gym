@@ -1,0 +1,15 @@
+{
+  "approved_parent_protocol": "temporal-v4-007-parquet-parity-parent/v1",
+  "authorization_version": "cellxgene-logical-component-authorization/v1",
+  "config_sha256": "ad9c0e2855c62f2354f4889d897367ad4dcc02352336091b821b8f803a0994c9",
+  "correction_task_id": "t_5a683225",
+  "execution_authorized": true,
+  "live_ledger_control_plane_sha256": "f37cc8159f660d2474533befcd10e8989694bd932a290169781c556efd471f11",
+  "parent_task_id": "t_536f36cd",
+  "parent_task_status": "completed",
+  "parquet_frame_parity_sha256": "f2827eca688dd2581a6ede51be77c4ae0b9327bacc66116e8ec1b1cc5420e976",
+  "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
+  "review_scope": "exact-head-independent-review-before-any-execution",
+  "writer_contract_sha256": "15cc561235f58ae8c728eea639d8a5ff6d82f8589524ec96663a7634d7723099",
+  "writer_sha256": "9077a7396ead7c82261a7a6c361844da6c5784f93cb126435eb67dffd3784166"
+}

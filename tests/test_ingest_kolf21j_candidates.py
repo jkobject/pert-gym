@@ -331,13 +331,98 @@ def test_register_triplet_rejects_non_contiguous_journal_before_remote_save(
     assert ln.Artifact.saved == saved_before
 
 
-def test_prepare_x_candidate_reuses_existing_payload_for_publication_resume(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+def _write_x_source(
+    path: Path,
+    *,
+    matrix: np.ndarray | None = None,
+    obs_names: list[str] | None = None,
+    var_names: list[str] | None = None,
 ) -> None:
+    matrix = np.array([[1, 2], [3, 4]], dtype=np.float32) if matrix is None else matrix
+    obs_names = ["cell-a", "cell-b"] if obs_names is None else obs_names
+    var_names = ["gene-a", "gene-b"] if var_names is None else var_names
+    ad.AnnData(
+        X=sparse.csr_matrix(matrix),
+        obs=pd.DataFrame(index=obs_names),
+        var=pd.DataFrame(index=var_names),
+    ).write_h5ad(path)
+
+
+def test_prepare_x_candidate_rejects_partial_payload_left_by_crash_without_overwrite(
+    tmp_path: Path,
+) -> None:
+    source_path = tmp_path / "source.h5ad"
+    _write_x_source(source_path)
     output_dir = tmp_path / "candidate"
     output_dir.mkdir()
     x_path = output_dir / "X.h5ad"
-    x_path.write_bytes(b"already-built X")
+    x_path.write_bytes(b"partial X write")
+
+    with pytest.raises(RuntimeError, match="cannot resume"):
+        kolf.prepare_x_candidate(source_path, output_dir)
+
+    assert x_path.read_bytes() == b"partial X write"
+
+
+def test_prepare_x_candidate_rejects_valid_x_from_a_different_source(
+    tmp_path: Path,
+) -> None:
+    source_path = tmp_path / "source.h5ad"
+    foreign_source_path = tmp_path / "foreign-source.h5ad"
+    _write_x_source(source_path)
+    _write_x_source(foreign_source_path, matrix=np.array([[9, 8], [7, 6]]))
+    output_dir = tmp_path / "candidate"
+
+    foreign_x_path = kolf.prepare_x_candidate(foreign_source_path, output_dir)
+
+    with pytest.raises(RuntimeError, match="source identity"):
+        kolf.prepare_x_candidate(source_path, output_dir)
+
+    assert foreign_x_path.exists()
+
+
+def test_prepare_x_candidate_rejects_shape_or_index_order_mismatch(
+    tmp_path: Path,
+) -> None:
+    source_path = tmp_path / "source.h5ad"
+    _write_x_source(source_path)
+    output_dir = tmp_path / "candidate"
+    x_path = kolf.prepare_x_candidate(source_path, output_dir)
+    mismatched = ad.AnnData(
+        X=sparse.csr_matrix(np.array([[1, 2], [3, 4]], dtype=np.float32)),
+        obs=pd.DataFrame(index=["cell-b", "cell-a"]),
+        var=pd.DataFrame(index=["gene-a", "gene-b"]),
+    )
+    replacement = tmp_path / "replacement.h5ad"
+    mismatched.write_h5ad(replacement)
+    os.replace(replacement, x_path)
+
+    with pytest.raises(RuntimeError, match="obs index"):
+        kolf.prepare_x_candidate(source_path, output_dir)
+
+
+def test_prepare_x_candidate_rejects_source_identity_drift(
+    tmp_path: Path,
+) -> None:
+    source_path = tmp_path / "source.h5ad"
+    _write_x_source(source_path)
+    output_dir = tmp_path / "candidate"
+    x_path = kolf.prepare_x_candidate(source_path, output_dir)
+    _write_x_source(source_path, matrix=np.array([[5, 6], [7, 8]]))
+
+    with pytest.raises(RuntimeError, match="source identity"):
+        kolf.prepare_x_candidate(source_path, output_dir)
+
+    assert x_path.exists()
+
+
+def test_prepare_x_candidate_reuses_verified_matching_payload_without_rewrite(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    source_path = tmp_path / "source.h5ad"
+    _write_x_source(source_path)
+    output_dir = tmp_path / "candidate"
+    x_path = kolf.prepare_x_candidate(source_path, output_dir)
 
     monkeypatch.setattr(
         kolf,
@@ -345,7 +430,7 @@ def test_prepare_x_candidate_reuses_existing_payload_for_publication_resume(
         lambda *_args, **_kwargs: pytest.fail("resume must not rewrite X"),
     )
 
-    assert kolf.prepare_x_candidate(tmp_path / "source.h5ad", output_dir) == x_path
+    assert kolf.prepare_x_candidate(source_path, output_dir) == x_path
 
 
 def test_build_canonical_obs_maps_pilot_fields_without_mutating_source() -> None:

@@ -1,0 +1,88 @@
+{
+  "accepted_components": {"credit": 0, "current": 3, "denominator": 153},
+  "api_identity": {
+    "assays": [
+      {"label": "10x 3' v3", "ontology_term_id": "EFO:0009922"},
+      {"label": "Parse Evercode Whole Transcriptome v2", "ontology_term_id": null}
+    ],
+    "is_primary_data": true,
+    "organism": {"label": "Homo sapiens", "ontology_term_id": "NCBITaxon:9606"},
+    "public": true,
+    "tombstone": false
+  },
+  "authorization_binding": {
+    "approved_parent_protocol": "temporal-v4-013-parquet-parity-parent/v1",
+    "correction_task_id": "t_b8dacd9d",
+    "parent_task_id": "t_0c090cdd"
+  },
+  "config_version": "cellxgene-logical-component-config/v1",
+  "dataset_config_status": "prewrite-fixture",
+  "execution": {
+    "billing_project": "jkobject-1549353370965",
+    "heartbeat_denominator": 153,
+    "heartbeat_interval_seconds": 50,
+    "heartbeat_metric": "accepted_components",
+    "host": "pert-gym-worker-eu",
+    "lamin_branch": "jkobject",
+    "lamin_instance": "laminlabs/pertdata",
+    "max_internal_block_rows": 4096,
+    "max_rss_bytes": 25769803776,
+    "min_available_bytes": 4294967296,
+    "output_directory": "/tmp/temporal-v4-013-t_b8dacd9d",
+    "single_writer_lease": "global-plus-legacy-exclusive",
+    "timeout_seconds": 7200,
+    "zone": "europe-west1-b"
+  },
+  "forbidden_actions": ["cleanup", "deletion", "promotion", "collection_mutation", "lamin_main", "vm_lifecycle_change"],
+  "logical_key": "pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno",
+  "obs": {
+    "assignments": [
+      {"op": "literal", "target": "dataset", "value": "pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno"},
+      {"op": "index", "target": "cell_id"},
+      {"op": "literal", "target": "organism", "value": "Homo sapiens"},
+      {"op": "literal", "target": "modality", "value": "scRNA-seq"},
+      {"op": "copy", "source": "development_stage", "target": "age"},
+      {"op": "literal", "target": "perturbation", "value": "none"},
+      {"op": "literal", "target": "perturbation_type", "value": "none"},
+      {"op": "literal", "target": "is_control", "value": true}
+    ],
+    "mapper_version": "declarative-obs-mapper/v1",
+    "predicates": [
+      {"column": "development_stage", "op": "all_contains", "value": "PREWRITE_EVIDENCE_REQUIRED"}
+    ],
+    "required_non_null": ["development_stage", "development_stage_ontology_term_id", "assay", "assay_ontology_term_id"],
+    "semantic_evidence": {
+      "basis": "PREWRITE FIXTURE ONLY: replace predicates, assignments, and this basis with row-level temporal evidence before review and authorization.",
+      "verdict": "pending-prewrite"
+    }
+  },
+  "ordered_var": {
+    "canonical_feature_namespace": "Ensembl Gene ID",
+    "feature_reference_column": "feature_reference",
+    "identity_sha256": null,
+    "normalization_version": "source-string/v1",
+    "organism_ontology_id": "NCBITaxon:9606"
+  },
+  "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
+  "revision": {"failed_candidate_denylist": [], "fresh_immutable_required": true, "prefix": "temporal-v4-013"},
+  "shape": [14424, 37434],
+  "source": {
+    "api_url": "https://api.cellxgene.cziscience.com/curation/v1/collections/0dd101f7-9829-44b3-a323-18b113eabeb4",
+    "asset_id": "ba404fa2-44a9-4420-b43c-03f863b12d37",
+    "collection_id": "0dd101f7-9829-44b3-a323-18b113eabeb4",
+    "collection_version_id": "d7cf1ac6-5574-4dbc-8cf3-3a58364f624f",
+    "dataset_id": "d995b85b-69f2-48f4-b6ec-0b7bffd120f5",
+    "dataset_version_id": "ba404fa2-44a9-4420-b43c-03f863b12d37",
+    "url": "https://datasets.cellxgene.cziscience.com/ba404fa2-44a9-4420-b43c-03f863b12d37.h5ad"
+  },
+  "source_head": {
+    "content_length": 335219160,
+    "etag": "3acfa1f6a7f9a53907393e516e400699-40",
+    "final_url": "https://datasets.cellxgene.cziscience.com/ba404fa2-44a9-4420-b43c-03f863b12d37.h5ad",
+    "last_modified": "Wed, 10 Jun 2026 13:57:30 GMT",
+    "status": 200,
+    "version_id": null
+  },
+  "storage": {"gcs_root": "scperturb/pert-gym/staging", "manifest_last": true, "per_block_var_count": 0, "shared_var_count": 1, "x_logical_object_count": 1},
+  "task_id": "t_b8dacd9d"
+}

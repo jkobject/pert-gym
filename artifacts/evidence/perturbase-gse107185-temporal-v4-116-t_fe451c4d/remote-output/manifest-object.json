@@ -1,0 +1,15 @@
+{
+  "crc32c_base64": "xpUeaw==",
+  "generation": "1784263868472118",
+  "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json#1784263868472118",
+  "md5_base64": "yXiP3JikqGymOlW6P3ZEgw==",
+  "producer_generation_readback": {
+    "sha256": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+    "size_bytes": 28859
+  },
+  "role": "manifest",
+  "sha256": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+  "size_bytes": 28859,
+  "updated": "2026-07-17T04:51:08+0000",
+  "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json"
+}

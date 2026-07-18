@@ -1,0 +1,161 @@
+{
+  "accepted_components": {
+    "credit": 0,
+    "current": 4,
+    "denominator": 153,
+    "metric": "accepted_components"
+  },
+  "api_identity": {
+    "assays": [
+      {
+        "label": "10x 3' v3",
+        "ontology_term_id": "EFO:0009922"
+      }
+    ],
+    "is_primary_data": true,
+    "organism": {
+      "label": "Homo sapiens",
+      "ontology_term_id": "NCBITaxon:9606"
+    },
+    "public": true,
+    "tombstone": false
+  },
+  "authorization_binding": {
+    "approved_parent_protocol": "temporal-v4-111-parquet-parity-parent/v1",
+    "correction_task_id": "t_71c1be94",
+    "parent_task_id": "t_23e01365"
+  },
+  "catalogue_record": "temporal_v4_111_transcriptomic_analysis_of_air_liquid_interface_culture_in_human_lung_organoids",
+  "config_version": "cellxgene-logical-component-config/v1",
+  "dataset_config_status": "reviewed-executable",
+  "execution": {
+    "billing_project": "jkobject-1549353370965",
+    "heartbeat_denominator": 153,
+    "heartbeat_interval_seconds": 50,
+    "heartbeat_metric": "accepted_components",
+    "host": "pert-gym-worker-eu",
+    "lamin_branch": "jkobject",
+    "lamin_instance": "laminlabs/pertdata",
+    "max_internal_block_rows": 4096,
+    "max_rss_bytes": 25769803776,
+    "min_available_bytes": 4294967296,
+    "output_directory": "/tmp/temporal-v4-111-t_71c1be94",
+    "single_writer_lease": "global-plus-family-plus-legacy-exclusive",
+    "task_timeout_seconds": 10800,
+    "timeout_seconds": 7200,
+    "zone": "europe-west1-b"
+  },
+  "forbidden_actions": [
+    "cleanup",
+    "deletion",
+    "promotion",
+    "collection_mutation",
+    "lamin_main",
+    "vm_lifecycle_change"
+  ],
+  "logical_key": "pert-gym/logical/temporal/transcriptomic_analysis_of_air_liquid_interface_culture_in_human_lung_organoids",
+  "obs": {
+    "assignments": [
+      {
+        "op": "literal",
+        "target": "dataset",
+        "value": "pert-gym/logical/temporal/transcriptomic_analysis_of_air_liquid_interface_culture_in_human_lung_organoids"
+      },
+      {
+        "op": "index",
+        "target": "cell_id"
+      },
+      {
+        "op": "literal",
+        "target": "organism",
+        "value": "Homo sapiens"
+      },
+      {
+        "op": "literal",
+        "target": "technology",
+        "value": "10x 3' v3"
+      },
+      {
+        "op": "literal",
+        "target": "modality",
+        "value": "scRNA-seq"
+      },
+      {
+        "op": "copy",
+        "source": "development_stage",
+        "target": "age"
+      }
+    ],
+    "mapper_version": "declarative-obs-mapper/v1",
+    "predicates": [
+      {
+        "column": "development_stage",
+        "op": "domain_equals",
+        "values": [
+          "late adult stage",
+          "middle aged stage"
+        ]
+      },
+      {
+        "column": "development_stage_ontology_term_id",
+        "op": "domain_equals",
+        "values": [
+          "HsapDv:0000227",
+          "HsapDv:0000267"
+        ]
+      }
+    ],
+    "required_non_null": [
+      "development_stage",
+      "development_stage_ontology_term_id",
+      "assay",
+      "assay_ontology_term_id"
+    ],
+    "semantic_evidence": {
+      "basis": "The exact frozen CELLxGENE source exposes only late adult stage (HsapDv:0000227) and middle aged stage (HsapDv:0000267); runtime preflight requires those exact paired source domains and preserves development_stage as canonical age without inferring temporal, perturbation, control, treatment, dose, or timepoint fields from the title.",
+      "verdict": "accepted"
+    }
+  },
+  "ordered_var": {
+    "canonical_feature_namespace": "Ensembl Gene ID",
+    "feature_reference_column": "feature_reference",
+    "identity_sha256": "runtime-computed-before-candidate-write",
+    "normalization_version": "source-string/v1",
+    "organism_ontology_id": "NCBITaxon:9606"
+  },
+  "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
+  "revision": {
+    "failed_candidate_denylist": [],
+    "fresh_immutable_required": true,
+    "prefix": "temporal-v4-111"
+  },
+  "shape": [
+    15806,
+    25229
+  ],
+  "source": {
+    "api_url": "https://api.cellxgene.cziscience.com/curation/v1/collections/e9cf4e8d-05ed-4d95-b550-af35ca219390",
+    "asset_id": "d3b2dfdb-e189-4257-8fab-083f7dbea4e3",
+    "collection_id": "e9cf4e8d-05ed-4d95-b550-af35ca219390",
+    "collection_version_id": "3464db4e-9883-41be-ab7c-ccf250800e81",
+    "dataset_id": "ef1a4b05-540c-4f73-8ceb-49dfa800645d",
+    "dataset_version_id": "d3b2dfdb-e189-4257-8fab-083f7dbea4e3",
+    "url": "https://datasets.cellxgene.cziscience.com/d3b2dfdb-e189-4257-8fab-083f7dbea4e3.h5ad"
+  },
+  "source_head": {
+    "content_length": 638045073,
+    "etag": "\"4ced72fa14acd46482c729596f1d96ed-77\"",
+    "final_url": "https://datasets.cellxgene.cziscience.com/d3b2dfdb-e189-4257-8fab-083f7dbea4e3.h5ad",
+    "last_modified": "Wed, 10 Jun 2026 04:29:21 GMT",
+    "status": 200,
+    "version_id": null
+  },
+  "storage": {
+    "gcs_root": "scperturb/pert-gym/staging",
+    "manifest_last": true,
+    "per_block_var_count": 0,
+    "shared_var_count": 1,
+    "x_logical_object_count": 1
+  },
+  "task_id": "t_71c1be94"
+}

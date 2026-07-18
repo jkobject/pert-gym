@@ -1,0 +1,653 @@
+{
+  "build_task_id": "t_fe451c4d",
+  "bytes_streamed_from_gcs": 94690115,
+  "bytes_streamed_from_upstream_source": 0,
+  "checks": [
+    {
+      "name": "frozen_manifest_checksum",
+      "observed": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+      "passed": true
+    },
+    {
+      "name": "bounded_wave_graph_checksum",
+      "observed": "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98",
+      "passed": true
+    },
+    {
+      "name": "frozen_scope_exactly_row_116_component",
+      "observed": [
+        {
+          "catalogue_origins": [
+            "temporal_pretraining_datasets_v4"
+          ],
+          "catalogue_row_ids": [
+            116
+          ],
+          "classification": "executable",
+          "collection_membership": {
+            "artifact_keys_sample": [],
+            "authoritative_coverage_note": "metadata match only; no live Lamin assertion",
+            "canonical_20260621_member_count": 0,
+            "categories": {}
+          },
+          "completion_state": "source_executable_not_completion",
+          "component": "Mapping Cellular Reprogramming via Pooled Overexpression Screens with Paired Fitness and Single Cell RNA-Sequencing Readout",
+          "denominator_basis": "temporal_pretraining_datasets_v4 retained row + upstream immutable accession/collection identity",
+          "downloadable": "yes",
+          "evidence_paths": [
+            "data/temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv"
+          ],
+          "exact_remaining_work": "Resolve exact payload manifest and execute EU-worker backed conversion/publication with readback; catalogue/source probe alone is never completion.",
+          "exclusion_reason": "",
+          "existing_lamin_coverage": "no matched member in unified_collection_manifest_20260621",
+          "expected_denominator_verbatim": "catalogue logical row; cells=8428",
+          "logical_dataset": "perturbase GSE107185",
+          "modality": "single-cell perturbation RNA",
+          "modality_contract": "expression_like_obs_X_var",
+          "pilot_or_probe_is_complete": false,
+          "record_id": "temporal_v4_116_perturbase_gse107185",
+          "source_bytes": null,
+          "source_integrity_identity": [
+            "upstream_immutable_identity:GSE107185;PRJNA419230"
+          ],
+          "source_n_obs": 8428,
+          "source_n_vars": null,
+          "source_object_identity": "GSE107185;PRJNA419230",
+          "source_uri": "http://www.perturbase.cn/repository/11",
+          "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+          "target_shared_var_identity": "sha256(canonical ordered var identifiers + organism + feature namespace); compute on EU worker before publication",
+          "target_zarr_or_block_plan": "single logical sparse Zarr or <=50k-row blocks after backed EU-worker probe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "exactly_one_bounded_wave",
+      "observed": [
+        {
+          "accepted_evidence": null,
+          "existing_builder": null,
+          "outcome_task_id": "t_f196b29f",
+          "record_id": "temporal_v4_116_perturbase_gse107185",
+          "status": "triage",
+          "wave": 11
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "manifest_generation_checksum",
+      "observed": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+      "passed": true
+    },
+    {
+      "name": "manifest_identity_and_scope",
+      "observed": {
+        "catalogue_row_ids": [
+          116
+        ],
+        "component": "Mapping Cellular Reprogramming via Pooled Overexpression Screens with Paired Fitness and Single Cell RNA-Sequencing Readout",
+        "dataset_count": 1,
+        "record_id": "temporal_v4_116_perturbase_gse107185",
+        "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+        "triplet_count": 1
+      },
+      "passed": true
+    },
+    {
+      "name": "manifest_controls_match_independent_files",
+      "observed": {
+        "accession": "GSE107185",
+        "archive": {
+          "immutable_copy": {
+            "crc32c_base64": "+DcsDg==",
+            "generation": "1784263842756819",
+            "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/source/extend_61.filter.tar.gz#1784263842756819",
+            "md5_base64": "KiN/x+u0Y6NwSFwxr6Z0/Q==",
+            "producer_generation_readback": {
+              "sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa",
+              "size_bytes": 65772471
+            },
+            "role": "frozen_source_archive",
+            "sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa",
+            "size_bytes": 65772471,
+            "updated": "2026-07-17T04:50:42+0000",
+            "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/source/extend_61.filter.tar.gz"
+          },
+          "sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa",
+          "size_bytes": 65772471
+        },
+        "archive_member": {
+          "name": "mixscape_hvg_filter.h5ad",
+          "sha256": "e8e19bf30b6b028d9bb257907f9bb4a0747478c6b5af24405df2a8da15e18e75",
+          "size_bytes": 215672608
+        },
+        "bioproject": "PRJNA419230",
+        "bounded_wave_graph_sha256": "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98",
+        "controlling_publication_manifest_sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+        "controlling_record": {
+          "catalogue_origins": [
+            "temporal_pretraining_datasets_v4"
+          ],
+          "catalogue_row_ids": [
+            116
+          ],
+          "classification": "executable",
+          "collection_membership": {
+            "artifact_keys_sample": [],
+            "authoritative_coverage_note": "metadata match only; no live Lamin assertion",
+            "canonical_20260621_member_count": 0,
+            "categories": {}
+          },
+          "completion_state": "source_executable_not_completion",
+          "component": "Mapping Cellular Reprogramming via Pooled Overexpression Screens with Paired Fitness and Single Cell RNA-Sequencing Readout",
+          "denominator_basis": "temporal_pretraining_datasets_v4 retained row + upstream immutable accession/collection identity",
+          "downloadable": "yes",
+          "evidence_paths": [
+            "data/temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv"
+          ],
+          "exact_remaining_work": "Resolve exact payload manifest and execute EU-worker backed conversion/publication with readback; catalogue/source probe alone is never completion.",
+          "exclusion_reason": "",
+          "existing_lamin_coverage": "no matched member in unified_collection_manifest_20260621",
+          "expected_denominator_verbatim": "catalogue logical row; cells=8428",
+          "logical_dataset": "perturbase GSE107185",
+          "modality": "single-cell perturbation RNA",
+          "modality_contract": "expression_like_obs_X_var",
+          "pilot_or_probe_is_complete": false,
+          "record_id": "temporal_v4_116_perturbase_gse107185",
+          "source_bytes": null,
+          "source_integrity_identity": [
+            "upstream_immutable_identity:GSE107185;PRJNA419230"
+          ],
+          "source_n_obs": 8428,
+          "source_n_vars": null,
+          "source_object_identity": "GSE107185;PRJNA419230",
+          "source_uri": "http://www.perturbase.cn/repository/11",
+          "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+          "target_shared_var_identity": "sha256(canonical ordered var identifiers + organism + feature namespace); compute on EU worker before publication",
+          "target_zarr_or_block_plan": "single logical sparse Zarr or <=50k-row blocks after backed EU-worker probe"
+        },
+        "data_index": "extend_61",
+        "http_identity": {
+          "content_length": 65772471,
+          "etag": "\"65b51ee2-3eb9bb7\"",
+          "last_modified": "Sat, 27 Jan 2024 15:18:58 GMT"
+        },
+        "source_uri": "http://www.perturbase.cn/static/extend_61/extend_61.filter.tar.gz"
+      },
+      "passed": true
+    },
+    {
+      "name": "manifest_single_wave",
+      "observed": {
+        "duplicate_check": {
+          "assignment_count": 1,
+          "duplicated_in_other_wave": false
+        },
+        "wave": {
+          "assignment_count": 1,
+          "id": "publication-wave-11-of-13",
+          "number": 11,
+          "outcome_task_id": "t_f196b29f",
+          "singular": true
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "one_exact_triplet_inventory",
+      "observed": [
+        "canonical_X_processed_mixscape_hvg",
+        "canonical_obs",
+        "canonical_var"
+      ],
+      "passed": true
+    },
+    {
+      "name": "all_payload_generation_size_sha256",
+      "observed": {
+        "canonical_X_processed_mixscape_hvg": {
+          "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/X.zarr.zip#1784263849356688",
+          "sha256": "55fe5a48ee66883082563f396dcec657cea45581efe9a9f4e35141fbe3d1de71",
+          "size_bytes": 28145156
+        },
+        "canonical_obs": {
+          "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/obs.parquet#1784263845892077",
+          "sha256": "39d2b65f2510bf7286e888303c0a3f11fec2821f12291547b598aa21cfc56127",
+          "size_bytes": 571107
+        },
+        "canonical_var": {
+          "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/var.parquet#1784263852678841",
+          "sha256": "410de9f0b91176ed91cd8c5613288955816b319f44a289200c544730e4925157",
+          "size_bytes": 170744
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "ledger_generation_size_sha256",
+      "observed": {
+        "sha256": "0f9d4efdf5cbd10c049a8182343fdc8a00311c2cd759b27cec718652bea6cee1",
+        "size_bytes": 1778
+      },
+      "passed": true
+    },
+    {
+      "name": "manifest_embeds_exact_ledger",
+      "observed": {
+        "accepted_delta_at_build": 0,
+        "artifact_accounting": {
+          "ledger_object_count": 1,
+          "manifest_object_count": 1,
+          "payload_object_count": 3,
+          "source_object_count": 1,
+          "triplet_count": 1
+        },
+        "catalogue_row_ids": [
+          116
+        ],
+        "credit_state": "materialized_pending_independent_test_review_and_administrative_acceptance",
+        "credits": {
+          "materialized_component_records": 1,
+          "materialized_observations": 8428,
+          "materialized_triplets": 1
+        },
+        "dataset_accounting": {
+          "excluded_datasets": 0,
+          "included_datasets": 1,
+          "materialized_triplets": 1,
+          "source_datasets": 1
+        },
+        "debits": {
+          "dropped_observations": 0,
+          "exclusions": 0,
+          "product_credit": 0
+        },
+        "deduplication_key": "record_id:temporal_v4_116_perturbase_gse107185",
+        "deduplication_scope_count": 1,
+        "observation_accounting": {
+          "catalogue_reported_n_obs": 8428,
+          "dropped_n_obs": 0,
+          "excluded_n_obs": 0,
+          "materialized_n_obs": 8428,
+          "resolved_eligible_n_obs": 8428
+        },
+        "quality_missingness_is_not_exclusion": true,
+        "record_accounting": {
+          "excluded_component_records": 0,
+          "included_component_records": 1,
+          "materialized_component_records": 1,
+          "source_component_records": 1
+        },
+        "record_id": "temporal_v4_116_perturbase_gse107185",
+        "schema_version": "pert-gym.proposed-publication-ledger/v2",
+        "submission_id": "pert-gym-ledger:materialized-build:t_fe451c4d:temporal_v4_116_perturbase_gse107185",
+        "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+        "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+        "wave": {
+          "assignment_count": 1,
+          "id": "publication-wave-11-of-13",
+          "number": 11,
+          "outcome_task_id": "t_f196b29f",
+          "singular": true
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "proposed_ledger_balanced_zero_credit",
+      "observed": {
+        "accepted_delta_at_build": 0,
+        "artifact_accounting": {
+          "ledger_object_count": 1,
+          "manifest_object_count": 1,
+          "payload_object_count": 3,
+          "source_object_count": 1,
+          "triplet_count": 1
+        },
+        "catalogue_row_ids": [
+          116
+        ],
+        "credit_state": "materialized_pending_independent_test_review_and_administrative_acceptance",
+        "credits": {
+          "materialized_component_records": 1,
+          "materialized_observations": 8428,
+          "materialized_triplets": 1
+        },
+        "dataset_accounting": {
+          "excluded_datasets": 0,
+          "included_datasets": 1,
+          "materialized_triplets": 1,
+          "source_datasets": 1
+        },
+        "debits": {
+          "dropped_observations": 0,
+          "exclusions": 0,
+          "product_credit": 0
+        },
+        "deduplication_key": "record_id:temporal_v4_116_perturbase_gse107185",
+        "deduplication_scope_count": 1,
+        "observation_accounting": {
+          "catalogue_reported_n_obs": 8428,
+          "dropped_n_obs": 0,
+          "excluded_n_obs": 0,
+          "materialized_n_obs": 8428,
+          "resolved_eligible_n_obs": 8428
+        },
+        "quality_missingness_is_not_exclusion": true,
+        "record_accounting": {
+          "excluded_component_records": 0,
+          "included_component_records": 1,
+          "materialized_component_records": 1,
+          "source_component_records": 1
+        },
+        "record_id": "temporal_v4_116_perturbase_gse107185",
+        "schema_version": "pert-gym.proposed-publication-ledger/v2",
+        "submission_id": "pert-gym-ledger:materialized-build:t_fe451c4d:temporal_v4_116_perturbase_gse107185",
+        "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+        "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+        "wave": {
+          "assignment_count": 1,
+          "id": "publication-wave-11-of-13",
+          "number": 11,
+          "outcome_task_id": "t_f196b29f",
+          "singular": true
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "complete_revision_inventory_six_objects",
+      "observed": [
+        "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/X.zarr.zip",
+        "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/obs.parquet",
+        "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/var.parquet",
+        "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/ledger.json",
+        "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json",
+        "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/source/extend_61.filter.tar.gz"
+      ],
+      "passed": true
+    },
+    {
+      "name": "live_objects_still_equal_pinned_generations",
+      "observed": {
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/X.zarr.zip": "1784263849356688",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/obs.parquet": "1784263845892077",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/var.parquet": "1784263852678841",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/ledger.json": "1784263863339434",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json": "1784263868472118",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/source/extend_61.filter.tar.gz": "1784263842756819"
+      },
+      "passed": true
+    },
+    {
+      "name": "manifest_written_last",
+      "observed": {
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/X.zarr.zip": "2026-07-17T04:50:49+00:00",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/obs.parquet": "2026-07-17T04:50:45+00:00",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/var.parquet": "2026-07-17T04:50:52+00:00",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/ledger.json": "2026-07-17T04:51:03+00:00",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json": "2026-07-17T04:51:08+00:00",
+        "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/source/extend_61.filter.tar.gz": "2026-07-17T04:50:42+00:00"
+      },
+      "passed": true
+    },
+    {
+      "name": "frozen_source_generation_checksum",
+      "observed": {
+        "sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa",
+        "size_bytes": 65772471
+      },
+      "passed": true
+    },
+    {
+      "name": "source_bytes_match_declared_identity",
+      "observed": {
+        "independent_upstream_copy_supplied": false,
+        "sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa",
+        "size_bytes": 65772471
+      },
+      "passed": true
+    },
+    {
+      "name": "source_archive_exact_member",
+      "observed": {
+        "member_sha256": "e8e19bf30b6b028d9bb257907f9bb4a0747478c6b5af24405df2a8da15e18e75",
+        "members": [
+          [
+            "mixscape_hvg_filter.h5ad",
+            215672608
+          ]
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "real_readback_shape_nnz",
+      "observed": {
+        "nnz": 6377510,
+        "obs": 8428,
+        "shape": [
+          8428,
+          2000
+        ],
+        "var": 2000
+      },
+      "passed": true
+    },
+    {
+      "name": "ordered_unique_axes_equal_source",
+      "observed": {
+        "obs_unique": true,
+        "var_unique": true
+      },
+      "passed": true
+    },
+    {
+      "name": "matrix_value_exact_source_parity",
+      "observed": {
+        "data_sha256": "cad48a77f5bcfb6c62792356ce37b6f11e0e20c5ce0d889a4b9d1c2599bc7da9",
+        "dtype": "float32",
+        "format": "csr_matrix",
+        "indices_sha256": "5e4da27eb223b5e7470f0a32afd46f4ecd07fd735a3ec59279a4db2ad531f89c",
+        "indptr_sha256": "50d51e9eb8497e5c811d5f1ceeffb85d86d781557f4689e5cc24cfbf1e8ca72a",
+        "maximum": 4.630971908569336,
+        "minimum": -4.088818073272705,
+        "negative_values": 4817891,
+        "nnz": 6377510,
+        "shape": [
+          8428,
+          2000
+        ],
+        "sum": -336057.78802825883
+      },
+      "passed": true
+    },
+    {
+      "name": "source_obs_columns_value_exact_after_declared_normalization",
+      "observed": [
+        "gene",
+        "batch",
+        "media",
+        "n_genes",
+        "n_genes_by_counts",
+        "total_counts",
+        "total_counts_mt",
+        "pct_counts_mt",
+        "leiden",
+        "mixscape_class_p_ko",
+        "mixscape_class",
+        "mixscape_class_global",
+        "pertclass"
+      ],
+      "passed": true
+    },
+    {
+      "name": "source_var_columns_value_exact_after_declared_normalization",
+      "observed": [
+        "ENSEMBL",
+        "ENTREZID",
+        "n_cells",
+        "mt",
+        "n_cells_by_counts",
+        "mean_counts",
+        "pct_dropout_by_counts",
+        "total_counts",
+        "highly_variable",
+        "means",
+        "dispersions",
+        "dispersions_norm"
+      ],
+      "passed": true
+    },
+    {
+      "name": "enriched_metadata_content_integrity",
+      "observed": {
+        "components": [
+          "extend_61"
+        ],
+        "datasets": [
+          "pert-gym/logical/temporal/perturbase_gse107185"
+        ],
+        "perturbations": 61,
+        "subchecks": {
+          "cell_id": true,
+          "dataset": true,
+          "is_control": true,
+          "perturbation": true,
+          "perturbation_count": true,
+          "source_accession": true,
+          "source_bioproject": true,
+          "source_component": true
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "missing_metadata_explicit_non_excluding",
+      "observed": {
+        "manifest_missingness": {
+          "affected_observations": 8428,
+          "age_missing_count": 8428,
+          "dependency_created": false,
+          "donor_id_missing_count": 8428,
+          "ethnicity_missing_count": 8428,
+          "excluded_component_records": 0,
+          "excluded_observations": 0,
+          "is_low_quality_missing_count": 8428,
+          "non_excluding": true,
+          "quality_reason": "the exact PerturBase QC-pass filtered component is retained in full; no reviewed per-cell low-quality boolean is supplied",
+          "sex_missing_count": 8428,
+          "timepoint_missing_count": 8428,
+          "timepoint_reason": "the source labels hPSC/endothelial/multilineage media conditions, not elapsed time",
+          "var_ensembl_missing_count": 361,
+          "var_reason": "source HVG object has optional ENSEMBL identifiers; source gene symbols remain the ordered canonical axis"
+        },
+        "null_counts": {
+          "age": 8428,
+          "donor_id": 8428,
+          "ethnicity": 8428,
+          "is_low_quality": 8428,
+          "sex": 8428,
+          "timepoint": 8428
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "var_ensembl_missingness_reported",
+      "observed": {
+        "gene_id_missing": 361
+      },
+      "passed": true
+    }
+  ],
+  "checks_failed": 0,
+  "checks_passed": 27,
+  "checks_total": 27,
+  "command": "cd ~/work/pert-gym && uv run python /tmp/gse107185-qa-t_51cc7265/qa_gse107185.py --input /tmp/gse107185-qa-t_51cc7265/input --output <result.json>",
+  "executed_script_sha256": "62a03704da90978d21d588d4a36d28089276cbbfff1cf54cfb05228f2598caad",
+  "failed_checks": [],
+  "host": "pert-gym-worker-eu",
+  "mode": "read-only exact-generation GCS payloads including frozen source archive; no mocks/testMode; tester-authored",
+  "platform": "GCE pert-gym-worker-eu, europe-west1-b; real Python consumer via gcloud, pandas, zarr, scipy, anndata",
+  "quality_findings": {
+    "missing_age_donor_sex_ethnicity_timepoint_quality_rows_each": 8428,
+    "missing_var_ensembl_identifiers": 361,
+    "non_excluding": true
+  },
+  "recommendation": "PASS: advance to terminal reviewer; retain zero product credit until reviewer and administrative acceptance.",
+  "record_id": "temporal_v4_116_perturbase_gse107185",
+  "review_task_id": "t_f196b29f",
+  "runtime_seconds": 24.149216939003963,
+  "schema_version": "pert-gym.independent-consumer-qa/v1",
+  "stable_evidence": {
+    "checks": {
+      "all_payload_generation_size_sha256": true,
+      "bounded_wave_graph_checksum": true,
+      "complete_revision_inventory_six_objects": true,
+      "enriched_metadata_content_integrity": true,
+      "exactly_one_bounded_wave": true,
+      "frozen_manifest_checksum": true,
+      "frozen_scope_exactly_row_116_component": true,
+      "frozen_source_generation_checksum": true,
+      "ledger_generation_size_sha256": true,
+      "live_objects_still_equal_pinned_generations": true,
+      "manifest_controls_match_independent_files": true,
+      "manifest_embeds_exact_ledger": true,
+      "manifest_generation_checksum": true,
+      "manifest_identity_and_scope": true,
+      "manifest_single_wave": true,
+      "manifest_written_last": true,
+      "matrix_value_exact_source_parity": true,
+      "missing_metadata_explicit_non_excluding": true,
+      "one_exact_triplet_inventory": true,
+      "ordered_unique_axes_equal_source": true,
+      "proposed_ledger_balanced_zero_credit": true,
+      "real_readback_shape_nnz": true,
+      "source_archive_exact_member": true,
+      "source_bytes_match_declared_identity": true,
+      "source_obs_columns_value_exact_after_declared_normalization": true,
+      "source_var_columns_value_exact_after_declared_normalization": true,
+      "var_ensembl_missingness_reported": true
+    },
+    "counts": {
+      "datasets": 1,
+      "nnz": 6377510,
+      "observations": 8428,
+      "perturbations": 61,
+      "triplets": 1,
+      "variables": 2000
+    },
+    "ledger_sha256": "0f9d4efdf5cbd10c049a8182343fdc8a00311c2cd759b27cec718652bea6cee1",
+    "manifest_sha256": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+    "matrix_identity": {
+      "data_sha256": "cad48a77f5bcfb6c62792356ce37b6f11e0e20c5ce0d889a4b9d1c2599bc7da9",
+      "dtype": "float32",
+      "format": "csr_matrix",
+      "indices_sha256": "5e4da27eb223b5e7470f0a32afd46f4ecd07fd735a3ec59279a4db2ad531f89c",
+      "indptr_sha256": "50d51e9eb8497e5c811d5f1ceeffb85d86d781557f4689e5cc24cfbf1e8ca72a",
+      "maximum": 4.630971908569336,
+      "minimum": -4.088818073272705,
+      "negative_values": 4817891,
+      "nnz": 6377510,
+      "shape": [
+        8428,
+        2000
+      ],
+      "sum": -336057.78802825883
+    },
+    "output_sha256": {
+      "canonical_X_processed_mixscape_hvg": "55fe5a48ee66883082563f396dcec657cea45581efe9a9f4e35141fbe3d1de71",
+      "canonical_obs": "39d2b65f2510bf7286e888303c0a3f11fec2821f12291547b598aa21cfc56127",
+      "canonical_var": "410de9f0b91176ed91cd8c5613288955816b319f44a289200c544730e4925157"
+    },
+    "source_member_sha256": "e8e19bf30b6b028d9bb257907f9bb4a0747478c6b5af24405df2a8da15e18e75",
+    "source_sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa"
+  },
+  "stable_reproducibility_fingerprint": "5e5914a9bd5ffdfb7f51d84d6e22ef66e2640329f0d6047b0f556771e607e52c",
+  "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+  "task_id": "t_51cc7265",
+  "upstream_source_note": "PerturBase origin advertised the expected 65,772,471-byte object but delivered only about 10 KB/s during QA, so the aborted direct refresh was not used as evidence. Reproducibility was exercised from the immutable generation-pinned source archive, including member hash and value-exact source-to-output parity.",
+  "verdict": "PASS"
+}

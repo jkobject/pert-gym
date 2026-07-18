@@ -1,0 +1,179 @@
+{
+  "accepted_components": {
+    "credit": 0,
+    "current": 4,
+    "denominator": 153,
+    "metric": "accepted_components"
+  },
+  "api_identity": {
+    "assays": [
+      {
+        "label": "10x 3' v3",
+        "ontology_term_id": "EFO:0009922"
+      }
+    ],
+    "is_primary_data": true,
+    "organism": {
+      "label": "Mus musculus",
+      "ontology_term_id": "NCBITaxon:10090"
+    },
+    "public": true,
+    "tombstone": false
+  },
+  "authorization_binding": {
+    "approved_parent_protocol": "temporal-v4-055-parquet-parity-parent/v1",
+    "correction_task_id": "t_5c375e11",
+    "parent_task_id": "t_523f452a"
+  },
+  "catalogue_record": "temporal_v4_055_type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior",
+  "config_version": "cellxgene-logical-component-config/v1",
+  "dataset_config_status": "reviewed-executable",
+  "execution": {
+    "billing_project": "jkobject-1549353370965",
+    "heartbeat_denominator": 153,
+    "heartbeat_interval_seconds": 50,
+    "heartbeat_metric": "accepted_components",
+    "host": "pert-gym-worker-eu",
+    "lamin_branch": "jkobject",
+    "lamin_instance": "laminlabs/pertdata",
+    "max_internal_block_rows": 4096,
+    "max_rss_bytes": 25769803776,
+    "min_available_bytes": 4294967296,
+    "output_directory": "/tmp/temporal-v4-055-t_5c375e11",
+    "single_writer_lease": "global-plus-legacy-exclusive",
+    "task_timeout_seconds": 10800,
+    "timeout_seconds": 7200,
+    "zone": "europe-west1-b"
+  },
+  "forbidden_actions": [
+    "cleanup",
+    "deletion",
+    "promotion",
+    "collection_mutation",
+    "lamin_main",
+    "vm_lifecycle_change"
+  ],
+  "logical_key": "pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior",
+  "obs": {
+    "assignments": [
+      {
+        "op": "literal",
+        "target": "dataset",
+        "value": "pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior"
+      },
+      {
+        "op": "index",
+        "target": "cell_id"
+      },
+      {
+        "op": "literal",
+        "target": "organism",
+        "value": "Mus musculus"
+      },
+      {
+        "op": "literal",
+        "target": "technology",
+        "value": "10x 3' v3"
+      },
+      {
+        "op": "literal",
+        "target": "modality",
+        "value": "scRNA-seq"
+      },
+      {
+        "op": "copy",
+        "source": "development_stage",
+        "target": "age"
+      },
+      {
+        "op": "literal",
+        "target": "perturbation",
+        "value": "none"
+      },
+      {
+        "op": "literal",
+        "target": "perturbation_type",
+        "value": "none"
+      },
+      {
+        "op": "literal",
+        "target": "is_control",
+        "value": true
+      }
+    ],
+    "mapper_version": "declarative-obs-mapper/v1",
+    "predicates": [
+      {
+        "column": "development_stage",
+        "op": "domain_equals",
+        "values": [
+          "5-day-old stage",
+          "7-day-old stage"
+        ]
+      },
+      {
+        "column": "development_stage_ontology_term_id",
+        "op": "all_not_in",
+        "values": [
+          "",
+          "na",
+          "none",
+          "unknown",
+          "unreported"
+        ]
+      }
+    ],
+    "required_non_null": [
+      "development_stage",
+      "development_stage_ontology_term_id",
+      "assay",
+      "assay_ontology_term_id"
+    ],
+    "semantic_evidence": {
+      "basis": "The frozen CELLxGENE collection identity exposes exactly the non-placeholder 5-day-old and 7-day-old development-stage domain; runtime preflight requires that exact domain and non-placeholder ontology identifiers before any candidate write, and preserves development_stage as canonical age.",
+      "verdict": "accepted"
+    }
+  },
+  "ordered_var": {
+    "canonical_feature_namespace": "Ensembl Gene ID",
+    "feature_reference_column": "feature_reference",
+    "identity_sha256": "runtime-computed-before-candidate-write",
+    "normalization_version": "source-string/v1",
+    "organism_ontology_id": "NCBITaxon:10090"
+  },
+  "protocol": "cellxgene-category-safe-logical-sparse-zarr/v1",
+  "revision": {
+    "failed_candidate_denylist": [],
+    "fresh_immutable_required": true,
+    "prefix": "temporal-v4-055"
+  },
+  "shape": [
+    12330,
+    22835
+  ],
+  "source": {
+    "api_url": "https://api.cellxgene.cziscience.com/curation/v1/collections/4828d33d-fb26-42e7-bf36-18293b0eec85",
+    "asset_id": "b85e8f33-1e23-4369-afaa-8bd39edbc667",
+    "collection_id": "4828d33d-fb26-42e7-bf36-18293b0eec85",
+    "collection_version_id": "20ba5b27-3e39-427d-89d5-4a51b0fb0df8",
+    "dataset_id": "5dec4249-8459-4df0-8998-37193135754c",
+    "dataset_version_id": "b85e8f33-1e23-4369-afaa-8bd39edbc667",
+    "url": "https://datasets.cellxgene.cziscience.com/b85e8f33-1e23-4369-afaa-8bd39edbc667.h5ad"
+  },
+  "source_head": {
+    "content_length": 245070756,
+    "etag": "\"a1ceff738c95fec7115acfa6cf8ae503-30\"",
+    "final_url": "https://datasets.cellxgene.cziscience.com/b85e8f33-1e23-4369-afaa-8bd39edbc667.h5ad",
+    "last_modified": "Wed, 10 Jun 2026 04:06:37 GMT",
+    "status": 200,
+    "version_id": "xupxdGsz5yjNY6W.oCuNxd8V0_f1vpAA"
+  },
+  "storage": {
+    "gcs_root": "scperturb/pert-gym/staging",
+    "manifest_last": true,
+    "per_block_var_count": 0,
+    "shared_var_count": 1,
+    "x_logical_object_count": 1
+  },
+  "task_id": "t_5c375e11"
+}

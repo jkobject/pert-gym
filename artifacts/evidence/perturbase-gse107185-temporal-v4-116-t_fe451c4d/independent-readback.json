@@ -1,0 +1,67 @@
+{
+  "checks": {
+    "bounded_wave_identity": true,
+    "complete_revision_inventory": true,
+    "generation_checksums": true,
+    "manifest_last_declared": true,
+    "matrix_semantic_hashes": true,
+    "missingness_non_excluding": true,
+    "obs_semantic_hash": true,
+    "ordered_axis_parity": true,
+    "proposed_ledger_balanced_zero_credit": true,
+    "unique_axes": true,
+    "var_semantic_hash": true
+  },
+  "counts": {
+    "media": {
+      "endothelial": 3961,
+      "hPSC": 2717,
+      "multilineage": 1750
+    },
+    "nnz": 6377510,
+    "observations": 8428,
+    "perturbations": 61,
+    "variables": 2000
+  },
+  "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json#1784263868472118",
+  "manifest_sha256": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+  "matrix_identity": {
+    "data_sha256": "cad48a77f5bcfb6c62792356ce37b6f11e0e20c5ce0d889a4b9d1c2599bc7da9",
+    "dtype": "float32",
+    "format": "csr_matrix",
+    "indices_sha256": "5e4da27eb223b5e7470f0a32afd46f4ecd07fd735a3ec59279a4db2ad531f89c",
+    "indptr_sha256": "50d51e9eb8497e5c811d5f1ceeffb85d86d781557f4689e5cc24cfbf1e8ca72a",
+    "maximum": 4.630971908569336,
+    "minimum": -4.088818073272705,
+    "negative_values": 4817891,
+    "nnz": 6377510,
+    "shape": [
+      8428,
+      2000
+    ],
+    "sum": -336057.78802825883
+  },
+  "product_credit": 0,
+  "record_id": "temporal_v4_116_perturbase_gse107185",
+  "revision_objects": [
+    "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/X.zarr.zip",
+    "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/obs.parquet",
+    "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/datasets/extend_61/var.parquet",
+    "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/ledger.json",
+    "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json",
+    "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/source/extend_61.filter.tar.gz"
+  ],
+  "schema_version": "pert-gym.independent-generation-readback/v1",
+  "scope": {
+    "catalogue_rows": [
+      116
+    ],
+    "datasets": 1,
+    "payload_objects": 3,
+    "revision_objects": 6,
+    "triplets": 1
+  },
+  "source_sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa",
+  "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+  "verdict": "PASS"
+}

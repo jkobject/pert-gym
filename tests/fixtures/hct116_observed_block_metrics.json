@@ -1,0 +1,12 @@
+{
+  "revision": "figshare55021257-223d9171f282",
+  "record_count": 10,
+  "covered_interval": [0, 921400],
+  "dataset_rows": 3409169,
+  "bytes_written_min": 1011030566,
+  "bytes_written_max": 1477224589,
+  "peak_rss_bytes_max": 19876278272,
+  "configured_max_rss_bytes": 17179869184,
+  "manifest_present": false,
+  "var_present": false
+}

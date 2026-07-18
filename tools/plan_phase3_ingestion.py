@@ -104,21 +104,26 @@ DATASETS: tuple[DatasetPlan, ...] = (
     DatasetPlan(
         name="Sanger Dual-guide KO CRC",
         family="genetic interaction screen",
-        modality="scRNA-seq or score matrix",
-        perturbation_axis="dual-guide CRISPRko",
+        modality="genetic_screen_counts",
+        perturbation_axis="CRISPRko_dual_guide read_count/count screen",
         priority=3,
         lamin_prefix="sanger_dual_guide_crc",
         local_dir="data/main/sanger_dualguide_crc",
         ingestion_entrypoint="tools.ingest_phase3_scrna.download_sanger_dualguide + ingest_sanger_dualguide",
         status="script_ready_format_tbc",
-        expected_outputs=["obs.parquet", "X.h5ad", "var.parquet"],
-        next_action="Download Figshare zip and inspect extracted layout before conversion.",
-        notes="Likely needs custom score-to-sensitivity mapping.",
+        expected_outputs=["obs.parquet", "var.parquet", "source_manifest.json"],
+        next_action="Download Figshare zip, inspect extracted count/read_count layout, then convert count observations without fake expression X.",
+        notes=(
+            "Dual-guide CRISPRko count/read_count screen contract: canonical rows are "
+            "genetic_screen_counts observations with perturbation_type=CRISPRko_dual_guide; "
+            "do not declare essentiality scores or X.h5ad unless a separate downstream scored "
+            "payload is computed and typed explicitly."
+        ),
     ),
     DatasetPlan(
         name="Broad PRISM Repurposing",
         family="drug sensitivity screen",
-        modality="bulk/sensitivity",
+        modality="drug_response",
         perturbation_axis="chemical perturbation",
         priority=1,
         lamin_prefix="broad_prism_repurposing",
@@ -132,7 +137,7 @@ DATASETS: tuple[DatasetPlan, ...] = (
     DatasetPlan(
         name="Sanger GDSC",
         family="drug dose-response screen",
-        modality="bulk/sensitivity",
+        modality="drug_response",
         perturbation_axis="chemical perturbation",
         priority=2,
         lamin_prefix="sanger_gdsc",
@@ -146,7 +151,7 @@ DATASETS: tuple[DatasetPlan, ...] = (
     DatasetPlan(
         name="Sanger SCORE CRISPR KO",
         family="gene essentiality screen",
-        modality="bulk/sensitivity",
+        modality="essentiality",
         perturbation_axis="CRISPRko",
         priority=2,
         lamin_prefix="sanger_score_crispr",
@@ -173,13 +178,39 @@ DATASETS: tuple[DatasetPlan, ...] = (
         modality="bulk RNA/protein",
         perturbation_axis="baseline covariates",
         priority=1,
-        lamin_prefix="depmap_ccle/25q2",
+        lamin_prefix="depmap_ccle/26q1",
         local_dir="data/main/depmap_ccle",
         ingestion_entrypoint="tools.ingest_phase3_bulk.ingest_depmap_ccle",
         status="script_ready_needs_figshare_article",
         expected_outputs=["obs.parquet", "X.h5ad", "var.parquet"],
         next_action="Set DepMap Figshare article id for the target release before download.",
-        notes="Needed to contextualize PRISM/GDSC/SCORE sensitivity triplets.",
+        notes=(
+            "Matched baseline RNA expression artifact: obs + true expression X + var; "
+            "contains no essentiality scores and joins to screen labels by stable model IDs."
+        ),
+    ),
+    DatasetPlan(
+        name="DepMap genetic dependencies",
+        family="gene essentiality screen",
+        modality="essentiality",
+        perturbation_axis="CRISPRko pooled screen",
+        priority=1,
+        lamin_prefix="depmap_genetic_dependencies/26q1",
+        local_dir="data/main/depmap_genetic_dependencies",
+        ingestion_entrypoint="tools.depmap_genetic_dependencies",
+        status="design_ready_public_urls_resolved",
+        expected_outputs=["obs.parquet", "var.parquet", "source_manifest.json"],
+        next_action=(
+            "Download/stage public DepMap 26Q1 CRISPRGeneEffect and CRISPRGeneDependency "
+            "matrices, then convert to obs+var essentiality artifacts with explicit baseline joins."
+        ),
+        notes=(
+            "DepMap essentiality-family format: obs+var only, scores in obs, "
+            "perturbation genes in var, no fake expression X.h5ad. Sanger/Project "
+            "Score is the same score family but, after PR #38, persists as empty "
+            "canonical X plus typed auxiliary X_score/var_score. Matched RNA "
+            "baseline is the separate depmap_ccle expression artifact."
+        ),
     ),
 )
 

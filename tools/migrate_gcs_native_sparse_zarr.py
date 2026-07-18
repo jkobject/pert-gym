@@ -35,6 +35,7 @@ from pert_gym.gcs_native_sparse_zarr import (  # noqa: E402
     requester_pays_gcs_filesystem,
     write_gcs_native_sparse_revision,
 )
+from pert_gym.obs_identity import add_obs_identity, validate_obs_identity  # noqa: E402
 from tools.lamin_context import connect_pertdata  # noqa: E402
 from tools.pert_gym_vm_runner import (  # noqa: E402
     lamin_writer_lock,
@@ -91,9 +92,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--revision", required=True)
     parser.add_argument("--schema-fingerprint", required=True)
     parser.add_argument("--ingestion-run-id", required=True)
+    parser.add_argument("--source-checksum", required=True)
+    parser.add_argument("--dataset-id", required=True)
+    parser.add_argument("--canonical-prefix", required=True)
+    parser.add_argument("--migration-map-json", type=Path, required=True)
+    parser.add_argument("--collection-metadata-json", type=Path, required=True)
     parser.add_argument("--cache-dir", type=Path, required=True)
     parser.add_argument("--cache-cap-gib", type=float, default=20.0)
     parser.add_argument("--max-rss-gib", type=float, default=4.0)
+    parser.add_argument("--min-block-gib", type=float, default=2.0)
+    parser.add_argument("--max-block-gib", type=float, default=3.0)
+    parser.add_argument(
+        "--block-size-exception-json",
+        type=Path,
+        help="reviewed explicit byte-bound exception; never overrides RSS",
+    )
     parser.add_argument("--min-rows", type=int, default=5_000)
     parser.add_argument("--max-rows", type=int, default=100_000)
     parser.add_argument("--row-start", type=int, required=True)
@@ -120,7 +133,9 @@ def open_generation_pinned_source(fs: Any, source_key: str) -> tuple[str, Any]:
     if not bool(getattr(fs, "version_aware", False)):
         raise RuntimeError("GCS source filesystem must enable version-aware paths")
     if "#" in source_key:
-        raise RuntimeError("GCS source key must not already contain a generation fragment")
+        raise RuntimeError(
+            "GCS source key must not already contain a generation fragment"
+        )
     source_info = fs.info(source_key)
     generation = str(source_info.get("generation", ""))
     if not generation or not generation.isdecimal():
@@ -128,7 +143,9 @@ def open_generation_pinned_source(fs: Any, source_key: str) -> tuple[str, Any]:
     pinned_key = f"{source_key}#{generation}"
     pinned_info = fs.info(pinned_key)
     if str(pinned_info.get("generation", "")) != generation:
-        raise RuntimeError("GCS generation-qualified source did not resolve requested generation")
+        raise RuntimeError(
+            "GCS generation-qualified source did not resolve requested generation"
+        )
     handle = fs.open(
         pinned_key,
         "rb",
@@ -157,9 +174,7 @@ def _read_h5ad_dataframe_rows(
     """
     if row_start < 0 or row_end <= row_start:
         raise ValueError("source row bounds must be non-negative and non-empty")
-    value = read_elem_partial(
-        group, indices=(slice(row_start, row_end), slice(None))
-    )
+    value = read_elem_partial(group, indices=(slice(row_start, row_end), slice(None)))
     if not isinstance(value, pd.DataFrame):
         raise ValueError("GCS source obs must be an AnnData dataframe encoding")
     return value
@@ -181,65 +196,88 @@ def main() -> int:
         "branch": "gcs-native-no-lamin",
         "started_at": time.time(),
     }
-    with lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata):
-        with ExitStack() as legacy_locks:
+    with ExitStack() as writer_locks:
+        if os.environ.get("PERT_GYM_VM_RUNNER_LOCK_RUN_ID") != args.ingestion_run_id:
+            writer_locks.enter_context(
+                lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata)
+            )
             for lock_path in legacy_lamin_writer_lock_paths():
-                legacy_locks.enter_context(
-                    lamin_writer_lock(lock_path, lock_metadata, check_live_metadata=False)
+                writer_locks.enter_context(
+                    lamin_writer_lock(
+                        lock_path, lock_metadata, check_live_metadata=False
+                    )
                 )
-            fs = requester_pays_gcs_filesystem("jkobject-1549353370965")
-            source_key = _gcs_key(args.source_gcs_uri)
-            generation, handle = open_generation_pinned_source(fs, source_key)
-            with handle:
-                with h5py.File(handle, "r") as h5:
-                    matrix = GCSH5ADCSR(
-                        h5, row_start=args.row_start, row_end=args.row_end
-                    )
-                    var = read_elem(h5["var"])
-                    if not isinstance(var, pd.DataFrame):
-                        raise ValueError("GCS source var must be a dataframe")
-                    obs = _read_h5ad_dataframe_rows(
-                        h5["obs"], row_start=args.row_start, row_end=args.row_end
-                    )
-                    manifest, metrics = write_gcs_native_sparse_revision(
-                        fs=fs,
-                        staging_prefix=_gcs_key(args.staging_gcs_prefix),
-                        logical_key=args.logical_key,
-                        revision=args.revision,
-                        matrix=matrix,
-                        obs=obs,
-                        var=var,
-                        source_uri=args.source_gcs_uri,
-                        source_generation=generation,
-                        source_row_start=args.row_start,
-                        source_row_end=args.row_end,
-                        schema_fingerprint=args.schema_fingerprint,
-                        ingestion_run_id=args.ingestion_run_id,
-                        cache_dir=args.cache_dir,
-                        cache_cap_bytes=int(args.cache_cap_gib * 1024**3),
-                        max_rss_bytes=int(args.max_rss_gib * 1024**3),
-                        min_rows=args.min_rows,
-                        max_rows=args.max_rows,
-                    )
-            result: dict[str, Any] = {
-                "manifest": manifest,
-                "metrics": metrics.__dict__,
-            }
-            if args.promote:
-                result["promotion"] = promote_gcs_native_revision(
+        fs = requester_pays_gcs_filesystem("jkobject-1549353370965")
+        source_key = _gcs_key(args.source_gcs_uri)
+        generation, handle = open_generation_pinned_source(fs, source_key)
+        with handle:
+            with h5py.File(handle, "r") as h5:
+                matrix = GCSH5ADCSR(h5, row_start=args.row_start, row_end=args.row_end)
+                var = read_elem(h5["var"])
+                if not isinstance(var, pd.DataFrame):
+                    raise ValueError("GCS source var must be a dataframe")
+                obs = _read_h5ad_dataframe_rows(
+                    h5["obs"], row_start=args.row_start, row_end=args.row_end
+                )
+                obs = add_obs_identity(
+                    obs, dataset_id=args.dataset_id, prefix=args.canonical_prefix
+                )
+                validate_obs_identity(obs)
+                candidate_metadata = {
+                    "migration_map": json.loads(
+                        args.migration_map_json.read_text("utf-8")
+                    ),
+                    "collection": json.loads(
+                        args.collection_metadata_json.read_text("utf-8")
+                    ),
+                }
+                block_size_exception = (
+                    json.loads(args.block_size_exception_json.read_text("utf-8"))
+                    if getattr(args, "block_size_exception_json", None)
+                    else None
+                )
+                manifest, metrics = write_gcs_native_sparse_revision(
                     fs=fs,
                     staging_prefix=_gcs_key(args.staging_gcs_prefix),
                     logical_key=args.logical_key,
                     revision=args.revision,
-                    manifest=manifest,
+                    matrix=matrix,
+                    obs=obs,
+                    var=var,
+                    source_uri=args.source_gcs_uri,
+                    source_generation=generation,
+                    source_checksum=args.source_checksum,
+                    source_row_start=args.row_start,
+                    source_row_end=args.row_end,
+                    schema_fingerprint=args.schema_fingerprint,
+                    ingestion_run_id=args.ingestion_run_id,
+                    cache_dir=args.cache_dir,
+                    candidate_metadata=candidate_metadata,
+                    cache_cap_bytes=int(args.cache_cap_gib * 1024**3),
+                    max_rss_bytes=int(args.max_rss_gib * 1024**3),
+                    min_block_bytes=int(getattr(args, "min_block_gib", 2.0) * 1024**3),
+                    max_block_bytes=int(getattr(args, "max_block_gib", 3.0) * 1024**3),
+                    block_size_exception=block_size_exception,
+                    min_rows=args.min_rows,
+                    max_rows=args.max_rows,
                 )
-            if args.register_lamin_prefix:
-                prefix = f"gs://{manifest['candidate_prefix']}"
-                result["lamin"] = str(
-                    register_gcs_prefix_with_lamin(
-                        ln=connect_pertdata(), prefix_uri=prefix
-                    )
-                )
+        result: dict[str, Any] = {
+            "manifest": manifest,
+            "metrics": metrics.__dict__,
+        }
+        if args.promote:
+            result["promotion"] = promote_gcs_native_revision(
+                fs=fs,
+                staging_prefix=_gcs_key(args.staging_gcs_prefix),
+                logical_key=args.logical_key,
+                revision=args.revision,
+                manifest=manifest,
+            )
+        if args.register_lamin_prefix:
+            prefix = f"gs://{manifest['candidate_prefix']}"
+            result["lamin"] = str(
+                register_gcs_prefix_with_lamin(ln=connect_pertdata(), prefix_uri=prefix)
+            )
     print(json.dumps(result, sort_keys=True, default=str))
     return 0
 

@@ -1,0 +1,75 @@
+{
+  "all_generation_pinned_readbacks_passed": true,
+  "counts": {
+    "batch": {
+      "sample1": 1315,
+      "sample2": 5820,
+      "sample3": 1293
+    },
+    "media": {
+      "endothelial": 3961,
+      "hPSC": 2717,
+      "multilineage": 1750
+    },
+    "nnz": 6377510,
+    "observations": 8428,
+    "perturbations": 61,
+    "variables": 2000
+  },
+  "explicit_missingness_preserved": true,
+  "ledger_balanced": true,
+  "manifest": {
+    "crc32c_base64": "xpUeaw==",
+    "generation": "1784263868472118",
+    "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json#1784263868472118",
+    "md5_base64": "yXiP3JikqGymOlW6P3ZEgw==",
+    "producer_generation_readback": {
+      "sha256": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+      "size_bytes": 28859
+    },
+    "role": "manifest",
+    "sha256": "87244217d705a74589aad4d28e6e41ed400ddda443aa02f470c706ff7f78893a",
+    "size_bytes": 28859,
+    "updated": "2026-07-17T04:51:08+0000",
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/manifest.json"
+  },
+  "matrix_identity": {
+    "data_sha256": "cad48a77f5bcfb6c62792356ce37b6f11e0e20c5ce0d889a4b9d1c2599bc7da9",
+    "dtype": "float32",
+    "format": "csr_matrix",
+    "indices_sha256": "5e4da27eb223b5e7470f0a32afd46f4ecd07fd735a3ec59279a4db2ad531f89c",
+    "indptr_sha256": "50d51e9eb8497e5c811d5f1ceeffb85d86d781557f4689e5cc24cfbf1e8ca72a",
+    "maximum": 4.630971908569336,
+    "minimum": -4.088818073272705,
+    "negative_values": 4817891,
+    "nnz": 6377510,
+    "shape": [
+      8428,
+      2000
+    ],
+    "sum": -336057.78802825883
+  },
+  "ordered_axis_parity": true,
+  "product_credit": 0,
+  "record_id": "temporal_v4_116_perturbase_gse107185",
+  "revision_prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13",
+  "schema_version": "pert-gym.machine-readback/v1",
+  "scope": {
+    "catalogue_row_ids": [
+      116
+    ],
+    "datasets": 1,
+    "payload_objects": 3,
+    "samples": 3,
+    "triplets": 1
+  },
+  "target_logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+  "verdict": "PASS",
+  "wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-11-of-13",
+    "number": 11,
+    "outcome_task_id": "t_f196b29f",
+    "singular": true
+  }
+}
