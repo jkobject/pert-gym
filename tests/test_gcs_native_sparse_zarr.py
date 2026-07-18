@@ -3,6 +3,8 @@ from __future__ import annotations
 import ctypes
 import importlib.util
 import json
+import math
+import sys
 import weakref
 from pathlib import Path
 from typing import Any, TypedDict, cast
@@ -565,6 +567,45 @@ def test_repeated_resume_attempts_persist_identity_bound_cumulative_requests(
     assert cumulative_class_b == sorted(cumulative_class_b)
     assert len(set(cumulative_class_a)) == len(cumulative_class_a)
     assert len(set(cumulative_class_b)) == len(cumulative_class_b)
+
+
+def test_resume_precharges_every_completed_chunk_before_readback(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=2)
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    plan = json.loads(cast(bytes, fs.cat(f"{base}/plan.json")))
+    with pytest.raises(OperationBudgetExceeded):
+        write(fs, tmp_path / "cache")
+
+    attempt = json.loads(
+        cast(bytes, fs.cat(f"{base}/operation-attempts/attempt_000001.json"))
+    )
+    per_chunk = math.ceil(plan["operation_forecast"]["class_b_requests"] / 3)
+    assert (
+        attempt["prepaid_until_next_durable_checkpoint"]["class_b_requests"]
+        >= per_chunk * 2
+    )
+
+
+def test_resume_rejects_same_identity_checkpoint_bound_to_wrong_chunk(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=1)
+    checkpoint_key = (
+        "bucket/staging/family/example/temporary-revisions/r1/"
+        "operation-checkpoints/chunk_000000.json"
+    )
+    checkpoint = json.loads(cast(bytes, fs.cat(checkpoint_key)))
+    checkpoint["logical_checkpoint"] = 1
+    fs.pipe(checkpoint_key, json.dumps(checkpoint).encode())
+
+    with pytest.raises(GCSNativeWriterError, match="checkpoint binding mismatch"):
+        write(fs, tmp_path / "cache")
 
 
 def test_resume_rereads_and_rejects_completed_matrix_payload_drift(

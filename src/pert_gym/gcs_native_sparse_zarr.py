@@ -1305,6 +1305,42 @@ def _cumulative_request_counts(
     return result
 
 
+def _validate_operation_evidence_binding(
+    *, key: str, evidence: Mapping[str, object], identity: Mapping[str, object]
+) -> None:
+    if evidence.get("identity") != identity:
+        raise GCSNativeWriterError(
+            "operation checkpoint identity mismatch; immutable resume refused"
+        )
+    name = key.rsplit("/", maxsplit=1)[-1]
+    if "/operation-checkpoints/" in key:
+        try:
+            expected_index = int(name.removeprefix("chunk_").removesuffix(".json"))
+        except ValueError as exc:
+            raise GCSNativeWriterError(
+                f"operation checkpoint binding mismatch at {key}"
+            ) from exc
+        if (
+            evidence.get("format") != f"{FORMAT}.operation-checkpoint/v1"
+            or evidence.get("logical_checkpoint") != expected_index
+        ):
+            raise GCSNativeWriterError(
+                f"operation checkpoint binding mismatch at {key}"
+            )
+    elif "/operation-attempts/" in key:
+        try:
+            expected_attempt = int(name.removeprefix("attempt_").removesuffix(".json"))
+        except ValueError as exc:
+            raise GCSNativeWriterError(
+                f"operation attempt binding mismatch at {key}"
+            ) from exc
+        if (
+            evidence.get("format") != f"{FORMAT}.operation-attempt/v1"
+            or evidence.get("attempt") != expected_attempt
+        ):
+            raise GCSNativeWriterError(f"operation attempt binding mismatch at {key}")
+
+
 def _load_cumulative_operation_floor(
     fs: Any, candidate_prefix: str, identity: Mapping[str, object]
 ) -> dict[str, int]:
@@ -1316,10 +1352,13 @@ def _load_cumulative_operation_floor(
     for evidence_prefix in evidence_prefixes:
         for key in sorted(fs.find(evidence_prefix)):
             evidence = json.loads(_read_bytes(fs, key))
-            if not isinstance(evidence, dict) or evidence.get("identity") != identity:
+            if not isinstance(evidence, dict):
                 raise GCSNativeWriterError(
-                    "operation checkpoint identity mismatch; immutable resume refused"
+                    f"operation accounting evidence must be an object: {key}"
                 )
+            _validate_operation_evidence_binding(
+                key=key, evidence=evidence, identity=identity
+            )
             counts = _cumulative_request_counts(
                 evidence.get("cumulative", evidence.get("actual")),
                 evidence_key=key,
@@ -1657,17 +1696,22 @@ def write_gcs_native_sparse_revision(
             )
     cumulative_floor = _load_cumulative_operation_floor(fs, candidate_prefix, identity)
     operation_counter.add_cumulative_floor(cumulative_floor)
+    # Every completed chunk is reread before another durable checkpoint. Prepay
+    # each such block so interruption anywhere in that loop cannot erase costs.
+    readback_blocks_before_checkpoint = max(1, len(completed))
     per_attempt_class_a_reserve = max(
         1,
         math.ceil(
             _required_int(operation_forecast, "class_a_requests") / len(chunks)
-        ),
+        )
+        * readback_blocks_before_checkpoint,
     )
     per_attempt_class_b_reserve = max(
         1,
         math.ceil(
             _required_int(operation_forecast, "class_b_requests") / len(chunks)
-        ),
+        )
+        * readback_blocks_before_checkpoint,
     )
     operation_counter.prepay(
         class_a_requests=per_attempt_class_a_reserve,
