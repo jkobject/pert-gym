@@ -15,10 +15,9 @@ import io
 import json
 import shutil
 import time
-from bisect import bisect_left, bisect_right
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Mapping, Sequence, cast
+from typing import Any, Mapping
 
 import fsspec
 import numpy as np
@@ -46,10 +45,6 @@ from pert_gym.sparse_zarr_contract import adaptive_target_rows, balanced_row_chu
 DEFAULT_CACHE_CAP_BYTES = 20 * 1024**3
 DEFAULT_CACHE_SAFETY_RESERVE_BYTES = 20 * 1024**3
 FORMAT = "pert-gym.gcs-native-logical-sparse-zarr/v1"
-GIB = 1024**3
-PRODUCTION_BLOCK_MIN_BYTES = 2 * GIB
-PRODUCTION_BLOCK_TARGET_BYTES = 5 * GIB // 2
-PRODUCTION_BLOCK_MAX_BYTES = 3 * GIB
 
 
 class GCSNativeWriterError(RuntimeError):
@@ -205,181 +200,6 @@ def _read_parquet(fs: Any, key: str) -> pd.DataFrame:
     return pd.read_parquet(io.BytesIO(_read_bytes(fs, key)))
 
 
-def plan_production_blocks(
-    compressed_chunk_bytes: Sequence[int],
-    *,
-    min_bytes: int = PRODUCTION_BLOCK_MIN_BYTES,
-    target_bytes: int = PRODUCTION_BLOCK_TARGET_BYTES,
-    max_bytes: int = PRODUCTION_BLOCK_MAX_BYTES,
-) -> tuple[tuple[int, int], ...]:
-    """Group measured chunks into a complete, target-biased contiguous partition.
-
-    Existing valid target-greedy layouts remain canonical. If that fast path
-    would reject, dynamic programming minimizes total target distance and then
-    block count. Range-min trees keep the complete fallback at O(n log n) time
-    and O(n) memory rather than enumerating exponentially many cut sets.
-    """
-    if min_bytes <= 0 or not min_bytes <= target_bytes <= max_bytes:
-        raise ValueError("block policy must satisfy 0 < min <= target <= max")
-    sizes = tuple(compressed_chunk_bytes)
-    if any(
-        not isinstance(value, int) or isinstance(value, bool) or value < 0
-        for value in sizes
-    ):
-        raise ValueError("compressed chunk sizes must be non-negative integers")
-    if not sizes:
-        return ()
-    if any(value > max_bytes for value in sizes):
-        raise ValueError("one measured chunk exceeds the production block ceiling")
-    if sum(sizes) <= max_bytes:
-        return ((0, len(sizes)),)
-
-    prefix_bytes = [0]
-    for size in sizes:
-        prefix_bytes.append(prefix_bytes[-1] + size)
-    greedy_result: list[tuple[int, int]] = []
-    greedy_start = 0
-    while greedy_start < len(sizes):
-        greedy_end = greedy_start
-        greedy_size = 0
-        while (
-            greedy_end < len(sizes) and greedy_size + sizes[greedy_end] <= target_bytes
-        ):
-            greedy_size += sizes[greedy_end]
-            greedy_end += 1
-        if greedy_end == greedy_start:
-            greedy_size = sizes[greedy_end]
-            greedy_end += 1
-        while (
-            greedy_size < min_bytes
-            and greedy_end < len(sizes)
-            and greedy_size + sizes[greedy_end] <= max_bytes
-        ):
-            greedy_size += sizes[greedy_end]
-            greedy_end += 1
-        remaining = prefix_bytes[-1] - prefix_bytes[greedy_end]
-        if remaining and remaining < min_bytes and greedy_size + remaining <= max_bytes:
-            greedy_end = len(sizes)
-        if greedy_end < len(sizes) and greedy_size < min_bytes:
-            break
-        greedy_result.append((greedy_start, greedy_end))
-        greedy_start = greedy_end
-    else:
-        return tuple(greedy_result)
-
-    coordinates = sorted(set(prefix_bytes[:-1]))
-    leaf_count = 1
-    while leaf_count < len(coordinates):
-        leaf_count *= 2
-    tree_size = 2 * leaf_count
-    lower_tree: list[tuple[int, int, int] | None] = [None] * tree_size
-    upper_tree: list[tuple[int, int, int] | None] = [None] * tree_size
-
-    def update(
-        tree: list[tuple[int, int, int] | None],
-        coordinate: int,
-        entry: tuple[int, int, int],
-    ) -> None:
-        position = leaf_count + bisect_left(coordinates, coordinate)
-        current = tree[position]
-        if current is not None and current <= entry:
-            return
-        tree[position] = entry
-        position //= 2
-        while position:
-            left = tree[2 * position]
-            right = tree[2 * position + 1]
-            tree[position] = (
-                right if left is None else left if right is None else min(left, right)
-            )
-            position //= 2
-
-    def range_minimum(
-        tree: list[tuple[int, int, int] | None], left: int, right: int
-    ) -> tuple[int, int, int] | None:
-        result: tuple[int, int, int] | None = None
-        left += leaf_count
-        right += leaf_count
-        while left < right:
-            if left % 2:
-                result = (
-                    tree[left] if result is None else min(result, tree[left] or result)
-                )
-                left += 1
-            if right % 2:
-                right -= 1
-                result = (
-                    tree[right]
-                    if result is None
-                    else min(result, tree[right] or result)
-                )
-            left //= 2
-            right //= 2
-        return result
-
-    chunk_count = len(sizes)
-    best_cost: list[int | None] = [None] * chunk_count
-    best_block_count = [0] * chunk_count
-    next_boundary = [-1] * chunk_count
-    for start in range(chunk_count - 1, -1, -1):
-        start_bytes = prefix_bytes[start]
-        candidates: list[tuple[int, int, int, int]] = []
-        final_size = prefix_bytes[-1] - start_bytes
-        if final_size <= max_bytes:
-            final_distance = abs(final_size - target_bytes)
-            candidates.append((final_distance, 1, final_distance, chunk_count))
-
-        lower = bisect_left(coordinates, start_bytes + min_bytes)
-        target_right = bisect_right(coordinates, start_bytes + target_bytes)
-        lower_entry = range_minimum(lower_tree, lower, target_right)
-        if lower_entry is not None:
-            end = lower_entry[2]
-            distance = start_bytes + target_bytes - prefix_bytes[end]
-            candidates.append(
-                (
-                    lower_entry[0] + start_bytes + target_bytes,
-                    lower_entry[1] + 1,
-                    distance,
-                    end,
-                )
-            )
-
-        target_left = bisect_left(coordinates, start_bytes + target_bytes)
-        upper = bisect_right(coordinates, start_bytes + max_bytes)
-        upper_entry = range_minimum(upper_tree, target_left, upper)
-        if upper_entry is not None:
-            end = upper_entry[2]
-            distance = prefix_bytes[end] - start_bytes - target_bytes
-            candidates.append(
-                (
-                    upper_entry[0] - start_bytes - target_bytes,
-                    upper_entry[1] + 1,
-                    distance,
-                    end,
-                )
-            )
-
-        if not candidates:
-            continue
-        cost, block_count, _, end = min(candidates)
-        best_cost[start] = cost
-        best_block_count[start] = block_count
-        next_boundary[start] = end
-        coordinate = prefix_bytes[start]
-        update(lower_tree, coordinate, (cost - coordinate, block_count, start))
-        update(upper_tree, coordinate, (cost + coordinate, block_count, start))
-
-    if best_cost[0] is None:
-        raise ValueError("measured chunk sizes cannot satisfy production block policy")
-    result: list[tuple[int, int]] = []
-    start = 0
-    while start < chunk_count:
-        end = next_boundary[start]
-        result.append((start, end))
-        start = end
-    return tuple(result)
-
-
 def _checkpoint_identity(
     *,
     logical_key: str,
@@ -414,23 +234,19 @@ def _load_plan(
     key: str,
     identity: Mapping[str, object],
     chunks: tuple[tuple[int, int], ...],
-    production_block_policy: Mapping[str, int],
 ) -> dict[str, object]:
     if not fs.exists(key):
         plan: dict[str, object] = {
             "format": FORMAT,
             "identity": dict(identity),
             "planned_chunks": [list(x) for x in chunks],
-            "production_block_policy": dict(production_block_policy),
         }
         _write_exclusive(fs, key, _json_bytes(plan))
         return plan
     plan = json.loads(_read_bytes(fs, key))
-    if (
-        plan.get("identity") != dict(identity)
-        or plan.get("planned_chunks") != [list(x) for x in chunks]
-        or plan.get("production_block_policy") != dict(production_block_policy)
-    ):
+    if plan.get("identity") != dict(identity) or plan.get("planned_chunks") != [
+        list(x) for x in chunks
+    ]:
         raise GCSNativeWriterError(
             "remote plan identity mismatch; refusing resume drift"
         )
@@ -459,9 +275,6 @@ def write_gcs_native_sparse_revision(
     min_rows: int = DEFAULT_MIN_ROWS,
     max_rows: int = DEFAULT_MAX_ROWS,
     stop_after_chunks: int | None = None,
-    production_block_min_bytes: int = PRODUCTION_BLOCK_MIN_BYTES,
-    production_block_target_bytes: int = PRODUCTION_BLOCK_TARGET_BYTES,
-    production_block_max_bytes: int = PRODUCTION_BLOCK_MAX_BYTES,
 ) -> tuple[dict[str, object], GCSNativeMetrics]:
     """Write bounded CSR/CSC tranches directly to a versioned temporary GCS prefix.
 
@@ -523,12 +336,7 @@ def write_gcs_native_sparse_revision(
         var=var,
         schema_fingerprint=schema_fingerprint,
     )
-    production_block_policy = {
-        "minimum_bytes": production_block_min_bytes,
-        "target_bytes": production_block_target_bytes,
-        "maximum_bytes": production_block_max_bytes,
-    }
-    _load_plan(fs, plan_key, identity, chunks, production_block_policy)
+    _load_plan(fs, plan_key, identity, chunks)
     if fs.exists(_path(candidate_prefix, "manifest.json")):
         raise GCSNativeWriterError(
             "remote candidate is already completed; choose a new revision"
@@ -559,12 +367,10 @@ def write_gcs_native_sparse_revision(
                 raise GCSNativeWriterError(
                     f"orphan or partial remote chunk {index}; refusing overwrite"
                 )
-            matrix_compressed_bytes = _write_remote_matrix(
+            bytes_written += _write_remote_matrix(
                 fs, matrix_key, source_chunk, sparse_format
             )
-            bytes_written += matrix_compressed_bytes
             obs_object = _write_parquet(fs, obs_key, source_obs)
-            bytes_written += int(obs_object["size"])
             remote = _read_remote_matrix(fs, matrix_key, sparse_format)
             remote_obs = _read_parquet(fs, obs_key)
             _assert_source_readback_parity(source_chunk, remote, source_obs, remote_obs)
@@ -583,8 +389,6 @@ def write_gcs_native_sparse_revision(
                 "matrix_key": matrix_key,
                 "obs_key": obs_key,
                 "obs_generation": obs_object["generation"],
-                "compressed_bytes": matrix_compressed_bytes,
-                "obs_compressed_bytes": int(obs_object["size"]),
                 "checksums": checksums,
                 "source_generation": source_generation,
             }
@@ -598,15 +402,6 @@ def write_gcs_native_sparse_revision(
         record = json.loads(_read_bytes(fs, record_key))
         if record.get("source_generation") != source_generation:
             raise GCSNativeWriterError(f"chunk source generation mismatch: {index}")
-        measured_bytes = record.get("compressed_bytes")
-        if (
-            not isinstance(measured_bytes, int)
-            or isinstance(measured_bytes, bool)
-            or measured_bytes < 0
-        ):
-            raise GCSNativeWriterError(
-                f"chunk compressed byte measurement missing: {index}"
-            )
         records.append(record)
     var_key = _path(candidate_prefix, "var.parquet")
     if fs.exists(var_key):
@@ -619,34 +414,6 @@ def write_gcs_native_sparse_revision(
         remote_var, schema_fingerprint=schema_fingerprint
     ) != shared_var_identity(var, schema_fingerprint=schema_fingerprint):
         raise GCSNativeWriterError("remote shared var readback identity mismatch")
-    var_identity = shared_var_identity(var, schema_fingerprint=schema_fingerprint)
-    var_manifest: dict[str, object] = {
-        "key": var_key,
-        "generation": var_object["generation"],
-        "index_sha256": var_identity.index_sha256,
-        "frame_sha256": var_identity.frame_sha256,
-        "schema_fingerprint": var_identity.schema_fingerprint,
-    }
-    block_ranges = plan_production_blocks(
-        [cast(int, record["compressed_bytes"]) for record in records],
-        min_bytes=production_block_min_bytes,
-        target_bytes=production_block_target_bytes,
-        max_bytes=production_block_max_bytes,
-    )
-    production_blocks = [
-        {
-            "index": block_index,
-            "start": records[first]["start"],
-            "end": records[last - 1]["end"],
-            "chunk_indexes": list(range(first, last)),
-            "compressed_bytes": sum(
-                cast(int, records[index]["compressed_bytes"])
-                for index in range(first, last)
-            ),
-            "var": dict(var_manifest),
-        }
-        for block_index, (first, last) in enumerate(block_ranges)
-    ]
     manifest: dict[str, object] = {
         "format": FORMAT,
         "logical_key": logical_key,
@@ -663,9 +430,7 @@ def write_gcs_native_sparse_revision(
         "sparse_format": sparse_format,
         "ingestion_run_id": ingestion_run_id,
         "chunks": records,
-        "production_block_policy": production_block_policy,
-        "blocks": production_blocks,
-        "var": var_manifest,
+        "var": {"key": var_key, "generation": var_object["generation"]},
     }
     manifest_key = _path(candidate_prefix, "manifest.json")
     manifest_object = _write_exclusive(fs, manifest_key, _json_bytes(manifest))

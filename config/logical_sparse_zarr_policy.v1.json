@@ -22,15 +22,6 @@
     "balanced_tails": "ceil(n_obs/target_rows) chunks; distribute remainder over leading chunks; row counts differ by at most one",
     "runtime_gate": "Writer samples/records peak RSS for the first chunk and reduces target_rows before later chunks when peak exceeds max_rss_bytes."
   },
-  "production_block_policy": {
-    "measurement": "post-write compressed matrix object bytes summed over contiguous physical chunks",
-    "minimum_bytes": 2147483648,
-    "target_bytes": 2684354560,
-    "maximum_bytes": 3221225472,
-    "exceptions": ["one_final_tail", "genuinely_smaller_dataset"],
-    "manifest_enforcement": "immutable plan pins the policy; every chunk records compressed_bytes; manifest records and readback recomputes logical block groupings",
-    "var_reference": "every block resolves the manifest's one full-hash shared_var"
-  },
   "shared_var": {
     "key": "vars/<var_identity>/var.parquet",
     "identity": "var_index_sha256 + var_frame_sha256 + schema_fingerprint",
@@ -52,7 +43,7 @@
     "promotion": "Manifest is written only after all chunk and obs objects have checksums and readback parity passes; consumers resolve an immutable manifest revision, never a mutable directory listing."
   },
   "compatibility": {
-    "loaders": ["pert_gym.logical_dataset.open_logical_dataset", "pert_gym.logical_dataset.LogicalCollection"],
+    "loaders": ["pert_gym.sparse_zarr_contract.load_compatible_surface"],
     "legacy": "pert-gym.triplet-h5ad/v1 is exposed as exactly one logical chunk. It remains immutable and is never rewritten in place.",
     "unknown_versions": "fail closed"
   },

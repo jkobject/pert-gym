@@ -723,7 +723,6 @@ def write_logical_sparse_revision(
         manifest: dict[str, object] = {
             "format": "pert-gym.logical-sparse-zarr",
             "version": 1,
-            "logical_key": logical_key,
             "revision": revision,
             "shape": list(shape),
             "nnz": matrix_nnz,
