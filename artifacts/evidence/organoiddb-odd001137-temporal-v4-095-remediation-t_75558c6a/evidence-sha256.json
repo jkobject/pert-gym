@@ -2,13 +2,13 @@
   "files": [
     {
       "path": "README.md",
-      "sha256": "3c6c354618220c67ad3a1c6a0661e8edd71f83b3caaeaf493a14c1dd58a6913f",
-      "size_bytes": 3844
+      "sha256": "dcc60ce4a885567ebb66eb0c9834f4cf7c50781dae1bbbe4dfa7664ecc9f9512",
+      "size_bytes": 4311
     },
     {
       "path": "build_component.py",
-      "sha256": "c50fdc6927d9ad20e120979a2200c4f51d7ba264458f0d3f39dc9a9bb2434ee7",
-      "size_bytes": 24249
+      "sha256": "c5bb5227325e1fe47d9e65da70380cb778a6881de0826005bb6d22a76bedc3bf",
+      "size_bytes": 26667
     },
     {
       "path": "immutability-readback.json",
@@ -61,6 +61,16 @@
       "size_bytes": 1070
     },
     {
+      "path": "test_evidence_inventory.py",
+      "sha256": "219a35fa63ffe342dc1661315577af0dbc556d5050c962b5f09b0f096b499979",
+      "size_bytes": 2378
+    },
+    {
+      "path": "test_revision_recovery.py",
+      "sha256": "d2b02f67554b6e012a40a61467b3af99e608320d84faf4c2fef4e0901feb1295",
+      "size_bytes": 4163
+    },
+    {
       "path": "test_sparse_inventory.py",
       "sha256": "20ee5951ad065efe22cbea17fb8bd631704a8d5f09f1166947d419599f000700",
       "size_bytes": 2517
@@ -77,8 +87,8 @@
     },
     {
       "path": "verify_evidence.py",
-      "sha256": "0b6b661304b58e04f6054ff597fea43a73ad822a3717af3ed3a9b6edec99f3d6",
-      "size_bytes": 3215
+      "sha256": "2c647c1183a84562ff002110497d54658943c6be3aac70122e5c5b9d3e2d3e49",
+      "size_bytes": 5201
     },
     {
       "path": "writer-execution.log",

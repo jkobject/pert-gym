@@ -176,6 +176,65 @@ def remote_upload(fs: Any, local: Path, key: str) -> dict[str, Any]:
     return {"key": key, "uri": f"gs://{key}", "generation": str(info["generation"]), "generation_uri": f"gs://{key}#{info['generation']}", "size_bytes": size, "sha256": digest.hexdigest()}
 
 
+def revision_stage_keys(revision_prefix: str, accession: str) -> dict[str, str]:
+    """Return the only object order allowed for this immutable revision."""
+    dataset_prefix = f"{revision_prefix}/datasets/{accession}"
+    return {
+        "obs": f"{dataset_prefix}/obs.parquet",
+        "X": f"{dataset_prefix}/X.h5ad",
+        "var": f"{dataset_prefix}/var.parquet",
+        "ledger": f"{revision_prefix}/ledger.json",
+        "manifest": f"{revision_prefix}/manifest.json",
+    }
+
+
+def inspect_revision_state(
+    fs: Any, revision_prefix: str, stage_keys: dict[str, str]
+) -> list[str]:
+    """Fail closed unless remote state is an exact contiguous stage prefix."""
+    remote_keys = sorted(str(key).split("#", 1)[0] for key in fs.find(revision_prefix))
+    allowed = list(stage_keys.values())
+    unexpected = sorted(set(remote_keys).difference(allowed))
+    if unexpected:
+        raise RuntimeError(
+            f"unexpected immutable revision objects; refusing recovery: {unexpected}"
+        )
+    completed = [stage for stage, key in stage_keys.items() if key in remote_keys]
+    if completed != list(stage_keys)[: len(completed)]:
+        raise RuntimeError(
+            "remote immutable revision stages must form a contiguous prefix"
+        )
+    return completed
+
+
+def remote_adopt_or_upload(fs: Any, local: Path, key: str) -> dict[str, Any]:
+    """Adopt an identity-matching saved object, otherwise create it once."""
+    expected_size = local.stat().st_size
+    expected_sha = sha256_file(local)
+    if not fs.exists(key):
+        return remote_upload(fs, local, key)
+
+    info = fs.info(key)
+    generation = str(info.get("generation", ""))
+    if not generation or int(info["size"]) != expected_size:
+        raise RuntimeError(f"existing immutable object identity mismatch: gs://{key}")
+    digest, size = hashlib.sha256(), 0
+    with fs.open(f"{key}#{generation}", "rb") as source:
+        while block := source.read(8 * 1024**2):
+            digest.update(block)
+            size += len(block)
+    if size != expected_size or digest.hexdigest() != expected_sha:
+        raise RuntimeError(f"existing immutable object identity mismatch: gs://{key}")
+    return {
+        "key": key,
+        "uri": f"gs://{key}",
+        "generation": generation,
+        "generation_uri": f"gs://{key}#{generation}",
+        "size_bytes": size,
+        "sha256": digest.hexdigest(),
+    }
+
+
 def remote_download(fs: Any, obj: dict[str, Any], local: Path) -> dict[str, Any]:
     digest, size = hashlib.sha256(), 0
     with fs.open(f"{obj['key']}#{obj['generation']}", "rb") as source, local.open("wb") as target:
@@ -292,8 +351,8 @@ def main() -> int:
     revision_prefix = f"{BUCKET_ROOT}/{LOGICAL_KEY}/revisions/{revision}"
     dataset_prefix = f"{revision_prefix}/datasets/{ACCESSION}"
     fs = fsspec.filesystem("gcs", version_aware=True, project=BILLING_PROJECT, requester_pays=BILLING_PROJECT)
-    if fs.exists(revision_prefix):
-        raise RuntimeError(f"immutable revision already exists: gs://{revision_prefix}")
+    stage_keys = revision_stage_keys(revision_prefix, ACCESSION)
+    inspect_revision_state(fs, revision_prefix, stage_keys)
     started = time.time()
     lock_metadata = {"task_id": TASK_ID, "record_id": RECORD_ID, "revision": revision, "pid": os.getpid(), "started_at": started}
     with ExitStack() as locks:
@@ -316,7 +375,7 @@ def main() -> int:
             objects: dict[str, dict[str, Any]] = {}
             readback_paths: dict[str, Path] = {}
             for role, filename in (("obs", "obs.parquet"), ("X", "X.h5ad"), ("var", "var.parquet")):
-                obj = remote_upload(fs, local_paths[role], f"{dataset_prefix}/{filename}")
+                obj = remote_adopt_or_upload(fs, local_paths[role], stage_keys[role])
                 obj.update({"role": role, "filename": filename})
                 readback = tmp / f"readback-{filename}"
                 obj["producer_generation_readback"] = remote_download(fs, obj, readback)
@@ -328,11 +387,13 @@ def main() -> int:
             ledger = {"schema_version": "pert-gym.proposed-publication-ledger/v2", "submission_id": f"pert-gym-ledger:materialized-build:{TASK_ID}:{RECORD_ID}", "submission_status": "submitted_materialized_build_entry_zero_product_credit", "record_id": RECORD_ID, "catalogue_row_ids": [ROW], "target_logical_key": LOGICAL_KEY, "wave": WAVE, "input_accounting": {"expected_inputs": 8, "accounted_inputs": 8, "controls": 3, "upstream_source_objects": 5, "source_payload_objects": 5}, "output_accounting": {"expected_outputs": 5, "accounted_outputs": 5, "triplet_artifacts": 3, "ledger_objects": 1, "manifest_objects": 1}, "observation_accounting": {"catalogue_source_n_obs_verbatim": 0, "resolved_source_n_obs": EXPECTED_OBS, "materialized_n_obs": EXPECTED_OBS, "excluded_n_obs": 0}, "sample_accounting": {"geo_samples": EXPECTED_SAMPLES, "matrix_objects": 1, "materialized_samples": EXPECTED_SAMPLES}, "debits": {"dropped_observations": 0, "exclusions": 0, "product_credit": 0}, "accepted_delta_at_build": 0, "note": "Build submission only; independent test/review is required before accepted publication credit."}
             ledger_path = tmp / "ledger.json"
             ledger_path.write_bytes(json_bytes(ledger))
-            ledger_obj = remote_upload(fs, ledger_path, f"{revision_prefix}/ledger.json")
+            ledger_obj = remote_adopt_or_upload(fs, ledger_path, stage_keys["ledger"])
             manifest = {"schema_version": "pert-gym.materialized-component/v2", "task_id": TASK_ID, "record_id": RECORD_ID, "component": COMPONENT, "catalogue_row_ids": [ROW], "target_logical_key": LOGICAL_KEY, "revision": revision, "revision_prefix": f"gs://{revision_prefix}", "supersedes_revision": SUPERSEDES_REVISION, "supersession_reason": "Correct the prior immutable manifest's hard-coded CSR declaration; physical HDF5 sparse encoding and indptr cardinality are now inspected.", "dataset_count": 1, "triplet_count": 1, "artifact_count": 3, "observation_count": EXPECTED_OBS, "variable_count": EXPECTED_VARS, "sample_count": EXPECTED_SAMPLES, "bounded_wave": WAVE, "bounded_wave_assignment": assignment, "controlling_record": record, "control_inputs": {"publication_manifest": {"sha256": SOURCE_MANIFEST_SHA}, "graph": {"sha256": GRAPH_SHA}, "catalogue": {"sha256": CATALOGUE_SHA}}, "source_identity": {"accession": ACCESSION, "organoiddb_id": ORGANOIDDB_ID, "source_object_identity": f"{ACCESSION};{ORGANOIDDB_ID}", "upstream_objects": source_inputs, "source_payload_object_count": len(source_inputs), "verified": True}, "dataset": {"prefix": f"gs://{dataset_prefix}", "objects": objects, "links": {"obs_to_X": "identical ordered cell_id", "X_to_var": "identical ordered source gene-symbol feature_id"}, "readback": readback_semantics, "matrix_build_inventory": built["matrix"], "consumer_readback_reached_built_data": True, "quality_disposition": "included_exactly_once"}, "actual_artifact_inventory": [objects[role] for role in ("obs", "X", "var")], "missingness": missingness, "ledger": ledger, "ledger_object": ledger_obj, "immutability": {"generation_pinned": True, "overwrite_refused": True, "manifest_written_last": True, "superseded_revision_mutated": False}, "provenance": {"builder_script_sha256": script_sha, "builder_script": str(Path(__file__).resolve()), "host": socket.gethostname(), "command": f"uv run python build_component.py --input {args.input} --output {args.output}", "started_unix": started, "finished_unix": time.time()}}
             manifest_path = tmp / "manifest.json"
             manifest_path.write_bytes(json_bytes(manifest))
-            manifest_obj = remote_upload(fs, manifest_path, f"{revision_prefix}/manifest.json")
+            manifest_obj = remote_adopt_or_upload(
+                fs, manifest_path, stage_keys["manifest"]
+            )
             remote_manifest = tmp / "manifest-readback.json"
             remote_download(fs, manifest_obj, remote_manifest)
             if remote_manifest.read_bytes() != manifest_path.read_bytes() or int(manifest_obj["generation"]) <= max(int(row["generation"]) for row in manifest["actual_artifact_inventory"] + [ledger_obj]):

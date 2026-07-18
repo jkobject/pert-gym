@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 OLD_REVISION = "temporal-v4-095-wave10-b1dee01a49f4c78c"
 NEW_REVISION = "temporal-v4-095-wave10-c1f63c6ec90e4c24"
+SEALED_BUILDER_SHA = "c50fdc6927d9ad20e120979a2200c4f51d7ba264458f0d3f39dc9a9bb2434ee7"
 EXPECTED_COUNTS = {
     "observations": 30_496,
     "variables": 23_961,
@@ -21,7 +22,51 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def verify_inventory(root: Path, inventory_path: Path) -> None:
+    """Verify the sealed packet is exact, complete, and path-safe."""
+    inventory = json.loads(inventory_path.read_text())
+    entries = inventory.get("files")
+    if not isinstance(entries, list):
+        raise RuntimeError("evidence inventory files must be a list")
+
+    sealed_paths: set[str] = set()
+    resolved_root = root.resolve()
+    for entry in entries:
+        if not isinstance(entry, dict) or not isinstance(entry.get("path"), str):
+            raise RuntimeError("evidence inventory entry is malformed")
+        relative = entry["path"]
+        if relative in sealed_paths:
+            raise RuntimeError(f"duplicate inventory path: {relative}")
+        sealed_paths.add(relative)
+        path = root / relative
+        try:
+            path.resolve().relative_to(resolved_root)
+        except ValueError as exc:
+            raise RuntimeError(f"inventory path escapes packet: {relative}") from exc
+        if not path.is_file() or path.is_symlink():
+            raise RuntimeError(f"missing inventory path: {relative}")
+        size = path.stat().st_size
+        digest = sha256(path)
+        if size != entry.get("size_bytes") or digest != entry.get("sha256"):
+            raise RuntimeError(f"inventory identity mismatch: {relative}")
+
+    inventory_relative = inventory_path.relative_to(root).as_posix()
+    actual_paths = {
+        path.relative_to(root).as_posix()
+        for path in root.rglob("*")
+        if path.is_file()
+        and not path.is_symlink()
+        and path.relative_to(root).as_posix() != inventory_relative
+        and "__pycache__" not in path.parts
+        and path.suffix != ".pyc"
+    }
+    extra = sorted(actual_paths.difference(sealed_paths))
+    if extra:
+        raise RuntimeError(f"extra packet entries absent from inventory: {extra}")
+
+
 def main() -> int:
+    verify_inventory(ROOT, ROOT / "evidence-sha256.json")
     output = ROOT / "remote-output" / "output"
     manifest_path = output / "manifest.json"
     manifest = json.loads(manifest_path.read_text())
@@ -36,7 +81,7 @@ def main() -> int:
     assert manifest["revision"] == NEW_REVISION
     assert manifest["supersedes_revision"] == OLD_REVISION
     assert manifest["immutability"]["superseded_revision_mutated"] is False
-    assert manifest["provenance"]["builder_script_sha256"] == sha256(ROOT / "build_component.py")
+    assert manifest["provenance"]["builder_script_sha256"] == SEALED_BUILDER_SHA
     assert readback["verdict"] == "PASS"
     assert readback["counts"] == EXPECTED_COUNTS
     assert readback["physical_sparse_encoding"] == {

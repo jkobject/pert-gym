@@ -9,6 +9,10 @@ from pert_gym.processing_decisions import validate_processing_decisions_contract
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK = ROOT / "notebooks/datasets/_template_processing_decisions.ipynb"
+ODD001137_NOTEBOOK = (
+    ROOT
+    / "notebooks/datasets/temporal_v4_095_organoiddb_odd001137_gse158999_processing_decisions.ipynb"
+)
 README = ROOT / "notebooks/datasets/README.md"
 
 
@@ -175,6 +179,23 @@ def test_template_contract_executes_without_remote_access() -> None:
         if cell.cell_type == "code":
             exec(cell.source, namespace)
     assert namespace["errors"] == []
+
+
+def test_odd001137_notebook_executes_as_complete_local_reconstruction_record() -> None:
+    notebook = nbformat.read(ODD001137_NOTEBOOK, as_version=4)
+    nbformat.validate(notebook)
+    namespace: dict[str, object] = {"__file__": str(ODD001137_NOTEBOOK)}
+    for cell in notebook.cells:
+        if cell.cell_type == "code":
+            assert cell.outputs == []
+            exec(cell.source, namespace)
+
+    contract = namespace["contract"]
+    assert isinstance(contract, dict)
+    assert namespace["errors"] == []
+    assert contract["identity"]["dataset_id"].endswith("gse158999")
+    assert contract["reconstruction"]["safe_to_remove_gcs"] is False
+    assert len(contract["temporary_gcs_dependencies"]) == 2
 
 
 def test_readme_explains_durable_gcs_exit_contract() -> None:

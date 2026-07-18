@@ -32,6 +32,12 @@ Both `build_component.py` and `verify_component.py` now:
 4. derive expected `indptr` cardinality from the physical major axis;
 5. reject an `indptr` cardinality mismatch and an indices/data length mismatch.
 
+The builder also recovers a crash-created partial revision without deleting or
+renaming it. It accepts only the exact ordered `obs -> X -> var -> ledger ->
+manifest` prefix, generation-reads and adopts an existing stage only when its
+size and SHA-256 match the locally reconstructed object, and rejects identity
+drift, holes, and unexpected objects before the next write.
+
 The corrected manifest and generation-qualified verifier both report:
 
 - format: `csc`
@@ -66,8 +72,17 @@ SPARSE_INVENTORY_REGRESSION_PASS csr+csc+unsupported
 
 python verify_evidence.py
 REMEDIATION_EVIDENCE_PASS revision=temporal-v4-095-wave10-c1f63c6ec90e4c24 manifest=c5b3b786cebb426ebdc50be19ead968fa258d39241264999e910aa4ec63f4e4b encoding=csc_matrix indptr=23962 product_credit=0
+
+python test_revision_recovery.py
+REVISION_RECOVERY_REGRESSION_PASS every-stage+drift+hole+extra
+
+python test_evidence_inventory.py
+EVIDENCE_SEAL_REGRESSION_PASS corruption+missing+extra
 ```
 
-Ruff and `py_compile` pass for builder, verifier, regression, and evidence verifier. An isolated `make test` run reached 417 passing tests, then stopped because a pre-existing PerturBase test imports an ignored evidence fixture absent from clean worktrees (`artifacts/evidence/remote-perturbase-gse216481-t_d84e0d14/build_perturbase_gse216481_component.py`). No Odd001137 code or assertion failed.
+`verify_evidence.py` validates every sealed path, byte size, and SHA-256 and
+rejects missing or extra packet entries before checking semantic evidence. The
+executable metadata-first reconstruction notebook is
+`notebooks/datasets/temporal_v4_095_organoiddb_odd001137_gse158999_processing_decisions.ipynb`.
 
 The exact writer/verifier stdout is preserved in `writer-execution.log` and `verifier-execution.log`; generation-pinned output metadata is under `remote-output/output/`.
