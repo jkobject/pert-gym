@@ -8,7 +8,9 @@ import subprocess
 import sys
 import time
 from contextlib import ExitStack
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -27,7 +29,6 @@ def test_require_heavy_vm_rejects_darwin(monkeypatch: pytest.MonkeyPatch) -> Non
     "hostname",
     [
         "pert-gym-worker-eu-v2",
-        "pert-gym-capacity-eu-v2",
         "pert-gym-capacity-eu-v2-lookalike",
         "untrusted-host",
     ],
@@ -84,6 +85,262 @@ def _writer_metadata(*, run_id: str, pid: int | None = None) -> dict[str, object
         "branch": "fix/test",
         "started_at": time.time(),
     }
+
+
+@dataclass
+class _MemoryLeaseObject:
+    generation: int
+    payload: dict[str, object]
+
+
+class _MemoryGcsLeaseBackend:
+    """Deterministic GCS-generation model used only by distributed-lease tests."""
+
+    def __init__(self) -> None:
+        self.object: _MemoryLeaseObject | None = None
+        self.next_generation = 1
+        self.unavailable = False
+        self.fail_replace = False
+        self.after_delete: object | None = None
+
+    def read(self) -> _MemoryLeaseObject | None:
+        if self.unavailable:
+            raise OSError("backend unavailable")
+        return self.object
+
+    def create(self, payload: dict[str, object]) -> _MemoryLeaseObject:
+        if self.unavailable:
+            raise OSError("backend unavailable")
+        if self.object is not None:
+            raise runner.LeaseGenerationConflict("already exists")
+        self.object = _MemoryLeaseObject(self.next_generation, payload)
+        self.next_generation += 1
+        return self.object
+
+    def replace(
+        self, generation: int, payload: dict[str, object]
+    ) -> _MemoryLeaseObject:
+        if self.unavailable or self.fail_replace:
+            raise OSError("backend unavailable")
+        if self.object is None or self.object.generation != generation:
+            raise runner.LeaseGenerationConflict("generation changed")
+        self.object = _MemoryLeaseObject(self.next_generation, payload)
+        self.next_generation += 1
+        return self.object
+
+    def delete(self, generation: int) -> None:
+        if self.unavailable:
+            raise OSError("backend unavailable")
+        if self.object is None or self.object.generation != generation:
+            raise runner.LeaseGenerationConflict("generation changed")
+        self.object = None
+        if self.after_delete is not None:
+            self.after_delete()  # type: ignore[operator]
+
+
+class _NoopDistributedLease:
+    def renew(self) -> None:
+        return None
+
+    def __enter__(self) -> "_NoopDistributedLease":
+        return self
+
+    def __exit__(self, exc_type: object, exc: object, traceback: object) -> None:
+        return None
+
+
+@pytest.fixture(autouse=True)
+def _avoid_live_gcs_for_runner_main(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        runner,
+        "distributed_lamin_writer_lease",
+        lambda metadata: _NoopDistributedLease(),
+    )
+
+
+def _distributed_lease(
+    backend: _MemoryGcsLeaseBackend, *, host: str, now: float = 100.0
+) -> object:
+    return runner.DistributedLaminWriterLease(
+        backend=backend,
+        metadata={**_writer_metadata(run_id=f"run-{host}"), "host": host},
+        ttl_seconds=30.0,
+        clock=lambda: now,
+    )
+
+
+def test_distributed_lease_allows_exactly_one_of_two_distinct_hosts() -> None:
+    backend = _MemoryGcsLeaseBackend()
+    first = _distributed_lease(backend, host="pert-gym-worker-eu")
+    second = _distributed_lease(backend, host="pert-gym-capacity-eu-v2")
+
+    first.acquire()  # type: ignore[attr-defined]
+    with pytest.raises(RuntimeError, match="another distributed Lamin writer"):
+        second.acquire()  # type: ignore[attr-defined]
+
+    assert backend.object is not None
+    assert backend.object.payload["host"] == "pert-gym-worker-eu"
+
+
+def test_distributed_lease_recovers_only_expired_owner() -> None:
+    backend = _MemoryGcsLeaseBackend()
+    backend.object = _MemoryLeaseObject(
+        7,
+        {**_writer_metadata(run_id="expired"), "lease_id": "old", "expires_at": 99.0},
+    )
+    lease = _distributed_lease(backend, host="pert-gym-capacity-eu-v2")
+
+    lease.acquire()  # type: ignore[attr-defined]
+
+    assert backend.object is not None
+    assert backend.object.payload["lease_id"] == lease.lease_id  # type: ignore[attr-defined]
+    assert backend.object.payload["expires_at"] == 130.0
+
+
+def test_distributed_lease_fails_closed_when_stale_recovery_loses_generation_race() -> (
+    None
+):
+    backend = _MemoryGcsLeaseBackend()
+    backend.object = _MemoryLeaseObject(
+        7,
+        {**_writer_metadata(run_id="expired"), "lease_id": "old", "expires_at": 99.0},
+    )
+
+    def competing_owner() -> None:
+        backend.create(
+            {
+                **_writer_metadata(run_id="winner"),
+                "lease_id": "winner",
+                "expires_at": 130.0,
+            }
+        )
+
+    backend.after_delete = competing_owner
+    lease = _distributed_lease(backend, host="pert-gym-capacity-eu-v2")
+
+    with pytest.raises(
+        RuntimeError, match="could not prove distributed Lamin writer lease"
+    ):
+        lease.acquire()  # type: ignore[attr-defined]
+
+    assert backend.object is not None
+    assert backend.object.payload["lease_id"] == "winner"
+
+
+def test_distributed_lease_renewal_failure_revokes_local_ownership() -> None:
+    backend = _MemoryGcsLeaseBackend()
+    lease = _distributed_lease(backend, host="pert-gym-worker-eu")
+    lease.acquire()  # type: ignore[attr-defined]
+    backend.fail_replace = True
+
+    with pytest.raises(RuntimeError, match="renewal could not be proven"):
+        lease.renew()  # type: ignore[attr-defined]
+
+    assert not lease.held  # type: ignore[attr-defined]
+
+
+def test_run_command_reaps_live_child_when_first_renewal_fails(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    real_popen = subprocess.Popen
+    children: list[Any] = []
+
+    def observe_child(*args: Any, **kwargs: Any) -> Any:
+        child = real_popen(*args, **kwargs)
+        children.append(child)
+        return child
+
+    renewals = 0
+
+    def fail_first_renewal() -> None:
+        nonlocal renewals
+        renewals += 1
+        assert children and children[0].poll() is None
+        raise RuntimeError("renewal could not be proven")
+
+    monkeypatch.setattr(runner.subprocess, "Popen", observe_child)
+    monkeypatch.setattr(runner, "PRODUCTION_HEARTBEAT_SECONDS", 0.01)
+
+    try:
+        with pytest.raises(RuntimeError, match="renewal could not be proven"):
+            runner.run_command(
+                [sys.executable, "-c", "import time; time.sleep(60)"],
+                run_dir=tmp_path,
+                run_id="renewal-termination-test",
+                renew_writer_lease=fail_first_renewal,
+            )
+        assert renewals == 1
+        assert len(children) == 1
+        assert children[0].poll() is not None
+    finally:
+        for child in children:
+            if child.poll() is None:
+                child.terminate()
+                child.wait(timeout=10)
+
+
+def test_run_command_terminates_live_child_when_later_renewal_fails(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    real_popen = subprocess.Popen
+    children: list[Any] = []
+
+    def observe_child(*args: Any, **kwargs: Any) -> Any:
+        child = real_popen(*args, **kwargs)
+        children.append(child)
+        return child
+
+    renewals = 0
+
+    def fail_second_renewal() -> None:
+        nonlocal renewals
+        renewals += 1
+        if renewals == 2:
+            assert children and children[0].poll() is None
+            raise RuntimeError("renewal could not be proven")
+
+    monkeypatch.setattr(runner.subprocess, "Popen", observe_child)
+    monkeypatch.setattr(runner, "PRODUCTION_HEARTBEAT_SECONDS", 0.01)
+
+    with pytest.raises(RuntimeError, match="renewal could not be proven"):
+        runner.run_command(
+            [sys.executable, "-c", "import time; time.sleep(60)"],
+            run_dir=tmp_path,
+            run_id="renewal-termination-test",
+            renew_writer_lease=fail_second_renewal,
+        )
+
+    assert renewals == 2
+    assert len(children) == 1
+    assert children[0].poll() is not None
+
+
+def test_distributed_lease_release_never_deletes_replaced_owner() -> None:
+    backend = _MemoryGcsLeaseBackend()
+    lease = _distributed_lease(backend, host="pert-gym-worker-eu")
+    lease.acquire()  # type: ignore[attr-defined]
+    assert backend.object is not None
+    backend.object = _MemoryLeaseObject(
+        backend.object.generation + 1,
+        {**_writer_metadata(run_id="other"), "lease_id": "other", "expires_at": 130.0},
+    )
+
+    with pytest.raises(RuntimeError, match="release ownership could not be proven"):
+        lease.release()  # type: ignore[attr-defined]
+
+    assert backend.object is not None
+    assert backend.object.payload["lease_id"] == "other"
+
+
+def test_distributed_lease_backend_unreachable_fails_closed() -> None:
+    backend = _MemoryGcsLeaseBackend()
+    backend.unavailable = True
+    lease = _distributed_lease(backend, host="pert-gym-worker-eu")
+
+    with pytest.raises(
+        RuntimeError, match="could not prove distributed Lamin writer lease"
+    ):
+        lease.acquire()  # type: ignore[attr-defined]
 
 
 def test_writer_lock_rejects_duplicate_writer(tmp_path: Path) -> None:

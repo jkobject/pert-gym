@@ -8,6 +8,7 @@ authors = [{ name = "jkobject", email = "jkobject@gmail.com" }]
 license = "MIT"
 keywords = ["python", "template", "pert-gym"]
 dependencies = [
+    "google-cloud-storage>=2.18",
     "gcsfs",
     "lamindb>=2.6",
     "httpx[http2]",

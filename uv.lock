@@ -2990,6 +2990,7 @@ source = { editable = "." }
 dependencies = [
     { name = "gcsfs" },
     { name = "gdown" },
+    { name = "google-cloud-storage" },
     { name = "httpx", extra = ["http2"] },
     { name = "ipykernel" },
     { name = "lamindb" },
@@ -3036,6 +3037,7 @@ requires-dist = [
     { name = "gcsfs" },
     { name = "gdown", specifier = ">=6.1.0" },
     { name = "gitchangelog", marker = "extra == 'dev'", specifier = ">=3.0.4" },
+    { name = "google-cloud-storage", specifier = ">=2.18" },
     { name = "httpx", extras = ["http2"] },
     { name = "ipykernel" },
     { name = "lamindb", specifier = ">=2.6" },
