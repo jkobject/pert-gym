@@ -90,6 +90,7 @@ class WriteOverrides(TypedDict, total=False):
     max_rows: int
     min_block_bytes: int
     obs: pd.DataFrame
+    operation_counter: gcs_native_sparse_zarr.GCSOperationCounter
     peak_rss_reader: Any
     source_generation: str
     source_row_end: int | None
@@ -460,8 +461,14 @@ def test_writer_persists_runtime_failure_before_next_logical_block(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     fs = memory_filesystem()
+    original_checkpoint = gcs_native_sparse_zarr.runtime_operation_checkpoint
+    checkpoint_calls = 0
 
-    def exceeded(**_kwargs: object) -> dict[str, object]:
+    def exceeded(**kwargs: object) -> dict[str, object]:
+        nonlocal checkpoint_calls
+        checkpoint_calls += 1
+        if checkpoint_calls == 1:
+            return original_checkpoint(**kwargs)  # type: ignore[arg-type]
         return {
             "status": "exceeded",
             "logical_checkpoint": 0,
@@ -484,45 +491,80 @@ def test_writer_persists_runtime_failure_before_next_logical_block(
     assert not fs.exists(f"{base}/chunks/chunk_000001.zarr")
 
 
-def test_resume_never_regenerates_accepted_remote_objects(
+def test_final_checkpoint_reserves_complete_var_and_manifest_reads(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    reservations: list[dict[str, object]] = []
+    original_checkpoint = gcs_native_sparse_zarr.runtime_operation_checkpoint
+
+    def checkpoint(**kwargs: object) -> dict[str, object]:
+        reserved = kwargs.get("reserved")
+        if isinstance(reserved, dict):
+            reservations.append(reserved)
+        return original_checkpoint(**kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(
+        gcs_native_sparse_zarr, "runtime_operation_checkpoint", checkpoint
+    )
+    write(memory_filesystem(), tmp_path / "cache")
+
+    assert reservations[-1]["class_b_requests"] == 6
+
+
+def test_resume_refuses_completed_chunk_missing_operation_checkpoint(
+    tmp_path: Path,
 ) -> None:
     fs = memory_filesystem()
     with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
         write(fs, tmp_path / "cache", stop_after_chunks=1)
-    first_matrix = (
-        "bucket/staging/family/example/temporary-revisions/r1/chunks/chunk_000000.zarr"
-    )
-    first_obs = (
-        "bucket/staging/family/example/temporary-revisions/r1/obs/chunk_000000.parquet"
-    )
     first_operation_checkpoint = (
         "bucket/staging/family/example/temporary-revisions/r1/"
         "operation-checkpoints/chunk_000000.json"
     )
     fs.rm(first_operation_checkpoint)
-    matrix_writes: list[str] = []
-    parquet_writes: list[str] = []
-    original_matrix_write = gcs_native_sparse_zarr._write_remote_matrix
-    original_parquet_write = gcs_native_sparse_zarr._write_parquet
 
-    def matrix_write(fs: Any, key: str, *args: object, **kwargs: object) -> int:
-        matrix_writes.append(key)
-        return original_matrix_write(fs, key, *args, **kwargs)
+    with pytest.raises(GCSNativeWriterError, match="operation checkpoint"):
+        write(fs, tmp_path / "cache")
 
-    def parquet_write(
-        fs: Any, key: str, *args: object, **kwargs: object
-    ) -> dict[str, str | int]:
-        parquet_writes.append(key)
-        return original_parquet_write(fs, key, *args, **kwargs)
 
-    monkeypatch.setattr(gcs_native_sparse_zarr, "_write_remote_matrix", matrix_write)
-    monkeypatch.setattr(gcs_native_sparse_zarr, "_write_parquet", parquet_write)
-    write(fs, tmp_path / "cache")
+def test_repeated_resume_attempts_persist_identity_bound_cumulative_requests(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=1)
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    plan = json.loads(cast(bytes, fs.cat(f"{base}/plan.json")))
+    original_verify = cast(Any, gcs_native_sparse_zarr._verify_completed_chunk)
 
-    assert first_matrix not in matrix_writes
-    assert first_obs not in parquet_writes
-    assert fs.exists(first_operation_checkpoint)
+    def interrupt_after_verify(**kwargs: object) -> None:
+        original_verify(**kwargs)
+        raise GCSNativeWriterError("interrupt during completed-chunk resume readback")
+
+    monkeypatch.setattr(
+        gcs_native_sparse_zarr, "_verify_completed_chunk", interrupt_after_verify
+    )
+    with pytest.raises(GCSNativeWriterError, match="resume readback"):
+        write(fs, tmp_path / "cache")
+    with pytest.raises(OperationBudgetExceeded):
+        write(fs, tmp_path / "cache")
+
+    attempts = [
+        json.loads(cast(bytes, fs.cat(key)))
+        for key in sorted(fs.find(f"{base}/operation-attempts"))
+    ]
+    assert len(attempts) == 3
+    assert all(attempt["identity"] == plan["identity"] for attempt in attempts)
+    cumulative_class_a = [
+        attempt["cumulative"]["class_a_requests"] for attempt in attempts
+    ]
+    cumulative_class_b = [
+        attempt["cumulative"]["class_b_requests"] for attempt in attempts
+    ]
+    assert cumulative_class_a == sorted(cumulative_class_a)
+    assert cumulative_class_b == sorted(cumulative_class_b)
+    assert len(set(cumulative_class_a)) == len(cumulative_class_a)
+    assert len(set(cumulative_class_b)) == len(cumulative_class_b)
 
 
 def test_resume_rereads_and_rejects_completed_matrix_payload_drift(
@@ -920,8 +962,10 @@ def test_generation_pinned_source_uses_gcsfs_versioned_range_request() -> None:
 
     fs.info = info  # type: ignore[method-assign]
     fs.cat_file = cat_file  # type: ignore[method-assign]
+    counter = gcs_native_sparse_zarr.GCSOperationCounter()
+    counted_fs = gcs_native_sparse_zarr.count_gcs_operations(fs, counter)
     generation, handle = gcs_native_migration_tool.open_generation_pinned_source(
-        fs, source_key
+        counted_fs, source_key, operation_counter=counter
     )
     try:
         assert generation == "123456"
@@ -935,6 +979,7 @@ def test_generation_pinned_source_uses_gcsfs_versioned_range_request() -> None:
         (pinned_key, {"generation": "123456"}),
     ]
     assert reads == [pinned_key]
+    assert counter.class_b_requests >= 5
 
 
 def test_generation_pinned_source_rejects_generation_fragment_in_source_key() -> None:
@@ -1101,7 +1146,7 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
     monkeypatch.setattr(
         gcs_native_migration_tool,
         "open_generation_pinned_source",
-        lambda *_args: ("123", Handle()),
+        lambda *_args, **_kwargs: ("123", Handle()),
     )
     monkeypatch.setattr(gcs_native_migration_tool.h5py, "File", lambda *_args: H5())
     monkeypatch.setattr(

@@ -30,6 +30,8 @@ sys.path.insert(0, str(ROOT))
 
 from pert_gym.gcs_native_sparse_zarr import (  # noqa: E402
     DEFAULT_CACHE_CAP_BYTES,
+    GCSOperationCounter,
+    count_gcs_operations,
     promote_gcs_native_revision,
     register_gcs_prefix_with_lamin,
     requester_pays_gcs_filesystem,
@@ -147,7 +149,41 @@ def _gcs_key(uri: str) -> str:
     return uri.removeprefix("gs://")
 
 
-def open_generation_pinned_source(fs: Any, source_key: str) -> tuple[str, Any]:
+class _CountingRangeReader:
+    """File-like proxy that charges every source metadata/range read as Class B."""
+
+    def __init__(self, handle: Any, counter: GCSOperationCounter) -> None:
+        self._handle = handle
+        self._counter = counter
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._handle, name)
+
+    def __enter__(self) -> _CountingRangeReader:
+        return self
+
+    def __exit__(self, *args: object) -> Any:
+        return self._handle.__exit__(*args)
+
+    def info(self) -> Any:
+        self._counter.count_class_b()
+        return self._handle.info()
+
+    def read(self, *args: object, **kwargs: object) -> Any:
+        self._counter.count_class_b()
+        return self._handle.read(*args, **kwargs)
+
+    def readinto(self, buffer: Any) -> Any:
+        self._counter.count_class_b()
+        return self._handle.readinto(buffer)
+
+
+def open_generation_pinned_source(
+    fs: Any,
+    source_key: str,
+    *,
+    operation_counter: GCSOperationCounter | None = None,
+) -> tuple[str, Any]:
     """Preflight and open one immutable GCS generation through gcsfs' path API.
 
     gcsfs 2025.12.0 accepts ``generation=`` in ``GCSFileSystem._open`` but
@@ -177,6 +213,8 @@ def open_generation_pinned_source(fs: Any, source_key: str) -> tuple[str, Any]:
         block_size=8 * 1024**2,
         cache_type="readahead",
     )
+    if operation_counter is not None:
+        handle = _CountingRangeReader(handle, operation_counter)
     try:
         opened_info = handle.info()
         if str(opened_info.get("generation", "")) != generation:
@@ -232,9 +270,15 @@ def main() -> int:
                         lock_path, lock_metadata, check_live_metadata=False
                     )
                 )
-        fs = requester_pays_gcs_filesystem("jkobject-1549353370965")
+        operation_counter = GCSOperationCounter()
+        fs = count_gcs_operations(
+            requester_pays_gcs_filesystem("jkobject-1549353370965"),
+            operation_counter,
+        )
         source_key = _gcs_key(args.source_gcs_uri)
-        generation, handle = open_generation_pinned_source(fs, source_key)
+        generation, handle = open_generation_pinned_source(
+            fs, source_key, operation_counter=operation_counter
+        )
         with handle:
             with h5py.File(handle, "r") as h5:
                 matrix = GCSH5ADCSR(h5, row_start=args.row_start, row_end=args.row_end)
@@ -299,6 +343,7 @@ def main() -> int:
                         getattr(args, "target_object_mib", 64) * 1024**2
                     ),
                     operation_cost_exception=operation_cost_exception,
+                    operation_counter=operation_counter,
                 )
         result: dict[str, Any] = {
             "manifest": manifest,

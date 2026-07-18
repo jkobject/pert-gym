@@ -474,10 +474,34 @@ class GCSNativeMetrics:
 
 
 @dataclass
-class _OperationCounter:
+class GCSOperationCounter:
+    """Conservative cumulative GCS request counter shared by source and target I/O."""
+
     candidate_objects: int = 0
     class_a_requests: int = 0
     class_b_requests: int = 0
+    _prepaid_class_a_requests: int = 0
+    _prepaid_class_b_requests: int = 0
+
+    def count_class_a(self, requests: int = 1) -> None:
+        consumed = min(requests, self._prepaid_class_a_requests)
+        self._prepaid_class_a_requests -= consumed
+        self.class_a_requests += requests - consumed
+
+    def count_class_b(self, requests: int = 1) -> None:
+        consumed = min(requests, self._prepaid_class_b_requests)
+        self._prepaid_class_b_requests -= consumed
+        self.class_b_requests += requests - consumed
+
+    def add_cumulative_floor(self, floor: Mapping[str, int]) -> None:
+        self.class_a_requests += floor["class_a_requests"]
+        self.class_b_requests += floor["class_b_requests"]
+
+    def prepay(self, *, class_a_requests: int, class_b_requests: int) -> None:
+        self.class_a_requests += class_a_requests
+        self.class_b_requests += class_b_requests
+        self._prepaid_class_a_requests += class_a_requests
+        self._prepaid_class_b_requests += class_b_requests
 
     def snapshot(self) -> dict[str, int]:
         return {
@@ -490,7 +514,7 @@ class _OperationCounter:
 class _CountingFileSystem:
     """Transparent fsspec proxy counting every invoked remote operation."""
 
-    def __init__(self, backend: Any, counter: _OperationCounter) -> None:
+    def __init__(self, backend: Any, counter: GCSOperationCounter) -> None:
         self._backend = backend
         self.operation_counter = counter
 
@@ -504,48 +528,57 @@ class _CountingFileSystem:
         return fsspec.mapping.FSMap(root, self, **kwargs)
 
     def exists(self, path: str, **kwargs: object) -> bool:
-        self.operation_counter.class_b_requests += 1
+        self.operation_counter.count_class_b()
         return bool(self._backend.exists(path, **kwargs))
 
     def info(self, path: str, **kwargs: object) -> dict[str, object]:
-        self.operation_counter.class_b_requests += 1
+        self.operation_counter.count_class_b()
         return dict(self._backend.info(path, **kwargs))
 
     def find(self, path: str, **kwargs: object) -> Any:
-        self.operation_counter.class_a_requests += 1
+        self.operation_counter.count_class_a()
         return self._backend.find(path, **kwargs)
 
     def ls(self, path: str, **kwargs: object) -> Any:
-        self.operation_counter.class_a_requests += 1
+        self.operation_counter.count_class_a()
         return self._backend.ls(path, **kwargs)
 
     def open(self, path: str, mode: str = "rb", **kwargs: object) -> Any:
         if any(flag in mode for flag in "wax+"):
-            self.operation_counter.class_a_requests += 1
+            self.operation_counter.count_class_a()
             self.operation_counter.candidate_objects += 1
         else:
-            self.operation_counter.class_b_requests += 1
+            self.operation_counter.count_class_b()
         return self._backend.open(path, mode=mode, **kwargs)
 
     def pipe_file(self, path: str, value: bytes, **kwargs: object) -> Any:
-        self.operation_counter.class_a_requests += 1
+        self.operation_counter.count_class_a()
         self.operation_counter.candidate_objects += 1
         return self._backend.pipe_file(path, value, **kwargs)
 
     def pipe(self, path: Any, value: bytes | None = None, **kwargs: object) -> Any:
         object_count = len(path) if isinstance(path, dict) else 1
-        self.operation_counter.class_a_requests += object_count
+        self.operation_counter.count_class_a(object_count)
         self.operation_counter.candidate_objects += object_count
         return self._backend.pipe(path, value=value, **kwargs)
 
     def cat_file(self, path: str, **kwargs: object) -> bytes:
-        self.operation_counter.class_b_requests += 1
+        self.operation_counter.count_class_b()
         return self._backend.cat_file(path, **kwargs)
 
     def cat(self, path: Any, **kwargs: object) -> Any:
         request_count = len(path) if isinstance(path, list) else 1
-        self.operation_counter.class_b_requests += request_count
+        self.operation_counter.count_class_b(request_count)
         return self._backend.cat(path, **kwargs)
+
+
+def count_gcs_operations(fs: Any, counter: GCSOperationCounter) -> Any:
+    """Return one non-nesting fsspec proxy bound to ``counter``."""
+    if isinstance(fs, _CountingFileSystem):
+        if fs.operation_counter is not counter:
+            raise GCSNativeWriterError("counted filesystem uses a different operation counter")
+        return fs
+    return _CountingFileSystem(fs, counter)
 
 
 def _validate_block_thresholds(
@@ -1253,6 +1286,49 @@ def _verify_completed_chunk(
         _release_block_memory()
 
 
+def _cumulative_request_counts(
+    value: object, *, evidence_key: str
+) -> dict[str, int]:
+    if not isinstance(value, Mapping):
+        raise GCSNativeWriterError(f"{evidence_key} cumulative counters are missing")
+    counters = cast(Mapping[str, object], value)
+    result: dict[str, int] = {}
+    for field in ("class_a_requests", "class_b_requests"):
+        field_value = counters.get(field)
+        if (
+            not isinstance(field_value, int)
+            or isinstance(field_value, bool)
+            or field_value < 0
+        ):
+            raise GCSNativeWriterError(f"{evidence_key} cumulative counters are invalid")
+        result[field] = field_value
+    return result
+
+
+def _load_cumulative_operation_floor(
+    fs: Any, candidate_prefix: str, identity: Mapping[str, object]
+) -> dict[str, int]:
+    floor = {"class_a_requests": 0, "class_b_requests": 0}
+    evidence_prefixes = (
+        _path(candidate_prefix, "operation-attempts"),
+        _path(candidate_prefix, "operation-checkpoints"),
+    )
+    for evidence_prefix in evidence_prefixes:
+        for key in sorted(fs.find(evidence_prefix)):
+            evidence = json.loads(_read_bytes(fs, key))
+            if not isinstance(evidence, dict) or evidence.get("identity") != identity:
+                raise GCSNativeWriterError(
+                    "operation checkpoint identity mismatch; immutable resume refused"
+                )
+            counts = _cumulative_request_counts(
+                evidence.get("cumulative", evidence.get("actual")),
+                evidence_key=key,
+            )
+            for field, count in counts.items():
+                floor[field] = max(floor[field], count)
+    return floor
+
+
 def write_gcs_native_sparse_revision(
     *,
     fs: Any,
@@ -1284,6 +1360,7 @@ def write_gcs_native_sparse_revision(
     target_object_bytes: int = DEFAULT_TARGET_OBJECT_BYTES,
     max_recovery_attempts: int = DEFAULT_MAX_RECOVERY_ATTEMPTS,
     operation_cost_exception: Mapping[str, object] | None = None,
+    operation_counter: GCSOperationCounter | None = None,
     peak_rss_reader: Callable[[], int] = _peak_rss_bytes,
     stop_after_chunks: int | None = None,
 ) -> tuple[dict[str, object], GCSNativeMetrics]:
@@ -1364,8 +1441,13 @@ def write_gcs_native_sparse_revision(
     component_dtypes = _source_component_dtypes(
         matrix, probe_rows=probe_rows, sparse_format=sparse_format
     )
-    operation_counter = _OperationCounter()
-    fs = _CountingFileSystem(fs, operation_counter)
+    if operation_counter is None:
+        operation_counter = (
+            fs.operation_counter
+            if isinstance(fs, _CountingFileSystem)
+            else GCSOperationCounter()
+        )
+    fs = count_gcs_operations(fs, operation_counter)
     candidate_prefix = _path(
         staging_prefix, logical_key, "temporary-revisions", revision
     )
@@ -1563,6 +1645,59 @@ def write_gcs_native_sparse_revision(
             _path(candidate_prefix, "chunk-records", f"chunk_{index:06d}.json")
         )
     }
+    for completed_index in completed:
+        operation_checkpoint_key = _path(
+            candidate_prefix,
+            "operation-checkpoints",
+            f"chunk_{completed_index:06d}.json",
+        )
+        if not fs.exists(operation_checkpoint_key):
+            raise GCSNativeWriterError(
+                f"completed chunk {completed_index} lacks operation checkpoint"
+            )
+    cumulative_floor = _load_cumulative_operation_floor(fs, candidate_prefix, identity)
+    operation_counter.add_cumulative_floor(cumulative_floor)
+    per_attempt_class_a_reserve = max(
+        1,
+        math.ceil(
+            _required_int(operation_forecast, "class_a_requests") / len(chunks)
+        ),
+    )
+    per_attempt_class_b_reserve = max(
+        1,
+        math.ceil(
+            _required_int(operation_forecast, "class_b_requests") / len(chunks)
+        ),
+    )
+    operation_counter.prepay(
+        class_a_requests=per_attempt_class_a_reserve,
+        class_b_requests=per_attempt_class_b_reserve,
+    )
+    attempt_prefix = _path(candidate_prefix, "operation-attempts")
+    attempt_index = len(fs.find(attempt_prefix))
+    attempt_key = _path(attempt_prefix, f"attempt_{attempt_index:06d}.json")
+    # Prepay the immutable evidence write so a crash cannot omit its own Class A
+    # request from the cumulative value serialized in that evidence object.
+    operation_counter.prepay(class_a_requests=1, class_b_requests=0)
+    attempt_evidence = {
+        "format": f"{FORMAT}.operation-attempt/v1",
+        "attempt": attempt_index,
+        "identity": identity,
+        "cumulative_floor": cumulative_floor,
+        "prepaid_until_next_durable_checkpoint": {
+            "class_a_requests": per_attempt_class_a_reserve,
+            "class_b_requests": per_attempt_class_b_reserve,
+        },
+        "cumulative": operation_counter.snapshot(),
+    }
+    _write_exclusive(fs, attempt_key, _json_bytes(attempt_evidence))
+    attempt_checkpoint = runtime_operation_checkpoint(
+        forecast=operation_forecast,
+        logical_checkpoint=0,
+        actual=operation_counter.snapshot(),
+    )
+    if attempt_checkpoint["status"] != "accepted":
+        raise OperationBudgetExceeded(attempt_checkpoint)
     recovery_attempts_used = 0
     for completed_index in completed:
         completed_record = json.loads(
@@ -1718,6 +1853,8 @@ def write_gcs_native_sparse_revision(
                 "operation-checkpoints",
                 f"chunk_{index:06d}.json",
             )
+            # The immutable checkpoint must include the request that persists it.
+            operation_counter.prepay(class_a_requests=1, class_b_requests=0)
             operation_checkpoint = runtime_operation_checkpoint(
                 forecast=operation_forecast,
                 logical_checkpoint=index,
@@ -1728,6 +1865,8 @@ def write_gcs_native_sparse_revision(
                     "class_b_requests": 3,
                 },
             )
+            operation_checkpoint["identity"] = identity
+            operation_checkpoint["cumulative"] = operation_counter.snapshot()
             checkpoint_object = _write_exclusive(
                 fs,
                 operation_checkpoint_key,
@@ -1779,25 +1918,11 @@ def write_gcs_native_sparse_revision(
             "operation-checkpoints",
             f"chunk_{index:06d}.json",
         )
-        if not fs.exists(operation_checkpoint_key):
-            operation_checkpoint = runtime_operation_checkpoint(
-                forecast=operation_forecast,
-                logical_checkpoint=index,
-                actual=operation_counter.snapshot(),
-                reserved={
-                    "candidate_objects": 3,
-                    "class_a_requests": 3,
-                    "class_b_requests": 3,
-                },
+        operation_checkpoint = json.loads(_read_bytes(fs, operation_checkpoint_key))
+        if operation_checkpoint.get("identity") != identity:
+            raise GCSNativeWriterError(
+                f"chunk {index} operation checkpoint identity mismatch"
             )
-            checkpoint_object = _write_exclusive(
-                fs,
-                operation_checkpoint_key,
-                _json_bytes(operation_checkpoint),
-            )
-            bytes_written += int(checkpoint_object["size"])
-        else:
-            operation_checkpoint = json.loads(_read_bytes(fs, operation_checkpoint_key))
         if operation_checkpoint.get("status") != "accepted":
             if not fs.exists(failure_key):
                 _write_exclusive(
@@ -1825,9 +1950,11 @@ def write_gcs_native_sparse_revision(
         reserved={
             "candidate_objects": 2,
             "class_a_requests": 2,
-            "class_b_requests": 3,
+            "class_b_requests": 6,
         },
     )
+    final_operation_checkpoint["identity"] = identity
+    final_operation_checkpoint["cumulative"] = operation_counter.snapshot()
     if final_operation_checkpoint["status"] != "accepted":
         raise OperationBudgetExceeded(final_operation_checkpoint)
     var_key = _path(candidate_prefix, "var.parquet")
