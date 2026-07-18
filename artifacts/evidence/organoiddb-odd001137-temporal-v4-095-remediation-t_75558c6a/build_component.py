@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import fcntl
 import gzip
 import hashlib
+import io
 import json
 import os
 import socket
@@ -37,6 +39,8 @@ EXPECTED_VARS = 23_961
 SOURCE_MANIFEST_SHA = "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4"
 GRAPH_SHA = "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98"
 CATALOGUE_SHA = "4d31f341b60163ba1bcf6293746b9f8fe483cbccf6cd975367ed62a30467fdea"
+CATALOGUE_PACKET_SHA = "f8aa67e0c21078aa19374e790f701e13fa28dc037521a236227640ebc3159b66"
+CATALOGUE_SEMANTIC_SHA = "264fa793c892b237df165983e238bc8bca174fe7901c620d50f87012a7233484"
 SOURCE_BASE = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE158nnn/GSE158999/suppl"
 SOFT_URL = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE158nnn/GSE158999/soft/GSE158999_family.soft.gz"
 SOURCE_FILES = {
@@ -63,6 +67,25 @@ def sha256_file(path: Path) -> str:
         while block := handle.read(8 * 1024**2):
             digest.update(block)
     return digest.hexdigest()
+
+
+def catalogue_semantic_sha(path: Path) -> str:
+    """Hash TSV values after review-only end-of-line whitespace normalization."""
+    text = path.read_text()
+    normalized = "\n".join(line.rstrip(" \t\r") for line in text.splitlines()) + "\n"
+    rows = list(csv.reader(io.StringIO(normalized, newline=""), delimiter="\t"))
+    if not rows:
+        raise RuntimeError("catalogue is empty")
+    width = len(rows[0])
+    canonical = []
+    for line_number, row in enumerate(rows, start=1):
+        if len(row) not in {width, width - 1}:
+            raise RuntimeError(
+                f"catalogue row {line_number} has {len(row)} fields; expected {width}"
+            )
+        canonical.append(row + [""] * (width - len(row)))
+    payload = json.dumps(canonical, ensure_ascii=False, separators=(",", ":")).encode()
+    return hashlib.sha256(payload).hexdigest()
 
 
 def index_sha(index: pd.Index) -> str:
@@ -121,11 +144,13 @@ def validate_controls(root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
     files = {
         "manifest": (root / "downloadable_logical_publication_manifest_20260713.json", SOURCE_MANIFEST_SHA),
         "graph": (root / "kanban_graph_compaction_t_36a3533e_manifest.json", GRAPH_SHA),
-        "catalogue": (root / "temporal_pretraining_datasets_v4.tsv", CATALOGUE_SHA),
+        "catalogue": (root / "temporal_pretraining_datasets_v4.tsv", CATALOGUE_PACKET_SHA),
     }
     for name, (path, expected) in files.items():
         if sha256_file(path) != expected:
             raise RuntimeError(f"{name} checksum mismatch")
+    if catalogue_semantic_sha(files["catalogue"][0]) != CATALOGUE_SEMANTIC_SHA:
+        raise RuntimeError("catalogue semantic identity mismatch")
     publication = json.loads(files["manifest"][0].read_text())
     records = [row for row in publication["records"] if row.get("record_id") == RECORD_ID]
     if len(records) != 1:
@@ -421,4 +446,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -7,8 +7,8 @@
     },
     {
       "path": "build_component.py",
-      "sha256": "a8a67fd5f972f1bf179f80b437bdbc3a97b5f5928c4a71c71c4919f0109e03e4",
-      "size_bytes": 26936
+      "sha256": "5ce8a34fb98659d6d1298e7d23fc3085cbe4a0aea04ee30e2e3f84f9da007ae4",
+      "size_bytes": 28155
     },
     {
       "path": "immutability-readback.json",
@@ -32,8 +32,8 @@
     },
     {
       "path": "input/temporal_pretraining_datasets_v4.tsv",
-      "sha256": "4d31f341b60163ba1bcf6293746b9f8fe483cbccf6cd975367ed62a30467fdea",
-      "size_bytes": 95457
+      "sha256": "f8aa67e0c21078aa19374e790f701e13fa28dc037521a236227640ebc3159b66",
+      "size_bytes": 95310
     },
     {
       "path": "remote-output/output/ledger.json",
@@ -82,13 +82,13 @@
     },
     {
       "path": "verify_component.py",
-      "sha256": "2f8baf367718d86fdd37e944e8f6959eda9a5ec49f4712c604b94007d86559ba",
-      "size_bytes": 13867
+      "sha256": "0b039b6a30c004661e803a5dcc348d0f8eb7eebc32c35a1b4f2436c8a2695f4b",
+      "size_bytes": 15378
     },
     {
       "path": "verify_evidence.py",
-      "sha256": "6026f2dc6833237bcb8e65c4597208a2f5ea97fdc8c28a513f570fbb7f9917ee",
-      "size_bytes": 5993
+      "sha256": "0e03a29c8a208038e2c678b8a8bb02482869b7368d4825108f6c5f4ccf9f7fe7",
+      "size_bytes": 7629
     },
     {
       "path": "writer-execution.log",

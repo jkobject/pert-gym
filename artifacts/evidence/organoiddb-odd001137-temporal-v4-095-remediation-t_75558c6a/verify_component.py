@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
+import io
 import json
 import socket
 import tempfile
@@ -29,6 +31,8 @@ SUPERSEDES_REVISION = "temporal-v4-095-wave10-b1dee01a49f4c78c"
 SOURCE_MANIFEST_SHA = "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4"
 GRAPH_SHA = "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98"
 CATALOGUE_SHA = "4d31f341b60163ba1bcf6293746b9f8fe483cbccf6cd975367ed62a30467fdea"
+CATALOGUE_PACKET_SHA = "f8aa67e0c21078aa19374e790f701e13fa28dc037521a236227640ebc3159b66"
+CATALOGUE_SEMANTIC_SHA = "264fa793c892b237df165983e238bc8bca174fe7901c620d50f87012a7233484"
 SOURCE_BASE = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE158nnn/GSE158999/suppl"
 SOFT_URL = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE158nnn/GSE158999/soft/GSE158999_family.soft.gz"
 SOURCE_FILES = {
@@ -48,6 +52,25 @@ def sha256_file(path: Path) -> str:
         while block := handle.read(8 * 1024**2):
             digest.update(block)
     return digest.hexdigest()
+
+
+def catalogue_semantic_sha(path: Path) -> str:
+    """Hash TSV values after review-only end-of-line whitespace normalization."""
+    text = path.read_text()
+    normalized = "\n".join(line.rstrip(" \t\r") for line in text.splitlines()) + "\n"
+    rows = list(csv.reader(io.StringIO(normalized, newline=""), delimiter="\t"))
+    if not rows:
+        raise RuntimeError("catalogue is empty")
+    width = len(rows[0])
+    canonical = []
+    for line_number, row in enumerate(rows, start=1):
+        if len(row) not in {width, width - 1}:
+            raise RuntimeError(
+                f"catalogue row {line_number} has {len(row)} fields; expected {width}"
+            )
+        canonical.append(row + [""] * (width - len(row)))
+    payload = json.dumps(canonical, ensure_ascii=False, separators=(",", ":")).encode()
+    return hashlib.sha256(payload).hexdigest()
 
 
 def download_generation(fs: Any, obj: dict[str, Any], path: Path) -> None:
@@ -115,15 +138,24 @@ def main() -> int:
     args = parser.parse_args()
     if socket.gethostname().split(".")[0] != "pert-gym-worker-eu":
         raise RuntimeError("verification may run only on pert-gym-worker-eu")
-    controls = {"frozen_manifest": sha256_file(args.input / "downloadable_logical_publication_manifest_20260713.json"), "graph": sha256_file(args.input / "kanban_graph_compaction_t_36a3533e_manifest.json"), "catalogue": sha256_file(args.input / "temporal_pretraining_datasets_v4.tsv")}
-    if controls != {"frozen_manifest": SOURCE_MANIFEST_SHA, "graph": GRAPH_SHA, "catalogue": CATALOGUE_SHA}:
+    catalogue_path = args.input / "temporal_pretraining_datasets_v4.tsv"
+    controls = {"frozen_manifest": sha256_file(args.input / "downloadable_logical_publication_manifest_20260713.json"), "graph": sha256_file(args.input / "kanban_graph_compaction_t_36a3533e_manifest.json"), "catalogue": sha256_file(catalogue_path)}
+    if controls != {"frozen_manifest": SOURCE_MANIFEST_SHA, "graph": GRAPH_SHA, "catalogue": CATALOGUE_PACKET_SHA}:
         raise RuntimeError(f"control drift: {controls}")
+    if catalogue_semantic_sha(catalogue_path) != CATALOGUE_SEMANTIC_SHA:
+        raise RuntimeError("catalogue semantic identity mismatch")
     manifest = json.loads(args.manifest.read_text())
     manifest_obj = json.loads(args.manifest_object.read_text())
     if manifest["record_id"] != RECORD_ID or manifest["component"] != COMPONENT or manifest["target_logical_key"] != LOGICAL_KEY or manifest["catalogue_row_ids"] != [ROW]:
         raise RuntimeError("component scope drift")
     if manifest["bounded_wave"] != WAVE:
         raise RuntimeError("wave identity drift")
+    if manifest.get("control_inputs") != {
+        "publication_manifest": {"sha256": SOURCE_MANIFEST_SHA},
+        "graph": {"sha256": GRAPH_SHA},
+        "catalogue": {"sha256": CATALOGUE_SHA},
+    }:
+        raise RuntimeError("frozen control identity drift")
     if manifest.get("supersedes_revision") != SUPERSEDES_REVISION or manifest["immutability"].get("superseded_revision_mutated") is not False:
         raise RuntimeError("immutable supersession lineage drift")
     graph = json.loads((args.input / "kanban_graph_compaction_t_36a3533e_manifest.json").read_text())
@@ -195,4 +227,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
