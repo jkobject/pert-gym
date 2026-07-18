@@ -10,12 +10,15 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import sqlite3
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterator, Sequence
 
 import numpy as np
 import pandas as pd
+import pyarrow as pa
 import pyarrow.parquet as pq
 from scipy import sparse
 
@@ -30,6 +33,16 @@ _SOURCE_STEM = re.compile(r"^(?P<family>WB\d+_\d+_\d+_part-)(?P<part>\d+)$")
 _REQUIRED_COLUMNS = {"cell_id", "genes", "expressions"}
 _CSR_STORAGE_DTYPE = np.dtype(np.int32)
 _CSR_STORAGE_MAX = np.iinfo(_CSR_STORAGE_DTYPE).max
+
+
+def _nullable_pandas_dtype(arrow_type: pa.DataType) -> object | None:
+    """Return stable pandas dtypes for Arrow types with null-sensitive inference."""
+    if pa.types.is_boolean(arrow_type):
+        return pd.BooleanDtype()
+    if pa.types.is_integer(arrow_type):
+        prefix = "UInt" if pa.types.is_unsigned_integer(arrow_type) else "Int"
+        return pd.api.types.pandas_dtype(f"{prefix}{arrow_type.bit_width}")
+    return None
 
 
 @dataclass(frozen=True)
@@ -224,7 +237,11 @@ class _SparseParquetMatrix:
     def _batches(self, source: PerturbAISource) -> Iterator[pd.DataFrame]:
         parquet = pq.ParquetFile(source.local_path)
         for batch in parquet.iter_batches(batch_size=self.batch_rows):
-            frame = batch.to_pandas()
+            # NumPy-backed conversion infers batch-local dtypes for nullable
+            # integers and booleans.  Use pandas nullable dtypes derived from
+            # the stable Parquet schema while leaving all other columns on the
+            # normal conversion path for source/readback parity.
+            frame = batch.to_pandas(types_mapper=_nullable_pandas_dtype)
             self.max_batch_rows = max(self.max_batch_rows, len(frame))
             yield frame
 
@@ -232,13 +249,9 @@ class _SparseParquetMatrix:
         rows = 0
         nnz = 0
         max_rows = 0
-        seen_cells: set[str] = set()
         for frame in self._batches(source):
             matrix = _csr_from_frame(frame, self.n_vars)
-            cells = _validated_cell_ids(frame)
-            if not cells.is_unique or set(cells) & seen_cells:
-                raise ValueError(f"cell_id is not unique in source {source.stem}")
-            seen_cells.update(cells)
+            _validated_cell_ids(frame)
             rows += len(frame)
             nnz += matrix.nnz
             max_rows = max(max_rows, len(frame))
@@ -272,25 +285,121 @@ class _SparseParquetMatrix:
         return sparse.vstack(pieces, format="csr")
 
 
+def _obs_frame(raw: pd.DataFrame, source: PerturbAISource) -> pd.DataFrame:
+    """Build one bounded metadata window from a sparse source batch."""
+    obs = raw.drop(columns=["genes", "expressions"]).copy()
+    obs.index = _validated_cell_ids(obs)
+    obs["dataset"] = "perturbai/wholebrain_crispr_atlas"
+    obs["source_file"] = f"data/{source.stem}.parquet"
+    obs["source_commit"] = source.source_commit
+    obs["source_object_id"] = source.source_object_id
+    obs["x_semantics"] = "raw_counts"
+    return obs
+
+
+class _StreamingPerturbAIObsILoc:
+    def __init__(self, obs: _StreamingPerturbAIObs) -> None:
+        self._obs = obs
+
+    def __getitem__(self, selection: slice) -> pd.DataFrame:
+        if not isinstance(selection, slice) or selection.step not in (None, 1):
+            raise TypeError("PerturbAI obs adapter supports contiguous row slices only")
+        start, end, _ = selection.indices(len(self._obs))
+        if start >= end:
+            return pd.DataFrame()
+        pieces: list[pd.DataFrame] = []
+        source_start = 0
+        for source, source_end in zip(
+            self._obs.sources, self._obs.matrix.row_ends, strict=True
+        ):
+            overlap_start = max(start, source_start)
+            overlap_end = min(end, source_end)
+            if overlap_start < overlap_end:
+                cursor = source_start
+                for raw in self._obs.matrix._batches(source):
+                    batch_end = cursor + len(raw)
+                    take_start = max(overlap_start, cursor) - cursor
+                    take_end = min(overlap_end, batch_end) - cursor
+                    if take_start < take_end:
+                        pieces.append(_obs_frame(raw.iloc[take_start:take_end], source))
+                    cursor = batch_end
+            source_start = source_end
+        result = pd.concat(pieces, axis=0)
+        self._obs.max_live_rows = max(self._obs.max_live_rows, len(result))
+        return result
+
+
+class _StreamingPerturbAIObs:
+    """Observation adapter with bounded windows and disk-backed uniqueness checks."""
+
+    def __init__(
+        self, matrix: _SparseParquetMatrix, sources: Sequence[PerturbAISource]
+    ) -> None:
+        self.matrix = matrix
+        self.sources = tuple(sources)
+        self.max_live_rows = 0
+
+    def __len__(self) -> int:
+        return self.matrix.shape[0]
+
+    @property
+    def iloc(self) -> _StreamingPerturbAIObsILoc:
+        return _StreamingPerturbAIObsILoc(self)
+
+    def logical_sparse_obs_identity(self) -> tuple[str, str]:
+        """Hash streamed metadata while checking identities in a temporary SQLite index."""
+        index_digest = hashlib.sha256()
+        frame_digest = hashlib.sha256()
+        schema: str | None = None
+        with tempfile.TemporaryDirectory(prefix="perturbai_obs_identity_") as temporary:
+            database = Path(temporary) / "cell_ids.sqlite3"
+            with sqlite3.connect(database) as connection:
+                connection.execute("PRAGMA cache_size = -8192")
+                connection.execute("PRAGMA temp_store = FILE")
+                connection.execute("CREATE TABLE cell_ids (cell_id TEXT PRIMARY KEY)")
+                for source in self.sources:
+                    for raw in self.matrix._batches(source):
+                        obs = _obs_frame(raw, source)
+                        self.max_live_rows = max(self.max_live_rows, len(obs))
+                        if not obs.index.is_unique:
+                            raise ValueError(
+                                "cell_id is not unique across selected sources"
+                            )
+                        try:
+                            connection.executemany(
+                                "INSERT INTO cell_ids (cell_id) VALUES (?)",
+                                ((cell,) for cell in obs.index),
+                            )
+                        except sqlite3.IntegrityError as error:
+                            raise ValueError(
+                                "cell_id is not unique across selected sources"
+                            ) from error
+                        index_digest.update(
+                            ("\n".join(str(cell) for cell in obs.index) + "\n").encode(
+                                "utf-8"
+                            )
+                        )
+                        values = pd.util.hash_pandas_object(
+                            obs, index=True, categorize=True
+                        ).values
+                        frame_digest.update(np.ascontiguousarray(values).tobytes())
+                        current_schema = "\n".join(
+                            f"{column}:{dtype}" for column, dtype in obs.dtypes.items()
+                        )
+                        if schema is None:
+                            schema = current_schema
+                        elif schema != current_schema:
+                            raise ValueError(
+                                "PerturbAI obs schema changes across source batches"
+                            )
+        frame_digest.update((schema or "").encode("utf-8"))
+        return index_digest.hexdigest(), frame_digest.hexdigest()
+
+
 def _build_obs(
     matrix: _SparseParquetMatrix, sources: Sequence[PerturbAISource]
-) -> pd.DataFrame:
-    frames: list[pd.DataFrame] = []
-    seen_cells: set[str] = set()
-    for source in sources:
-        for raw in matrix._batches(source):
-            obs = raw.drop(columns=["genes", "expressions"]).copy()
-            obs.index = _validated_cell_ids(obs)
-            if not obs.index.is_unique or set(obs.index) & seen_cells:
-                raise ValueError("cell_id is not unique across selected sources")
-            seen_cells.update(obs.index)
-            obs["dataset"] = "perturbai/wholebrain_crispr_atlas"
-            obs["source_file"] = f"data/{source.stem}.parquet"
-            obs["source_commit"] = source.source_commit
-            obs["source_object_id"] = source.source_object_id
-            obs["x_semantics"] = "raw_counts"
-            frames.append(obs)
-    return pd.concat(frames, axis=0) if frames else pd.DataFrame()
+) -> _StreamingPerturbAIObs:
+    return _StreamingPerturbAIObs(matrix, sources)
 
 
 def build_perturbai_revision(
