@@ -182,6 +182,74 @@ def test_obs_adapter_keeps_only_window_sized_metadata_and_disk_unique_index(
     assert obs.max_live_rows == 2
 
 
+def test_obs_adapter_accepts_nullable_metadata_split_across_row_groups(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "nullable-metadata.parquet"
+    pq.write_table(
+        pa.table(
+            {
+                "cell_id": ["c0", "c1"],
+                "numeric_metadata": pa.array([1, None], type=pa.int64()),
+                "genes": [[0], [1]],
+                "expressions": [[2], [3]],
+            }
+        ),
+        path,
+        row_group_size=1,
+    )
+    sources = (_source(path, "WB8588_2_1_part-2"),)
+    build_perturbai_revision(
+        root=tmp_path / "out",
+        logical_key="perturbai/wholebrain",
+        revision="r1",
+        sources=sources,
+        var=_var(),
+        schema_fingerprint="perturbai-gene-metadata/v1",
+        ingestion_run_id="test-run",
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=2,
+        parquet_batch_rows=1,
+    )
+    _surface, _matrix, obs, _var_frame = read_logical_sparse_revision(
+        tmp_path / "out", "perturbai/wholebrain", "r1"
+    )
+
+    assert obs["numeric_metadata"].tolist() == [1, pd.NA]
+
+
+def test_obs_adapter_rejects_genuinely_incompatible_metadata_schemas(
+    tmp_path: Path,
+) -> None:
+    first = tmp_path / "integer-metadata.parquet"
+    second = tmp_path / "string-metadata.parquet"
+    for path, metadata, cell in (
+        (first, pa.array([1], type=pa.int64()), "c0"),
+        (second, pa.array(["one"], type=pa.string()), "c1"),
+    ):
+        pq.write_table(
+            pa.table(
+                {
+                    "cell_id": [cell],
+                    "metadata": metadata,
+                    "genes": [[0]],
+                    "expressions": [[2]],
+                }
+            ),
+            path,
+        )
+    sources = (
+        _source(first, "WB8588_2_1_part-2"),
+        _source(second, "WB8588_2_1_part-3"),
+    )
+    matrix = _SparseParquetMatrix(sources, n_vars=len(_var()), batch_rows=1)
+    obs = _build_obs(matrix, sources)
+
+    with pytest.raises(ValueError, match="schema changes"):
+        obs.logical_sparse_obs_identity()
+
+
 def test_adapter_rejects_malformed_sparse_rows_before_candidate_write(
     tmp_path: Path,
 ) -> None:

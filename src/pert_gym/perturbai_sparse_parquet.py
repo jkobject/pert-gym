@@ -18,6 +18,7 @@ from typing import Any, Iterator, Sequence
 
 import numpy as np
 import pandas as pd
+import pyarrow as pa
 import pyarrow.parquet as pq
 from scipy import sparse
 
@@ -32,6 +33,16 @@ _SOURCE_STEM = re.compile(r"^(?P<family>WB\d+_\d+_\d+_part-)(?P<part>\d+)$")
 _REQUIRED_COLUMNS = {"cell_id", "genes", "expressions"}
 _CSR_STORAGE_DTYPE = np.dtype(np.int32)
 _CSR_STORAGE_MAX = np.iinfo(_CSR_STORAGE_DTYPE).max
+
+
+def _nullable_pandas_dtype(arrow_type: pa.DataType) -> object | None:
+    """Return stable pandas dtypes for Arrow types with null-sensitive inference."""
+    if pa.types.is_boolean(arrow_type):
+        return pd.BooleanDtype()
+    if pa.types.is_integer(arrow_type):
+        prefix = "UInt" if pa.types.is_unsigned_integer(arrow_type) else "Int"
+        return pd.api.types.pandas_dtype(f"{prefix}{arrow_type.bit_width}")
+    return None
 
 
 @dataclass(frozen=True)
@@ -226,7 +237,11 @@ class _SparseParquetMatrix:
     def _batches(self, source: PerturbAISource) -> Iterator[pd.DataFrame]:
         parquet = pq.ParquetFile(source.local_path)
         for batch in parquet.iter_batches(batch_size=self.batch_rows):
-            frame = batch.to_pandas()
+            # NumPy-backed conversion infers batch-local dtypes for nullable
+            # integers and booleans.  Use pandas nullable dtypes derived from
+            # the stable Parquet schema while leaving all other columns on the
+            # normal conversion path for source/readback parity.
+            frame = batch.to_pandas(types_mapper=_nullable_pandas_dtype)
             self.max_batch_rows = max(self.max_batch_rows, len(frame))
             yield frame
 
@@ -374,7 +389,9 @@ class _StreamingPerturbAIObs:
                         if schema is None:
                             schema = current_schema
                         elif schema != current_schema:
-                            raise ValueError("PerturbAI obs schema changes across source batches")
+                            raise ValueError(
+                                "PerturbAI obs schema changes across source batches"
+                            )
         frame_digest.update((schema or "").encode("utf-8"))
         return index_digest.hexdigest(), frame_digest.hexdigest()
 
