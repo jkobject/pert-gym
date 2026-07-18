@@ -23,6 +23,12 @@ EXPECTED_SHAPE = [129_441, 23_308]
 EXPECTED_NNZ = 528_649_855
 EXPECTED_COUNT_SUM = 2_017_575_951
 EXPECTED_MANIFEST_SHA = "dc33b1a1e1d24e96f3ce8efce8d052d1b01c2e7102d335a0ebf866ebc63e92a6"
+EXPECTED_TIMEPOINTS = {
+    "NoCrush": (0, 0),
+    "ONC2D": (2_880, 2),
+    "ONC7d": (10_080, 7),
+    "ONC21d": (30_240, 21),
+}
 
 
 def read_generation(fs: Any, key: str, generation: str) -> bytes:
@@ -47,6 +53,29 @@ def verify_object(fs: Any, obj: dict[str, Any], target: Path | None = None) -> d
     if size != obj["size_bytes"] or digest.hexdigest() != obj["sha256"]:
         raise RuntimeError(f"generation-qualified object mismatch: {obj['key']}")
     return {"key": obj["key"], "generation": obj["generation"], "size_bytes": size, "sha256": digest.hexdigest()}
+
+
+def validate_canonical_timepoints(obs: pd.DataFrame) -> None:
+    required = {
+        "raw_time_label",
+        "timepoint",
+        "timepoint_original_value",
+        "timepoint_original_unit",
+    }
+    if not required.issubset(obs.columns) or not pd.api.types.is_integer_dtype(
+        obs["timepoint"]
+    ):
+        raise RuntimeError("canonical timepoint minute/provenance schema mismatch")
+    if set(obs["raw_time_label"].unique()) != set(EXPECTED_TIMEPOINTS):
+        raise RuntimeError("source timepoint label inventory mismatch")
+    for label, (minutes, days) in EXPECTED_TIMEPOINTS.items():
+        rows = obs.loc[obs["raw_time_label"] == label]
+        if (
+            set(rows["timepoint"].unique()) != {minutes}
+            or set(rows["timepoint_original_value"].unique()) != {days}
+            or set(rows["timepoint_original_unit"].unique()) != {"day"}
+        ):
+            raise RuntimeError(f"canonical timepoint conversion mismatch for {label}")
 
 
 def main() -> None:
@@ -92,6 +121,7 @@ def main() -> None:
         ])
         obs = pd.read_parquet(io.BytesIO(obs_bytes))
         var = pd.read_parquet(io.BytesIO(var_bytes))
+        validate_canonical_timepoints(obs)
         with h5py.File(x_path, "r") as h5:
             shape = list(map(int, h5["X"].attrs["shape"]))
             nnz = int(h5["X/data"].shape[0])

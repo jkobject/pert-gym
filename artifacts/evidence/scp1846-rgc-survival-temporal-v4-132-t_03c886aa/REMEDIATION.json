@@ -1,0 +1,49 @@
+{
+  "schema_version": "pert-gym.row-remediation/v1",
+  "producer_task_id": "t_03c886aa",
+  "remediation_task_id": "t_277bcc32",
+  "pull_request": 95,
+  "rejected_revision": {
+    "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/manifest.json#1784284536286438",
+    "manifest_sha256": "dc33b1a1e1d24e96f3ce8efce8d052d1b01c2e7102d335a0ebf866ebc63e92a6",
+    "reason": "canonical timepoint stored source days instead of schema-required integer minutes",
+    "retained": true,
+    "accepted_product_credit": 0
+  },
+  "canonical_timepoint_contract": {
+    "unit": "minute",
+    "integer_required": true,
+    "source_unit": "day",
+    "mapping": {
+      "NoCrush": 0,
+      "ONC2D": 2880,
+      "ONC7d": 10080,
+      "ONC21d": 30240
+    },
+    "provenance_columns": [
+      "raw_time_label",
+      "timepoint_original_value",
+      "timepoint_original_unit"
+    ]
+  },
+  "crash_recovery_contract": {
+    "behavior": "adopt an existing deterministic stage only after generation-qualified size and SHA-256 parity with the local candidate",
+    "drift_behavior": "fail closed before any additional write",
+    "deletion": false,
+    "overwrite": false,
+    "revision_identity_change_on_retry": false
+  },
+  "code_identity": {
+    "builder_sha256": "ba0cfa97724d71a526524cf6aa8a7a9dc30f438d709d4ed9db6ae05c14a9af50",
+    "verifier_sha256": "84e1ff00a990f8d0090aa21ad199976b6f4eb3b119b5ca04701d56f18825c797",
+    "regression_test_sha256": "96a0d25123401358d6461bf2e7bced1e5e570b54f4a32d8eb12f73a0ad2b0a26"
+  },
+  "publication": {
+    "corrected_payload_published": false,
+    "gcs_writes": 0,
+    "lamin_writes": 0,
+    "source_mutations": 0,
+    "deletions": 0,
+    "disposition": "corrected builder and verifier are reviewable; a future authorized heavy execution must create and independently verify a new immutable revision"
+  }
+}

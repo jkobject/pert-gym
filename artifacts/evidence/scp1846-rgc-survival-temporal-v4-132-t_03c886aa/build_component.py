@@ -68,6 +68,19 @@ def index_sha(index: pd.Index) -> str:
     return hashlib.sha256(("\n".join(map(str, index)) + "\n").encode()).hexdigest()
 
 
+def timepoint_fields(raw_time: str, day: float) -> dict[str, str | int]:
+    """Return canonical integer minutes while retaining exact day provenance."""
+    minutes = day * 24 * 60
+    if day < 0 or not minutes.is_integer():
+        raise ValueError(f"timepoint day must convert exactly to minutes: {day!r}")
+    return {
+        "raw_time_label": raw_time,
+        "timepoint": int(minutes),
+        "timepoint_original_value": int(day),
+        "timepoint_original_unit": "day",
+    }
+
+
 def controls(inp: Path) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     manifest_path = inp / "downloadable_logical_publication_manifest_20260713.json"
     graph_path = inp / "kanban_graph_compaction_t_36a3533e_manifest.json"
@@ -118,9 +131,8 @@ def parse_csv(path: Path, expected_size: int, expected_sha: str, expected_obs: i
     obs["source_filename"] = path.name
     obs["source_cell_id"] = cells.to_numpy()
     obs["source_condition"] = condition
-    obs["raw_time_label"] = raw_time
-    obs["timepoint"] = day
-    obs["timepoint_unit"] = "day"
+    for column, value in timepoint_fields(raw_time, day).items():
+        obs[column] = value
     obs["optic_nerve_crush"] = raw_time != "NoCrush"
     obs["is_control"] = condition == "Control" and raw_time == "NoCrush"
     obs["perturbation"] = condition + (" + optic nerve crush" if raw_time != "NoCrush" else " + no crush")
@@ -139,21 +151,53 @@ def parse_csv(path: Path, expected_size: int, expected_sha: str, expected_obs: i
     var = pd.DataFrame(index=genes)
     var["gene_symbol"] = genes.to_numpy()
     var["feature_type"] = "Gene Expression"
-    inventory = {"filename": path.name, "uri": f"{GEO_BASE}/{path.name}", "size_bytes": expected_size, "sha256": expected_sha, "shape_genes_by_cells": [len(genes), len(cells)], "n_obs": len(cells), "n_vars": len(genes), "nnz": int(matrix.nnz), "raw_count_sum": int(totals.sum()), "gene_axis_sha256": GENE_AXIS_SHA, "condition": condition, "raw_time_label": raw_time, "timepoint_day": day}
+    inventory = {"filename": path.name, "uri": f"{GEO_BASE}/{path.name}", "size_bytes": expected_size, "sha256": expected_sha, "shape_genes_by_cells": [len(genes), len(cells)], "n_obs": len(cells), "n_vars": len(genes), "nnz": int(matrix.nnz), "raw_count_sum": int(totals.sum()), "gene_axis_sha256": GENE_AXIS_SHA, "condition": condition, **timepoint_fields(raw_time, day)}
     return matrix, obs, var, inventory
 
 
-def upload(fs: Any, path: Path, key: str, role: str) -> dict[str, Any]:
-    if fs.exists(key):
-        raise RuntimeError(f"refusing overwrite gs://{key}")
-    digest = hashlib.sha256(); size = 0
-    with path.open("rb") as src, fs.open(key, "xb") as dst:
-        while block := src.read(8 * 1024**2):
-            dst.write(block); digest.update(block); size += len(block)
+def _remote_identity(fs: Any, key: str, generation: str) -> tuple[int, str]:
+    digest = hashlib.sha256()
+    size = 0
+    with fs.open(f"{key}#{generation}", "rb") as source:
+        while block := source.read(8 * 1024**2):
+            digest.update(block)
+            size += len(block)
+    return size, digest.hexdigest()
+
+
+def upload_or_adopt_immutable(
+    fs: Any, path: Path, key: str, *, role: str
+) -> dict[str, Any]:
+    """Append one object or adopt an exact interrupted upload at the same key."""
+    expected_size = path.stat().st_size
+    expected_sha = sha(path)
+    if not fs.exists(key):
+        with path.open("rb") as source, fs.open(key, "xb") as destination:
+            while block := source.read(8 * 1024**2):
+                destination.write(block)
     info = fs.info(key)
-    if int(info["size"]) != size:
-        raise RuntimeError("upload size mismatch")
-    return {"role": role, "filename": path.name, "key": key, "uri": f"gs://{key}", "generation": str(info["generation"]), "generation_uri": f"gs://{key}#{info['generation']}", "size_bytes": size, "sha256": digest.hexdigest()}
+    generation = str(info.get("generation", ""))
+    if not generation:
+        raise RuntimeError(f"immutable object lacks generation identity: gs://{key}")
+    remote_size, remote_sha = _remote_identity(fs, key, generation)
+    if (
+        int(info.get("size", -1)) != expected_size
+        or remote_size != expected_size
+        or remote_sha != expected_sha
+    ):
+        raise RuntimeError(
+            f"existing immutable stage identity mismatch; refusing drift: gs://{key}"
+        )
+    return {
+        "role": role,
+        "filename": path.name,
+        "key": key,
+        "uri": f"gs://{key}",
+        "generation": generation,
+        "generation_uri": f"gs://{key}#{generation}",
+        "size_bytes": expected_size,
+        "sha256": expected_sha,
+    }
 
 
 def generation_readback(fs: Any, obj: dict[str, Any], path: Path) -> dict[str, Any]:
@@ -177,7 +221,7 @@ def main() -> None:
     if socket.gethostname().split(".")[0] != EXPECTED_HOST:
         raise RuntimeError("large build must run on pert-gym-worker-eu")
     row, assignment, ledger_preflight = controls(args.input_dir)
-    args.output_dir.mkdir(parents=True, exist_ok=False)
+    args.output_dir.mkdir(parents=True, exist_ok=True)
     script_sha = sha(Path(__file__))
     blocks: list[sparse.csr_matrix] = []; obs_parts: list[pd.DataFrame] = []; inventory: list[dict[str, Any]] = []; canonical_var: pd.DataFrame | None = None
     for filename, size, digest, n_obs, condition, raw_time, day in SAMPLES:
@@ -214,16 +258,15 @@ def main() -> None:
     revision = f"temporal-v4-132-wave13-{hashlib.sha256((script_sha + ''.join(x[2] for x in SAMPLES)).encode()).hexdigest()[:16]}"
     root_prefix = f"{BUCKET_ROOT}/{LOGICAL_KEY}/revisions/{revision}"; dataset_prefix = f"{root_prefix}/datasets/{ACCESSION}"
     fs = fsspec.filesystem("gcs", version_aware=True, project=BILLING, requester_pays=BILLING)
-    if fs.exists(root_prefix): raise RuntimeError(f"immutable revision already exists: gs://{root_prefix}")
     objects = []
     for role, path in (("obs", obs_path), ("X", x_path), ("var", var_path)):
-        obj = upload(fs, path, f"{dataset_prefix}/{path.name}", role); obj["producer_generation_readback"] = generation_readback(fs, obj, args.output_dir / f"generation-readback-{path.name}"); objects.append(obj)
+        obj = upload_or_adopt_immutable(fs, path, f"{dataset_prefix}/{path.name}", role=role); obj["producer_generation_readback"] = generation_readback(fs, obj, args.output_dir / f"generation-readback-{path.name}"); objects.append(obj)
     support_objects = []
     for name in support_values:
         path = args.output_dir / name; role = name.removesuffix(".json").replace("-", "_")
-        obj = upload(fs, path, f"{root_prefix}/{name}", role); obj["producer_generation_readback"] = generation_readback(fs, obj, args.output_dir / f"generation-readback-{name}"); support_objects.append(obj)
-    manifest = {"schema_version": "pert-gym.frozen-component-manifest/v1", "task_id": TASK_ID, "record_id": RECORD_ID, "component": COMPONENT, "catalogue_row_ids": [ROW], "target_logical_key": LOGICAL_KEY, "bounded_wave": WAVE, "bounded_wave_assignment": assignment, "bounded_wave_duplicate_check": {"assignment_count": 1, "duplicated_in_other_wave": False}, "source_control": {"manifest_sha256": SOURCE_MANIFEST_SHA, "matched_record_count": 1, "matched_row": row}, "source_identity": {"single_cell_portal": ACCESSION, "geo_superseries": GEO_SUPERSERIES, "geo_component_series": GEO_COMPONENT, "source_members": inventory, "source_members_total_bytes": sum(x[1] for x in SAMPLES)}, "build_identity": {"host": EXPECTED_HOST, "zone": "europe-west1-b", "script_sha256": script_sha, "matrix_semantics": "processed integer count matrices as published", "filtering": "none", "transformations": ["validate exact frozen manifest record and singleton wave assignment", "validate all twelve immutable GEO processed-matrix SHA-256 identities", "transpose each source genes-by-cells matrix and concatenate all source cells", "compute non-filtering quality metrics", "write ordered same-prefix obs/X/var triplet and verify local plus generation-qualified readback"], "lamin_writes": 0, "collection_writes": 0}, "revision": revision, "revision_prefix": f"gs://{root_prefix}", "dataset_count": 1, "triplet_count": 1, "payload_object_count": 3, "observation_count": len(obs), "variable_count": len(var), "shape": list(X.shape), "nnz": int(X.nnz), "raw_count_sum": int(X.sum()), "condition_counts": condition_counts, "timepoint_counts": time_counts, "payload_objects": objects, "support_objects": support_objects, "quality_readback": quality, "missingness": missingness, "ledger": ledger, "manifest_written_last": True, "runtime_seconds_before_manifest": time.time() - started}
-    manifest_path = args.output_dir / "manifest.json"; manifest_path.write_bytes(jb(manifest)); manifest_obj = upload(fs, manifest_path, f"{root_prefix}/manifest.json", "manifest")
+        obj = upload_or_adopt_immutable(fs, path, f"{root_prefix}/{name}", role=role); obj["producer_generation_readback"] = generation_readback(fs, obj, args.output_dir / f"generation-readback-{name}"); support_objects.append(obj)
+    manifest = {"schema_version": "pert-gym.frozen-component-manifest/v1", "task_id": TASK_ID, "record_id": RECORD_ID, "component": COMPONENT, "catalogue_row_ids": [ROW], "target_logical_key": LOGICAL_KEY, "bounded_wave": WAVE, "bounded_wave_assignment": assignment, "bounded_wave_duplicate_check": {"assignment_count": 1, "duplicated_in_other_wave": False}, "source_control": {"manifest_sha256": SOURCE_MANIFEST_SHA, "matched_record_count": 1, "matched_row": row}, "source_identity": {"single_cell_portal": ACCESSION, "geo_superseries": GEO_SUPERSERIES, "geo_component_series": GEO_COMPONENT, "source_members": inventory, "source_members_total_bytes": sum(x[1] for x in SAMPLES)}, "build_identity": {"host": EXPECTED_HOST, "zone": "europe-west1-b", "script_sha256": script_sha, "matrix_semantics": "processed integer count matrices as published", "filtering": "none", "transformations": ["validate exact frozen manifest record and singleton wave assignment", "validate all twelve immutable GEO processed-matrix SHA-256 identities", "transpose each source genes-by-cells matrix and concatenate all source cells", "convert source day values to canonical integer minutes while retaining label/value/unit provenance", "compute non-filtering quality metrics", "write ordered same-prefix obs/X/var triplet and verify local plus generation-qualified readback"], "lamin_writes": 0, "collection_writes": 0}, "revision": revision, "revision_prefix": f"gs://{root_prefix}", "dataset_count": 1, "triplet_count": 1, "payload_object_count": 3, "observation_count": len(obs), "variable_count": len(var), "shape": list(X.shape), "nnz": int(X.nnz), "raw_count_sum": int(X.sum()), "condition_counts": condition_counts, "timepoint_counts": time_counts, "payload_objects": objects, "support_objects": support_objects, "quality_readback": quality, "missingness": missingness, "ledger": ledger, "manifest_written_last": True}
+    manifest_path = args.output_dir / "manifest.json"; manifest_path.write_bytes(jb(manifest)); manifest_obj = upload_or_adopt_immutable(fs, manifest_path, f"{root_prefix}/manifest.json", role="manifest")
     if int(manifest_obj["generation"]) <= max(int(x["generation"]) for x in objects + support_objects): raise RuntimeError("manifest was not written last")
     (args.output_dir / "manifest-object.json").write_bytes(jb(manifest_obj)); generation_readback(fs, manifest_obj, args.output_dir / "manifest-readback.json")
     result = {"verdict": "PASS", "record_id": RECORD_ID, "shape": list(X.shape), "nnz": int(X.nnz), "raw_count_sum": int(X.sum()), "manifest_sha256": sha(manifest_path), "manifest_generation_uri": manifest_obj["generation_uri"], "revision": revision, "accepted_product_credit_pre": 0, "accepted_product_credit_post": 0, "lamin_writes": 0, "runtime_seconds": time.time() - started}

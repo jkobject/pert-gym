@@ -2,6 +2,22 @@
 
 Task: `t_03c886aa`
 
+## Superseding remediation (`t_277bcc32`)
+
+The immutable revision documented below is retained as historical evidence but is
+rejected for canonical use: its `obs.timepoint` values are source days rather than
+schema-required integer minutes. It has zero accepted-product credit and was not
+deleted or rewritten. `REMEDIATION.json` seals the corrected contract and code
+identity without claiming a corrected heavy publication.
+
+The corrected builder writes `0`, `2880`, `10080`, and `30240` minutes for
+NoCrush/ONC2D/ONC7d/ONC21d and retains `raw_time_label`,
+`timepoint_original_value`, and `timepoint_original_unit=day`. Deterministic retry
+stages now adopt only generation-qualified objects with exact byte size and SHA-256
+parity; drift fails closed before another write. The verifier enforces this temporal
+contract. No GCS, Lamin, source, deletion, or promotion operation was performed by
+the remediation.
+
 ## Frozen scope
 
 - Record: `temporal_v4_132_overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of`
@@ -24,8 +40,9 @@ Result:
 - revision: `temporal-v4-132-wave13-5f7d704794fcd538`
 - immutable manifest: `gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/manifest.json#1784284536286438`
 - manifest SHA-256: `dc33b1a1e1d24e96f3ce8efce8d052d1b01c2e7102d335a0ebf866ebc63e92a6`
-- writer verdict: PASS
-- independent generation-qualified verifier verdict: PASS
+- historical writer verdict at production time: PASS (superseded/rejected)
+- historical independent generation-qualified verifier verdict: PASS for byte and
+  matrix parity only (superseded because it did not validate canonical minutes)
 
 The independent verifier reread all nine physical members by immutable generation, checked every object SHA-256/size, verified the manifest was written last, and checked H5AD sparse encoding, shape, nnz, count sum, and ordered obs/var axis parity.
 
