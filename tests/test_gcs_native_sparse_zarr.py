@@ -595,17 +595,49 @@ def test_resume_rejects_same_identity_checkpoint_bound_to_wrong_chunk(
 ) -> None:
     fs = memory_filesystem()
     with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
-        write(fs, tmp_path / "cache", stop_after_chunks=1)
-    checkpoint_key = (
-        "bucket/staging/family/example/temporary-revisions/r1/"
-        "operation-checkpoints/chunk_000000.json"
-    )
-    checkpoint = json.loads(cast(bytes, fs.cat(checkpoint_key)))
-    checkpoint["logical_checkpoint"] = 1
-    fs.pipe(checkpoint_key, json.dumps(checkpoint).encode())
+        write(fs, tmp_path / "cache", stop_after_chunks=2)
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    first_checkpoint = f"{base}/operation-checkpoints/chunk_000000.json"
+    second_checkpoint = f"{base}/operation-checkpoints/chunk_000001.json"
+    fs.pipe(second_checkpoint, cast(bytes, fs.cat(first_checkpoint)))
 
     with pytest.raises(GCSNativeWriterError, match="checkpoint binding mismatch"):
         write(fs, tmp_path / "cache")
+    assert not fs.exists(f"{base}/operation-attempts/attempt_000001.json")
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("format", "malformed", "checkpoint binding mismatch"),
+        ("logical_checkpoint", "0", "checkpoint binding mismatch"),
+        ("status", "exceeded", "checkpoint status mismatch"),
+        ("cumulative", None, "cumulative counters are missing"),
+        (
+            "cumulative",
+            {"class_a_requests": True, "class_b_requests": 1},
+            "cumulative counters are invalid",
+        ),
+    ],
+)
+def test_resume_rejects_malformed_operation_checkpoint_before_candidate_work(
+    tmp_path: Path, field: str, value: object, message: str
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=1)
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    checkpoint_key = f"{base}/operation-checkpoints/chunk_000000.json"
+    checkpoint = json.loads(cast(bytes, fs.cat(checkpoint_key)))
+    if value is None:
+        checkpoint.pop(field)
+    else:
+        checkpoint[field] = value
+    fs.pipe(checkpoint_key, json.dumps(checkpoint).encode())
+
+    with pytest.raises(GCSNativeWriterError, match=message):
+        write(fs, tmp_path / "cache")
+    assert not fs.exists(f"{base}/operation-attempts/attempt_000001.json")
 
 
 def test_resume_rereads_and_rejects_completed_matrix_payload_drift(

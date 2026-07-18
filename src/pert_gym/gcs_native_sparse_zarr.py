@@ -1320,13 +1320,23 @@ def _validate_operation_evidence_binding(
             raise GCSNativeWriterError(
                 f"operation checkpoint binding mismatch at {key}"
             ) from exc
+        normalized_key = key.lstrip("/")
+        checkpoint_root = normalized_key.split("/operation-checkpoints/", maxsplit=1)[0]
+        expected_key = _path(
+            checkpoint_root,
+            "operation-checkpoints",
+            f"chunk_{expected_index:06d}.json",
+        )
         if (
-            evidence.get("format") != f"{FORMAT}.operation-checkpoint/v1"
+            normalized_key != expected_key
+            or evidence.get("format") != f"{FORMAT}.operation-checkpoint/v1"
             or evidence.get("logical_checkpoint") != expected_index
         ):
             raise GCSNativeWriterError(
                 f"operation checkpoint binding mismatch at {key}"
             )
+        if evidence.get("status") != "accepted":
+            raise GCSNativeWriterError(f"operation checkpoint status mismatch at {key}")
     elif "/operation-attempts/" in key:
         try:
             expected_attempt = int(name.removeprefix("attempt_").removesuffix(".json"))
@@ -1334,8 +1344,16 @@ def _validate_operation_evidence_binding(
             raise GCSNativeWriterError(
                 f"operation attempt binding mismatch at {key}"
             ) from exc
+        normalized_key = key.lstrip("/")
+        attempt_root = normalized_key.split("/operation-attempts/", maxsplit=1)[0]
+        expected_key = _path(
+            attempt_root,
+            "operation-attempts",
+            f"attempt_{expected_attempt:06d}.json",
+        )
         if (
-            evidence.get("format") != f"{FORMAT}.operation-attempt/v1"
+            normalized_key != expected_key
+            or evidence.get("format") != f"{FORMAT}.operation-attempt/v1"
             or evidence.get("attempt") != expected_attempt
         ):
             raise GCSNativeWriterError(f"operation attempt binding mismatch at {key}")
@@ -1360,7 +1378,7 @@ def _load_cumulative_operation_floor(
                 key=key, evidence=evidence, identity=identity
             )
             counts = _cumulative_request_counts(
-                evidence.get("cumulative", evidence.get("actual")),
+                evidence.get("cumulative"),
                 evidence_key=key,
             )
             for field, count in counts.items():
@@ -1963,27 +1981,19 @@ def write_gcs_native_sparse_revision(
             f"chunk_{index:06d}.json",
         )
         operation_checkpoint = json.loads(_read_bytes(fs, operation_checkpoint_key))
-        if operation_checkpoint.get("identity") != identity:
+        if not isinstance(operation_checkpoint, dict):
             raise GCSNativeWriterError(
-                f"chunk {index} operation checkpoint identity mismatch"
+                f"operation accounting evidence must be an object: {operation_checkpoint_key}"
             )
-        if operation_checkpoint.get("status") != "accepted":
-            if not fs.exists(failure_key):
-                _write_exclusive(
-                    fs,
-                    failure_key,
-                    _json_bytes(
-                        {
-                            "status": "failed",
-                            "identity": identity,
-                            "failed_chunk": index,
-                            "evidence": operation_checkpoint,
-                            "ended_at": time.time(),
-                            "requires_new_revision": True,
-                        }
-                    ),
-                )
-            raise OperationBudgetExceeded(operation_checkpoint)
+        _validate_operation_evidence_binding(
+            key=operation_checkpoint_key,
+            evidence=operation_checkpoint,
+            identity=identity,
+        )
+        _cumulative_request_counts(
+            operation_checkpoint.get("cumulative"),
+            evidence_key=operation_checkpoint_key,
+        )
         records.append(record)
         del source_chunk, source_obs, remote, remote_obs
         _release_block_memory()
