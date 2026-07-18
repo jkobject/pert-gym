@@ -37,6 +37,8 @@ renaming it. It accepts only the exact ordered `obs -> X -> var -> ledger ->
 manifest` prefix, generation-reads and adopts an existing stage only when its
 size and SHA-256 match the locally reconstructed object, and rejects identity
 drift, holes, and unexpected objects before the next write.
+Immutable manifest provenance is retry-stable: execution timestamps stay in the
+local writer result rather than changing the manifest bytes after a crash.
 
 The corrected manifest and generation-qualified verifier both report:
 
@@ -77,7 +79,7 @@ python test_revision_recovery.py
 REVISION_RECOVERY_REGRESSION_PASS every-stage+drift+hole+extra
 
 python test_evidence_inventory.py
-EVIDENCE_SEAL_REGRESSION_PASS corruption+missing+extra
+EVIDENCE_SEAL_REGRESSION_PASS corruption+missing+extra+symlink+alias
 ```
 
 `verify_evidence.py` validates every sealed path, byte size, and SHA-256 and

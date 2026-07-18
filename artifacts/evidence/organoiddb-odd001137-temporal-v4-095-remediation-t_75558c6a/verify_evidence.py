@@ -30,6 +30,7 @@ def verify_inventory(root: Path, inventory_path: Path) -> None:
         raise RuntimeError("evidence inventory files must be a list")
 
     sealed_paths: set[str] = set()
+    sealed_targets: set[Path] = set()
     resolved_root = root.resolve()
     for entry in entries:
         if not isinstance(entry, dict) or not isinstance(entry.get("path"), str):
@@ -38,11 +39,20 @@ def verify_inventory(root: Path, inventory_path: Path) -> None:
         if relative in sealed_paths:
             raise RuntimeError(f"duplicate inventory path: {relative}")
         sealed_paths.add(relative)
+        relative_path = Path(relative)
+        if relative_path.is_absolute() or relative_path.as_posix() != relative:
+            raise RuntimeError(f"inventory path is not canonical: {relative}")
+        if any(part in ("", ".", "..") for part in relative_path.parts):
+            raise RuntimeError(f"inventory path is not canonical: {relative}")
         path = root / relative
         try:
             path.resolve().relative_to(resolved_root)
         except ValueError as exc:
             raise RuntimeError(f"inventory path escapes packet: {relative}") from exc
+        resolved_path = path.resolve()
+        if resolved_path in sealed_targets:
+            raise RuntimeError(f"duplicate inventory target: {relative}")
+        sealed_targets.add(resolved_path)
         if not path.is_file() or path.is_symlink():
             raise RuntimeError(f"missing inventory path: {relative}")
         size = path.stat().st_size
@@ -51,13 +61,15 @@ def verify_inventory(root: Path, inventory_path: Path) -> None:
             raise RuntimeError(f"inventory identity mismatch: {relative}")
 
     inventory_relative = inventory_path.relative_to(root).as_posix()
+    packet_files = [path for path in root.rglob("*") if "__pycache__" not in path.parts]
+    symlinks = sorted(path.relative_to(root).as_posix() for path in packet_files if path.is_symlink())
+    if symlinks:
+        raise RuntimeError(f"extra packet entries are symlinks: {symlinks}")
     actual_paths = {
         path.relative_to(root).as_posix()
-        for path in root.rglob("*")
+        for path in packet_files
         if path.is_file()
-        and not path.is_symlink()
         and path.relative_to(root).as_posix() != inventory_relative
-        and "__pycache__" not in path.parts
         and path.suffix != ".pyc"
     }
     extra = sorted(actual_paths.difference(sealed_paths))

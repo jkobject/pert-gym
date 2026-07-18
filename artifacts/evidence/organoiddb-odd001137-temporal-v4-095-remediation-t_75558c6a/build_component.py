@@ -188,6 +188,17 @@ def revision_stage_keys(revision_prefix: str, accession: str) -> dict[str, str]:
     }
 
 
+def manifest_provenance(script_sha: str) -> dict[str, object]:
+    """Return retry-stable provenance for the immutable manifest identity."""
+    return {
+        "builder_script_sha256": script_sha,
+        "builder_script": "build_component.py",
+        "host": EXPECTED_HOST,
+        "command": "uv run python build_component.py --input <INPUT> --output <OUTPUT>",
+        "execution_timestamps": "recorded outside immutable manifest",
+    }
+
+
 def inspect_revision_state(
     fs: Any, revision_prefix: str, stage_keys: dict[str, str]
 ) -> list[str]:
@@ -388,7 +399,7 @@ def main() -> int:
             ledger_path = tmp / "ledger.json"
             ledger_path.write_bytes(json_bytes(ledger))
             ledger_obj = remote_adopt_or_upload(fs, ledger_path, stage_keys["ledger"])
-            manifest = {"schema_version": "pert-gym.materialized-component/v2", "task_id": TASK_ID, "record_id": RECORD_ID, "component": COMPONENT, "catalogue_row_ids": [ROW], "target_logical_key": LOGICAL_KEY, "revision": revision, "revision_prefix": f"gs://{revision_prefix}", "supersedes_revision": SUPERSEDES_REVISION, "supersession_reason": "Correct the prior immutable manifest's hard-coded CSR declaration; physical HDF5 sparse encoding and indptr cardinality are now inspected.", "dataset_count": 1, "triplet_count": 1, "artifact_count": 3, "observation_count": EXPECTED_OBS, "variable_count": EXPECTED_VARS, "sample_count": EXPECTED_SAMPLES, "bounded_wave": WAVE, "bounded_wave_assignment": assignment, "controlling_record": record, "control_inputs": {"publication_manifest": {"sha256": SOURCE_MANIFEST_SHA}, "graph": {"sha256": GRAPH_SHA}, "catalogue": {"sha256": CATALOGUE_SHA}}, "source_identity": {"accession": ACCESSION, "organoiddb_id": ORGANOIDDB_ID, "source_object_identity": f"{ACCESSION};{ORGANOIDDB_ID}", "upstream_objects": source_inputs, "source_payload_object_count": len(source_inputs), "verified": True}, "dataset": {"prefix": f"gs://{dataset_prefix}", "objects": objects, "links": {"obs_to_X": "identical ordered cell_id", "X_to_var": "identical ordered source gene-symbol feature_id"}, "readback": readback_semantics, "matrix_build_inventory": built["matrix"], "consumer_readback_reached_built_data": True, "quality_disposition": "included_exactly_once"}, "actual_artifact_inventory": [objects[role] for role in ("obs", "X", "var")], "missingness": missingness, "ledger": ledger, "ledger_object": ledger_obj, "immutability": {"generation_pinned": True, "overwrite_refused": True, "manifest_written_last": True, "superseded_revision_mutated": False}, "provenance": {"builder_script_sha256": script_sha, "builder_script": str(Path(__file__).resolve()), "host": socket.gethostname(), "command": f"uv run python build_component.py --input {args.input} --output {args.output}", "started_unix": started, "finished_unix": time.time()}}
+            manifest = {"schema_version": "pert-gym.materialized-component/v2", "task_id": TASK_ID, "record_id": RECORD_ID, "component": COMPONENT, "catalogue_row_ids": [ROW], "target_logical_key": LOGICAL_KEY, "revision": revision, "revision_prefix": f"gs://{revision_prefix}", "supersedes_revision": SUPERSEDES_REVISION, "supersession_reason": "Correct the prior immutable manifest's hard-coded CSR declaration; physical HDF5 sparse encoding and indptr cardinality are now inspected.", "dataset_count": 1, "triplet_count": 1, "artifact_count": 3, "observation_count": EXPECTED_OBS, "variable_count": EXPECTED_VARS, "sample_count": EXPECTED_SAMPLES, "bounded_wave": WAVE, "bounded_wave_assignment": assignment, "controlling_record": record, "control_inputs": {"publication_manifest": {"sha256": SOURCE_MANIFEST_SHA}, "graph": {"sha256": GRAPH_SHA}, "catalogue": {"sha256": CATALOGUE_SHA}}, "source_identity": {"accession": ACCESSION, "organoiddb_id": ORGANOIDDB_ID, "source_object_identity": f"{ACCESSION};{ORGANOIDDB_ID}", "upstream_objects": source_inputs, "source_payload_object_count": len(source_inputs), "verified": True}, "dataset": {"prefix": f"gs://{dataset_prefix}", "objects": objects, "links": {"obs_to_X": "identical ordered cell_id", "X_to_var": "identical ordered source gene-symbol feature_id"}, "readback": readback_semantics, "matrix_build_inventory": built["matrix"], "consumer_readback_reached_built_data": True, "quality_disposition": "included_exactly_once"}, "actual_artifact_inventory": [objects[role] for role in ("obs", "X", "var")], "missingness": missingness, "ledger": ledger, "ledger_object": ledger_obj, "immutability": {"generation_pinned": True, "overwrite_refused": True, "manifest_written_last": True, "superseded_revision_mutated": False}, "provenance": manifest_provenance(script_sha)}
             manifest_path = tmp / "manifest.json"
             manifest_path.write_bytes(json_bytes(manifest))
             manifest_obj = remote_adopt_or_upload(
@@ -402,7 +413,7 @@ def main() -> int:
             (args.output / "manifest-readback.json").write_bytes(remote_manifest.read_bytes())
             (args.output / "manifest-object.json").write_bytes(json_bytes(manifest_obj))
             (args.output / "ledger.json").write_bytes(json_bytes(ledger))
-            result = {"verdict": "PASS", "revision": revision, "manifest_sha256": sha256_file(manifest_path), "manifest_generation_uri": manifest_obj["generation_uri"], "shape": source_semantics["shape"], "nnz_stored": source_semantics["matrix"]["nnz_stored"], "finite_value_sum": source_semantics["matrix"]["finite_value_sum"], "source_sha256": source_hashes, "wave": WAVE}
+            result = {"verdict": "PASS", "revision": revision, "manifest_sha256": sha256_file(manifest_path), "manifest_generation_uri": manifest_obj["generation_uri"], "shape": source_semantics["shape"], "nnz_stored": source_semantics["matrix"]["nnz_stored"], "finite_value_sum": source_semantics["matrix"]["finite_value_sum"], "source_sha256": source_hashes, "wave": WAVE, "started_unix": started, "finished_unix": time.time()}
             (args.output / "writer-result.json").write_bytes(json_bytes(result))
             print(json.dumps(result, indent=2, sort_keys=True))
     return 0

@@ -83,7 +83,14 @@ def main() -> int:
         local_by_stage: dict[str, Path] = {}
         for index, (stage, key) in enumerate(keys.items(), start=1):
             local = tmp / f"{stage}.payload"
-            local.write_bytes(f"identity-matching-{stage}".encode())
+            payload = (
+                builder.json_bytes(
+                    {"provenance": builder.manifest_provenance("script-sha")}
+                )
+                if stage == "manifest"
+                else f"identity-matching-{stage}".encode()
+            )
+            local.write_bytes(payload)
             local_by_stage[stage] = local
             first = builder.remote_adopt_or_upload(fs, local, key)
             assert fs.write_count == index
@@ -91,6 +98,21 @@ def main() -> int:
             assert fs.write_count == index
             assert adopted == first
             assert builder.inspect_revision_state(fs, prefix, keys) == list(keys)[:index]
+
+        assert builder.manifest_provenance("script-sha") == builder.manifest_provenance(
+            "script-sha"
+        )
+        assert "started_unix" not in builder.manifest_provenance("script-sha")
+        assert "finished_unix" not in builder.manifest_provenance("script-sha")
+        rebuilt_manifest = tmp / "rebuilt-manifest.json"
+        rebuilt_manifest.write_bytes(
+            builder.json_bytes(
+                {"provenance": builder.manifest_provenance("script-sha")}
+            )
+        )
+        writes_before_manifest_resume = fs.write_count
+        builder.remote_adopt_or_upload(fs, rebuilt_manifest, keys["manifest"])
+        assert fs.write_count == writes_before_manifest_resume
 
         fs.objects[keys["obs"]] = b"drifted-payload"
         expect_runtime_error(

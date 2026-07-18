@@ -61,8 +61,17 @@ def main() -> int:
 
         (packet / "extra.txt").write_text("extra\n")
         expect_failure("extra packet entries", verifier.verify_inventory, packet, inventory_path)
+        (packet / "extra.txt").unlink()
 
-    print("EVIDENCE_SEAL_REGRESSION_PASS corruption+missing+extra")
+        (packet / "extra-link").symlink_to(packet / "a.txt")
+        expect_failure("symlink", verifier.verify_inventory, packet, inventory_path)
+        (packet / "extra-link").unlink()
+
+        inventory["files"][0]["path"] = "nested/../a.txt"
+        inventory_path.write_text(json.dumps(inventory))
+        expect_failure("not canonical", verifier.verify_inventory, packet, inventory_path)
+
+    print("EVIDENCE_SEAL_REGRESSION_PASS corruption+missing+extra+symlink+alias")
     return 0
 
 
