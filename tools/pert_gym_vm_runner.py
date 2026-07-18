@@ -23,13 +23,18 @@ import socket
 import subprocess
 import sys
 import time
+import uuid
 from contextlib import ExitStack, contextmanager
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterator, Sequence, TextIO
+from typing import Callable, Iterator, Protocol, Sequence, TextIO
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
+# Production execution is intentionally pinned to the sole active worker.
+# Capacity VMs may exist for future operations but must remain dormant: reject
+# them before the runner constructs candidates, touches GCS/Lamin, or acquires
+# a distributed writer lease.
 ALLOWED_HEAVY_HOSTS = frozenset({"pert-gym-worker-eu"})
 EXPECTED_GCE_PROJECT = "jkobject-1549353370965"
 EXPECTED_ZONE = "europe-west1-b"
@@ -40,6 +45,9 @@ PRODUCTION_HEARTBEAT_SECONDS = 30.0
 METADATA_BASE_URL = "http://metadata.google.internal/computeMetadata/v1"
 DEFAULT_LAMIN_WRITER_LOCK_DIR = Path("/tmp/pert-gym")
 LAMIN_WRITER_LOCK_DIR_ENV = "PERT_GYM_LAMIN_WRITER_LOCK_DIR"
+GCS_LAMIN_WRITER_LOCK_BUCKET = "scperturb"
+GCS_LAMIN_WRITER_LOCK_OBJECT = "pert-gym/locks/lamin-writer-v1.json"
+GCS_LAMIN_WRITER_LEASE_SECONDS = 120.0
 _LOCK_METADATA_FIELDS = frozenset(
     {"run_id", "pid", "host", "project", "zone", "branch", "started_at"}
 )
@@ -54,6 +62,226 @@ class Preflight:
     free_disk_bytes: int
     available_memory_bytes: int
     billing_project: str
+
+
+@dataclass(frozen=True)
+class LeaseObject:
+    generation: int
+    payload: dict[str, object]
+
+
+class LeaseGenerationConflict(RuntimeError):
+    """A conditional GCS operation lost its object-generation precondition."""
+
+
+class LeaseBackend(Protocol):
+    def read(self) -> LeaseObject | None: ...
+
+    def create(self, payload: dict[str, object]) -> LeaseObject: ...
+
+    def replace(self, generation: int, payload: dict[str, object]) -> LeaseObject: ...
+
+    def delete(self, generation: int) -> None: ...
+
+
+class GcsLeaseBackend:
+    """Generation-match GCS backend pinned to pert-gym's requester-pays bucket."""
+
+    def __init__(self) -> None:
+        try:
+            from google.api_core.exceptions import NotFound, PreconditionFailed
+            from google.cloud import storage
+        except ImportError as exc:
+            raise RuntimeError(
+                "GCS lease backend dependencies are unavailable"
+            ) from exc
+        self._not_found = NotFound
+        self._precondition_failed = PreconditionFailed
+        self._client = storage.Client(project=EXPECTED_GCE_PROJECT)
+        self._blob = self._client.bucket(
+            GCS_LAMIN_WRITER_LOCK_BUCKET, user_project=BILLING_PROJECT
+        ).blob(GCS_LAMIN_WRITER_LOCK_OBJECT)
+
+    def _snapshot(self) -> LeaseObject:
+        self._blob.reload()
+        generation = self._blob.generation
+        if generation is None:
+            raise RuntimeError("GCS lease object is missing its generation")
+        try:
+            payload = json.loads(self._blob.download_as_text())
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("GCS lease object contains invalid JSON") from exc
+        if not isinstance(payload, dict):
+            raise RuntimeError("GCS lease object must contain a JSON object")
+        return LeaseObject(int(generation), payload)
+
+    def read(self) -> LeaseObject | None:
+        try:
+            return self._snapshot()
+        except self._not_found:
+            return None
+
+    def create(self, payload: dict[str, object]) -> LeaseObject:
+        try:
+            self._blob.upload_from_string(
+                json.dumps(payload, sort_keys=True),
+                content_type="application/json",
+                if_generation_match=0,
+            )
+            return self._snapshot()
+        except self._precondition_failed as exc:
+            raise LeaseGenerationConflict("GCS lease object already exists") from exc
+
+    def replace(self, generation: int, payload: dict[str, object]) -> LeaseObject:
+        try:
+            self._blob.upload_from_string(
+                json.dumps(payload, sort_keys=True),
+                content_type="application/json",
+                if_generation_match=generation,
+            )
+            return self._snapshot()
+        except self._precondition_failed as exc:
+            raise LeaseGenerationConflict("GCS lease generation changed") from exc
+
+    def delete(self, generation: int) -> None:
+        try:
+            self._blob.delete(if_generation_match=generation)
+        except self._precondition_failed as exc:
+            raise LeaseGenerationConflict("GCS lease generation changed") from exc
+
+
+class DistributedLaminWriterLease:
+    """Fail-closed one-writer lease over a generation-pinned GCS object."""
+
+    def __init__(
+        self,
+        *,
+        backend: LeaseBackend,
+        metadata: dict[str, object],
+        ttl_seconds: float = GCS_LAMIN_WRITER_LEASE_SECONDS,
+        clock: Callable[[], float] = time.time,
+    ) -> None:
+        if ttl_seconds <= 0:
+            raise ValueError("distributed Lamin writer lease TTL must be positive")
+        missing = _LOCK_METADATA_FIELDS - metadata.keys()
+        if missing:
+            raise ValueError(
+                f"writer lease metadata missing required fields: {sorted(missing)}"
+            )
+        self._backend = backend
+        self._metadata = dict(metadata)
+        self._ttl_seconds = ttl_seconds
+        self._clock = clock
+        self.lease_id = uuid.uuid4().hex
+        self._generation: int | None = None
+        self.held = False
+
+    def _payload(self) -> dict[str, object]:
+        now = self._clock()
+        return {
+            **self._metadata,
+            "protocol": "pert-gym-lamin-writer-lease-v1",
+            "lease_id": self.lease_id,
+            "issued_at": now,
+            "expires_at": now + self._ttl_seconds,
+        }
+
+    def _verify_ownership(self, object_: LeaseObject) -> None:
+        if object_.payload.get("lease_id") != self.lease_id:
+            raise RuntimeError(
+                "GCS lease operation did not prove this writer owns the lease"
+            )
+        if self._expiration(object_) <= self._clock():
+            raise RuntimeError("GCS lease operation returned an already-expired lease")
+
+    @staticmethod
+    def _expiration(object_: LeaseObject) -> float:
+        expires_at = object_.payload.get("expires_at")
+        if not isinstance(expires_at, (int, float)) or isinstance(expires_at, bool):
+            raise RuntimeError("refusing GCS lease with invalid expiration metadata")
+        return float(expires_at)
+
+    def acquire(self) -> None:
+        if self.held:
+            raise RuntimeError("distributed Lamin writer lease is already held")
+        payload = self._payload()
+        try:
+            object_ = self._backend.create(payload)
+        except LeaseGenerationConflict:
+            try:
+                existing = self._backend.read()
+                if existing is None:
+                    raise RuntimeError("GCS lease changed during acquisition")
+                if self._expiration(existing) > self._clock():
+                    raise RuntimeError(
+                        "another distributed Lamin writer holds the lease"
+                    )
+                self._backend.delete(existing.generation)
+                object_ = self._backend.create(payload)
+            except LeaseGenerationConflict as exc:
+                raise RuntimeError(
+                    "could not prove distributed Lamin writer lease"
+                ) from exc
+            except RuntimeError:
+                raise
+            except Exception as exc:
+                raise RuntimeError(
+                    "could not prove distributed Lamin writer lease"
+                ) from exc
+        except Exception as exc:
+            raise RuntimeError(
+                "could not prove distributed Lamin writer lease"
+            ) from exc
+        try:
+            self._verify_ownership(object_)
+        except Exception as exc:
+            raise RuntimeError(
+                "could not prove distributed Lamin writer lease"
+            ) from exc
+        self._generation = object_.generation
+        self.held = True
+
+    def renew(self) -> None:
+        if not self.held or self._generation is None:
+            raise RuntimeError("distributed Lamin writer lease is not held")
+        try:
+            object_ = self._backend.replace(self._generation, self._payload())
+            self._verify_ownership(object_)
+        except Exception as exc:
+            self.held = False
+            self._generation = None
+            raise RuntimeError(
+                "distributed Lamin writer lease renewal could not be proven"
+            ) from exc
+        self._generation = object_.generation
+
+    def release(self) -> None:
+        if not self.held or self._generation is None:
+            return
+        try:
+            self._backend.delete(self._generation)
+        except Exception as exc:
+            self.held = False
+            self._generation = None
+            raise RuntimeError(
+                "distributed Lamin writer lease release ownership could not be proven"
+            ) from exc
+        self.held = False
+        self._generation = None
+
+    def __enter__(self) -> "DistributedLaminWriterLease":
+        self.acquire()
+        return self
+
+    def __exit__(self, exc_type: object, exc: object, traceback: object) -> None:
+        self.release()
+
+
+def distributed_lamin_writer_lease(
+    metadata: dict[str, object],
+) -> DistributedLaminWriterLease:
+    """Build the mandatory cross-VM lease; initialization is fail-closed."""
+    return DistributedLaminWriterLease(backend=GcsLeaseBackend(), metadata=metadata)
 
 
 def _available_memory_bytes() -> int:
@@ -386,7 +614,13 @@ def _pid_is_live(value: object) -> bool:
     return True
 
 
-def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
+def run_command(
+    command: Sequence[str],
+    *,
+    run_dir: Path,
+    run_id: str,
+    renew_writer_lease: Callable[[], None] | None = None,
+) -> int:
     """Run a production child with durable periodic liveness and progress state.
 
     ``checkpoints/production.json`` is intentionally independent of the child:
@@ -406,6 +640,8 @@ def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
         exit_code: int | None = None,
         signal_name: str | None = None,
     ) -> None:
+        if renew_writer_lease is not None:
+            renew_writer_lease()
         state: dict[str, object] = {
             "status": status,
             "run_id": run_id,
@@ -437,7 +673,7 @@ def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
-        assert process.stdout is not None
+        selector: selectors.BaseSelector | None = None
         received_signal: int | None = None
         old_handlers: dict[int, object] = {}
 
@@ -450,37 +686,40 @@ def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
                 except ProcessLookupError:
                     pass
 
-        for signum in (signal.SIGINT, signal.SIGTERM):
-            old_handlers[signum] = signal.getsignal(signum)
-            signal.signal(signum, interrupt)
-        publish("running")
-        selector = selectors.DefaultSelector()
-        selector.register(process.stdout, selectors.EVENT_READ)
-        stdout_fd = process.stdout.fileno()
-        os.set_blocking(stdout_fd, False)
-
-        def drain_stdout() -> None:
-            """Copy only currently available child bytes without delaying liveness."""
-            nonlocal stdout_lines
-            while True:
-                try:
-                    output = os.read(stdout_fd, 64 * 1024)
-                except BlockingIOError:
-                    return
-                if not output:
-                    return
-                stdout_lines += output.count(b"\n")
-                log.write(output)
-                log.flush()
-                stdout_buffer = getattr(sys.stdout, "buffer", None)
-                if stdout_buffer is not None:
-                    stdout_buffer.write(output)
-                    stdout_buffer.flush()
-                else:
-                    sys.stdout.write(output.decode("utf-8", errors="surrogateescape"))
-                    sys.stdout.flush()
-
         try:
+            assert process.stdout is not None
+            for signum in (signal.SIGINT, signal.SIGTERM):
+                old_handlers[signum] = signal.getsignal(signum)
+                signal.signal(signum, interrupt)
+            publish("running")
+            selector = selectors.DefaultSelector()
+            selector.register(process.stdout, selectors.EVENT_READ)
+            stdout_fd = process.stdout.fileno()
+            os.set_blocking(stdout_fd, False)
+
+            def drain_stdout() -> None:
+                """Copy only currently available child bytes without delaying liveness."""
+                nonlocal stdout_lines
+                while True:
+                    try:
+                        output = os.read(stdout_fd, 64 * 1024)
+                    except BlockingIOError:
+                        return
+                    if not output:
+                        return
+                    stdout_lines += output.count(b"\n")
+                    log.write(output)
+                    log.flush()
+                    stdout_buffer = getattr(sys.stdout, "buffer", None)
+                    if stdout_buffer is not None:
+                        stdout_buffer.write(output)
+                        stdout_buffer.flush()
+                    else:
+                        sys.stdout.write(
+                            output.decode("utf-8", errors="surrogateescape")
+                        )
+                        sys.stdout.flush()
+
             while True:
                 for _, _ in selector.select(timeout=PRODUCTION_HEARTBEAT_SECONDS):
                     drain_stdout()
@@ -517,8 +756,20 @@ def run_command(command: Sequence[str], *, run_dir: Path, run_id: str) -> int:
                     )
                     return exit_code
                 publish("running")
+        except BaseException:
+            # Losing proof of the distributed lease must stop the child rather
+            # than leave a potentially writing process running after failure.
+            if process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait()
+            raise
         finally:
-            selector.close()
+            if selector is not None:
+                selector.close()
             for signum, handler in old_handlers.items():
                 signal.signal(signum, handler)
 
@@ -618,27 +869,31 @@ def main(argv: Sequence[str] | None = None) -> int:
     ]
     _write_json(run_dir / "smoke-summary.json", measurements)
     if args.command:
-        with lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata):
-            with ExitStack() as legacy_locks:
-                # A legacy lock's metadata predates PID identity. Its kernel
-                # flock is authoritative: once acquired, no legacy writer is
-                # live, so do not reject a safely recovered legacy inode on
-                # stale metadata.
-                for legacy_lock_path in legacy_lamin_writer_lock_paths():
-                    legacy_locks.enter_context(
-                        lamin_writer_lock(
-                            legacy_lock_path,
-                            lock_metadata,
-                            check_live_metadata=False,
+        with distributed_lamin_writer_lease(lock_metadata) as distributed_lease:
+            with lamin_writer_lock(vm_global_lamin_writer_lock_path(), lock_metadata):
+                with ExitStack() as legacy_locks:
+                    # A legacy lock's metadata predates PID identity. Its kernel
+                    # flock is authoritative: once acquired, no legacy writer is
+                    # live, so do not reject a safely recovered legacy inode on
+                    # stale metadata.
+                    for legacy_lock_path in legacy_lamin_writer_lock_paths():
+                        legacy_locks.enter_context(
+                            lamin_writer_lock(
+                                legacy_lock_path,
+                                lock_metadata,
+                                check_live_metadata=False,
+                            )
                         )
+                    exit_code = run_command(
+                        args.command,
+                        run_dir=run_dir,
+                        run_id=args.run_id,
+                        renew_writer_lease=distributed_lease.renew,
                     )
-                exit_code = run_command(
-                    args.command, run_dir=run_dir, run_id=args.run_id
-                )
-                if exit_code:
-                    raise RuntimeError(
-                        f"command exited {exit_code}; see {run_dir / 'logs' / 'runner.log'}"
-                    )
+                    if exit_code:
+                        raise RuntimeError(
+                            f"command exited {exit_code}; see {run_dir / 'logs' / 'runner.log'}"
+                        )
     _write_json(
         run_dir / "heartbeat.json", {"status": "completed", "run_id": args.run_id}
     )
