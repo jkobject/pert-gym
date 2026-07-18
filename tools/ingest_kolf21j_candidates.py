@@ -730,9 +730,11 @@ def main() -> int:
             for v in VARIANTS
         ]
     else:
-        run_id = f"kolf21j-{os.getpid()}-{int(time.time())}"
-        with vm_runner.lamin_writer_lease(run_id=run_id) as writer_lease:
-            reports = [
+
+        def build_reports(
+            writer_lease: vm_runner.LaminWriterLease,
+        ) -> list[dict[str, Any]]:
+            return [
                 build_variant(
                     v,
                     source_dir=args.source_dir,
@@ -742,6 +744,14 @@ def main() -> int:
                 )
                 for v in VARIANTS
             ]
+
+        inherited_lease = vm_runner.inherited_lamin_writer_lease()
+        if inherited_lease is not None:
+            reports = build_reports(inherited_lease)
+        else:
+            run_id = f"kolf21j-{os.getpid()}-{int(time.time())}"
+            with vm_runner.lamin_writer_lease(run_id=run_id) as writer_lease:
+                reports = build_reports(writer_lease)
     payload = {
         "schema": "pert-gym.kolf21j-candidates.v1",
         "dry_run": args.dry_run,

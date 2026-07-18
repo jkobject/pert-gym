@@ -320,6 +320,93 @@ def test_child_environment_sets_requester_pays_project(
     assert environment["PERT_GYM_GCS_USER_PROJECT"] == runner.BILLING_PROJECT
 
 
+def test_runner_child_attests_inherited_global_and_legacy_writer_lease(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    global_lock = tmp_path / "host-locks" / "lamin-writer.lock"
+    legacy_lock = tmp_path / "legacy" / "lamin-writer.lock"
+    run_dir = tmp_path / "run"
+    proof = tmp_path / "inherited-lease.json"
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(global_lock.parent))
+    monkeypatch.setattr(
+        runner, "legacy_lamin_writer_lock_paths", lambda: (legacy_lock,)
+    )
+    monkeypatch.setattr(runner, "_git_branch", lambda: "fix/test")
+
+    child = [
+        sys.executable,
+        "-c",
+        (
+            "import json, sys; from pathlib import Path; "
+            "from tools import pert_gym_vm_runner as runner; "
+            "lease = runner.inherited_lamin_writer_lease(); "
+            "Path(sys.argv[1]).write_text(json.dumps({"
+            "'active': runner.has_lamin_writer_lease(lease), "
+            "'run_id': lease.run_id if lease else None}))"
+        ),
+        str(proof),
+    ]
+
+    with runner.lamin_writer_lease(
+        run_id="runner-owned", preflight_result=_valid_preflight()
+    ) as lease:
+        assert (
+            runner.run_command(
+                child, run_dir=run_dir, run_id="runner-owned", writer_lease=lease
+            )
+            == 0
+        )
+
+    assert json.loads(proof.read_text()) == {
+        "active": True,
+        "run_id": "runner-owned",
+    }
+
+
+def test_inherited_writer_lease_fails_closed_after_parent_release(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    global_lock = tmp_path / "host-locks" / "lamin-writer.lock"
+    legacy_lock = tmp_path / "legacy" / "lamin-writer.lock"
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(global_lock.parent))
+    monkeypatch.setattr(
+        runner, "legacy_lamin_writer_lock_paths", lambda: (legacy_lock,)
+    )
+    monkeypatch.setattr(runner, "_git_branch", lambda: "fix/test")
+
+    with runner.lamin_writer_lease(
+        run_id="released", preflight_result=_valid_preflight()
+    ) as lease:
+        inherited_environment = runner._child_env(lease)
+
+    for name in runner.LAMIN_WRITER_LEASE_ENV_VARS:
+        monkeypatch.setenv(name, inherited_environment[name])
+
+    with pytest.raises(RuntimeError, match="inherited Lamin writer lease"):
+        runner.inherited_lamin_writer_lease()
+
+
+def test_inherited_writer_lease_fails_closed_on_forged_environment(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    global_lock = tmp_path / "host-locks" / "lamin-writer.lock"
+    monkeypatch.setenv("PERT_GYM_LAMIN_WRITER_LOCK_DIR", str(global_lock.parent))
+    monkeypatch.setenv(
+        runner.LAMIN_WRITER_LEASE_ENV,
+        json.dumps(
+            {
+                "run_id": "forged",
+                "owner_pid": os.getppid(),
+                "fds": [999_999, 999_998],
+                "paths": [str(global_lock), str(tmp_path / "legacy.lock")],
+            }
+        ),
+    )
+
+    with pytest.raises(RuntimeError, match="inherited Lamin writer lease"):
+        runner.inherited_lamin_writer_lease()
+
+
 def test_requester_pays_urls_include_billing_project(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

@@ -628,3 +628,34 @@ def test_direct_kolf_publication_releases_writer_lease_after_build_failure(
 
     with runner.lamin_writer_lease(run_id="next") as lease:
         assert runner.has_lamin_writer_lease(lease)
+
+
+def test_runner_managed_kolf_publication_uses_inherited_lease_without_reacquiring(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    _configure_kolf_writer_lease(monkeypatch, tmp_path)
+    reports: list[dict[str, object]] = []
+
+    def record_build(*_args: object, **kwargs: object) -> dict[str, object]:
+        assert kwargs["dry_run"] is False
+        assert runner.has_lamin_writer_lease(kwargs["writer_lease"])
+        report = {"dataset_id": f"variant-{len(reports)}"}
+        reports.append(report)
+        return report
+
+    monkeypatch.setattr(kolf, "build_variant", record_build)
+
+    with runner.lamin_writer_lease(run_id="runner-parent") as parent_lease:
+        monkeypatch.setattr(
+            runner, "inherited_lamin_writer_lease", lambda: parent_lease
+        )
+        monkeypatch.setattr(
+            runner,
+            "lamin_writer_lease",
+            lambda **_kwargs: pytest.fail(
+                "runner child must not reacquire writer locks"
+            ),
+        )
+        assert kolf.main() == 0
+
+    assert len(reports) == len(kolf.VARIANTS)
