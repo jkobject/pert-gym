@@ -460,7 +460,14 @@ def inherited_lamin_writer_lease() -> LaminWriterLease | None:
         lock_paths = tuple(Path(path) for path in paths)
         if not all(path.is_absolute() for path in lock_paths):
             raise ValueError
-        if lock_paths[0] != vm_global_lamin_writer_lock_path():
+        expected_lock_paths = (
+            vm_global_lamin_writer_lock_path(),
+            *legacy_lamin_writer_lock_paths(),
+        )
+        if (
+            len(set(expected_lock_paths)) != len(expected_lock_paths)
+            or lock_paths != expected_lock_paths
+        ):
             raise ValueError
     except (json.JSONDecodeError, TypeError, ValueError) as exc:
         raise RuntimeError("invalid inherited Lamin writer lease declaration") from exc
