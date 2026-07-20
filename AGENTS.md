@@ -71,9 +71,6 @@ See [TODO.md](TODO.md) for the live dashboard and
 [docs/pert_gym_schema.md](docs/pert_gym_schema.md), and
 [docs/adr/0001-logical-sparse-zarr.md](docs/adr/0001-logical-sparse-zarr.md) for
 the durable execution, schema, and storage contracts. `wiki/` is obsolete.
-||||||| 1a12a6f See [TODO.md](TODO.md) for the live dashboard and
-[wiki/pert-gym/migration-reproducibility-and-gcs-exit.md](wiki/pert-gym/migration-reproducibility-and-gcs-exit.md)
-for the detailed contract.
 
 ## Collection and payload contract
 
@@ -102,14 +99,13 @@ model-ready members are different denominators.
 ## Git and review workflow
 
 The standalone repository is `https://github.com/jkobject/pert-gym.git`. The
-shared checkout at `/Users/jkobject/.openclaw/workspace/work/pert-gym` is for
-read-only inspection, cache/materialized data, and emergency operations.
-Implementation and model-code work uses isolated worktrees under
-`/Users/jkobject/.openclaw/worktrees/pert-gym/<task-id>` and a reviewable PR.
+canonical checkout is `/Users/jkobject/Documents/pert-gym`; treat its primary
+worktree as shared and do not pile implementation edits into it. Implementation
+and model-code work uses isolated worktrees under
+`/Users/jkobject/Documents/pert-gym/.worktrees/<task-id>` and a reviewable PR.
 
-Do not pile implementation edits into the shared checkout. Commit only code,
-docs, tests, config, and reviewable manifests—not raw data, caches, generated
-sites/logs, or local model-ready exports.
+Commit only code, docs, tests, config, and reviewable manifests—not raw data,
+caches, generated sites/logs, or local model-ready exports.
 
 A single independent verifier normally combines behavioral/live tests and
 semantic/provenance review. Split tester and reviewer only when evidence,
