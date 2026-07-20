@@ -55,7 +55,9 @@ def test_score_loaded_obs_refuses_missing_controls() -> None:
     assert rows[0]["score_method"] == "not_applicable_no_identifiable_controls"
 
 
-def test_score_loaded_obs_does_not_treat_missing_perturbation_labels_as_controls() -> None:
+def test_score_loaded_obs_does_not_treat_missing_perturbation_labels_as_controls() -> (
+    None
+):
     obs = pd.DataFrame(
         {
             "perturbation": ["GENE1_0", None, np.nan, "GENE2_0"],

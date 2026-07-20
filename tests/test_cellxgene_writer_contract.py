@@ -38,7 +38,9 @@ def sha256(path: Path) -> str:
 
 
 def load_contract_module():
-    spec = importlib.util.spec_from_file_location("cellxgene_writer_contract", CONTRACT_PATH)
+    spec = importlib.util.spec_from_file_location(
+        "cellxgene_writer_contract", CONTRACT_PATH
+    )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -194,7 +196,10 @@ def test_row_7_exact_contract_is_intrinsically_bound_and_execution_authorized() 
         require_execution=True,
     )
 
-    assert config["catalogue_record"] == "temporal_v4_007_a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s"
+    assert (
+        config["catalogue_record"]
+        == "temporal_v4_007_a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s"
+    )
     assert config["revision"]["prefix"] == "temporal-v4-007"
     assert config["shape"] == [9619, 35461]
     source_head = config["source_head"]
@@ -206,7 +211,10 @@ def test_row_7_exact_contract_is_intrinsically_bound_and_execution_authorized() 
         "denominator": 153,
         "credit": 0,
     }
-    assert config["ordered_var"]["identity_sha256"] == "runtime-computed-before-candidate-write"
+    assert (
+        config["ordered_var"]["identity_sha256"]
+        == "runtime-computed-before-candidate-write"
+    )
     assert authorization["config_sha256"] == sha256(ROW_7_CONFIG)
     assert authorization["writer_sha256"] == sha256(WRITER)
     assert authorization["writer_contract_sha256"] == sha256(CONTRACT_PATH)
@@ -242,8 +250,14 @@ def test_row_55_exact_mouse_contract_is_intrinsically_bound_and_authorized() -> 
         require_execution=True,
     )
 
-    assert config["catalogue_record"] == "temporal_v4_055_type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior"
-    assert config["logical_key"] == "pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior"
+    assert (
+        config["catalogue_record"]
+        == "temporal_v4_055_type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior"
+    )
+    assert (
+        config["logical_key"]
+        == "pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior"
+    )
     assert config["revision"]["prefix"] == "temporal-v4-055"
     assert config["shape"] == [12330, 22835]
     assert config["api_identity"]["organism"] == {
@@ -252,11 +266,17 @@ def test_row_55_exact_mouse_contract_is_intrinsically_bound_and_authorized() -> 
     }
     assert config["source_head"]["version_id"] == ROW_55_SOURCE_VERSION_ID
     assert config["accepted_components"] == {
-        "metric": "accepted_components", "current": 4, "denominator": 153, "credit": 0,
+        "metric": "accepted_components",
+        "current": 4,
+        "denominator": 153,
+        "credit": 0,
     }
     assert config["storage"] == {
-        "gcs_root": "scperturb/pert-gym/staging", "manifest_last": True,
-        "per_block_var_count": 0, "shared_var_count": 1, "x_logical_object_count": 1,
+        "gcs_root": "scperturb/pert-gym/staging",
+        "manifest_last": True,
+        "per_block_var_count": 0,
+        "shared_var_count": 1,
+        "x_logical_object_count": 1,
     }
     assert authorization["live_ledger_control_plane_sha256"] == sha256(LEDGER_HELPER)
     assert validated.config == config
@@ -330,12 +350,28 @@ def test_row_111_exact_contract_is_intrinsically_bound_and_authorized() -> None:
 @pytest.mark.parametrize(
     ("mutation", "match"),
     [
-        (lambda c, a: c.__setitem__("catalogue_record", "../row-111"), "catalogue_record"),
+        (
+            lambda c, a: c.__setitem__("catalogue_record", "../row-111"),
+            "catalogue_record",
+        ),
         (lambda c, a: c.__setitem__("task_id", "t_wrong"), "task identity|task_id"),
-        (lambda c, a: c["revision"].__setitem__("prefix", "temporal-v4-110"), "output/task identity|revision"),
-        (lambda c, a: c.__setitem__("logical_key", "pert-gym/logical/temporal/wrong"), "logical_key conflicts"),
+        (
+            lambda c, a: c["revision"].__setitem__("prefix", "temporal-v4-110"),
+            "output/task identity|revision",
+        ),
+        (
+            lambda c, a: c.__setitem__(
+                "logical_key", "pert-gym/logical/temporal/wrong"
+            ),
+            "logical_key conflicts",
+        ),
         (lambda c, a: c.__setitem__("shape", [1, 25229]), "shape"),
-        (lambda c, a: c["source"].__setitem__("dataset_id", "00000000-0000-0000-0000-000000000000"), "dataset_id"),
+        (
+            lambda c, a: c["source"].__setitem__(
+                "dataset_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "dataset_id",
+        ),
         (
             lambda c, a: (
                 c["accepted_components"].pop("metric"),
@@ -345,7 +381,10 @@ def test_row_111_exact_contract_is_intrinsically_bound_and_authorized() -> None:
             ),
             "catalogue_record|authorization|accepted_components",
         ),
-        (lambda c, a: a.__setitem__("live_ledger_control_plane_sha256", "0" * 64), "live-ledger helper SHA-256"),
+        (
+            lambda c, a: a.__setitem__("live_ledger_control_plane_sha256", "0" * 64),
+            "live-ledger helper SHA-256",
+        ),
     ],
 )
 def test_row_111_rebinding_fails_before_external_io(
@@ -355,12 +394,20 @@ def test_row_111_rebinding_fails_before_external_io(
     config = load_json(ROW_111_CONFIG)
     authorization = load_json(ROW_111_AUTHORIZATION)
     mutation(config, authorization)
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     calls = instrument_external_boundaries(monkeypatch, writer)
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
 
     with pytest.raises((RuntimeError, ValueError), match=match):
@@ -414,9 +461,7 @@ def test_row_111_family_lease_is_deterministic_confined_and_collision_resistant(
 
     outside = tmp_path.parent / f"{tmp_path.name}-outside"
     outside.mkdir()
-    (tmp_path / "cellxgene-families").symlink_to(
-        outside, target_is_directory=True
-    )
+    (tmp_path / "cellxgene-families").symlink_to(outside, target_is_directory=True)
     with pytest.raises(RuntimeError, match="escaped|confined"):
         writer.writer_family_lease_path(config, lock_root=tmp_path)
 
@@ -429,7 +474,9 @@ def test_row_111_ledger_probe_uses_bound_prefix_under_global_and_family_leases(
     authorization = load_json(ROW_111_AUTHORIZATION)
     authorization["writer_sha256"] = sha256(WRITER)
     authorization["writer_contract_sha256"] = sha256(CONTRACT_PATH)
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     events: list[str] = []
 
     @contextmanager
@@ -445,16 +492,29 @@ def test_row_111_ledger_probe_uses_bound_prefix_under_global_and_family_leases(
         "task_id": "t_664e9dc0",
     }
     monkeypatch.setattr(writer, "lamin_writer_lock", lease)
-    monkeypatch.setattr(writer, "vm_global_lamin_writer_lock_path", lambda: tmp_path / "global.lock")
+    monkeypatch.setattr(
+        writer, "vm_global_lamin_writer_lock_path", lambda: tmp_path / "global.lock"
+    )
     monkeypatch.setattr(writer, "legacy_lamin_writer_lock_paths", lambda: ())
-    monkeypatch.setattr(writer, "read_live_accepted_components_ledger", lambda: events.append("ledger") or live)
+    monkeypatch.setattr(
+        writer,
+        "read_live_accepted_components_ledger",
+        lambda: events.append("ledger") or live,
+    )
     monkeypatch.setattr(writer.socket, "gethostname", lambda: "pert-gym-worker-eu")
     monkeypatch.setattr(writer, "mem_available", lambda: 4 * 1024**3)
     external_calls = instrument_external_boundaries(monkeypatch, writer)
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path), "--ledger-probe-only"],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+            "--ledger-probe-only",
+        ],
     )
 
     assert writer.main() == 0
@@ -499,15 +559,17 @@ def test_row_111_write_path_uses_global_and_family_leases(
     )
     monkeypatch.setattr(writer, "legacy_lamin_writer_lock_paths", lambda: ())
     monkeypatch.setattr(
-        writer, "read_live_accepted_components_ledger", lambda: events.append("ledger") or live
+        writer,
+        "read_live_accepted_components_ledger",
+        lambda: events.append("ledger") or live,
     )
     monkeypatch.setattr(
         writer,
         "_execute_authorized_contract",
-        lambda *args, **kwargs: events.append(
-            ("execute", kwargs["lease_acquired"], kwargs["live_ledger"])
-        )
-        or 0,
+        lambda *args, **kwargs: (
+            events.append(("execute", kwargs["lease_acquired"], kwargs["live_ledger"]))
+            or 0
+        ),
     )
     monkeypatch.setattr(writer.socket, "gethostname", lambda: "pert-gym-worker-eu")
     monkeypatch.setattr(writer, "mem_available", lambda: 4 * 1024**3)
@@ -535,7 +597,9 @@ def test_row_111_write_path_uses_global_and_family_leases(
     assert events[5] == "lease-exit:global.lock"
 
 
-def test_row_111_concurrent_family_lease_fails_closed(tmp_path: Path, monkeypatch) -> None:
+def test_row_111_concurrent_family_lease_fails_closed(
+    tmp_path: Path, monkeypatch
+) -> None:
     writer = load_writer_module()
     writer.ACTIVE_CONFIG = load_json(ROW_111_CONFIG)
     global_path = tmp_path / "global.lock"
@@ -607,22 +671,63 @@ def test_static_row_99_acquires_global_and_legacy_leases_without_family_identity
 @pytest.mark.parametrize(
     ("mutation", "match"),
     [
-        (lambda c, a: c.__setitem__("catalogue_record", "temporal_v4_055_wrong"), "catalogue_record conflicts"),
-        (lambda c, a: (c.__setitem__("logical_key", "pert-gym/logical/temporal/rebound"), c["obs"]["assignments"][0].__setitem__("value", "pert-gym/logical/temporal/rebound")), "logical_key conflicts"),
-        (lambda c, a: c["source"].__setitem__("collection_version_id", "00000000-0000-0000-0000-000000000000"), "source collection_version_id conflicts"),
-        (lambda c, a: c["source"].__setitem__("dataset_version_id", "00000000-0000-0000-0000-000000000000"), "dataset_version_id conflicts"),
-        (lambda c, a: c["source_head"].__setitem__("version_id", "rebound-version"), "source_head conflicts"),
-        (lambda c, a: a.__setitem__("live_ledger_control_plane_sha256", "0" * 64), "live-ledger helper SHA-256"),
+        (
+            lambda c, a: c.__setitem__("catalogue_record", "temporal_v4_055_wrong"),
+            "catalogue_record conflicts",
+        ),
+        (
+            lambda c, a: (
+                c.__setitem__("logical_key", "pert-gym/logical/temporal/rebound"),
+                c["obs"]["assignments"][0].__setitem__(
+                    "value", "pert-gym/logical/temporal/rebound"
+                ),
+            ),
+            "logical_key conflicts",
+        ),
+        (
+            lambda c, a: c["source"].__setitem__(
+                "collection_version_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "source collection_version_id conflicts",
+        ),
+        (
+            lambda c, a: c["source"].__setitem__(
+                "dataset_version_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "dataset_version_id conflicts",
+        ),
+        (
+            lambda c, a: c["source_head"].__setitem__("version_id", "rebound-version"),
+            "source_head conflicts",
+        ),
+        (
+            lambda c, a: a.__setitem__("live_ledger_control_plane_sha256", "0" * 64),
+            "live-ledger helper SHA-256",
+        ),
     ],
 )
-def test_row_55_rebinding_has_zero_side_effects(monkeypatch, tmp_path: Path, mutation, match: str) -> None:
+def test_row_55_rebinding_has_zero_side_effects(
+    monkeypatch, tmp_path: Path, mutation, match: str
+) -> None:
     writer = load_writer_module()
     config = load_json(ROW_55_CONFIG)
     authorization = load_json(ROW_55_AUTHORIZATION)
     mutation(config, authorization)
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     calls = instrument_external_boundaries(monkeypatch, writer)
-    monkeypatch.setattr(sys, "argv", [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
+    )
 
     with pytest.raises((RuntimeError, ValueError), match=match):
         writer.main()
@@ -634,25 +739,41 @@ def test_row_55_mouse_ordered_var_uses_mouse_ensembl_namespace() -> None:
     writer.ACTIVE_CONFIG = load_json(ROW_55_CONFIG)
     writer.N_VARS = 2
     source = pd.DataFrame(
-        {"feature_reference": ["NCBITaxon:10090"] * 2, "feature_name": ["Gene1", "Gene2"]},
+        {
+            "feature_reference": ["NCBITaxon:10090"] * 2,
+            "feature_name": ["Gene1", "Gene2"],
+        },
         index=["ENSMUSG00000000001", "ENSMUSG00000000002"],
     )
     _var, identity = writer.map_var(source, "Mus musculus")
     expected = {
-        "organism_ontology_id": "NCBITaxon:10090", "canonical_feature_namespace": "Ensembl Gene ID",
-        "normalization_version": "source-string/v1", "n_vars": 2,
+        "organism_ontology_id": "NCBITaxon:10090",
+        "canonical_feature_namespace": "Ensembl Gene ID",
+        "normalization_version": "source-string/v1",
+        "n_vars": 2,
         "ordered_canonical_feature_identifiers": list(source.index),
     }
-    assert identity == hashlib.sha256(json.dumps(expected, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    assert (
+        identity
+        == hashlib.sha256(
+            json.dumps(
+                expected, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+            ).encode()
+        ).hexdigest()
+    )
 
 
-def test_row_55_reads_live_ledger_under_writer_leases(monkeypatch, tmp_path: Path) -> None:
+def test_row_55_reads_live_ledger_under_writer_leases(
+    monkeypatch, tmp_path: Path
+) -> None:
     writer = load_writer_module()
     config = load_json(ROW_55_CONFIG)
     authorization = load_json(ROW_55_AUTHORIZATION)
     authorization["writer_sha256"] = sha256(WRITER)
     authorization["writer_contract_sha256"] = sha256(CONTRACT_PATH)
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     events: list[object] = []
 
     @contextmanager
@@ -663,16 +784,47 @@ def test_row_55_reads_live_ledger_under_writer_leases(monkeypatch, tmp_path: Pat
         finally:
             events.append("lease-exit")
 
-    live = {"metric": "accepted_components", "current": 4, "denominator": 153, "source": "hermes-kanban-completed-product-deltas/v1"}
+    live = {
+        "metric": "accepted_components",
+        "current": 4,
+        "denominator": 153,
+        "source": "hermes-kanban-completed-product-deltas/v1",
+    }
     monkeypatch.setattr(writer, "acquired_writer_leases", leases)
-    monkeypatch.setattr(writer, "read_live_accepted_components_ledger", lambda: events.append("live-ledger") or live)
-    monkeypatch.setattr(writer, "_execute_authorized_contract", lambda *args, **kwargs: events.append(("execute", kwargs["lease_acquired"], kwargs["live_ledger"])) or 0)
+    monkeypatch.setattr(
+        writer,
+        "read_live_accepted_components_ledger",
+        lambda: events.append("live-ledger") or live,
+    )
+    monkeypatch.setattr(
+        writer,
+        "_execute_authorized_contract",
+        lambda *args, **kwargs: (
+            events.append(("execute", kwargs["lease_acquired"], kwargs["live_ledger"]))
+            or 0
+        ),
+    )
     monkeypatch.setattr(writer.socket, "gethostname", lambda: "pert-gym-worker-eu")
     monkeypatch.setattr(writer, "mem_available", lambda: 4 * 1024**3)
-    monkeypatch.setattr(sys, "argv", [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)])
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
+    )
 
     assert writer.main() == 0
-    assert events == ["lease-enter", "live-ledger", ("execute", 123.0, live), "lease-exit"]
+    assert events == [
+        "lease-enter",
+        "live-ledger",
+        ("execute", 123.0, live),
+        "lease-exit",
+    ]
 
 
 def immutable_manifest(revision: str = "temporal-v4-013-test") -> dict[str, str]:
@@ -773,7 +925,9 @@ def exact_live_six_record_fixture() -> list[tuple[str, dict[str, object]]]:
                 {
                     "product_delta": {
                         "metrics": {
-                            "accepted_components": accepted_components_delta(before, index)
+                            "accepted_components": accepted_components_delta(
+                                before, index
+                            )
                         }
                     },
                     "manifest": immutable_manifest(),
@@ -873,9 +1027,7 @@ def regress_administrative_replay(records) -> None:
                         }
                     },
                     "manifest": immutable_manifest("second-outcome"),
-                    "independent_gates": {
-                        "administrative_credit_task": "t_664e9dc0"
-                    },
+                    "independent_gates": {"administrative_credit_task": "t_664e9dc0"},
                 },
             )
         ),
@@ -896,9 +1048,7 @@ def test_control_plane_helper_rejects_non_exact_administrative_credit_replay(
 
 
 def response_fixture(writer, *, current: int = 4, issued_at: float = 100.0):
-    chain = [
-        {"task_id": "t_zero", "run_id": 1, "ended_at": 1, "before": 0, "after": 0}
-    ]
+    chain = [{"task_id": "t_zero", "run_id": 1, "ended_at": 1, "before": 0, "after": 0}]
     for value in range(1, current + 1):
         chain.append(
             {
@@ -1025,7 +1175,9 @@ def test_loopback_helper_enforces_bearer_and_writer_fetches_one_fresh_response(
     thread.start()
     endpoint = f"http://127.0.0.1:{server.server_port}{helper.REQUEST_PATH}"
     monkeypatch.setenv("PERT_GYM_LEDGER_URL", endpoint)
-    monkeypatch.setenv("PERT_GYM_LEDGER_BEARER_TOKEN", "wrong-token-with-at-least-thirty-two-bytes")
+    monkeypatch.setenv(
+        "PERT_GYM_LEDGER_BEARER_TOKEN", "wrong-token-with-at-least-thirty-two-bytes"
+    )
 
     try:
         with pytest.raises(RuntimeError, match="loopback request failed"):
@@ -1058,22 +1210,36 @@ def executable_row_7_contract() -> tuple[dict[str, object], dict[str, object]]:
 def configure_row_7_lease_boundary(monkeypatch, tmp_path: Path):
     writer = load_writer_module()
     config, authorization = executable_row_7_contract()
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
-    monkeypatch.setattr(writer.socket, "gethostname", lambda: config["execution"]["host"])
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
+    monkeypatch.setattr(
+        writer.socket, "gethostname", lambda: config["execution"]["host"]
+    )
     monkeypatch.setattr(
         writer, "mem_available", lambda: config["execution"]["min_available_bytes"]
     )
-    monkeypatch.setattr(writer, "vm_global_lamin_writer_lock_path", lambda: Path("/global"))
+    monkeypatch.setattr(
+        writer, "vm_global_lamin_writer_lock_path", lambda: Path("/global")
+    )
     monkeypatch.setattr(
         writer,
         "writer_family_lease_path",
         lambda config, lock_root: Path("/family"),
     )
-    monkeypatch.setattr(writer, "legacy_lamin_writer_lock_paths", lambda: [Path("/legacy")])
+    monkeypatch.setattr(
+        writer, "legacy_lamin_writer_lock_paths", lambda: [Path("/legacy")]
+    )
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
     return writer
 
@@ -1111,7 +1277,11 @@ def test_row_7_live_ledger_is_observed_under_both_leases_before_external_calls(
         writer.main()
 
     assert calls == [
-        "lease:/global", "lease:/family", "lease:/legacy", "live-ledger:4", "source-api"
+        "lease:/global",
+        "lease:/family",
+        "lease:/legacy",
+        "live-ledger:4",
+        "source-api",
     ]
 
 
@@ -1133,7 +1303,9 @@ def test_row_7_live_ledger_failure_releases_leases_before_all_external_boundarie
     monkeypatch.setattr(
         writer,
         "read_live_accepted_components_ledger",
-        lambda: (_ for _ in ()).throw(RuntimeError("accepted-components ledger malformed")),
+        lambda: (_ for _ in ()).throw(
+            RuntimeError("accepted-components ledger malformed")
+        ),
     )
     external_calls = instrument_external_boundaries(monkeypatch, writer)
 
@@ -1170,9 +1342,7 @@ def test_row_7_live_ledger_failure_releases_leases_before_all_external_boundarie
         lambda value: value["latest_owner"]["manifest"].__setitem__(
             "uri", immutable_manifest("rebound")["uri"]
         ),
-        lambda value: value["latest_owner"]["manifest"].__setitem__(
-            "generation", ""
-        ),
+        lambda value: value["latest_owner"]["manifest"].__setitem__("generation", ""),
         lambda value: value["latest_owner"]["manifest"].__setitem__(
             "sha256", "not-a-sha"
         ),
@@ -1267,23 +1437,76 @@ def test_heartbeat_uses_the_single_lease_protected_live_ledger_observation(
     ("mutation", "match"),
     [
         (lambda c: c.__setitem__("catalogue_record", "wrong"), "catalogue_record"),
-        (lambda c: c.__setitem__("logical_key", "pert-gym/logical/temporal/wrong"), "logical_key"),
-        (lambda c: c["source"].__setitem__("collection_id", "00000000-0000-0000-0000-000000000000"), "collection_id"),
-        (lambda c: c["source"].__setitem__("collection_version_id", "00000000-0000-0000-0000-000000000000"), "collection_version_id"),
-        (lambda c: c["source"].__setitem__("dataset_id", "00000000-0000-0000-0000-000000000000"), "dataset_id"),
-        (lambda c: c["source"].__setitem__("dataset_version_id", "00000000-0000-0000-0000-000000000000"), "dataset_version_id"),
-        (lambda c: c["source"].__setitem__("asset_id", "00000000-0000-0000-0000-000000000000"), "asset_id"),
-        (lambda c: c["source"].__setitem__("url", "https://datasets.cellxgene.cziscience.com/00000000-0000-0000-0000-000000000000.h5ad"), "URL|url"),
+        (
+            lambda c: c.__setitem__("logical_key", "pert-gym/logical/temporal/wrong"),
+            "logical_key",
+        ),
+        (
+            lambda c: c["source"].__setitem__(
+                "collection_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "collection_id",
+        ),
+        (
+            lambda c: c["source"].__setitem__(
+                "collection_version_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "collection_version_id",
+        ),
+        (
+            lambda c: c["source"].__setitem__(
+                "dataset_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "dataset_id",
+        ),
+        (
+            lambda c: c["source"].__setitem__(
+                "dataset_version_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "dataset_version_id",
+        ),
+        (
+            lambda c: c["source"].__setitem__(
+                "asset_id", "00000000-0000-0000-0000-000000000000"
+            ),
+            "asset_id",
+        ),
+        (
+            lambda c: c["source"].__setitem__(
+                "url",
+                "https://datasets.cellxgene.cziscience.com/00000000-0000-0000-0000-000000000000.h5ad",
+            ),
+            "URL|url",
+        ),
         (lambda c: c["source_head"].__setitem__("content_length", 1), "source_head"),
         (lambda c: c["source_head"].__setitem__("etag", "wrong"), "source_head"),
-        (lambda c: c["source_head"].__setitem__("last_modified", "wrong"), "source_head"),
+        (
+            lambda c: c["source_head"].__setitem__("last_modified", "wrong"),
+            "source_head",
+        ),
         (lambda c: c.__setitem__("shape", [1, 35461]), "shape"),
-        (lambda c: c["api_identity"].__setitem__("organism", {"label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090"}), "Homo sapiens"),
-        (lambda c: c["api_identity"].__setitem__("assays", [{"label": "wrong", "ontology_term_id": "EFO:0000000"}]), "assays"),
-        (lambda c: c["ordered_var"].__setitem__("identity_sha256", "f" * 64), "ordered[_-]var"),
+        (
+            lambda c: c["api_identity"].__setitem__(
+                "organism",
+                {"label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090"},
+            ),
+            "Homo sapiens",
+        ),
+        (
+            lambda c: c["api_identity"].__setitem__(
+                "assays", [{"label": "wrong", "ontology_term_id": "EFO:0000000"}]
+            ),
+            "assays",
+        ),
+        (
+            lambda c: c["ordered_var"].__setitem__("identity_sha256", "f" * 64),
+            "ordered[_-]var",
+        ),
     ],
 )
-def test_row_7_rebound_config_identity_mismatches_fail_closed(mutation, match: str) -> None:
+def test_row_7_rebound_config_identity_mismatches_fail_closed(
+    mutation, match: str
+) -> None:
     config = load_json(ROW_7_CONFIG)
     mutation(config)
     authorization = load_json(ROW_7_AUTHORIZATION)
@@ -1295,7 +1518,9 @@ def test_row_7_rebound_config_identity_mismatches_fail_closed(mutation, match: s
         validate(config, authorization)
 
 
-def test_row_7_runtime_semantic_preflight_rejects_placeholder_development_stage() -> None:
+def test_row_7_runtime_semantic_preflight_rejects_placeholder_development_stage() -> (
+    None
+):
     writer = load_writer_module()
     writer.ACTIVE_CONFIG = load_json(ROW_7_CONFIG)
     writer.N_OBS = 2
@@ -1312,7 +1537,9 @@ def test_row_7_runtime_semantic_preflight_rejects_placeholder_development_stage(
         writer.map_obs(source, "Homo sapiens")
 
 
-def test_row_7_runtime_ordered_var_identity_is_computed_before_candidate_write() -> None:
+def test_row_7_runtime_ordered_var_identity_is_computed_before_candidate_write() -> (
+    None
+):
     writer = load_writer_module()
     writer.ACTIVE_CONFIG = load_json(ROW_7_CONFIG)
     writer.N_VARS = 2
@@ -1333,11 +1560,28 @@ def test_row_7_runtime_ordered_var_identity_is_computed_before_candidate_write()
         (lambda c, a: a.__setitem__("config_sha256", "0" * 64), "config SHA-256"),
         (lambda c, a: a.__setitem__("writer_sha256", "0" * 64), "writer SHA-256"),
         (lambda c, a: a.__setitem__("parent_task_status", "running"), "not completed"),
-        (lambda c, a: (c["authorization_binding"].__setitem__("parent_task_id", "t_rebound"), a.__setitem__("parent_task_id", "t_rebound")), "approved revision identity"),
-        (lambda c, a: (c.__setitem__("dataset_config_status", "prewrite-fixture"), c["obs"]["semantic_evidence"].__setitem__("verdict", "pending-prewrite"), c["ordered_var"].__setitem__("identity_sha256", None)), "dataset_config_status"),
+        (
+            lambda c, a: (
+                c["authorization_binding"].__setitem__("parent_task_id", "t_rebound"),
+                a.__setitem__("parent_task_id", "t_rebound"),
+            ),
+            "approved revision identity",
+        ),
+        (
+            lambda c, a: (
+                c.__setitem__("dataset_config_status", "prewrite-fixture"),
+                c["obs"]["semantic_evidence"].__setitem__(
+                    "verdict", "pending-prewrite"
+                ),
+                c["ordered_var"].__setitem__("identity_sha256", None),
+            ),
+            "dataset_config_status",
+        ),
     ],
 )
-def test_row_7_stale_or_rebound_authorization_fails_closed(mutation, match: str) -> None:
+def test_row_7_stale_or_rebound_authorization_fails_closed(
+    mutation, match: str
+) -> None:
     config = load_json(ROW_7_CONFIG)
     authorization = load_json(ROW_7_AUTHORIZATION)
     mutation(config, authorization)
@@ -1362,8 +1606,16 @@ def test_row_7_execution_false_is_not_authorized() -> None:
 @pytest.mark.parametrize(
     ("mutator", "rebind_config", "match"),
     [
-        (lambda c, a: a.__setitem__("config_sha256", "0" * 64), False, "config SHA-256"),
-        (lambda c, a: a.__setitem__("writer_sha256", "0" * 64), False, "writer SHA-256"),
+        (
+            lambda c, a: a.__setitem__("config_sha256", "0" * 64),
+            False,
+            "config SHA-256",
+        ),
+        (
+            lambda c, a: a.__setitem__("writer_sha256", "0" * 64),
+            False,
+            "writer SHA-256",
+        ),
         (
             lambda c, a: a.__setitem__("writer_contract_sha256", "0" * 64),
             False,
@@ -1376,12 +1628,16 @@ def test_row_7_execution_false_is_not_authorized() -> None:
         ),
         (lambda c, a: c.__setitem__("shape", [1, 2]), False, "config SHA-256"),
         (
-            lambda c, a: c["source"].__setitem__("asset_id", "00000000-0000-0000-0000-000000000000"),
+            lambda c, a: c["source"].__setitem__(
+                "asset_id", "00000000-0000-0000-0000-000000000000"
+            ),
             True,
             "source URL",
         ),
         (
-            lambda c, a: c.__setitem__("logical_key", "pert-gym/logical/temporal/wrong"),
+            lambda c, a: c.__setitem__(
+                "logical_key", "pert-gym/logical/temporal/wrong"
+            ),
             True,
             "logical_key conflicts with OBS dataset assignment",
         ),
@@ -1403,7 +1659,9 @@ def test_row_7_execution_false_is_not_authorized() -> None:
         (lambda c, a: a.__setitem__("protocol", "wrong/v1"), False, "protocol"),
     ],
 )
-def test_every_bound_mismatch_aborts_before_any_write(mutator, rebind_config: bool, match: str) -> None:
+def test_every_bound_mismatch_aborts_before_any_write(
+    mutator, rebind_config: bool, match: str
+) -> None:
     config = load_json(ROW_99_CONFIG)
     authorization = bound_authorization(config)
     mutator(config, authorization)
@@ -1504,7 +1762,9 @@ def write_contract_files(
     authorization_path = tmp_path / "authorization.json"
     config_path.write_text(json.dumps(config, indent=2, sort_keys=True) + "\n")
     authorization["config_sha256"] = sha256(config_path)
-    authorization_path.write_text(json.dumps(authorization, indent=2, sort_keys=True) + "\n")
+    authorization_path.write_text(
+        json.dumps(authorization, indent=2, sort_keys=True) + "\n"
+    )
     return config_path, authorization_path
 
 
@@ -1512,7 +1772,10 @@ def write_contract_files(
     "mutation",
     [
         lambda c: c["revision"].__setitem__("prefix", "temporal-v4-008"),
-        lambda c: c["source"].__setitem__("url", "https://datasets.cellxgene.cziscience.com/00000000-0000-0000-0000-000000000000.h5ad"),
+        lambda c: c["source"].__setitem__(
+            "url",
+            "https://datasets.cellxgene.cziscience.com/00000000-0000-0000-0000-000000000000.h5ad",
+        ),
     ],
 )
 def test_row_7_unauthorized_source_or_revision_rejects_before_side_effects(
@@ -1522,12 +1785,20 @@ def test_row_7_unauthorized_source_or_revision_rejects_before_side_effects(
     config = load_json(ROW_7_CONFIG)
     authorization = load_json(ROW_7_AUTHORIZATION)
     mutation(config)
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     calls = instrument_external_boundaries(monkeypatch, writer)
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
     with pytest.raises((RuntimeError, ValueError)):
         writer.main()
@@ -1720,31 +1991,37 @@ def cellxgene_collection_payload(
         "collection_id": source["collection_id"],
         "collection_version_id": source["collection_version_id"],
         "visibility": "PUBLIC",
-        "datasets": [{
-            "dataset_id": source["dataset_id"],
-            "dataset_version_id": source["dataset_version_id"],
-            "assets": [{"filetype": "H5AD", "url": source["url"]}],
-            "cell_count": config["shape"][0],
-            "feature_count": config["shape"][1],
-            "organism": [config["api_identity"]["organism"]],
-            "assay": config["api_identity"]["assays"],
-            "tombstone": False,
-            "is_primary_data": is_primary_data,
-        }],
+        "datasets": [
+            {
+                "dataset_id": source["dataset_id"],
+                "dataset_version_id": source["dataset_version_id"],
+                "assets": [{"filetype": "H5AD", "url": source["url"]}],
+                "cell_count": config["shape"][0],
+                "feature_count": config["shape"][1],
+                "organism": [config["api_identity"]["organism"]],
+                "assay": config["api_identity"]["assays"],
+                "tombstone": False,
+                "is_primary_data": is_primary_data,
+            }
+        ],
     }
 
 
 def configure_row_13_main(monkeypatch, tmp_path: Path, live_value: object):
     writer = load_writer_module()
     config, authorization = executable_row_13_contract()
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     payload = cellxgene_collection_payload(config, live_value)
     monkeypatch.setattr(
         writer.urllib.request,
         "urlopen",
         lambda *args, **kwargs: io.BytesIO(json.dumps(payload).encode()),
     )
-    monkeypatch.setattr(writer.socket, "gethostname", lambda: config["execution"]["host"])
+    monkeypatch.setattr(
+        writer.socket, "gethostname", lambda: config["execution"]["host"]
+    )
     monkeypatch.setattr(
         writer,
         "mem_available",
@@ -1753,7 +2030,13 @@ def configure_row_13_main(monkeypatch, tmp_path: Path, live_value: object):
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
     return writer
 
@@ -1794,6 +2077,7 @@ def test_row_13_malformed_or_non_primary_live_values_reject_before_side_effects(
         def boundary(*args, **kwargs):
             calls.append(label)
             raise AssertionError(f"unexpected boundary call: {label}")
+
         return boundary
 
     monkeypatch.setattr(Path, "mkdir", reject("mkdir"))
@@ -1820,12 +2104,20 @@ def test_non_scalar_or_non_boolean_contract_primary_data_rejects_before_boundari
     authorization = bound_authorization(config)
     authorization.update(config["authorization_binding"])
     authorization["execution_authorized"] = True
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     calls = instrument_external_boundaries(monkeypatch, writer)
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
     with pytest.raises(ValueError, match="primary-data identity"):
         writer.main()
@@ -1875,7 +2167,10 @@ def test_non_scalar_or_non_boolean_contract_primary_data_rejects_before_boundari
             lambda c, a: a.__setitem__("approved_parent_protocol", "anything/v999"),
             "parent protocol",
         ),
-        (lambda c, a: a.__setitem__("correction_task_id", "t_other"), "correction task"),
+        (
+            lambda c, a: a.__setitem__("correction_task_id", "t_other"),
+            "correction task",
+        ),
     ],
 )
 def test_contract_conflicts_reject_before_instrumented_boundaries(
@@ -1886,7 +2181,9 @@ def test_contract_conflicts_reject_before_instrumented_boundaries(
     authorization = bound_authorization(config)
     authorization["execution_authorized"] = True
     mutation(config, authorization)
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     calls = instrument_external_boundaries(monkeypatch, writer)
     execution = config["execution"]
     assert isinstance(execution, dict)
@@ -1903,7 +2200,13 @@ def test_contract_conflicts_reject_before_instrumented_boundaries(
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
 
     with pytest.raises((RuntimeError, ValueError), match=match):
@@ -1945,7 +2248,9 @@ def test_row_13_invalid_parent_authorization_rejects_before_instrumented_boundar
     authorization.update(binding)
     authorization["parent_task_status"] = parent_task_status
     authorization["execution_authorized"] = True
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     calls = instrument_external_boundaries(monkeypatch, writer)
     execution = config["execution"]
     assert isinstance(execution, dict)
@@ -1958,7 +2263,13 @@ def test_row_13_invalid_parent_authorization_rejects_before_instrumented_boundar
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
 
     with pytest.raises((RuntimeError, ValueError), match=match):
@@ -1974,13 +2285,21 @@ def test_runtime_host_rejects_before_instrumented_boundaries(
     config = load_json(ROW_99_CONFIG)
     authorization = bound_authorization(config)
     authorization["execution_authorized"] = True
-    config_path, authorization_path = write_contract_files(tmp_path, config, authorization)
+    config_path, authorization_path = write_contract_files(
+        tmp_path, config, authorization
+    )
     calls = instrument_external_boundaries(monkeypatch, writer)
     monkeypatch.setattr(writer.socket, "gethostname", lambda: "other-host")
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
 
     with pytest.raises(RuntimeError, match="exact authorized host"):

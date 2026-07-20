@@ -63,9 +63,9 @@ def differential_expression_similarity(
                 "truncate predicted DE genes by absolute logFC."
             )
         pred_set = set(
-            sorted(pred_set, key=lambda gene: abs(pred_logfc.get(gene, 0.0)), reverse=True)[
-                : len(true_set)
-            ]
+            sorted(
+                pred_set, key=lambda gene: abs(pred_logfc.get(gene, 0.0)), reverse=True
+            )[: len(true_set)]
         )
 
     overlap = len(true_set & pred_set)
@@ -143,22 +143,34 @@ def differential_expression_profile(
     return [p - r for p, r in zip(pert_centroid, ref_centroid)]
 
 
-def pearson_delta(delta_true: Vector, delta_pred: Vector, top_k: int | None = None) -> float:
+def pearson_delta(
+    delta_true: Vector, delta_pred: Vector, top_k: int | None = None
+) -> float:
     """Pearson correlation on differential profiles (Systema reference-based metric)."""
-    selected_true, selected_pred = _select_top_k_by_abs_true(delta_true, delta_pred, top_k)
+    selected_true, selected_pred = _select_top_k_by_abs_true(
+        delta_true, delta_pred, top_k
+    )
     return pearson_correlation(selected_true, selected_pred)
 
 
-def rmse_delta(delta_true: Vector, delta_pred: Vector, top_k: int | None = None) -> float:
+def rmse_delta(
+    delta_true: Vector, delta_pred: Vector, top_k: int | None = None
+) -> float:
     """RMSE on differential profiles (Systema reference-based metric)."""
-    selected_true, selected_pred = _select_top_k_by_abs_true(delta_true, delta_pred, top_k)
+    selected_true, selected_pred = _select_top_k_by_abs_true(
+        delta_true, delta_pred, top_k
+    )
     if not selected_true:
         return 0.0
-    mse = sum((t - p) ** 2 for t, p in zip(selected_true, selected_pred)) / len(selected_true)
+    mse = sum((t - p) ** 2 for t, p in zip(selected_true, selected_pred)) / len(
+        selected_true
+    )
     return sqrt(mse)
 
 
-def mean_train_differential_profile(train_profiles: Mapping[str, Vector]) -> list[float]:
+def mean_train_differential_profile(
+    train_profiles: Mapping[str, Vector],
+) -> list[float]:
     """Mean perturbation differential profile o_pert from the Systema paper."""
     if not train_profiles:
         raise ValueError("train_profiles must not be empty.")
@@ -176,7 +188,9 @@ def centroid_accuracy(
     centroid is less than or equal to its distance to every other target centroid.
     """
     if set(predicted_profiles) != set(true_profiles):
-        raise ValueError("predicted_profiles and true_profiles must share the same keys.")
+        raise ValueError(
+            "predicted_profiles and true_profiles must share the same keys."
+        )
     if not predicted_profiles:
         return 0.0
 
@@ -188,7 +202,11 @@ def centroid_accuracy(
         pred = predicted_profiles[label]
         target = true_profiles[label]
         d_match = dist(pred, target)
-        if all(d_match <= dist(pred, true_profiles[other]) for other in labels if other != label):
+        if all(
+            d_match <= dist(pred, true_profiles[other])
+            for other in labels
+            if other != label
+        ):
             correct += 1
 
     return correct / len(labels)
@@ -245,11 +263,15 @@ def _select_top_k_by_abs_true(
         raise ValueError("top_k must be positive when provided.")
 
     n = min(top_k, len(delta_true))
-    indices = sorted(range(len(delta_true)), key=lambda idx: abs(delta_true[idx]), reverse=True)[:n]
+    indices = sorted(
+        range(len(delta_true)), key=lambda idx: abs(delta_true[idx]), reverse=True
+    )[:n]
     return [delta_true[idx] for idx in indices], [delta_pred[idx] for idx in indices]
 
 
 def _validate_equal_length(*vectors: Vector) -> None:
     lengths = {len(v) for v in vectors}
     if len(lengths) > 1:
-        raise ValueError(f"All vectors must have equal length, got lengths={sorted(lengths)}")
+        raise ValueError(
+            f"All vectors must have equal length, got lengths={sorted(lengths)}"
+        )

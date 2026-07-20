@@ -47,7 +47,9 @@ def test_model_env_manifest_uses_isolated_paths_and_safe_installs() -> None:
     assert "--no-deps -e ." in config["defaults"]["local_package_install"]
 
     for name, spec in config["models"].items():
-        assert spec["install_command"] == f"uv run python tools/model_env.py create {name}"
+        assert (
+            spec["install_command"] == f"uv run python tools/model_env.py create {name}"
+        )
         assert spec["smoke_command"] == f"uv run python tools/model_env.py smoke {name}"
         data_policy = spec["data_policy"].lower()
         assert "lamin" in data_policy or "read-only" in data_policy

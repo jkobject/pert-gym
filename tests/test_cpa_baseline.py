@@ -51,7 +51,9 @@ def test_compositional_perturbation_autoencoder_runs_tiny_synthetic_smoke() -> N
     assert model.perturbation_to_index_ == {"drug_a": 0, "drug_b": 1}
 
 
-def test_compositional_perturbation_autoencoder_runs_model_ready_v0_metadata_smoke() -> None:
+def test_compositional_perturbation_autoencoder_runs_model_ready_v0_metadata_smoke() -> (
+    None
+):
     dataset = load_model_ready_v0_or_synthetic()
     model = CompositionalPerturbationAutoencoder(
         latent_dim=2,
@@ -66,7 +68,10 @@ def test_compositional_perturbation_autoencoder_runs_model_ready_v0_metadata_smo
 
     assert dataset.metadata["loader"] == "model_ready_v0_or_synthetic"
     assert dataset.metadata["fallback"] == "synthetic"
-    assert dataset.metadata["model_ready_collection_key"] == "pert-gym/model-ready/20260621"
+    assert (
+        dataset.metadata["model_ready_collection_key"]
+        == "pert-gym/model-ready/20260621"
+    )
     assert dataset.metadata["model_ready_member_count"] == 1
     assert result.model_name == "cpa_standalone"
     assert result.n_obs == len(dataset.test.X)
@@ -85,7 +90,9 @@ def test_compositional_perturbation_autoencoder_rejects_control_only_training() 
         )
 
 
-def test_compositional_perturbation_autoencoder_uses_neutral_unknown_embedding() -> None:
+def test_compositional_perturbation_autoencoder_uses_neutral_unknown_embedding() -> (
+    None
+):
     model = CompositionalPerturbationAutoencoder(
         latent_dim=2,
         hidden_dim=8,

@@ -36,3 +36,4 @@ pert-gym/model-ready-*/
 
 # Accidental shell/package-manager droppings
 =*
+.DS_Store

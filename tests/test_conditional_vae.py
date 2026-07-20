@@ -49,7 +49,9 @@ def test_conditional_perturbation_vae_runs_tiny_synthetic_smoke() -> None:
     assert all(isfinite(value) for row in result.predictions for value in row)
     assert isfinite(result.metrics["mae"])
     assert model.loss_ is not None and isfinite(model.loss_)
-    assert model.reconstruction_loss_ is not None and isfinite(model.reconstruction_loss_)
+    assert model.reconstruction_loss_ is not None and isfinite(
+        model.reconstruction_loss_
+    )
     assert model.kl_loss_ is not None and isfinite(model.kl_loss_)
     assert model.perturbation_to_index_ == {"drug_a": 1, "drug_b": 2}
     assert model.control_latent_ is not None and len(model.control_latent_) == 2
@@ -71,7 +73,10 @@ def test_conditional_perturbation_vae_runs_model_ready_v0_metadata_smoke() -> No
 
     assert dataset.metadata["loader"] == "model_ready_v0_or_synthetic"
     assert dataset.metadata["fallback"] == "synthetic"
-    assert dataset.metadata["model_ready_collection_key"] == "pert-gym/model-ready/20260621"
+    assert (
+        dataset.metadata["model_ready_collection_key"]
+        == "pert-gym/model-ready/20260621"
+    )
     assert dataset.metadata["model_ready_member_count"] == 1
     assert result.model_name == "conditional_perturbation_vae"
     assert result.n_obs == len(dataset.test.X)

@@ -65,7 +65,10 @@ def test_latent_perturbation_model_runs_model_ready_v0_metadata_smoke() -> None:
 
     assert dataset.metadata["loader"] == "model_ready_v0_or_synthetic"
     assert dataset.metadata["fallback"] == "synthetic"
-    assert dataset.metadata["model_ready_collection_key"] == "pert-gym/model-ready/20260621"
+    assert (
+        dataset.metadata["model_ready_collection_key"]
+        == "pert-gym/model-ready/20260621"
+    )
     assert dataset.metadata["model_ready_member_count"] == 1
     assert result.model_name == "latent_perturbation"
     assert result.n_obs == len(dataset.test.X)

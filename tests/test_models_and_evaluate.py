@@ -11,7 +11,9 @@ def test_mean_control_baseline_predicts_training_control_centroid() -> None:
         controls=[True, True, False],
     )
 
-    predictions = model.predict(perturbations=["drug_a", "unseen"], controls=[False, False])
+    predictions = model.predict(
+        perturbations=["drug_a", "unseen"], controls=[False, False]
+    )
 
     assert predictions == [[2.0, 4.0], [2.0, 4.0]]
     assert model.n_features_ == 2
@@ -24,7 +26,9 @@ def test_mean_perturbation_baseline_predicts_global_perturbed_centroid() -> None
         controls=[True, True, False, False],
     )
 
-    predictions = model.predict(perturbations=["drug_a", "unseen"], controls=[False, False])
+    predictions = model.predict(
+        perturbations=["drug_a", "unseen"], controls=[False, False]
+    )
 
     assert predictions == [[12.0, 14.0], [12.0, 14.0]]
 

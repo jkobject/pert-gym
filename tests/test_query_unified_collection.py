@@ -15,7 +15,9 @@ from tools.query_unified_collection import (
     validate_triplet_var_policy,
 )
 
-FIXTURE_MANIFEST = Path(__file__).parent / "fixtures" / "unified_collection_manifest_minimal.tsv"
+FIXTURE_MANIFEST = (
+    Path(__file__).parent / "fixtures" / "unified_collection_manifest_minimal.tsv"
+)
 
 
 def load_fixture_manifest():
@@ -85,7 +87,9 @@ def test_legacy_manifest_gets_same_prefix_var_policy_defaults():
     assert set(manifest.var_policy) == {"same_prefix"}
     assert manifest.same_prefix_var.all()
 
-    row = manifest.loc[manifest.artifact_key == "DRUG-seq/GSE120222/obs.parquet"].iloc[0]
+    row = manifest.loc[manifest.artifact_key == "DRUG-seq/GSE120222/obs.parquet"].iloc[
+        0
+    ]
     assert row.var_key == "DRUG-seq/GSE120222/var.parquet"
     assert validate_manifest_var_policy(manifest).empty
 
@@ -108,7 +112,9 @@ def test_shared_alias_policy_allows_non_same_prefix_when_link_is_explicit():
 
     missing_link = row.copy()
     missing_link.loc[0, "has_x_var_link"] = False
-    assert "missing X->var link" in " ".join(validate_manifest_var_policy(missing_link).reason)
+    assert "missing X->var link" in " ".join(
+        validate_manifest_var_policy(missing_link).reason
+    )
 
     bad_same_prefix = row.copy()
     bad_same_prefix.loc[0, "var_policy"] = "same_prefix"

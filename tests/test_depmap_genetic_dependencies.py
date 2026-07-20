@@ -30,7 +30,9 @@ def test_parse_depmap_gene_label():
     assert parse_depmap_gene_label("MALFORMED") == ("MALFORMED", None)
 
 
-def test_durable_manifest_redacts_transient_signed_url_fields(tmp_path: Path, monkeypatch):
+def test_durable_manifest_redacts_transient_signed_url_fields(
+    tmp_path: Path, monkeypatch
+):
     signed_url = (
         "https://storage.googleapis.com/depmap-external-downloads/path/CRISPRGeneEffect.csv"
         "?response-content-disposition=attachment%3B+filename%3D%22CRISPRGeneEffect.csv%22"
@@ -90,9 +92,7 @@ def test_durable_manifest_redacts_transient_signed_url_fields(tmp_path: Path, mo
 def test_depmap_matrix_to_obs_var_essentiality_contract(tmp_path: Path):
     matrix = tmp_path / "CRISPRGeneEffect.csv"
     matrix.write_text(
-        ",A1BG (1),TP53 (7157)\n"
-        "ACH-000001,-0.11,-1.25\n"
-        "ACH-000002,0.05,-0.80\n",
+        ",A1BG (1),TP53 (7157)\nACH-000001,-0.11,-1.25\nACH-000002,0.05,-0.80\n",
         encoding="utf-8",
     )
     model = tmp_path / "Model.csv"
@@ -127,15 +127,16 @@ def test_depmap_matrix_to_obs_var_essentiality_contract(tmp_path: Path):
     assert "expression" not in obs.columns
 
     tp53_ovcar = obs[
-        (obs["cell_line"] == "NIH:OVCAR-3")
-        & (obs["perturbation_gene"] == "TP53")
+        (obs["cell_line"] == "NIH:OVCAR-3") & (obs["perturbation_gene"] == "TP53")
     ].iloc[0]
     assert tp53_ovcar["effect_score"] == -1.25
     assert tp53_ovcar["score"] == -1.25
     assert tp53_ovcar["score_type"] == "effect_score"
 
 
-def test_depmap_readout_modality_distinguishes_effect_and_dependency_scores(tmp_path: Path):
+def test_depmap_readout_modality_distinguishes_effect_and_dependency_scores(
+    tmp_path: Path,
+):
     assert infer_depmap_readout_modality("effect_score") == "essentiality"
     assert infer_depmap_readout_modality("dependency_score") == "dependency"
 
@@ -154,7 +155,9 @@ def test_no_fake_x_output_for_essentiality_converter(tmp_path: Path):
     matrix = tmp_path / "CRISPRGeneDependency.csv"
     matrix.write_text(",A1BG (1)\nACH-000001,0.02\n", encoding="utf-8")
     obs, var = depmap_matrix_to_obs_var(matrix, score_column="dependency_score")
-    obs_path, var_path = write_obs_var(obs, var, tmp_path / "obs.csv", tmp_path / "var.csv")
+    obs_path, var_path = write_obs_var(
+        obs, var, tmp_path / "obs.csv", tmp_path / "var.csv"
+    )
 
     assert obs_path.name == "obs.csv"
     assert var_path.name == "var.csv"
@@ -163,10 +166,12 @@ def test_no_fake_x_output_for_essentiality_converter(tmp_path: Path):
     assert reloaded.loc[0, "cell_line"] == "ACH-000001"
     assert reloaded.loc[0, "dependency_score"] == 0.02
 
-    compatibility_obs = depmap_matrix_to_long_table(matrix, score_column="dependency_score")
-    assert list(compatibility_obs.columns[: len(ESSENTIALITY_OBS_REQUIRED_COLUMNS)]) == list(
-        ESSENTIALITY_OBS_REQUIRED_COLUMNS
+    compatibility_obs = depmap_matrix_to_long_table(
+        matrix, score_column="dependency_score"
     )
+    assert list(
+        compatibility_obs.columns[: len(ESSENTIALITY_OBS_REQUIRED_COLUMNS)]
+    ) == list(ESSENTIALITY_OBS_REQUIRED_COLUMNS)
 
 
 def test_validator_rejects_fake_x_output_for_essentiality(tmp_path: Path):
@@ -175,7 +180,9 @@ def test_validator_rejects_fake_x_output_for_essentiality(tmp_path: Path):
     obs, var = depmap_matrix_to_obs_var(matrix, score_column="dependency_score")
 
     try:
-        validate_essentiality_obs_var_contract(obs, var, expected_outputs=("obs.parquet", "X.h5ad", "var.parquet"))
+        validate_essentiality_obs_var_contract(
+            obs, var, expected_outputs=("obs.parquet", "X.h5ad", "var.parquet")
+        )
     except ValueError as exc:
         assert "must not declare X.h5ad" in str(exc)
     else:  # pragma: no cover - should fail before here
@@ -211,31 +218,51 @@ def test_sanger_score_contract_matches_pr38_typed_aux_payload():
         "var_score.parquet",
     )
     assert SANGER_SCORE_AUX_CONTRACT["score_aux_keys"] == ("X_score", "var_score")
-    assert "canonical X is intentionally empty" in SANGER_SCORE_AUX_CONTRACT["x_semantics"]
+    assert (
+        "canonical X is intentionally empty" in SANGER_SCORE_AUX_CONTRACT["x_semantics"]
+    )
 
 
 def test_phase3_plan_declares_essentiality_and_baseline_as_separate_contracts():
-    depmap = next(dataset for dataset in DATASETS if dataset.name == "DepMap genetic dependencies")
-    sanger = next(dataset for dataset in DATASETS if dataset.name == "Sanger SCORE CRISPR KO")
-    dual_guide = next(dataset for dataset in DATASETS if dataset.name == "Sanger Dual-guide KO CRC")
-    prism = next(dataset for dataset in DATASETS if dataset.name == "Broad PRISM Repurposing")
+    depmap = next(
+        dataset for dataset in DATASETS if dataset.name == "DepMap genetic dependencies"
+    )
+    sanger = next(
+        dataset for dataset in DATASETS if dataset.name == "Sanger SCORE CRISPR KO"
+    )
+    dual_guide = next(
+        dataset for dataset in DATASETS if dataset.name == "Sanger Dual-guide KO CRC"
+    )
+    prism = next(
+        dataset for dataset in DATASETS if dataset.name == "Broad PRISM Repurposing"
+    )
     gdsc = next(dataset for dataset in DATASETS if dataset.name == "Sanger GDSC")
     baseline = next(dataset for dataset in DATASETS if dataset.name == "DepMap CCLE")
 
     assert depmap.modality == "essentiality"
-    assert depmap.expected_outputs == ["obs.parquet", "var.parquet", "source_manifest.json"]
+    assert depmap.expected_outputs == [
+        "obs.parquet",
+        "var.parquet",
+        "source_manifest.json",
+    ]
     assert "X.h5ad" not in depmap.expected_outputs
     assert "obs+var" in depmap.notes
     assert "Sanger/Project Score" in depmap.notes
 
-    assert sanger.expected_outputs == list(SANGER_SCORE_AUX_CONTRACT["expected_outputs"])
+    assert sanger.expected_outputs == list(
+        SANGER_SCORE_AUX_CONTRACT["expected_outputs"]
+    )
     assert sanger.modality == "essentiality"
     assert "X_score.h5ad" in sanger.expected_outputs
     assert "typed auxiliary X_score/var_score" in sanger.notes
 
     assert dual_guide.modality == "genetic_screen_counts"
     assert dual_guide.perturbation_axis.startswith("CRISPRko_dual_guide")
-    assert dual_guide.expected_outputs == ["obs.parquet", "var.parquet", "source_manifest.json"]
+    assert dual_guide.expected_outputs == [
+        "obs.parquet",
+        "var.parquet",
+        "source_manifest.json",
+    ]
     assert "X.h5ad" not in dual_guide.expected_outputs
     assert "count/read_count" in dual_guide.notes
 
@@ -246,7 +273,11 @@ def test_phase3_plan_declares_essentiality_and_baseline_as_separate_contracts():
     assert baseline.lamin_prefix == BASELINE_RNA_CONTRACT["lamin_prefix"]
     assert "RNA expression" in baseline.notes
     assert "no essentiality scores" in baseline.notes
-    assert BASELINE_RNA_CONTRACT["join_fields"] == ("baseline_join_id", "model_id", "depmap_id")
+    assert BASELINE_RNA_CONTRACT["join_fields"] == (
+        "baseline_join_id",
+        "model_id",
+        "depmap_id",
+    )
     assert "dependency" not in BASELINE_RNA_CONTRACT["x_semantics"].split(",")[0]
 
 

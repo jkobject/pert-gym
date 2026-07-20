@@ -66,7 +66,9 @@ class MeanPerturbationBaseline:
 
         perturbed_rows = [row for row, is_control in zip(X, controls) if not is_control]
         if not perturbed_rows:
-            raise ValueError("MeanPerturbationBaseline requires at least one perturbed row.")
+            raise ValueError(
+                "MeanPerturbationBaseline requires at least one perturbed row."
+            )
         self.perturbation_mean_ = _centroid(perturbed_rows)
         return self
 
@@ -89,7 +91,10 @@ def _default_controls(
 ) -> Sequence[bool]:
     if controls is not None:
         return controls
-    return [perturbation.lower() in {"control", "ctrl", "vehicle"} for perturbation in perturbations]
+    return [
+        perturbation.lower() in {"control", "ctrl", "vehicle"}
+        for perturbation in perturbations
+    ]
 
 
 def _validate_training_inputs(

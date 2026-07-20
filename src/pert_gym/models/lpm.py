@@ -50,7 +50,9 @@ class LatentPerturbationModel:
         _validate_training_inputs(X, perturbations, controls)
         controls = _default_controls(perturbations, controls)
         if not any(controls):
-            raise ValueError("LatentPerturbationModel requires at least one control row.")
+            raise ValueError(
+                "LatentPerturbationModel requires at least one control row."
+            )
         if not any(not is_control for is_control in controls):
             raise ValueError(
                 "LatentPerturbationModel requires at least one perturbed row."

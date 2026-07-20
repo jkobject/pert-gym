@@ -30,5 +30,7 @@
   `GCS_DECOMMISSION_READY` manifest, not prose.
 
 See [TODO.md](TODO.md) for the live dashboard and
-[wiki/pert-gym/migration-reproducibility-and-gcs-exit.md](wiki/pert-gym/migration-reproducibility-and-gcs-exit.md)
-for the detailed contract.
+[docs/project/agent-runbook.md](docs/project/agent-runbook.md),
+[docs/pert_gym_schema.md](docs/pert_gym_schema.md), and
+[docs/adr/0001-logical-sparse-zarr.md](docs/adr/0001-logical-sparse-zarr.md)
+for the durable execution, schema, and storage contracts. `wiki/` is obsolete.

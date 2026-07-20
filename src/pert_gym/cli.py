@@ -13,7 +13,9 @@ def build_parser() -> argparse.ArgumentParser:
         prog="pert-gym",
         description="Command line interface for pert-gym.",
     )
-    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     run_parser = subparsers.add_parser("run", help="Run the default pipeline.")

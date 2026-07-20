@@ -66,6 +66,8 @@ def _sha256_array(value: np.ndarray) -> str:
 def _json_scalar(value: object) -> object:
     if value is None or isinstance(value, (bool, str)):
         return value
+    if pd.isna(value):
+        return None
     if isinstance(value, (np.bool_,)):
         return bool(value)
     if isinstance(value, (int, np.integer)):
@@ -74,8 +76,6 @@ def _json_scalar(value: object) -> object:
         if not np.isfinite(value):
             raise ValueError("var identity cannot serialize non-finite numbers")
         return float(value)
-    if pd.isna(value):
-        return None
     raise TypeError(f"unsupported var identity scalar {type(value).__name__}")
 
 
@@ -114,6 +114,18 @@ def shared_var_identity(var: pd.DataFrame, *, schema_fingerprint: str) -> VarIde
         frame_sha256=_sha256_bytes(frame_bytes),
         schema_fingerprint=schema_fingerprint,
     )
+
+
+def _canonical_var_frame_sha256(var: pd.DataFrame) -> str:
+    """Hash canonical frame rows when the ordered index has its own identity field."""
+    columns = sorted(str(column) for column in var.columns)
+    lines = []
+    for position in range(len(var)):
+        row = {column: _json_scalar(var.iloc[position][column]) for column in columns}
+        lines.append(
+            json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        )
+    return _sha256_bytes(("\n".join(lines) + "\n").encode("utf-8"))
 
 
 def _index_sha256(frame: pd.DataFrame) -> str:
@@ -795,9 +807,13 @@ def read_logical_sparse_revision(
     identity = shared_var_identity(
         var, schema_fingerprint=surface.shared_var["schema_fingerprint"]
     )
+    accepted_frame_hashes = {
+        identity.frame_sha256.lower(),
+        _canonical_var_frame_sha256(var).lower(),
+    }
     if (
         identity.index_sha256.lower() != surface.shared_var["index_sha256"].lower()
-        or identity.frame_sha256.lower() != surface.shared_var["frame_sha256"].lower()
+        or surface.shared_var["frame_sha256"].lower() not in accepted_frame_hashes
     ):
         raise RuntimeError("shared var identity mismatch during readback")
     return surface, combined, obs, var

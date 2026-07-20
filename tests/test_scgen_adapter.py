@@ -6,7 +6,9 @@ from pert_gym.models import ScgenPerturbationAdapter
 def test_scgen_adapter_fit_predict_generic_contract() -> None:
     pytest.importorskip("torch")
 
-    model = ScgenPerturbationAdapter(epochs=1, latent_dim=2, hidden_dim=4, condition_dim=2)
+    model = ScgenPerturbationAdapter(
+        epochs=1, latent_dim=2, hidden_dim=4, condition_dim=2
+    )
     X = [
         [1.0, 1.0],
         [1.1, 0.9],

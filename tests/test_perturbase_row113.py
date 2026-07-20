@@ -123,7 +123,9 @@ def test_write_triplet_bypasses_cross_key_hash_dedup_for_x(tmp_path) -> None:
         var=pd.DataFrame(index=["gene-1", "gene-2"]),
     )
 
-    result = write_triplet(FakeLamin(), prefix="new/prefix", chunk=chunk, overwrite=False)
+    result = write_triplet(
+        FakeLamin(), prefix="new/prefix", chunk=chunk, overwrite=False
+    )
 
     assert result["status"] == "ingested"
     assert result["prefix"] == "new/prefix"

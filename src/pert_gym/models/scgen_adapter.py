@@ -75,9 +75,13 @@ class ScgenPerturbationAdapter:
         """
 
         if not hasattr(adata, "X") or not hasattr(adata, "obs"):
-            raise TypeError("fit_anndata expects an AnnData-like object with X and obs.")
+            raise TypeError(
+                "fit_anndata expects an AnnData-like object with X and obs."
+            )
         if self.condition_key not in adata.obs:
-            raise ValueError(f"AnnData.obs is missing condition_key={self.condition_key!r}.")
+            raise ValueError(
+                f"AnnData.obs is missing condition_key={self.condition_key!r}."
+            )
         conditions = [str(value) for value in adata.obs[self.condition_key].tolist()]
         controls = [value == self.control_value for value in conditions]
         X = _matrix_to_lists(adata.X)

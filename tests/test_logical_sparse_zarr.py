@@ -97,6 +97,28 @@ def test_writer_readback_exact_denominator_provenance_and_shared_var(
     assert checkpoint["completed_chunks"] == [0, 1, 2]
 
 
+def test_reader_accepts_separate_canonical_var_frame_identity(tmp_path: Path) -> None:
+    """Sealed contracts may hash frame rows separately from the ordered var index."""
+    write_candidate(tmp_path, "sealed-frame")
+    candidate = tmp_path / "surfaces/example/revisions/sealed-frame"
+    manifest_path = candidate / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    var = pd.read_parquet(tmp_path / manifest["shared_var"]["key"])
+    manifest["shared_var"]["frame_sha256"] = (
+        logical_sparse_zarr._canonical_var_frame_sha256(var)
+    )
+    manifest_path.write_text(json.dumps(manifest))
+
+    surface, matrix, obs, restored_var = read_logical_sparse_revision(
+        tmp_path, "surfaces/example", "sealed-frame"
+    )
+
+    assert surface.shape == (9, 3)
+    assert matrix.nnz == 18
+    assert len(obs) == 9
+    assert restored_var.index.tolist() == ["g1", "g2", "g3"]
+
+
 def test_resume_reuses_completed_payload_without_overwrite(tmp_path: Path) -> None:
     matrix, obs, var = fixture_data()
     kwargs = dict(

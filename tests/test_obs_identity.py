@@ -34,7 +34,9 @@ def test_add_obs_identity_preserves_prism_chunk_original_index_and_stable_uuid()
     assert with_identity.index.name == "source_well"
     expected_material = "pert-gym.obs.v1:prism_collection/GSE221321:prism_collection/GSE221321/chunk_0042:well_A01"
     assert with_identity["obs_uuid"].iloc[0] == "1433fed0-04e9-59d4-837b-e9a0e99152c9"
-    assert with_identity["obs_uuid"].iloc[0] == str(uuid5(NAMESPACE_URL, expected_material))
+    assert with_identity["obs_uuid"].iloc[0] == str(
+        uuid5(NAMESPACE_URL, expected_material)
+    )
     assert with_identity["obs_uuid"].tolist() == rerun["obs_uuid"].tolist()
     assert with_identity["obs_uuid"].is_unique
     assert with_identity["original_obs_index_is_duplicated"].tolist() == [False, False]
@@ -101,7 +103,9 @@ def test_add_obs_identity_supports_non_scrna_table_rows_without_barcodes():
 
 
 def test_add_obs_identity_appends_row_position_only_for_duplicate_original_indices():
-    obs = pd.DataFrame({"sample_id": ["donor1", "donor1", "donor2"]}, index=["same", "same", "other"])
+    obs = pd.DataFrame(
+        {"sample_id": ["donor1", "donor1", "donor2"]}, index=["same", "same", "other"]
+    )
 
     with_identity = add_obs_identity(
         obs,
@@ -115,10 +119,18 @@ def test_add_obs_identity_appends_row_position_only_for_duplicate_original_indic
     expected_duplicate_material = "pert-gym.obs.v1:prism_collection/GSE221321:prism_collection/GSE221321/chunk_0042:same:0"
     expected_unique_material = "pert-gym.obs.v1:prism_collection/GSE221321:prism_collection/GSE221321/chunk_0042:other"
     assert with_identity["original_obs_index"].tolist() == ["same", "same", "other"]
-    assert with_identity["original_obs_index_is_duplicated"].tolist() == [True, True, False]
+    assert with_identity["original_obs_index_is_duplicated"].tolist() == [
+        True,
+        True,
+        False,
+    ]
     assert with_identity["obs_uuid"].iloc[0] == "102e795e-1d59-5c5b-b236-4bc3b5559cba"
-    assert with_identity["obs_uuid"].iloc[0] == str(uuid5(NAMESPACE_URL, expected_duplicate_material))
-    assert with_identity["obs_uuid"].iloc[2] == str(uuid5(NAMESPACE_URL, expected_unique_material))
+    assert with_identity["obs_uuid"].iloc[0] == str(
+        uuid5(NAMESPACE_URL, expected_duplicate_material)
+    )
+    assert with_identity["obs_uuid"].iloc[2] == str(
+        uuid5(NAMESPACE_URL, expected_unique_material)
+    )
     assert with_identity["obs_uuid"].is_unique
 
 

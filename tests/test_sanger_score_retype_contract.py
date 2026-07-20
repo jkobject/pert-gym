@@ -41,8 +41,12 @@ def test_repair_payload_builds_empty_canonical_x_and_typed_score_auxiliary() -> 
     assert score_payload.uns["canonical_expression_X"] is False
 
 
-def test_phase3_plan_marks_sanger_score_as_auxiliary_not_model_ready_expression() -> None:
-    sanger = next(dataset for dataset in DATASETS if dataset.name == "Sanger SCORE CRISPR KO")
+def test_phase3_plan_marks_sanger_score_as_auxiliary_not_model_ready_expression() -> (
+    None
+):
+    sanger = next(
+        dataset for dataset in DATASETS if dataset.name == "Sanger SCORE CRISPR KO"
+    )
     depmap = next(dataset for dataset in DATASETS if dataset.name == "DepMap CCLE")
 
     assert "X_score.h5ad" in sanger.expected_outputs

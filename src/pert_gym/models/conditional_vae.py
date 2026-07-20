@@ -61,7 +61,9 @@ class ConditionalPerturbationVAE:
         _validate_training_inputs(X, perturbations, controls)
         controls = _default_controls(perturbations, controls)
         if not any(controls):
-            raise ValueError("ConditionalPerturbationVAE requires at least one control row.")
+            raise ValueError(
+                "ConditionalPerturbationVAE requires at least one control row."
+            )
         if not any(not is_control for is_control in controls):
             raise ValueError(
                 "ConditionalPerturbationVAE requires at least one perturbed row."
@@ -72,7 +74,11 @@ class ConditionalPerturbationVAE:
         torch.manual_seed(self.seed)
 
         perturbation_names = sorted(
-            {perturbation for perturbation, is_control in zip(perturbations, controls) if not is_control}
+            {
+                perturbation
+                for perturbation, is_control in zip(perturbations, controls)
+                if not is_control
+            }
         )
         # index 0 is reserved for the control condition. Non-control perturbations
         # start at 1 so unseen requested perturbations can safely fall back to the
@@ -93,7 +99,10 @@ class ConditionalPerturbationVAE:
         optimizer = torch.optim.Adam(model.parameters(), lr=self.lr)
         expression = torch.tensor(X, dtype=torch.float32)
         condition_index = torch.tensor(
-            [0 if is_control else self.perturbation_to_index_[perturbation] for perturbation, is_control in zip(perturbations, controls)],
+            [
+                0 if is_control else self.perturbation_to_index_[perturbation]
+                for perturbation, is_control in zip(perturbations, controls)
+            ],
             dtype=torch.long,
         )
         control_mask = torch.tensor(list(controls), dtype=torch.bool)
@@ -105,7 +114,9 @@ class ConditionalPerturbationVAE:
         for _ in range(self.epochs):
             optimizer.zero_grad(set_to_none=True)
             reconstructed, mu, logvar = model(expression, condition_index)
-            reconstruction_loss = torch.nn.functional.mse_loss(reconstructed, expression)
+            reconstruction_loss = torch.nn.functional.mse_loss(
+                reconstructed, expression
+            )
             kl_loss = -0.5 * torch.mean(1 + logvar - mu.pow(2) - logvar.exp())
             loss = reconstruction_loss + self.beta_kl * kl_loss
             loss.backward()
@@ -142,10 +153,15 @@ class ConditionalPerturbationVAE:
 
         controls = _default_controls(perturbations, controls)
         condition_index = torch.tensor(
-            [0 if is_control else self.perturbation_to_index_.get(perturbation, 0) for perturbation, is_control in zip(perturbations, controls)],
+            [
+                0 if is_control else self.perturbation_to_index_.get(perturbation, 0)
+                for perturbation, is_control in zip(perturbations, controls)
+            ],
             dtype=torch.long,
         )
-        latent = torch.tensor([self.control_latent_] * len(condition_index), dtype=torch.float32)
+        latent = torch.tensor(
+            [self.control_latent_] * len(condition_index), dtype=torch.float32
+        )
         self._model.eval()
         with torch.no_grad():
             decoded = self._model.decode(latent, condition_index)
@@ -173,7 +189,9 @@ class _TinyConditionalVAE:
         class TinyConditionalVAE(torch.nn.Module):
             def __init__(self) -> None:
                 super().__init__()
-                self.condition_embedding = torch.nn.Embedding(n_conditions, condition_dim)
+                self.condition_embedding = torch.nn.Embedding(
+                    n_conditions, condition_dim
+                )
                 encoder_input_dim = n_features + condition_dim
                 decoder_input_dim = latent_dim + condition_dim
                 self.encoder = torch.nn.Sequential(
@@ -201,7 +219,9 @@ class _TinyConditionalVAE:
                 condition = self.condition_embedding(condition_index)
                 return self.decoder(torch.cat([latent, condition], dim=1))
 
-            def forward(self, expression: Any, condition_index: Any) -> tuple[Any, Any, Any]:
+            def forward(
+                self, expression: Any, condition_index: Any
+            ) -> tuple[Any, Any, Any]:
                 mu, logvar = self.encode(expression, condition_index)
                 latent = self.reparameterize(mu, logvar)
                 return self.decode(latent, condition_index), mu, logvar

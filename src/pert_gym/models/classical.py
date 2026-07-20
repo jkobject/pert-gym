@@ -80,7 +80,10 @@ class BinarySplitBaseline:
             for perturbation, magnitude in magnitudes.items()
         }
 
-        grouped_rows: dict[GroupName, list[Sequence[float]]] = {"weak": [], "strong": []}
+        grouped_rows: dict[GroupName, list[Sequence[float]]] = {
+            "weak": [],
+            "strong": [],
+        }
         for row, perturbation, is_control in zip(X, perturbations, controls):
             if is_control:
                 continue
@@ -143,7 +146,9 @@ class _SklearnPerturbationRegressor:
         controls: Sequence[bool] | None = None,
     ) -> list[list[float]]:
         self._require_fitted()
-        design = _encode_perturbations_for_predict(self.encoder_, perturbations, controls)
+        design = _encode_perturbations_for_predict(
+            self.encoder_, perturbations, controls
+        )
         predictions = self.estimator_.predict(design)
         return _as_prediction_list(predictions)
 
@@ -293,16 +298,22 @@ class CellStateLogisticClassifier:
         self.classes_ = [str(label) for label in self.classifier_.classes_]
         return self
 
-    def predict(self, perturbations: Sequence[str], controls: Sequence[bool] | None = None) -> list[str]:
+    def predict(
+        self, perturbations: Sequence[str], controls: Sequence[bool] | None = None
+    ) -> list[str]:
         self._require_fitted()
-        design = _encode_perturbations_for_predict(self.encoder_, perturbations, controls)
+        design = _encode_perturbations_for_predict(
+            self.encoder_, perturbations, controls
+        )
         return [str(label) for label in self.classifier_.predict(design)]
 
     def predict_proba(
         self, perturbations: Sequence[str], controls: Sequence[bool] | None = None
     ) -> list[dict[str, float]]:
         self._require_fitted()
-        design = _encode_perturbations_for_predict(self.encoder_, perturbations, controls)
+        design = _encode_perturbations_for_predict(
+            self.encoder_, perturbations, controls
+        )
         probabilities = self.classifier_.predict_proba(design)
         return [
             {label: float(value) for label, value in zip(self.classes_, row)}
@@ -355,7 +366,10 @@ def _feature_rows(
     perturbations: Sequence[str], controls: Sequence[bool] | None
 ) -> list[list[object]]:
     controls = _default_controls(perturbations, controls)
-    return [[str(perturbation), bool(is_control)] for perturbation, is_control in zip(perturbations, controls)]
+    return [
+        [str(perturbation), bool(is_control)]
+        for perturbation, is_control in zip(perturbations, controls)
+    ]
 
 
 def _as_float_matrix(X: Matrix) -> list[list[float]]:

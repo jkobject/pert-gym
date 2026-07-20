@@ -49,7 +49,9 @@ class CompositionalPerturbationAutoencoder:
         if self.epochs < 1:
             raise ValueError("epochs must be >= 1.")
         if self.latent_dim < 1 or self.hidden_dim < 1 or self.perturbation_dim < 1:
-            raise ValueError("latent_dim, hidden_dim, and perturbation_dim must be >= 1.")
+            raise ValueError(
+                "latent_dim, hidden_dim, and perturbation_dim must be >= 1."
+            )
         _validate_training_inputs(X, perturbations, controls)
         controls = _default_controls(perturbations, controls)
         if not any(controls):
@@ -66,7 +68,11 @@ class CompositionalPerturbationAutoencoder:
         torch.manual_seed(self.seed)
 
         perturbation_names = sorted(
-            {perturbation for perturbation, is_control in zip(perturbations, controls) if not is_control}
+            {
+                perturbation
+                for perturbation, is_control in zip(perturbations, controls)
+                if not is_control
+            }
         )
         self.perturbation_to_index_ = {
             perturbation: idx for idx, perturbation in enumerate(perturbation_names)
@@ -180,7 +186,9 @@ class _TinyCPA:
                     perturbation_dim,
                 )
                 with torch.no_grad():
-                    self.perturbation_embedding.weight[unknown_perturbation_index].zero_()
+                    self.perturbation_embedding.weight[
+                        unknown_perturbation_index
+                    ].zero_()
                 self.decoder = torch.nn.Sequential(
                     torch.nn.Linear(latent_dim + perturbation_dim, hidden_dim),
                     torch.nn.ReLU(),

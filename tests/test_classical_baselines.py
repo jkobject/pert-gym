@@ -83,7 +83,9 @@ def test_classical_regressors_predict_one_expression_vector_per_perturbation(
     assert predictions[0][1] < predictions[1][1]
 
 
-def test_logistic_cell_state_classifier_predicts_state_labels_when_labels_available() -> None:
+def test_logistic_cell_state_classifier_predicts_state_labels_when_labels_available() -> (
+    None
+):
     classifier = CellStateLogisticClassifier(random_state=0).fit(
         perturbations=["control", "control", "weak", "weak", "strong", "strong"],
         labels=["baseline", "baseline", "mild", "mild", "stressed", "stressed"],
