@@ -1,0 +1,53 @@
+{
+  "schema_version": "pert-gym.cellxgene-triplet-execution-plan/v1",
+  "task_id": "t_8b1ae292",
+  "record_id": "temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "logical_key": "pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "writer_sha256": "fd24f484818f8eb8be862a04fcb26a74dd60281a76103bd61936051aafe31e62",
+  "controlling_packet": {
+    "task_id": "t_81cabafd",
+    "component_sha256": "1782e5b3592fd16f8385f1f2c2c6d9a4783c3863c29f0bafd05b8c5ac0aca4ff",
+    "output_manifest_sha256": "3f02cb459ebe859bd86de636e4a18878f17ee817b68e8578ee5fbfd9a2b804cc",
+    "publication_manifest_sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+    "workload_manifest_generation": "1784231679033487"
+  },
+  "source_collection": {
+    "collection_id": "c11009b8-b113-4a99-9890-78b2f9df9d79",
+    "collection_version_id": "a4996baf-010b-4b4d-bde1-c04b0ed749a7"
+  },
+  "datasets": [
+    {
+      "dataset_id": "aecc2743-4ff2-4b55-ac8c-a1ff76fc4bb4",
+      "dataset_version_id": "3fdf264b-40f6-4f5a-b433-bddba1bbebf4",
+      "source_url": "https://datasets.cellxgene.cziscience.com/3fdf264b-40f6-4f5a-b433-bddba1bbebf4.h5ad",
+      "source_head": {
+        "status": 200,
+        "final_url": "https://datasets.cellxgene.cziscience.com/3fdf264b-40f6-4f5a-b433-bddba1bbebf4.h5ad",
+        "content_length": 726874325,
+        "etag": "\"0b7a11b9b3659f1f96c254ba77a52c5d-87\"",
+        "last_modified": "Wed, 10 Jun 2026 18:56:34 GMT",
+        "version_id": "Qz6YHhkpwpas4hIYmgi22qvcrtZ7Czk1"
+      },
+      "n_obs": 108838,
+      "n_vars": 32055,
+      "organism": "NCBITaxon:9606",
+      "feature_namespace": "cellxgene_feature_id",
+      "prefix": "pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4"
+    }
+  ],
+  "storage": {
+    "bucket": "scperturb",
+    "root": "pert-gym/staging",
+    "manifest_name": "pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/workloads/temporal-v4-025-wave05-ab1405c531952b7a/materialization-manifest.json"
+  },
+  "execution": {
+    "host": "pert-gym-worker-eu",
+    "zone": "europe-west1-b",
+    "billing_project": "jkobject-1549353370965",
+    "lock_path": "/tmp/pert-gym-row25-t_8b1ae292.lock",
+    "manifest_last": true,
+    "source_reads": "streamed download plus h5py-backed chunked X copy",
+    "preserve_all_rows_and_nulls": true,
+    "payload_create_only": true
+  }
+}

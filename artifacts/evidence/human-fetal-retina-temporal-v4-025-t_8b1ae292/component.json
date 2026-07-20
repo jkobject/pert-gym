@@ -1,0 +1,52 @@
+{
+  "schema_version": "pert-gym.materialized-build-component/v1",
+  "task_id": "t_8b1ae292",
+  "supersedes_builder_task_id": "t_81cabafd",
+  "record_id": "temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "target_logical_key": "pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "catalogue_row_ids": [25],
+  "completion_status": "materialized_generation_pinned_remote_readback_pass",
+  "record_counts": {
+    "component_records": 1,
+    "included_records": 1,
+    "excluded_records": 0,
+    "source_datasets": 1,
+    "output_datasets": 1,
+    "observations": 108838,
+    "variables": 32055,
+    "payload_members": 3
+  },
+  "side_effect_attestation": {
+    "source_payload_bytes_read": 726874325,
+    "payload_bytes_written": 372379284,
+    "matrix_payload_bytes_written": 365451315,
+    "gcs_payload_writes": 3,
+    "gcs_manifest_writes": 1,
+    "lamin_writes": 0,
+    "collection_writes": 0,
+    "legacy_deletions": 0,
+    "product_credit": 1
+  },
+  "materialization_manifest": {
+    "generation": "1784281750307410",
+    "sha256": "c96f88c3f925df94c3511f5e3a8792cb5afe9e8af086faa93cf00f1579bf6d10",
+    "size_bytes": 17194,
+    "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/workloads/temporal-v4-025-wave05-ab1405c531952b7a/materialization-manifest.json#1784281750307410",
+    "manifest_last": true
+  },
+  "source_payload_sha256": "c2528b8c1eaea03979b367b86744e5aa2e13de0ac1c9c82f433229e082e9411f",
+  "shared_var_identity_sha256": "2e38a37f56c4e91819f8bbe098118221e2cb1bcd7160d86df0f61101a72ee246",
+  "readback": {
+    "path": "independent-readback.json",
+    "sha256": "c6ab70b69aa93cf867836cbba48005c23b06cdd6f3d619685b6ebb409680191e",
+    "status": "PASS",
+    "opened_members": 3,
+    "shape": [108838, 32055],
+    "axis_linkage": "obs -> X -> var equal"
+  },
+  "accounting": {
+    "equation": "1 source = 1 included + 0 excluded = 1 materialized output",
+    "balanced": true,
+    "accepted_product_credit": 1
+  }
+}

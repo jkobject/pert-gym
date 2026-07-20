@@ -1,0 +1,562 @@
+{
+  "artifact_count": 3,
+  "consumer_readback": [
+    {
+      "X_to_var_axis_equal": true,
+      "dataset_version_id": "3fdf264b-40f6-4f5a-b433-bddba1bbebf4",
+      "generation_pinned_hashes_equal": true,
+      "obs_to_X_axis_equal": true,
+      "opened_members": [
+        "obs.parquet",
+        "X.h5ad",
+        "var.parquet"
+      ],
+      "sample_rows": [
+        {
+          "nnz": 2746,
+          "row": 0
+        },
+        {
+          "nnz": 1112,
+          "row": 54419
+        },
+        {
+          "nnz": 1326,
+          "row": 108837
+        }
+      ],
+      "shape": [
+        108838,
+        32055
+      ]
+    }
+  ],
+  "controlling_packet": {
+    "component_sha256": "1782e5b3592fd16f8385f1f2c2c6d9a4783c3863c29f0bafd05b8c5ac0aca4ff",
+    "output_manifest_sha256": "3f02cb459ebe859bd86de636e4a18878f17ee817b68e8578ee5fbfd9a2b804cc",
+    "publication_manifest_sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+    "task_id": "t_81cabafd",
+    "workload_manifest_generation": "1784231679033487"
+  },
+  "dataset_count": 1,
+  "datasets": [
+    {
+      "dataset_id": "aecc2743-4ff2-4b55-ac8c-a1ff76fc4bb4",
+      "dataset_version_id": "3fdf264b-40f6-4f5a-b433-bddba1bbebf4",
+      "objects": {
+        "X": {
+          "bucket": "scperturb",
+          "generation": "1784281744589276",
+          "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4/X.h5ad#1784281744589276",
+          "name": "pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4/X.h5ad",
+          "sha256": "4f7b8c24f229d469950c93798daa9a9d621619eec5fee56a5f92b0c5a3ac9144",
+          "size_bytes": 365451315,
+          "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4/X.h5ad"
+        },
+        "obs": {
+          "bucket": "scperturb",
+          "generation": "1784281740674292",
+          "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4/obs.parquet#1784281740674292",
+          "name": "pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4/obs.parquet",
+          "sha256": "71e6350c3a2b6d2ecc594475aee3f247b196159b11981d74a14af9d52e3a32b0",
+          "size_bytes": 6355332,
+          "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4/obs.parquet"
+        },
+        "var": {
+          "bucket": "scperturb",
+          "generation": "1784281745961826",
+          "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4/var.parquet#1784281745961826",
+          "name": "pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4/var.parquet",
+          "sha256": "32b70fc0585fd3144af932b49ce0550f6149bf8c2612f6709416b2008c3d566a",
+          "size_bytes": 572637,
+          "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4/var.parquet"
+        }
+      },
+      "obs": {
+        "columns": [
+          {
+            "dtype": "float64",
+            "name": "nCount_RNA",
+            "null_count": 0
+          },
+          {
+            "dtype": "int32",
+            "name": "nFeature_RNA",
+            "null_count": 0
+          },
+          {
+            "dtype": "int32",
+            "name": "Retina_Cells",
+            "null_count": 0
+          },
+          {
+            "dtype": "float64",
+            "name": "percent.rb",
+            "null_count": 0
+          },
+          {
+            "dtype": "float64",
+            "name": "percent.mt",
+            "null_count": 0
+          },
+          {
+            "dtype": "float64",
+            "name": "S.Score",
+            "null_count": 0
+          },
+          {
+            "dtype": "float64",
+            "name": "G2M.Score",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "Phase",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "origin",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "timepoint",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "EK_PB_annov1",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "development_stage_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "sex_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "self_reported_ethnicity_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "disease_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "tissue_type",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "tissue_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "cell_type_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "assay_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "suspension_type",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "GSE",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "doi",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "donor_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "sample",
+            "null_count": 0
+          },
+          {
+            "dtype": "bool",
+            "name": "is_primary_data",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "cell_type",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "assay",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "disease",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "sex",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "tissue",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "self_reported_ethnicity",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "development_stage",
+            "null_count": 0
+          },
+          {
+            "dtype": "object",
+            "name": "observation_joinid",
+            "null_count": 0
+          }
+        ],
+        "index_dtype": "object",
+        "index_name": null,
+        "index_null_count": 0,
+        "index_unique": true,
+        "ordered_index_sha256": "6ccccc3a6fe9b9290093cef23fc38b41d60f122dd0763ee1721b4dba16ac3c83",
+        "rows": 108838,
+        "total_null_count": 0
+      },
+      "position": 1,
+      "prefix": "pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/3fdf264b-40f6-4f5a-b433-bddba1bbebf4",
+      "shape": [
+        108838,
+        32055
+      ],
+      "shared_var_identity": {
+        "feature_namespace": "cellxgene_feature_id",
+        "ordered_var_identifiers_sha256": "9868d94cfa347c651fba05bc7908e733db51477914dfd242f7e637699d0fad11",
+        "organism": "NCBITaxon:9606",
+        "sha256": "2e38a37f56c4e91819f8bbe098118221e2cb1bcd7160d86df0f61101a72ee246"
+      },
+      "source": {
+        "content_length": 726874325,
+        "etag": "\"0b7a11b9b3659f1f96c254ba77a52c5d-87\"",
+        "final_url": "https://datasets.cellxgene.cziscience.com/3fdf264b-40f6-4f5a-b433-bddba1bbebf4.h5ad",
+        "last_modified": "Wed, 10 Jun 2026 18:56:34 GMT",
+        "sha256": "c2528b8c1eaea03979b367b86744e5aa2e13de0ac1c9c82f433229e082e9411f",
+        "size_bytes": 726874325,
+        "status": 200,
+        "url": "https://datasets.cellxgene.cziscience.com/3fdf264b-40f6-4f5a-b433-bddba1bbebf4.h5ad",
+        "version_id": "Qz6YHhkpwpas4hIYmgi22qvcrtZ7Czk1"
+      },
+      "source_obs": {
+        "columns": [
+          {
+            "dtype": "float64",
+            "name": "nCount_RNA",
+            "null_count": 0
+          },
+          {
+            "dtype": "int32",
+            "name": "nFeature_RNA",
+            "null_count": 0
+          },
+          {
+            "dtype": "int32",
+            "name": "Retina_Cells",
+            "null_count": 0
+          },
+          {
+            "dtype": "float64",
+            "name": "percent.rb",
+            "null_count": 0
+          },
+          {
+            "dtype": "float64",
+            "name": "percent.mt",
+            "null_count": 0
+          },
+          {
+            "dtype": "float64",
+            "name": "S.Score",
+            "null_count": 0
+          },
+          {
+            "dtype": "float64",
+            "name": "G2M.Score",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "Phase",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "origin",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "timepoint",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "EK_PB_annov1",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "development_stage_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "sex_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "self_reported_ethnicity_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "disease_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "tissue_type",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "tissue_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "cell_type_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "assay_ontology_term_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "suspension_type",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "GSE",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "doi",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "donor_id",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "sample",
+            "null_count": 0
+          },
+          {
+            "dtype": "bool",
+            "name": "is_primary_data",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "cell_type",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "assay",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "disease",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "sex",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "tissue",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "self_reported_ethnicity",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "development_stage",
+            "null_count": 0
+          },
+          {
+            "dtype": "object",
+            "name": "observation_joinid",
+            "null_count": 0
+          }
+        ],
+        "index_dtype": "object",
+        "index_name": null,
+        "index_null_count": 0,
+        "index_unique": true,
+        "ordered_index_sha256": "6ccccc3a6fe9b9290093cef23fc38b41d60f122dd0763ee1721b4dba16ac3c83",
+        "rows": 108838,
+        "total_null_count": 0
+      },
+      "source_var": {
+        "columns": [
+          {
+            "dtype": "bool",
+            "name": "feature_is_filtered",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "feature_name",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "feature_reference",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "feature_biotype",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "feature_length",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "feature_type",
+            "null_count": 0
+          }
+        ],
+        "index_dtype": "object",
+        "index_name": null,
+        "index_null_count": 0,
+        "index_unique": true,
+        "ordered_index_sha256": "9868d94cfa347c651fba05bc7908e733db51477914dfd242f7e637699d0fad11",
+        "rows": 32055,
+        "total_null_count": 0
+      },
+      "var": {
+        "columns": [
+          {
+            "dtype": "bool",
+            "name": "feature_is_filtered",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "feature_name",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "feature_reference",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "feature_biotype",
+            "null_count": 0
+          },
+          {
+            "dtype": "int64",
+            "name": "feature_length",
+            "null_count": 0
+          },
+          {
+            "dtype": "category",
+            "name": "feature_type",
+            "null_count": 0
+          }
+        ],
+        "index_dtype": "object",
+        "index_name": null,
+        "index_null_count": 0,
+        "index_unique": true,
+        "ordered_index_sha256": "9868d94cfa347c651fba05bc7908e733db51477914dfd242f7e637699d0fad11",
+        "rows": 32055,
+        "total_null_count": 0
+      },
+      "x_h5ad_size_bytes": 365451315
+    }
+  ],
+  "excluded_observations": 0,
+  "execution_plan_sha256": "9dd7106c0fbf51a778cde641e128dcbbd222022a5c3e584202c3cbd0df4853b1",
+  "logical_key": "pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "matrix_payload_bytes_written": 365451315,
+  "missingness_is_non_excluding": true,
+  "observation_count": 108838,
+  "preserve_all_rows_and_nulls": true,
+  "publication": {
+    "lamin_writes": 0,
+    "legacy_deletions": 0,
+    "manifest_last": true,
+    "payload_create_only": true,
+    "product_credit": 0
+  },
+  "record_id": "temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "runtime": {
+    "host": "pert-gym-worker-eu",
+    "max_rss_bytes": 623308800,
+    "seconds_before_manifest": 84.74444699287415
+  },
+  "schema_version": "pert-gym.cellxgene-triplet-materialization/v1",
+  "source_collection": {
+    "collection_id": "c11009b8-b113-4a99-9890-78b2f9df9d79",
+    "collection_version_id": "a4996baf-010b-4b4d-bde1-c04b0ed749a7"
+  },
+  "task_id": "t_8b1ae292",
+  "writer_sha256": "fd24f484818f8eb8be862a04fcb26a74dd60281a76103bd61936051aafe31e62"
+}

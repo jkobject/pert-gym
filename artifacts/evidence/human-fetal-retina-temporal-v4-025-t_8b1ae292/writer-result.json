@@ -1,0 +1,19 @@
+{
+  "artifacts": 3,
+  "consumer_readback": "3/3 opened at recorded generations",
+  "datasets": 1,
+  "manifest": {
+    "bucket": "scperturb",
+    "generation": "1784281750307410",
+    "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/workloads/temporal-v4-025-wave05-ab1405c531952b7a/materialization-manifest.json#1784281750307410",
+    "name": "pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/workloads/temporal-v4-025-wave05-ab1405c531952b7a/materialization-manifest.json",
+    "sha256": "c96f88c3f925df94c3511f5e3a8792cb5afe9e8af086faa93cf00f1579bf6d10",
+    "size_bytes": 17194,
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/workloads/temporal-v4-025-wave05-ab1405c531952b7a/materialization-manifest.json"
+  },
+  "manifest_last": true,
+  "manifest_newer_than_every_payload": true,
+  "observations": 108838,
+  "product_credit": 0,
+  "status": "PASS"
+}

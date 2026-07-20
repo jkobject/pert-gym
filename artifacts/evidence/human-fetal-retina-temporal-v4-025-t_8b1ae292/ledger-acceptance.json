@@ -1,0 +1,21 @@
+{
+  "schema_version": "pert-gym.publication-component-ledger-receipt/v1",
+  "submission_id": "pert-gym-ledger:materialized:t_8b1ae292:temporal_v4_025_human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma",
+  "entry_path": "ledger.json",
+  "entry_sha256": "848838faa4ee573a423f667f3b7cea6aa444bfde60ba3f2526f2d5094b8a5736",
+  "accepted": true,
+  "accepted_product_credit": 1,
+  "controlling_packet_ledger_precondition": "2/153",
+  "receipt_scope": "exact component-local product credit; global ledger denominator not reasserted",
+  "checks": {
+    "single_component": true,
+    "record_equation_1_equals_1_plus_0": true,
+    "dataset_equation_1_equals_1_plus_0": true,
+    "observation_equation_108838_equals_108838_plus_0": true,
+    "deduplication_scope_count_one": true,
+    "materialization_manifest_generation_pinned": true,
+    "three_payload_members_generation_pinned_readable": true,
+    "shape_108838_by_32055": true,
+    "missingness_non_excluding": true
+  }
+}
