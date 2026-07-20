@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -13,6 +14,9 @@ CONFIG_VERSION = "cellxgene-logical-component-config/v1"
 AUTHORIZATION_VERSION = "cellxgene-logical-component-authorization/v1"
 PROTOCOL = "cellxgene-category-safe-logical-sparse-zarr/v1"
 MAPPER_VERSION = "declarative-obs-mapper/v1"
+AUTHORIZATION_MANIFEST_VERSION = "cellxgene-writer-authorization-manifest/v1"
+MISSINGNESS_POLICY_VERSION = "explicit-only/v1"
+EXACT_REVIEW_SCOPE = "exact-head-independent-review-before-any-execution"
 
 _CONFIG_KEYS = {
     "config_version",
@@ -104,6 +108,49 @@ _REQUIRED_FORBIDDEN = {
 }
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+
+_MANIFEST_KEYS = {
+    "manifest_version",
+    "protocol",
+    "issued_at",
+    "expires_at",
+    "batch_review",
+    "writer_contract",
+    "entries",
+}
+_MANIFEST_WRITER_KEYS = {
+    "writer_sha256",
+    "writer_contract_sha256",
+    "parquet_frame_parity_sha256",
+    "live_ledger_control_plane_sha256",
+}
+_MANIFEST_ENTRY_KEYS = {
+    "record_id",
+    "config_sha256",
+    "source_packet_sha256",
+    "source",
+    "http_identity",
+    "shape",
+    "species",
+    "assays",
+    "missingness_policy",
+    "writer_contract_sha256",
+    "task_id",
+    "family_lease",
+    "revision_prefix",
+    "config_identity",
+    "review_provenance",
+    "execution_authorized",
+}
+_CONFIG_IDENTITY_KEYS = {
+    "dataset_config_status",
+    "ordered_var",
+    "obs",
+    "accepted_components",
+    "execution",
+    "storage",
+    "forbidden_actions",
+}
 _APPROVED_IDENTITY_SHA256_BY_REVISION = {
     "temporal-v4-007": {
         "url": "b1234ed992555b240aa5c93e16f04ad1be9c5c7b2e33bae856f6f00dd85fedd8",
@@ -238,13 +285,190 @@ def _json_sha256(value: Any) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def _utc_timestamp(value: Any, label: str) -> datetime:
+    text = _nonempty(value, label)
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError as error:
+        raise ValueError(f"{label} must be an ISO-8601 timestamp") from error
+    if parsed.tzinfo is None:
+        raise ValueError(f"{label} must include a timezone")
+    return parsed.astimezone(timezone.utc)
+
+
+def _entry_approved_identity(entry: dict[str, Any]) -> dict[str, str]:
+    identity = entry["config_identity"]
+    approved = {
+        key: hashlib.sha256(str(value).encode()).hexdigest()
+        for key, value in {
+            **entry["source"],
+            "parent_task_id": entry["review_provenance"]["parent_task_id"],
+            "catalogue_record": entry["record_id"],
+            "logical_key": entry["family_lease"],
+            "task_id": entry["task_id"],
+            "dataset_config_status": identity["dataset_config_status"],
+        }.items()
+    }
+    for key, value in {
+        "source_head": entry["http_identity"],
+        "shape": entry["shape"],
+        "organism": entry["species"],
+        "assays": entry["assays"],
+        "ordered_var": identity["ordered_var"],
+        "obs": identity["obs"],
+        "accepted_components": identity["accepted_components"],
+        "execution": identity["execution"],
+        "storage": identity["storage"],
+        "forbidden_actions": identity["forbidden_actions"],
+    }.items():
+        approved[key] = _json_sha256(value)
+    return approved
+
+
+def load_authorization_manifest(
+    manifest_path: Path,
+    digest_path: Path,
+    *,
+    writer_path: Path,
+    helper_path: Path,
+    ledger_helper_path: Path,
+    now: str | None = None,
+) -> SimpleNamespace:
+    """Load one reviewed batch manifest and verify its detached content hash."""
+    manifest_bytes = manifest_path.read_bytes()
+    manifest_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
+    digest_parts = digest_path.read_text().strip().split()
+    if (
+        len(digest_parts) != 2
+        or digest_parts[0] != manifest_sha256
+        or digest_parts[1] != manifest_path.name
+    ):
+        raise RuntimeError("authorization manifest SHA-256 signature is stale or malformed")
+    manifest = json.loads(manifest_bytes)
+    _exact_keys(manifest, _MANIFEST_KEYS, "authorization manifest")
+    if manifest["manifest_version"] != AUTHORIZATION_MANIFEST_VERSION:
+        raise ValueError("unsupported authorization manifest version")
+    if manifest["protocol"] != PROTOCOL:
+        raise ValueError("authorization manifest protocol is not approved")
+    issued_at = _utc_timestamp(manifest["issued_at"], "manifest.issued_at")
+    expires_at = _utc_timestamp(manifest["expires_at"], "manifest.expires_at")
+    observed_at = _utc_timestamp(
+        now or datetime.now(timezone.utc).isoformat(), "manifest validation time"
+    )
+    if not issued_at <= observed_at <= expires_at:
+        raise RuntimeError("authorization manifest is expired or has an invalid validity window")
+
+    batch_review = _exact_keys(
+        manifest["batch_review"],
+        {"task_id", "reviewer", "status", "scope"},
+        "manifest.batch_review",
+    )
+    for key in ("task_id", "reviewer", "scope"):
+        _nonempty(batch_review[key], f"manifest.batch_review.{key}")
+    if batch_review["status"] != "completed":
+        raise RuntimeError("authorization manifest batch review is not completed")
+
+    writer_contract = _exact_keys(
+        manifest["writer_contract"],
+        _MANIFEST_WRITER_KEYS,
+        "manifest.writer_contract",
+    )
+    observed_hashes = {
+        "writer_sha256": hashlib.sha256(writer_path.read_bytes()).hexdigest(),
+        "writer_contract_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "parquet_frame_parity_sha256": hashlib.sha256(helper_path.read_bytes()).hexdigest(),
+        "live_ledger_control_plane_sha256": hashlib.sha256(
+            ledger_helper_path.read_bytes()
+        ).hexdigest(),
+    }
+    for key, observed in observed_hashes.items():
+        _sha(writer_contract[key], f"manifest.writer_contract.{key}")
+        if writer_contract[key] != observed:
+            label = "writer SHA-256" if key == "writer_sha256" else key.replace("_", " ")
+            raise RuntimeError(f"authorization manifest {label} is stale")
+
+    entries = manifest["entries"]
+    if not isinstance(entries, list) or not entries:
+        raise ValueError("authorization manifest entries must be a non-empty list")
+    seen_records: set[str] = set()
+    seen_configs: set[str] = set()
+    for index, raw_entry in enumerate(entries):
+        entry = _exact_keys(raw_entry, _MANIFEST_ENTRY_KEYS, f"manifest.entries[{index}]")
+        record_id = _nonempty(entry["record_id"], "manifest entry record_id")
+        config_sha256 = _sha(entry["config_sha256"], "manifest entry config_sha256")
+        _sha(entry["source_packet_sha256"], "manifest entry source_packet_sha256")
+        _sha(entry["writer_contract_sha256"], "manifest entry writer_contract_sha256")
+        if record_id in seen_records or config_sha256 in seen_configs:
+            raise ValueError("duplicate or conflicting authorization manifest entry")
+        seen_records.add(record_id)
+        seen_configs.add(config_sha256)
+        _exact_keys(entry["source"], _SOURCE_KEYS, "manifest entry source")
+        _exact_keys(entry["http_identity"], _HEAD_KEYS, "manifest entry http_identity")
+        species = _exact_keys(
+            entry["species"],
+            {"label", "ontology_term_id"},
+            "manifest entry species",
+        )
+        for key in ("label", "ontology_term_id"):
+            _nonempty(species[key], f"manifest entry species.{key}")
+        if not isinstance(entry["assays"], list) or not entry["assays"]:
+            raise ValueError("manifest entry assays must be non-empty")
+        if not isinstance(entry["shape"], list) or len(entry["shape"]) != 2:
+            raise ValueError("manifest entry shape must contain [n_obs, n_vars]")
+        missingness = _exact_keys(
+            entry["missingness_policy"],
+            {"mode", "allowed_unknown_fields", "invent_values"},
+            "manifest entry missingness_policy",
+        )
+        if (
+            missingness["mode"] != MISSINGNESS_POLICY_VERSION
+            or not isinstance(missingness["allowed_unknown_fields"], list)
+            or len(set(missingness["allowed_unknown_fields"]))
+            != len(missingness["allowed_unknown_fields"])
+            or missingness["invent_values"] is not False
+        ):
+            raise ValueError("manifest missingness policy must be explicit and non-inventing")
+        _exact_keys(entry["config_identity"], _CONFIG_IDENTITY_KEYS, "manifest entry config_identity")
+        provenance = _exact_keys(
+            entry["review_provenance"],
+            {"parent_task_id", "correction_task_id", "reviewer", "reviewed_at", "status", "scope"},
+            "manifest entry review_provenance",
+        )
+        for key in ("parent_task_id", "correction_task_id", "reviewer", "scope"):
+            _nonempty(provenance[key], f"manifest entry review_provenance.{key}")
+        reviewed_at = _utc_timestamp(
+            provenance["reviewed_at"], "manifest entry reviewed_at"
+        )
+        if reviewed_at > issued_at or reviewed_at > observed_at:
+            raise RuntimeError(
+                "manifest entry reviewed_at is later than manifest issuance or validation"
+            )
+        if provenance["status"] != "completed":
+            raise RuntimeError("manifest entry review provenance is not completed")
+        if provenance["scope"] != EXACT_REVIEW_SCOPE:
+            raise RuntimeError(
+                "manifest entry review scope is not exact-head independent review"
+            )
+        if entry["writer_contract_sha256"] != writer_contract["writer_contract_sha256"]:
+            raise RuntimeError("manifest entry writer contract SHA-256 is stale")
+        if entry["execution_authorized"] is not True:
+            raise RuntimeError("manifest entry is not execution-authorized")
+    return SimpleNamespace(
+        manifest=manifest,
+        entries=entries,
+        manifest_sha256=manifest_sha256,
+    )
+
+
 def requires_live_ledger(config: dict[str, Any]) -> bool:
     """Bind the live gate to the accepted-components metric, never a row list."""
     ledger = config.get("accepted_components")
     return isinstance(ledger, dict) and ledger.get("metric") == "accepted_components"
 
 
-def _validate_config(config: dict[str, Any]) -> None:
+def _validate_config(
+    config: dict[str, Any], manifest_entry: dict[str, Any] | None = None
+) -> None:
     revision_prefix = (
         config.get("revision", {}).get("prefix")
         if isinstance(config, dict) and isinstance(config.get("revision"), dict)
@@ -292,9 +516,13 @@ def _validate_config(config: dict[str, Any]) -> None:
         raise ValueError("API visibility/tombstone/primary-data identity must fail closed")
     organism = _exact_keys(api["organism"], {"label", "ontology_term_id"}, "api_identity.organism")
     expected_organism = (
-        {"label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090"}
-        if revision_prefix == "temporal-v4-055"
-        else {"label": "Homo sapiens", "ontology_term_id": "NCBITaxon:9606"}
+        manifest_entry["species"]
+        if manifest_entry is not None
+        else (
+            {"label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090"}
+            if revision_prefix == "temporal-v4-055"
+            else {"label": "Homo sapiens", "ontology_term_id": "NCBITaxon:9606"}
+        )
     )
     if organism != expected_organism:
         raise ValueError(f"only exact {expected_organism['label']} identity is approved")
@@ -442,7 +670,11 @@ def _validate_config(config: dict[str, Any]) -> None:
     ):
         raise ValueError("revision prefix conflicts with output/task identity")
 
-    approved_identity = _APPROVED_IDENTITY_SHA256_BY_REVISION.get(revision["prefix"])
+    approved_identity = (
+        _entry_approved_identity(manifest_entry)
+        if manifest_entry is not None
+        else _APPROVED_IDENTITY_SHA256_BY_REVISION.get(revision["prefix"])
+    )
     if approved_identity is None:
         raise ValueError("revision has no intrinsically approved identity binding")
     for key in sorted(_SOURCE_KEYS):
@@ -529,9 +761,10 @@ def validate_bound_contract(
     helper_sha256: str,
     contract_sha256: str,
     ledger_helper_sha256: str | None = None,
+    manifest_entry: dict[str, Any] | None = None,
 ) -> SimpleNamespace:
     """Validate all data and hash bindings without performing any I/O."""
-    _validate_config(config)
+    _validate_config(config, manifest_entry)
     live_ledger_revision = requires_live_ledger(config)
     authorization_keys = (
         _LIVE_LEDGER_AUTHORIZATION_KEYS if live_ledger_revision else _AUTHORIZATION_KEYS
@@ -566,11 +799,88 @@ def validate_bound_contract(
     if authorization["correction_task_id"] != binding["correction_task_id"]:
         raise RuntimeError("authorization correction task is not bound to config task")
     _nonempty(authorization["review_scope"], "authorization.review_scope")
-    if authorization["review_scope"] != "exact-head-independent-review-before-any-execution":
+    if authorization["review_scope"] != EXACT_REVIEW_SCOPE:
         raise RuntimeError("authorization review scope is not exact-head independent review")
     if not isinstance(authorization["execution_authorized"], bool):
         raise ValueError("authorization.execution_authorized must be boolean")
     return SimpleNamespace(config=config, authorization=authorization)
+
+
+def load_manifest_contract(
+    config_path: Path,
+    manifest_path: Path,
+    digest_path: Path,
+    *,
+    writer_path: Path,
+    helper_path: Path,
+    require_execution: bool,
+    now: str | None = None,
+) -> SimpleNamespace:
+    """Resolve an exact config from the reviewed data-driven authorization set."""
+    ledger_helper_path = Path(__file__).with_name("live_ledger_control_plane.py")
+    validated_manifest = load_authorization_manifest(
+        manifest_path,
+        digest_path,
+        writer_path=writer_path,
+        helper_path=helper_path,
+        ledger_helper_path=ledger_helper_path,
+        now=now,
+    )
+    config_bytes = config_path.read_bytes()
+    config_sha256 = hashlib.sha256(config_bytes).hexdigest()
+    config = json.loads(config_bytes)
+    record_id = config.get("catalogue_record")
+    candidates = [
+        entry
+        for entry in validated_manifest.entries
+        if entry["record_id"] == record_id
+    ]
+    if len(candidates) != 1:
+        raise RuntimeError("config has no exact manifest entry membership")
+    entry = candidates[0]
+    if entry["config_sha256"] != config_sha256:
+        raise RuntimeError("manifest config SHA-256 does not match exact config bytes")
+    if entry["source_packet_sha256"] != config_sha256:
+        raise RuntimeError("manifest source packet SHA-256 is not bound to exact config")
+
+    writer_contract = validated_manifest.manifest["writer_contract"]
+    provenance = entry["review_provenance"]
+    authorization = {
+        "authorization_version": AUTHORIZATION_VERSION,
+        "protocol": validated_manifest.manifest["protocol"],
+        "config_sha256": config_sha256,
+        "writer_sha256": writer_contract["writer_sha256"],
+        "writer_contract_sha256": writer_contract["writer_contract_sha256"],
+        "parquet_frame_parity_sha256": writer_contract[
+            "parquet_frame_parity_sha256"
+        ],
+        "live_ledger_control_plane_sha256": writer_contract[
+            "live_ledger_control_plane_sha256"
+        ],
+        "parent_task_id": provenance["parent_task_id"],
+        "parent_task_status": provenance["status"],
+        "approved_parent_protocol": (
+            f"{entry['revision_prefix']}-parquet-parity-parent/v1"
+        ),
+        "correction_task_id": provenance["correction_task_id"],
+        "review_scope": provenance["scope"],
+        "execution_authorized": entry["execution_authorized"],
+    }
+    result = validate_bound_contract(
+        config,
+        authorization,
+        config_sha256=config_sha256,
+        writer_sha256=writer_contract["writer_sha256"],
+        helper_sha256=writer_contract["parquet_frame_parity_sha256"],
+        contract_sha256=writer_contract["writer_contract_sha256"],
+        ledger_helper_sha256=writer_contract["live_ledger_control_plane_sha256"],
+        manifest_entry=entry,
+    )
+    result.manifest_entry = entry
+    result.manifest_sha256 = validated_manifest.manifest_sha256
+    if require_execution:
+        require_execution_authorized(result)
+    return result
 
 
 def load_bound_contract(

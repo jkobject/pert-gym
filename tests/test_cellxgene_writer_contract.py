@@ -26,6 +26,8 @@ ROW_55_CONFIG = REVIEW / "row-55-config.json"
 ROW_55_AUTHORIZATION = REVIEW / "row-55-authorization.json"
 ROW_111_CONFIG = REVIEW / "row-111-config.json"
 ROW_111_AUTHORIZATION = REVIEW / "row-111-authorization.json"
+AUTHORIZATION_MANIFEST = REVIEW / "writer-authorization-manifest.json"
+AUTHORIZATION_MANIFEST_DIGEST = REVIEW / "writer-authorization-manifest.sha256"
 WRITER = REVIEW / "write_component.py"
 HELPER = REVIEW / "parquet_frame_parity.py"
 LEDGER_HELPER = REVIEW / "live_ledger_control_plane.py"
@@ -47,13 +49,21 @@ def load_contract_module():
     return module
 
 
-def load_writer_module():
+def load_writer_module(*, strict_legacy_paths: bool = False):
     sys.path.insert(0, str(REVIEW))
     try:
         spec = importlib.util.spec_from_file_location("cellxgene_writer", WRITER)
         assert spec is not None and spec.loader is not None
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+        if not strict_legacy_paths:
+            # Existing unit tests exercise validation/runtime boundaries behind the
+            # production CLI path gate; strict CLI tests opt back into the real gate.
+            setattr(
+                module,
+                "require_legacy_replay_paths",
+                lambda config, authorization: (config, authorization),
+            )
         return module
     finally:
         sys.path.remove(str(REVIEW))
@@ -155,6 +165,59 @@ def test_row_99_stale_writer_hash_rejects_before_external_io(
     with pytest.raises(RuntimeError, match="writer SHA-256"):
         writer.main()
 
+    assert calls == []
+
+
+@pytest.mark.parametrize(
+    ("config_path", "authorization_path"),
+    [
+        (ROW_7_CONFIG, ROW_7_AUTHORIZATION),
+        (ROW_55_CONFIG, ROW_55_AUTHORIZATION),
+        (ROW_111_CONFIG, ROW_111_AUTHORIZATION),
+    ],
+)
+def test_manifest_migrated_rows_reject_legacy_cli_authorization_before_external_io(
+    monkeypatch, config_path: Path, authorization_path: Path
+) -> None:
+    writer = load_writer_module(strict_legacy_paths=True)
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+    )
+    with pytest.raises(RuntimeError, match="canonical row-99 replay"):
+        writer.main()
+    assert calls == []
+
+
+def test_manifest_cli_rejects_incomplete_provenance_before_external_io(
+    monkeypatch, tmp_path: Path
+) -> None:
+    writer = load_writer_module()
+    manifest = json.loads(AUTHORIZATION_MANIFEST.read_text())
+    manifest["entries"][0]["review_provenance"]["reviewer"] = ""
+    manifest_path = tmp_path / AUTHORIZATION_MANIFEST.name
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    digest_path = tmp_path / AUTHORIZATION_MANIFEST_DIGEST.name
+    digest_path.write_text(f"{sha256(manifest_path)}  {manifest_path.name}\n")
+    calls = instrument_external_boundaries(monkeypatch, writer)
+    monkeypatch.setattr(
+        writer,
+        "require_reviewed_manifest_paths",
+        lambda manifest, digest: (manifest, digest),
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(WRITER), "--config", str(ROW_7_CONFIG),
+            "--authorization-manifest", str(manifest_path),
+            "--authorization-manifest-sha256", str(digest_path),
+        ],
+    )
+    with pytest.raises(ValueError, match="reviewer.*non-empty"):
+        writer.main()
     assert calls == []
 
 
