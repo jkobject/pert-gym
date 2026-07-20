@@ -327,6 +327,14 @@ def depmap_matrix_to_obs_var(
         columns=["perturbation_gene", "perturbation_gene_id"],
         index=matrix.columns.astype(str),
     )
+    malformed_gene_labels = gene_meta.index[
+        gene_meta["perturbation_gene_id"].isna()
+    ].tolist()
+    if malformed_gene_labels:
+        raise ValueError(
+            "Malformed DepMap gene labels (expected 'SYMBOL (EntrezID)'): "
+            f"{malformed_gene_labels[:5]}"
+        )
     gene_meta["gene_label"] = gene_meta.index.astype(str)
     gene_meta["gene_id_type"] = gene_meta["perturbation_gene_id"].map(
         lambda value: "NCBI Entrez Gene ID" if pd.notna(value) and value is not None else None
@@ -364,7 +372,12 @@ def depmap_matrix_to_obs_var(
     obs["readout_modality"] = readout_modality
     obs["source_filename"] = source_filename or Path(matrix_csv).name
     obs["source"] = "DepMap"
-    obs["assay"] = "Chronos_CRISPR_gene_effect" if "effect" in score_column else "Chronos_CRISPR_gene_dependency"
+    normalized_score_column = score_column.lower()
+    obs["assay"] = (
+        "Chronos_CRISPR_gene_effect"
+        if "effect" in normalized_score_column
+        else "Chronos_CRISPR_gene_dependency"
+    )
     obs["is_control"] = False
     obs["essentiality_observation_id"] = (
         obs["source"].astype(str)
@@ -426,6 +439,27 @@ def validate_baseline_rna_obs_contract(
     missing = set(join_fields).difference(obs.columns)
     if missing:
         raise ValueError(f"Baseline RNA obs missing stable join fields: {sorted(missing)}")
+
+    join_fields = tuple(join_fields)
+    join_values = obs.loc[:, list(join_fields)]
+    invalid = join_values.isna() | join_values.apply(
+        lambda column: column.astype(str).str.strip().eq("")
+    )
+    if invalid.any(axis=None):
+        bad_rows = list(obs.index[invalid.any(axis=1)])
+        raise ValueError(
+            "Baseline RNA stable join fields must be non-null and nonblank; "
+            f"bad rows: {bad_rows}"
+        )
+
+    normalized = join_values.apply(lambda column: column.astype(str).str.strip())
+    disagreements = normalized.nunique(axis=1) != 1
+    if disagreements.any():
+        bad_rows = list(obs.index[disagreements])
+        raise ValueError(
+            "Baseline RNA stable join fields must agree by exact normalized "
+            f"string equality; bad rows: {bad_rows}"
+        )
     forbidden_score_columns = {"effect_score", "dependency_score", "score", "gene_effect", "essentiality_score"}
     leaked = forbidden_score_columns.intersection(obs.columns)
     if leaked:

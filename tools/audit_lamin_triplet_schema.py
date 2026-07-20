@@ -149,8 +149,13 @@ def logical_dataset_for_prefix(prefix: str) -> str:
 
 def source_accession_for_prefix(prefix: str) -> str:
     """Return first GEO-like accession embedded in a prefix, if any."""
-    match = re.search(r"\bGSE\d+\b", prefix)
-    return match.group(0) if match else ""
+    lower = prefix.lower()
+    if lower.startswith("lincs/phase1/"):
+        return "GSE92742"
+    if lower.startswith("lincs/phase2/"):
+        return "GSE70138"
+    match = re.search(r"\bGSE\d+\b", prefix, flags=re.IGNORECASE)
+    return match.group(0).upper() if match else ""
 
 
 def infer_prefix_role(prefix: str, has_obs: bool, has_x: bool, has_var: bool) -> str:
@@ -238,7 +243,7 @@ def infer_modality(prefix: str, role: str, variant: str) -> str:
     if any(token in lower for token in ["gdsc", "score_crispr", "repurposing"]):
         return "screen"
     if "lincs" in lower:
-        return "bulk_RNA_signature"
+        return "L1000"
     if "drug-seq" in lower:
         return "bulk_RNA"
     if "sidecar" in role and variant == "unknown_sidecar":
@@ -307,15 +312,24 @@ def recommended_repair(prefix: str, role: str, missing: list[str]) -> tuple[str,
                 "excluded_legacy_dataset",
                 "archive/delete from pert-gym branch; do not use as PRoPER-seq substitute",
             )
-        return ("classify_sidecar", "do not force into canonical expression triplet; record sidecar role")
+        return (
+            "classify_sidecar",
+            "do not force into canonical expression triplet; record sidecar role",
+        )
     if role == "orphan_X_or_sidecar":
         return (
             "orphan_review",
             "inspect whether X.h5ad still contains obs/var; migrate only if intended as loadable dataset",
         )
     if role == "orphan_obs_or_demo":
-        return ("orphan_review", "classify as demo/obs-only sidecar or find matching X before repair")
-    return ("manual_review", f"review incomplete prefix with missing parts: {missing_text}")
+        return (
+            "orphan_review",
+            "classify as demo/obs-only sidecar or find matching X before repair",
+        )
+    return (
+        "manual_review",
+        f"review incomplete prefix with missing parts: {missing_text}",
+    )
 
 
 def write_tsv(
@@ -354,6 +368,8 @@ def infer_x_semantics(prefix: str, obs_columns: set[str]) -> str:
     lower = prefix.lower()
     if any(x in lower for x in ["gdsc", "score", "repurposing"]):
         return "empty_or_screen_response"
+    if "lincs" in lower and "level2_gex" in lower:
+        return "normalized_expression"
     if "lincs" in lower and "delta" in lower:
         return "delta_expression"
     if "properseq/chimeric" in lower:
@@ -454,7 +470,9 @@ def auxiliary_artifact_plan(row: dict[str, Any]) -> dict[str, Any] | None:
         key_prefix = target_prefix or "<primary-prefix>"
         target_x_key = f"{key_prefix}/X_{name}.h5ad"
         target_var_key = f"{key_prefix}/var_{name}.parquet"
-        safe_next_action = "bounded obs-index and feature identity check before aliasing/linking"
+        safe_next_action = (
+            "bounded obs-index and feature identity check before aliasing/linking"
+        )
     elif role == "model_embedding_sidecar":
         standard_kind = "model_or_embedding_artifact"
         target_prefix = row["logical_dataset"]
@@ -467,7 +485,9 @@ def auxiliary_artifact_plan(row: dict[str, Any]) -> dict[str, Any] | None:
         safe_next_action = "leave as top-level shared var reference; plate-level vars are already same-prefix"
     elif role == "feature_reference_sidecar":
         standard_kind = "feature_reference"
-        safe_next_action = "keep as feature-barcode reference unless paired with a primary X"
+        safe_next_action = (
+            "keep as feature-barcode reference unless paired with a primary X"
+        )
     elif role == "non_expression_sidecar":
         standard_kind = "non_expression_readout"
         safe_next_action = "keep typed outside canonical RNA triplet"
@@ -513,7 +533,9 @@ def schema_feature_names(artifact: Any) -> list[str]:
     schema = getattr(artifact, "schema", None)
     if schema is None:
         return []
-    cache_key = str(getattr(schema, "uid", "") or getattr(schema, "id", "") or id(schema))
+    cache_key = str(
+        getattr(schema, "uid", "") or getattr(schema, "id", "") or id(schema)
+    )
     if cache_key in SCHEMA_FEATURE_NAME_CACHE:
         return SCHEMA_FEATURE_NAME_CACHE[cache_key]
     try:
@@ -524,7 +546,13 @@ def schema_feature_names(artifact: Any) -> list[str]:
         except Exception:  # noqa: BLE001
             SCHEMA_FEATURE_NAME_CACHE[cache_key] = []
             return []
-    names = sorted({str(getattr(member, "name", "")) for member in members if getattr(member, "name", "")})
+    names = sorted(
+        {
+            str(getattr(member, "name", ""))
+            for member in members
+            if getattr(member, "name", "")
+        }
+    )
     SCHEMA_FEATURE_NAME_CACHE[cache_key] = names
     return names
 
@@ -538,7 +566,8 @@ def alias_available_for_columns(obs_columns: set[str]) -> dict[str, list[str]]:
     return {
         canonical: [alias for alias in aliases if alias in obs_columns]
         for canonical, aliases in SYNONYMS.items()
-        if canonical not in obs_columns and any(alias in obs_columns for alias in aliases)
+        if canonical not in obs_columns
+        and any(alias in obs_columns for alias in aliases)
     }
 
 
@@ -549,7 +578,9 @@ def classify_var_from_columns(columns: set[str], prefix: str) -> str:
         return "unknown_metadata_only"
     if any(c in lower_cols for c in {"ensembl_id", "ensembl", "gene_ids", "gene_id"}):
         return "id_columns_present_metadata_only"
-    if any(c in lower_cols for c in {"gene_symbol", "symbol", "gene_name", "gene_symbols"}):
+    if any(
+        c in lower_cols for c in {"gene_symbol", "symbol", "gene_name", "gene_symbols"}
+    ):
         return "symbol_columns_present_metadata_only"
     if any(token in prefix.lower() for token in ["gdsc", "score", "repurposing"]):
         return "screen_feature_metadata_only"
@@ -590,7 +621,9 @@ def main() -> int:
 
     suffix_by_prefix: dict[str, set[str]] = defaultdict(set)
     row_by_key = {a.key: a for a in artifacts if a.key}
-    artifact_by_key = {getattr(a, "key", ""): a for a in raw_artifacts if getattr(a, "key", "")}
+    artifact_by_key = {
+        getattr(a, "key", ""): a for a in raw_artifacts if getattr(a, "key", "")
+    }
     for row in artifacts:
         prefix = prefix_for_key(row.key)
         if prefix is not None:
@@ -612,8 +645,12 @@ def main() -> int:
         linked_obs_key = ""
         linked_var_key = ""
         if not complete:
-            linked_obs_key = feature_link_key(artifact_by_key.get(f"{prefix}/X.h5ad"), "obs")
-            linked_var_key = feature_link_key(artifact_by_key.get(f"{prefix}/X.h5ad"), "var")
+            linked_obs_key = feature_link_key(
+                artifact_by_key.get(f"{prefix}/X.h5ad"), "obs"
+            )
+            linked_var_key = feature_link_key(
+                artifact_by_key.get(f"{prefix}/X.h5ad"), "var"
+            )
         triplet_rows.append(
             {
                 "prefix": prefix,
@@ -630,7 +667,9 @@ def main() -> int:
                 "linked_var_key": linked_var_key,
                 "has_linked_var": bool_str(bool(linked_var_key)),
                 "is_complete_triplet": bool_str(complete),
-                "is_training_candidate": bool_str(complete and is_training_candidate_role(role)),
+                "is_training_candidate": bool_str(
+                    complete and is_training_candidate_role(role)
+                ),
                 "obs_n_observations": getattr(obs_row, "n_observations", None),
                 "X_n_observations": getattr(x_row, "n_observations", None),
                 "var_n_observations": getattr(var_row, "n_observations", None),
@@ -671,7 +710,9 @@ def main() -> int:
         role_counts = defaultdict(int)
         variant_counts = defaultdict(int)
         modality_counts = defaultdict(int)
-        accessions = sorted({r["source_accession"] for r in rows if r["source_accession"]})
+        accessions = sorted(
+            {r["source_accession"] for r in rows if r["source_accession"]}
+        )
         for row in rows:
             role_counts[row["prefix_role"]] += 1
             variant_counts[row["variant_type"]] += 1
@@ -684,7 +725,9 @@ def main() -> int:
                 "n_prefixes": len(rows),
                 "n_complete_triplets": complete_count,
                 "n_incomplete_prefixes": len(rows) - complete_count,
-                "n_training_candidate_prefixes": sum(r["is_training_candidate"] == "true" for r in rows),
+                "n_training_candidate_prefixes": sum(
+                    r["is_training_candidate"] == "true" for r in rows
+                ),
                 "is_chunked_or_sharded": bool_str(len(rows) > 1),
                 "prefix_roles": repr(dict(sorted(role_counts.items()))),
                 "variant_types": repr(dict(sorted(variant_counts.items()))),
@@ -707,7 +750,9 @@ def main() -> int:
             ]
             if flag != "true"
         ]
-        priority, action = recommended_repair(row["prefix"], row["prefix_role"], missing)
+        priority, action = recommended_repair(
+            row["prefix"], row["prefix_role"], missing
+        )
         if "var.parquet" in missing and row["has_linked_var"] == "true":
             priority = "local_var_artifact_missing_but_linked"
             action = (
@@ -773,7 +818,11 @@ def main() -> int:
         prefix = row["prefix"]
         obs_artifact = artifact_by_key.get(f"{prefix}/obs.parquet")
         var_artifact = artifact_by_key.get(f"{prefix}/var.parquet")
-        obs_columns = obs_columns_from_registry(obs_artifact) if row["has_obs"] == "true" else set()
+        obs_columns = (
+            obs_columns_from_registry(obs_artifact)
+            if row["has_obs"] == "true"
+            else set()
+        )
         present = [c for c in CANONICAL_OBS_COLUMNS if c in obs_columns]
         missing = [c for c in CANONICAL_OBS_COLUMNS if c not in obs_columns]
         alias_available = alias_available_for_columns(obs_columns)
@@ -812,7 +861,11 @@ def main() -> int:
                 }
             )
 
-        var_columns = set(schema_feature_names(var_artifact)) if row["has_var"] == "true" else set()
+        var_columns = (
+            set(schema_feature_names(var_artifact))
+            if row["has_var"] == "true"
+            else set()
+        )
         if row["has_var"] == "true":
             var_rows.append(
                 {
@@ -841,7 +894,9 @@ def main() -> int:
                 "prefix": prefix,
                 "logical_dataset": row["logical_dataset"],
                 "x_semantics_guess": infer_x_semantics(prefix, obs_columns),
-                "needs_manual_review": bool_str(row["modality_guess"] in {"unknown_sidecar", "RNA"}),
+                "needs_manual_review": bool_str(
+                    row["modality_guess"] in {"unknown_sidecar", "RNA"}
+                ),
             }
         )
 
@@ -862,8 +917,7 @@ def main() -> int:
             present = [c for c in CANONICAL_OBS_COLUMNS if c in obs_columns]
             missing = [c for c in CANONICAL_OBS_COLUMNS if c not in obs_columns]
             alias_available = {
-                c: [s for s in SYNONYMS.get(c, []) if s in obs_columns]
-                for c in missing
+                c: [s for s in SYNONYMS.get(c, []) if s in obs_columns] for c in missing
             }
             obs_coverage_rows.append(
                 {
@@ -873,7 +927,9 @@ def main() -> int:
                     "n_obs_columns": len(obs_columns),
                     "present_columns": ",".join(present),
                     "missing_columns": ",".join(missing),
-                    "alias_available": repr({k: v for k, v in alias_available.items() if v}),
+                    "alias_available": repr(
+                        {k: v for k, v in alias_available.items() if v}
+                    ),
                     "load_error": "",
                 }
             )
@@ -1046,34 +1102,54 @@ def main() -> int:
         "branch": ln.setup.settings.branch.name,
         "artifacts": len(artifacts),
         "triplet_prefixes": len(triplet_rows),
-        "complete_triplets": sum(r["is_complete_triplet"] == "true" for r in triplet_rows),
-        "incomplete_triplets": sum(r["is_complete_triplet"] != "true" for r in triplet_rows),
-        "training_candidate_prefixes": sum(r["is_training_candidate"] == "true" for r in triplet_rows),
-        "logical_datasets": len(logical_rows),
-        "urgent_triplet_repairs": sum(r["priority"] == "urgent_triplet_repair" for r in repair_rows),
-        "local_var_missing_but_linked": sum(
-            r["priority"] == "local_var_artifact_missing_but_linked" for r in repair_rows
+        "complete_triplets": sum(
+            r["is_complete_triplet"] == "true" for r in triplet_rows
         ),
-        "sidecar_classification_items": sum(r["priority"] == "classify_sidecar" for r in repair_rows),
+        "incomplete_triplets": sum(
+            r["is_complete_triplet"] != "true" for r in triplet_rows
+        ),
+        "training_candidate_prefixes": sum(
+            r["is_training_candidate"] == "true" for r in triplet_rows
+        ),
+        "logical_datasets": len(logical_rows),
+        "urgent_triplet_repairs": sum(
+            r["priority"] == "urgent_triplet_repair" for r in repair_rows
+        ),
+        "local_var_missing_but_linked": sum(
+            r["priority"] == "local_var_artifact_missing_but_linked"
+            for r in repair_rows
+        ),
+        "sidecar_classification_items": sum(
+            r["priority"] == "classify_sidecar" for r in repair_rows
+        ),
         "auxiliary_standardization_items": sum(
             r["priority"] == "standardize_auxiliary_artifact" for r in repair_rows
         ),
         "auxiliary_artifact_plan_items": len(auxiliary_rows),
-        "orphan_review_items": sum(r["priority"] == "orphan_review" for r in repair_rows),
+        "orphan_review_items": sum(
+            r["priority"] == "orphan_review" for r in repair_rows
+        ),
         "duplicate_candidates": len(duplicate_rows),
         "metadata_obs_prefixes": len(obs_coverage_rows) - len(sample_prefixes),
         "metadata_var_prefixes": len(var_rows) - len(sample_prefixes),
         "metadata_x_semantics_prefixes": len(x_semantics_rows) - len(sample_prefixes),
-        "obs_prefixes_with_derivable_aliases": sum(row["alias_available"] != "{}" for row in obs_coverage_rows),
+        "obs_prefixes_with_derivable_aliases": sum(
+            row["alias_available"] != "{}" for row in obs_coverage_rows
+        ),
         "var_prefixes_with_id_or_symbol_columns": sum(
             row["var_index_class"]
-            in {"id_columns_present_metadata_only", "symbol_columns_present_metadata_only"}
+            in {
+                "id_columns_present_metadata_only",
+                "symbol_columns_present_metadata_only",
+            }
             for row in var_rows
         ),
         "sampled_payload_prefixes": len(sample_prefixes),
         "output_dir": str(out),
     }
-    (out / "summary.txt").write_text("\n".join(f"{k}={v}" for k, v in summary.items()) + "\n")
+    (out / "summary.txt").write_text(
+        "\n".join(f"{k}={v}" for k, v in summary.items()) + "\n"
+    )
     for key, value in summary.items():
         print(f"{key}={value}")
     return 0
