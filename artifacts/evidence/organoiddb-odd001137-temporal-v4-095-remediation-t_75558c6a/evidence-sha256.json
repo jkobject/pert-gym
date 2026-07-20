@@ -1,0 +1,104 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "799a60eb2125d46ff356e7ca1178e6d58a764a67790bd4b401788a9880655522",
+      "size_bytes": 4480
+    },
+    {
+      "path": "build_component.py",
+      "sha256": "5ce8a34fb98659d6d1298e7d23fc3085cbe4a0aea04ee30e2e3f84f9da007ae4",
+      "size_bytes": 28155
+    },
+    {
+      "path": "immutability-readback.json",
+      "sha256": "2536ea97294fb1974bff81f56eb9632cceb0c3854ed6e06d44919fc2bfcdbe9b",
+      "size_bytes": 858
+    },
+    {
+      "path": "independent-readback.json",
+      "sha256": "830ececbfa8a9d61c822cc7047f5919d1fd20a7f4ad2fcb151bcc9ea9886b620",
+      "size_bytes": 3141
+    },
+    {
+      "path": "input/downloadable_logical_publication_manifest_20260713.json",
+      "sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+      "size_bytes": 499533
+    },
+    {
+      "path": "input/kanban_graph_compaction_t_36a3533e_manifest.json",
+      "sha256": "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98",
+      "size_bytes": 357964
+    },
+    {
+      "path": "input/temporal_pretraining_datasets_v4.tsv",
+      "sha256": "f8aa67e0c21078aa19374e790f701e13fa28dc037521a236227640ebc3159b66",
+      "size_bytes": 95310
+    },
+    {
+      "path": "remote-output/output/ledger.json",
+      "sha256": "23dd243b421527faca47d9c110b6265bf76d8552616564272257cafdfcf1b7de",
+      "size_bytes": 1450
+    },
+    {
+      "path": "remote-output/output/manifest-object.json",
+      "sha256": "b44303015e60025cf03ba90f48ac9b21ef428528165f02ee42813b2bd977b234",
+      "size_bytes": 660
+    },
+    {
+      "path": "remote-output/output/manifest-readback.json",
+      "sha256": "c5b3b786cebb426ebdc50be19ead968fa258d39241264999e910aa4ec63f4e4b",
+      "size_bytes": 19653
+    },
+    {
+      "path": "remote-output/output/manifest.json",
+      "sha256": "c5b3b786cebb426ebdc50be19ead968fa258d39241264999e910aa4ec63f4e4b",
+      "size_bytes": 19653
+    },
+    {
+      "path": "remote-output/output/writer-result.json",
+      "sha256": "b070a49ab72a3d1d2968df808ae58a87a8969a876b8ce337411839a00b36a782",
+      "size_bytes": 1070
+    },
+    {
+      "path": "test_evidence_inventory.py",
+      "sha256": "de2761299be596eb426e83d4fcd200c1f1ebce2cab93f0691087ed3c4d277fca",
+      "size_bytes": 2827
+    },
+    {
+      "path": "test_revision_recovery.py",
+      "sha256": "57b29c4423ff4391424dc1c5a028a546707f0dbb6b27f4e7f18ef207add117cd",
+      "size_bytes": 5107
+    },
+    {
+      "path": "test_sparse_inventory.py",
+      "sha256": "20ee5951ad065efe22cbea17fb8bd631704a8d5f09f1166947d419599f000700",
+      "size_bytes": 2517
+    },
+    {
+      "path": "verifier-execution.log",
+      "sha256": "830ececbfa8a9d61c822cc7047f5919d1fd20a7f4ad2fcb151bcc9ea9886b620",
+      "size_bytes": 3141
+    },
+    {
+      "path": "verify_component.py",
+      "sha256": "0b039b6a30c004661e803a5dcc348d0f8eb7eebc32c35a1b4f2436c8a2695f4b",
+      "size_bytes": 15378
+    },
+    {
+      "path": "verify_evidence.py",
+      "sha256": "0e03a29c8a208038e2c678b8a8bb02482869b7368d4825108f6c5f4ccf9f7fe7",
+      "size_bytes": 7629
+    },
+    {
+      "path": "writer-execution.log",
+      "sha256": "b070a49ab72a3d1d2968df808ae58a87a8969a876b8ce337411839a00b36a782",
+      "size_bytes": 1070
+    }
+  ],
+  "manifest_sha256": "c5b3b786cebb426ebdc50be19ead968fa258d39241264999e910aa4ec63f4e4b",
+  "record_id": "temporal_v4_095_organoiddb_odd001137_gse158999",
+  "revision": "temporal-v4-095-wave10-c1f63c6ec90e4c24",
+  "schema_version": "pert-gym.evidence-seal/v1",
+  "task_id": "t_75558c6a"
+}

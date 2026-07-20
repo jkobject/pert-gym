@@ -1,0 +1,23 @@
+{
+  "schema_version": "pert-gym.immutable-supersession-readback/v1",
+  "logical_key": "pert-gym/logical/temporal/organoiddb_odd001137_gse158999",
+  "revision_count": 2,
+  "revisions": [
+    {
+      "revision": "temporal-v4-095-wave10-b1dee01a49f4c78c",
+      "role": "superseded_frozen_revision",
+      "manifest_generation": "1784259356995184",
+      "manifest_size_bytes": 19245,
+      "mutated": false
+    },
+    {
+      "revision": "temporal-v4-095-wave10-c1f63c6ec90e4c24",
+      "role": "corrected_append_only_revision",
+      "manifest_generation": "1784286707609127",
+      "manifest_size_bytes": 19653,
+      "manifest_sha256": "c5b3b786cebb426ebdc50be19ead968fa258d39241264999e910aa4ec63f4e4b"
+    }
+  ],
+  "observed_with": "gcloud storage ls + generation-qualified gcloud storage objects describe",
+  "billing_project": "jkobject-1549353370965"
+}
