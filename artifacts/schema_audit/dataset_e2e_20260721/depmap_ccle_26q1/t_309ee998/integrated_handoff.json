@@ -1,0 +1,120 @@
+{
+  "format": "pert-gym.dataset-e2e-integrated-handoff/v1",
+  "task_id": "t_309ee998",
+  "dataset_id": "depmap_ccle/26q1",
+  "status": "review_required",
+  "done_contract": {
+    "source_publication_denominator": {
+      "status": "PASS",
+      "release": "26q1",
+      "evidence_url": "https://depmap.org/portal/download/all/",
+      "source_rows_total": 1775,
+      "selected_default_model_rows": 1719,
+      "non_default_source_rows": 56
+    },
+    "compacted_representation": {
+      "status": "PASS_ACCEPTED_REUSE",
+      "manifest": "gs://scperturb/pert-gym/staging/pert-gym/logical/depmap_ccle26q1/revisions/depmap-ccle26q1-default-models-wave01-960f9db1b737f306/manifest.json#1784226218253256",
+      "manifest_sha256": "ad3d220f2a0550d63d76ff944e93454a658dfa16efe4a3b3be7239ff0e492ecc",
+      "n_obs": 1719,
+      "n_vars": 19215,
+      "rollback": "retain all predecessor Artifact revisions and rejected logical candidate"
+    },
+    "source_exhaustive_obs": {
+      "status": "PASS_ACCEPTED_REUSE",
+      "obs_uid": "kCNSxyUJoJJKRSgE0004",
+      "rows": 1719,
+      "accepted_fields": [
+        "modality",
+        "perturbation",
+        "perturbation_type",
+        "source",
+        "source_accession",
+        "x_semantics"
+      ],
+      "unsupported_fields_remain_explicit": true
+    },
+    "species_correct_var": {
+      "status": "PASS_ACCEPTED_REUSE",
+      "var_uid": "0S0wAPqgigynI4Av0003",
+      "rows": 19215,
+      "human_ensembl_release_116_unique": 17747,
+      "explicit_unresolved": 1468
+    },
+    "dataset_collection": {
+      "status": "PASS_PENDING_INDEPENDENT_REVIEW",
+      "uid": "6bVd5NhvcNOXom0s0000",
+      "key": "pert-gym/dataset/depmap_ccle/26q1/20260721-e2e",
+      "hash": "WTrCJAmC8y3rJupQb9Xn_w",
+      "member_count": 1,
+      "membership_sha256": "4c9ea52a66181a2a8dc9b515b9b49225a9487d00ac34d7b58a58fb9fc63439cd",
+      "obs_uid": "kCNSxyUJoJJKRSgE0004"
+    },
+    "global_versioned_collection": {
+      "status": "PASS_PENDING_INDEPENDENT_REVIEW",
+      "uid": "B9N5cXbu8Cm0RZSj0000",
+      "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e-r2",
+      "hash": "ImySHsnSBRg8WsSXmRcGzw",
+      "member_count": 1016,
+      "unique_uid_count": 1016,
+      "unique_key_count": 1016,
+      "membership_sha256": "9052ec0f3df6f680819c9c2db059bf1a943dd643d8192f4f6b4bd30694cda957",
+      "predecessor_uid": "WBFxVN9Alr8zFt9T0000",
+      "replaced_obsolete_obs_uid": "kCNSxyUJoJJKRSgE0000",
+      "added_current_obs_uid": "kCNSxyUJoJJKRSgE0004",
+      "removed_unrelated_uids": 0
+    },
+    "replay_and_readback": {
+      "status": "PASS",
+      "mutation_replay_writes": 0,
+      "verify_only_writes": 0,
+      "duplicate_uid_count": 0,
+      "duplicate_key_count": 0,
+      "counts_stable": true,
+      "vm_status_after": "TERMINATED",
+      "gce_lease_released": true,
+      "local_lease_released": true
+    },
+    "independent_reviewer": {
+      "status": "PENDING",
+      "required_before_done": true
+    }
+  },
+  "immutable_identities": {
+    "obs_uid": "kCNSxyUJoJJKRSgE0004",
+    "x_uid": "fUSYT9ArHdQye5qv0001",
+    "var_uid": "0S0wAPqgigynI4Av0003",
+    "dataset_collection_uid": "6bVd5NhvcNOXom0s0000",
+    "global_collection_uid": "B9N5cXbu8Cm0RZSj0000"
+  },
+  "rejected_no_credit": {
+    "collection_uid": "aH1RWvlWo87xGpsb0000",
+    "reason": "first successor retained both obsolete and current OBS revisions under the same artifact key",
+    "member_count": 1017,
+    "unique_uid_count": 1017,
+    "unique_key_count": 1016,
+    "replacement_uid": "B9N5cXbu8Cm0RZSj0000",
+    "preserved_append_only": true
+  },
+  "evidence_files": {
+    "publish_collections.py": "29d973fb6cc9285c9d098159c6f2dc9dcc28448820222b45fda681406ec79ae1",
+    "mutation_r2_receipt.json": "27578f16d718e4e8f1553221ef135011057bfcf5d3c9532cd770c439a94f07e6",
+    "verify_receipt.json": "4d4e6d944d208776448527c24e6a3f6452577de798b6ea387cd821bf0e651a7b",
+    "partial_diagnosis.json": "a0e3ca4a5c4ba9d5ab013e6af5e02ea5009ad580487bc397476588fda83fb00a",
+    "inspect_partial.py": "9b7399887d39c239c4ec361329cbeafae1f30a2ce5aff7bd66ccad39ed5293a2"
+  },
+  "validation": {
+    "helper_py_compile": "PASS",
+    "helper_ruff_check": "PASS",
+    "helper_ruff_format_check": "PASS",
+    "make_fmt": "PASS; three unrelated baseline files were restored after canonical formatter changed them",
+    "make_lint": "PASS",
+    "make_test": "PASS; 757 passed, 2 skipped",
+    "remote_verify_only": "PASS; zero writes"
+  },
+  "residual_risks": [
+    "Independent reviewer acceptance is still required before DONE.",
+    "Rejected Collection aH1RWvlWo87xGpsb0000 and its unfinished failed-attempt Run Lz66ZdHZIrVyfIgn are preserved as append-only no-credit evidence; no deletion or rewrite was attempted.",
+    "Remote VM lamindb client 2.6.1 warned that the database is 2.8.1; exact readback and verify-only replay nevertheless passed."
+  ]
+}
