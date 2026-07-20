@@ -340,6 +340,54 @@ def test_reviewed_contract_uses_the_accepted_path_b_join_not_historical_evidence
     )
 
 
+def test_reviewed_contract_matches_independent_accepted_attestation() -> None:
+    runner = _runner_module()
+
+    # Independently stated from the accepted generation-pinned attestation at
+    # provenance-attestation.json#1783849398326128. Do not derive this expected
+    # contract from runner constants: exact durable object identity is the gate.
+    accepted = {
+        "prism_subset": {
+            "uri": "gs://scperturb/pert-gym/staging/executions/t_fef266a1/20260712T094155Z-provenance-attestation-v1/prism_126row_subset.tsv",
+            "generation": "1783849334578024",
+            "sha256": "b4f9abda6162d3e8a13149f384417a26a7589acd840a32bb47abfc9deeba51a1",
+            "size_bytes": 105280,
+        },
+        "prism_manifest": {
+            "uri": "gs://scperturb/pert-gym/staging/executions/t_fef266a1/20260712T094155Z-provenance-attestation-v1/prism_126row_manifest.json",
+            "generation": "1783849336667872",
+            "sha256": "a7fa4054f2f6785a1f9e0abe18e05f2b534eb65b34ffb903b92543107deefa2c",
+            "size_bytes": 1637,
+        },
+        "depmap_fixture": {
+            "uri": "gs://scperturb/pert-gym/staging/executions/t_75fcfe65/20260711T041136Z-8d20d03/depmap_26q1_default_entry_baseline.json",
+            "generation": "1783743276398375",
+            "sha256": "2d055813bcd4e00ae7aecd86c00a772e2342a036181cf6107488444e7790d3bf",
+            "size_bytes": 41343318,
+        },
+        "depmap_source": {
+            "uri": "gs://scperturb/pert-gym/staging/data/main/depmap_ccle/OmicsExpressionTPMLogp1HumanProteinCodingGenes.csv",
+            "generation": "1781122665212682",
+            "sha256": "0377be80c525fde98cbd2c6e8b06bdf2a4014a9683eb70182c1f8649d711021a",
+            "size_bytes": 305007605,
+        },
+        "strand_join": {
+            "uri": "gs://scperturb/pert-gym/staging/executions/t_fef266a1/20260712T094155Z-provenance-attestation-v1/strand_path_b_join.tsv",
+            "generation": "1783849338790865",
+            "sha256": "df012a59fe2469e996660dfa19fd5acabc0b5e4579b7f9d717b347654a651823",
+            "size_bytes": 14209636,
+        },
+        "strand_metadata": {
+            "uri": "gs://scperturb/pert-gym/staging/executions/t_fef266a1/20260712T094155Z-provenance-attestation-v1/strand_metadata.json",
+            "generation": "1783849340784769",
+            "sha256": "75d34a1a0cee72e64a0811f2dd202e1ac6fb8733890cf8e9296c51e48cdcfb1f",
+            "size_bytes": 9731,
+        },
+    }
+
+    assert runner.REVIEWED_INPUT_PROVENANCE == accepted
+
+
 def test_reviewed_contract_accepts_depmap_source_provenance_emitted_by_fixture() -> (
     None
 ):

@@ -34,13 +34,13 @@ from pert_gym.transversal import (
 # against these constants before it can emit a passing report.
 REVIEWED_INPUT_PROVENANCE = {
     "prism_subset": {
-        "uri": "prism_126row_subset.tsv",
+        "uri": "gs://scperturb/pert-gym/staging/executions/t_fef266a1/20260712T094155Z-provenance-attestation-v1/prism_126row_subset.tsv",
         "generation": "1783849334578024",
         "sha256": "b4f9abda6162d3e8a13149f384417a26a7589acd840a32bb47abfc9deeba51a1",
         "size_bytes": 105280,
     },
     "prism_manifest": {
-        "uri": "prism_126row_manifest.json",
+        "uri": "gs://scperturb/pert-gym/staging/executions/t_fef266a1/20260712T094155Z-provenance-attestation-v1/prism_126row_manifest.json",
         "generation": "1783849336667872",
         "sha256": "a7fa4054f2f6785a1f9e0abe18e05f2b534eb65b34ffb903b92543107deefa2c",
         "size_bytes": 1637,
@@ -58,13 +58,13 @@ REVIEWED_INPUT_PROVENANCE = {
         "size_bytes": 305007605,
     },
     "strand_join": {
-        "uri": "strand_path_b_join.tsv",
+        "uri": "gs://scperturb/pert-gym/staging/executions/t_fef266a1/20260712T094155Z-provenance-attestation-v1/strand_path_b_join.tsv",
         "generation": "1783849338790865",
         "sha256": "df012a59fe2469e996660dfa19fd5acabc0b5e4579b7f9d717b347654a651823",
         "size_bytes": 14209636,
     },
     "strand_metadata": {
-        "uri": "strand_metadata.json",
+        "uri": "gs://scperturb/pert-gym/staging/executions/t_fef266a1/20260712T094155Z-provenance-attestation-v1/strand_metadata.json",
         "generation": "1783849340784769",
         "sha256": "75d34a1a0cee72e64a0811f2dd202e1ac6fb8733890cf8e9296c51e48cdcfb1f",
         "size_bytes": 9731,
