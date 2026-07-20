@@ -88,7 +88,9 @@ def test_manifest_migrates_existing_authorized_rows_as_data_entries() -> None:
     )
 
 
-def test_writer_accepts_only_the_reviewed_in_tree_manifest_paths(tmp_path: Path) -> None:
+def test_writer_accepts_only_the_reviewed_in_tree_manifest_paths(
+    tmp_path: Path,
+) -> None:
     writer = load_writer_module()
 
     assert writer.require_reviewed_manifest_paths(
@@ -131,6 +133,25 @@ def test_manifest_exact_membership_authorizes_each_migrated_config(record: int) 
         validated.manifest_entry["assays"] == validated.config["api_identity"]["assays"]
     )
     assert validated.manifest_entry["family_lease"] == validated.config["logical_key"]
+    assert validated.manifest_entry["config_identity"][
+        "metadata_completeness_findings"
+    ] == validated.config.get("metadata_completeness_findings", [])
+
+
+def test_row_7_manifest_explicitly_authorizes_documented_age_missingness() -> None:
+    manifest = load_manifest()
+    entry = manifest["entries"][0]
+    config = json.loads((REVIEW / "row-7-config.json").read_text())
+
+    assert entry["missingness_policy"] == {
+        "mode": "explicit-only/v1",
+        "allowed_unknown_fields": ["age"],
+        "invent_values": False,
+    }
+    assert (
+        entry["config_identity"]["metadata_completeness_findings"]
+        == config["metadata_completeness_findings"]
+    )
 
 
 def test_manifest_digest_stale_writer_and_stale_config_fail_closed(
@@ -301,7 +322,9 @@ def test_new_mouse_manifest_entry_needs_no_row_specific_validator_change(
     logical_key = "pert-gym/logical/temporal/synthetic_mouse_dataset"
     config["catalogue_record"] = record_id
     config["task_id"] = task_id
-    config["authorization_binding"]["approved_parent_protocol"] = "temporal-v4-056-parquet-parity-parent/v1"
+    config["authorization_binding"]["approved_parent_protocol"] = (
+        "temporal-v4-056-parquet-parity-parent/v1"
+    )
     config["authorization_binding"]["correction_task_id"] = task_id
     config["logical_key"] = logical_key
     config["obs"]["assignments"][0]["value"] = logical_key
@@ -322,10 +345,15 @@ def test_new_mouse_manifest_entry_needs_no_row_specific_validator_change(
     path, digest_path = write_manifest(tmp_path, manifest)
 
     validated = contract.load_manifest_contract(
-        config_path, path, digest_path,
-        writer_path=WRITER, helper_path=HELPER,
-        require_execution=True, now="2026-07-16T12:00:00Z",
+        config_path,
+        path,
+        digest_path,
+        writer_path=WRITER,
+        helper_path=HELPER,
+        require_execution=True,
+        now="2026-07-16T12:00:00Z",
     )
     assert validated.manifest_entry["species"] == {
-        "label": "Mus musculus", "ontology_term_id": "NCBITaxon:10090",
+        "label": "Mus musculus",
+        "ontology_term_id": "NCBITaxon:10090",
     }

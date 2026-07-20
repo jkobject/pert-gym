@@ -45,6 +45,19 @@
           "lamin_main",
           "vm_lifecycle_change"
         ],
+        "metadata_completeness_findings": [
+          {
+            "denominator": 9619,
+            "evidence_searched": [
+              "CELLxGENE source development_stage and ontology columns",
+              "source paper and supplementary materials"
+            ],
+            "field": "age",
+            "missing_count": 9619,
+            "publication_blocking": false,
+            "resolution": "source_missing_documented"
+          }
+        ],
         "obs": {
           "assignments": [
             {
@@ -96,26 +109,16 @@
           "predicates": [
             {
               "column": "development_stage",
-              "op": "all_not_in",
+              "op": "domain_equals",
               "values": [
-                "",
-                "na",
-                "none",
-                "not applicable",
-                "not_applicable",
-                "unknown",
-                "unreported"
+                "unknown"
               ]
             },
             {
               "column": "development_stage_ontology_term_id",
-              "op": "all_not_in",
+              "op": "domain_equals",
               "values": [
-                "",
-                "na",
-                "none",
-                "unknown",
-                "unreported"
+                "unknown"
               ]
             }
           ],
@@ -126,7 +129,7 @@
             "assay_ontology_term_id"
           ],
           "semantic_evidence": {
-            "basis": "Fail-closed runtime preflight requires every source row to carry a non-null, non-placeholder development_stage and development_stage_ontology_term_id before any candidate write; development_stage is preserved as canonical age.",
+            "basis": "Exhaustive source and paper review found no reported age or development stage. Runtime preflight preserves the exact source placeholders and records the non-blocking missingness in the dataset recap; invented values remain forbidden.",
             "verdict": "accepted"
           }
         },
@@ -145,7 +148,7 @@
           "x_logical_object_count": 1
         }
       },
-      "config_sha256": "ad9c0e2855c62f2354f4889d897367ad4dcc02352336091b821b8f803a0994c9",
+      "config_sha256": "2c55650baa06ea1fc50fcbff9b4093aee427172957bcd21321550c0f830316b2",
       "execution_authorized": true,
       "family_lease": "pert-gym/logical/temporal/a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s",
       "http_identity": {
@@ -157,7 +160,9 @@
         "version_id": "YipoWdKvKlXR9hHaku1ta0iAGqNr8w_m"
       },
       "missingness_policy": {
-        "allowed_unknown_fields": [],
+        "allowed_unknown_fields": [
+          "age"
+        ],
         "invent_values": false,
         "mode": "explicit-only/v1"
       },
@@ -184,13 +189,13 @@
         "dataset_version_id": "89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8",
         "url": "https://datasets.cellxgene.cziscience.com/89a17e6a-bbb0-4a9a-b2b4-3bafd89277a8.h5ad"
       },
-      "source_packet_sha256": "ad9c0e2855c62f2354f4889d897367ad4dcc02352336091b821b8f803a0994c9",
+      "source_packet_sha256": "2c55650baa06ea1fc50fcbff9b4093aee427172957bcd21321550c0f830316b2",
       "species": {
         "label": "Homo sapiens",
         "ontology_term_id": "NCBITaxon:9606"
       },
       "task_id": "t_5a683225",
-      "writer_contract_sha256": "572e3f14e3caf17989de6df3852084f580659b53f48a992847dd75c87c5bf8f5"
+      "writer_contract_sha256": "56990f729c6a9132f871b52fa19a387e7078b64dad0fcf9174533028380249da"
     },
     {
       "assays": [
@@ -231,6 +236,7 @@
           "lamin_main",
           "vm_lifecycle_change"
         ],
+        "metadata_completeness_findings": [],
         "obs": {
           "assignments": [
             {
@@ -371,7 +377,7 @@
         "ontology_term_id": "NCBITaxon:10090"
       },
       "task_id": "t_5c375e11",
-      "writer_contract_sha256": "572e3f14e3caf17989de6df3852084f580659b53f48a992847dd75c87c5bf8f5"
+      "writer_contract_sha256": "56990f729c6a9132f871b52fa19a387e7078b64dad0fcf9174533028380249da"
     },
     {
       "assays": [
@@ -412,6 +418,7 @@
           "lamin_main",
           "vm_lifecycle_change"
         ],
+        "metadata_completeness_findings": [],
         "obs": {
           "assignments": [
             {
@@ -534,7 +541,7 @@
         "ontology_term_id": "NCBITaxon:9606"
       },
       "task_id": "t_71c1be94",
-      "writer_contract_sha256": "572e3f14e3caf17989de6df3852084f580659b53f48a992847dd75c87c5bf8f5"
+      "writer_contract_sha256": "56990f729c6a9132f871b52fa19a387e7078b64dad0fcf9174533028380249da"
     }
   ],
   "expires_at": "2027-07-16T00:00:00Z",
@@ -544,7 +551,7 @@
   "writer_contract": {
     "live_ledger_control_plane_sha256": "f37cc8159f660d2474533befcd10e8989694bd932a290169781c556efd471f11",
     "parquet_frame_parity_sha256": "f2827eca688dd2581a6ede51be77c4ae0b9327bacc66116e8ec1b1cc5420e976",
-    "writer_contract_sha256": "572e3f14e3caf17989de6df3852084f580659b53f48a992847dd75c87c5bf8f5",
-    "writer_sha256": "67ce2c57c05f0429c1c954619ea34289e25a30f0babfc875d6564590a465a372"
+    "writer_contract_sha256": "56990f729c6a9132f871b52fa19a387e7078b64dad0fcf9174533028380249da",
+    "writer_sha256": "97b13644148233491c9ee8a6cd528841ef96ad93ac286bbfb1904700acd7814c"
   }
 }

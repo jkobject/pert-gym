@@ -1,0 +1,22 @@
+{
+  "dataset_id": "781cc817-3fd0-487c-a55a-b47b2786a05d",
+  "format": "pert-gym.dataset-metadata-recap/v1",
+  "metadata_completeness_findings": [
+    {
+      "denominator": 9619,
+      "evidence_searched": [
+        "CELLxGENE source development_stage and ontology columns",
+        "source paper and supplementary materials"
+      ],
+      "field": "age",
+      "missing_count": 9619,
+      "publication_blocking": false,
+      "resolution": "source_missing_documented"
+    }
+  ],
+  "supersedes": {
+    "path": "artifacts/evidence/remote-temporal-v4-007-development-stage-disposition-v3/row-7-exclusion-config.json",
+    "sha256": "ad9c0e2855c62f2354f4889d897367ad4dcc02352336091b821b8f803a0994c9"
+  },
+  "supersession_mode": "append_only"
+}

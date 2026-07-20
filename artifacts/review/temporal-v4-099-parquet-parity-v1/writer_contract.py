@@ -71,6 +71,14 @@ _SOURCE_KEYS = {
 _HEAD_KEYS = {"status", "final_url", "content_length", "etag", "last_modified", "version_id"}
 _API_KEYS = {"public", "tombstone", "is_primary_data", "organism", "assays"}
 _OBS_KEYS = {"mapper_version", "required_non_null", "predicates", "assignments", "semantic_evidence"}
+_METADATA_COMPLETENESS_FINDING_KEYS = {
+    "field",
+    "missing_count",
+    "denominator",
+    "evidence_searched",
+    "resolution",
+    "publication_blocking",
+}
 _ORDERED_VAR_KEYS = {
     "identity_sha256",
     "organism_ontology_id",
@@ -146,6 +154,7 @@ _CONFIG_IDENTITY_KEYS = {
     "dataset_config_status",
     "ordered_var",
     "obs",
+    "metadata_completeness_findings",
     "accepted_components",
     "execution",
     "storage",
@@ -170,7 +179,8 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "organism": "4ac6e019aa2207b1bbe041031c02191143ed61de9f357eb790708ded9de52145",
         "assays": "8051c05ee8991d6476c5b9526dac01661cd5d6599d4eef55cbc191023696638a",
         "ordered_var": "6e24c720e545edd8d21246fb3976fb89b97e11af64be3bc76600899faa3d7de8",
-        "obs": "9b51b2a7a19d58a3d818ff72d4c545c16bbdb86db3ccec1ab09bf242b80359d9",
+        "obs": "7e6e1bc0a4615da467b3d4e1bf3a7311b586aa37779cd94295357bd7aff4276d",
+        "metadata_completeness_findings": "93955ffc7806fa76de547e6f10390b0f748ef3999d063c1d28f674f4bacbc84b",
         "accepted_components": "b670b692eb51e511baab82cf947fafbc81dd2b9327126c6bc72dcf2ad0b97fa2",
         "execution": "047a2c6b9dedd3c4aff5c738cf3e2a9fb249e4f9c0fab3c066a8de5a4c7f9d4a",
         "storage": "7c870891e7c79024b91c2b590dd2638a13884d5a06ee7e79e50a17c65507565d",
@@ -185,6 +195,7 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "dataset_version_id": "0d3439c839c4204f6c6770e6484740bf0ed38212dc5a3bec6805533dc80a13a3",
         "asset_id": "0d3439c839c4204f6c6770e6484740bf0ed38212dc5a3bec6805533dc80a13a3",
         "parent_task_id": "cd25835ac1c731f3d0c94f2dcaebeb1921a37286033e159211aff8403da2083a",
+        "metadata_completeness_findings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     },
     "temporal-v4-013": {
         "url": "2f0d259aecfd4bfeec86673f1a39b3fb6769f9284b665cb4445e3deb15d528d3",
@@ -195,6 +206,7 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "dataset_version_id": "f372b7b0be24c172c2db73306c6dd4d2ed97ce5eeea9617e8ad5c17ff4fea968",
         "asset_id": "f372b7b0be24c172c2db73306c6dd4d2ed97ce5eeea9617e8ad5c17ff4fea968",
         "parent_task_id": "90bfe728fa4ee245f47ef2af876c728f4f14a37d77d6fdf4e29e800c9111d74e",
+        "metadata_completeness_findings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
     },
     "temporal-v4-055": {
         "url": "26441043eea01f949f3840c9cba35bf03415210265f36e651705c30b48ce25cd",
@@ -215,6 +227,7 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "assays": "ce8d066cc464d052a79407400c9328cd2960fbc657ccc56dab9d505f5f5dc63e",
         "ordered_var": "00758a6fb096ced900a0cb1cecd8fe7a082beb8df4344b0697a64488c5d64d61",
         "obs": "05861fc3673defb1017652411bfd4df76ca464b1549de0eeef63be9b2e399c37",
+        "metadata_completeness_findings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "accepted_components": "b670b692eb51e511baab82cf947fafbc81dd2b9327126c6bc72dcf2ad0b97fa2",
         "execution": "12b307fc8b0fa31ad0616fd271857e75df43f6f974f79a71af52ae46f1f4fa18",
         "storage": "7c870891e7c79024b91c2b590dd2638a13884d5a06ee7e79e50a17c65507565d",
@@ -239,6 +252,7 @@ _APPROVED_IDENTITY_SHA256_BY_REVISION = {
         "assays": "ce8d066cc464d052a79407400c9328cd2960fbc657ccc56dab9d505f5f5dc63e",
         "ordered_var": "6e24c720e545edd8d21246fb3976fb89b97e11af64be3bc76600899faa3d7de8",
         "obs": "f8b53a4f9fd9d047340e097959d251dfe9ff5625aa0b3c94d607120bbb37613c",
+        "metadata_completeness_findings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
         "accepted_components": "b670b692eb51e511baab82cf947fafbc81dd2b9327126c6bc72dcf2ad0b97fa2",
         "execution": "e2fd27bcd4c0c81d6b501f3eb8ee1308828a1f23a2148d35aedc01854d29a3bc",
         "storage": "7c870891e7c79024b91c2b590dd2638a13884d5a06ee7e79e50a17c65507565d",
@@ -316,6 +330,9 @@ def _entry_approved_identity(entry: dict[str, Any]) -> dict[str, str]:
         "assays": entry["assays"],
         "ordered_var": identity["ordered_var"],
         "obs": identity["obs"],
+        "metadata_completeness_findings": identity[
+            "metadata_completeness_findings"
+        ],
         "accepted_components": identity["accepted_components"],
         "execution": identity["execution"],
         "storage": identity["storage"],
@@ -476,6 +493,8 @@ def _validate_config(
     )
     live_ledger_revision = requires_live_ledger(config)
     config_keys = _CONFIG_KEYS | ({"catalogue_record"} if live_ledger_revision else set())
+    if "metadata_completeness_findings" in config:
+        config_keys.add("metadata_completeness_findings")
     _exact_keys(config, config_keys, "config")
     if config["config_version"] != CONFIG_VERSION or config["protocol"] != PROTOCOL:
         raise ValueError("unsupported config version or protocol")
@@ -543,6 +562,38 @@ def _validate_config(
     _positive_int(shape[1], "shape[1]")
     if not str(config["logical_key"]).startswith("pert-gym/logical/temporal/"):
         raise ValueError("logical_key must be an explicit temporal logical key")
+
+    findings = config.get("metadata_completeness_findings", [])
+    if not isinstance(findings, list):
+        raise ValueError("metadata_completeness_findings must be a list")
+    for index, finding in enumerate(findings):
+        label = f"metadata_completeness_findings[{index}]"
+        finding = _exact_keys(
+            finding, _METADATA_COMPLETENESS_FINDING_KEYS, label
+        )
+        _nonempty(finding["field"], f"{label}.field")
+        missing_count = _positive_int(
+            finding["missing_count"], f"{label}.missing_count"
+        )
+        denominator = _positive_int(
+            finding["denominator"], f"{label}.denominator"
+        )
+        if denominator != shape[0]:
+            raise ValueError(f"{label}.denominator must equal shape[0] dataset row count")
+        if missing_count > denominator:
+            raise ValueError(f"{label}.missing_count exceeds denominator")
+        evidence = finding["evidence_searched"]
+        if (
+            not isinstance(evidence, list)
+            or not evidence
+            or len(set(evidence)) != len(evidence)
+            or any(not isinstance(item, str) or not item.strip() for item in evidence)
+        ):
+            raise ValueError(f"{label}.evidence_searched must be non-empty and unique")
+        if finding["resolution"] != "source_missing_documented":
+            raise ValueError(f"{label}.resolution is not approved")
+        if finding["publication_blocking"] is not False:
+            raise ValueError(f"{label}.publication_blocking must be false")
 
     obs = _exact_keys(config["obs"], _OBS_KEYS, "obs")
     if obs["mapper_version"] != MAPPER_VERSION:
@@ -677,6 +728,17 @@ def _validate_config(
     )
     if approved_identity is None:
         raise ValueError("revision has no intrinsically approved identity binding")
+    approved_findings_sha256 = approved_identity.get(
+        "metadata_completeness_findings"
+    )
+    if approved_findings_sha256 is None:
+        raise ValueError(
+            "revision has no approved metadata_completeness_findings identity"
+        )
+    if _json_sha256(findings) != approved_findings_sha256:
+        raise ValueError(
+            "metadata_completeness_findings conflicts with approved revision identity"
+        )
     for key in sorted(_SOURCE_KEYS):
         observed_sha256 = hashlib.sha256(source[key].encode()).hexdigest()
         if observed_sha256 != approved_identity[key]:
@@ -695,6 +757,7 @@ def _validate_config(
         "assays": config["api_identity"]["assays"],
         "ordered_var": config["ordered_var"],
         "obs": config["obs"],
+        "metadata_completeness_findings": findings,
         "accepted_components": (
             {
                 "metric": ledger["metric"],
@@ -923,6 +986,12 @@ def preflight_plan(contract: SimpleNamespace) -> dict[str, Any]:
         "source_url": config["source"]["url"],
         "shape": config["shape"],
         "logical_key": config["logical_key"],
+        "dataset_recap": {
+            "dataset_id": config["source"]["dataset_id"],
+            "metadata_completeness_findings": config.get(
+                "metadata_completeness_findings", []
+            ),
+        },
         "accepted_components": {
             "current": config["accepted_components"]["current"],
             "denominator": config["accepted_components"]["denominator"],

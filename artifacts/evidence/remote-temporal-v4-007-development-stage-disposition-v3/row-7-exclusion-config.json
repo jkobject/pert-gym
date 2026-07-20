@@ -54,19 +54,6 @@
     "vm_lifecycle_change"
   ],
   "logical_key": "pert-gym/logical/temporal/a_novel_human_fetal_lung_derived_alveolar_organoid_model_reveals_mechanisms_of_s",
-  "metadata_completeness_findings": [
-    {
-      "denominator": 9619,
-      "evidence_searched": [
-        "CELLxGENE source development_stage and ontology columns",
-        "source paper and supplementary materials"
-      ],
-      "field": "age",
-      "missing_count": 9619,
-      "publication_blocking": false,
-      "resolution": "source_missing_documented"
-    }
-  ],
   "obs": {
     "assignments": [
       {
@@ -118,16 +105,26 @@
     "predicates": [
       {
         "column": "development_stage",
-        "op": "domain_equals",
+        "op": "all_not_in",
         "values": [
-          "unknown"
+          "",
+          "na",
+          "none",
+          "not applicable",
+          "not_applicable",
+          "unknown",
+          "unreported"
         ]
       },
       {
         "column": "development_stage_ontology_term_id",
-        "op": "domain_equals",
+        "op": "all_not_in",
         "values": [
-          "unknown"
+          "",
+          "na",
+          "none",
+          "unknown",
+          "unreported"
         ]
       }
     ],
@@ -138,7 +135,7 @@
       "assay_ontology_term_id"
     ],
     "semantic_evidence": {
-      "basis": "Exhaustive source and paper review found no reported age or development stage. Runtime preflight preserves the exact source placeholders and records the non-blocking missingness in the dataset recap; invented values remain forbidden.",
+      "basis": "Fail-closed runtime preflight requires every source row to carry a non-null, non-placeholder development_stage and development_stage_ontology_term_id before any candidate write; development_stage is preserved as canonical age.",
       "verdict": "accepted"
     }
   },

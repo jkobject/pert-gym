@@ -22,6 +22,11 @@ ROW_99_AUTHORIZATION = REVIEW / "authorization.json"
 ROW_13_CONFIG = REVIEW / "row-13-prewrite-fixture.json"
 ROW_7_CONFIG = REVIEW / "row-7-config.json"
 ROW_7_AUTHORIZATION = REVIEW / "row-7-authorization.json"
+ROW_7_RECAP = (
+    ROOT
+    / "artifacts/evidence/remote-temporal-v4-007-development-stage-disposition-v4"
+    / "dataset-recap.json"
+)
 ROW_55_CONFIG = REVIEW / "row-55-config.json"
 ROW_55_AUTHORIZATION = REVIEW / "row-55-authorization.json"
 ROW_111_CONFIG = REVIEW / "row-111-config.json"
@@ -184,7 +189,13 @@ def test_manifest_migrated_rows_reject_legacy_cli_authorization_before_external_
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
     with pytest.raises(RuntimeError, match="canonical row-99 replay"):
         writer.main()
@@ -211,9 +222,13 @@ def test_manifest_cli_rejects_incomplete_provenance_before_external_io(
         sys,
         "argv",
         [
-            str(WRITER), "--config", str(ROW_7_CONFIG),
-            "--authorization-manifest", str(manifest_path),
-            "--authorization-manifest-sha256", str(digest_path),
+            str(WRITER),
+            "--config",
+            str(ROW_7_CONFIG),
+            "--authorization-manifest",
+            str(manifest_path),
+            "--authorization-manifest-sha256",
+            str(digest_path),
         ],
     )
     with pytest.raises(ValueError, match="reviewer.*non-empty"):
@@ -1581,23 +1596,180 @@ def test_row_7_rebound_config_identity_mismatches_fail_closed(
         validate(config, authorization)
 
 
-def test_row_7_runtime_semantic_preflight_rejects_placeholder_development_stage() -> (
-    None
-):
+def test_row_7_runtime_accepts_documented_unknown_age_with_dataset_recap() -> None:
+    writer = load_writer_module()
+    writer.ACTIVE_CONFIG = load_json(ROW_7_CONFIG)
+    writer.N_OBS = 9619
+    source = pd.DataFrame(
+        {
+            "development_stage": ["unknown"] * 9619,
+            "development_stage_ontology_term_id": ["unknown"] * 9619,
+            "assay": ["10x 5' v1"] * 9619,
+            "assay_ontology_term_id": ["EFO:0011025"] * 9619,
+        },
+        index=[f"cell-{index}" for index in range(9619)],
+    )
+
+    obs = writer.map_obs(source, "Homo sapiens")
+
+    assert obs["development_stage"].eq("unknown").all()
+    assert obs["development_stage_ontology_term_id"].eq("unknown").all()
+    assert obs["age"].eq("unknown").all()
+    assert writer.dataset_recap() == {
+        "dataset_id": "781cc817-3fd0-487c-a55a-b47b2786a05d",
+        "metadata_completeness_findings": [
+            {
+                "field": "age",
+                "missing_count": 9619,
+                "denominator": 9619,
+                "evidence_searched": [
+                    "CELLxGENE source development_stage and ontology columns",
+                    "source paper and supplementary materials",
+                ],
+                "resolution": "source_missing_documented",
+                "publication_blocking": False,
+            }
+        ],
+    }
+
+
+def test_row_7_runtime_rejects_invented_development_stage() -> None:
     writer = load_writer_module()
     writer.ACTIVE_CONFIG = load_json(ROW_7_CONFIG)
     writer.N_OBS = 2
     source = pd.DataFrame(
         {
-            "development_stage": ["unknown", "unknown"],
-            "development_stage_ontology_term_id": ["unknown", "unknown"],
-            "assay": ["10x 5' v1", "10x 5' v1"],
-            "assay_ontology_term_id": ["EFO:0011025", "EFO:0011025"],
+            "development_stage": ["fetal stage", "fetal stage"],
+            "development_stage_ontology_term_id": ["HsapDv:0000083"] * 2,
+            "assay": ["10x 5' v1"] * 2,
+            "assay_ontology_term_id": ["EFO:0011025"] * 2,
         },
         index=["cell-1", "cell-2"],
     )
+
     with pytest.raises(RuntimeError, match="required OBS predicate failed"):
         writer.map_obs(source, "Homo sapiens")
+
+
+def test_row_7_contract_exposes_non_blocking_missingness_in_preflight_plan() -> None:
+    contract = load_contract_module()
+    config, authorization = executable_row_7_contract()
+
+    validated = validate(config, authorization)
+
+    assert contract.preflight_plan(validated)["dataset_recap"] == {
+        "dataset_id": config["source"]["dataset_id"],
+        "metadata_completeness_findings": config["metadata_completeness_findings"],
+    }
+
+
+def test_row_7_dataset_recap_append_only_supersedes_exclusion_overlay() -> None:
+    config = load_json(ROW_7_CONFIG)
+
+    recap = load_json(ROW_7_RECAP)
+
+    assert recap["dataset_id"] == config["source"]["dataset_id"]
+    assert (
+        recap["metadata_completeness_findings"]
+        == config["metadata_completeness_findings"]
+    )
+    supersedes = recap["supersedes"]
+    assert isinstance(supersedes, dict)
+    assert set(supersedes) == {"path", "sha256"}
+    predecessor = ROOT / supersedes["path"]
+    assert predecessor.is_file()
+    assert sha256(predecessor) == supersedes["sha256"]
+    predecessor_config = load_json(predecessor)
+    assert predecessor_config["source"]["dataset_id"] == config["source"]["dataset_id"]
+    assert predecessor_config["revision"] == config["revision"]
+    assert predecessor_config["obs"]["predicates"] == [
+        {
+            "column": "development_stage",
+            "op": "all_not_in",
+            "values": [
+                "",
+                "na",
+                "none",
+                "not applicable",
+                "not_applicable",
+                "unknown",
+                "unreported",
+            ],
+        },
+        {
+            "column": "development_stage_ontology_term_id",
+            "op": "all_not_in",
+            "values": ["", "na", "none", "unknown", "unreported"],
+        },
+    ]
+    assert recap["supersession_mode"] == "append_only"
+
+
+@pytest.mark.parametrize(
+    "config_path",
+    [ROW_99_CONFIG, ROW_13_CONFIG, ROW_7_CONFIG, ROW_55_CONFIG, ROW_111_CONFIG],
+)
+def test_every_approved_revision_hash_binds_explicit_or_empty_findings(
+    config_path: Path,
+) -> None:
+    contract = load_contract_module()
+    config = load_json(config_path)
+    revision = config["revision"]["prefix"]
+
+    approved = contract._APPROVED_IDENTITY_SHA256_BY_REVISION[revision]
+
+    assert approved["metadata_completeness_findings"] == contract._json_sha256(
+        config.get("metadata_completeness_findings", [])
+    )
+
+
+def test_row_55_fabricated_finding_fails_after_authorization_rebind() -> None:
+    config = load_json(ROW_55_CONFIG)
+    config["metadata_completeness_findings"] = [
+        {
+            "field": "fabricated",
+            "missing_count": 1,
+            "denominator": config["shape"][0],
+            "evidence_searched": ["fabricated evidence"],
+            "resolution": "source_missing_documented",
+            "publication_blocking": False,
+        }
+    ]
+    authorization = load_json(ROW_55_AUTHORIZATION)
+    authorization["config_sha256"] = hashlib.sha256(
+        (json.dumps(config, indent=2, sort_keys=True) + "\n").encode()
+    ).hexdigest()
+
+    with pytest.raises(ValueError, match="metadata_completeness_findings"):
+        validate(config, authorization)
+
+
+@pytest.mark.parametrize(
+    ("mutation", "match"),
+    [
+        (lambda finding: finding.__setitem__("missing_count", 9620), "missing_count"),
+        (lambda finding: finding.__setitem__("denominator", 1), "denominator"),
+        (lambda finding: finding.__setitem__("evidence_searched", []), "evidence"),
+        (lambda finding: finding.__setitem__("resolution", "invented"), "resolution"),
+        (
+            lambda finding: finding.__setitem__("publication_blocking", True),
+            "publication_blocking",
+        ),
+        (lambda finding: finding.__setitem__("invented_age", "fetal"), "keys mismatch"),
+    ],
+)
+def test_metadata_completeness_finding_schema_rejects_inauditable_values(
+    mutation, match: str
+) -> None:
+    config, authorization = executable_row_7_contract()
+    finding = config["metadata_completeness_findings"][0]
+    mutation(finding)
+    authorization["config_sha256"] = hashlib.sha256(
+        (json.dumps(config, indent=2, sort_keys=True) + "\n").encode()
+    ).hexdigest()
+
+    with pytest.raises(ValueError, match=match):
+        validate(config, authorization)
 
 
 def test_row_7_runtime_ordered_var_identity_is_computed_before_candidate_write() -> (
