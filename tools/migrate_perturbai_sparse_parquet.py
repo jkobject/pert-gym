@@ -32,7 +32,34 @@ def _var(path: Path) -> pd.DataFrame:
     if missing:
         raise ValueError(f"gene metadata missing columns: {missing}")
     genes = genes.copy()
-    genes["gene_token_id"] = genes["gene_token_id"].astype(int)
+    raw_token_ids = genes["gene_token_id"]
+    max_token_id = np.iinfo(np.int64).max
+    token_ids: list[int] = []
+    for value in raw_token_ids:
+        if pd.isna(value):
+            raise ValueError("gene_token_id must be non-null and finite")
+        if isinstance(value, (bool, np.bool_)):
+            raise ValueError("gene_token_id must not be boolean")
+        if isinstance(value, (int, np.integer)):
+            token_id = int(value)
+        elif isinstance(value, (float, np.floating)):
+            float_value = float(value)
+            if not np.isfinite(float_value):
+                raise ValueError("gene_token_id must be finite")
+            if not float_value.is_integer():
+                raise ValueError("gene_token_id must be integer-valued")
+            token_id = int(float_value)
+        else:
+            raise ValueError("gene_token_id must be numeric")
+        if token_id < 0:
+            raise ValueError("gene_token_id must be non-negative")
+        if token_id > max_token_id:
+            raise ValueError("gene_token_id outside supported range")
+        token_ids.append(token_id)
+    if len(set(token_ids)) != len(token_ids):
+        raise ValueError("gene_token_id values must be unique; duplicate found")
+    token_ids_array = np.asarray(token_ids, dtype=np.int64)
+    genes["gene_token_id"] = token_ids_array
     genes = genes.sort_values("gene_token_id")
     if not np.array_equal(genes["gene_token_id"].to_numpy(), np.arange(len(genes))):
         raise ValueError("gene_token_id is not contiguous 0..n_vars-1")
