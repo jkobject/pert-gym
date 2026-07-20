@@ -30,6 +30,8 @@ sys.path.insert(0, str(ROOT))
 
 from pert_gym.gcs_native_sparse_zarr import (  # noqa: E402
     DEFAULT_CACHE_CAP_BYTES,
+    GCSOperationCounter,
+    count_gcs_operations,
     promote_gcs_native_revision,
     register_gcs_prefix_with_lamin,
     requester_pays_gcs_filesystem,
@@ -64,6 +66,9 @@ class GCSH5ADCSR:
         self._row_start = row_start
         self.shape = (row_end - row_start, full_shape[1])
         indptr = group["indptr"]
+        self.data_dtype = np.dtype(group["data"].dtype)
+        self.index_dtype = np.dtype(group["indices"].dtype)
+        self.indptr_dtype = np.dtype(indptr.dtype)
         self.nnz = int(indptr[row_end]) - int(indptr[row_start])
 
     def __getitem__(self, selection: slice) -> sparse.csr_matrix:
@@ -82,6 +87,15 @@ class GCSH5ADCSR:
             ),
             shape=(end - start, self.shape[1]),
         )
+
+    def block_nnz(self, start: int, end: int) -> int:
+        """Return exact interval nnz from two bounded indptr reads."""
+        if start < 0 or end <= start or end > self.shape[0]:
+            raise ValueError("block nnz interval is outside the source range")
+        absolute_start = self._row_start + start
+        absolute_end = self._row_start + end
+        indptr = self._group["indptr"]
+        return int(indptr[absolute_end]) - int(indptr[absolute_start])
 
 
 def parse_args() -> argparse.Namespace:
@@ -109,6 +123,19 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--min-rows", type=int, default=5_000)
     parser.add_argument("--max-rows", type=int, default=100_000)
+    parser.add_argument("--target-object-mib", type=int, default=64)
+    parser.add_argument("--forecast-logical-blocks", type=int, required=True)
+    parser.add_argument("--launch-task-id", required=True)
+    parser.add_argument(
+        "--operation-cost-reviewed-by",
+        required=True,
+        help="reviewer identity bound independently from the exception JSON",
+    )
+    parser.add_argument(
+        "--operation-cost-exception-json",
+        type=Path,
+        help="task-scoped independently reviewed object/request budget exception",
+    )
     parser.add_argument("--row-start", type=int, required=True)
     parser.add_argument("--row-end", type=int, required=True)
     parser.add_argument("--promote", action="store_true")
@@ -122,7 +149,41 @@ def _gcs_key(uri: str) -> str:
     return uri.removeprefix("gs://")
 
 
-def open_generation_pinned_source(fs: Any, source_key: str) -> tuple[str, Any]:
+class _CountingRangeReader:
+    """File-like proxy that charges every source metadata/range read as Class B."""
+
+    def __init__(self, handle: Any, counter: GCSOperationCounter) -> None:
+        self._handle = handle
+        self._counter = counter
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._handle, name)
+
+    def __enter__(self) -> _CountingRangeReader:
+        return self
+
+    def __exit__(self, *args: object) -> Any:
+        return self._handle.__exit__(*args)
+
+    def info(self) -> Any:
+        self._counter.count_class_b()
+        return self._handle.info()
+
+    def read(self, *args: object, **kwargs: object) -> Any:
+        self._counter.count_class_b()
+        return self._handle.read(*args, **kwargs)
+
+    def readinto(self, buffer: Any) -> Any:
+        self._counter.count_class_b()
+        return self._handle.readinto(buffer)
+
+
+def open_generation_pinned_source(
+    fs: Any,
+    source_key: str,
+    *,
+    operation_counter: GCSOperationCounter | None = None,
+) -> tuple[str, Any]:
     """Preflight and open one immutable GCS generation through gcsfs' path API.
 
     gcsfs 2025.12.0 accepts ``generation=`` in ``GCSFileSystem._open`` but
@@ -152,6 +213,8 @@ def open_generation_pinned_source(fs: Any, source_key: str) -> tuple[str, Any]:
         block_size=8 * 1024**2,
         cache_type="readahead",
     )
+    if operation_counter is not None:
+        handle = _CountingRangeReader(handle, operation_counter)
     try:
         opened_info = handle.info()
         if str(opened_info.get("generation", "")) != generation:
@@ -207,9 +270,15 @@ def main() -> int:
                         lock_path, lock_metadata, check_live_metadata=False
                     )
                 )
-        fs = requester_pays_gcs_filesystem("jkobject-1549353370965")
+        operation_counter = GCSOperationCounter()
+        fs = count_gcs_operations(
+            requester_pays_gcs_filesystem("jkobject-1549353370965"),
+            operation_counter,
+        )
         source_key = _gcs_key(args.source_gcs_uri)
-        generation, handle = open_generation_pinned_source(fs, source_key)
+        generation, handle = open_generation_pinned_source(
+            fs, source_key, operation_counter=operation_counter
+        )
         with handle:
             with h5py.File(handle, "r") as h5:
                 matrix = GCSH5ADCSR(h5, row_start=args.row_start, row_end=args.row_end)
@@ -236,6 +305,11 @@ def main() -> int:
                     if getattr(args, "block_size_exception_json", None)
                     else None
                 )
+                operation_cost_exception = (
+                    json.loads(args.operation_cost_exception_json.read_text("utf-8"))
+                    if getattr(args, "operation_cost_exception_json", None)
+                    else None
+                )
                 manifest, metrics = write_gcs_native_sparse_revision(
                     fs=fs,
                     staging_prefix=_gcs_key(args.staging_gcs_prefix),
@@ -251,7 +325,12 @@ def main() -> int:
                     source_row_end=args.row_end,
                     schema_fingerprint=args.schema_fingerprint,
                     ingestion_run_id=args.ingestion_run_id,
+                    launch_context={
+                        "task_id": args.launch_task_id,
+                        "reviewed_by": args.operation_cost_reviewed_by,
+                    },
                     cache_dir=args.cache_dir,
+                    forecast_logical_blocks=args.forecast_logical_blocks,
                     candidate_metadata=candidate_metadata,
                     cache_cap_bytes=int(args.cache_cap_gib * 1024**3),
                     max_rss_bytes=int(args.max_rss_gib * 1024**3),
@@ -260,6 +339,11 @@ def main() -> int:
                     block_size_exception=block_size_exception,
                     min_rows=args.min_rows,
                     max_rows=args.max_rows,
+                    target_object_bytes=int(
+                        getattr(args, "target_object_mib", 64) * 1024**2
+                    ),
+                    operation_cost_exception=operation_cost_exception,
+                    operation_counter=operation_counter,
                 )
         result: dict[str, Any] = {
             "manifest": manifest,

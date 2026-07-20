@@ -1,0 +1,366 @@
+{
+  "cases": [
+    {
+      "component_chunks": {
+        "data": [
+          65536
+        ],
+        "indices": [
+          65536
+        ],
+        "indptr": [
+          65536
+        ]
+      },
+      "configured_value": 65536,
+      "label": "legacy-65536-elements",
+      "mode": "elements",
+      "objects_including_metadata": 266,
+      "parity": true,
+      "payload_bytes": 104000008,
+      "readback_mib_per_second": 1742.3657116242107,
+      "readback_seconds": 0.056923833999917406,
+      "rss_baseline_bytes": 142966784,
+      "rss_peak_bytes": 357269504,
+      "rss_peak_delta_bytes": 214302720,
+      "write_mib_per_second": 1369.6715072299824,
+      "write_seconds": 0.07241308299990123
+    },
+    {
+      "component_chunks": {
+        "data": [
+          4194304
+        ],
+        "indices": [
+          2097152
+        ],
+        "indptr": [
+          1000001
+        ]
+      },
+      "configured_value": 16777216,
+      "label": "16-mib",
+      "mode": "bytes",
+      "objects_including_metadata": 11,
+      "parity": true,
+      "payload_bytes": 104000008,
+      "readback_mib_per_second": 5017.561417350997,
+      "readback_seconds": 0.01976699999977427,
+      "rss_baseline_bytes": 142917632,
+      "rss_peak_bytes": 384991232,
+      "rss_peak_delta_bytes": 242073600,
+      "write_mib_per_second": 4949.51713735029,
+      "write_seconds": 0.020038749999912397
+    },
+    {
+      "component_chunks": {
+        "data": [
+          8000000
+        ],
+        "indices": [
+          4194304
+        ],
+        "indptr": [
+          1000001
+        ]
+      },
+      "configured_value": 33554432,
+      "label": "32-mib",
+      "mode": "bytes",
+      "objects_including_metadata": 8,
+      "parity": true,
+      "payload_bytes": 104000008,
+      "readback_mib_per_second": 5343.877207901587,
+      "readback_seconds": 0.0185599579999689,
+      "rss_baseline_bytes": 142917632,
+      "rss_peak_bytes": 403292160,
+      "rss_peak_delta_bytes": 260374528,
+      "write_mib_per_second": 8056.628850041015,
+      "write_seconds": 0.012310624999827269
+    },
+    {
+      "component_chunks": {
+        "data": [
+          8000000
+        ],
+        "indices": [
+          8000000
+        ],
+        "indptr": [
+          1000001
+        ]
+      },
+      "configured_value": 67108864,
+      "label": "64-mib",
+      "mode": "bytes",
+      "objects_including_metadata": 7,
+      "parity": true,
+      "payload_bytes": 104000008,
+      "readback_mib_per_second": 5488.4317681169505,
+      "readback_seconds": 0.01807112500000585,
+      "rss_baseline_bytes": 142983168,
+      "rss_peak_bytes": 368246784,
+      "rss_peak_delta_bytes": 225263616,
+      "write_mib_per_second": 10920.536534362976,
+      "write_seconds": 0.009082167000087793
+    }
+  ],
+  "decision": {
+    "hard_caps": {
+      "candidate_objects": 10000,
+      "request_cost_eur": 1.0
+    },
+    "reason": "Only 64 MiB keeps the conservative HEK293T 32-block candidate forecast, including one append-only recovery bounded to 200,000 rows, below the 10,000-object hard cap; parity passed and isolated RSS/throughput remained within the measured envelope.",
+    "selected_forecast": {
+      "candidate_objects": 7019,
+      "request_cost_eur": 0.047025956679999995
+    },
+    "selected_target_mib": 64
+  },
+  "execution_boundary": "local isolated subprocesses; no GCS/VM/Lamin writes",
+  "forecast_assumptions": {
+    "basis": "conservative upper bound",
+    "calibration": "local only; calibration nnz is bounded by min(dataset nnz, calibration_rows * n_vars)",
+    "legacy_case_recovery_attempts": 0,
+    "max_recovery_attempts": 1,
+    "max_retry_rows": 200000,
+    "retry_nnz_upper_bound": "min(dataset nnz, max_retry_rows * n_vars)"
+  },
+  "format": "pert-gym.sparse-zarr-object-target-benchmark/v1",
+  "hek293t_forecasts": {
+    "16-mib": {
+      "basis": "upper_bound",
+      "calibration_nnz_upper_bound": 3860600000,
+      "calibration_rows": 100000,
+      "candidate_objects": 26792,
+      "class_a_requests": 26894,
+      "class_b_requests": 53860,
+      "component_objects": {
+        "calibration": {
+          "data": 921,
+          "indices": 1841,
+          "indptr": 1
+        },
+        "production": {
+          "data": 6978,
+          "indices": 13925,
+          "indptr": 34
+        },
+        "retry": {
+          "data": 1841,
+          "indices": 3682,
+          "indptr": 1
+        }
+      },
+      "format": "pert-gym.gcs-native-logical-sparse-zarr/v1.operation-forecast/v1",
+      "layout_objects": {
+        "calibration": 0,
+        "calibration_local_only": 2770,
+        "checkpoints": 32,
+        "fixed": 3,
+        "manifest_or_failure": 1,
+        "obs": 32,
+        "plan": 1,
+        "production": 21257,
+        "production_matrix": 21161,
+        "records": 32,
+        "retries": 5532,
+        "var": 1
+      },
+      "legacy_fixed_chunk_elements": null,
+      "list_requests": 102,
+      "logical_blocks": 32,
+      "max_recovery_attempts": 1,
+      "max_retry_nnz": 7721200000,
+      "max_retry_rows": 200000,
+      "monthly_free_class_a_applied": 0,
+      "monthly_free_class_a_remaining_after": 0,
+      "pricing": {
+        "class_a_eur_per_1000": 0.005689,
+        "class_b_eur_per_1000": 0.00045512,
+        "currency": "EUR",
+        "free_tier_scope": "shared_monthly_balance; per-dataset default is zero"
+      },
+      "readback_passes": 1,
+      "request_cost_eur": 0.1775127292,
+      "target_object_bytes": 16777216
+    },
+    "32-mib": {
+      "basis": "upper_bound",
+      "calibration_nnz_upper_bound": 3860600000,
+      "calibration_rows": 100000,
+      "candidate_objects": 13610,
+      "class_a_requests": 13712,
+      "class_b_requests": 27496,
+      "component_objects": {
+        "calibration": {
+          "data": 461,
+          "indices": 921,
+          "indptr": 1
+        },
+        "production": {
+          "data": 3505,
+          "indices": 6978,
+          "indptr": 33
+        },
+        "retry": {
+          "data": 921,
+          "indices": 1841,
+          "indptr": 1
+        }
+      },
+      "format": "pert-gym.gcs-native-logical-sparse-zarr/v1.operation-forecast/v1",
+      "layout_objects": {
+        "calibration": 0,
+        "calibration_local_only": 1390,
+        "checkpoints": 32,
+        "fixed": 3,
+        "manifest_or_failure": 1,
+        "obs": 32,
+        "plan": 1,
+        "production": 10836,
+        "production_matrix": 10740,
+        "records": 32,
+        "retries": 2771,
+        "var": 1
+      },
+      "legacy_fixed_chunk_elements": null,
+      "list_requests": 102,
+      "logical_blocks": 32,
+      "max_recovery_attempts": 1,
+      "max_retry_nnz": 7721200000,
+      "max_retry_rows": 200000,
+      "monthly_free_class_a_applied": 0,
+      "monthly_free_class_a_remaining_after": 0,
+      "pricing": {
+        "class_a_eur_per_1000": 0.005689,
+        "class_b_eur_per_1000": 0.00045512,
+        "currency": "EUR",
+        "free_tier_scope": "shared_monthly_balance; per-dataset default is zero"
+      },
+      "readback_passes": 1,
+      "request_cost_eur": 0.09052154751999998,
+      "target_object_bytes": 33554432
+    },
+    "64-mib": {
+      "basis": "upper_bound",
+      "calibration_nnz_upper_bound": 3860600000,
+      "calibration_rows": 100000,
+      "candidate_objects": 7019,
+      "class_a_requests": 7121,
+      "class_b_requests": 14314,
+      "component_objects": {
+        "calibration": {
+          "data": 231,
+          "indices": 461,
+          "indptr": 1
+        },
+        "production": {
+          "data": 1768,
+          "indices": 3505,
+          "indptr": 32
+        },
+        "retry": {
+          "data": 461,
+          "indices": 921,
+          "indptr": 1
+        }
+      },
+      "format": "pert-gym.gcs-native-logical-sparse-zarr/v1.operation-forecast/v1",
+      "layout_objects": {
+        "calibration": 0,
+        "calibration_local_only": 700,
+        "checkpoints": 32,
+        "fixed": 3,
+        "manifest_or_failure": 1,
+        "obs": 32,
+        "plan": 1,
+        "production": 5625,
+        "production_matrix": 5529,
+        "records": 32,
+        "retries": 1391,
+        "var": 1
+      },
+      "legacy_fixed_chunk_elements": null,
+      "list_requests": 102,
+      "logical_blocks": 32,
+      "max_recovery_attempts": 1,
+      "max_retry_nnz": 7721200000,
+      "max_retry_rows": 200000,
+      "monthly_free_class_a_applied": 0,
+      "monthly_free_class_a_remaining_after": 0,
+      "pricing": {
+        "class_a_eur_per_1000": 0.005689,
+        "class_b_eur_per_1000": 0.00045512,
+        "currency": "EUR",
+        "free_tier_scope": "shared_monthly_balance; per-dataset default is zero"
+      },
+      "readback_passes": 1,
+      "request_cost_eur": 0.047025956679999995,
+      "target_object_bytes": 67108864
+    },
+    "legacy-65536-elements": {
+      "basis": "upper_bound",
+      "calibration_nnz_upper_bound": 3860600000,
+      "calibration_rows": 100000,
+      "candidate_objects": 889660,
+      "class_a_requests": 889730,
+      "class_b_requests": 1779596,
+      "component_objects": {
+        "calibration": {
+          "data": 58909,
+          "indices": 58909,
+          "indptr": 2
+        },
+        "production": {
+          "data": 444618,
+          "indices": 444618,
+          "indptr": 101
+        },
+        "retry": {
+          "data": 444587,
+          "indices": 444587,
+          "indptr": 70
+        }
+      },
+      "format": "pert-gym.gcs-native-logical-sparse-zarr/v1.operation-forecast/v1",
+      "layout_objects": {
+        "calibration": 0,
+        "calibration_local_only": 117827,
+        "checkpoints": 32,
+        "fixed": 3,
+        "manifest_or_failure": 1,
+        "obs": 32,
+        "plan": 1,
+        "production": 889657,
+        "production_matrix": 889561,
+        "records": 32,
+        "retries": 0,
+        "var": 1
+      },
+      "legacy_fixed_chunk_elements": 65536,
+      "list_requests": 70,
+      "logical_blocks": 32,
+      "max_recovery_attempts": 0,
+      "max_retry_nnz": 29136391388,
+      "max_retry_rows": 4534299,
+      "monthly_free_class_a_applied": 0,
+      "monthly_free_class_a_remaining_after": 0,
+      "pricing": {
+        "class_a_eur_per_1000": 0.005689,
+        "class_b_eur_per_1000": 0.00045512,
+        "currency": "EUR",
+        "free_tier_scope": "shared_monthly_balance; per-dataset default is zero"
+      },
+      "readback_passes": 1,
+      "request_cost_eur": 5.87160370152,
+      "target_object_bytes": 67108864
+    }
+  },
+  "synthetic_payload": {
+    "data": "8,000,000 float32",
+    "indices": "8,000,000 int64",
+    "indptr": "1,000,001 int64"
+  },
+  "task_id": "t_e3c75df0"
+}

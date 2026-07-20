@@ -25,9 +25,11 @@ from scipy import sparse
 
 from pert_gym.sparse_zarr_contract import (
     LogicalSparseSurface,
+    adaptive_component_chunk_length,
     adaptive_target_rows,
     balanced_row_chunks,
     validate_logical_sparse_surface,
+    validate_target_object_bytes,
 )
 
 WRITER_VERSION = "pert-gym.logical-sparse-zarr.writer/v1"
@@ -35,6 +37,7 @@ DEFAULT_MIN_ROWS = 5_000
 DEFAULT_MAX_ROWS = 100_000
 DEFAULT_BYTES_PER_NNZ = 12
 DEFAULT_MATERIALIZATION_FACTOR = 3.0
+DEFAULT_TARGET_OBJECT_BYTES = 64 * 1024**2
 SOURCE_CHECKSUM_RE = re.compile(r"^sha256-file-bytes/v1:[0-9a-fA-F]{64}$")
 CompressedMatrix: TypeAlias = sparse.csr_matrix | sparse.csc_matrix
 
@@ -250,7 +253,11 @@ def _assert_source_readback_parity(
 
 
 def _write_matrix(
-    path: Path, matrix: CompressedMatrix, sparse_format: str
+    path: Path,
+    matrix: CompressedMatrix,
+    sparse_format: str,
+    *,
+    target_object_bytes: int,
 ) -> dict[str, str]:
     if path.exists():
         raise FileExistsError(f"refusing to overwrite existing chunk: {path}")
@@ -265,7 +272,15 @@ def _write_matrix(
     data, indices, indptr = _matrix_components(matrix)
     for name, values in (("data", data), ("indices", indices), ("indptr", indptr)):
         group.create_dataset(
-            name, data=values, chunks=(max(1, min(len(values), 65_536)),)
+            name,
+            data=values,
+            chunks=(
+                adaptive_component_chunk_length(
+                    length=len(values),
+                    dtype=values.dtype,
+                    target_object_bytes=target_object_bytes,
+                ),
+            ),
         )
     return {
         "data_sha256": _sha256_array(data),
@@ -320,6 +335,7 @@ def _checkpoint_base(
     obs_index_sha256: str,
     obs_frame_sha256: str,
     chunks: tuple[tuple[int, int], ...],
+    target_object_bytes: int,
 ) -> dict[str, object]:
     return {
         "format": "pert-gym.logical-sparse-zarr.checkpoint",
@@ -340,6 +356,7 @@ def _checkpoint_base(
         "obs_index_sha256": obs_index_sha256,
         "obs_frame_sha256": obs_frame_sha256,
         "planned_chunks": [list(chunk) for chunk in chunks],
+        "target_object_bytes": target_object_bytes,
         "planning_status": "pending",
         "completed_chunks": [],
         "status": "in_progress",
@@ -371,6 +388,7 @@ def _load_or_create_checkpoint(
         "schema_fingerprint",
         "obs_index_sha256",
         "obs_frame_sha256",
+        "target_object_bytes",
     ):
         if checkpoint.get(field) != expected[field]:
             raise RuntimeError(
@@ -519,6 +537,7 @@ def write_logical_sparse_revision(
     max_rss_bytes: int = 4 * 1024**3,
     min_rows: int = DEFAULT_MIN_ROWS,
     max_rows: int = DEFAULT_MAX_ROWS,
+    target_object_bytes: int = DEFAULT_TARGET_OBJECT_BYTES,
     stop_after_chunks: int | None = None,
 ) -> dict[str, object]:
     """Append a resumable candidate revision without promoting or overwriting it.
@@ -526,6 +545,7 @@ def write_logical_sparse_revision(
     ``stop_after_chunks`` exists only for deterministic interruption tests and is
     deliberately not exposed by the production CLI.
     """
+    validate_target_object_bytes(target_object_bytes)
     if not source_uri or not ingestion_run_id:
         raise ValueError("source_uri and ingestion_run_id must be non-empty")
     if not SOURCE_CHECKSUM_RE.fullmatch(source_checksum):
@@ -582,6 +602,7 @@ def write_logical_sparse_revision(
         obs_index_sha256=obs_index_sha256,
         obs_frame_sha256=obs_frame_sha256,
         chunks=chunks,
+        target_object_bytes=target_object_bytes,
     )
     with _exclusive_lock(lock_path):
         checkpoint = _load_or_create_checkpoint(checkpoint_path, expected)
@@ -687,7 +708,12 @@ def write_logical_sparse_revision(
                 checkpoint["updated_at"] = time.time()
                 _atomic_json(checkpoint_path, checkpoint)
             else:
-                _write_matrix(chunk_path, source_chunk, sparse_format)
+                _write_matrix(
+                    chunk_path,
+                    source_chunk,
+                    sparse_format,
+                    target_object_bytes=target_object_bytes,
+                )
                 obs_path.parent.mkdir(parents=True, exist_ok=True)
                 source_obs.to_parquet(obs_path)
                 completed.add(index)

@@ -119,6 +119,40 @@ def test_reader_accepts_separate_canonical_var_frame_identity(tmp_path: Path) ->
     assert restored_var.index.tolist() == ["g1", "g2", "g3"]
 
 
+def test_local_writer_uses_the_same_byte_targeted_component_chunks(
+    tmp_path: Path,
+) -> None:
+    matrix, obs, var = fixture_data(rows=2)
+    write_logical_sparse_revision(
+        root=tmp_path,
+        logical_key="surfaces/byte-target",
+        revision="r1",
+        matrix=matrix,
+        obs=obs,
+        var=var,
+        schema_fingerprint="schema-v1",
+        source_uri="gs://example/source.h5ad",
+        source_checksum=SOURCE_CHECKSUM,
+        ingestion_run_id="test-run",
+        max_rss_bytes=10**12,
+        min_rows=1,
+        max_rows=2,
+        target_object_bytes=16 * 1024**2,
+    )
+    metadata = json.loads(
+        (
+            tmp_path
+            / "surfaces/byte-target/revisions/r1/chunks/chunk_000000.zarr/data/.zarray"
+        ).read_text()
+    )
+    checkpoint = json.loads(
+        (tmp_path / "surfaces/byte-target/checkpoints/r1.json").read_text()
+    )
+
+    assert metadata["chunks"] == [4]
+    assert checkpoint["target_object_bytes"] == 16 * 1024**2
+
+
 def test_resume_reuses_completed_payload_without_overwrite(tmp_path: Path) -> None:
     matrix, obs, var = fixture_data()
     kwargs = dict(

@@ -3,6 +3,8 @@ from __future__ import annotations
 import ctypes
 import importlib.util
 import json
+import math
+import sys
 import weakref
 from pathlib import Path
 from typing import Any, TypedDict, cast
@@ -13,6 +15,7 @@ import h5py
 import numpy as np
 import pandas as pd
 import pytest
+import zarr
 from anndata import AnnData
 from fsspec.implementations.memory import MemoryFileSystem
 from scipy import sparse
@@ -23,11 +26,16 @@ from pert_gym.gcs_native_sparse_zarr import (
     BlockPlanConflict,
     GCSNativeMetrics,
     GCSNativeWriterError,
+    OperationBudgetExceeded,
+    adaptive_component_chunk_length,
     assert_cache_budget,
     calibrated_block_plan,
+    forecast_gcs_operation_cost,
     promote_gcs_native_revision,
     register_gcs_prefix_with_lamin,
     requester_pays_gcs_filesystem,
+    runtime_operation_checkpoint,
+    validate_gcs_operation_budget,
     validate_measured_block,
     write_gcs_native_sparse_revision,
 )
@@ -65,6 +73,7 @@ class NativeVar(TypedDict):
 
 class NativeManifest(TypedDict):
     chunks: list[NativeChunk]
+    final_operation_checkpoint: dict[str, Any]
     source: NativeSource
     var: NativeVar
 
@@ -75,28 +84,36 @@ class PromotionMarker(TypedDict):
 
 class WriteOverrides(TypedDict, total=False):
     block_size_exception: dict[str, str]
+    forecast_logical_blocks: int
     matrix: object
     max_block_bytes: int
+    max_recovery_attempts: int
     max_rss_bytes: int
     max_rows: int
     min_block_bytes: int
     obs: pd.DataFrame
+    operation_counter: gcs_native_sparse_zarr.GCSOperationCounter
     peak_rss_reader: Any
     source_generation: str
     source_row_end: int | None
     source_row_start: int | None
     stop_after_chunks: int | None
+    target_object_bytes: int
+    launch_context: dict[str, str]
 
 
 class WriteArguments(TypedDict):
     cache_cap_bytes: int
     cache_dir: Path
     cache_safety_reserve_bytes: int
+    forecast_logical_blocks: int
     fs: Any
     ingestion_run_id: str
+    launch_context: dict[str, str]
     logical_key: str
     matrix: object
     max_block_bytes: int
+    max_recovery_attempts: int
     max_rows: int
     min_block_bytes: int
     min_rows: int
@@ -132,6 +149,530 @@ def memory_filesystem() -> MemoryFileSystem:
     fs.store.clear()
     fs.pseudo_dirs[:] = [""]
     return cast(MemoryFileSystem, fs)
+
+
+def test_byte_targeted_chunks_and_hek_forecast_cap_object_fanout() -> None:
+    target_bytes = 64 * 1024**2
+    assert (
+        adaptive_component_chunk_length(
+            length=100_000_000,
+            dtype=np.dtype("float32"),
+            target_object_bytes=target_bytes,
+        )
+        == target_bytes // np.dtype("float32").itemsize
+    )
+    assert (
+        adaptive_component_chunk_length(
+            length=10,
+            dtype=np.dtype("int64"),
+            target_object_bytes=target_bytes,
+        )
+        == 10
+    )
+
+    inputs = {
+        "n_obs": 4_534_299,
+        "n_vars": 38_606,
+        "nnz": 29_136_391_388,
+        "data_dtype": np.dtype("float32"),
+        "index_dtype": np.dtype("int64"),
+        "indptr_dtype": np.dtype("int64"),
+        "sparse_format": "csr",
+        "logical_blocks": 32,
+        "calibration_rows": 100_000,
+    }
+    legacy = forecast_gcs_operation_cost(
+        **inputs,
+        legacy_fixed_chunk_elements=65_536,
+        max_recovery_attempts=0,
+    )
+    bounded = forecast_gcs_operation_cost(
+        **inputs,
+        target_object_bytes=target_bytes,
+        max_retry_rows=200_000,
+    )
+
+    assert 880_000 <= legacy["candidate_objects"] <= 930_000
+    assert bounded["candidate_objects"] <= 10_000
+    assert bounded["candidate_objects"] < legacy["candidate_objects"] // 100
+    assert bounded["target_object_bytes"] == target_bytes
+    assert bounded["class_a_requests"] >= bounded["candidate_objects"]
+    assert bounded["class_b_requests"] > 0
+
+
+def test_cost_forecast_is_conservative_and_free_tier_is_consumed_once() -> None:
+    first = forecast_gcs_operation_cost(
+        n_obs=1_000,
+        n_vars=100,
+        nnz=10_000,
+        data_dtype=np.dtype("float32"),
+        index_dtype=np.dtype("int32"),
+        indptr_dtype=np.dtype("int32"),
+        sparse_format="csr",
+        logical_blocks=2,
+        calibration_rows=100,
+        monthly_free_class_a_remaining=5_000,
+    )
+    second = forecast_gcs_operation_cost(
+        n_obs=1_000,
+        n_vars=100,
+        nnz=10_000,
+        data_dtype=np.dtype("float32"),
+        index_dtype=np.dtype("int32"),
+        indptr_dtype=np.dtype("int32"),
+        sparse_format="csr",
+        logical_blocks=2,
+        calibration_rows=100,
+        monthly_free_class_a_remaining=first["monthly_free_class_a_remaining_after"],
+    )
+    conservative = forecast_gcs_operation_cost(
+        n_obs=1_000,
+        n_vars=100,
+        nnz=10_000,
+        data_dtype=np.dtype("float32"),
+        index_dtype=np.dtype("int32"),
+        indptr_dtype=np.dtype("int32"),
+        sparse_format="csr",
+        logical_blocks=2,
+        calibration_rows=100,
+    )
+
+    assert first["monthly_free_class_a_applied"] == first["class_a_requests"]
+    assert second["monthly_free_class_a_applied"] == second["class_a_requests"]
+    assert (
+        first["monthly_free_class_a_applied"] + second["monthly_free_class_a_applied"]
+        <= 5_000
+    )
+    assert conservative["monthly_free_class_a_applied"] == 0
+    assert conservative["request_cost_eur"] >= first["request_cost_eur"]
+    assert conservative["pricing"]["class_a_eur_per_1000"] == pytest.approx(0.005689)
+
+
+def test_cost_forecast_bounds_skewed_calibration_and_every_recovery_attempt() -> None:
+    inputs = {
+        "n_obs": 100,
+        "n_vars": 100,
+        "nnz": 1_000,
+        "data_dtype": np.dtype("float32"),
+        "index_dtype": np.dtype("int32"),
+        "indptr_dtype": np.dtype("int32"),
+        "sparse_format": "csr",
+        "logical_blocks": 2,
+        "calibration_rows": 10,
+        "legacy_fixed_chunk_elements": 100,
+    }
+    forecast = forecast_gcs_operation_cost(**inputs, max_recovery_attempts=1)
+    without_recovery = forecast_gcs_operation_cost(**inputs, max_recovery_attempts=0)
+
+    assert forecast["calibration_nnz_upper_bound"] == 1_000
+    assert forecast["component_objects"]["calibration"]["data"] == 10
+    assert forecast["max_recovery_attempts"] == 1
+    assert forecast["layout_objects"]["retries"] > 0
+    assert forecast["candidate_objects"] > without_recovery["candidate_objects"]
+
+
+def test_operation_budget_requires_a_task_scoped_reviewed_exception() -> None:
+    forecast = {
+        "candidate_objects": 10_001,
+        "request_cost_eur": 1.01,
+    }
+    with pytest.raises(GCSNativeWriterError, match="operation budget"):
+        validate_gcs_operation_budget(forecast)
+    with pytest.raises(GCSNativeWriterError, match="reviewed exception"):
+        validate_gcs_operation_budget(
+            forecast,
+            exception={"task_id": "t_example", "reason": "needed"},
+        )
+
+    launch_context = {
+        "task_id": "t_example",
+        "reviewed_by": "independent-reviewer",
+    }
+    with pytest.raises(GCSNativeWriterError, match="launch context"):
+        validate_gcs_operation_budget(
+            forecast,
+            exception={
+                "task_id": "t_other",
+                "reviewed_by": "independent-reviewer",
+                "reason": "bounded one-off migration",
+                "max_candidate_objects": 10_100,
+                "max_request_cost_eur": 1.10,
+            },
+            launch_context=launch_context,
+        )
+
+    accepted = validate_gcs_operation_budget(
+        forecast,
+        exception={
+            "task_id": "t_example",
+            "reviewed_by": "independent-reviewer",
+            "reason": "bounded one-off migration",
+            "max_candidate_objects": 10_100,
+            "max_request_cost_eur": 1.10,
+        },
+        launch_context=launch_context,
+    )
+    assert accepted["status"] == "accepted_exception"
+    assert accepted["exception"]["task_id"] == "t_example"
+
+    with pytest.raises(GCSNativeWriterError, match="exception budget"):
+        validate_gcs_operation_budget(
+            forecast,
+            exception={
+                "task_id": "t_example",
+                "reviewed_by": "independent-reviewer",
+                "reason": "too small",
+                "max_candidate_objects": 10_000,
+                "max_request_cost_eur": 1.00,
+            },
+            launch_context=launch_context,
+        )
+
+    with pytest.raises(TypeError):
+        validate_gcs_operation_budget(  # type: ignore[call-arg]
+            forecast,
+            max_candidate_objects=20_000,
+        )
+
+
+def test_writer_refuses_operation_budget_before_first_remote_object(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fs = memory_filesystem()
+
+    monkeypatch.setattr(
+        gcs_native_sparse_zarr,
+        "forecast_gcs_operation_cost",
+        lambda **_kwargs: {
+            "candidate_objects": 10_001,
+            "request_cost_eur": 1.01,
+        },
+    )
+
+    with pytest.raises(GCSNativeWriterError, match="operation budget"):
+        write(fs, tmp_path / "cache")
+
+    assert fs.find("bucket/staging/family/example") == []
+
+
+def test_writer_requires_calibration_to_match_reviewed_logical_block_count(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+
+    with pytest.raises(GCSNativeWriterError, match="reviewed logical block count"):
+        write(fs, tmp_path / "cache", forecast_logical_blocks=2)
+
+    assert fs.find("bucket/staging/family/example") == []
+
+
+def test_runtime_checkpoint_uses_measured_requests_and_reserves_final_objects() -> None:
+    checkpoint = runtime_operation_checkpoint(
+        forecast={
+            "candidate_objects": 10,
+            "class_a_requests": 20,
+            "class_b_requests": 30,
+            "request_cost_eur": 1.0,
+        },
+        logical_checkpoint=2,
+        actual={
+            "candidate_objects": 7,
+            "class_a_requests": 19,
+            "class_b_requests": 12,
+        },
+        reserved={
+            "candidate_objects": 2,
+            "class_a_requests": 6,
+            "class_b_requests": 3,
+        },
+    )
+
+    assert checkpoint["actual"]["class_a_requests"] == 19
+    assert checkpoint["projected_final"]["candidate_objects"] == 9
+    assert checkpoint["projected_final"]["class_a_requests"] == 25
+    assert checkpoint["status"] == "exceeded"
+    assert checkpoint["violations"] == ["class_a_requests"]
+
+
+def test_writer_rejects_unbenchmarked_object_target_before_remote_io(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+
+    with pytest.raises(ValueError, match="benchmarked"):
+        write(fs, tmp_path / "cache", target_object_bytes=128 * 1024**2)
+
+    assert fs.find("bucket/staging/family/example") == []
+
+
+def test_writer_persists_forecast_and_uses_byte_targeted_zarr_chunks(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    target_object_bytes = 16 * 1024**2
+    manifest, _ = write(
+        fs,
+        tmp_path / "cache",
+        target_object_bytes=target_object_bytes,
+    )
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    plan = json.loads(fs.cat(f"{base}/plan.json"))
+    zarray = json.loads(fs.cat(f"{base}/chunks/chunk_000000.zarr/data/.zarray"))
+
+    assert zarray["chunks"] == [4]
+    assert plan["operation_forecast"]["target_object_bytes"] == target_object_bytes
+    assert plan["operation_budget"]["status"] == "accepted"
+    assert manifest["operation_forecast"] == plan["operation_forecast"]
+    assert manifest["operation_budget"] == plan["operation_budget"]
+
+
+def test_runtime_operation_checkpoint_fails_above_twenty_percent() -> None:
+    forecast = {
+        "candidate_objects": 10,
+        "class_a_requests": 100,
+        "class_b_requests": 100,
+        "request_cost_eur": 100.0,
+    }
+
+    accepted = runtime_operation_checkpoint(
+        forecast=forecast,
+        logical_checkpoint=0,
+        actual={
+            "candidate_objects": 12,
+            "class_a_requests": 1,
+            "class_b_requests": 1,
+        },
+    )
+    assert accepted["status"] == "accepted"
+    assert accepted["actual"]["candidate_objects"] == 12
+
+    exceeded = runtime_operation_checkpoint(
+        forecast=forecast,
+        logical_checkpoint=1,
+        actual={
+            "candidate_objects": 13,
+            "class_a_requests": 1,
+            "class_b_requests": 1,
+        },
+    )
+    assert exceeded["status"] == "exceeded"
+    assert exceeded["violations"] == ["candidate_objects"]
+
+
+def test_writer_persists_runtime_failure_before_next_logical_block(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fs = memory_filesystem()
+    original_checkpoint = gcs_native_sparse_zarr.runtime_operation_checkpoint
+    checkpoint_calls = 0
+
+    def exceeded(**kwargs: object) -> dict[str, object]:
+        nonlocal checkpoint_calls
+        checkpoint_calls += 1
+        if checkpoint_calls == 1:
+            return original_checkpoint(**kwargs)  # type: ignore[arg-type]
+        return {
+            "status": "exceeded",
+            "logical_checkpoint": 0,
+            "violations": ["candidate_objects"],
+            "actual": {"candidate_objects": 13, "request_cost_eur": 0.01},
+            "allowed": {"candidate_objects": 12, "request_cost_eur": 1.2},
+        }
+
+    monkeypatch.setattr(
+        gcs_native_sparse_zarr, "runtime_operation_checkpoint", exceeded
+    )
+    with pytest.raises(OperationBudgetExceeded, match="runtime GCS operation"):
+        write(fs, tmp_path / "cache")
+
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    checkpoint = json.loads(fs.cat(f"{base}/operation-checkpoints/chunk_000000.json"))
+    failure = json.loads(fs.cat(f"{base}/failure.json"))
+    assert checkpoint["status"] == "exceeded"
+    assert failure["evidence"] == checkpoint
+    assert not fs.exists(f"{base}/chunks/chunk_000001.zarr")
+
+
+def test_final_checkpoint_reserves_complete_var_and_manifest_reads(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    reservations: list[dict[str, object]] = []
+    original_checkpoint = gcs_native_sparse_zarr.runtime_operation_checkpoint
+
+    def checkpoint(**kwargs: object) -> dict[str, object]:
+        reserved = kwargs.get("reserved")
+        if isinstance(reserved, dict):
+            reservations.append(reserved)
+        return original_checkpoint(**kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(
+        gcs_native_sparse_zarr, "runtime_operation_checkpoint", checkpoint
+    )
+    write(memory_filesystem(), tmp_path / "cache")
+
+    assert reservations[-1]["class_b_requests"] == 6
+
+
+def test_resume_refuses_completed_chunk_missing_operation_checkpoint(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=1)
+    first_operation_checkpoint = (
+        "bucket/staging/family/example/temporary-revisions/r1/"
+        "operation-checkpoints/chunk_000000.json"
+    )
+    fs.rm(first_operation_checkpoint)
+
+    with pytest.raises(GCSNativeWriterError, match="operation checkpoint"):
+        write(fs, tmp_path / "cache")
+
+
+def test_repeated_resume_attempts_persist_identity_bound_cumulative_requests(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=1)
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    plan = json.loads(cast(bytes, fs.cat(f"{base}/plan.json")))
+    original_verify = cast(Any, gcs_native_sparse_zarr._verify_completed_chunk)
+
+    def interrupt_after_verify(**kwargs: object) -> None:
+        original_verify(**kwargs)
+        raise GCSNativeWriterError("interrupt during completed-chunk resume readback")
+
+    monkeypatch.setattr(
+        gcs_native_sparse_zarr, "_verify_completed_chunk", interrupt_after_verify
+    )
+    with pytest.raises(GCSNativeWriterError, match="resume readback"):
+        write(fs, tmp_path / "cache")
+    with pytest.raises(OperationBudgetExceeded):
+        write(fs, tmp_path / "cache")
+
+    attempts = [
+        json.loads(cast(bytes, fs.cat(key)))
+        for key in sorted(fs.find(f"{base}/operation-attempts"))
+    ]
+    assert len(attempts) == 3
+    assert all(attempt["identity"] == plan["identity"] for attempt in attempts)
+    cumulative_class_a = [
+        attempt["cumulative"]["class_a_requests"] for attempt in attempts
+    ]
+    cumulative_class_b = [
+        attempt["cumulative"]["class_b_requests"] for attempt in attempts
+    ]
+    assert cumulative_class_a == sorted(cumulative_class_a)
+    assert cumulative_class_b == sorted(cumulative_class_b)
+    assert len(set(cumulative_class_a)) == len(cumulative_class_a)
+    assert len(set(cumulative_class_b)) == len(cumulative_class_b)
+
+
+def test_resume_precharges_every_completed_chunk_before_readback(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=2)
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    plan = json.loads(cast(bytes, fs.cat(f"{base}/plan.json")))
+    with pytest.raises(OperationBudgetExceeded):
+        write(fs, tmp_path / "cache")
+
+    attempt = json.loads(
+        cast(bytes, fs.cat(f"{base}/operation-attempts/attempt_000001.json"))
+    )
+    per_chunk = math.ceil(plan["operation_forecast"]["class_b_requests"] / 3)
+    assert (
+        attempt["prepaid_until_next_durable_checkpoint"]["class_b_requests"]
+        >= per_chunk * 2
+    )
+
+
+def test_resume_rejects_same_identity_checkpoint_bound_to_wrong_chunk(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=2)
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    first_checkpoint = f"{base}/operation-checkpoints/chunk_000000.json"
+    second_checkpoint = f"{base}/operation-checkpoints/chunk_000001.json"
+    fs.pipe(second_checkpoint, cast(bytes, fs.cat(first_checkpoint)))
+
+    with pytest.raises(GCSNativeWriterError, match="checkpoint binding mismatch"):
+        write(fs, tmp_path / "cache")
+    assert not fs.exists(f"{base}/operation-attempts/attempt_000001.json")
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("format", "malformed", "checkpoint binding mismatch"),
+        ("logical_checkpoint", "0", "checkpoint binding mismatch"),
+        ("status", "exceeded", "checkpoint status mismatch"),
+        ("cumulative", None, "cumulative counters are missing"),
+        (
+            "cumulative",
+            {"class_a_requests": True, "class_b_requests": 1},
+            "cumulative counters are invalid",
+        ),
+    ],
+)
+def test_resume_rejects_malformed_operation_checkpoint_before_candidate_work(
+    tmp_path: Path, field: str, value: object, message: str
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=1)
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    checkpoint_key = f"{base}/operation-checkpoints/chunk_000000.json"
+    checkpoint = json.loads(cast(bytes, fs.cat(checkpoint_key)))
+    if value is None:
+        checkpoint.pop(field)
+    else:
+        checkpoint[field] = value
+    fs.pipe(checkpoint_key, json.dumps(checkpoint).encode())
+
+    with pytest.raises(GCSNativeWriterError, match=message):
+        write(fs, tmp_path / "cache")
+    assert not fs.exists(f"{base}/operation-attempts/attempt_000001.json")
+
+
+def test_resume_rereads_and_rejects_completed_matrix_payload_drift(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=1)
+    matrix_key = (
+        "bucket/staging/family/example/temporary-revisions/r1/chunks/chunk_000000.zarr"
+    )
+    store = zarr.storage.FSStore(matrix_key, fs=fs, mode="a", check=False)
+    group = zarr.open_group(store=store, mode="a")
+    group["data"][0] = 999
+    store.close()
+
+    with pytest.raises(GCSNativeWriterError, match="completed chunk payload mismatch"):
+        write(fs, tmp_path / "cache")
+
+
+def test_resume_rejects_completed_object_generation_drift(tmp_path: Path) -> None:
+    fs = memory_filesystem()
+    original_info = fs.info
+    generation = {"value": "1"}
+
+    def info(path: str, **kwargs: object) -> dict[str, object]:
+        return {**original_info(path, **kwargs), "generation": generation["value"]}
+
+    fs.info = info  # type: ignore[method-assign]
+    with pytest.raises(GCSNativeWriterError, match="intentional interruption"):
+        write(fs, tmp_path / "cache", stop_after_chunks=1)
+    generation["value"] = "2"
+
+    with pytest.raises(GCSNativeWriterError, match="generation mismatch"):
+        write(fs, tmp_path / "cache")
 
 
 def test_requester_pays_gcs_filesystem_enables_concrete_version_aware_paths(
@@ -207,6 +748,12 @@ def write(
             "source_row_end": 6,
             "schema_fingerprint": "schema-v1",
             "ingestion_run_id": "test-run",
+            "launch_context": {
+                "task_id": "t_example",
+                "reviewed_by": "independent-reviewer",
+            },
+            "forecast_logical_blocks": 3,
+            "max_recovery_attempts": 1,
             "cache_dir": cache_dir,
             "cache_cap_bytes": 1024,
             "cache_safety_reserve_bytes": 0,
@@ -232,6 +779,17 @@ def test_remote_writer_resumes_direct_object_store_chunks_and_promotes_last(
     assert metrics.chunk_count == 3
     assert metrics.bytes_read > 0
     assert metrics.bytes_written > 0
+    base = "bucket/staging/family/example/temporary-revisions/r1"
+    assert metrics.actual_operations["candidate_objects"] == len(fs.find(base))
+    assert (
+        metrics.actual_operations["class_a_requests"]
+        - manifest["final_operation_checkpoint"]["actual"]["class_a_requests"]
+        >= 2
+    )
+    assert (
+        manifest["final_operation_checkpoint"]["projected_final"]["candidate_objects"]
+        >= metrics.actual_operations["candidate_objects"]
+    )
     assert metrics.cache_bytes_after_cleanup == 0
     assert not (tmp_path / "cache").exists()
     assert fs.exists(
@@ -354,7 +912,7 @@ def test_remote_writer_skips_partial_recovery_attempt_without_overwrite(
     fs.pipe(canonical_orphan, b"canonical")
     fs.pipe(first_recovery_orphan, b"recovery-0")
 
-    manifest, _ = write(fs, tmp_path / "cache")
+    manifest, _ = write(fs, tmp_path / "cache", max_recovery_attempts=2)
 
     assert fs.cat(canonical_orphan) == b"canonical"
     assert fs.cat(first_recovery_orphan) == b"recovery-0"
@@ -415,6 +973,7 @@ def test_remote_writer_records_absolute_bounded_source_rows_and_rejects_resume_d
         obs=obs.iloc[2:5],
         source_row_start=2,
         source_row_end=5,
+        forecast_logical_blocks=2,
     )
 
     assert manifest["source"]["row_start"] == 2
@@ -476,8 +1035,10 @@ def test_generation_pinned_source_uses_gcsfs_versioned_range_request() -> None:
 
     fs.info = info  # type: ignore[method-assign]
     fs.cat_file = cat_file  # type: ignore[method-assign]
+    counter = gcs_native_sparse_zarr.GCSOperationCounter()
+    counted_fs = gcs_native_sparse_zarr.count_gcs_operations(fs, counter)
     generation, handle = gcs_native_migration_tool.open_generation_pinned_source(
-        fs, source_key
+        counted_fs, source_key, operation_counter=counter
     )
     try:
         assert generation == "123456"
@@ -491,6 +1052,7 @@ def test_generation_pinned_source_uses_gcsfs_versioned_range_request() -> None:
         (pinned_key, {"generation": "123456"}),
     ]
     assert reads == [pinned_key]
+    assert counter.class_b_requests >= 5
 
 
 def test_generation_pinned_source_rejects_generation_fragment_in_source_key() -> None:
@@ -610,14 +1172,31 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
             "cache_dir": tmp_path / "cache",
             "min_rows": 1,
             "max_rows": 1,
+            "target_object_mib": 32,
+            "forecast_logical_blocks": 1,
+            "launch_task_id": "t_reviewed",
+            "operation_cost_reviewed_by": "reviewer",
             "promote": True,
             "register_lamin_prefix": False,
             "migration_map_json": tmp_path / "migration.json",
             "collection_metadata_json": tmp_path / "collection.json",
+            "operation_cost_exception_json": tmp_path / "cost-exception.json",
         },
     )()
     args.migration_map_json.write_text("{}", encoding="utf-8")
     args.collection_metadata_json.write_text("{}", encoding="utf-8")
+    args.operation_cost_exception_json.write_text(
+        json.dumps(
+            {
+                "task_id": "t_reviewed",
+                "reviewed_by": "reviewer",
+                "reason": "bounded",
+                "max_candidate_objects": 12_000,
+                "max_request_cost_eur": 1.5,
+            }
+        ),
+        encoding="utf-8",
+    )
     capacity = type(
         "Capacity", (), {"hostname": "host", "project": "project", "zone": "zone"}
     )()
@@ -640,7 +1219,7 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
     monkeypatch.setattr(
         gcs_native_migration_tool,
         "open_generation_pinned_source",
-        lambda *_args: ("123", Handle()),
+        lambda *_args, **_kwargs: ("123", Handle()),
     )
     monkeypatch.setattr(gcs_native_migration_tool.h5py, "File", lambda *_args: H5())
     monkeypatch.setattr(
@@ -656,10 +1235,14 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
         "_read_h5ad_dataframe_rows",
         lambda *_args, **_kwargs: pd.DataFrame(index=pd.Index(["cell"])),
     )
+    writer_arguments: dict[str, object] = {}
+
+    def write_revision(**kwargs: object) -> tuple[dict[str, str], Metrics]:
+        writer_arguments.update(kwargs)
+        return {"candidate_prefix": "bucket/staging/candidate"}, Metrics()
+
     monkeypatch.setattr(
-        gcs_native_migration_tool,
-        "write_gcs_native_sparse_revision",
-        lambda **_kwargs: ({"candidate_prefix": "bucket/staging/candidate"}, Metrics()),
+        gcs_native_migration_tool, "write_gcs_native_sparse_revision", write_revision
     )
 
     def promote(**_kwargs: object) -> dict[str, str]:
@@ -678,6 +1261,19 @@ def test_promotion_remote_io_occurs_before_every_writer_lock_exits(
         "exit:legacy",
         "exit:global",
     ]
+    assert writer_arguments["target_object_bytes"] == 32 * 1024**2
+    assert writer_arguments["forecast_logical_blocks"] == 1
+    assert writer_arguments["launch_context"] == {
+        "task_id": "t_reviewed",
+        "reviewed_by": "reviewer",
+    }
+    assert writer_arguments["operation_cost_exception"] == {
+        "task_id": "t_reviewed",
+        "reviewed_by": "reviewer",
+        "reason": "bounded",
+        "max_candidate_objects": 12_000,
+        "max_request_cost_eur": 1.5,
+    }
 
 
 def test_calibration_selects_feasible_measured_intervals_and_records_identity() -> None:
@@ -976,7 +1572,9 @@ def test_writer_calibrates_before_immutable_plan_and_refuses_plan_drift(
     base = "bucket/staging/family/example/temporary-revisions/r1"
     plan = json.loads(fs.cat(f"{base}/plan.json"))
 
-    assert fs.exists(f"{base}/calibration/probe.json")
+    assert not fs.exists(f"{base}/calibration/probe.json")
+    assert plan["calibration"]["target_object_bytes"] == 64 * 1024**2
+    assert plan["calibration"]["identity"]["target_object_bytes"] == 64 * 1024**2
     assert plan["calibration"]["measured_bytes"] > 0
     with pytest.raises(GCSNativeWriterError, match="immutable plan"):
         write(
@@ -1001,6 +1599,7 @@ def test_writer_persists_terminal_evidence_and_stops_before_next_block(
             max_block_bytes=10_000,
             max_rows=2,
             max_rss_bytes=150,
+            forecast_logical_blocks=6,
             peak_rss_reader=lambda: next(rss),
         )
 
