@@ -22,7 +22,7 @@ from pert_gym.perturbai_sparse_parquet import (
     requester_pays_storage_options,
 )
 from tools.lamin_context import connect_pertdata
-from tools.pert_gym_vm_runner import require_heavy_vm
+from tools.pert_gym_vm_runner import lamin_writer_lease, require_heavy_vm
 
 
 def _var(path: Path) -> pd.DataFrame:
@@ -97,14 +97,15 @@ def main() -> int:
     )
     publication = None
     if args.publish_collection_key:
-        publication = publish_candidate(
-            ln=connect_pertdata(),
-            root=args.output_root,
-            logical_key=args.logical_key,
-            revision=args.revision,
-            collection_key=args.publish_collection_key,
-            require_vm=require_heavy_vm,
-        )
+        with lamin_writer_lease(run_id=args.ingestion_run_id):
+            publication = publish_candidate(
+                ln=connect_pertdata(),
+                root=args.output_root,
+                logical_key=args.logical_key,
+                revision=args.revision,
+                collection_key=args.publish_collection_key,
+                require_vm=require_heavy_vm,
+            )
     print(
         json.dumps(
             {
