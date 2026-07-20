@@ -4,6 +4,10 @@ import importlib.util
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
+from tools import pert_gym_vm_runner as vm_runner
+
 MODULE_PATH = (
     Path(__file__).parents[1] / "tools" / "audit_gcs_lamin_payloads_readonly.py"
 )
@@ -11,6 +15,97 @@ SPEC = importlib.util.spec_from_file_location("gcs_audit", MODULE_PATH)
 assert SPEC and SPEC.loader
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
+
+
+def _configure_approved_gce_identity(
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    hostname: str = "pert-gym-worker-eu",
+    project: str = vm_runner.EXPECTED_GCE_PROJECT,
+    zone: str = vm_runner.EXPECTED_ZONE,
+    instance: str = "pert-gym-worker-eu",
+) -> None:
+    monkeypatch.setattr(vm_runner.platform, "system", lambda: "Linux")
+    monkeypatch.setattr(vm_runner.socket, "gethostname", lambda: hostname)
+    metadata = {
+        "project/project-id": project,
+        "instance/zone": f"projects/1/zones/{zone}",
+        "instance/name": instance,
+    }
+    monkeypatch.setattr(vm_runner, "_metadata_value", metadata.__getitem__)
+
+
+@pytest.mark.parametrize(
+    ("hostname", "project", "zone", "instance"),
+    [
+        (
+            "evil-pert-gym-worker-eu-lookalike",
+            vm_runner.EXPECTED_GCE_PROJECT,
+            vm_runner.EXPECTED_ZONE,
+            "pert-gym-worker-eu",
+        ),
+        (
+            "pert-gym-worker-eu",
+            "wrong-project",
+            vm_runner.EXPECTED_ZONE,
+            "pert-gym-worker-eu",
+        ),
+        (
+            "pert-gym-worker-eu",
+            vm_runner.EXPECTED_GCE_PROJECT,
+            "wrong-zone",
+            "pert-gym-worker-eu",
+        ),
+        (
+            "pert-gym-worker-eu",
+            vm_runner.EXPECTED_GCE_PROJECT,
+            vm_runner.EXPECTED_ZONE,
+            "wrong-instance",
+        ),
+    ],
+)
+def test_assert_eu_worker_rejects_unpinned_gce_identity(
+    monkeypatch: pytest.MonkeyPatch,
+    hostname: str,
+    project: str,
+    zone: str,
+    instance: str,
+) -> None:
+    _configure_approved_gce_identity(
+        monkeypatch,
+        hostname=hostname,
+        project=project,
+        zone=zone,
+        instance=instance,
+    )
+    monkeypatch.setattr(MODULE.socket, "gethostname", lambda: hostname)
+
+    with pytest.raises(RuntimeError):
+        MODULE.assert_eu_worker()
+
+
+def test_assert_eu_worker_rejects_metadata_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _configure_approved_gce_identity(monkeypatch)
+    monkeypatch.setattr(
+        vm_runner,
+        "_metadata_value",
+        lambda _: (_ for _ in ()).throw(RuntimeError("metadata unavailable")),
+    )
+    monkeypatch.setattr(MODULE.socket, "gethostname", lambda: "pert-gym-worker-eu")
+
+    with pytest.raises(RuntimeError, match="metadata unavailable"):
+        MODULE.assert_eu_worker()
+
+
+def test_assert_eu_worker_accepts_exact_pinned_gce_identity(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _configure_approved_gce_identity(monkeypatch)
+    monkeypatch.setattr(MODULE.socket, "gethostname", lambda: "pert-gym-worker-eu")
+
+    MODULE.assert_eu_worker()
 
 
 def source_row(name: str, *, size: int = 10) -> dict[str, object]:
