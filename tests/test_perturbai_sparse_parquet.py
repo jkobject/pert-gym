@@ -44,6 +44,18 @@ def _write_source(
     pq.write_table(table, path, row_group_size=1)
 
 
+def _write_many_row_source(path: Path, rows: int = 100) -> None:
+    table = pa.table(
+        {
+            "cell_id": [f"c{row}" for row in range(rows)],
+            "batch": ["b"] * rows,
+            "genes": [[row % 3] for row in range(rows)],
+            "expressions": [[row + 1] for row in range(rows)],
+        }
+    )
+    pq.write_table(table, path, row_group_size=10)
+
+
 def _source(path: Path, stem: str) -> PerturbAISource:
     return PerturbAISource(
         stem=stem,
@@ -248,6 +260,116 @@ def test_obs_adapter_rejects_genuinely_incompatible_metadata_schemas(
 
     with pytest.raises(ValueError, match="schema changes"):
         obs.logical_sparse_obs_identity()
+
+
+def test_sparse_matrix_reads_only_overlapping_row_groups_for_early_and_late_slices(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "source.parquet"
+    _write_many_row_source(path)
+    matrix = _SparseParquetMatrix(
+        (_source(path, "WB8588_2_1_part-2"),), n_vars=3, batch_rows=10
+    )
+    original_batches = matrix._batches
+    reads = 0
+
+    def counted_batches(
+        source: PerturbAISource,
+        *,
+        start_row: int = 0,
+        end_row: int | None = None,
+    ):
+        nonlocal reads
+        for frame in original_batches(source, start_row=start_row, end_row=end_row):
+            reads += 1
+            yield frame
+
+    monkeypatch.setattr(matrix, "_batches", counted_batches)
+
+    early = matrix[0:10]
+    assert reads == 1
+    assert early.toarray().tolist() == [
+        [1, 0, 0],
+        [0, 2, 0],
+        [0, 0, 3],
+        [4, 0, 0],
+        [0, 5, 0],
+        [0, 0, 6],
+        [7, 0, 0],
+        [0, 8, 0],
+        [0, 0, 9],
+        [10, 0, 0],
+    ]
+
+    reads = 0
+    late = matrix[90:100]
+    assert reads == 1
+    assert late.toarray().tolist() == [
+        [91, 0, 0],
+        [0, 92, 0],
+        [0, 0, 93],
+        [94, 0, 0],
+        [0, 95, 0],
+        [0, 0, 96],
+        [97, 0, 0],
+        [0, 98, 0],
+        [0, 0, 99],
+        [100, 0, 0],
+    ]
+
+
+def test_adapter_multi_chunk_build_scans_each_row_group_a_bounded_number_of_times(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "source.parquet"
+    _write_many_row_source(path)
+    original_batches = _SparseParquetMatrix._batches
+    batch_reads = 0
+
+    def counted_batches(
+        self: _SparseParquetMatrix,
+        source: PerturbAISource,
+        *,
+        start_row: int = 0,
+        end_row: int | None = None,
+    ):
+        nonlocal batch_reads
+        for frame in original_batches(
+            self, source, start_row=start_row, end_row=end_row
+        ):
+            batch_reads += 1
+            yield frame
+
+    monkeypatch.setattr(_SparseParquetMatrix, "_batches", counted_batches)
+
+    build_perturbai_revision(
+        root=tmp_path / "out",
+        logical_key="perturbai/wholebrain",
+        revision="r1",
+        sources=(_source(path, "WB8588_2_1_part-2"),),
+        var=_var(),
+        schema_fingerprint="perturbai-gene-metadata/v1",
+        ingestion_run_id="test-run",
+        max_rss_bytes=10**12,
+        min_rows=10,
+        max_rows=10,
+        parquet_batch_rows=10,
+    )
+
+    # Matrix validation, streamed obs identity, and paired X/obs chunk writes
+    # each scan every row group only a bounded number of times.
+    assert batch_reads == 41
+    _surface, matrix, _obs, _var_frame = read_logical_sparse_revision(
+        tmp_path / "out", "perturbai/wholebrain", "r1"
+    )
+    expected = sparse.csr_matrix(
+        (
+            np.arange(1, 101),
+            (np.arange(100), np.arange(100) % 3),
+        ),
+        shape=(100, 3),
+    )
+    assert (matrix != expected).nnz == 0
 
 
 def test_adapter_rejects_malformed_sparse_rows_before_candidate_write(

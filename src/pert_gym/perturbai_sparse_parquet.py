@@ -234,16 +234,51 @@ class _SparseParquetMatrix:
             self.max_batch_rows = max(self.max_batch_rows, max_rows)
         self.shape = (total, n_vars)
 
-    def _batches(self, source: PerturbAISource) -> Iterator[pd.DataFrame]:
+    def _batches(
+        self,
+        source: PerturbAISource,
+        *,
+        start_row: int = 0,
+        end_row: int | None = None,
+    ) -> Iterator[pd.DataFrame]:
         parquet = pq.ParquetFile(source.local_path)
-        for batch in parquet.iter_batches(batch_size=self.batch_rows):
+        total_rows = int(parquet.metadata.num_rows)
+        if start_row < 0 or start_row > total_rows:
+            raise ValueError("parquet batch start_row is outside the source")
+        effective_end = total_rows if end_row is None else end_row
+        if effective_end < start_row or effective_end > total_rows:
+            raise ValueError("parquet batch end_row is outside the source")
+
+        cursor = 0
+        row_groups: list[int] = []
+        first_row = start_row
+        for row_group in range(parquet.metadata.num_row_groups):
+            group_end = cursor + parquet.metadata.row_group(row_group).num_rows
+            if group_end > start_row and cursor < effective_end:
+                if not row_groups:
+                    first_row = cursor
+                row_groups.append(row_group)
+            cursor = group_end
+            if cursor >= effective_end:
+                break
+
+        cursor = first_row
+        for batch in parquet.iter_batches(
+            batch_size=self.batch_rows, row_groups=row_groups
+        ):
             # NumPy-backed conversion infers batch-local dtypes for nullable
-            # integers and booleans.  Use pandas nullable dtypes derived from
+            # integers and booleans. Use pandas nullable dtypes derived from
             # the stable Parquet schema while leaving all other columns on the
             # normal conversion path for source/readback parity.
             frame = batch.to_pandas(types_mapper=_nullable_pandas_dtype)
-            self.max_batch_rows = max(self.max_batch_rows, len(frame))
-            yield frame
+            batch_end = cursor + len(frame)
+            take_start = max(start_row, cursor) - cursor
+            take_end = min(effective_end, batch_end) - cursor
+            if take_start < take_end:
+                selected = frame.iloc[take_start:take_end]
+                self.max_batch_rows = max(self.max_batch_rows, len(selected))
+                yield selected
+            cursor = batch_end
 
     def _scan(self, source: PerturbAISource) -> tuple[int, int, int]:
         rows = 0
@@ -269,18 +304,12 @@ class _SparseParquetMatrix:
             overlap_start = max(start, source_start)
             overlap_end = min(end, source_end)
             if overlap_start < overlap_end:
-                cursor = source_start
-                for frame in self._batches(source):
-                    batch_end = cursor + len(frame)
-                    take_start = max(overlap_start, cursor) - cursor
-                    take_end = min(overlap_end, batch_end) - cursor
-                    if take_start < take_end:
-                        pieces.append(
-                            _csr_from_frame(
-                                frame.iloc[take_start:take_end], self.n_vars
-                            )
-                        )
-                    cursor = batch_end
+                for frame in self._batches(
+                    source,
+                    start_row=overlap_start - source_start,
+                    end_row=overlap_end - source_start,
+                ):
+                    pieces.append(_csr_from_frame(frame, self.n_vars))
             source_start = source_end
         return sparse.vstack(pieces, format="csr")
 
@@ -315,14 +344,12 @@ class _StreamingPerturbAIObsILoc:
             overlap_start = max(start, source_start)
             overlap_end = min(end, source_end)
             if overlap_start < overlap_end:
-                cursor = source_start
-                for raw in self._obs.matrix._batches(source):
-                    batch_end = cursor + len(raw)
-                    take_start = max(overlap_start, cursor) - cursor
-                    take_end = min(overlap_end, batch_end) - cursor
-                    if take_start < take_end:
-                        pieces.append(_obs_frame(raw.iloc[take_start:take_end], source))
-                    cursor = batch_end
+                for raw in self._obs.matrix._batches(
+                    source,
+                    start_row=overlap_start - source_start,
+                    end_row=overlap_end - source_start,
+                ):
+                    pieces.append(_obs_frame(raw, source))
             source_start = source_end
         result = pd.concat(pieces, axis=0)
         self._obs.max_live_rows = max(self._obs.max_live_rows, len(result))
