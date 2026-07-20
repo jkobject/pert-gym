@@ -154,6 +154,7 @@ _CONFIG_IDENTITY_KEYS = {
     "dataset_config_status",
     "ordered_var",
     "obs",
+    "metadata_completeness_findings",
     "accepted_components",
     "execution",
     "storage",
@@ -329,6 +330,9 @@ def _entry_approved_identity(entry: dict[str, Any]) -> dict[str, str]:
         "assays": entry["assays"],
         "ordered_var": identity["ordered_var"],
         "obs": identity["obs"],
+        "metadata_completeness_findings": identity[
+            "metadata_completeness_findings"
+        ],
         "accepted_components": identity["accepted_components"],
         "execution": identity["execution"],
         "storage": identity["storage"],

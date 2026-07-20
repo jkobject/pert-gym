@@ -189,7 +189,13 @@ def test_manifest_migrated_rows_reject_legacy_cli_authorization_before_external_
     monkeypatch.setattr(
         sys,
         "argv",
-        [str(WRITER), "--config", str(config_path), "--authorization", str(authorization_path)],
+        [
+            str(WRITER),
+            "--config",
+            str(config_path),
+            "--authorization",
+            str(authorization_path),
+        ],
     )
     with pytest.raises(RuntimeError, match="canonical row-99 replay"):
         writer.main()
@@ -216,9 +222,13 @@ def test_manifest_cli_rejects_incomplete_provenance_before_external_io(
         sys,
         "argv",
         [
-            str(WRITER), "--config", str(ROW_7_CONFIG),
-            "--authorization-manifest", str(manifest_path),
-            "--authorization-manifest-sha256", str(digest_path),
+            str(WRITER),
+            "--config",
+            str(ROW_7_CONFIG),
+            "--authorization-manifest",
+            str(manifest_path),
+            "--authorization-manifest-sha256",
+            str(digest_path),
         ],
     )
     with pytest.raises(ValueError, match="reviewer.*non-empty"):
@@ -1659,9 +1669,10 @@ def test_row_7_dataset_recap_append_only_supersedes_exclusion_overlay() -> None:
     recap = load_json(ROW_7_RECAP)
 
     assert recap["dataset_id"] == config["source"]["dataset_id"]
-    assert recap["metadata_completeness_findings"] == config[
-        "metadata_completeness_findings"
-    ]
+    assert (
+        recap["metadata_completeness_findings"]
+        == config["metadata_completeness_findings"]
+    )
     supersedes = recap["supersedes"]
     assert isinstance(supersedes, dict)
     assert set(supersedes) == {"path", "sha256"}
