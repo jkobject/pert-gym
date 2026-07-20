@@ -106,6 +106,46 @@ def test_migration_accepts_exact_integer_valued_gene_token_ids(tmp_path: Path) -
     assert var.index.tolist() == ["g0", "g1", "g2"]
 
 
+@pytest.mark.parametrize(
+    ("gene_token_ids", "error"),
+    [
+        ([1, 0, 2], "align exactly with matrix columns"),
+        ([0, 1, 1], "unique"),
+        (None, "missing required column"),
+        (pd.Series([0, 1], index=["g0", "g1"]), "finite"),
+        ([0, 1, 3], "outside supported range"),
+        ([0, 1.5, 2], "integer-valued"),
+    ],
+)
+def test_public_builder_rejects_invalid_gene_token_to_column_identity(
+    tmp_path: Path,
+    gene_token_ids: list[object] | pd.Series | None,
+    error: str,
+) -> None:
+    source_path = tmp_path / "source.parquet"
+    _write_source(source_path)
+    var = _var()
+    if gene_token_ids is None:
+        var = var.drop(columns="gene_token_id")
+    else:
+        var["gene_token_id"] = gene_token_ids
+
+    with pytest.raises(ValueError, match=error):
+        build_perturbai_revision(
+            root=tmp_path / "out",
+            logical_key="perturbai/wholebrain",
+            revision="r1",
+            sources=(_source(source_path, "WB8588_2_1_part-2"),),
+            var=var,
+            schema_fingerprint="perturbai-gene-metadata/v1",
+            ingestion_run_id="test-run",
+            max_rss_bytes=10**12,
+            min_rows=1,
+            max_rows=2,
+        )
+    assert not (tmp_path / "out/perturbai/wholebrain/revisions/r1").exists()
+
+
 def test_source_validation_accepts_non_numeric_stems_in_exact_part_order(
     tmp_path: Path,
 ) -> None:

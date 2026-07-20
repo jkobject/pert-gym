@@ -157,6 +157,25 @@ def _validated_cell_ids(frame: pd.DataFrame) -> pd.Index:
     return pd.Index(cells, name="cell_id")
 
 
+def _validate_var_token_alignment(var: pd.DataFrame) -> None:
+    """Require each var row's token identity to equal its matrix column."""
+    if "gene_token_id" not in var.columns:
+        raise ValueError("var missing required column: gene_token_id")
+    token_ids = _validated_sparse_vector(
+        var["gene_token_id"].to_numpy(dtype=object),
+        sequence_name="gene_token_id",
+        value_name="gene_token_id",
+        upper_bound=len(var) - 1,
+    )
+    if len(np.unique(token_ids)) != len(token_ids):
+        raise ValueError("gene_token_id values must be unique")
+    expected = np.arange(len(var), dtype=_CSR_STORAGE_DTYPE)
+    if not np.array_equal(token_ids, expected):
+        raise ValueError(
+            "gene_token_id values must align exactly with matrix columns 0..n_vars-1"
+        )
+
+
 def _csr_from_frame(frame: pd.DataFrame, n_vars: int) -> sparse.csr_matrix:
     """Build an int32 CSR batch after validating every sparse source value."""
     missing = _REQUIRED_COLUMNS - set(frame.columns)
@@ -309,6 +328,7 @@ def build_perturbai_revision(
     stop_after_chunks: int | None = None,
 ) -> dict[str, object]:
     """Convert ordered source rows to one append-only local logical revision."""
+    _validate_var_token_alignment(var)
     ordered = validate_perturbai_sources(sources)
     matrix = _SparseParquetMatrix(ordered, len(var), parquet_batch_rows)
     obs = _build_obs(matrix, ordered)
