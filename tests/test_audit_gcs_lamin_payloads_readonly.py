@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -108,12 +109,15 @@ def test_assert_eu_worker_accepts_exact_pinned_gce_identity(
     MODULE.assert_eu_worker()
 
 
-def source_row(name: str, *, size: int = 10) -> dict[str, object]:
+def source_row(
+    name: str, *, size: int = 10, generation: object = "1710000000000000"
+) -> dict[str, object]:
     return {
         "name": f"pert-gym/staging/data/main/{name}",
         "uri": f"gs://scperturb/pert-gym/staging/data/main/{name}",
         "logical_prefix": "pert-gym/staging/data/main",
         "bytes": size,
+        "generation": generation,
         "updated": "2026-07-12T00:00:00Z",
         "storage_class": "STANDARD",
         "md5_hash": "",
@@ -121,9 +125,22 @@ def source_row(name: str, *, size: int = 10) -> dict[str, object]:
     }
 
 
-def artifact(uid: str, key: str, *, size: int | None = 10, uri: str) -> SimpleNamespace:
+def artifact(
+    uid: str,
+    key: str,
+    *,
+    size: int | None = 10,
+    uri: str,
+    generation: object | None = None,
+) -> SimpleNamespace:
     return SimpleNamespace(
-        uid=uid, key=key, size=size, path=uri, url=None, storage=None
+        uid=uid,
+        key=key,
+        size=size,
+        path=uri,
+        url=None,
+        storage=None,
+        generation=generation,
     )
 
 
@@ -255,11 +272,13 @@ def test_equivalent_durable_uri_aliases_select_lowest_uid_deterministically() ->
         "z-target",
         "staging/data/main/equivalent.h5ad",
         uri="https://storage.googleapis.com/durable/equivalent.h5ad",
+        generation="200",
     )
     first = artifact(
         "a-target",
         "staging/data/main/equivalent.h5ad",
         uri="gs://durable/equivalent.h5ad",
+        generation="200",
     )
 
     manifest = MODULE.build_manifest(
@@ -297,3 +316,115 @@ def test_all_zero_audit_remains_fail_closed() -> None:
     assert manifest[0]["classification"] == "KEEP temporary"
     assert summary["safe_candidate_bytes"] == 0
     assert summary["unexplained_delta_bytes"] == 0
+
+
+def test_missing_or_fractional_source_generation_cannot_be_safe() -> None:
+    candidate = artifact(
+        "durable",
+        "staging/data/main/generation.h5ad",
+        uri="s3://durable/generation.h5ad",
+    )
+
+    for invalid_generation in (None, "", False, 0, -1, 10.0, "10.0", " 10", "ten"):
+        manifest = MODULE.build_manifest(
+            [source_row("generation.h5ad", generation=invalid_generation)],
+            [candidate],
+            header_reader=lambda _: (True, "ok"),
+        )
+
+        assert manifest[0]["classification"] == "KEEP temporary"
+        assert manifest[0]["exact_lamin_object_matches"] == 0
+        assert (
+            "invalid source object generation metadata"
+            in manifest[0]["non_safe_reasons"]
+        )
+
+
+def test_safe_manifest_uses_one_generation_matched_delete_per_source_object() -> None:
+    candidate = artifact(
+        "durable",
+        "staging/data/main/generation-change.h5ad",
+        uri="s3://durable/generation-change.h5ad",
+    )
+    first = MODULE.build_manifest(
+        [source_row("generation-change.h5ad", generation="101")],
+        [candidate],
+        header_reader=lambda _: (True, "ok"),
+    )[0]
+    second = MODULE.build_manifest(
+        [source_row("generation-change.h5ad", generation="102")],
+        [candidate],
+        header_reader=lambda _: (True, "ok"),
+    )[0]
+
+    assert first["classification"] == "SAFE-CANDIDATE after review"
+    assert first["source_generation_evidence"] == "101"
+    assert "--if-generation-match=101" in first["proposed_delete_command_not_executed"]
+    assert (
+        "gs://scperturb/pert-gym/staging/data/main/generation-change.h5ad"
+        in first["proposed_delete_command_not_executed"]
+    )
+    assert "--recursive" not in first["proposed_delete_command_not_executed"]
+    assert (
+        first["proposed_delete_command_not_executed"]
+        != second["proposed_delete_command_not_executed"]
+    )
+    assert "--if-generation-match=102" in second["proposed_delete_command_not_executed"]
+
+
+def test_gcs_durable_readback_requires_and_records_immutable_generation() -> None:
+    row = source_row("durable-gcs.h5ad")
+    missing_generation = artifact(
+        "gcs-durable",
+        "staging/data/main/durable-gcs.h5ad",
+        uri="gs://durable/durable-gcs.h5ad",
+    )
+    manifest = MODULE.build_manifest(
+        [row], [missing_generation], header_reader=lambda _: (True, "unexpected")
+    )
+
+    assert manifest[0]["classification"] == "KEEP temporary"
+    assert "immutable GCS generation" in manifest[0]["non_safe_reasons"]
+
+    pinned = artifact(
+        "gcs-durable",
+        "staging/data/main/durable-gcs.h5ad",
+        uri="gs://durable/durable-gcs.h5ad",
+        generation="202",
+    )
+    seen: list[str] = []
+    manifest = MODULE.build_manifest(
+        [row],
+        [pinned],
+        header_reader=lambda uri: (seen.append(uri) is None, f"readback:{uri}"),
+    )
+
+    assert manifest[0]["classification"] == "SAFE-CANDIDATE after review"
+    assert seen == ["gs://durable/durable-gcs.h5ad#202"]
+    assert "gs://durable/durable-gcs.h5ad#202" in manifest[0]["readback_evidence"]
+
+
+def test_read_header_passes_gcs_generation_to_fsspec(monkeypatch) -> None:
+    calls: list[tuple[str, str, dict[str, str]]] = []
+
+    class Handle:
+        def __enter__(self) -> "Handle":
+            return self
+
+        def __exit__(self, *_: object) -> None:
+            return None
+
+        def read(self, _: int) -> bytes:
+            return b"evidence"
+
+    def open_file(uri: str, mode: str, **kwargs: str) -> Handle:
+        calls.append((uri, mode, kwargs))
+        return Handle()
+
+    monkeypatch.setitem(sys.modules, "fsspec", SimpleNamespace(open=open_file))
+
+    ok, evidence = MODULE.read_header("gs://durable/durable-gcs.h5ad#202")
+
+    assert ok
+    assert calls == [("gs://durable/durable-gcs.h5ad", "rb", {"generation": "202"})]
+    assert "identity:gs://durable/durable-gcs.h5ad#202" in evidence
