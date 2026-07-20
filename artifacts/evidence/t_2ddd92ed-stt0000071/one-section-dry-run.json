@@ -1,0 +1,88 @@
+{
+  "branch": "jkobject",
+  "catalogue_row_id": 150,
+  "component": "zebrafish heart regeneration",
+  "duplicate_probe": {
+    "candidates": [],
+    "query_counts": {
+      "component_description": 0,
+      "logical_key_prefix": 0,
+      "record_id_description": 0
+    }
+  },
+  "logical_key": "pert-gym/logical/stt0000071",
+  "mode": "one-section-converter-dry-run",
+  "obs_columns": [
+    "x",
+    "y",
+    "n_genes",
+    "n_counts",
+    "sid",
+    "3D_x",
+    "3D_y",
+    "3D_z",
+    "cell_type",
+    "cell_id",
+    "cid",
+    "dataset",
+    "sample",
+    "section_id",
+    "timepoint_label",
+    "timepoint",
+    "trajectory_id",
+    "organism",
+    "tissue_type",
+    "assay",
+    "modality",
+    "perturbation",
+    "perturbation_type",
+    "is_control",
+    "is_baseline",
+    "age",
+    "age_missingness_reason",
+    "sex",
+    "sex_missingness_reason",
+    "disease",
+    "technology",
+    "is_bulk",
+    "is_pseudobulk",
+    "is_low_quality",
+    "quality_missingness_reason"
+  ],
+  "readback": {
+    "matrix_equal": true,
+    "nnz": 42507,
+    "obs_parquet_equal": true,
+    "shape": [
+      156,
+      6073
+    ],
+    "sum": 134734
+  },
+  "record_id": "stt0000071",
+  "section": {
+    "sample_id": "STSA0000742",
+    "section_id": "STTS0001197",
+    "section_label": "DP8400016197TL_C5",
+    "timepoint": "uninjured_2"
+  },
+  "source": {
+    "cell_bin": {
+      "bytes": 217717,
+      "sha256": "f5f132cd50daebe35709821b83ada3d93a838879c56a94abf454df7cf128e0e3"
+    },
+    "metadata": {
+      "bytes": 7896,
+      "sha256": "5885ed0f03d9c2ad731767553fe1de84b89213acde4310503c8650b3c09c2e15"
+    }
+  },
+  "stats": {
+    "metadata_n_counts_sum": 134734,
+    "n_obs": 156,
+    "n_vars": 6073,
+    "nnz": 42507,
+    "section_present_genes": 6073,
+    "sum": 134734
+  },
+  "status": "PASS"
+}

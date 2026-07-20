@@ -1,0 +1,68 @@
+{
+  "accepted_ledger": {
+    "precondition": {
+      "after": 4,
+      "before": 3,
+      "current": 4,
+      "denominator": 153,
+      "ended_at": 1784152951,
+      "live_readback": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/revisions/temporal-v4-013-20260715T212836Z-a4b6c94d/manifest.json",
+      "manifest": {
+        "generation": "1784150946597762",
+        "sha256": "935a41963af1addba7b0b13a779ceefcbe7ddb1ba527da1b531f8f9019881d6c",
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/revisions/temporal-v4-013-20260715T212836Z-a4b6c94d/manifest.json"
+      },
+      "mismatch": 0,
+      "run_id": 2978,
+      "task_id": "t_664e9dc0",
+      "unit": "components"
+    },
+    "producer_credit": 0,
+    "proposed_delta_if_independently_accepted": {
+      "after": 5,
+      "before": 4,
+      "denominator": 153,
+      "mismatch": 0,
+      "unit": "components"
+    },
+    "self_accepted": false
+  },
+  "candidate_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2",
+  "dimensions": {
+    "n_obs": 260139,
+    "n_vars": 29747,
+    "nnz": 132879334,
+    "samples": 9,
+    "sections": 46,
+    "sum_counts": 525246132,
+    "timepoints": 9
+  },
+  "duplicate_preflight": {
+    "candidates": [],
+    "query_counts": {
+      "component_description": 0,
+      "logical_key_prefix": 0,
+      "record_id_description": 0
+    }
+  },
+  "manifest": {
+    "crc32c_base64": null,
+    "generation": "1784221380010648",
+    "md5_base64": null,
+    "sha256": "0054f000aace5c259c9cf4e47f67dd3efbeff0634909f5210c3f4888c5dc4f67",
+    "size": 156115,
+    "updated": null,
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/manifest.json"
+  },
+  "manifest_last": true,
+  "readback_mismatch": 0,
+  "source_counts": {
+    "all_non_tiff": 138,
+    "cell_bin_expression": 46,
+    "cell_metadata": 46,
+    "raw_unbinned_expression_provenance": 46,
+    "tiff_explicitly_excluded": 46,
+    "total_staged_bytes": 4406943940
+  },
+  "status": "PASS"
+}

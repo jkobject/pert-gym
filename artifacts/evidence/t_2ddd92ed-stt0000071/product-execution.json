@@ -1,0 +1,24 @@
+{
+  "completed": 46,
+  "current": 4,
+  "denominator": 153,
+  "format": "pert-gym.product-execution-heartbeat/v1",
+  "host": "pert-gym-worker-eu",
+  "manifest": {
+    "crc32c_base64": null,
+    "generation": "1784221380010648",
+    "md5_base64": null,
+    "sha256": "0054f000aace5c259c9cf4e47f67dd3efbeff0634909f5210c3f4888c5dc4f67",
+    "size": 156115,
+    "updated": null,
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/manifest.json"
+  },
+  "metric": "accepted_components",
+  "n_obs": 260139,
+  "nnz": 132879334,
+  "payload_heartbeat_at": 1784221383.26633,
+  "phase": "completed",
+  "pid": 1817,
+  "revision": "stt0000071-20260716T164254Z-374d55c2",
+  "total": 46
+}
