@@ -1,0 +1,68 @@
+{
+  "accepted_product_credit_post": 0,
+  "accepted_product_credit_pre": 0,
+  "generation_qualified_member_checks": [
+    {
+      "generation": "1784284533730634",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/source-inventory.json",
+      "sha256": "67fe850353528fde7553a7581155d7ee981274d346de4d4b46abc56873ae9351",
+      "size_bytes": 7667
+    },
+    {
+      "generation": "1784284534010961",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/quality-readback.json",
+      "sha256": "63d782d1338cc8be38911cd7d1e2adde2d6f05d8bfbcdd171cb97685cbd31b2d",
+      "size_bytes": 1041
+    },
+    {
+      "generation": "1784284534292151",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/missingness.json",
+      "sha256": "d40744a341b6de17021563225ae2dde4205981c6cbc62c9269219803c6e8c191",
+      "size_bytes": 1279
+    },
+    {
+      "generation": "1784284534571555",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/ledger.json",
+      "sha256": "98b7d4193e2624ef9bb1419482d8b54aaeccacd43920b87900a87602248f042e",
+      "size_bytes": 2460
+    },
+    {
+      "generation": "1784284534881810",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/ledger-preflight.json",
+      "sha256": "0dad6e12b7476db6698afc33e77fd355971ca2b653fb170a941bf7cd729a1949",
+      "size_bytes": 1424
+    },
+    {
+      "generation": "1784284505693646",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/datasets/SCP1846/X.h5ad",
+      "sha256": "113bcf5be483d69e82a635422779ffb6e4b995679fef46ff330bcf07e5c87986",
+      "size_bytes": 1166890709
+    },
+    {
+      "generation": "1784284487150900",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/datasets/SCP1846/obs.parquet",
+      "sha256": "d7351cf8ab4720a9fad953b4f431634cc1da674aa456c7946cdce0687b8dabe1",
+      "size_bytes": 5522577
+    },
+    {
+      "generation": "1784284533449109",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/datasets/SCP1846/var.parquet",
+      "sha256": "073d97e7fae82250efe0c90d5843826a39455a56ec2354c30a21ad6d4bf1f9b7",
+      "size_bytes": 409855
+    }
+  ],
+  "global_accepted_components_control_plane_status": "unavailable_malformed_administrative_replay_binding",
+  "independent": true,
+  "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/manifest.json#1784284536286438",
+  "manifest_sha256": "dc33b1a1e1d24e96f3ce8efce8d052d1b01c2e7102d335a0ebf866ebc63e92a6",
+  "manifest_written_last": true,
+  "nnz": 528649855,
+  "ordered_axis_parity": true,
+  "physical_member_count": 9,
+  "raw_count_sum": 2017575951,
+  "shape": [
+    129441,
+    23308
+  ],
+  "verdict": "PASS"
+}

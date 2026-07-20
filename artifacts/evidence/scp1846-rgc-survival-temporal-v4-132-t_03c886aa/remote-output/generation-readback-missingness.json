@@ -1,0 +1,35 @@
+{
+  "affected_cells": 129441,
+  "dependency_created": false,
+  "excluded_component_records": 0,
+  "excluded_source_cells": 0,
+  "explicit_all_null_columns": {
+    "age": 129441,
+    "age_unit": 129441,
+    "cell_type": 129441,
+    "is_low_quality": 129441,
+    "sex": 129441,
+    "source_quality_annotation": 129441
+  },
+  "findings": [
+    {
+      "disposition": "explicit null; no exclusion, imputation, or dependency",
+      "field_group": "age_sex",
+      "state": "per-cell age and sex are absent from GEO processed matrices"
+    },
+    {
+      "disposition": "explicit null; all 129441 source cells retained",
+      "field_group": "cell_type",
+      "state": "SCP per-cell annotations were not published with the immutable GEO matrices"
+    },
+    {
+      "disposition": "all source cells retained; no quality rejection",
+      "field_group": "quality",
+      "state": "processed source matrices define the frozen source-cell universe; deterministic counts, detected genes, mitochondrial and ribosomal fractions were computed without filtering"
+    }
+  ],
+  "imputations": 0,
+  "non_excluding": true,
+  "record_id": "temporal_v4_132_overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "schema_version": "pert-gym.explicit-missingness/v1"
+}

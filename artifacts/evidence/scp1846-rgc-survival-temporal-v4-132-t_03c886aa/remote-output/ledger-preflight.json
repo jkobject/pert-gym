@@ -1,0 +1,40 @@
+{
+  "accepted_product_credit": 0,
+  "captured_at": "2026-07-17",
+  "component_matches": 0,
+  "component_scan": {
+    "board_db": "~/.hermes/kanban/boards/pert-gym/kanban.db",
+    "completed_run_metadata_matches": []
+  },
+  "global_control_plane": {
+    "fail_closed": true,
+    "first_malformed_replay": {
+      "delta": {
+        "after": 27,
+        "before": 26,
+        "denominator": 153
+      },
+      "error": "RuntimeError: accepted-components administrative replay binding is malformed",
+      "run_id": 3771,
+      "task_id": "t_98a0a434"
+    },
+    "latest_contiguous_owner": {
+      "after": 4,
+      "before": 3,
+      "denominator": 153,
+      "run_id": 2978,
+      "task_id": "t_664e9dc0"
+    },
+    "producer_credit_policy": "zero; no global accepted-count assertion; independent reviewer/administrator must repair or bind the replay before acceptance",
+    "status": "unavailable_malformed_administrative_replay_binding"
+  },
+  "postcondition_required": {
+    "accepted_product_credit": 0,
+    "component_matches": 0,
+    "producer_does_not_self_accept": true
+  },
+  "record_id": "temporal_v4_132_overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "schema_version": "pert-gym.accepted-components-preflight/v1",
+  "target_logical_key": "pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "task_id": "t_03c886aa"
+}

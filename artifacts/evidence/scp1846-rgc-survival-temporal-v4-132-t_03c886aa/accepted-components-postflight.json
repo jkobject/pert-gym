@@ -1,0 +1,19 @@
+{
+  "schema_version": "pert-gym.accepted-components-postflight/v1",
+  "captured_epoch": 1784284827,
+  "task_id": "t_03c886aa",
+  "record_id": "temporal_v4_132_overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "target_logical_key": "pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/temporal-v4-132-wave13-5f7d704794fcd538/manifest.json#1784284536286438",
+  "component_matches": 0,
+  "accepted_product_credit_pre": 0,
+  "accepted_product_credit_post": 0,
+  "producer_self_acceptance": false,
+  "completed_run_metadata_matches": [],
+  "global_control_plane": {
+    "status": "unavailable_malformed_administrative_replay_binding",
+    "fail_closed": true,
+    "producer_credit_policy": "zero; independent reviewer/administrator must repair or bind the replay before acceptance"
+  },
+  "verdict": "PASS_ZERO_CREDIT_POSTCONDITION"
+}

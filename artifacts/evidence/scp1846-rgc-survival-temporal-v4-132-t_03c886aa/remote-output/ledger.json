@@ -1,0 +1,66 @@
+{
+  "acceptance_state": "materialized_pending_independent_test_review_and_administrative_acceptance",
+  "accepted_delta_at_build": 0,
+  "accepted_product_credit_post": 0,
+  "accepted_product_credit_pre": 0,
+  "catalogue_row_ids": [
+    132
+  ],
+  "dataset_accounting": {
+    "materialized_triplets": 1,
+    "payload_objects": 3,
+    "represented_members": 12,
+    "source_members": 12
+  },
+  "deduplication_key": "record_id:temporal_v4_132_overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "deduplication_scope_count": 1,
+  "global_control_plane": {
+    "fail_closed": true,
+    "first_malformed_replay": {
+      "delta": {
+        "after": 27,
+        "before": 26,
+        "denominator": 153
+      },
+      "error": "RuntimeError: accepted-components administrative replay binding is malformed",
+      "run_id": 3771,
+      "task_id": "t_98a0a434"
+    },
+    "latest_contiguous_owner": {
+      "after": 4,
+      "before": 3,
+      "denominator": 153,
+      "run_id": 2978,
+      "task_id": "t_664e9dc0"
+    },
+    "producer_credit_policy": "zero; no global accepted-count assertion; independent reviewer/administrator must repair or bind the replay before acceptance",
+    "status": "unavailable_malformed_administrative_replay_binding"
+  },
+  "observation_accounting": {
+    "catalogue_source_n_obs_verbatim": 129441,
+    "dropped_source_cells": 0,
+    "excluded_source_cells": 0,
+    "materialized_cells": 129441,
+    "source_matrix_cells": 129441
+  },
+  "product_credit": 0,
+  "quality_missingness_is_not_exclusion": true,
+  "record_accounting": {
+    "excluded_component_records": 0,
+    "included_component_records": 1,
+    "materialized_component_records": 1,
+    "source_component_records": 1
+  },
+  "record_id": "temporal_v4_132_overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "schema_version": "pert-gym.proposed-publication-ledger/v2",
+  "submission_id": "pert-gym-ledger:materialized-build:t_03c886aa:temporal_v4_132_overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+  "target_logical_key": "pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of",
+  "wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-13-of-13",
+    "number": 13,
+    "outcome_task_id": "t_76c7ad2b",
+    "singular": true
+  }
+}
