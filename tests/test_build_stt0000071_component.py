@@ -2,9 +2,18 @@ from __future__ import annotations
 
 import gzip
 import importlib.util
+import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pandas as pd
+import pytest
+
+from pert_gym.logical_sparse_zarr import (
+    read_logical_sparse_revision,
+    shared_var_identity,
+)
+from pert_gym.sparse_zarr_contract import load_compatible_surface
 
 SCRIPT = Path(__file__).parents[1] / "tools" / "build_stt0000071_component.py"
 
@@ -32,23 +41,57 @@ def source_row(section: str, filename: str, index: int) -> dict[str, str]:
     }
 
 
+def canonical_source_rows() -> list[dict[str, str]]:
+    coverage = [
+        ("STSA0000734", "uninjured_1", 3),
+        ("STSA0000735", "6_hpa", 3),
+        ("STSA0000736", "12_hpa", 3),
+        ("STSA0000737", "1_dpa", 3),
+        ("STSA0000738", "3_dpa", 3),
+        ("STSA0000739", "7_dpa", 3),
+        ("STSA0000740", "14_dpa", 3),
+        ("STSA0000741", "28_dpa", 3),
+        ("STSA0000742", "uninjured_2", 22),
+    ]
+    rows = []
+    section_index = 0
+    for sample_id, timepoint, count in coverage:
+        for _ in range(count):
+            section = f"STTS{section_index:07d}"
+            for offset, filename in enumerate(
+                (
+                    f"S{section_index}.70.gem.gz",
+                    f"S{section_index}.70.tsv.gz",
+                    f"S{section_index}.gem.gz",
+                )
+            ):
+                row = source_row(section, filename, section_index * 3 + offset)
+                row["sample_id"] = sample_id
+                row["timepoint"] = timepoint
+                rows.append(row)
+            section_index += 1
+    return rows
+
+
 def test_classify_sections_requires_exact_cellbin_metadata_and_raw(monkeypatch) -> None:
     module = load_module()
-    rows = []
-    for index in range(46):
-        section = f"STTS{index:07d}"
-        rows.extend(
-            [
-                source_row(section, f"S{index}.70.gem.gz", index * 3),
-                source_row(section, f"S{index}.70.tsv.gz", index * 3 + 1),
-                source_row(section, f"S{index}.gem.gz", index * 3 + 2),
-            ]
-        )
+    rows = canonical_source_rows()
     sections = module.classify_sections(rows)
     assert len(sections) == 46
     assert sections[0]["cell_bin"]["filename"].endswith(".70.gem.gz")
     assert sections[0]["metadata"]["filename"].endswith(".70.tsv.gz")
     assert sections[0]["raw_unbinned"]["filename"].endswith(".gem.gz")
+
+
+def test_classify_sections_rejects_incomplete_sample_timepoint_coverage() -> None:
+    module = load_module()
+    rows = canonical_source_rows()
+    for row in rows:
+        if row["sample_id"] == "STSA0000735":
+            row["sample_id"] = "STSA0000734"
+            row["timepoint"] = "uninjured_1"
+    with pytest.raises(RuntimeError, match="sample/timepoint coverage"):
+        module.classify_sections(rows)
 
 
 def test_convert_section_preserves_coordinate_obs_x_parity(tmp_path: Path) -> None:
@@ -150,3 +193,222 @@ def test_sparse_zarr_zip_roundtrip(tmp_path: Path) -> None:
     assert loaded.shape == matrix.shape
     assert loaded.nnz == matrix.nnz
     assert (loaded != matrix).nnz == 0
+
+
+def test_local_payload_resume_preserves_exact_bytes_and_rejects_drift(
+    tmp_path: Path,
+) -> None:
+    module = load_module()
+    matrix = module.sparse.csr_matrix([[0, 2], [3, 0]], dtype="int64")
+    matrix_path = tmp_path / "X.zarr.zip"
+    module.write_or_validate_sparse_zarr_zip(matrix_path, matrix)
+    matrix_bytes = matrix_path.read_bytes()
+    module.write_or_validate_sparse_zarr_zip(matrix_path, matrix)
+    assert matrix_path.read_bytes() == matrix_bytes
+    with pytest.raises(RuntimeError, match="local sparse-Zarr resume mismatch"):
+        module.write_or_validate_sparse_zarr_zip(
+            matrix_path,
+            module.sparse.csr_matrix([[1, 0], [0, 0]], dtype="int64"),
+        )
+
+    obs = pd.DataFrame({"cell_id": ["c1", "c2"]}, index=["c1", "c2"])
+    obs_path = tmp_path / "obs.parquet"
+    module.write_or_validate_parquet(obs_path, obs)
+    obs_bytes = obs_path.read_bytes()
+    module.write_or_validate_parquet(obs_path, obs)
+    assert obs_path.read_bytes() == obs_bytes
+    with pytest.raises(RuntimeError, match="local Parquet resume mismatch"):
+        module.write_or_validate_parquet(
+            obs_path,
+            pd.DataFrame({"cell_id": ["different"]}, index=["c1"]),
+        )
+
+
+def test_manifest_surface_is_accepted_by_canonical_loader() -> None:
+    module = load_module()
+    var = pd.DataFrame(
+        {"gene_symbol": ["g1", "g2"]}, index=pd.Index(["g1", "g2"], name="var_id")
+    )
+    var_identity = shared_var_identity(
+        var, schema_fingerprint="stt0000071-shared-var/v1"
+    )
+    records = [
+        {
+            "chunk_index": 0,
+            "stats": {"n_obs": 2, "n_vars": 2, "nnz": 2},
+            "dtype": "int64",
+            "checksums": {
+                "data_sha256": "a" * 64,
+                "indices_sha256": "b" * 64,
+                "indptr_sha256": "c" * 64,
+            },
+            "X": {"key": "sections/0000/X.zarr.zip"},
+            "obs": {"key": "sections/0000/obs.parquet"},
+            "source_cell_metadata": {
+                "uri": "gs://source/section.metadata.tsv",
+                "sha256": "d" * 64,
+            },
+        }
+    ]
+    manifest = module.canonical_surface_manifest(
+        revision="stt0000071-20260720T000000Z-deadbeef",
+        section_records=records,
+        shared_var_key=f"vars/{var_identity.key}/var.parquet",
+        var_identity=var_identity,
+    )
+    surface = load_compatible_surface(manifest)
+    assert surface.shape == (2, 2)
+    assert surface.chunks[0].obs["provenance"]["source_checksum"] == (
+        "sha256-file-bytes/v1:" + "d" * 64
+    )
+    assert surface.chunks[0].obs["provenance"]["source_uri"] == (
+        "gs://source/section.metadata.tsv"
+    )
+    assert surface.shared_var["frame_sha256"] == var_identity.frame_sha256
+
+
+def test_canonical_loader_reads_stt_zip_chunks(tmp_path: Path) -> None:
+    module = load_module()
+    revision = "stt0000071-20260720T000000Z-deadbeef"
+    candidate = tmp_path / module.LOGICAL_KEY / "revisions" / revision
+    section = candidate / "sections" / "0000-STTS0000000"
+    section.mkdir(parents=True)
+    matrix = module.sparse.csr_matrix([[0, 2], [3, 0]], dtype="int64")
+    matrix_path = section / "X.zarr.zip"
+    module.write_sparse_zarr_zip(matrix_path, matrix)
+    obs = pd.DataFrame({"cell_id": ["c1", "c2"]}, index=["c1", "c2"])
+    obs.to_parquet(section / "obs.parquet")
+    var = pd.DataFrame(
+        {"gene_symbol": ["g1", "g2"]},
+        index=pd.Index(["g1", "g2"], name="var_id"),
+    )
+    var_identity = shared_var_identity(
+        var, schema_fingerprint="stt0000071-shared-var/v1"
+    )
+    shared_var_key = f"vars/{var_identity.key}/var.parquet"
+    shared_var_path = tmp_path / shared_var_key
+    shared_var_path.parent.mkdir(parents=True)
+    var.to_parquet(shared_var_path)
+    record = {
+        "chunk_index": 0,
+        "stats": {"n_obs": 2, "n_vars": 2, "nnz": 2},
+        "dtype": "int64",
+        "checksums": {
+            "data_sha256": module.sha256_array(matrix.data),
+            "indices_sha256": module.sha256_array(matrix.indices),
+            "indptr_sha256": module.sha256_array(matrix.indptr),
+        },
+        "X": {"key": "sections/0000-STTS0000000/X.zarr.zip"},
+        "obs": {"key": "sections/0000-STTS0000000/obs.parquet"},
+        "source_cell_metadata": {
+            "uri": "gs://source/input.metadata.tsv#1",
+            "sha256": "d" * 64,
+        },
+    }
+    manifest = module.canonical_surface_manifest(
+        revision=revision,
+        section_records=[record],
+        shared_var_key=shared_var_key,
+        var_identity=var_identity,
+    )
+    (candidate / "manifest.json").write_text(json.dumps(manifest))
+
+    surface, loaded_matrix, loaded_obs, loaded_var = read_logical_sparse_revision(
+        tmp_path, module.LOGICAL_KEY, revision
+    )
+    assert surface.shape == (2, 2)
+    assert (loaded_matrix != matrix).nnz == 0
+    assert loaded_obs.index.tolist() == ["c1", "c2"]
+    assert loaded_var.equals(var)
+
+
+def test_publish_output_adopts_exact_remote_object_after_prejournal_crash(
+    tmp_path: Path, monkeypatch
+) -> None:
+    module = load_module()
+    payload = tmp_path / "payload.bin"
+    payload.write_bytes(b"exact payload")
+    journal_path = tmp_path / "publication-journal.json"
+    identity = {"revision": "r1", "staging_manifest_sha256": "a" * 64}
+    remote = {
+        "uri": "gs://bucket/revisions/r1/payload.bin",
+        "generation": "123",
+        "size": payload.stat().st_size,
+        "sha256": module.sha256_file(payload),
+    }
+
+    monkeypatch.setattr(module, "upload_or_reconcile", lambda path, uri: dict(remote))
+    result = module.publish_output(
+        payload,
+        remote["uri"],
+        stage="payload",
+        journal_path=journal_path,
+        journal_identity=identity,
+    )
+
+    assert result == remote
+    journal = json.loads(journal_path.read_text())
+    assert journal["completed_stages"]["payload"] == remote
+    with pytest.raises(RuntimeError, match="journal identity mismatch"):
+        module.publish_output(
+            payload,
+            remote["uri"],
+            stage="payload",
+            journal_path=journal_path,
+            journal_identity={"revision": "different"},
+        )
+
+
+def test_publication_journal_preserves_manifest_timestamp_across_resume(
+    tmp_path: Path,
+) -> None:
+    module = load_module()
+    path = tmp_path / "publication-journal.json"
+    identity = {"revision": "r1"}
+    first = module.load_or_create_publication_journal(path, identity)
+    second = module.load_or_create_publication_journal(path, identity)
+    assert isinstance(first["publication_started_at"], float)
+    assert second["publication_started_at"] == first["publication_started_at"]
+
+
+def test_upload_or_reconcile_reuses_exact_remote_and_rejects_drift(
+    tmp_path: Path, monkeypatch
+) -> None:
+    module = load_module()
+    payload = tmp_path / "payload.bin"
+    payload.write_bytes(b"exact payload")
+    remote_bytes = payload.read_bytes()
+    uploads = []
+
+    monkeypatch.setattr(
+        module,
+        "probe_gcs",
+        lambda uri: {"uri": uri, "generation": "123", "size": len(remote_bytes)},
+    )
+    monkeypatch.setattr(
+        module,
+        "readback_object",
+        lambda identity, destination: destination.write_bytes(remote_bytes),
+    )
+    monkeypatch.setattr(module, "run", lambda *args, **kwargs: uploads.append(args))
+
+    identity = module.upload_or_reconcile(payload, "gs://bucket/payload.bin")
+    assert identity["sha256"] == module.sha256_file(payload)
+    assert uploads == []
+
+    remote_bytes = b"drifted"
+    with pytest.raises(RuntimeError, match="existing immutable object mismatch"):
+        module.upload_or_reconcile(payload, "gs://bucket/payload.bin")
+
+
+def test_execute_requires_complete_heavy_vm_identity_before_other_work(
+    monkeypatch,
+) -> None:
+    module = load_module()
+    monkeypatch.setattr(
+        module,
+        "require_heavy_vm",
+        lambda: (_ for _ in ()).throw(RuntimeError("unpinned GCE identity")),
+    )
+    with pytest.raises(RuntimeError, match="unpinned GCE identity"):
+        module.execute(SimpleNamespace(), {}, {}, [])

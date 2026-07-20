@@ -5,6 +5,7 @@ The writer consumes generation-pinned staged CNGB objects, emits one sparse-Zarr
 zip plus obs Parquet per section and one shared var Parquet, verifies every object
 through a fresh GCS readback, and writes the immutable manifest last.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -19,6 +20,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from collections import Counter
 from contextlib import ExitStack
 from pathlib import Path
 from typing import Any, Iterable
@@ -30,10 +32,13 @@ from scipy import sparse
 
 ROOT = Path.home() / "work" / "pert-gym"
 sys.path.insert(0, str(ROOT))
+from pert_gym.logical_sparse_zarr import shared_var_identity  # noqa: E402
+from pert_gym.sparse_zarr_contract import load_compatible_surface  # noqa: E402
 from tools.lamin_context import connect_pertdata  # noqa: E402
 from tools.pert_gym_vm_runner import (  # noqa: E402
     lamin_writer_lock,
     legacy_lamin_writer_lock_paths,
+    require_heavy_vm,
     vm_global_lamin_writer_lock_path,
 )
 
@@ -60,6 +65,19 @@ TIMEPOINT_MINUTES = {
     "28_dpa": 40_320,
     "uninjured_2": 0,
 }
+EXPECTED_SAMPLE_TIMEPOINT_SECTIONS = {
+    ("STSA0000734", "uninjured_1"): 3,
+    ("STSA0000735", "6_hpa"): 3,
+    ("STSA0000736", "12_hpa"): 3,
+    ("STSA0000737", "1_dpa"): 3,
+    ("STSA0000738", "3_dpa"): 3,
+    ("STSA0000739", "7_dpa"): 3,
+    ("STSA0000740", "14_dpa"): 3,
+    ("STSA0000741", "28_dpa"): 3,
+    ("STSA0000742", "uninjured_2"): 22,
+}
+WRITER_VERSION = "pert-gym.stt0000071.writer/v2"
+VAR_SCHEMA_FINGERPRINT = "stt0000071-shared-var/v1"
 CELL_BIN = re.compile(r"\.(?:50|70)\.gem\.gz$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 FAILED_PREDECESSORS = [
@@ -130,6 +148,13 @@ def sha256_json(value: object) -> str:
     ).hexdigest()
 
 
+def atomic_json(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_bytes(json_bytes(value))
+    temporary.replace(path)
+
+
 def product_heartbeat(path: Path, **values: object) -> None:
     payload = {
         "format": "pert-gym.product-execution-heartbeat/v1",
@@ -175,7 +200,9 @@ def validate_frozen_record(path: Path) -> dict[str, Any]:
 
 def classify_sections(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     if len(rows) != 138:
-        raise RuntimeError(f"staging manifest must contain exactly 138 rows, got {len(rows)}")
+        raise RuntimeError(
+            f"staging manifest must contain exactly 138 rows, got {len(rows)}"
+        )
     if len({row["relative_path"] for row in rows}) != 138:
         raise RuntimeError("staging manifest relative paths are not unique")
     sections: dict[str, list[dict[str, Any]]] = {}
@@ -200,8 +227,13 @@ def classify_sections(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             and not CELL_BIN.search(str(row["filename"]))
         ]
         if not (len(group) == 3 and len(cell_bins) == len(metadata) == len(raw) == 1):
-            raise RuntimeError(f"section {section_id} does not have cell-bin GEM/TSV/raw GEM")
-        if len({row["sample_id"] for row in group}) != 1 or len({row["timepoint"] for row in group}) != 1:
+            raise RuntimeError(
+                f"section {section_id} does not have cell-bin GEM/TSV/raw GEM"
+            )
+        if (
+            len({row["sample_id"] for row in group}) != 1
+            or len({row["timepoint"] for row in group}) != 1
+        ):
             raise RuntimeError(f"section {section_id} metadata is incoherent")
         result.append(
             {
@@ -213,6 +245,12 @@ def classify_sections(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "metadata": metadata[0],
                 "raw_unbinned": raw[0],
             }
+        )
+    coverage = Counter((item["sample_id"], item["timepoint"]) for item in result)
+    if coverage != Counter(EXPECTED_SAMPLE_TIMEPOINT_SECTIONS):
+        raise RuntimeError(
+            "staging manifest sample/timepoint coverage does not match the frozen contract: "
+            f"{dict(sorted(coverage.items()))}"
         )
     return result
 
@@ -229,6 +267,32 @@ def describe_gcs(uri: str) -> dict[str, Any]:
             "--format=json",
         ]
     )
+    value = json.loads(result.stdout)
+    return {
+        "uri": uri.split("#", 1)[0],
+        "generation": str(value["generation"]),
+        "size": int(value["size"]),
+        "md5_base64": value.get("md5Hash"),
+        "crc32c_base64": value.get("crc32c"),
+        "updated": value.get("updateTime") or value.get("updated"),
+    }
+
+
+def probe_gcs(uri: str) -> dict[str, Any] | None:
+    result = run(
+        [
+            "gcloud",
+            "storage",
+            "objects",
+            "describe",
+            uri,
+            f"--billing-project={BILLING_PROJECT}",
+            "--format=json",
+        ],
+        check=False,
+    )
+    if result.returncode != 0:
+        return None
     value = json.loads(result.stdout)
     return {
         "uri": uri.split("#", 1)[0],
@@ -428,7 +492,50 @@ def read_sparse_zarr_zip(path: Path) -> sparse.csr_matrix:
         store.close()
 
 
-def upload_immutable(path: Path, uri: str) -> dict[str, Any]:
+def write_or_validate_sparse_zarr_zip(path: Path, matrix: sparse.csr_matrix) -> None:
+    if not path.exists():
+        write_sparse_zarr_zip(path, matrix)
+        return
+    loaded = read_sparse_zarr_zip(path)
+    if (
+        loaded.shape != matrix.shape
+        or loaded.dtype != matrix.dtype
+        or loaded.nnz != matrix.nnz
+        or (loaded != matrix).nnz != 0
+    ):
+        raise RuntimeError(f"local sparse-Zarr resume mismatch: {path}")
+
+
+def write_or_validate_parquet(path: Path, frame: pd.DataFrame) -> None:
+    if not path.exists():
+        frame.to_parquet(path)
+        return
+    if not pd.read_parquet(path).equals(frame):
+        raise RuntimeError(f"local Parquet resume mismatch: {path}")
+
+
+def upload_or_reconcile(path: Path, uri: str) -> dict[str, Any]:
+    expected_size = path.stat().st_size
+    expected_sha256 = sha256_file(path)
+    existing = probe_gcs(uri)
+    if existing is not None:
+        existing["sha256"] = expected_sha256
+        with tempfile.TemporaryDirectory(
+            prefix="stt0000071-upload-reconcile-"
+        ) as temporary:
+            destination = Path(temporary) / path.name
+            try:
+                readback_object(existing, destination)
+            except RuntimeError as error:
+                raise RuntimeError(
+                    f"existing immutable object mismatch: {uri}"
+                ) from error
+            if (
+                destination.stat().st_size != expected_size
+                or sha256_file(destination) != expected_sha256
+            ):
+                raise RuntimeError(f"existing immutable object mismatch: {uri}")
+        return existing
     result = run(
         [
             "gcloud",
@@ -442,11 +549,15 @@ def upload_immutable(path: Path, uri: str) -> dict[str, Any]:
         check=False,
     )
     if result.returncode != 0:
-        raise RuntimeError(f"immutable upload failed for {uri}: {result.stderr.strip()}")
+        raise RuntimeError(
+            f"immutable upload failed for {uri}: {result.stderr.strip()}"
+        )
     identity = describe_gcs(uri)
-    identity["sha256"] = sha256_file(path)
-    if identity["size"] != path.stat().st_size:
+    identity["sha256"] = expected_sha256
+    if identity["size"] != expected_size:
         raise RuntimeError(f"uploaded object size mismatch: {uri}")
+    with tempfile.TemporaryDirectory(prefix="stt0000071-upload-readback-") as temporary:
+        readback_object(identity, Path(temporary) / path.name)
     return identity
 
 
@@ -463,6 +574,118 @@ def readback_object(identity: dict[str, Any], destination: Path) -> None:
     )
     if destination.stat().st_size != identity["size"] or sha256_file(destination) != identity["sha256"]:
         raise RuntimeError(f"remote readback mismatch: {identity['uri']}")
+
+
+def load_or_create_publication_journal(
+    path: Path, identity: dict[str, Any]
+) -> dict[str, Any]:
+    if path.exists():
+        journal = load_json(path)
+        if journal.get("identity") != identity:
+            raise RuntimeError(
+                "publication journal identity mismatch; refusing drifted resume"
+            )
+        if journal.get(
+            "format"
+        ) != "pert-gym.stt0000071.publication-journal/v1" or not isinstance(
+            journal.get("completed_stages"), dict
+        ):
+            raise RuntimeError("publication journal is malformed")
+        return journal
+    journal = {
+        "format": "pert-gym.stt0000071.publication-journal/v1",
+        "identity": dict(identity),
+        "publication_started_at": time.time(),
+        "completed_stages": {},
+    }
+    atomic_json(path, journal)
+    return journal
+
+
+def publish_output(
+    path: Path,
+    uri: str,
+    *,
+    stage: str,
+    journal_path: Path,
+    journal_identity: dict[str, Any],
+) -> dict[str, Any]:
+    journal = load_or_create_publication_journal(journal_path, journal_identity)
+    remote = upload_or_reconcile(path, uri)
+    completed = journal["completed_stages"]
+    recorded = completed.get(stage)
+    if recorded is not None and recorded != remote:
+        raise RuntimeError(f"publication journal stage identity mismatch: {stage}")
+    if recorded is None:
+        completed[stage] = remote
+        atomic_json(journal_path, journal)
+    return remote
+
+
+def sha256_array(values: np.ndarray) -> str:
+    return hashlib.sha256(np.ascontiguousarray(values).tobytes(order="C")).hexdigest()
+
+
+def canonical_surface_manifest(
+    *,
+    revision: str,
+    section_records: list[dict[str, Any]],
+    shared_var_key: str,
+    var_identity: Any,
+) -> dict[str, Any]:
+    chunks = []
+    start = 0
+    n_vars: int | None = None
+    total_nnz = 0
+    for record in section_records:
+        stats = record["stats"]
+        if n_vars is None:
+            n_vars = int(stats["n_vars"])
+        elif int(stats["n_vars"]) != n_vars:
+            raise RuntimeError("section var dimensions are inconsistent")
+        end = start + int(stats["n_obs"])
+        total_nnz += int(stats["nnz"])
+        source = record["source_cell_metadata"]
+        chunks.append(
+            {
+                "key": record["X"]["key"],
+                "start": start,
+                "end": end,
+                "nnz": int(stats["nnz"]),
+                "shape": [end - start, int(stats["n_vars"])],
+                "dtype": record["dtype"],
+                "checksums": dict(record["checksums"]),
+                "obs": {
+                    "key": record["obs"]["key"],
+                    "provenance": {
+                        "source_uri": source["uri"],
+                        "source_checksum": f"sha256-file-bytes/v1:{source['sha256']}",
+                        "source_row_start": 0,
+                        "source_row_end": end - start,
+                        "ingestion_run_id": revision,
+                        "writer_version": WRITER_VERSION,
+                    },
+                },
+            }
+        )
+        start = end
+    manifest = {
+        "format": "pert-gym.logical-sparse-zarr",
+        "version": 1,
+        "revision": revision,
+        "shape": [start, n_vars or 0],
+        "nnz": total_nnz,
+        "sparse_format": "csr",
+        "chunks": chunks,
+        "shared_var": {
+            "key": shared_var_key,
+            "index_sha256": var_identity.index_sha256,
+            "frame_sha256": var_identity.frame_sha256,
+            "schema_fingerprint": var_identity.schema_fingerprint,
+        },
+    }
+    load_compatible_surface(manifest)
+    return manifest
 
 
 def duplicate_probe(ln: Any) -> dict[str, Any]:
@@ -550,9 +773,13 @@ def dry_run(args: argparse.Namespace, sections: list[dict[str, Any]]) -> int:
     return 0
 
 
-def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str, Any], sections: list[dict[str, Any]]) -> int:
-    if socket.gethostname().split(".")[0] != HOST:
-        raise RuntimeError(f"production execution is restricted to {HOST}")
+def execute(
+    args: argparse.Namespace,
+    frozen: dict[str, Any],
+    staging: dict[str, Any],
+    sections: list[dict[str, Any]],
+) -> int:
+    require_heavy_vm()
     ledger = validate_ledger(args.ledger_evidence)
     ln = exact_context()
     duplicates = duplicate_probe(ln)
@@ -562,12 +789,6 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
     if re.fullmatch(r"stt0000071-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{8}", revision) is None:
         raise RuntimeError("revision is not a fresh immutable STT0000071 revision")
     candidate_uri = f"{GCS_OUTPUT_ROOT}/{LOGICAL_KEY}/revisions/{revision}"
-    existence = run(
-        ["gcloud", "storage", "ls", f"--billing-project={BILLING_PROJECT}", f"{candidate_uri}/**"],
-        check=False,
-    )
-    if existence.stdout.strip():
-        raise RuntimeError("fresh immutable candidate prefix already contains objects")
     lock_metadata = {
         "pid": os.getpid(),
         "run_id": f"t_2ddd92ed-{revision}",
@@ -578,28 +799,55 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
         "started_at": time.time(),
     }
     output_root = args.work_dir / revision
-    if output_root.exists():
-        raise RuntimeError("local immutable revision directory already exists")
-    output_root.mkdir(parents=True)
+    journal_path = output_root / "publication-journal.json"
+    journal_identity = {
+        "revision": revision,
+        "candidate_uri": candidate_uri,
+        "frozen_record_sha256": sha256_json(frozen),
+        "staging_manifest_sha256": sha256_file(args.staging_manifest),
+        "ledger_owner_sha256": sha256_json(ledger["latest_owner"]),
+        "writer_sha256": sha256_file(Path(__file__)),
+    }
+    if output_root.exists() and not journal_path.exists():
+        raise RuntimeError("existing local revision lacks its publication journal")
+    output_root.mkdir(parents=True, exist_ok=True)
+    journal = load_or_create_publication_journal(journal_path, journal_identity)
+    if not isinstance(journal.get("publication_started_at"), (int, float)):
+        raise RuntimeError("publication journal is missing its stable start time")
+
+    def publish(path: Path, uri: str, *, stage: str) -> dict[str, Any]:
+        return publish_output(
+            path,
+            uri,
+            stage=stage,
+            journal_path=journal_path,
+            journal_identity=journal_identity,
+        )
+
     source_root = output_root / "source"
     built_root = output_root / "built"
     readback_root = output_root / "readback"
-    source_root.mkdir()
-    built_root.mkdir()
-    readback_root.mkdir()
+    source_root.mkdir(exist_ok=True)
+    built_root.mkdir(exist_ok=True)
+    readback_root.mkdir(exist_ok=True)
     global_lock = vm_global_lamin_writer_lock_path()
     heartbeat_path = args.evidence_out.with_name("product-execution.json")
     with ExitStack() as locks:
-        lease_acquired = time.time()
         locks.enter_context(lamin_writer_lock(global_lock, lock_metadata))
         for path in legacy_lamin_writer_lock_paths():
-            locks.enter_context(lamin_writer_lock(path, lock_metadata, check_live_metadata=False))
+            locks.enter_context(
+                lamin_writer_lock(path, lock_metadata, check_live_metadata=False)
+            )
         ln.track()
-        product_heartbeat(heartbeat_path, phase="preflight", revision=revision, completed=0, total=138)
+        product_heartbeat(
+            heartbeat_path, phase="preflight", revision=revision, completed=0, total=138
+        )
         source_identities: list[dict[str, Any]] = []
         for index, row in enumerate(staging["rows"], 1):
             identity = describe_gcs(generation_uri(row))
-            if identity["generation"] != str(row["gcs_generation"]) or identity["size"] != int(row["gcs_size"]):
+            if identity["generation"] != str(row["gcs_generation"]) or identity[
+                "size"
+            ] != int(row["gcs_size"]):
                 raise RuntimeError(f"source physical identity drift: {row['gcs_uri']}")
             source_identities.append(
                 {
@@ -608,12 +856,24 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
                     "sample_id": row["sample_id"],
                     "timepoint": row["timepoint"],
                     "section_id": row["section_id"],
-                    "role": "cell_bin_expression" if CELL_BIN.search(row["filename"]) else ("cell_metadata" if row["filename"].endswith(".tsv.gz") else "raw_unbinned_expression_provenance"),
+                    "role": "cell_bin_expression"
+                    if CELL_BIN.search(row["filename"])
+                    else (
+                        "cell_metadata"
+                        if row["filename"].endswith(".tsv.gz")
+                        else "raw_unbinned_expression_provenance"
+                    ),
                 }
             )
             if index % 20 == 0:
                 print(f"source identity {index}/138", flush=True)
-                product_heartbeat(heartbeat_path, phase="source-identity", revision=revision, completed=index, total=138)
+                product_heartbeat(
+                    heartbeat_path,
+                    phase="source-identity",
+                    revision=revision,
+                    completed=index,
+                    total=138,
+                )
         local_sources: dict[str, dict[str, Any]] = {}
         all_genes: set[str] = set()
         for index, section in enumerate(sections, 1):
@@ -623,10 +883,18 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
                 destination = section_root / row["filename"]
                 local_sources[row["relative_path"]] = copy_generation(row, destination)
             gem_path = section_root / section["cell_bin"]["filename"]
-            genes = pd.read_csv(gem_path, sep="\t", usecols=["geneID"])["geneID"].astype(str)
+            genes = pd.read_csv(gem_path, sep="\t", usecols=["geneID"])[
+                "geneID"
+            ].astype(str)
             all_genes.update(genes.unique())
             print(f"source materialized {index}/46 genes={len(all_genes)}", flush=True)
-            product_heartbeat(heartbeat_path, phase="source-materialization", revision=revision, completed=index, total=46)
+            product_heartbeat(
+                heartbeat_path,
+                phase="source-materialization",
+                revision=revision,
+                completed=index,
+                total=46,
+            )
         genes = sorted(all_genes)
         var = pd.DataFrame(
             {
@@ -639,19 +907,29 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
             index=pd.Index(genes, name="var_id"),
         )
         var_path = built_root / "shared-var.parquet"
-        var.to_parquet(var_path)
+        write_or_validate_parquet(var_path, var)
         output_identities: list[dict[str, Any]] = []
-        var_identity = upload_immutable(var_path, f"{candidate_uri}/shared-var.parquet")
-        var_identity["role"] = "shared_var"
-        output_identities.append(var_identity)
+        var_contract_identity = shared_var_identity(
+            var, schema_fingerprint=VAR_SCHEMA_FINGERPRINT
+        )
+        shared_var_key = f"vars/{var_contract_identity.key}/var.parquet"
+        var_output_identity = publish(
+            var_path,
+            f"{GCS_OUTPUT_ROOT}/{shared_var_key}",
+            stage="shared-var",
+        )
+        var_output_identity.update({"role": "shared_var", "key": shared_var_key})
+        output_identities.append(var_output_identity)
         section_records: list[dict[str, Any]] = []
         total_obs = 0
         total_nnz = 0
         total_counts = 0
         for index, section in enumerate(sections, 1):
             source_section = source_root / section["section_id"]
-            output_section = built_root / "sections" / f"{index - 1:04d}-{section['section_id']}"
-            output_section.mkdir(parents=True)
+            output_section = (
+                built_root / "sections" / f"{index - 1:04d}-{section['section_id']}"
+            )
+            output_section.mkdir(parents=True, exist_ok=True)
             obs, matrix, stats = convert_section(
                 source_section / section["cell_bin"]["filename"],
                 source_section / section["metadata"]["filename"],
@@ -660,13 +938,29 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
             )
             obs_path = output_section / "obs.parquet"
             matrix_path = output_section / "X.zarr.zip"
-            obs.to_parquet(obs_path)
-            write_sparse_zarr_zip(matrix_path, matrix)
-            section_prefix = f"{candidate_uri}/sections/{index - 1:04d}-{section['section_id']}"
-            obs_identity = upload_immutable(obs_path, f"{section_prefix}/obs.parquet")
-            matrix_identity = upload_immutable(matrix_path, f"{section_prefix}/X.zarr.zip")
-            obs_identity["role"] = "canonical_obs"
-            matrix_identity["role"] = "canonical_X_sparse_zarr_zip"
+            write_or_validate_parquet(obs_path, obs)
+            write_or_validate_sparse_zarr_zip(matrix_path, matrix)
+            section_key = f"sections/{index - 1:04d}-{section['section_id']}"
+            section_prefix = f"{candidate_uri}/{section_key}"
+            obs_identity = publish(
+                obs_path,
+                f"{section_prefix}/obs.parquet",
+                stage=f"section-{index - 1:04d}-obs",
+            )
+            matrix_identity = publish(
+                matrix_path,
+                f"{section_prefix}/X.zarr.zip",
+                stage=f"section-{index - 1:04d}-X",
+            )
+            obs_identity.update(
+                {"role": "canonical_obs", "key": f"{section_key}/obs.parquet"}
+            )
+            matrix_identity.update(
+                {
+                    "role": "canonical_X_sparse_zarr_zip",
+                    "key": f"{section_key}/X.zarr.zip",
+                }
+            )
             output_identities.extend([obs_identity, matrix_identity])
             total_obs += stats["n_obs"]
             total_nnz += stats["nnz"]
@@ -677,17 +971,52 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
                     "section_id": section["section_id"],
                     "sample_id": section["sample_id"],
                     "timepoint": section["timepoint"],
-                    "source_cell_bin_relative_path": section["cell_bin"]["relative_path"],
-                    "source_metadata_relative_path": section["metadata"]["relative_path"],
-                    "source_raw_unbinned_relative_path": section["raw_unbinned"]["relative_path"],
+                    "source_cell_bin_relative_path": section["cell_bin"][
+                        "relative_path"
+                    ],
+                    "source_metadata_relative_path": section["metadata"][
+                        "relative_path"
+                    ],
+                    "source_raw_unbinned_relative_path": section["raw_unbinned"][
+                        "relative_path"
+                    ],
                     "stats": stats,
+                    "dtype": str(matrix.dtype),
+                    "checksums": {
+                        "data_sha256": sha256_array(matrix.data),
+                        "indices_sha256": sha256_array(matrix.indices),
+                        "indptr_sha256": sha256_array(matrix.indptr),
+                    },
+                    "source_cell_bin": {
+                        "uri": generation_uri(section["cell_bin"]),
+                        "sha256": local_sources[section["cell_bin"]["relative_path"]][
+                            "sha256"
+                        ],
+                    },
+                    "source_cell_metadata": {
+                        "uri": generation_uri(section["metadata"]),
+                        "sha256": local_sources[
+                            section["metadata"]["relative_path"]
+                        ]["sha256"],
+                    },
                     "obs": obs_identity,
                     "X": matrix_identity,
-                    "var": var_identity,
+                    "var": var_output_identity,
                 }
             )
-            print(f"section built {index}/46 n_obs={stats['n_obs']} nnz={stats['nnz']}", flush=True)
-            product_heartbeat(heartbeat_path, phase="writing", revision=revision, completed=index, total=46, n_obs=total_obs, nnz=total_nnz)
+            print(
+                f"section built {index}/46 n_obs={stats['n_obs']} nnz={stats['nnz']}",
+                flush=True,
+            )
+            product_heartbeat(
+                heartbeat_path,
+                phase="writing",
+                revision=revision,
+                completed=index,
+                total=46,
+                n_obs=total_obs,
+                nnz=total_nnz,
+            )
         for identity in source_identities:
             local = local_sources.get(identity["relative_path"])
             if local:
@@ -709,19 +1038,39 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
         }
         source_inventory_path = built_root / "source-inventory.json"
         source_inventory_path.write_bytes(json_bytes(source_inventory))
-        source_inventory_identity = upload_immutable(source_inventory_path, f"{candidate_uri}/source-inventory.json")
+        source_inventory_identity = publish(
+            source_inventory_path,
+            f"{candidate_uri}/source-inventory.json",
+            stage="source-inventory",
+        )
         source_inventory_identity["role"] = "source_inventory"
         output_identities.append(source_inventory_identity)
         missingness = {
             "format": "pert-gym.metadata-quality-missingness/v1",
             "record_id": RECORD_ID,
-            "dataset_age": {"value": None, "reason": "source_not_reported", "excluded": False},
+            "dataset_age": {
+                "value": None,
+                "reason": "source_not_reported",
+                "excluded": False,
+            },
             "sex": {"value": None, "reason": "source_not_reported", "excluded": False},
-            "ethnicity": {"value": None, "reason": "not_applicable_non_human", "excluded": False},
-            "donor_id": {"value": None, "reason": "source_sections_not_donor-resolved", "excluded": False},
+            "ethnicity": {
+                "value": None,
+                "reason": "not_applicable_non_human",
+                "excluded": False,
+            },
+            "donor_id": {
+                "value": None,
+                "reason": "source_sections_not_donor-resolved",
+                "excluded": False,
+            },
             "quality": {
                 "available": ["n_counts", "n_genes"],
-                "missing": ["pct_mito", "pct_ribo", "accepted_is_low_quality_threshold"],
+                "missing": [
+                    "pct_mito",
+                    "pct_ribo",
+                    "accepted_is_low_quality_threshold",
+                ],
                 "reason": "source_not_reported_or_no_reviewed_threshold",
                 "excluded": False,
             },
@@ -741,11 +1090,19 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
                 "reason": "source_not_reported_for_seurat_spatial_sections",
                 "excluded": False,
             },
-            "images": {"count": 46, "status": "explicitly_excluded_from_this_expression_component", "reason": "frozen workload requires no TIFF canonical ingestion"},
+            "images": {
+                "count": 46,
+                "status": "explicitly_excluded_from_this_expression_component",
+                "reason": "frozen workload requires no TIFF canonical ingestion",
+            },
         }
         missingness_path = built_root / "metadata-quality-missingness.json"
         missingness_path.write_bytes(json_bytes(missingness))
-        missingness_identity = upload_immutable(missingness_path, f"{candidate_uri}/metadata-quality-missingness.json")
+        missingness_identity = publish(
+            missingness_path,
+            f"{candidate_uri}/metadata-quality-missingness.json",
+            stage="metadata-quality-missingness",
+        )
         missingness_identity["role"] = "metadata_quality_missingness"
         output_identities.append(missingness_identity)
         readback_sections: list[dict[str, Any]] = []
@@ -753,8 +1110,10 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
         readback_nnz = 0
         readback_counts = 0
         for section in section_records:
-            target = readback_root / f"{section['chunk_index']:04d}-{section['section_id']}"
-            target.mkdir(parents=True)
+            target = (
+                readback_root / f"{section['chunk_index']:04d}-{section['section_id']}"
+            )
+            target.mkdir(parents=True, exist_ok=True)
             obs_path = target / "obs.parquet"
             matrix_path = target / "X.zarr.zip"
             readback_object(section["obs"], obs_path)
@@ -762,26 +1121,60 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
             obs = pd.read_parquet(obs_path)
             matrix = read_sparse_zarr_zip(matrix_path)
             expected = section["stats"]
-            if list(matrix.shape) != [expected["n_obs"], expected["n_vars"]] or len(obs) != expected["n_obs"]:
+            if (
+                list(matrix.shape) != [expected["n_obs"], expected["n_vars"]]
+                or len(obs) != expected["n_obs"]
+            ):
                 raise RuntimeError("remote section readback shape mismatch")
-            if int(matrix.nnz) != expected["nnz"] or int(matrix.sum()) != expected["sum"]:
+            if (
+                int(matrix.nnz) != expected["nnz"]
+                or int(matrix.sum()) != expected["sum"]
+            ):
                 raise RuntimeError("remote section readback sparse parity mismatch")
             if int(obs["n_counts"].sum()) != expected["sum"]:
                 raise RuntimeError("remote obs/X count parity mismatch")
             readback_obs += len(obs)
             readback_nnz += int(matrix.nnz)
             readback_counts += int(matrix.sum())
-            readback_sections.append({"chunk_index": section["chunk_index"], "section_id": section["section_id"], "shape": list(matrix.shape), "nnz": int(matrix.nnz), "sum": int(matrix.sum()), "obs_index_sha256": hashlib.sha256(("\n".join(map(str, obs.index)) + "\n").encode()).hexdigest()})
-            product_heartbeat(heartbeat_path, phase="readback", revision=revision, completed=len(readback_sections), total=46, n_obs=readback_obs, nnz=readback_nnz)
+            readback_sections.append(
+                {
+                    "chunk_index": section["chunk_index"],
+                    "section_id": section["section_id"],
+                    "shape": list(matrix.shape),
+                    "nnz": int(matrix.nnz),
+                    "sum": int(matrix.sum()),
+                    "obs_index_sha256": hashlib.sha256(
+                        ("\n".join(map(str, obs.index)) + "\n").encode()
+                    ).hexdigest(),
+                }
+            )
+            product_heartbeat(
+                heartbeat_path,
+                phase="readback",
+                revision=revision,
+                completed=len(readback_sections),
+                total=46,
+                n_obs=readback_obs,
+                nnz=readback_nnz,
+            )
         var_readback_path = readback_root / "shared-var.parquet"
-        readback_object(var_identity, var_readback_path)
+        readback_object(var_output_identity, var_readback_path)
         var_readback = pd.read_parquet(var_readback_path)
         if not var_readback.equals(var):
             raise RuntimeError("remote shared-var readback mismatch")
-        if (readback_obs, readback_nnz, readback_counts) != (total_obs, total_nnz, total_counts):
+        if (readback_obs, readback_nnz, readback_counts) != (
+            total_obs,
+            total_nnz,
+            total_counts,
+        ):
             raise RuntimeError("component-level remote readback parity mismatch")
         manifest = {
-            "format": "pert-gym.frozen-logical-component-manifest/v1",
+            **canonical_surface_manifest(
+                revision=revision,
+                section_records=section_records,
+                shared_var_key=shared_var_key,
+                var_identity=var_contract_identity,
+            ),
             "manifest_last": True,
             "record_id": RECORD_ID,
             "component": COMPONENT,
@@ -796,14 +1189,10 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
                 "host": HOST,
                 "zone": ZONE,
                 "billing_project": BILLING_PROJECT,
-                "frozen_publication_manifest_path": str(args.frozen_manifest),
                 "frozen_publication_manifest_sha256": REQUIRED_FROZEN_SHA256,
                 "frozen_record_sha256": sha256_json(frozen),
-                "staging_manifest_path": str(args.staging_manifest),
                 "staging_manifest_sha256": sha256_file(args.staging_manifest),
-                "writer_path": str(Path(__file__)),
                 "writer_sha256": sha256_file(Path(__file__)),
-                "lease_acquired_at": lease_acquired,
             },
             "source": {
                 "identity": frozen["source_integrity_identity"],
@@ -812,25 +1201,73 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
                 "inventory": source_inventory_identity,
                 "counts": source_inventory["counts"],
             },
-            "dimensions": {"n_obs": total_obs, "n_vars": len(genes), "nnz": total_nnz, "sum_counts": total_counts, "sections": 46, "samples": 9, "timepoints": 9},
-            "shared_var": {"identity": var_identity, "ordered_var_sha256": hashlib.sha256(("\n".join(genes) + "\n").encode()).hexdigest(), "namespace": "source gene symbol", "n_vars": len(genes)},
+            "dimensions": {
+                "n_obs": total_obs,
+                "n_vars": len(genes),
+                "nnz": total_nnz,
+                "sum_counts": total_counts,
+                "sections": len(sections),
+                "samples": len({section["sample_id"] for section in sections}),
+                "timepoints": len({section["timepoint"] for section in sections}),
+            },
+            "shared_var_output": {
+                "identity": var_output_identity,
+                "ordered_var_sha256": hashlib.sha256(
+                    ("\n".join(genes) + "\n").encode()
+                ).hexdigest(),
+                "namespace": "source gene symbol",
+                "n_vars": len(genes),
+            },
             "sections": section_records,
             "physical_outputs": output_identities,
             "duplicate_preflight": duplicates,
-            "metadata_quality_missingness": {"identity": missingness_identity, "summary": missingness},
-            "readback": {"status": "PASS", "mode": "generation-pinned-remote-GCS-all-sections", "n_obs": readback_obs, "n_vars": len(var_readback), "nnz": readback_nnz, "sum_counts": readback_counts, "sections": readback_sections, "mismatch": 0},
+            "metadata_quality_missingness": {
+                "identity": missingness_identity,
+                "summary": missingness,
+            },
+            "readback": {
+                "status": "PASS",
+                "mode": "generation-pinned-remote-GCS-all-sections",
+                "n_obs": readback_obs,
+                "n_vars": len(var_readback),
+                "nnz": readback_nnz,
+                "sum_counts": readback_counts,
+                "sections": readback_sections,
+                "mismatch": 0,
+            },
             "accepted_ledger": {
                 "precondition": ledger["latest_owner"],
                 "producer_credit": 0,
-                "proposed_delta_if_independently_accepted": {"before": 4, "after": 5, "denominator": 153, "unit": "components", "mismatch": 0},
+                "proposed_delta_if_independently_accepted": {
+                    "before": 4,
+                    "after": 5,
+                    "denominator": 153,
+                    "unit": "components",
+                    "mismatch": 0,
+                },
                 "self_accepted": False,
             },
             "failed_predecessors": FAILED_PREDECESSORS,
-            "forbidden_actions_observed": {"promotion": False, "collection_mutation": False, "cleanup": False, "deletion": False, "lamin_main": False},
+            "publication_journal": {
+                "format": "pert-gym.stt0000071.publication-journal/v1",
+                "identity": journal_identity,
+            },
+            "forbidden_actions_observed": {
+                "promotion": False,
+                "collection_mutation": False,
+                "cleanup": False,
+                "deletion": False,
+                "lamin_main": False,
+            },
         }
+        load_compatible_surface(manifest)
         manifest_path = built_root / "manifest.json"
         manifest_path.write_bytes(json_bytes(manifest))
-        manifest_identity = upload_immutable(manifest_path, f"{candidate_uri}/manifest.json")
+        manifest_identity = publish(
+            manifest_path,
+            f"{candidate_uri}/manifest.json",
+            stage="manifest",
+        )
         manifest_readback_path = readback_root / "manifest.json"
         readback_object(manifest_identity, manifest_readback_path)
         loaded_manifest = load_json(manifest_readback_path)
@@ -849,7 +1286,16 @@ def execute(args: argparse.Namespace, frozen: dict[str, Any], staging: dict[str,
         }
         args.evidence_out.parent.mkdir(parents=True, exist_ok=True)
         args.evidence_out.write_bytes(json_bytes(final))
-        product_heartbeat(heartbeat_path, phase="completed", revision=revision, completed=46, total=46, n_obs=total_obs, nnz=total_nnz, manifest=manifest_identity)
+        product_heartbeat(
+            heartbeat_path,
+            phase="completed",
+            revision=revision,
+            completed=46,
+            total=46,
+            n_obs=total_obs,
+            nnz=total_nnz,
+            manifest=manifest_identity,
+        )
         print(json.dumps(final, indent=2, sort_keys=True))
     return 0
 
