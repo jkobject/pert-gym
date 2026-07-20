@@ -45,6 +45,10 @@ files/docs, expected evidence, and what not to read.
   Do not silently fall back to Mac-local bulk reads.
 - `gs://scperturb` is in `EUROPE-WEST1` with Requester Pays; direct access must
   use billing project `jkobject-1549353370965`.
+- Launch every heavy VM payload through `tools/launch_pert_gym_heavy.py` with the
+  exact Kanban task and ETA. It publishes and reads back the bounded GCE lease
+  plus the local defense-in-depth lease before any VM start or payload. Legacy
+  `active-wave` / `do-not-stop` labels are not leases.
 - The target for large matrices is adaptive sparse-Zarr with shared-var support.
   Retain legacy triplets until their accepted replacement has parity/readback
   evidence and a rollback identity.
