@@ -31,6 +31,10 @@ SOURCE_KEYS = (
     "scperturb/records/13350497/files/SchiebingerLander2019_GSE115943.h5ad",
     "scperturb/records/13350497/files/SchiebingerLander2019_GSE106340.h5ad",
 )
+SOURCE_SUFFIXES = (
+    "SchiebingerLander2019_GSE115943",
+    "SchiebingerLander2019_GSE106340",
+)
 
 
 def canonical(value: Any) -> str:
@@ -174,6 +178,7 @@ def main() -> None:
         identity = download_source(ln, key, path)
         backed = ad.read_h5ad(path, backed="r")
         obs = backed.obs.copy()
+        obs.index = pd.Index(obs.index.astype(str) + "-" + SOURCE_SUFFIXES[position])
         var = backed.var.copy()
         identity.update(
             {
