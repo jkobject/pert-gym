@@ -209,7 +209,12 @@ def exact_source_join(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataF
         if column == "_source_accession" or column not in obs:
             continue
         left = joined[column].astype("string")
-        right = obs[column].astype("string")
+        comparison_column = (
+            "source_organism"
+            if column == "organism" and "source_organism" in obs
+            else column
+        )
+        right = obs[comparison_column].astype("string")
         equal = (left.isna() & right.isna()) | (left.fillna("") == right.fillna(""))
         mismatches[str(column)] = int((~equal).sum())
     if any(mismatches.values()):
