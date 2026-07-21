@@ -6,10 +6,11 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
-import shutil
+import subprocess
 import sys
+import tarfile
 import tempfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from pert_gym.logical_sparse_zarr import read_logical_sparse_revision
@@ -17,6 +18,7 @@ from tools.lamin_context import connect_pertdata
 
 HERE = Path(__file__).resolve().parent
 RUNNER_PATH = HERE / "run_e2e.py"
+EXPECTED_GIT_HEAD = "ef33dc21bc50ad8d96b6f58066e5958949886b83"
 SPEC = importlib.util.spec_from_file_location("ginkgo_vcpi_run_e2e", RUNNER_PATH)
 if SPEC is None or SPEC.loader is None:
     raise RuntimeError("cannot load exact mutation runner")
@@ -56,6 +58,65 @@ def sha256_json(value: object) -> str:
             value, sort_keys=True, separators=(",", ":"), allow_nan=False
         ).encode()
     ).hexdigest()
+
+
+def resolve_git_state(start: Path = HERE) -> dict[str, object]:
+    def git(*args: str) -> str:
+        result = subprocess.run(
+            ["git", "-C", str(start), *args],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        return result.stdout.strip()
+
+    root = Path(git("rev-parse", "--show-toplevel")).resolve()
+    head = git("rev-parse", "HEAD")
+    dirty_paths = git("status", "--porcelain", "--untracked-files=no").splitlines()
+    if head != EXPECTED_GIT_HEAD:
+        raise AssertionError(
+            f"verifier checkout drift: expected {EXPECTED_GIT_HEAD}, observed {head}"
+        )
+    if dirty_paths:
+        raise AssertionError(f"verifier checkout has tracked changes: {dirty_paths}")
+    return {"root": str(root), "head": head, "tracked_dirty": False}
+
+
+def safely_extract_payload(payload: Path, destination: Path) -> str:
+    """Hash, inspect, and extract one archive stream without link traversal."""
+    destination.mkdir(parents=True, exist_ok=True)
+    root = destination.resolve()
+    digest = hashlib.sha256()
+    with payload.open("rb") as handle:
+        for block in iter(lambda: handle.read(8 * 1024**2), b""):
+            digest.update(block)
+        handle.seek(0)
+        with tarfile.open(fileobj=handle, mode="r:gz") as archive:
+            members = archive.getmembers()
+            for member in members:
+                member_path = PurePosixPath(member.name)
+                if (
+                    member_path.is_absolute()
+                    or ".." in member_path.parts
+                    or not member.name
+                ):
+                    raise AssertionError(f"unsafe archive member path: {member.name!r}")
+                try:
+                    (root / Path(*member_path.parts)).resolve().relative_to(root)
+                except ValueError as error:
+                    raise AssertionError(
+                        f"archive member escapes extraction root: {member.name!r}"
+                    ) from error
+                if member.issym() or member.islnk():
+                    raise AssertionError(
+                        f"archive links are forbidden: {member.name!r} -> {member.linkname!r}"
+                    )
+                if not (member.isfile() or member.isdir()):
+                    raise AssertionError(
+                        f"unsupported archive member type: {member.name!r}"
+                    )
+            archive.extractall(root, members=members, filter="data")
+    return digest.hexdigest()
 
 
 def artifact_paths(shared_key: str) -> dict[str, str]:
@@ -200,7 +261,7 @@ def verify_sealed_publication(ln: Any) -> dict[str, Any]:
             local_files[relative] = sha256_file(item)
     with tempfile.TemporaryDirectory(prefix="ginkgo_vcpi_remote_payload_") as temporary:
         extract_root = Path(temporary)
-        shutil.unpack_archive(remote_paths["payload"], extract_root)
+        payload_sha256 = safely_extract_payload(remote_paths["payload"], extract_root)
         remote_files = {
             item.relative_to(extract_root).as_posix(): sha256_file(item)
             for item in extract_root.rglob("*")
@@ -294,6 +355,7 @@ def verify_sealed_publication(ln: Any) -> dict[str, Any]:
         "candidate_collection_uid": str(collections[0].uid),
         "parity": parity,
         "remote_payload_semantic_parity": remote_semantic_parity,
+        "remote_payload_sha256": payload_sha256,
         "payload_semantic_file_count": len(local_files),
         "payload_remote_journal_members_excluded": remote_journals,
         "dataset_collection": first["dataset_collection"],
@@ -313,6 +375,7 @@ def main() -> int:
     heartbeat.start()
     ln = None
     try:
+        git_state = resolve_git_state()
         ln = connect_pertdata()
         before = {
             "artifacts": ln.Artifact.filter().count(),
@@ -336,7 +399,7 @@ def main() -> int:
             "status": "PASS",
             "verifier_sha256": sha256_file(Path(__file__).resolve()),
             "mutation_helper_sha256": sha256_file(RUNNER_PATH),
-            "git_head": "ef33dc21bc50ad8d96b6f58066e5958949886b83",
+            "git": git_state,
             "registry_counts_before": before,
             "registry_counts_after": after,
             "readback": readback,
