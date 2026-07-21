@@ -23,8 +23,8 @@ from tools.pert_gym_vm_runner import preflight
 TASK_ID = "t_fbb1d519"
 DATASET_ID = "SchiebingerLander2019"
 PREFIX = "SchiebingerLander2019"
-EXPECTED_OBS_UID = "trSdGyVkTDn5ZkaY0000"
-EXPECTED_VAR_UID = "cw0Kr6j7qVyrDBP10001"
+EXPECTED_BASE_OBS_UID = "trSdGyVkTDn5ZkaY0000"
+EXPECTED_BASE_VAR_UID = "cw0Kr6j7qVyrDBP10000"
 EXPECTED_N_OBS = 327_494
 EXPECTED_N_VARS = 27_998
 SOURCE_KEYS = (
@@ -114,14 +114,15 @@ def download_source(ln: Any, key: str, destination: Path) -> dict[str, Any]:
     url = str(artifact.path)
     if not url.startswith("https://zenodo.org/records/13350497/files/"):
         raise AssertionError(f"unexpected immutable source URL: {url}")
-    subprocess.run(
-        [
-            "curl", "--location", "--fail", "--retry", "3", "--output",
-            str(destination), url,
-        ],
-        check=True,
-        timeout=7200,
-    )
+    if not destination.exists() or destination.stat().st_size != int(artifact.size):
+        subprocess.run(
+            [
+                "curl", "--location", "--fail", "--retry", "3", "--output",
+                str(destination), url,
+            ],
+            check=True,
+            timeout=7200,
+        )
     if destination.stat().st_size != int(artifact.size):
         raise AssertionError(f"source size drift: {key}")
     return {
@@ -155,7 +156,8 @@ def main() -> None:
     capacity = preflight()
     if platform.system() == "Darwin":
         raise RuntimeError("refusing Mac execution")
-    root = Path(tempfile.mkdtemp(prefix=f"{TASK_ID}-schiebinger-inspect-"))
+    root = Path(tempfile.gettempdir()) / f"{TASK_ID}-schiebinger-sources"
+    root.mkdir(parents=True, exist_ok=True)
 
     ln = connect_pertdata()
     if ln.setup.settings.instance.slug != "laminlabs/pertdata":
@@ -189,20 +191,26 @@ def main() -> None:
         source_var_indices.append(var.index.copy())
 
     obs_artifact, obs_history = latest_artifact(ln, f"{PREFIX}/obs.parquet")
-    if str(obs_artifact.uid) != EXPECTED_OBS_UID:
-        raise AssertionError(f"current OBS UID drift: {obs_artifact.uid}")
+    if EXPECTED_BASE_OBS_UID not in {str(item.uid) for item in obs_history}:
+        raise AssertionError("frozen base OBS UID absent from history")
     current_obs = obs_artifact.load()
     x_artifact = resolve_artifact(ln, obs_artifact.features.get_values()["X"])
-    var_artifact = resolve_artifact(ln, x_artifact.features.get_values()["var"])
-    if str(var_artifact.uid) != EXPECTED_VAR_UID:
-        raise AssertionError(f"current VAR UID drift: {var_artifact.uid}")
-    current_var = var_artifact.load()
+    linked_var_artifact = resolve_artifact(ln, x_artifact.features.get_values()["var"])
+    latest_var_artifact, var_history = latest_artifact(ln, f"{PREFIX}/var.parquet")
+    if EXPECTED_BASE_VAR_UID not in {str(item.uid) for item in var_history}:
+        raise AssertionError("frozen base VAR UID absent from history")
+    linked_var = linked_var_artifact.load()
+    latest_var = latest_var_artifact.load()
 
     concatenated_index = source_obs[0].index.append(source_obs[1].index)
     overlap = source_obs[0].index.intersection(source_obs[1].index)
     if sum(len(frame) for frame in source_obs) != EXPECTED_N_OBS:
         raise AssertionError("source OBS denominator drift")
-    if len(current_obs) != EXPECTED_N_OBS or len(current_var) != EXPECTED_N_VARS:
+    if (
+        len(current_obs) != EXPECTED_N_OBS
+        or len(linked_var) != EXPECTED_N_VARS
+        or len(latest_var) != EXPECTED_N_VARS
+    ):
         raise AssertionError("current triplet denominator drift")
     if len(source_var_indices[0]) != EXPECTED_N_VARS or not source_var_indices[0].equals(source_var_indices[1]):
         raise AssertionError("source VAR axes differ")
@@ -232,11 +240,15 @@ def main() -> None:
             "obs_history": [artifact_identity(item) for item in obs_history],
             "obs_frame": frame_summary(current_obs),
             "x": artifact_identity(x_artifact),
-            "var": artifact_identity(var_artifact),
-            "var_frame": frame_summary(current_var),
+            "linked_var": artifact_identity(linked_var_artifact),
+            "linked_var_frame": frame_summary(linked_var),
+            "latest_var": artifact_identity(latest_var_artifact),
+            "latest_var_history": [artifact_identity(item) for item in var_history],
+            "latest_var_frame": frame_summary(latest_var),
             "links": {
                 "obs_to_x": str(resolve_artifact(ln, obs_artifact.features.get_values()["X"]).uid) == str(x_artifact.uid),
-                "x_to_var": str(resolve_artifact(ln, x_artifact.features.get_values()["var"]).uid) == str(var_artifact.uid),
+                "x_to_linked_var": str(resolve_artifact(ln, x_artifact.features.get_values()["var"]).uid) == str(linked_var_artifact.uid),
+                "x_links_latest_var": str(linked_var_artifact.uid) == str(latest_var_artifact.uid),
             },
         },
         "identity_hypotheses": {
@@ -245,7 +257,8 @@ def main() -> None:
                 "original_obs_index" in current_obs
                 and concatenated_index.equals(pd.Index(current_obs["original_obs_index"].astype(str)))
             ),
-            "source_var_index_equals_current_index": source_var_indices[0].equals(current_var.index.astype(str)),
+            "source_var_index_equals_linked_var_index": source_var_indices[0].equals(linked_var.index.astype(str)),
+            "source_var_index_equals_latest_var_index": source_var_indices[0].equals(latest_var.index.astype(str)),
         },
         "collections": collection_membership(ln, str(obs_artifact.uid)),
         "invariants": {
