@@ -209,11 +209,14 @@ def exact_source_join(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataF
         if column == "_source_accession" or column not in obs:
             continue
         left = joined[column].astype("string")
-        comparison_column = (
-            "source_organism"
-            if column == "organism" and "source_organism" in obs
-            else column
-        )
+        preserved_aliases = {
+            "age": "source_age_label",
+            "organism": "source_organism",
+            "tissue_type": "source_tissue_type",
+            "perturbation_type": "source_original_perturbation_type",
+        }
+        alias = preserved_aliases.get(str(column))
+        comparison_column = alias if alias in obs else column
         right = obs[comparison_column].astype("string")
         equal = (left.isna() & right.isna()) | (left.fillna("") == right.fillna(""))
         mismatches[str(column)] = int((~equal).sum())
@@ -244,6 +247,9 @@ def curate_obs(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataFrame, d
     curated = obs.copy(deep=True)
     source_age = joined["age"].astype("string")
     curated["source_age_label"] = source_age
+    curated["source_original_perturbation_type"] = joined[
+        "perturbation_type"
+    ].astype("string")
     set_field(curated, "dataset", DATASET_ID, "known", "canonical dataset identity")
     set_field(curated, "sample", joined["GSM"].astype("string"), "known", "source H5AD GSM")
     set_field(curated, "cell_id", original["original_obs_index"].astype("string"), "known", "source H5AD normalized cell identity")
@@ -411,7 +417,9 @@ def verify_current(ln: Any) -> tuple[dict[str, Any], bool]:
     var = var_artifact.load()
     curated_obs, join_receipt = curate_obs(obs, source)
     curated_var = curate_var(var)
-    obs_curated = str(obs_artifact.description).startswith(f"{TASK_ID}: source-exhaustive SchiebingerLander2019 OBS")
+    obs_curated = str(obs_artifact.description).startswith(
+        f"{TASK_ID}: source-exhaustive SchiebingerLander2019 OBS"
+    ) and "source_original_perturbation_type" in obs
     var_curated = {"stable_feature_id_namespace", "organism"}.issubset(var.columns)
     if obs_curated:
         verify_obs_semantics(obs, curated_obs)

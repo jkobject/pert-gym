@@ -66,6 +66,8 @@ def _fixture() -> tuple[object, object]:
     obs = source.drop(columns="_source_accession").copy()
     obs["original_obs_index"] = source_index.astype(str)
     obs["obs_uuid"] = ["uuid-a", "uuid-b", "uuid-c"]
+    obs["source_organism"] = source["organism"].astype("string")
+    obs["source_tissue_type"] = source["tissue_type"].astype("string")
     obs.index = source_index
     return obs, source
 
@@ -85,6 +87,11 @@ def test_curate_obs_materializes_source_join_and_temporal_semantics(monkeypatch)
         "induced pluripotent stem cell",
     ]
     assert curated["source_age_label"].tolist() == ["D0", "D2", "iPSCs"]
+    assert curated["source_original_perturbation_type"].tolist() == [
+        "drug",
+        "drug",
+        "drug",
+    ]
     assert curated["age"].isna().all()
     assert curated["is_control"].tolist()[:2] == [True, False]
     assert pd.isna(curated["is_control"].iloc[2])
@@ -94,6 +101,9 @@ def test_curate_obs_materializes_source_join_and_temporal_semantics(monkeypatch)
     assert dispositions["timepoint"]["disposition"] == "materialized_partial"
     assert dispositions["age"]["disposition"] == "unknown"
     assert dispositions["guide_id"]["disposition"] == "not_applicable"
+    repeated, repeated_receipt = curation.curate_obs(curated, source)
+    pd.testing.assert_frame_equal(repeated, curated)
+    assert repeated_receipt["join_mismatch_count"] == 0
 
 
 def _var_fixture() -> object:
