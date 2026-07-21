@@ -1,0 +1,103 @@
+{
+  "accepted_x_axis_bindings": {
+    "scperturb/adamson16_GSM2406675_10X001": {
+      "expected_rows": 35635,
+      "var": {
+        "hash": "ikI7UhZUMyRIOV2OXAUmiA",
+        "uid": "2j6j7JDLkLjoRLm90002"
+      },
+      "x": {
+        "hash": "aCwEF40-TBS1mNvQa5Vlj6",
+        "uid": "E7pZHzRaxMWmefk80000"
+      }
+    },
+    "scperturb/adamson16_GSM2406677_10X005": {
+      "expected_rows": 32738,
+      "var": {
+        "hash": "e1UFvdrtJrDPJ8nuszfuAQ",
+        "uid": "wn8ozyDwXEXob7mF0002"
+      },
+      "x": {
+        "hash": "KuDuwvrwYdUv45It73z655",
+        "uid": "eWYpt9tMQVsFpoLG0000"
+      }
+    },
+    "scperturb/adamson16_GSM2406681_10X010": {
+      "expected_rows": 32738,
+      "var": {
+        "hash": "4nC2qsYp69TpyT-cNOcLYw",
+        "uid": "5By6mLARgeYAEThC0002"
+      },
+      "x": {
+        "hash": "on2uwLLbAmDlfB4DpKTnln",
+        "uid": "h1Xmuenf9GyCOQll0000"
+      }
+    }
+  },
+  "canonical_sha256": "42ef199874df6341d93c26c45052bc3501ca0d33b16ce5afad4db8dc9eeb4244",
+  "code": {
+    "curation_script_sha256": "f875ed6ba72874cfbacda54e66e7def3530319e178256e3b469f78ad3215a1f9",
+    "focused_test_sha256": "027c1701df87e48b7790363c6bbc033f72753a1365f5537e30c6c7d47db1fbc2"
+  },
+  "continuation_task_id": "t_d1b6a24a",
+  "continuation_writes": {
+    "collections": 0,
+    "gcs": 0,
+    "lamin": 0,
+    "obs": 0,
+    "var": 0,
+    "x": 0
+  },
+  "corrected_verifier": {
+    "obs_authoritative_constants_and_exact_joins": true,
+    "var_exact_human_ensg_unique": true,
+    "var_exact_namespace_status_organism": true,
+    "var_independent_x_axis_count_order_binding": true
+  },
+  "dataset_id": "scperturb/adamson16",
+  "format": "pert-gym.adamson16-local-verifier/v1",
+  "frozen_inputs": {
+    "binding_manifest_sha256": "e4ed4f17a44f7ef41147a032be5656ab4e04d918a92a3159ebc1695966c6ec6b",
+    "inputs": [
+      {
+        "binding_path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/frozen_inputs/real_biological_dataset_crosswalk_120_families_20260716.json.gz",
+        "compression": "gzip level 9, mtime=0",
+        "gzip_bytes": 52179,
+        "gzip_sha256": "8acbf5b4f6b88ed9676f5403990d01a4a6a755cf8f5ed21af6821a1a5babe908",
+        "original_path": "artifacts/schema_audit/real_biological_dataset_crosswalk_120_families_20260716.json",
+        "uncompressed_bytes": 806794,
+        "uncompressed_sha256": "65388d3d575d99961e2f8fb62d35dd38366d50268068ff144445af6530b54a9b"
+      },
+      {
+        "binding_path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/frozen_inputs/final_real_dataset_obs_var_20260717.json.gz",
+        "compression": "gzip level 9, mtime=0",
+        "gzip_bytes": 612434,
+        "gzip_sha256": "28fc912fa9c270ca42a710984b0479dce761cd0467b1467f4602254b543dacff",
+        "original_path": "artifacts/schema_audit/final_real_dataset_obs_var_20260717.json",
+        "uncompressed_bytes": 17879030,
+        "uncompressed_sha256": "60530cc3a14fe28e1dbf06c9f62b3e993649750069287083e4351aea3f8318df"
+      }
+    ]
+  },
+  "prior_production_evidence": {
+    "mutate_receipt.json": {
+      "canonical_sha256": "d219b6f4192713c9003b05d2926601496b4a5444815837a5b0579b8f9a560bbf",
+      "path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/mutate_receipt.json",
+      "provenance": "prior production evidence; not replayed by this local continuation",
+      "sha256": "4f77f11d4cc267377f6b7aaa58fa1592aba0e01b5fdf6fd07dd418bc342de452"
+    },
+    "verify_receipt.json": {
+      "canonical_sha256": "521c211b59998447bcb7b528f66caad0c73a2e012c58d8b3a1ef883b147fda5f",
+      "path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/verify_receipt.json",
+      "provenance": "prior production evidence; not replayed by this local continuation",
+      "sha256": "9cb20a594798a0fdc2b9ab2ae634303772fb83ef4aec8dbd43ef16f5710c0e1c"
+    }
+  },
+  "remote_live_verification": {
+    "reason": "continuation is local-only; no VM, Lamin, GCS, Collection, or payload access",
+    "replay_claimed": false,
+    "status": "PENDING_INDEPENDENT_REVIEWER"
+  },
+  "status": "LOCAL_PASS_REMOTE_REVIEW_PENDING",
+  "task_id": "t_f1d056cd"
+}

@@ -1,0 +1,598 @@
+{
+  "extracted_markdown_sha256": "ec9d7700f4a8f8f9a510d970b51069efba3a21c964929bf70e7016a54704cab5",
+  "format": "pert-gym.adamson16-table-s1-guide-map/v1",
+  "retrieval": "Nous web_extract document extraction on 2026-07-21; direct PMC urllib returned a 1817-byte proof-of-work wrapper rather than workbook bytes",
+  "row_count": 98,
+  "rows": [
+    {
+      "gene": "AARS",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS381",
+      "protospacer": "GAGGGCGGCCTACCTCTCCT"
+    },
+    {
+      "gene": "AMIGO3/GMPPB",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS391",
+      "protospacer": "GGAACGCGACACCGGGTAGA"
+    },
+    {
+      "gene": "AMIGO3/GMPPB",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS434",
+      "protospacer": "GGGGCCAGCAGCCGTCTACC"
+    },
+    {
+      "gene": "ARHGAP22",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS458",
+      "protospacer": "GGTCCGTCCGGAGCCAGGAG"
+    },
+    {
+      "gene": "ASCC3",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS051",
+      "protospacer": "GACGCAAAGACGCACAGACC"
+    },
+    {
+      "gene": "ASCC3",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS052",
+      "protospacer": "GCGCACAGACCCGGCGAGGA"
+    },
+    {
+      "gene": "ATF6",
+      "guide_id": "ATF6",
+      "perturb_seq_vector_id": null,
+      "protospacer": "GGGGATCTGAGAATGTACCA"
+    },
+    {
+      "gene": "ATP5B",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS055",
+      "protospacer": "GAGTCTCCGCAAGGCCCCGG"
+    },
+    {
+      "gene": "CAD",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS468",
+      "protospacer": "GTAGGAGCCTCGGGCGCGCT"
+    },
+    {
+      "gene": "CARS",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS460",
+      "protospacer": "GAGCCATGGCAGATTCCTCC"
+    },
+    {
+      "gene": "CCND3",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS006",
+      "protospacer": "GCGACGTCCGAGCATTCCA"
+    },
+    {
+      "gene": "CHERP",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS024",
+      "protospacer": "GCGCTGGTGGTCGATCGTG"
+    },
+    {
+      "gene": "COPB1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS065",
+      "protospacer": "GCGGCTATGAACCGCAGCAG"
+    },
+    {
+      "gene": "COPZ1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS462",
+      "protospacer": "GGATGCTGTGGTGTCCACAG"
+    },
+    {
+      "gene": "DAD1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS499",
+      "protospacer": "GACCTTGCGTGCAGTTATGT"
+    },
+    {
+      "gene": "DARS",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS495",
+      "protospacer": "GTGAGACCCCAGGGTCGGGA"
+    },
+    {
+      "gene": "DDOST",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS382",
+      "protospacer": "GTGGGTCCTTCGGCAGGAGG"
+    },
+    {
+      "gene": "DDRGK1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS041",
+      "protospacer": "GCGGTCCACAAAGGCTCAGA"
+    },
+    {
+      "gene": "DERL2",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS042",
+      "protospacer": "GGTAGGCGCGGCTGACCGGT"
+    },
+    {
+      "gene": "DHDDS",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS383",
+      "protospacer": "GGCGCCCAGCGGAGCTAATC"
+    },
+    {
+      "gene": "DNAJC19",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS026",
+      "protospacer": "GGGCGCCTGTGCTTGAGGTT"
+    },
+    {
+      "gene": "DNAJC19",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS074",
+      "protospacer": "GCTTGCCTGGAACTCCTGTA"
+    },
+    {
+      "gene": "EGFP (protopacer name: EGFP-NT2)",
+      "guide_id": null,
+      "perturb_seq_vector_id": null,
+      "protospacer": "GACCAGGATGGGCACCACCC"
+    },
+    {
+      "gene": "EIF2AK3",
+      "guide_id": "PERK",
+      "perturb_seq_vector_id": null,
+      "protospacer": "GCGGGCTGAGACGTGGCCAG"
+    },
+    {
+      "gene": "EIF2B2",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS463",
+      "protospacer": "GTAGCTGCCTTCAGCCTTCAC"
+    },
+    {
+      "gene": "EIF2B3",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS508",
+      "protospacer": "GCCATTGGGCTGTCAGTCAG"
+    },
+    {
+      "gene": "EIF2B4",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS491",
+      "protospacer": "GCTGAGGGCGATGGCTGCTG"
+    },
+    {
+      "gene": "EIF2S1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS386",
+      "protospacer": "GAGACTTGCTTCCCCCTCAC"
+    },
+    {
+      "gene": "ERN1",
+      "guide_id": "IRE1\u03b1",
+      "perturb_seq_vector_id": null,
+      "protospacer": "GAGAACTGACTAGGCAGCGG"
+    },
+    {
+      "gene": "FARSB",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS390",
+      "protospacer": "GTCACTGTAGGTGCGGCCCA"
+    },
+    {
+      "gene": "FECH",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS494",
+      "protospacer": "GGCAGCCTCGGCCCGAGTCC"
+    },
+    {
+      "gene": "GBF1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS043",
+      "protospacer": "GCAGGGCTCGCGCAGTTACC"
+    },
+    {
+      "gene": "GNPNAT1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS506",
+      "protospacer": "GCAGGGCCGCGCGCAGGCGAG"
+    },
+    {
+      "gene": "HARS",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS466",
+      "protospacer": "GCTCAAGTGGACAGCCGGGA"
+    },
+    {
+      "gene": "HSD17B12",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS087",
+      "protospacer": "GTCATCCTCACCGTCACGGC"
+    },
+    {
+      "gene": "HSPA5",
+      "guide_id": "HSPA5-1",
+      "perturb_seq_vector_id": "pDS017",
+      "protospacer": "GCGACGGTGAGGTCGACGC"
+    },
+    {
+      "gene": "HSPA5",
+      "guide_id": "HSPA5-2",
+      "perturb_seq_vector_id": "pDS371",
+      "protospacer": "GGCGACGGTGAGGTCGACGC"
+    },
+    {
+      "gene": "HSPA5",
+      "guide_id": "HSPA5-3",
+      "perturb_seq_vector_id": null,
+      "protospacer": "GAGGGCAGGTCTAGAAATAC"
+    },
+    {
+      "gene": "HSPA9",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS088",
+      "protospacer": "GGGATAAATGGAGGAGTACG"
+    },
+    {
+      "gene": "HYOU1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS089",
+      "protospacer": "GGACAGCGTGCGAGCTCCGG"
+    },
+    {
+      "gene": "IARS2",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS090",
+      "protospacer": "GGCGCGTGCGCCCTCTTACT"
+    },
+    {
+      "gene": "IARS2",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS091",
+      "protospacer": "GCGGAGGACCCCGCTCTCAG"
+    },
+    {
+      "gene": "IDH3A",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS393",
+      "protospacer": "GGGGCCCGCGTGGATCTCTA"
+    },
+    {
+      "gene": "IER3IP1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS002",
+      "protospacer": "GGGCCGCGTGAGGGGACACCA"
+    },
+    {
+      "gene": "IER3IP1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS110",
+      "protospacer": "GGGGCCCCATCGGCTTCCGT"
+    },
+    {
+      "gene": "KCTD16",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS096",
+      "protospacer": "GGTTTCTCAGACCTAGGTGA"
+    },
+    {
+      "gene": "MANF",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS027",
+      "protospacer": "GACTTGGAGGCGGTGCGGCG"
+    },
+    {
+      "gene": "MARS",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS394",
+      "protospacer": "GCAGCACCGGCAAGCAACCC"
+    },
+    {
+      "gene": "MRGBP",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS124",
+      "protospacer": "GCGAGCAAGGAGCCCCCGGC"
+    },
+    {
+      "gene": "MRPL39",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS498",
+      "protospacer": "GTCTGGCTGGTCGCACCCGG"
+    },
+    {
+      "gene": "MTHFD1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS395",
+      "protospacer": "GGGCCAGTCCCTAAGCACGT"
+    },
+    {
+      "gene": "NEDD8/NEDD8-MDP1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS396",
+      "protospacer": "GCAGCGGCGACCGGAGCGGT"
+    },
+    {
+      "gene": "OST4",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS353",
+      "protospacer": "GGCTTGTTCGCTGGTGGCGT"
+    },
+    {
+      "gene": "P4HB",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS397",
+      "protospacer": "GGGCGCCGCCGGGACAGCGG"
+    },
+    {
+      "gene": "PDIA6",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS029",
+      "protospacer": "GGGCAACCTAGCAGCTCCTC"
+    },
+    {
+      "gene": "PPWD1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS398",
+      "protospacer": "GTTTTCAGCAGAGACGTAGA"
+    },
+    {
+      "gene": "PSMD4",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS488",
+      "protospacer": "GCCGTCCCGGAGACCCGGTC"
+    },
+    {
+      "gene": "PTDSS1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS478",
+      "protospacer": "GCTGGCGCCCAGCAAAGGCT"
+    },
+    {
+      "gene": "QARS",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS510",
+      "protospacer": "GCGCGCTCAGTGAGAGGAAA"
+    },
+    {
+      "gene": "SAMM50",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS156",
+      "protospacer": "GCTGCCTCGCAGAGCTGCCC"
+    },
+    {
+      "gene": "SARS",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS467",
+      "protospacer": "GGGCGCAGTGCGGCGGTCAC"
+    },
+    {
+      "gene": "SCYL1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS159",
+      "protospacer": "GGCCGGAGGACCCGGAGCTA"
+    },
+    {
+      "gene": "SCYL1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS160",
+      "protospacer": "GGCCTTAGCTCCGGGTCCTC"
+    },
+    {
+      "gene": "SEC61A1",
+      "guide_id": "SEC61A1-1",
+      "perturb_seq_vector_id": "pDS031",
+      "protospacer": "GCTGTGCAGTGGAACGCGCT"
+    },
+    {
+      "gene": "SEC61A1",
+      "guide_id": "SEC61A1-2",
+      "perturb_seq_vector_id": "pDS032",
+      "protospacer": "GTGCTAGCCCGGCGGCAAG"
+    },
+    {
+      "gene": "SEC61A1",
+      "guide_id": "SEC61A1-3",
+      "perturb_seq_vector_id": null,
+      "protospacer": "GCACGTCAGTGCTAGCCCGG"
+    },
+    {
+      "gene": "SEC61B",
+      "guide_id": "SEC61B-1",
+      "perturb_seq_vector_id": "pDS033",
+      "protospacer": "GTACGGAGCCCCCGAAAGAC"
+    },
+    {
+      "gene": "SEC61B",
+      "guide_id": "SEC61B-2",
+      "perturb_seq_vector_id": null,
+      "protospacer": "GGGCAAGGCGCTGACGCGGA"
+    },
+    {
+      "gene": "SEC61B",
+      "guide_id": "SEC61B-3",
+      "perturb_seq_vector_id": "pDS162",
+      "protospacer": "GGCGGACGGATAGAAAGTTA"
+    },
+    {
+      "gene": "SEC61G",
+      "guide_id": "SEC61G-2",
+      "perturb_seq_vector_id": "pDS440",
+      "protospacer": "GCTCCAGTGCTACGTGTCCC"
+    },
+    {
+      "gene": "SEC63",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS218",
+      "protospacer": "GGTGCAGAGCGTGGTCGTGG"
+    },
+    {
+      "gene": "SEL1L",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS373",
+      "protospacer": "GGTGGTGGCTGAGTCCGTGG"
+    },
+    {
+      "gene": "SLC35B1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS046",
+      "protospacer": "GGTCGCATGCAGCTCCTATG"
+    },
+    {
+      "gene": "SLC39A7",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS219",
+      "protospacer": "GCCGGGAAAGGAGAGGATCC"
+    },
+    {
+      "gene": "SLMO2",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS433",
+      "protospacer": "GAGATGTCCGGGTAGCGCCA"
+    },
+    {
+      "gene": "SOCS1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS479",
+      "protospacer": "GCGGCGGACCCGGCCCTAGG"
+    },
+    {
+      "gene": "SPCS2",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS401",
+      "protospacer": "GTCAGACAAGTCGGAGGGGA"
+    },
+    {
+      "gene": "SPCS3",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS402",
+      "protospacer": "GGCCGGTCCGCCGCCGGAAC"
+    },
+    {
+      "gene": "SRP68",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS403",
+      "protospacer": "GAGAAGCAGGTCCCAGGCGG"
+    },
+    {
+      "gene": "SRP72",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS505",
+      "protospacer": "GCCTCCAAGATGGCGAGCGG"
+    },
+    {
+      "gene": "SRPR",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS482",
+      "protospacer": "GGCGAACGCGGCCTGAATTCC"
+    },
+    {
+      "gene": "SRPRB",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS404",
+      "protospacer": "GGCCACCCGGCGCGAGTCCG"
+    },
+    {
+      "gene": "STT3A",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS011",
+      "protospacer": "GGGAGCCCCGCGGATCGTTT"
+    },
+    {
+      "gene": "SYVN1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS442",
+      "protospacer": "GGCGCTGGGTTCCTGGTGAGT"
+    },
+    {
+      "gene": "TARS",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS405",
+      "protospacer": "GGAGGAGCCAAGAGGCGGGT"
+    },
+    {
+      "gene": "TELO2",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS496",
+      "protospacer": "GCCGCGGAGACCCGCCCCAG"
+    },
+    {
+      "gene": "TIMM23",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS284",
+      "protospacer": "GAAGTAGGCGCTGGCAACGC"
+    },
+    {
+      "gene": "TIMM44",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS430",
+      "protospacer": "GCGGCACCAGCCACTCCGCA"
+    },
+    {
+      "gene": "TMED10",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS036",
+      "protospacer": "GAGACTCGTTCACCACCGA"
+    },
+    {
+      "gene": "TMED2",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS175",
+      "protospacer": "GTGAGGCCGAAGCCAGGACC"
+    },
+    {
+      "gene": "TMEM167A",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS038",
+      "protospacer": "GCAGCCACATCACCCTTCCG"
+    },
+    {
+      "gene": "TTI1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS407",
+      "protospacer": "GAAGGCTGGAAGACGAGGTA"
+    },
+    {
+      "gene": "TTI2",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS408",
+      "protospacer": "GTCCGGATCCTGTTAGACAC"
+    },
+    {
+      "gene": "UFL1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS410",
+      "protospacer": "GTGACTCGCAGTAGACGCGG"
+    },
+    {
+      "gene": "UFM1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS040",
+      "protospacer": "GCGGTAAGCAAACACTTACA"
+    },
+    {
+      "gene": "XRN1",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS411",
+      "protospacer": "GTCCGCGGAGCGACGACCGG"
+    },
+    {
+      "gene": "YIPF5",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS186",
+      "protospacer": "GGGTGCAGGGGACCGCGTCA"
+    },
+    {
+      "gene": "YIPF5",
+      "guide_id": null,
+      "perturb_seq_vector_id": "pDS226",
+      "protospacer": "GTGACACGTAGCAACGGGGC"
+    }
+  ],
+  "source_label": "Adamson et al. 2016 Table S1: Protospacer sequences of sgRNAs",
+  "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/5315571/bin/NIHMS832990-supplement-8.xlsx"
+}
