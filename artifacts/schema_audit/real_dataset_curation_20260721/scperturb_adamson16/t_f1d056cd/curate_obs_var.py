@@ -39,6 +39,8 @@ TABLE_S1_URL = (
 )
 TABLE_S1_PATH = Path(__file__).with_name("table_s1_guide_map.json")
 TABLE_S1_SHA256 = "d006e9c56610c72e590ad14f6ac2c048f5a6200ce6d79209998fc358fcb4844e"
+FROZEN_INPUT_BINDINGS_PATH = Path(__file__).with_name("frozen_inputs") / "bindings.json"
+LOCAL_VERIFIER_RECEIPT_PATH = Path(__file__).with_name("local_verifier_receipt.json")
 
 COMPONENTS = {
     "scperturb/adamson16_GSM2406675_10X001": {
@@ -64,6 +66,37 @@ COMPONENTS = {
         "sequencer": "Illumina HiSeq 4000",
         "barcodes_sha256": "1e0d820343d0c6e17bdab4fef96f4446e223b94861942ccf3d7225818e009836",
         "identities_sha256": "8b40be7a2280c1713bf5a1eb828aad46e70ad3a7000b5f5a1322e51e06c4cf7f",
+    },
+}
+
+OBS_AUTHORITATIVE_CONSTANTS = {
+    "organism": "human",
+    "cell_line": "K-562",
+    "cell_type": "lymphoblast",
+    "disease": "chronic myelogenous leukemia, BCR-ABL1 positive",
+    "tissue_type": "cell culture",
+    "sex": "female",
+    "assay": "10x 3' v1",
+}
+
+# The immutable X identities pre-date this curation. Their feature-axis row
+# counts are independently bound by both frozen audit inputs. The accepted VAR
+# artifact hashes bind the exact feature order without loading X.
+X_AXIS_BINDINGS = {
+    "scperturb/adamson16_GSM2406675_10X001": {
+        "expected_rows": 35635,
+        "x": {"uid": "E7pZHzRaxMWmefk80000", "hash": "aCwEF40-TBS1mNvQa5Vlj6"},
+        "var": {"uid": "2j6j7JDLkLjoRLm90002", "hash": "ikI7UhZUMyRIOV2OXAUmiA"},
+    },
+    "scperturb/adamson16_GSM2406677_10X005": {
+        "expected_rows": 32738,
+        "x": {"uid": "eWYpt9tMQVsFpoLG0000", "hash": "KuDuwvrwYdUv45It73z655"},
+        "var": {"uid": "wn8ozyDwXEXob7mF0002", "hash": "e1UFvdrtJrDPJ8nuszfuAQ"},
+    },
+    "scperturb/adamson16_GSM2406681_10X010": {
+        "expected_rows": 32738,
+        "x": {"uid": "h1Xmuenf9GyCOQll0000", "hash": "on2uwLLbAmDlfB4DpKTnln"},
+        "var": {"uid": "5By6mLARgeYAEThC0002", "hash": "4nC2qsYp69TpyT-cNOcLYw"},
     },
 }
 
@@ -156,6 +189,89 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def ordered_values_sha256(values: pd.Index) -> str:
+    payload = {
+        "name": None if values.name is None else str(values.name),
+        "values": values.astype(str).tolist(),
+    }
+    return sha256_bytes(canonical(payload).encode("utf-8"))
+
+
+def load_frozen_input_bindings() -> dict[str, Any]:
+    manifest = json.loads(FROZEN_INPUT_BINDINGS_PATH.read_text(encoding="utf-8"))
+    if manifest.get("format") != "pert-gym.frozen-input-bindings/v1":
+        raise AssertionError("frozen input binding format drift")
+    repository_root = Path(__file__).parents[5]
+    for entry in manifest.get("inputs", []):
+        compressed_path = repository_root / entry["binding_path"]
+        compressed = compressed_path.read_bytes()
+        if sha256_bytes(compressed) != entry["gzip_sha256"]:
+            raise AssertionError(f"frozen gzip hash drift: {entry['binding_path']}")
+        raw = gzip.decompress(compressed)
+        if len(raw) != entry["uncompressed_bytes"]:
+            raise AssertionError(f"frozen input size drift: {entry['original_path']}")
+        if sha256_bytes(raw) != entry["uncompressed_sha256"]:
+            raise AssertionError(f"frozen input hash drift: {entry['original_path']}")
+    if len(manifest.get("inputs", [])) != 2:
+        raise AssertionError("frozen input binding coverage drift")
+    return manifest
+
+
+def build_local_verifier_receipt() -> dict[str, Any]:
+    root = Path(__file__).parent
+    repository_root = Path(__file__).parents[5]
+    frozen = load_frozen_input_bindings()
+    evidence = {}
+    for name in ("mutate_receipt.json", "verify_receipt.json"):
+        path = root / name
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        evidence[name] = {
+            "path": str(path.relative_to(repository_root)),
+            "sha256": sha256_file(path),
+            "canonical_sha256": payload["canonical_sha256"],
+            "provenance": "prior production evidence; not replayed by this local continuation",
+        }
+    test_path = repository_root / "tests/test_adamson16_obs_var_curation.py"
+    receipt = {
+        "format": "pert-gym.adamson16-local-verifier/v1",
+        "task_id": TASK_ID,
+        "continuation_task_id": "t_d1b6a24a",
+        "dataset_id": DATASET_ID,
+        "status": "LOCAL_PASS_REMOTE_REVIEW_PENDING",
+        "corrected_verifier": {
+            "obs_authoritative_constants_and_exact_joins": True,
+            "var_exact_human_ensg_unique": True,
+            "var_exact_namespace_status_organism": True,
+            "var_independent_x_axis_count_order_binding": True,
+        },
+        "code": {
+            "curation_script_sha256": sha256_file(Path(__file__)),
+            "focused_test_sha256": sha256_file(test_path),
+        },
+        "frozen_inputs": {
+            "binding_manifest_sha256": sha256_file(FROZEN_INPUT_BINDINGS_PATH),
+            "inputs": frozen["inputs"],
+        },
+        "accepted_x_axis_bindings": X_AXIS_BINDINGS,
+        "prior_production_evidence": evidence,
+        "remote_live_verification": {
+            "status": "PENDING_INDEPENDENT_REVIEWER",
+            "replay_claimed": False,
+            "reason": "continuation is local-only; no VM, Lamin, GCS, Collection, or payload access",
+        },
+        "continuation_writes": {
+            "lamin": 0,
+            "gcs": 0,
+            "collections": 0,
+            "x": 0,
+            "obs": 0,
+            "var": 0,
+        },
+    }
+    receipt["canonical_sha256"] = sha256_bytes(canonical(receipt).encode("utf-8"))
+    return receipt
 
 
 def emit_product(phase: str, current: int) -> None:
@@ -274,7 +390,9 @@ def reproduce_scperturb_join(
     )
     reproduced_index = make_index_unique(base)
     if not reproduced_index.equals(obs.index.astype(str)):
-        raise AssertionError("scPerturb barcode transformation does not reproduce OBS index")
+        raise AssertionError(
+            "scPerturb barcode transformation does not reproduce OBS index"
+        )
     metadata = identities.copy()
     metadata.index = metadata.index.astype(str).str.rsplit("-", n=1).str[0]
     metadata = metadata.loc[~metadata.index.duplicated(keep="first")]
@@ -299,23 +417,30 @@ def reproduce_scperturb_join(
     raw_barcode.index = obs.index
     gem_group = raw_barcode.str.rsplit("-", n=1).str[-1]
     gem_group.index = obs.index
-    return raw_barcode, gem_group, joined, {
-        "barcodes_url": barcodes_url,
-        "barcodes_sha256": spec["barcodes_sha256"],
-        "identities_url": identities_url,
-        "identities_sha256": spec["identities_sha256"],
-        "barcodes_rows": len(barcodes),
-        "identities_rows": len(identities),
-        "joined_guide_rows": int(joined["guide identity"].notna().sum()),
-        "join_mismatch_count": sum(comparisons.values()),
-        "scperturb_join_semantics": "strip gem-group suffix, make OBS names unique, strip identity suffix, keep first duplicate, left-join to OBS order",
-    }
+    return (
+        raw_barcode,
+        gem_group,
+        joined,
+        {
+            "barcodes_url": barcodes_url,
+            "barcodes_sha256": spec["barcodes_sha256"],
+            "identities_url": identities_url,
+            "identities_sha256": spec["identities_sha256"],
+            "barcodes_rows": len(barcodes),
+            "identities_rows": len(identities),
+            "joined_guide_rows": int(joined["guide identity"].notna().sum()),
+            "join_mismatch_count": sum(comparisons.values()),
+            "scperturb_join_semantics": "strip gem-group suffix, make OBS names unique, strip identity suffix, keep first duplicate, left-join to OBS order",
+        },
+    )
 
 
 def target_lists(obs: pd.DataFrame) -> list[list[str]]:
     values: list[list[str]] = []
     for _, row in obs.iterrows():
-        if "pert_target_multi" in obs and isinstance(row.get("pert_target_multi"), np.ndarray):
+        if "pert_target_multi" in obs and isinstance(
+            row.get("pert_target_multi"), np.ndarray
+        ):
             targets = [str(value) for value in row["pert_target_multi"] if str(value)]
         else:
             value = row.get("pert_target")
@@ -365,6 +490,12 @@ def curate_obs(
     by_guide: dict[str, str],
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     original = obs.copy(deep=True)
+    for field, expected in OBS_AUTHORITATIVE_CONSTANTS.items():
+        if field not in original:
+            raise AssertionError(f"OBS authoritative field missing: {field}")
+        values = original[field].astype("string")
+        if not values.notna().all() or not values.eq(expected).all():
+            raise AssertionError(f"OBS source semantic mismatch: {field}")
     raw_barcode, gem_group, joined, join_receipt = reproduce_scperturb_join(obs, spec)
     curated = obs.copy(deep=True)
     curated["dataset"] = prefix
@@ -376,7 +507,9 @@ def curate_obs(
     curated["modality"] = "scRNA-seq"
     curated["is_bulk"] = False
     curated["is_pseudobulk"] = False
-    assigned = curated["pert_genetic"].astype("string").replace({"*": pd.NA, "empty": pd.NA})
+    assigned = (
+        curated["pert_genetic"].astype("string").replace({"*": pd.NA, "empty": pd.NA})
+    )
     curated["perturbation"] = assigned
     curated["perturbation_type"] = "CRISPRi"
     curated["perturbation_technology"] = "CRISPR interference"
@@ -401,15 +534,50 @@ def curate_obs(
     curated["source_accession"] = SOURCE_ACCESSION
     curated["control_availability"] = "strict_control_available"
 
-    assert_frame_equal(curated.loc[:, original.columns], original, check_categorical=True)
+    rewritten = {
+        "dataset",
+        "sample",
+        "cell_id",
+        "batch",
+        "sequencer",
+        "technology",
+        "modality",
+        "is_bulk",
+        "is_pseudobulk",
+        "perturbation",
+        "perturbation_type",
+        "perturbation_technology",
+        "perturbation_library",
+        "guide_id",
+        "is_control",
+        "n_counts",
+        "n_genes",
+        "pct_mito",
+        "pct_ribo",
+        "source",
+        "source_accession",
+        "control_availability",
+    }
+    preserved = [
+        column
+        for column in original.columns
+        if column not in rewritten
+        and not str(column).startswith("guide_sequence")
+        and not str(column).startswith("perturbation_target")
+    ]
+    assert_frame_equal(
+        curated.loc[:, preserved], original.loc[:, preserved], check_categorical=True
+    )
     if not curated.index.equals(original.index):
         raise AssertionError("OBS row order/index drift")
     if len(curated) != spec["n_obs"]:
         raise AssertionError("OBS row denominator drift")
     if not curated["obs_uuid"].is_unique:
         raise AssertionError("OBS UUID uniqueness drift")
-    if not curated["original_obs_index"].astype(str).equals(
-        original["original_obs_index"].astype(str)
+    if (
+        not curated["original_obs_index"]
+        .astype(str)
+        .equals(original["original_obs_index"].astype(str))
     ):
         raise AssertionError("original OBS identity drift")
     return curated, {
@@ -424,15 +592,37 @@ def curate_obs(
     }
 
 
-def field_dispositions(frame: pd.DataFrame) -> dict[str, Any]:
+def verify_obs_semantics(actual: pd.DataFrame, expected: pd.DataFrame) -> None:
+    if not actual.index.equals(expected.index):
+        raise AssertionError("OBS source semantic mismatch: row order/index")
+    if len(actual) != len(expected):
+        raise AssertionError("OBS source semantic mismatch: row count")
+    for field in expected.columns:
+        if field not in actual:
+            raise AssertionError(f"OBS source semantic mismatch: {field} missing")
+        try:
+            pd.testing.assert_series_equal(
+                actual[field], expected[field], check_names=True, check_categorical=True
+            )
+        except AssertionError as error:
+            raise AssertionError(f"OBS source semantic mismatch: {field}") from error
+
+
+def field_dispositions(frame: pd.DataFrame, expected: pd.DataFrame) -> dict[str, Any]:
+    verify_obs_semantics(frame, expected)
     result: dict[str, Any] = {}
     for field in CANONICAL_OBS_FIELDS:
         if field in NOT_APPLICABLE_FIELDS:
-            result[field] = {"disposition": "not_applicable", "materialized": field in frame}
+            result[field] = {
+                "disposition": "not_applicable",
+                "materialized": field in frame,
+            }
         elif field in UNKNOWN_FIELDS:
             observed = []
             if field in frame:
-                observed = sorted(frame[field].dropna().astype(str).unique().tolist())[:20]
+                observed = sorted(frame[field].dropna().astype(str).unique().tolist())[
+                    :20
+                ]
             result[field] = {
                 "disposition": "unknown",
                 "materialized": field in frame,
@@ -443,7 +633,9 @@ def field_dispositions(frame: pd.DataFrame) -> dict[str, Any]:
         else:
             known = int(frame[field].notna().sum())
             result[field] = {
-                "disposition": "materialized_complete" if known == len(frame) else "materialized_partial",
+                "disposition": "materialized_complete"
+                if known == len(frame)
+                else "materialized_partial",
                 "materialized": True,
                 "known_rows": known,
                 "unknown_rows": len(frame) - known,
@@ -454,7 +646,22 @@ def field_dispositions(frame: pd.DataFrame) -> dict[str, Any]:
     return result
 
 
-def verify_var(var: pd.DataFrame, expected_rows: int) -> dict[str, Any]:
+def _assert_bound_identity(
+    role: str, actual: dict[str, Any], expected: dict[str, Any]
+) -> None:
+    observed = {key: str(actual.get(key)) for key in ("uid", "hash")}
+    bound = {key: str(expected.get(key)) for key in ("uid", "hash")}
+    if observed != bound:
+        raise AssertionError(f"accepted {role} identity drift: {observed} != {bound}")
+
+
+def verify_var(
+    var: pd.DataFrame,
+    axis_binding: dict[str, Any],
+    *,
+    x_identity: dict[str, Any],
+    var_identity: dict[str, Any],
+) -> dict[str, Any]:
     required = {
         "stable_feature_id",
         "stable_feature_id_namespace",
@@ -462,32 +669,63 @@ def verify_var(var: pd.DataFrame, expected_rows: int) -> dict[str, Any]:
         "organism",
     }
     missing = sorted(required - set(var.columns))
+    if missing:
+        raise AssertionError(
+            f"VAR stable identifier contract absent: missing={missing}"
+        )
+    expected_rows = int(axis_binding["expected_rows"])
     if len(var) != expected_rows:
-        raise AssertionError(f"VAR row drift: rows={len(var)}, expected={expected_rows}")
-    if "stable_feature_id" not in var or "stable_feature_id_mapping_status" not in var:
-        raise AssertionError(f"VAR stable identifier contract absent: missing={missing}")
-    stable = var["stable_feature_id"].dropna().astype(str)
-    ensembl = stable.str.match(r"^ENSG\d{11}(?:\.\d+)?$")
-    if "organism" in var and not var["organism"].dropna().astype(str).isin(
-        {"human", "Homo sapiens"}
-    ).all():
-        raise AssertionError("VAR species drift")
+        raise AssertionError(
+            f"VAR row drift: rows={len(var)}, expected={expected_rows}"
+        )
+    _assert_bound_identity("X", x_identity, axis_binding["x"])
+    _assert_bound_identity("VAR", var_identity, axis_binding["var"])
+    if not var.index.is_unique:
+        raise AssertionError("VAR index uniqueness drift")
+    stable = var["stable_feature_id"].astype("string")
+    if (
+        not stable.notna().all()
+        or not stable.str.fullmatch(r"ENSG\d{11}", na=False).all()
+    ):
+        raise AssertionError("VAR human ENSG identity drift")
+    if not stable.is_unique:
+        raise AssertionError("VAR stable_feature_id uniqueness drift")
+    namespace = var["stable_feature_id_namespace"].astype("string")
+    if not namespace.eq("Ensembl stable gene ID").all():
+        raise AssertionError("VAR namespace drift")
+    status = var["stable_feature_id_mapping_status"].astype("string")
+    if not status.eq("exact_stable_id").all():
+        raise AssertionError("VAR mapping status drift")
+    organism = var["organism"].astype("string")
+    if not organism.eq("Homo sapiens").all():
+        raise AssertionError("VAR organism drift")
+    expected_order = axis_binding.get("ordered_index_sha256")
+    if (
+        expected_order is not None
+        and ordered_values_sha256(var.index) != expected_order
+    ):
+        raise AssertionError("VAR feature order drift")
     return {
         "rows": len(var),
         "columns": list(map(str, var.columns)),
-        "missing_required_columns": missing,
-        "needs_revision": bool(missing),
+        "missing_required_columns": [],
+        "needs_revision": False,
         "stable_feature_id_non_null": int(stable.size),
-        "human_ensembl_stable_ids": int(ensembl.sum()),
+        "human_ensembl_stable_ids": int(stable.size),
         "mapping_status_counts": var["stable_feature_id_mapping_status"]
         .astype(str)
         .value_counts(dropna=False)
         .sort_index()
         .to_dict(),
-        "organism_values": (
-            sorted(var["organism"].dropna().astype(str).unique())
-            if "organism" in var
-            else []
+        "organism_values": sorted(organism.unique()),
+        "accepted_x_identity": axis_binding["x"],
+        "accepted_var_identity": axis_binding["var"],
+        "axis_count_parity": True,
+        "axis_order_parity": True,
+        "axis_order_basis": (
+            "ordered_index_sha256"
+            if expected_order is not None
+            else "exact_accepted_var_artifact_hash"
         ),
         "mismatch_count": 0,
     }
@@ -497,9 +735,10 @@ def curate_var(var: pd.DataFrame) -> pd.DataFrame:
     original = var.copy(deep=True)
     curated = var.copy(deep=True)
     stable = curated["stable_feature_id"].astype("string")
-    if not stable.notna().all() or not stable.str.match(
-        r"^ENSG\d{11}(?:\.\d+)?$", na=False
-    ).all():
+    if (
+        not stable.notna().all()
+        or not stable.str.match(r"^ENSG\d{11}(?:\.\d+)?$", na=False).all()
+    ):
         raise AssertionError("refusing species annotation for non-human stable IDs")
     curated["stable_feature_id_namespace"] = "Ensembl stable gene ID"
     curated["organism"] = "Homo sapiens"
@@ -547,28 +786,35 @@ def verify_current(
         x = resolve_feature_artifact(ln, obs_artifact.features.get_values()["X"])
         var = resolve_feature_artifact(ln, x.features.get_values()["var"])
         var_frame = var.load()
-        var_verdict = verify_var(var_frame, len(var_frame))
-        curated_var = curate_var(var_frame)
-        curated, source_receipt = curate_obs(
-            obs, prefix, spec, by_vector, by_guide
+        axis_binding = X_AXIS_BINDINGS[prefix]
+        x_identity = artifact_identity(x)
+        var_identity = artifact_identity(var)
+        var_verdict = verify_var(
+            var_frame,
+            axis_binding,
+            x_identity=x_identity,
+            var_identity=var_identity,
         )
+        curated_var = curate_var(var_frame)
+        curated, source_receipt = curate_obs(obs, prefix, spec, by_vector, by_guide)
         already_curated = str(obs_artifact.description).startswith(
             f"{TASK_ID}: source-exhaustive Adamson16 OBS"
         )
-        var_curated = not var_verdict["needs_revision"]
+        var_curated = True
         all_curated &= already_curated and var_curated
         if already_curated:
-            assert_frame_equal(obs, curated, check_categorical=True)
+            verify_obs_semantics(obs, curated)
+        disposition_frame = obs if already_curated else curated
         results.append(
             {
                 "prefix": prefix,
                 "obs_before": artifact_identity(obs_artifact),
                 "obs_history_count": len(history),
-                "x": artifact_identity(x),
-                "var": artifact_identity(var),
+                "x": x_identity,
+                "var": var_identity,
                 "rows": len(obs),
                 "source_join": source_receipt,
-                "field_dispositions": field_dispositions(curated),
+                "field_dispositions": field_dispositions(disposition_frame, curated),
                 "var_verdict": var_verdict,
                 "var_curated": var_curated,
                 "already_curated": already_curated,

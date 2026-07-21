@@ -1,41 +1,21 @@
 {
-  "aggregate_obs_coverage": {
-    "guide_id_known_rows": 83072,
-    "guide_id_unknown_rows": 3039,
-    "guide_sequence_known_rows": 65616,
-    "guide_sequence_unknown_rows": 20495,
-    "is_control_known_rows": 74007,
-    "is_control_unknown_rows": 12104,
-    "unknown_values_preserved_as_unknown": true
+  "canonical_sha256": "a9e275fbe7600e2d99a30d90ad4c8cb097c02777f890bb4a970b9c7285ce9f0f",
+  "continuation_task_id": "t_d1b6a24a",
+  "continuation_writes": {
+    "collections": 0,
+    "gcs": 0,
+    "lamin": 0,
+    "obs": 0,
+    "var": 0,
+    "x": 0
   },
-  "canonical_sha256": "5c152212b862f9541d0103af79164e4af8e87108ff30e06397f8564ecf13a3e9",
-  "collection_validation": {
-    "pert-gym/base-public/20260621": {
-      "hash": "iYeMjKnPCIp7_MHRa17Ygw",
-      "member_count": 60,
-      "target_key_count": 3,
-      "target_keys_present": [
-        "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
-        "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
-        "scperturb/adamson16_GSM2406681_10X010/obs.parquet"
-      ],
-      "uid": "SM2AjpxEQZ1pEfF30000"
-    },
-    "pert-gym/canonical/20260621": {
-      "hash": "FuT5cWa5QodFHfYbzsyLRw",
-      "member_count": 1056,
-      "target_key_count": 3,
-      "target_keys_present": [
-        "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
-        "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
-        "scperturb/adamson16_GSM2406681_10X010/obs.parquet"
-      ],
-      "uid": "aEWBxMlcWx2d7Cd80000"
-    }
+  "corrected_verifier": {
+    "obs_authoritative_constants_and_exact_joins": true,
+    "var_exact_human_ensg_unique": true,
+    "var_exact_namespace_status_organism": true,
+    "var_independent_x_axis_count_order_binding": true
   },
-  "collection_writes": 0,
   "dataset_id": "scperturb/adamson16",
-  "deletions": 0,
   "denominators": {
     "biological_datasets": 1,
     "logical_families": 3,
@@ -45,28 +25,35 @@
   "evidence": {
     "curation_script": {
       "path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/curate_obs_var.py",
-      "sha256": "f921f2abdbf4005de4dcbe7ff2c8fc7dad4e4f81f6f0078b1b69eb27655a8957"
+      "sha256": "f875ed6ba72874cfbacda54e66e7def3530319e178256e3b469f78ad3215a1f9"
     },
-    "inspection_report": {
-      "path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/inspection_report.json",
-      "sha256": "bdcd5a764ca858b10ada5429e81346ddeeea9ba11dd687049eb71d663a34eb99"
+    "focused_tests": {
+      "path": "tests/test_adamson16_obs_var_curation.py",
+      "sha256": "027c1701df87e48b7790363c6bbc033f72753a1365f5537e30c6c7d47db1fbc2"
     },
-    "mutation_receipt": {
+    "frozen_input_bindings": {
+      "path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/frozen_inputs/bindings.json",
+      "sha256": "e4ed4f17a44f7ef41147a032be5656ab4e04d918a92a3159ebc1695966c6ec6b"
+    },
+    "local_verifier_receipt": {
+      "canonical_sha256": "42ef199874df6341d93c26c45052bc3501ca0d33b16ce5afad4db8dc9eeb4244",
+      "path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/local_verifier_receipt.json",
+      "sha256": "72bece6c853faf3123a5688319f9e7605961f5dd4f98e9e47aff4b720b668209"
+    },
+    "prior_mutation_receipt": {
       "canonical_sha256": "d219b6f4192713c9003b05d2926601496b4a5444815837a5b0579b8f9a560bbf",
       "path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/mutate_receipt.json",
+      "provenance": "prior production evidence; not replayed by this continuation",
       "sha256": "4f77f11d4cc267377f6b7aaa58fa1592aba0e01b5fdf6fd07dd418bc342de452"
     },
-    "table_s1_map": {
-      "path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/table_s1_guide_map.json",
-      "sha256": "d006e9c56610c72e590ad14f6ac2c048f5a6200ce6d79209998fc358fcb4844e"
-    },
-    "verification_receipt": {
+    "prior_verification_receipt": {
       "canonical_sha256": "521c211b59998447bcb7b528f66caad0c73a2e012c58d8b3a1ef883b147fda5f",
       "path": "artifacts/schema_audit/real_dataset_curation_20260721/scperturb_adamson16/t_f1d056cd/verify_receipt.json",
+      "provenance": "prior production evidence; corrected live replay pending independent reviewer",
       "sha256": "9cb20a594798a0fdc2b9ab2ae634303772fb83ef4aec8dbd43ef16f5710c0e1c"
     }
   },
-  "format": "pert-gym.real-dataset-obs-var-handoff/v2",
+  "format": "pert-gym.real-dataset-obs-var-integrated-handoff/v2",
   "members": [
     {
       "canonical_field_dispositions": {
@@ -401,6 +388,14 @@
         "version": "0002"
       },
       "var_verdict": {
+        "accepted_var_identity": {
+          "hash": "ikI7UhZUMyRIOV2OXAUmiA",
+          "uid": "2j6j7JDLkLjoRLm90002"
+        },
+        "accepted_x_identity": {
+          "hash": "aCwEF40-TBS1mNvQa5Vlj6",
+          "uid": "E7pZHzRaxMWmefk80000"
+        },
         "columns": [
           "pert_gym_original_var_index",
           "gene_symbol",
@@ -413,6 +408,7 @@
           "stable_feature_id_namespace",
           "organism"
         ],
+        "expected_rows_independent": 35635,
         "human_ensembl_stable_ids": 35635,
         "mapping_status_counts": {
           "exact_stable_id": 35635
@@ -424,7 +420,8 @@
           "Homo sapiens"
         ],
         "rows": 35635,
-        "stable_feature_id_non_null": 35635
+        "stable_feature_id_non_null": 35635,
+        "verdict_provenance": "prior production receipt; corrected exact-head live verification pending independent reviewer"
       },
       "x": {
         "created_at": "2025-01-14 14:06:11.954542+00:00",
@@ -770,6 +767,14 @@
         "version": "0002"
       },
       "var_verdict": {
+        "accepted_var_identity": {
+          "hash": "e1UFvdrtJrDPJ8nuszfuAQ",
+          "uid": "wn8ozyDwXEXob7mF0002"
+        },
+        "accepted_x_identity": {
+          "hash": "KuDuwvrwYdUv45It73z655",
+          "uid": "eWYpt9tMQVsFpoLG0000"
+        },
         "columns": [
           "pert_gym_original_var_index",
           "gene_symbol",
@@ -782,6 +787,7 @@
           "stable_feature_id_namespace",
           "organism"
         ],
+        "expected_rows_independent": 32738,
         "human_ensembl_stable_ids": 32738,
         "mapping_status_counts": {
           "exact_stable_id": 32738
@@ -793,7 +799,8 @@
           "Homo sapiens"
         ],
         "rows": 32738,
-        "stable_feature_id_non_null": 32738
+        "stable_feature_id_non_null": 32738,
+        "verdict_provenance": "prior production receipt; corrected exact-head live verification pending independent reviewer"
       },
       "x": {
         "created_at": "2025-01-14 09:17:01.493413+00:00",
@@ -1139,6 +1146,14 @@
         "version": "0002"
       },
       "var_verdict": {
+        "accepted_var_identity": {
+          "hash": "4nC2qsYp69TpyT-cNOcLYw",
+          "uid": "5By6mLARgeYAEThC0002"
+        },
+        "accepted_x_identity": {
+          "hash": "on2uwLLbAmDlfB4DpKTnln",
+          "uid": "h1Xmuenf9GyCOQll0000"
+        },
         "columns": [
           "pert_gym_original_var_index",
           "gene_symbol",
@@ -1151,6 +1166,7 @@
           "stable_feature_id_namespace",
           "organism"
         ],
+        "expected_rows_independent": 32738,
         "human_ensembl_stable_ids": 32738,
         "mapping_status_counts": {
           "exact_stable_id": 32738
@@ -1162,7 +1178,8 @@
           "Homo sapiens"
         ],
         "rows": 32738,
-        "stable_feature_id_non_null": 32738
+        "stable_feature_id_non_null": 32738,
+        "verdict_provenance": "prior production receipt; corrected exact-head live verification pending independent reviewer"
       },
       "x": {
         "created_at": "2025-01-14 09:20:58.726165+00:00",
@@ -1176,6 +1193,13 @@
       }
     }
   ],
+  "prior_production_replay": {
+    "collection_writes": 0,
+    "noop": true,
+    "obs_revisions": 0,
+    "status": "PASS",
+    "var_revisions": 0
+  },
   "production_writes": {
     "artifacts": {
       "obs": [
@@ -1249,37 +1273,20 @@
     "var_revisions": 3,
     "x_revisions": 0
   },
-  "registry_counts": {
-    "after_mutation": {
-      "artifacts": 28515,
-      "collections": 38
-    },
-    "after_replay": {
-      "artifacts": 28515,
-      "collections": 38
-    },
-    "before_mutation": {
-      "artifacts": 28509,
-      "collections": 38
-    },
-    "before_replay": {
-      "artifacts": 28515,
-      "collections": 38
-    }
+  "remote_live_verification": {
+    "reason": "continuation is local-only; no VM, Lamin, GCS, Collection, or payload access",
+    "replay_claimed": false,
+    "status": "PENDING_INDEPENDENT_REVIEWER"
   },
-  "replay": {
+  "safety": {
     "collection_writes": 0,
-    "noop": true,
-    "obs_revisions": 0,
-    "status": "PASS",
-    "var_revisions": 0
+    "gcs_writes": 0,
+    "lamin_writes": 0,
+    "product_mutations": 0,
+    "remote_replay_claimed": false,
+    "vm_launched": false,
+    "x_loads": 0
   },
-  "residual_risks": [
-    "Guide sequences remain unknown for 20,495 rows where Table S1 lacks an exact construct/vector mapping; no sequence was guessed.",
-    "is_control remains unknown for 12,104 rows without an explicit source-supported negative-control assignment.",
-    "Canonical fields unavailable from authoritative sources remain explicitly unknown; inapplicable response/dose/trajectory fields remain not_applicable."
-  ],
-  "source_accession": "GSE90546",
   "source_exhaustive": {
     "limitation": "Direct urllib retrieval of the PMC workbook returned a 1817-byte proof-of-work wrapper; the committed 98-row map is bound to the authoritative URL and the Nous web_extract markdown digest rather than a workbook-byte digest.",
     "primary_sources": [
@@ -1296,17 +1303,6 @@
     "table_s1_map_sha256": "d006e9c56610c72e590ad14f6ac2c048f5a6200ce6d79209998fc358fcb4844e",
     "table_s1_rows": 98
   },
-  "status": "PASS",
-  "task_id": "t_f1d056cd",
-  "vm_terminal_state": {
-    "instance": "pert-gym-worker-eu",
-    "status": "TERMINATED",
-    "task_label": "t-f1d056cd"
-  },
-  "x_linkage": {
-    "feature_pointer_relinks_to_new_var": 3,
-    "verified_by_following_live_obs_to_x_to_var_links": true,
-    "x_artifact_revisions": 0,
-    "x_payload_loads": 0
-  }
+  "status": "LOCAL_PASS_REMOTE_REVIEW_PENDING",
+  "task_id": "t_f1d056cd"
 }
