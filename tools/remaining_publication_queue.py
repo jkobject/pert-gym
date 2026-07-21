@@ -10,12 +10,14 @@ claim or review can be replayed safely after a crash.
 from __future__ import annotations
 
 import argparse
+import base64
 import fcntl
 import hashlib
 import json
 import os
 import re
 import shutil
+import socket
 import subprocess
 import sys
 import time
@@ -25,10 +27,15 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Callable, Mapping, Sequence, cast
 
+from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+
 ACCEPTED_LEDGER_FORMAT = "pert-gym.accepted-component-identities/v1"
 BATCH_MANIFEST_FORMAT = "pert-gym.remaining-publication-batch/v1"
 JOURNAL_FORMAT = "pert-gym.remaining-publication-journal-event/v1"
 CLEANUP_RECEIPT_FORMAT = "pert-gym.heavy-cleanup-receipt/v1"
+LEASE_RECEIPT_FORMAT = "pert-gym.bounded-lifecycle-lease-observation/v1"
+CAPACITY_RECEIPT_FORMAT = "pert-gym.host-heavy-capacity-observation/v1"
 EXECUTION_RESULT_FORMAT = "pert-gym.component-execution-result/v1"
 PRODUCT_HEARTBEAT_FORMAT = "pert-gym.product-execution-heartbeat/v1"
 REVIEW_RECEIPT_FORMAT = "pert-gym.independent-component-readback/v1"
@@ -41,11 +48,21 @@ CLEANUP_RECEIPT_MAX_AGE_SECONDS = 24 * 60 * 60
 EXPECTED_OWNER = "jkobject"
 EXPECTED_PROJECT = "pert-gym"
 EXPECTED_PURPOSE = "pert-gym-longrun"
+EXPECTED_GATE_OBSERVER = "pert-gym.lifecycle-observer/v1"
+AUTHORITY_KEY_FORMAT = "pert-gym.ed25519-authority-key/v1"
+GATE_MAX_AGE_SECONDS = 5 * 60
+REQUIRED_PUBLICATION_STAGES = (
+    "source",
+    "payload",
+    "generation_readback",
+    "parity",
+    "manifest",
+)
 
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _TASK_ID = re.compile(r"^t_[0-9a-f]{8}$")
 _IMMUTABLE_MANIFEST_URI = re.compile(
-    r"^gs://scperturb/pert-gym/staging/.+/revisions/[^/]+/manifest\.json$"
+    r"^gs://scperturb/pert-gym/staging/.+/(?:[^/]*revisions|builds)/[^/]+/manifest\.json$"
 )
 _IDENTITY_FIELDS = (
     "record_id",
@@ -62,6 +79,10 @@ class ExecutionInfrastructureError(RuntimeError):
 
 class QueueBusy(RuntimeError):
     """Another controller currently owns the queue execution lane."""
+
+
+class DispatchPending(RuntimeError):
+    """A durable dispatch exists; wait for its exact bound result without relaunch."""
 
 
 @dataclass(frozen=True)
@@ -84,10 +105,9 @@ class Claim:
 class ExecutionGates:
     """Fresh scheduler observations required before invoking the lifecycle launcher."""
 
-    lease_state: str
-    host_global_capacity_available: bool
+    lease_receipt: Path
+    capacity_receipt: Path
     cleanup_receipt: Path
-    free_disk_bytes: int
 
 
 def _canonical_json(value: object) -> bytes:
@@ -108,6 +128,63 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _load_authority_key(
+    path: Path, *, expected_sha256: str, label: str
+) -> dict[str, str]:
+    expected_sha256 = _require_sha256(expected_sha256, f"expected {label} SHA-256")
+    try:
+        key_bytes = path.read_bytes()
+    except OSError as exc:
+        raise RuntimeError(f"unable to read {label}: {path}") from exc
+    if hashlib.sha256(key_bytes).hexdigest() != expected_sha256:
+        raise RuntimeError(f"{label} SHA-256 mismatch")
+    if len(key_bytes) != 32:
+        raise RuntimeError(f"{label} must be a raw 32-byte Ed25519 public key")
+    return {
+        "format": AUTHORITY_KEY_FORMAT,
+        "sha256": expected_sha256,
+        "public_key_base64": base64.b64encode(key_bytes).decode("ascii"),
+    }
+
+
+def _verify_signed_receipt(
+    receipt: Mapping[str, object], authority: Mapping[str, object], label: str
+) -> str:
+    if authority.get("format") != AUTHORITY_KEY_FORMAT:
+        raise RuntimeError(f"{label} authority format is unsupported")
+    encoded_key = authority.get("public_key_base64")
+    authority_sha256 = authority.get("sha256")
+    signature = receipt.get("signature")
+    if (
+        not isinstance(encoded_key, str)
+        or not isinstance(authority_sha256, str)
+        or not isinstance(signature, str)
+    ):
+        raise RuntimeError(f"{label} signature is missing")
+    unsigned = dict(receipt)
+    unsigned.pop("signature", None)
+    claimed_sha256 = unsigned.pop("receipt_sha256", None)
+    payload = _canonical_json(unsigned)
+    actual_sha256 = hashlib.sha256(payload).hexdigest()
+    if claimed_sha256 != actual_sha256:
+        raise RuntimeError(f"{label} digest is invalid")
+    try:
+        public_key_bytes = base64.b64decode(encoded_key, validate=True)
+        signature_bytes = base64.b64decode(signature, validate=True)
+        if (
+            len(public_key_bytes) != 32
+            or hashlib.sha256(public_key_bytes).hexdigest() != authority_sha256
+        ):
+            raise ValueError("authority key digest mismatch")
+        Ed25519PublicKey.from_public_bytes(public_key_bytes).verify(
+            signature_bytes,
+            _canonical_json({**unsigned, "receipt_sha256": actual_sha256}),
+        )
+    except (ValueError, InvalidSignature) as exc:
+        raise RuntimeError(f"{label} signature is invalid") from exc
+    return actual_sha256
+
+
 def _load_object(path: Path, label: str) -> dict[str, object]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -116,6 +193,17 @@ def _load_object(path: Path, label: str) -> dict[str, object]:
     if not isinstance(value, dict):
         raise RuntimeError(f"{label} must be a JSON object")
     return cast(dict[str, object], value)
+
+
+def _load_object_with_digest(path: Path, label: str) -> tuple[dict[str, object], str]:
+    try:
+        payload = path.read_bytes()
+        value = json.loads(payload)
+    except (FileNotFoundError, json.JSONDecodeError, OSError) as exc:
+        raise RuntimeError(f"{label} is unavailable or malformed: {path}") from exc
+    if not isinstance(value, dict):
+        raise RuntimeError(f"{label} must be a JSON object")
+    return cast(dict[str, object], value), hashlib.sha256(payload).hexdigest()
 
 
 def _load_pinned_object(
@@ -226,72 +314,123 @@ def _load_accepted(
     path: Path,
     *,
     expected_sha256: str,
+    catalogue_sha256: str,
     components: Sequence[Component],
     denominator: int,
 ) -> tuple[set[str], list[dict[str, object]]]:
     ledger = _load_pinned_object(
         path, expected_sha256=expected_sha256, label="accepted identity ledger"
     )
-    if ledger.get("format") != ACCEPTED_LEDGER_FORMAT:
+    entries = ledger.get("accepted_components")
+    accepted_count = ledger.get("accepted")
+    if ledger.get("schema_id") != ACCEPTED_LEDGER_FORMAT:
         raise RuntimeError("accepted identity ledger format is unsupported")
-    if ledger.get("denominator") != denominator:
+    source_files = ledger.get("source_files")
+    if not isinstance(source_files, dict):
+        raise RuntimeError("accepted ledger source binding is malformed")
+    source_files = cast(dict[str, object], source_files)
+    source_catalogue = source_files.get("catalogue")
+    if not isinstance(source_catalogue, dict):
+        raise RuntimeError("accepted ledger is not bound to the frozen catalogue")
+    source_catalogue = cast(dict[str, object], source_catalogue)
+    if source_catalogue.get("sha256") != catalogue_sha256:
+        raise RuntimeError("accepted ledger is not bound to the frozen catalogue")
+    if (
+        not isinstance(entries, list)
+        or not isinstance(accepted_count, int)
+        or isinstance(accepted_count, bool)
+        or accepted_count != len(entries)
+        or ledger.get("denominator") != denominator
+        or ledger.get("remaining") != denominator - accepted_count
+    ):
         raise RuntimeError("accepted identity ledger denominator mismatch")
-    entries = ledger.get("entries")
-    if not isinstance(entries, list):
-        raise RuntimeError("accepted identity ledger entries are malformed")
-    by_identity = {component.identity: component for component in components}
+    by_record_id = {component.record_id: component for component in components}
     accepted: set[str] = set()
     normalized: list[dict[str, object]] = []
     for entry in entries:
-        if not isinstance(entry, dict) or set(entry) != {
-            "component_identity",
-            "record_id",
-            "manifest",
-            "independent_review",
-        }:
+        if not isinstance(entry, dict):
             raise RuntimeError("accepted identity ledger entry is malformed")
         entry = cast(dict[str, object], entry)
-        identity = _require_sha256(
-            entry["component_identity"], "accepted component identity"
-        )
-        component = by_identity.get(identity)
-        if component is None or entry["record_id"] != component.record_id:
+        record_id = entry.get("record_id")
+        component = by_record_id.get(str(record_id))
+        if (
+            component is None
+            or entry.get("target_logical_key") != component.target_logical_key
+        ):
             raise RuntimeError(
                 "accepted component identity is absent from frozen catalogue"
             )
+        identity = component.identity
         if identity in accepted:
             raise RuntimeError("duplicate accepted component identity")
-        manifest = _validate_manifest_identity(entry["manifest"], "accepted")
-        review = entry["independent_review"]
-        if not isinstance(review, dict) or set(review) != {
-            "reviewer_task_id",
-            "mismatch",
-            "readback_sha256",
-        }:
+        live_readback = entry.get("live_readback")
+        if not isinstance(live_readback, dict):
+            raise RuntimeError("accepted immutable readback is malformed")
+        live_readback = cast(dict[str, object], live_readback)
+        uri = live_readback.get("uri")
+        generation = live_readback.get("generation")
+        if not isinstance(uri, str):
+            raise RuntimeError("accepted immutable readback is malformed")
+        uri_parts = uri.split("#", 1)
+        base_uri = uri_parts[0]
+        if len(uri_parts) == 2 and uri_parts[1] != str(generation):
+            raise RuntimeError("accepted readback generation is incoherent")
+        manifest = _validate_manifest_identity(
+            {
+                "uri": base_uri,
+                "generation": generation,
+                "sha256": live_readback.get("sha256"),
+            },
+            "accepted",
+        )
+        review = entry.get("acceptance")
+        event = entry.get("event")
+        if not isinstance(review, dict) or not isinstance(event, dict):
             raise RuntimeError("accepted independent review is malformed")
         review = cast(dict[str, object], review)
+        event = cast(dict[str, object], event)
+        reviewer_task_id = review.get("task_id")
         if (
-            not isinstance(review["reviewer_task_id"], str)
-            or _TASK_ID.fullmatch(review["reviewer_task_id"]) is None
-            or review["mismatch"] != 0
+            not isinstance(reviewer_task_id, str)
+            or _TASK_ID.fullmatch(reviewer_task_id) is None
+            or reviewer_task_id == event.get("task_id")
+            or review.get("profile") not in {"reviewer", "tester", "default"}
+            or review.get("verdict") != "PASS"
+            or not isinstance(review.get("run_id"), int)
+            or isinstance(review.get("run_id"), bool)
         ):
             raise RuntimeError(
                 "accepted identity lacks independent reviewer mismatch-0"
             )
-        readback = _require_sha256(
-            review["readback_sha256"], "accepted independent readback"
+        metadata_sha256 = _require_sha256(
+            review.get("metadata_sha256"), "accepted review metadata"
         )
-        if readback != manifest["sha256"]:
-            raise RuntimeError("accepted readback is not bound to manifest bytes")
         accepted.add(identity)
         normalized.append(
             {
                 "component_identity": identity,
                 "record_id": component.record_id,
                 "manifest": manifest,
-                "independent_review": {**review, "readback_sha256": readback},
+                "independent_review": {
+                    "reviewer_task_id": reviewer_task_id,
+                    "reviewer_profile": review["profile"],
+                    "review_run_id": review["run_id"],
+                    "review_metadata_sha256": metadata_sha256,
+                    "mismatch": 0,
+                    "readback_sha256": manifest["sha256"],
+                },
             }
         )
+    record_ids = sorted(
+        component.record_id
+        for component in components
+        if component.identity in accepted
+    )
+    if (
+        ledger.get("identity_set_sha256")
+        != hashlib.sha256(_canonical_json(record_ids)).hexdigest()
+    ):
+        raise RuntimeError("accepted identity-set digest mismatch")
     return accepted, normalized
 
 
@@ -309,6 +448,7 @@ def dry_run(
     accepted, _entries = _load_accepted(
         accepted_ledger,
         expected_sha256=accepted_ledger_sha256,
+        catalogue_sha256=catalogue_sha256,
         components=components,
         denominator=denominator,
     )
@@ -368,6 +508,18 @@ class PublicationQueue:
             for entry in accepted_entries
             if isinstance(entry, dict)
         }
+        authority_keys = batch_manifest.get("authority_keys")
+        if not isinstance(authority_keys, dict):
+            raise RuntimeError("batch authority keys are malformed")
+        authority_keys = cast(dict[str, object], authority_keys)
+        gate_authority = authority_keys.get("gate_observer")
+        review_authority = authority_keys.get("reviewer")
+        if not isinstance(gate_authority, dict) or not isinstance(
+            review_authority, dict
+        ):
+            raise RuntimeError("batch authority keys are malformed")
+        self._gate_authority = cast(dict[str, object], gate_authority)
+        self._review_authority = cast(dict[str, object], review_authority)
 
     @classmethod
     def create(
@@ -378,6 +530,10 @@ class PublicationQueue:
         catalogue_sha256: str,
         accepted_ledger: Path,
         accepted_ledger_sha256: str,
+        gate_authority_public_key: Path,
+        gate_authority_public_key_sha256: str,
+        reviewer_authority_public_key: Path,
+        reviewer_authority_public_key_sha256: str,
         denominator: int,
         task_id: str,
     ) -> "PublicationQueue":
@@ -393,10 +549,25 @@ class PublicationQueue:
         _accepted, accepted_entries = _load_accepted(
             accepted_ledger,
             expected_sha256=accepted_ledger_sha256,
+            catalogue_sha256=catalogue_sha256,
             components=components,
             denominator=denominator,
         )
-        batch_dir.mkdir(parents=True)
+        authority_keys = {
+            "gate_observer": _load_authority_key(
+                gate_authority_public_key,
+                expected_sha256=gate_authority_public_key_sha256,
+                label="gate authority public key",
+            ),
+            "reviewer": _load_authority_key(
+                reviewer_authority_public_key,
+                expected_sha256=reviewer_authority_public_key_sha256,
+                label="reviewer authority public key",
+            ),
+        }
+        batch_dir.parent.mkdir(parents=True, exist_ok=True)
+        staging_dir = batch_dir.with_name(f".{batch_dir.name}.{uuid.uuid4().hex}.tmp")
+        staging_dir.mkdir()
         manifest: dict[str, object] = {
             "format": BATCH_MANIFEST_FORMAT,
             "task_id": task_id,
@@ -409,12 +580,18 @@ class PublicationQueue:
             "denominator": denominator,
             "components": [asdict(component) for component in components],
             "accepted_entries": accepted_entries,
+            "authority_keys": authority_keys,
         }
         manifest["batch_identity"] = _sha256_json(manifest)
-        cls._exclusive_json(batch_dir / "batch-manifest.json", manifest)
-        publication_queue = cls(batch_dir, manifest)
+        cls._exclusive_json(staging_dir / "batch-manifest.json", manifest)
+        publication_queue = cls(staging_dir, manifest)
         publication_queue._append_event("initialized", None, 0, {})
-        return publication_queue
+        try:
+            os.rename(staging_dir, batch_dir)
+            cls._fsync_directory(batch_dir.parent)
+        except FileExistsError as exc:
+            raise RuntimeError(f"batch directory already exists: {batch_dir}") from exc
+        return cls(batch_dir, manifest)
 
     @classmethod
     def open(cls, batch_dir: Path) -> "PublicationQueue":
@@ -441,18 +618,24 @@ class PublicationQueue:
                 handle.write(payload)
                 handle.flush()
                 os.fsync(handle.fileno())
-            os.link(temporary, path)
-            directory_fd = os.open(path.parent, os.O_RDONLY)
-            try:
-                os.fsync(directory_fd)
-            finally:
-                os.close(directory_fd)
+            if path.exists():
+                raise FileExistsError(path)
+            os.replace(temporary, path)
+            PublicationQueue._fsync_directory(path.parent)
         except FileExistsError as exc:
             raise RuntimeError(
                 f"refusing overwrite of immutable checkpoint: {path}"
             ) from exc
         finally:
             temporary.unlink(missing_ok=True)
+
+    @staticmethod
+    def _fsync_directory(path: Path) -> None:
+        directory_fd = os.open(path, os.O_RDONLY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
 
     def _events(self) -> list[dict[str, object]]:
         paths = sorted((self.batch_dir / "journal").glob("*.json"))
@@ -531,7 +714,11 @@ class PublicationQueue:
                 "revision": 1,
                 "rejections": 0,
                 "candidate_manifest": None,
+                "execution_result_sha256": None,
+                "parity_evidence_sha256": None,
+                "dispatch": None,
                 "review_receipt_sha256": None,
+                "review_receipts": {},
             }
             for component in self.components
         }
@@ -548,13 +735,21 @@ class PublicationQueue:
             if not isinstance(revision, int) or not isinstance(details, dict):
                 raise RuntimeError("queue event payload is malformed")
             details = cast(dict[str, object], details)
-            if kind in {"claimed", "running", "awaiting_review"}:
+            if kind in {"claimed", "running", "dispatch_prepared", "awaiting_review"}:
                 item["status"] = kind
                 item["revision"] = revision
+                if kind == "claimed":
+                    item["candidate_manifest"] = None
+                    item["execution_result_sha256"] = None
+                    item["parity_evidence_sha256"] = None
             elif kind == "launch_blocked":
                 item["status"] = "pending"
                 item["revision"] = revision
+                if details.get("clear_dispatch") is True:
+                    item["dispatch"] = None
             elif kind == "rejected":
+                receipts = cast(dict[int, object], item["review_receipts"])
+                receipts[revision] = details.get("receipt_sha256")
                 item["rejections"] = (
                     _require_int(item["rejections"], "rejection count") + 1
                 )
@@ -565,6 +760,10 @@ class PublicationQueue:
                     >= MAX_REJECTED_REVISIONS
                     else "pending"
                 )
+                item["dispatch"] = None
+                item["candidate_manifest"] = None
+                item["execution_result_sha256"] = None
+                item["parity_evidence_sha256"] = None
             elif kind == "accepted":
                 item["status"] = "accepted"
                 item["revision"] = revision
@@ -573,6 +772,10 @@ class PublicationQueue:
                 raise RuntimeError(f"unknown queue journal event: {kind!r}")
             if kind == "awaiting_review":
                 item["candidate_manifest"] = details.get("candidate_manifest")
+                item["execution_result_sha256"] = details.get("execution_result_sha256")
+                item["parity_evidence_sha256"] = details.get("parity_evidence_sha256")
+            elif kind == "dispatch_prepared":
+                item["dispatch"] = details
         return state
 
     def status(self) -> dict[str, object]:
@@ -589,7 +792,11 @@ class PublicationQueue:
             "accepted": counts.get("accepted", 0),
             "remaining": len(self.components) - counts.get("accepted", 0),
             "pending": counts.get("pending", 0),
-            "claimed": counts.get("claimed", 0) + counts.get("running", 0),
+            "claimed": (
+                counts.get("claimed", 0)
+                + counts.get("running", 0)
+                + counts.get("dispatch_prepared", 0)
+            ),
             "awaiting_review": counts.get("awaiting_review", 0),
             "frozen": counts.get("frozen", 0),
             "rejected_revisions": sum(
@@ -617,7 +824,8 @@ class PublicationQueue:
         active = [
             component
             for component in self.components
-            if state[component.identity]["status"] in {"claimed", "running"}
+            if state[component.identity]["status"]
+            in {"claimed", "running", "dispatch_prepared"}
         ]
         if len(active) > 1:
             raise RuntimeError(
@@ -635,8 +843,6 @@ class PublicationQueue:
                     minimum=1,
                 ),
             )
-        if any(item["status"] == "awaiting_review" for item in state.values()):
-            return None
         component = next(
             (
                 item
@@ -659,70 +865,156 @@ class PublicationQueue:
         )
 
     def _validate_gates(
-        self, gates: ExecutionGates
-    ) -> tuple[bool, str | None, str | None]:
-        if (
-            type(gates.host_global_capacity_available) is not bool
-            or not isinstance(gates.free_disk_bytes, int)
-            or isinstance(gates.free_disk_bytes, bool)
-            or gates.free_disk_bytes < 0
-        ):
-            raise RuntimeError("execution gate values are malformed")
-        if gates.lease_state != "available":
-            if gates.lease_state == "foreign_live":
-                return False, "bounded-lifecycle-lease", None
-            raise RuntimeError("bounded lifecycle lease state is malformed")
-        if not gates.host_global_capacity_available:
-            return False, "host-global-heavy-capacity", None
-        receipt = _load_object(gates.cleanup_receipt, "cleanup receipt")
-        expected_receipt_keys = {
-            "format",
-            "batch_identity",
-            "task_id",
-            "owner",
-            "project",
-            "purpose",
-            "recorded_at",
-            "previous_payload_terminal",
-            "vm_stopped",
-            "lease_released",
-            "receipt_sha256",
-        }
-        recorded_receipt_sha256 = receipt.get("receipt_sha256")
-        unsigned_receipt = {
-            key: value for key, value in receipt.items() if key != "receipt_sha256"
-        }
-        if (
-            set(receipt) != expected_receipt_keys
-            or receipt.get("format") != CLEANUP_RECEIPT_FORMAT
-            or receipt.get("batch_identity") != self._manifest["batch_identity"]
-            or receipt.get("task_id") != self._manifest["task_id"]
-            or receipt.get("owner") != EXPECTED_OWNER
-            or receipt.get("project") != EXPECTED_PROJECT
-            or receipt.get("purpose") != EXPECTED_PURPOSE
-            or receipt.get("previous_payload_terminal") is not True
-            or receipt.get("vm_stopped") is not True
-            or receipt.get("lease_released") is not True
-            or recorded_receipt_sha256 != _sha256_json(unsigned_receipt)
-        ):
-            raise RuntimeError("cleanup receipt does not prove terminal cleanup")
-        cleanup_sha256 = _require_sha256(recorded_receipt_sha256, "cleanup receipt")
-        recorded_at = receipt.get("recorded_at")
+        self, claim: Claim, gates: ExecutionGates
+    ) -> tuple[bool, str | None, dict[str, str]]:
         now = time.time()
-        if (
-            not isinstance(recorded_at, (int, float))
-            or isinstance(recorded_at, bool)
-            or recorded_at > now + 300
-            or now - recorded_at > CLEANUP_RECEIPT_MAX_AGE_SECONDS
+        host = socket.gethostname()
+
+        def load_receipt(path: Path, label: str) -> tuple[dict[str, object], str]:
+            receipt = _load_object(path, label)
+            digest = _verify_signed_receipt(receipt, self._gate_authority, label)
+            receipt_id = receipt.get("receipt_id")
+            if (
+                not isinstance(receipt_id, str)
+                or re.fullmatch(r"[0-9a-f]{32}", receipt_id) is None
+            ):
+                raise RuntimeError(f"{label} identity is malformed")
+            recorded_at = receipt.get("recorded_at")
+            valid_until = receipt.get("valid_until")
+            if (
+                not isinstance(recorded_at, (int, float))
+                or isinstance(recorded_at, bool)
+                or not isinstance(valid_until, (int, float))
+                or isinstance(valid_until, bool)
+                or recorded_at > now + 5
+                or now - recorded_at > GATE_MAX_AGE_SECONDS
+                or valid_until < now
+                or valid_until <= recorded_at
+            ):
+                raise RuntimeError(f"{label} is stale, expired, or future-dated")
+            return receipt, digest
+
+        common = {
+            "batch_identity": self._manifest["batch_identity"],
+            "task_id": self._manifest["task_id"],
+            "component_identity": claim.component_identity,
+            "revision": claim.revision,
+            "owner": EXPECTED_OWNER,
+            "project": EXPECTED_PROJECT,
+            "purpose": EXPECTED_PURPOSE,
+            "host": host,
+            "observer": EXPECTED_GATE_OBSERVER,
+        }
+
+        def require_keys(
+            receipt: Mapping[str, object], label: str, specific: set[str]
+        ) -> None:
+            expected = set(common) | {
+                "receipt_id",
+                "recorded_at",
+                "valid_until",
+                "instance",
+                "lease_generation",
+                "receipt_sha256",
+                "signature",
+                *specific,
+            }
+            if set(receipt) != expected:
+                raise RuntimeError(f"{label} fields are malformed")
+
+        lease, lease_sha256 = load_receipt(gates.lease_receipt, "lease receipt")
+        require_keys(lease, "lease receipt", {"format", "state", "lease_until"})
+        lease_state = lease.get("state")
+        if lease.get("format") != LEASE_RECEIPT_FORMAT or any(
+            lease.get(key) != value for key, value in common.items()
         ):
-            raise RuntimeError("cleanup receipt is stale or future-dated")
-        actual_free_disk = shutil.disk_usage(self.batch_dir).free
-        if min(gates.free_disk_bytes, actual_free_disk) < MIN_FREE_DISK_BYTES:
+            raise RuntimeError("lease receipt is malformed or not bound to this claim")
+        if lease_state == "foreign_live":
+            return False, "bounded-lifecycle-lease", {}
+        if lease_state != "available":
+            raise RuntimeError("lease receipt state is malformed")
+        lease_until = lease.get("lease_until")
+        lease_generation = lease.get("lease_generation")
+        instance = lease.get("instance")
+        if (
+            not isinstance(lease_until, (int, float))
+            or isinstance(lease_until, bool)
+            or lease_until <= now
+            or not isinstance(lease_generation, str)
+            or not lease_generation
+            or not isinstance(instance, str)
+            or not instance
+        ):
+            raise RuntimeError("lease receipt lacks a live generation/instance binding")
+
+        capacity, capacity_sha256 = load_receipt(
+            gates.capacity_receipt, "capacity receipt"
+        )
+        require_keys(capacity, "capacity receipt", {"format", "available"})
+        if any(capacity.get(key) != value for key, value in common.items()) or any(
+            capacity.get(key) != value
+            for key, value in {
+                "format": CAPACITY_RECEIPT_FORMAT,
+                "lease_generation": lease_generation,
+                "instance": instance,
+            }.items()
+        ):
+            raise RuntimeError(
+                "capacity receipt is malformed or not bound to this claim"
+            )
+        if type(capacity.get("available")) is not bool:
+            raise RuntimeError("capacity receipt availability must be boolean")
+        if capacity["available"] is not True:
+            return False, "host-global-heavy-capacity", {}
+
+        cleanup, cleanup_sha256 = load_receipt(gates.cleanup_receipt, "cleanup receipt")
+        require_keys(
+            cleanup,
+            "cleanup receipt",
+            {
+                "format",
+                "previous_payload_terminal",
+                "vm_stopped",
+                "lease_released",
+                "cleanup_subject_generation",
+            },
+        )
+        if any(cleanup.get(key) != value for key, value in common.items()) or any(
+            cleanup.get(key) != value
+            for key, value in {
+                "format": CLEANUP_RECEIPT_FORMAT,
+                "lease_generation": lease_generation,
+                "instance": instance,
+                "previous_payload_terminal": True,
+                "vm_stopped": True,
+                "lease_released": True,
+            }.items()
+        ):
+            raise RuntimeError("cleanup receipt does not prove claim-bound cleanup")
+        cleanup_subject = cleanup.get("cleanup_subject_generation")
+        if not isinstance(cleanup_subject, str) or not cleanup_subject:
+            raise RuntimeError("cleanup receipt lacks cleanup subject generation")
+        if shutil.disk_usage(self.batch_dir).free < MIN_FREE_DISK_BYTES:
             raise RuntimeError("insufficient disk for publication component")
-        return True, None, cleanup_sha256
+        return (
+            True,
+            None,
+            {
+                "lease_receipt_sha256": lease_sha256,
+                "capacity_receipt_sha256": capacity_sha256,
+                "cleanup_receipt_sha256": cleanup_sha256,
+                "lease_generation": lease_generation,
+                "instance": instance,
+            },
+        )
 
     @staticmethod
-    def _validate_execution_result(result: object, claim: Claim) -> dict[str, object]:
+    def _validate_execution_result(
+        result: object,
+        claim: Claim,
+        component: Component,
+        expected_dispatch: Mapping[str, object] | None = None,
+    ) -> dict[str, object]:
         if not isinstance(result, dict):
             raise RuntimeError("execution result is not a JSON object")
         result = cast(dict[str, object], result)
@@ -732,6 +1024,10 @@ class PublicationQueue:
             or result.get("revision") != claim.revision
         ):
             raise RuntimeError("execution result identity mismatch")
+        if expected_dispatch is not None and result.get("dispatch") != dict(
+            expected_dispatch
+        ):
+            raise RuntimeError("execution result lacks the durable dispatch binding")
         heartbeat = result.get("heartbeat")
         if not isinstance(heartbeat, dict):
             raise RuntimeError("product_execution heartbeat contract is missing")
@@ -743,24 +1039,51 @@ class PublicationQueue:
             or heartbeat.get("status") != "terminal"
         ):
             raise RuntimeError("product_execution heartbeat contract is missing")
-        for label in ("source_parity", "generation_parity", "readback_parity"):
-            parity = result.get(label)
-            if not isinstance(parity, dict):
-                raise RuntimeError(f"{label} mismatch")
-            parity = cast(dict[str, object], parity)
-            if (
-                set(parity) != {"expected_sha256", "observed_sha256", "mismatch"}
-                or parity.get("mismatch") != 0
-            ):
-                raise RuntimeError(f"{label} mismatch")
-            expected = _require_sha256(
-                parity.get("expected_sha256"), f"{label} expected"
-            )
-            observed = _require_sha256(
-                parity.get("observed_sha256"), f"{label} observed"
-            )
-            if expected != observed:
-                raise RuntimeError(f"{label} mismatch")
+        manifest = _validate_manifest_identity(
+            result.get("candidate_manifest"), "candidate"
+        )
+        source_parity = result.get("source_parity")
+        generation_parity = result.get("generation_parity")
+        readback_parity = result.get("readback_parity")
+        if not isinstance(source_parity, dict):
+            raise RuntimeError("source_parity mismatch")
+        if not isinstance(generation_parity, dict):
+            raise RuntimeError("generation_parity mismatch")
+        if not isinstance(readback_parity, dict):
+            raise RuntimeError("readback_parity mismatch")
+        source_parity = cast(dict[str, object], source_parity)
+        generation_parity = cast(dict[str, object], generation_parity)
+        readback_parity = cast(dict[str, object], readback_parity)
+        if (
+            set(source_parity)
+            != {
+                "expected_source_identity_sha256",
+                "observed_source_identity_sha256",
+                "mismatch",
+            }
+            or source_parity.get("mismatch") != 0
+            or source_parity.get("expected_source_identity_sha256")
+            != component.identity
+            or source_parity.get("observed_source_identity_sha256")
+            != component.identity
+        ):
+            raise RuntimeError("source_parity mismatch")
+        if (
+            set(generation_parity)
+            != {"expected_generation", "observed_generation", "mismatch"}
+            or generation_parity.get("mismatch") != 0
+            or generation_parity.get("expected_generation") != manifest["generation"]
+            or generation_parity.get("observed_generation") != manifest["generation"]
+        ):
+            raise RuntimeError("generation_parity mismatch")
+        if (
+            set(readback_parity)
+            != {"expected_manifest_sha256", "observed_manifest_sha256", "mismatch"}
+            or readback_parity.get("mismatch") != 0
+            or readback_parity.get("expected_manifest_sha256") != manifest["sha256"]
+            or readback_parity.get("observed_manifest_sha256") != manifest["sha256"]
+        ):
+            raise RuntimeError("readback_parity mismatch")
         publication = result.get("publication")
         if not isinstance(publication, dict):
             raise RuntimeError("manifest-last publication receipt is missing")
@@ -773,16 +1096,19 @@ class PublicationQueue:
         stages = cast(list[str], stages)
         if (
             publication.get("manifest_last") is not True
-            or len(stages) < 2
-            or "payload" not in stages[:-1]
-            or stages.count("manifest") != 1
-            or stages[-1] != "manifest"
+            or tuple(stages) != REQUIRED_PUBLICATION_STAGES
         ):
             raise RuntimeError("manifest-last publication contract failed")
-        manifest = _validate_manifest_identity(
-            result.get("candidate_manifest"), "candidate"
-        )
-        return {**result, "candidate_manifest": manifest}
+        parity_evidence = {
+            "source_parity": source_parity,
+            "generation_parity": generation_parity,
+            "readback_parity": readback_parity,
+        }
+        return {
+            **result,
+            "candidate_manifest": manifest,
+            "parity_evidence_sha256": _sha256_json(parity_evidence),
+        }
 
     def execute_next(
         self,
@@ -800,12 +1126,35 @@ class PublicationQueue:
         gates: ExecutionGates,
         executor: Callable[[Claim], object],
     ) -> dict[str, object]:
-        ready, reason, cleanup_sha256 = self._validate_gates(gates)
-        if not ready:
-            return {"status": "waiting", "reason": reason}
         claim = self.claim_next()
         if claim is None:
             return {"status": "idle", "reason": "no-claimable-component"}
+        component = next(
+            item
+            for item in self.components
+            if item.identity == claim.component_identity
+        )
+        try:
+            ready, reason, gate_bindings = self._validate_gates(claim, gates)
+        except Exception as exc:
+            self._append_event(
+                "launch_blocked",
+                claim.component_identity,
+                claim.revision,
+                {"reason": str(exc), "clear_dispatch": False},
+            )
+            raise
+        if not ready:
+            self._append_event(
+                "launch_blocked",
+                claim.component_identity,
+                claim.revision,
+                {
+                    "reason": reason or "execution gate unavailable",
+                    "clear_dispatch": False,
+                },
+            )
+            return {"status": "waiting", "reason": reason}
         state = self._state()[claim.component_identity]
         if state["status"] == "claimed":
             used_cleanup_receipts = set()
@@ -815,22 +1164,30 @@ class PublicationQueue:
                     used_cleanup_receipts.add(
                         cast(dict[str, object], details).get("cleanup_receipt_sha256")
                     )
+            cleanup_sha256 = gate_bindings["cleanup_receipt_sha256"]
             if cleanup_sha256 in used_cleanup_receipts:
                 raise RuntimeError("cleanup receipt was already consumed by a launch")
             self._append_event(
                 "running",
                 claim.component_identity,
                 claim.revision,
-                {"cleanup_receipt_sha256": cleanup_sha256},
+                gate_bindings,
             )
         try:
             execution_result = executor(claim)
         except Exception as exc:
+            if isinstance(exc, DispatchPending):
+                return {
+                    "status": "waiting",
+                    "reason": str(exc),
+                    "component_identity": claim.component_identity,
+                    "revision": claim.revision,
+                }
             self._append_event(
                 "launch_blocked",
                 claim.component_identity,
                 claim.revision,
-                {"reason": str(exc)},
+                {"reason": str(exc), "clear_dispatch": True},
             )
             return {
                 "status": "blocked",
@@ -839,17 +1196,16 @@ class PublicationQueue:
                 "revision": claim.revision,
             }
         try:
-            result = self._validate_execution_result(execution_result, claim)
+            result = self._validate_execution_result(execution_result, claim, component)
         except Exception as exc:
             self._append_event(
-                "rejected",
+                "launch_blocked",
                 claim.component_identity,
                 claim.revision,
-                {"reason": str(exc)},
+                {"reason": str(exc), "clear_dispatch": True},
             )
-            frozen = self._state()[claim.component_identity]["status"] == "frozen"
             return {
-                "status": "frozen" if frozen else "rejected",
+                "status": "blocked",
                 "reason": str(exc),
                 "component_identity": claim.component_identity,
                 "revision": claim.revision,
@@ -860,6 +1216,7 @@ class PublicationQueue:
             claim.revision,
             {
                 "execution_result_sha256": _sha256_json(result),
+                "parity_evidence_sha256": result["parity_evidence_sha256"],
                 "candidate_manifest": cast(
                     dict[str, object], result["candidate_manifest"]
                 ),
@@ -873,8 +1230,8 @@ class PublicationQueue:
             "producer_credit": 0,
         }
 
-    def _load_launch_plan(self, path: Path) -> dict[str, dict[str, object]]:
-        plan = _load_object(path, "component launch plan")
+    def _load_launch_plan(self, path: Path) -> tuple[dict[str, dict[str, object]], str]:
+        plan, plan_sha256 = _load_object_with_digest(path, "component launch plan")
         if (
             plan.get("format") != LAUNCH_PLAN_FORMAT
             or plan.get("task_id") != self._manifest["task_id"]
@@ -914,7 +1271,7 @@ class PublicationQueue:
             ):
                 raise RuntimeError("component launch-plan command/result is malformed")
             result[identity] = entry.copy()
-        return result
+        return result, plan_sha256
 
     def run_next(
         self,
@@ -937,12 +1294,7 @@ class PublicationQueue:
             "lifecycle_launcher_sha256"
         ):
             raise RuntimeError("approved lifecycle launcher identity drift")
-        launch_entries = self._load_launch_plan(plan)
-        resume_running_identities = {
-            identity
-            for identity, item in self._state().items()
-            if item["status"] == "running"
-        }
+        launch_entries, launch_plan_sha256 = self._load_launch_plan(plan)
 
         def launch(claim: Claim) -> object:
             entry = launch_entries.get(claim.component_identity)
@@ -951,12 +1303,72 @@ class PublicationQueue:
                     "claimed component is absent from launch plan"
                 )
             result_path = Path(str(entry["result_path"]))
+            launch_entry_sha256 = _sha256_json(entry)
+            state = self._state()[claim.component_identity]
+            dispatch = state.get("dispatch")
+            component = next(
+                item
+                for item in self.components
+                if item.identity == claim.component_identity
+            )
+            if dispatch is not None:
+                if not isinstance(dispatch, dict):
+                    raise ExecutionInfrastructureError(
+                        "durable dispatch checkpoint is malformed"
+                    )
+                dispatch = cast(dict[str, object], dispatch)
+                if any(
+                    dispatch.get(key) != value
+                    for key, value in {
+                        "batch_identity": self._manifest["batch_identity"],
+                        "component_identity": claim.component_identity,
+                        "revision": claim.revision,
+                        "launch_plan_sha256": launch_plan_sha256,
+                        "launch_entry_sha256": launch_entry_sha256,
+                        "result_path": str(result_path),
+                    }.items()
+                ):
+                    raise ExecutionInfrastructureError(
+                        "durable dispatch does not match the immutable launch plan"
+                    )
+                if not result_path.is_file():
+                    raise DispatchPending(
+                        "durable launcher dispatch is pending its bound result"
+                    )
+                replayed = _load_object(result_path, "component execution result")
+                self._validate_execution_result(replayed, claim, component, dispatch)
+                return replayed
             if result_path.exists():
-                if claim.component_identity in resume_running_identities:
-                    return _load_object(result_path, "component execution result")
                 raise ExecutionInfrastructureError(
                     "preexisting execution result before launcher dispatch"
                 )
+            running_event = next(
+                event
+                for event in reversed(self._events())
+                if event["event"] == "running"
+                and event["component_identity"] == claim.component_identity
+                and event["revision"] == claim.revision
+            )
+            running_details = cast(dict[str, object], running_event["details"])
+            dispatch = {
+                "batch_identity": self._manifest["batch_identity"],
+                "component_identity": claim.component_identity,
+                "revision": claim.revision,
+                "dispatch_id": uuid.uuid4().hex,
+                "launch_plan_sha256": launch_plan_sha256,
+                "launch_entry_sha256": launch_entry_sha256,
+                "result_path": str(result_path),
+                "lease_receipt_sha256": running_details["lease_receipt_sha256"],
+                "capacity_receipt_sha256": running_details["capacity_receipt_sha256"],
+                "cleanup_receipt_sha256": running_details["cleanup_receipt_sha256"],
+                "lease_generation": running_details["lease_generation"],
+            }
+            self._append_event(
+                "dispatch_prepared",
+                claim.component_identity,
+                claim.revision,
+                dispatch,
+            )
             command = cast(list[str], entry["command"])
             launcher_command = [
                 sys.executable,
@@ -966,6 +1378,11 @@ class PublicationQueue:
                 "--eta-hours",
                 str(eta_hours),
                 "--command",
+                "env",
+                f"PERT_GYM_PUBLICATION_DISPATCH_ID={dispatch['dispatch_id']}",
+                f"PERT_GYM_PUBLICATION_LAUNCH_ENTRY_SHA256={launch_entry_sha256}",
+                "PERT_GYM_PUBLICATION_DISPATCH_B64="
+                + base64.b64encode(_canonical_json(dispatch)).decode("ascii"),
                 *command,
             ]
             completed = run(launcher_command)
@@ -977,7 +1394,9 @@ class PublicationQueue:
                 raise ExecutionInfrastructureError(
                     "bounded lifecycle launcher produced no execution result"
                 )
-            return _load_object(result_path, "component execution result")
+            produced = _load_object(result_path, "component execution result")
+            self._validate_execution_result(produced, claim, component, dispatch)
+            return produced
 
         return self.execute_next(gates, launch)
 
@@ -990,19 +1409,43 @@ class PublicationQueue:
     ) -> dict[str, object]:
         if receipt.get("format") != REVIEW_RECEIPT_FORMAT:
             raise RuntimeError("independent review receipt format is unsupported")
+        if set(receipt) != {
+            "format",
+            "batch_identity",
+            "component_identity",
+            "revision",
+            "candidate_manifest",
+            "reviewer_task_id",
+            "reviewer_profile",
+            "mismatch",
+            "readback_sha256",
+            "reviewed_manifest_bytes_sha256",
+            "reviewed_manifest_generation",
+            "execution_result_sha256",
+            "parity_evidence_sha256",
+            "receipt_sha256",
+            "signature",
+        }:
+            raise RuntimeError("independent review receipt fields are malformed")
+        receipt_sha256 = _verify_signed_receipt(
+            receipt, self._review_authority, "independent review receipt"
+        )
         identity = _require_sha256(
             receipt.get("component_identity"), "review component identity"
         )
         revision = receipt.get("revision")
         reviewer = receipt.get("reviewer_task_id")
+        reviewer_profile = receipt.get("reviewer_profile")
         mismatch = receipt.get("mismatch")
         if (
-            not isinstance(revision, int)
+            receipt.get("batch_identity") != self._manifest["batch_identity"]
+            or not isinstance(revision, int)
             or isinstance(revision, bool)
             or revision <= 0
             or not isinstance(reviewer, str)
             or _TASK_ID.fullmatch(reviewer) is None
             or reviewer == self._manifest["task_id"]
+            or reviewer_profile != "reviewer"
             or not isinstance(mismatch, int)
             or isinstance(mismatch, bool)
             or mismatch < 0
@@ -1016,10 +1459,27 @@ class PublicationQueue:
         )
         if readback_sha256 != candidate_manifest["sha256"]:
             raise RuntimeError("independent readback is not bound to candidate bytes")
+        reviewed_manifest_bytes_sha256 = _require_sha256(
+            receipt.get("reviewed_manifest_bytes_sha256"),
+            "reviewed immutable manifest bytes",
+        )
+        reviewed_generation = receipt.get("reviewed_manifest_generation")
+        execution_result_sha256 = _require_sha256(
+            receipt.get("execution_result_sha256"), "reviewed execution result"
+        )
+        parity_evidence_sha256 = _require_sha256(
+            receipt.get("parity_evidence_sha256"), "reviewed parity evidence"
+        )
+        if (
+            reviewed_manifest_bytes_sha256 != candidate_manifest["sha256"]
+            or reviewed_generation != candidate_manifest["generation"]
+        ):
+            raise RuntimeError(
+                "review is not bound to immutable manifest generation/bytes"
+            )
         state = self._state()
         if identity not in state:
             raise RuntimeError("review receipt references a foreign component")
-        receipt_sha256 = _sha256_json(dict(receipt))
         item = state[identity]
         if item["status"] == "accepted":
             if item["review_receipt_sha256"] != receipt_sha256:
@@ -1029,10 +1489,23 @@ class PublicationQueue:
                 "component_identity": identity,
                 "replay": "exact-noop",
             }
+        prior_receipts = cast(dict[int, object], item["review_receipts"])
+        if revision in prior_receipts:
+            if prior_receipts[revision] != receipt_sha256:
+                raise RuntimeError("conflicting review replay for rejected revision")
+            return {
+                "status": "frozen" if item["status"] == "frozen" else "rejected",
+                "component_identity": identity,
+                "revision": revision,
+                "replay": "exact-noop",
+                "accepted_product_credit": 0,
+            }
         if (
             item["status"] != "awaiting_review"
             or item["revision"] != revision
             or item["candidate_manifest"] != candidate_manifest
+            or item["execution_result_sha256"] != execution_result_sha256
+            or item["parity_evidence_sha256"] != parity_evidence_sha256
         ):
             raise RuntimeError(
                 "review receipt does not match awaiting immutable revision"
@@ -1045,8 +1518,13 @@ class PublicationQueue:
             {
                 "receipt_sha256": receipt_sha256,
                 "reviewer_task_id": reviewer,
+                "reviewer_profile": reviewer_profile,
                 "mismatch": mismatch,
                 "candidate_manifest": candidate_manifest,
+                "reviewed_manifest_bytes_sha256": reviewed_manifest_bytes_sha256,
+                "reviewed_manifest_generation": reviewed_generation,
+                "execution_result_sha256": execution_result_sha256,
+                "parity_evidence_sha256": parity_evidence_sha256,
             },
         )
         if mismatch:
@@ -1088,6 +1566,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     source_arguments(create)
     create.add_argument("--batch-dir", type=Path, required=True)
     create.add_argument("--task", required=True)
+    create.add_argument("--gate-authority-public-key", type=Path, required=True)
+    create.add_argument("--gate-authority-public-key-sha256", required=True)
+    create.add_argument("--reviewer-authority-public-key", type=Path, required=True)
+    create.add_argument("--reviewer-authority-public-key-sha256", required=True)
     for action in ("list", "status"):
         command = subparsers.add_parser(action)
         command.add_argument("--batch-dir", type=Path, required=True)
@@ -1118,6 +1600,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             catalogue_sha256=args.catalogue_sha256,
             accepted_ledger=args.accepted_ledger,
             accepted_ledger_sha256=args.accepted_ledger_sha256,
+            gate_authority_public_key=args.gate_authority_public_key,
+            gate_authority_public_key_sha256=args.gate_authority_public_key_sha256,
+            reviewer_authority_public_key=args.reviewer_authority_public_key,
+            reviewer_authority_public_key_sha256=(
+                args.reviewer_authority_public_key_sha256
+            ),
             denominator=args.denominator,
             task_id=args.task,
         )
@@ -1131,25 +1619,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         _print_json(PublicationQueue.open(args.batch_dir).replay_review(receipt))
     else:
         gate_payload = _load_object(args.gates, "execution gates")
-        lease_state = gate_payload.get("lease_state")
-        capacity = gate_payload.get("host_global_capacity_available")
+        lease = gate_payload.get("lease_receipt")
+        capacity = gate_payload.get("capacity_receipt")
         cleanup = gate_payload.get("cleanup_receipt")
-        free_disk = gate_payload.get("free_disk_bytes")
         if (
-            not isinstance(lease_state, str)
-            or type(capacity) is not bool
+            not isinstance(lease, str)
+            or not Path(lease).is_absolute()
+            or not isinstance(capacity, str)
+            or not Path(capacity).is_absolute()
             or not isinstance(cleanup, str)
             or not Path(cleanup).is_absolute()
-            or not isinstance(free_disk, int)
-            or isinstance(free_disk, bool)
-            or free_disk < 0
         ):
             raise RuntimeError("execution gates are malformed")
         gates = ExecutionGates(
-            lease_state=lease_state,
-            host_global_capacity_available=capacity,
+            lease_receipt=Path(lease),
+            capacity_receipt=Path(capacity),
             cleanup_receipt=Path(cleanup),
-            free_disk_bytes=free_disk,
         )
         _print_json(
             PublicationQueue.open(args.batch_dir).run_next(
