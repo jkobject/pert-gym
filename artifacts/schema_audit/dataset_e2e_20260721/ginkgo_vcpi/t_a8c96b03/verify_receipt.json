@@ -1,7 +1,12 @@
 {
-  "canonical_sha256": "bd96475b22ab46a98e57799cbe967bcdb88070a95136e6b5292181609f104248",
+  "canonical_sha256": "fcd907289274e02690ce2cc7b4cd0aa3259a05e14cd86e13e341e4a25d108ff6",
   "format": "pert-gym.ginkgo-vcpi-fresh-readback-receipt/v1",
-  "git_head": "ef33dc21bc50ad8d96b6f58066e5958949886b83",
+  "git": {
+    "expected_head": "ef33dc21bc50ad8d96b6f58066e5958949886b83",
+    "head": "ef33dc21bc50ad8d96b6f58066e5958949886b83",
+    "root": "/tmp/pert-gym-t_a8c96b03-secure-verify2",
+    "tracked_dirty": false
+  },
   "mutation_helper_sha256": "b9b952abc830f604b4c4922fd81b6016ebaca71c17ea1aa11f65dcdc9ecb0982",
   "readback": {
     "candidate_collection_uid": "gIpGxVz1cSH19D4h0000",
@@ -56,6 +61,7 @@
       "rows_checked": 11808,
       "var_rows_checked": 59427
     },
+    "remote_payload_sha256": "729fbe51f0aa71a6d6d3df7384b1b0fb6836dddea8b32828ce51cb62971797e5",
     "remote_stage_uids": {
       "collection-manifest": "xam0Qlv8lzIQtOAR0000",
       "manifest": "D3AXO8yZlU5bt0h60000",
@@ -81,5 +87,5 @@
   },
   "status": "PASS",
   "task_id": "t_a8c96b03",
-  "verifier_sha256": "a9820304bcee5acaf6ba573302aa094b28ca96c3c9dce17171943f152868bde7"
+  "verifier_sha256": "3f9e7fde4372930de15b3f8be545e8277f8de106a76ea8c3fc1f0b92eca3076d"
 }
