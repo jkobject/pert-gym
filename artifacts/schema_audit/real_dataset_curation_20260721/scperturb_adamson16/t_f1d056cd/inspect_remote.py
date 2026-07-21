@@ -106,7 +106,7 @@ def frame_summary(frame: pd.DataFrame) -> dict[str, Any]:
             str(column): int(frame[column].notna().sum()) for column in frame.columns
         },
         "nunique": {
-            str(column): int(frame[column].nunique(dropna=True))
+            str(column): int(frame[column].dropna().astype(str).nunique())
             for column in frame.columns
         },
         "value_samples": {
