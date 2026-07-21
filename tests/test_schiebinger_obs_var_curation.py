@@ -72,7 +72,9 @@ def _fixture() -> tuple[object, object]:
     return obs, source
 
 
-def test_curate_obs_materializes_source_join_and_temporal_semantics(monkeypatch) -> None:
+def test_curate_obs_materializes_source_join_and_temporal_semantics(
+    monkeypatch,
+) -> None:
     obs, source = _fixture()
     monkeypatch.setattr(curation, "EXPECTED_N_OBS", 3)
     curated, receipt = curation.curate_obs(obs, source)
@@ -106,6 +108,27 @@ def test_curate_obs_materializes_source_join_and_temporal_semantics(monkeypatch)
     assert repeated_receipt["join_mismatch_count"] == 0
 
 
+@pytest.mark.parametrize(
+    ("field", "wrong"),
+    [
+        ("organism", "Homo sapiens"),
+        ("source_accession", "GSE000000"),
+        ("timepoint", 999.0),
+        ("source_original_perturbation_type", "genetic"),
+    ],
+)
+def test_obs_verifier_rejects_wrong_but_non_null_semantics(
+    monkeypatch, field, wrong
+) -> None:
+    obs, source = _fixture()
+    monkeypatch.setattr(curation, "EXPECTED_N_OBS", 3)
+    expected, _ = curation.curate_obs(obs, source)
+    actual = expected.copy(deep=True)
+    actual[field] = wrong
+    with pytest.raises(AssertionError):
+        curation.verify_obs_semantics(actual, expected)
+
+
 def _var_fixture() -> object:
     statuses = (
         ["mapped_exact_external_gene_name_unique"] * 2
@@ -114,7 +137,12 @@ def _var_fixture() -> object:
     )
     return pd.DataFrame(
         {
-            "stable_feature_id": ["ENSMUSG00000000001", "ENSMUSG00000000002", pd.NA, pd.NA],
+            "stable_feature_id": [
+                "ENSMUSG00000000001",
+                "ENSMUSG00000000002",
+                pd.NA,
+                pd.NA,
+            ],
             "stable_feature_id_mapping_status": statuses,
             "stable_feature_id_candidate_count": [1, 1, 2, 0],
             "stable_feature_id_mapping_release": ["Ensembl 116"] * 4,
@@ -154,19 +182,31 @@ def test_var_curation_preserves_unresolved_and_adds_mouse_contract(monkeypatch) 
         (lambda frame: frame.assign(organism="Homo sapiens"), "organism"),
         (
             lambda frame: frame.assign(
-                stable_feature_id=["ENSMUSG00000000001", "ENSMUSG00000000001", pd.NA, pd.NA]
+                stable_feature_id=[
+                    "ENSMUSG00000000001",
+                    "ENSMUSG00000000001",
+                    pd.NA,
+                    pd.NA,
+                ]
             ),
             "exact-unique",
         ),
         (
             lambda frame: frame.assign(
-                stable_feature_id=["ENSMUSG00000000001", "ENSMUSG00000000002", "ENSMUSG00000000003", pd.NA]
+                stable_feature_id=[
+                    "ENSMUSG00000000001",
+                    "ENSMUSG00000000002",
+                    "ENSMUSG00000000003",
+                    pd.NA,
+                ]
             ),
             "unresolved symbols",
         ),
     ],
 )
-def test_var_verifier_rejects_wrong_non_null_semantics(monkeypatch, mutation, message) -> None:
+def test_var_verifier_rejects_wrong_non_null_semantics(
+    monkeypatch, mutation, message
+) -> None:
     curated = curation.curate_var(_var_fixture())
     monkeypatch.setattr(curation, "EXPECTED_N_VARS", 4)
     monkeypatch.setattr(

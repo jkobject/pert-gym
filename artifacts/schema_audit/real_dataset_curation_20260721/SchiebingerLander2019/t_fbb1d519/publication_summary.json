@@ -1,0 +1,56 @@
+{
+  "dataset_id": "SchiebingerLander2019",
+  "format": "pert-gym.real-dataset-publication-summary/v1",
+  "task_id": "t_fbb1d519",
+  "sources": [
+    {
+      "key": "scperturb/records/13350497/files/SchiebingerLander2019_GSE115943.h5ad",
+      "n_obs": 259155,
+      "n_vars": 27998,
+      "sha256": "393f4a8a171c5aadc38ed37f69bcccd03777d4d4175e5476fa363d49c4277144"
+    },
+    {
+      "key": "scperturb/records/13350497/files/SchiebingerLander2019_GSE106340.h5ad",
+      "n_obs": 68339,
+      "n_vars": 27998,
+      "sha256": "fcc4da2d1f24566d926e5c61a7bf1dc8a362b7aa4d07e1061434dab2e2845ff9"
+    }
+  ],
+  "publication": {
+    "final_obs": {
+      "hash": "eYM4uPJWFRJBZMu3JgjtwQ",
+      "key": "SchiebingerLander2019/obs.parquet",
+      "run_uid": "TCPcgZwkwP8TuG46",
+      "uid": "trSdGyVkTDn5ZkaY0004",
+      "version": "0004"
+    },
+    "final_var": {
+      "hash": "bgvG_w6_CxmgaCppT-jGjw",
+      "key": "SchiebingerLander2019/var.parquet",
+      "run_uid": "kd5kNW6ZLxBYYfqN",
+      "uid": "cw0Kr6j7qVyrDBP10003",
+      "version": "0003"
+    },
+    "superseded_obs": {
+      "reason": "Terminal readback exposed a missing raw perturbation_type alias; the corrective successor adds source_original_perturbation_type and is replay-idempotent.",
+      "uid": "trSdGyVkTDn5ZkaY0003",
+      "version": "0003"
+    },
+    "artifact_count_delta": 3,
+    "collection_count_delta": 0,
+    "collection_writes": 0,
+    "deletions": 0,
+    "x_artifact_writes": 0
+  },
+  "verification": {
+    "canonical_collections_unchanged": true,
+    "independent_x_axis_order_parity": true,
+    "replay_noop": true,
+    "source_join_mismatch_count": 0,
+    "source_rows": 327494,
+    "var_mapped_exact_unique": 23795,
+    "var_unresolved_preserved": 4203,
+    "var_verifier_mismatch_count": 0,
+    "x_uid": "FM4BeGN5qFCdMNNW0000"
+  }
+}

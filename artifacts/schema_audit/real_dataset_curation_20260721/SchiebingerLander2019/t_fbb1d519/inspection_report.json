@@ -1,7 +1,7 @@
 {
   "capacity": {
-    "available_memory_bytes": 32881377280,
-    "free_disk_bytes": 291758927872
+    "available_memory_bytes": 32913383424,
+    "free_disk_bytes": 284787027968
   },
   "collections": {
     "pert-gym/additions/20260621": {
@@ -25,14 +25,14 @@
   },
   "current": {
     "latest_var": {
-      "created_at": "2026-07-17 08:44:06.953803+00:00",
-      "description": "t_231ff520: L04 SchiebingerLander2019 mouse symbol-axis remediation; Ensembl release 116 BioMart mmusculus_gene_ensembl; response sha256 6fba036a5541c47d8eef671eb0adf734ca1cc258db74979b58e4bd7f525804a3; source var uid cw0Kr6j7qVyrDBP10001",
-      "hash": "QbsKSirMKah_-Q4avpzYsA",
+      "created_at": "2026-07-21 19:57:59.195728+00:00",
+      "description": "t_fbb1d519: SchiebingerLander2019 mouse VAR species/namespace annotation; preserves 23795 exact unique ENSMUSG, 54 ambiguous and 4149 unmapped symbols",
+      "hash": "bgvG_w6_CxmgaCppT-jGjw",
       "key": "SchiebingerLander2019/var.parquet",
-      "run_uid": "h3REH93GnY0Igucj",
-      "size": 1109980,
-      "uid": "cw0Kr6j7qVyrDBP10002",
-      "version": "0002"
+      "run_uid": "kd5kNW6ZLxBYYfqN",
+      "size": 1111450,
+      "uid": "cw0Kr6j7qVyrDBP10003",
+      "version": "0003"
     },
     "latest_var_frame": {
       "columns": [
@@ -45,10 +45,13 @@
         "stable_feature_id_candidate_count",
         "stable_feature_id_mapping_release",
         "stable_feature_id_mapping_dataset",
-        "stable_feature_id_mapping_response_sha256"
+        "stable_feature_id_mapping_response_sha256",
+        "stable_feature_id_namespace",
+        "organism"
       ],
       "dtypes": {
         "ensembl_gene_id": "string",
+        "organism": "object",
         "pert_gym_original_var_index": "object",
         "pert_gym_source_gene_symbol": "object",
         "stable_feature_id": "string",
@@ -57,6 +60,7 @@
         "stable_feature_id_mapping_release": "object",
         "stable_feature_id_mapping_response_sha256": "object",
         "stable_feature_id_mapping_status": "string",
+        "stable_feature_id_namespace": "object",
         "stable_feature_id_source": "object"
       },
       "index_name": "gene_symbol",
@@ -91,6 +95,7 @@
       "index_unique": true,
       "non_null": {
         "ensembl_gene_id": 23795,
+        "organism": 27998,
         "pert_gym_original_var_index": 27998,
         "pert_gym_source_gene_symbol": 27998,
         "stable_feature_id": 23795,
@@ -99,10 +104,12 @@
         "stable_feature_id_mapping_release": 27998,
         "stable_feature_id_mapping_response_sha256": 27998,
         "stable_feature_id_mapping_status": 27998,
+        "stable_feature_id_namespace": 27998,
         "stable_feature_id_source": 27998
       },
       "nunique": {
         "ensembl_gene_id": 23795,
+        "organism": 1,
         "pert_gym_original_var_index": 27998,
         "pert_gym_source_gene_symbol": 27998,
         "stable_feature_id": 23795,
@@ -111,6 +118,7 @@
         "stable_feature_id_mapping_release": 1,
         "stable_feature_id_mapping_response_sha256": 1,
         "stable_feature_id_mapping_status": 3,
+        "stable_feature_id_namespace": 1,
         "stable_feature_id_source": 1
       },
       "rows": 27998,
@@ -141,6 +149,9 @@
           "ENSMUSG00000061024",
           "ENSMUSG00000025911",
           "ENSMUSG00000099827"
+        ],
+        "organism": [
+          "Mus musculus"
         ],
         "pert_gym_original_var_index": [
           "Xkr4",
@@ -242,6 +253,9 @@
           "mapped_exact_external_gene_name_unique",
           "unmapped_symbol",
           "ambiguous_multiple_ensembl_ids"
+        ],
+        "stable_feature_id_namespace": [
+          "Ensembl stable gene ID"
         ],
         "stable_feature_id_source": [
           "ensembl_release_116_biomart_external_gene_name_mmusculus_gene_ensembl_index_response_sha256_6fba036a5541c47d8eef671eb0adf734ca1cc258db74979b58e4bd7f525804a3"
@@ -278,17 +292,27 @@
         "size": 1109980,
         "uid": "cw0Kr6j7qVyrDBP10002",
         "version": "0002"
+      },
+      {
+        "created_at": "2026-07-21 19:57:59.195728+00:00",
+        "description": "t_fbb1d519: SchiebingerLander2019 mouse VAR species/namespace annotation; preserves 23795 exact unique ENSMUSG, 54 ambiguous and 4149 unmapped symbols",
+        "hash": "bgvG_w6_CxmgaCppT-jGjw",
+        "key": "SchiebingerLander2019/var.parquet",
+        "run_uid": "kd5kNW6ZLxBYYfqN",
+        "size": 1111450,
+        "uid": "cw0Kr6j7qVyrDBP10003",
+        "version": "0003"
       }
     ],
     "linked_var": {
-      "created_at": "2026-07-17 08:44:06.953803+00:00",
-      "description": "t_231ff520: L04 SchiebingerLander2019 mouse symbol-axis remediation; Ensembl release 116 BioMart mmusculus_gene_ensembl; response sha256 6fba036a5541c47d8eef671eb0adf734ca1cc258db74979b58e4bd7f525804a3; source var uid cw0Kr6j7qVyrDBP10001",
-      "hash": "QbsKSirMKah_-Q4avpzYsA",
+      "created_at": "2026-07-21 19:57:59.195728+00:00",
+      "description": "t_fbb1d519: SchiebingerLander2019 mouse VAR species/namespace annotation; preserves 23795 exact unique ENSMUSG, 54 ambiguous and 4149 unmapped symbols",
+      "hash": "bgvG_w6_CxmgaCppT-jGjw",
       "key": "SchiebingerLander2019/var.parquet",
-      "run_uid": "h3REH93GnY0Igucj",
-      "size": 1109980,
-      "uid": "cw0Kr6j7qVyrDBP10002",
-      "version": "0002"
+      "run_uid": "kd5kNW6ZLxBYYfqN",
+      "size": 1111450,
+      "uid": "cw0Kr6j7qVyrDBP10003",
+      "version": "0003"
     },
     "linked_var_frame": {
       "columns": [
@@ -301,10 +325,13 @@
         "stable_feature_id_candidate_count",
         "stable_feature_id_mapping_release",
         "stable_feature_id_mapping_dataset",
-        "stable_feature_id_mapping_response_sha256"
+        "stable_feature_id_mapping_response_sha256",
+        "stable_feature_id_namespace",
+        "organism"
       ],
       "dtypes": {
         "ensembl_gene_id": "string",
+        "organism": "object",
         "pert_gym_original_var_index": "object",
         "pert_gym_source_gene_symbol": "object",
         "stable_feature_id": "string",
@@ -313,6 +340,7 @@
         "stable_feature_id_mapping_release": "object",
         "stable_feature_id_mapping_response_sha256": "object",
         "stable_feature_id_mapping_status": "string",
+        "stable_feature_id_namespace": "object",
         "stable_feature_id_source": "object"
       },
       "index_name": "gene_symbol",
@@ -347,6 +375,7 @@
       "index_unique": true,
       "non_null": {
         "ensembl_gene_id": 23795,
+        "organism": 27998,
         "pert_gym_original_var_index": 27998,
         "pert_gym_source_gene_symbol": 27998,
         "stable_feature_id": 23795,
@@ -355,10 +384,12 @@
         "stable_feature_id_mapping_release": 27998,
         "stable_feature_id_mapping_response_sha256": 27998,
         "stable_feature_id_mapping_status": 27998,
+        "stable_feature_id_namespace": 27998,
         "stable_feature_id_source": 27998
       },
       "nunique": {
         "ensembl_gene_id": 23795,
+        "organism": 1,
         "pert_gym_original_var_index": 27998,
         "pert_gym_source_gene_symbol": 27998,
         "stable_feature_id": 23795,
@@ -367,6 +398,7 @@
         "stable_feature_id_mapping_release": 1,
         "stable_feature_id_mapping_response_sha256": 1,
         "stable_feature_id_mapping_status": 3,
+        "stable_feature_id_namespace": 1,
         "stable_feature_id_source": 1
       },
       "rows": 27998,
@@ -397,6 +429,9 @@
           "ENSMUSG00000061024",
           "ENSMUSG00000025911",
           "ENSMUSG00000099827"
+        ],
+        "organism": [
+          "Mus musculus"
         ],
         "pert_gym_original_var_index": [
           "Xkr4",
@@ -499,6 +534,9 @@
           "unmapped_symbol",
           "ambiguous_multiple_ensembl_ids"
         ],
+        "stable_feature_id_namespace": [
+          "Ensembl stable gene ID"
+        ],
         "stable_feature_id_source": [
           "ensembl_release_116_biomart_external_gene_name_mmusculus_gene_ensembl_index_response_sha256_6fba036a5541c47d8eef671eb0adf734ca1cc258db74979b58e4bd7f525804a3"
         ]
@@ -510,14 +548,14 @@
       "x_to_linked_var": true
     },
     "obs": {
-      "created_at": "2026-06-26 13:28:04.508497+00:00",
-      "description": "t_47b770a1 non-PRISM scRNA obs_uuid/original_obs_index rewrite using pert_gym.obs_identity.add_obs_identity",
-      "hash": "pAptD2J2tb2z-rn4PLNS2w",
+      "created_at": "2026-07-21 20:08:44.663174+00:00",
+      "description": "t_fbb1d519: source-exhaustive SchiebingerLander2019 OBS; exact two-H5AD cell join; GEO/paper temporal semantics; sources=GSE115943,GSE106340",
+      "hash": "eYM4uPJWFRJBZMu3JgjtwQ",
       "key": "SchiebingerLander2019/obs.parquet",
-      "run_uid": "S9jaxtZ4PIZZFBqC",
-      "size": 25047053,
-      "uid": "trSdGyVkTDn5ZkaY0002",
-      "version": "0002"
+      "run_uid": "TCPcgZwkwP8TuG46",
+      "size": 35229883,
+      "uid": "trSdGyVkTDn5ZkaY0004",
+      "version": "0004"
     },
     "obs_frame": {
       "columns": [
@@ -684,25 +722,73 @@
         "quality_flag",
         "quality_flag_state",
         "quality_flag_source",
-        "original_obs_index_is_duplicated"
+        "original_obs_index_is_duplicated",
+        "source_age_label",
+        "age_state",
+        "age_source",
+        "sequencer",
+        "sequencer_state",
+        "sequencer_source",
+        "technology",
+        "technology_state",
+        "technology_source",
+        "is_bulk",
+        "is_bulk_state",
+        "is_bulk_source",
+        "is_pseudobulk",
+        "is_pseudobulk_state",
+        "is_pseudobulk_source",
+        "trajectory_id",
+        "trajectory_id_state",
+        "trajectory_id_source",
+        "n_counts",
+        "n_counts_state",
+        "n_counts_source",
+        "n_genes",
+        "n_genes_state",
+        "n_genes_source",
+        "pct_mito",
+        "pct_mito_state",
+        "pct_mito_source",
+        "pct_ribo",
+        "pct_ribo_state",
+        "pct_ribo_source",
+        "pseudotime",
+        "pseudotime_state",
+        "pseudotime_source",
+        "ethnicity",
+        "ethnicity_state",
+        "ethnicity_source",
+        "sex",
+        "sex_state",
+        "sex_source",
+        "media",
+        "media_state",
+        "media_source",
+        "is_low_quality",
+        "is_low_quality_state",
+        "is_low_quality_source",
+        "source_original_perturbation_type"
       ],
       "dtypes": {
         "GSM": "category",
-        "age": "category",
+        "age": "string",
+        "age_source": "object",
+        "age_state": "object",
         "assay": "object",
         "assay_source": "object",
         "assay_state": "object",
-        "batch": "object",
+        "batch": "string",
         "batch_source": "object",
         "batch_state": "object",
         "cancer": "bool",
-        "cell_id": "object",
+        "cell_id": "string",
         "cell_id_source": "object",
         "cell_id_state": "object",
-        "cell_line": "object",
+        "cell_line": "string",
         "cell_line_source": "object",
         "cell_line_state": "object",
-        "cell_type": "object",
+        "cell_type": "string",
         "cell_type_source": "object",
         "cell_type_state": "object",
         "celltype": "category",
@@ -727,42 +813,63 @@
         "disease": "object",
         "disease_source": "object",
         "disease_state": "object",
-        "donor_id": "object",
+        "donor_id": "string",
         "donor_id_source": "object",
         "donor_id_state": "object",
-        "dose": "object",
+        "dose": "Float64",
         "dose_source": "object",
         "dose_state": "object",
-        "dose_unit": "object",
+        "dose_unit": "string",
         "dose_unit_source": "object",
         "dose_unit_state": "object",
         "duplicate_status": "object",
         "duplicate_status_source": "object",
         "duplicate_status_state": "object",
-        "guide_id": "object",
+        "ethnicity": "string",
+        "ethnicity_source": "object",
+        "ethnicity_state": "object",
+        "guide_id": "string",
         "guide_id_source": "object",
         "guide_id_state": "object",
-        "guide_sequence": "object",
+        "guide_sequence": "string",
         "guide_sequence_source": "object",
         "guide_sequence_state": "object",
         "harmonization_level": "object",
         "harmonization_level_source": "object",
         "harmonization_level_state": "object",
-        "is_baseline": "object",
+        "is_baseline": "boolean",
         "is_baseline_source": "object",
         "is_baseline_state": "object",
-        "is_control": "object",
+        "is_bulk": "bool",
+        "is_bulk_source": "object",
+        "is_bulk_state": "object",
+        "is_control": "boolean",
         "is_control_source": "object",
         "is_control_state": "object",
+        "is_low_quality": "string",
+        "is_low_quality_source": "object",
+        "is_low_quality_state": "object",
+        "is_pseudobulk": "bool",
+        "is_pseudobulk_source": "object",
+        "is_pseudobulk_state": "object",
         "loader_projectable": "object",
         "loader_projectable_source": "object",
         "loader_projectable_state": "object",
+        "media": "string",
+        "media_source": "object",
+        "media_state": "object",
         "modality": "object",
         "modality_source": "object",
         "modality_state": "object",
         "model_ready": "object",
         "model_ready_source": "object",
         "model_ready_state": "object",
+        "n_counts": "float64",
+        "n_counts_source": "object",
+        "n_counts_state": "object",
+        "n_genes": "int64",
+        "n_genes_source": "object",
+        "n_genes_state": "object",
         "ncounts": "float64",
         "ngenes": "int64",
         "nperts": "int64",
@@ -776,52 +883,69 @@
         "original_obs_index_is_duplicated": "bool",
         "original_obs_index_source": "object",
         "original_obs_index_state": "object",
+        "pct_mito": "float64",
+        "pct_mito_source": "object",
+        "pct_mito_state": "object",
+        "pct_ribo": "float64",
+        "pct_ribo_source": "object",
+        "pct_ribo_state": "object",
         "percent_mito": "float64",
         "percent_ribo": "float64",
-        "perturbation": "object",
-        "perturbation_library": "object",
+        "perturbation": "string",
+        "perturbation_library": "string",
         "perturbation_library_source": "object",
         "perturbation_library_state": "object",
         "perturbation_source": "object",
         "perturbation_state": "object",
-        "perturbation_target": "object",
-        "perturbation_target_id": "object",
+        "perturbation_target": "string",
+        "perturbation_target_id": "string",
         "perturbation_target_id_source": "object",
         "perturbation_target_id_state": "object",
         "perturbation_target_source": "object",
         "perturbation_target_state": "object",
-        "perturbation_technology": "object",
+        "perturbation_technology": "string",
         "perturbation_technology_source": "object",
         "perturbation_technology_state": "object",
-        "perturbation_type": "object",
+        "perturbation_type": "string",
         "perturbation_type_source": "object",
         "perturbation_type_state": "object",
+        "pseudotime": "Float64",
+        "pseudotime_source": "object",
+        "pseudotime_state": "object",
         "quality_flag": "object",
         "quality_flag_source": "object",
         "quality_flag_state": "object",
         "replicate": "float64",
-        "response_metric": "object",
+        "response_metric": "string",
         "response_metric_source": "object",
         "response_metric_state": "object",
-        "response_source": "object",
+        "response_source": "string",
         "response_source_source": "object",
         "response_source_state": "object",
-        "response_value": "object",
+        "response_value": "string",
         "response_value_source": "object",
         "response_value_state": "object",
-        "sample": "object",
+        "sample": "string",
         "sample_source": "object",
         "sample_state": "object",
-        "sensitivity": "object",
+        "sensitivity": "string",
         "sensitivity_source": "object",
         "sensitivity_state": "object",
+        "sequencer": "object",
+        "sequencer_source": "object",
+        "sequencer_state": "object",
+        "sex": "string",
+        "sex_source": "object",
+        "sex_state": "object",
         "source": "object",
-        "source_accession": "object",
+        "source_accession": "string",
         "source_accession_source": "object",
         "source_accession_state": "object",
+        "source_age_label": "string",
         "source_cancer": "bool",
         "source_celltype": "category",
         "source_organism": "category",
+        "source_original_perturbation_type": "string",
         "source_replicate": "float64",
         "source_source": "object",
         "source_source_tissue_type": "category",
@@ -836,7 +960,10 @@
         "target_gene": "object",
         "target_gene_source": "object",
         "target_gene_state": "object",
-        "timepoint": "object",
+        "technology": "object",
+        "technology_source": "object",
+        "technology_state": "object",
+        "timepoint": "Float64",
         "timepoint_source": "object",
         "timepoint_state": "object",
         "timepoint_unit": "object",
@@ -848,7 +975,10 @@
         "tissue_type": "object",
         "tissue_type_source": "object",
         "tissue_type_state": "object",
-        "x_semantics": "object",
+        "trajectory_id": "object",
+        "trajectory_id_source": "object",
+        "trajectory_id_state": "object",
+        "x_semantics": "string",
         "x_semantics_source": "object",
         "x_semantics_state": "object"
       },
@@ -884,18 +1014,20 @@
       "index_unique": true,
       "non_null": {
         "GSM": 327494,
-        "age": 327494,
+        "age": 0,
+        "age_source": 327494,
+        "age_state": 327494,
         "assay": 327494,
         "assay_source": 327494,
         "assay_state": 327494,
-        "batch": 259155,
+        "batch": 327494,
         "batch_source": 327494,
         "batch_state": 327494,
         "cancer": 327494,
         "cell_id": 327494,
         "cell_id_source": 327494,
         "cell_id_state": 327494,
-        "cell_line": 327494,
+        "cell_line": 0,
         "cell_line_source": 327494,
         "cell_line_state": 327494,
         "cell_type": 327494,
@@ -923,22 +1055,25 @@
         "disease": 327494,
         "disease_source": 327494,
         "disease_state": 327494,
-        "donor_id": 327494,
+        "donor_id": 0,
         "donor_id_source": 327494,
         "donor_id_state": 327494,
-        "dose": 327494,
+        "dose": 0,
         "dose_source": 327494,
         "dose_state": 327494,
-        "dose_unit": 327494,
+        "dose_unit": 0,
         "dose_unit_source": 327494,
         "dose_unit_state": 327494,
         "duplicate_status": 327494,
         "duplicate_status_source": 327494,
         "duplicate_status_state": 327494,
-        "guide_id": 327494,
+        "ethnicity": 0,
+        "ethnicity_source": 327494,
+        "ethnicity_state": 327494,
+        "guide_id": 0,
         "guide_id_source": 327494,
         "guide_id_state": 327494,
-        "guide_sequence": 327494,
+        "guide_sequence": 0,
         "guide_sequence_source": 327494,
         "guide_sequence_state": 327494,
         "harmonization_level": 327494,
@@ -947,18 +1082,36 @@
         "is_baseline": 327494,
         "is_baseline_source": 327494,
         "is_baseline_state": 327494,
-        "is_control": 327494,
+        "is_bulk": 327494,
+        "is_bulk_source": 327494,
+        "is_bulk_state": 327494,
+        "is_control": 297657,
         "is_control_source": 327494,
         "is_control_state": 327494,
+        "is_low_quality": 0,
+        "is_low_quality_source": 327494,
+        "is_low_quality_state": 327494,
+        "is_pseudobulk": 327494,
+        "is_pseudobulk_source": 327494,
+        "is_pseudobulk_state": 327494,
         "loader_projectable": 327494,
         "loader_projectable_source": 327494,
         "loader_projectable_state": 327494,
+        "media": 0,
+        "media_source": 327494,
+        "media_state": 327494,
         "modality": 327494,
         "modality_source": 327494,
         "modality_state": 327494,
         "model_ready": 327494,
         "model_ready_source": 327494,
         "model_ready_state": 327494,
+        "n_counts": 327494,
+        "n_counts_source": 327494,
+        "n_counts_state": 327494,
+        "n_genes": 327494,
+        "n_genes_source": 327494,
+        "n_genes_state": 327494,
         "ncounts": 327494,
         "ngenes": 327494,
         "nperts": 327494,
@@ -972,52 +1125,69 @@
         "original_obs_index_is_duplicated": 327494,
         "original_obs_index_source": 327494,
         "original_obs_index_state": 327494,
+        "pct_mito": 327494,
+        "pct_mito_source": 327494,
+        "pct_mito_state": 327494,
+        "pct_ribo": 327494,
+        "pct_ribo_source": 327494,
+        "pct_ribo_state": 327494,
         "percent_mito": 327494,
         "percent_ribo": 327494,
         "perturbation": 297657,
-        "perturbation_library": 327494,
+        "perturbation_library": 0,
         "perturbation_library_source": 327494,
         "perturbation_library_state": 327494,
         "perturbation_source": 327494,
         "perturbation_state": 327494,
-        "perturbation_target": 327494,
-        "perturbation_target_id": 327494,
+        "perturbation_target": 0,
+        "perturbation_target_id": 0,
         "perturbation_target_id_source": 327494,
         "perturbation_target_id_state": 327494,
         "perturbation_target_source": 327494,
         "perturbation_target_state": 327494,
-        "perturbation_technology": 327494,
+        "perturbation_technology": 206681,
         "perturbation_technology_source": 327494,
         "perturbation_technology_state": 327494,
-        "perturbation_type": 327494,
+        "perturbation_type": 297657,
         "perturbation_type_source": 327494,
         "perturbation_type_state": 327494,
+        "pseudotime": 0,
+        "pseudotime_source": 327494,
+        "pseudotime_state": 327494,
         "quality_flag": 327494,
         "quality_flag_source": 327494,
         "quality_flag_state": 327494,
         "replicate": 259155,
-        "response_metric": 327494,
+        "response_metric": 0,
         "response_metric_source": 327494,
         "response_metric_state": 327494,
-        "response_source": 327494,
+        "response_source": 0,
         "response_source_source": 327494,
         "response_source_state": 327494,
-        "response_value": 327494,
+        "response_value": 0,
         "response_value_source": 327494,
         "response_value_state": 327494,
         "sample": 327494,
         "sample_source": 327494,
         "sample_state": 327494,
-        "sensitivity": 327494,
+        "sensitivity": 0,
         "sensitivity_source": 327494,
         "sensitivity_state": 327494,
+        "sequencer": 327494,
+        "sequencer_source": 327494,
+        "sequencer_state": 327494,
+        "sex": 0,
+        "sex_source": 327494,
+        "sex_state": 327494,
         "source": 327494,
         "source_accession": 327494,
         "source_accession_source": 327494,
         "source_accession_state": 327494,
+        "source_age_label": 327494,
         "source_cancer": 327494,
         "source_celltype": 327494,
         "source_organism": 327494,
+        "source_original_perturbation_type": 327494,
         "source_replicate": 259155,
         "source_source": 327494,
         "source_source_tissue_type": 327494,
@@ -1032,7 +1202,10 @@
         "target_gene": 327494,
         "target_gene_source": 327494,
         "target_gene_state": 327494,
-        "timepoint": 327494,
+        "technology": 327494,
+        "technology_source": 327494,
+        "technology_state": 327494,
+        "timepoint": 306528,
         "timepoint_source": 327494,
         "timepoint_state": 327494,
         "timepoint_unit": 327494,
@@ -1044,27 +1217,32 @@
         "tissue_type": 327494,
         "tissue_type_source": 327494,
         "tissue_type_state": 327494,
-        "x_semantics": 327494,
+        "trajectory_id": 327494,
+        "trajectory_id_source": 327494,
+        "trajectory_id_state": 327494,
+        "x_semantics": 0,
         "x_semantics_source": 327494,
         "x_semantics_state": 327494
       },
       "nunique": {
         "GSM": 148,
-        "age": 39,
+        "age": 0,
+        "age_source": 1,
+        "age_state": 1,
         "assay": 1,
         "assay_source": 1,
         "assay_state": 1,
-        "batch": 2,
+        "batch": 148,
         "batch_source": 1,
         "batch_state": 1,
         "cancer": 1,
-        "cell_id": 1,
+        "cell_id": 327494,
         "cell_id_source": 1,
         "cell_id_state": 1,
-        "cell_line": 1,
+        "cell_line": 0,
         "cell_line_source": 1,
         "cell_line_state": 1,
-        "cell_type": 1,
+        "cell_type": 3,
         "cell_type_source": 1,
         "cell_type_state": 1,
         "celltype": 1,
@@ -1089,42 +1267,63 @@
         "disease": 1,
         "disease_source": 1,
         "disease_state": 1,
-        "donor_id": 1,
+        "donor_id": 0,
         "donor_id_source": 1,
         "donor_id_state": 1,
-        "dose": 1,
+        "dose": 0,
         "dose_source": 1,
         "dose_state": 1,
-        "dose_unit": 1,
+        "dose_unit": 0,
         "dose_unit_source": 1,
         "dose_unit_state": 1,
         "duplicate_status": 1,
         "duplicate_status_source": 1,
         "duplicate_status_state": 1,
-        "guide_id": 1,
+        "ethnicity": 0,
+        "ethnicity_source": 1,
+        "ethnicity_state": 1,
+        "guide_id": 0,
         "guide_id_source": 1,
         "guide_id_state": 1,
-        "guide_sequence": 1,
+        "guide_sequence": 0,
         "guide_sequence_source": 1,
         "guide_sequence_state": 1,
         "harmonization_level": 1,
         "harmonization_level_source": 1,
         "harmonization_level_state": 1,
-        "is_baseline": 1,
+        "is_baseline": 2,
         "is_baseline_source": 1,
         "is_baseline_state": 1,
-        "is_control": 1,
+        "is_bulk": 1,
+        "is_bulk_source": 1,
+        "is_bulk_state": 1,
+        "is_control": 2,
         "is_control_source": 1,
-        "is_control_state": 1,
+        "is_control_state": 2,
+        "is_low_quality": 0,
+        "is_low_quality_source": 1,
+        "is_low_quality_state": 1,
+        "is_pseudobulk": 1,
+        "is_pseudobulk_source": 1,
+        "is_pseudobulk_state": 1,
         "loader_projectable": 1,
         "loader_projectable_source": 1,
         "loader_projectable_state": 1,
+        "media": 0,
+        "media_source": 1,
+        "media_state": 1,
         "modality": 1,
         "modality_source": 1,
         "modality_state": 1,
         "model_ready": 1,
         "model_ready_source": 1,
         "model_ready_state": 1,
+        "n_counts": 42009,
+        "n_counts_source": 1,
+        "n_counts_state": 1,
+        "n_genes": 6936,
+        "n_genes_source": 1,
+        "n_genes_state": 1,
         "ncounts": 42009,
         "ngenes": 6936,
         "nperts": 1,
@@ -1138,52 +1337,69 @@
         "original_obs_index_is_duplicated": 1,
         "original_obs_index_source": 1,
         "original_obs_index_state": 1,
+        "pct_mito": 294657,
+        "pct_mito_source": 1,
+        "pct_mito_state": 1,
+        "pct_ribo": 316742,
+        "pct_ribo_source": 1,
+        "pct_ribo_state": 1,
         "percent_mito": 294657,
         "percent_ribo": 316742,
         "perturbation": 3,
-        "perturbation_library": 1,
+        "perturbation_library": 0,
         "perturbation_library_source": 1,
         "perturbation_library_state": 1,
         "perturbation_source": 1,
-        "perturbation_state": 1,
-        "perturbation_target": 1,
-        "perturbation_target_id": 1,
+        "perturbation_state": 2,
+        "perturbation_target": 0,
+        "perturbation_target_id": 0,
         "perturbation_target_id_source": 1,
         "perturbation_target_id_state": 1,
         "perturbation_target_source": 1,
         "perturbation_target_state": 1,
         "perturbation_technology": 1,
         "perturbation_technology_source": 1,
-        "perturbation_technology_state": 1,
-        "perturbation_type": 1,
+        "perturbation_technology_state": 2,
+        "perturbation_type": 2,
         "perturbation_type_source": 1,
-        "perturbation_type_state": 1,
+        "perturbation_type_state": 2,
+        "pseudotime": 0,
+        "pseudotime_source": 1,
+        "pseudotime_state": 1,
         "quality_flag": 1,
         "quality_flag_source": 1,
         "quality_flag_state": 1,
         "replicate": 2,
-        "response_metric": 1,
+        "response_metric": 0,
         "response_metric_source": 1,
         "response_metric_state": 1,
-        "response_source": 1,
+        "response_source": 0,
         "response_source_source": 1,
         "response_source_state": 1,
-        "response_value": 1,
+        "response_value": 0,
         "response_value_source": 1,
         "response_value_state": 1,
-        "sample": 1,
+        "sample": 148,
         "sample_source": 1,
         "sample_state": 1,
-        "sensitivity": 1,
+        "sensitivity": 0,
         "sensitivity_source": 1,
         "sensitivity_state": 1,
-        "source": 2,
-        "source_accession": 1,
+        "sequencer": 1,
+        "sequencer_source": 1,
+        "sequencer_state": 1,
+        "sex": 0,
+        "sex_source": 1,
+        "sex_state": 1,
+        "source": 1,
+        "source_accession": 2,
         "source_accession_source": 1,
         "source_accession_state": 1,
+        "source_age_label": 39,
         "source_cancer": 1,
         "source_celltype": 1,
         "source_organism": 1,
+        "source_original_perturbation_type": 1,
         "source_replicate": 2,
         "source_source": 1,
         "source_source_tissue_type": 1,
@@ -1198,9 +1414,12 @@
         "target_gene": 1,
         "target_gene_source": 1,
         "target_gene_state": 1,
-        "timepoint": 1,
+        "technology": 1,
+        "technology_source": 1,
+        "technology_state": 1,
+        "timepoint": 37,
         "timepoint_source": 1,
-        "timepoint_state": 1,
+        "timepoint_state": 2,
         "timepoint_unit": 1,
         "timepoint_unit_source": 1,
         "timepoint_unit_state": 1,
@@ -1210,7 +1429,10 @@
         "tissue_type": 1,
         "tissue_type_source": 1,
         "tissue_type_state": 1,
-        "x_semantics": 1,
+        "trajectory_id": 1,
+        "trajectory_id_source": 1,
+        "trajectory_id_state": 1,
+        "x_semantics": 0,
         "x_semantics_source": 1,
         "x_semantics_state": 1
       },
@@ -1243,81 +1465,108 @@
           "GSM3195714",
           "GSM3195751"
         ],
-        "age": [
-          "D9",
-          "D2",
-          "D8.5",
-          "D15",
-          "D12.5",
-          "D10.5",
-          "D2.5",
-          "D17.5",
-          "D13.5",
-          "D14.5",
-          "D3",
-          "D18",
-          "D17",
-          "D0.5",
-          "D5.5",
-          "D15.5",
-          "D11.5",
-          "D16",
-          "D13",
-          "iPSC",
-          "D14",
-          "D11",
-          "D4.5",
-          "D5",
-          "D8"
+        "age": [],
+        "age_source": [
+          "source age label is experimental time, preserved in source_age_label"
+        ],
+        "age_state": [
+          "unknown"
         ],
         "assay": [
           "scRNA-seq"
         ],
         "assay_source": [
-          "manifest.assay"
+          "GEO experiment type"
         ],
         "assay_state": [
-          "manifest_only"
+          "known"
         ],
         "batch": [
-          "1.0",
-          "2.0"
+          "GSM3195694",
+          "GSM3195656",
+          "GSM3195696",
+          "GSM3195688",
+          "GSM3195745",
+          "GSM3195723",
+          "GSM3195708",
+          "GSM3195658",
+          "GSM3195765",
+          "GSM3195730",
+          "GSM3195739",
+          "GSM3195742",
+          "GSM3195660",
+          "GSM3195766",
+          "GSM3195760",
+          "GSM3195650",
+          "GSM3195661",
+          "GSM3195670",
+          "GSM3195706",
+          "GSM3195725",
+          "GSM3195733",
+          "GSM3195749",
+          "GSM3195715",
+          "GSM3195714",
+          "GSM3195751"
         ],
         "batch_source": [
-          "replicate"
+          "GEO sample accession"
         ],
         "batch_state": [
-          "alias_only"
+          "known"
         ],
         "cancer": [
           "False"
         ],
         "cell_id": [
-          "missing"
+          "AAACCTGAGACAGGCT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAACCTGGTGAAAGAG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAACCTGTCCACGAAT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAACCTGTCGGCCGAT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAACGGGCATGGTCAT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGATGGTAATCACC-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGATGGTCGCATAT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAAGTGGCCCTA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAAGTGTTGAGG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAATCATTATCC-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAATCCAGAAGG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAATCTAACTCT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGTAGGTATCAGTC-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGTAGTCAACGGGA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGTAGTCACATACG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAATGCCGTACCGAGA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAATGCCGTAGTACCT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACACGTCAGACTCGC-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACACGTTCGGACAAG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACACGTTCGTTTAGG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACCATGCACAGACTT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACCATGCACAGGTTT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACCATGCAGCCACCA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACCATGGTAGGCTGA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACGTTGCATTCCTCG-GSM3195694-SchiebingerLander2019_GSE115943"
         ],
         "cell_id_source": [
-          "contract"
+          "source H5AD normalized cell identity"
         ],
         "cell_id_state": [
-          "missing"
+          "known"
         ],
-        "cell_line": [
-          "missing"
-        ],
+        "cell_line": [],
         "cell_line_source": [
-          "contract"
+          "source-exhaustive search found no defensible value"
         ],
         "cell_line_state": [
-          "missing"
+          "unknown"
         ],
         "cell_type": [
-          "mESCs"
+          "MEF-derived reprogramming cell",
+          "induced pluripotent stem cell",
+          "mouse embryonic fibroblast"
         ],
         "cell_type_source": [
-          "celltype"
+          "publication time-course design plus source age label"
         ],
         "cell_type_state": [
-          "alias_only"
+          "known"
         ],
         "celltype": [
           "mESCs"
@@ -1341,13 +1590,13 @@
           "not_applicable"
         ],
         "control_availability": [
-          "missing"
+          "strict_control_available"
         ],
         "control_availability_source": [
-          "contract"
+          "source control rows"
         ],
         "control_availability_state": [
-          "missing"
+          "known"
         ],
         "control_type": [
           "missing"
@@ -1371,46 +1620,40 @@
           "manifest_only"
         ],
         "dataset_source": [
-          "manifest.dataset_id"
+          "canonical dataset identity"
         ],
         "dataset_state": [
-          "manifest_only"
+          "known"
         ],
         "disease": [
           "healthy"
         ],
         "disease_source": [
-          "disease"
+          "source H5AD"
         ],
         "disease_state": [
-          "present"
+          "known"
         ],
-        "donor_id": [
-          "missing"
-        ],
+        "donor_id": [],
         "donor_id_source": [
-          "contract"
+          "source-exhaustive search found no defensible value"
         ],
         "donor_id_state": [
-          "missing"
+          "unknown"
         ],
-        "dose": [
-          "not_applicable"
-        ],
+        "dose": [],
         "dose_source": [
-          "contract"
+          "source-exhaustive search found no defensible value"
         ],
         "dose_state": [
-          "not_applicable"
+          "unknown"
         ],
-        "dose_unit": [
-          "not_applicable"
-        ],
+        "dose_unit": [],
         "dose_unit_source": [
-          "contract"
+          "source-exhaustive search found no defensible value"
         ],
         "dose_unit_state": [
-          "not_applicable"
+          "unknown"
         ],
         "duplicate_status": [
           "missing"
@@ -1421,20 +1664,23 @@
         "duplicate_status_state": [
           "missing"
         ],
-        "guide_id": [
-          "not_applicable"
+        "ethnicity": [],
+        "ethnicity_source": [
+          "source-exhaustive search found no defensible value"
         ],
+        "ethnicity_state": [
+          "unknown"
+        ],
+        "guide_id": [],
         "guide_id_source": [
-          "contract"
+          "dataset design"
         ],
         "guide_id_state": [
           "not_applicable"
         ],
-        "guide_sequence": [
-          "not_applicable"
-        ],
+        "guide_sequence": [],
         "guide_sequence_source": [
-          "contract"
+          "dataset design"
         ],
         "guide_sequence_state": [
           "not_applicable"
@@ -1449,22 +1695,50 @@
           "manifest_only"
         ],
         "is_baseline": [
-          "missing"
+          "False",
+          "True"
         ],
         "is_baseline_source": [
-          "contract"
+          "source H5AD day label"
         ],
         "is_baseline_state": [
-          "missing"
+          "known"
+        ],
+        "is_bulk": [
+          "False"
+        ],
+        "is_bulk_source": [
+          "single-cell source"
+        ],
+        "is_bulk_state": [
+          "known"
         ],
         "is_control": [
-          "missing"
+          "False",
+          "True"
         ],
         "is_control_source": [
-          "contract"
+          "source H5AD perturbation"
         ],
         "is_control_state": [
-          "missing"
+          "known",
+          "unknown"
+        ],
+        "is_low_quality": [],
+        "is_low_quality_source": [
+          "source-exhaustive search found no defensible value"
+        ],
+        "is_low_quality_state": [
+          "unknown"
+        ],
+        "is_pseudobulk": [
+          "False"
+        ],
+        "is_pseudobulk_source": [
+          "single-cell source"
+        ],
+        "is_pseudobulk_state": [
+          "known"
         ],
         "loader_projectable": [
           "missing"
@@ -1475,14 +1749,21 @@
         "loader_projectable_state": [
           "missing"
         ],
+        "media": [],
+        "media_source": [
+          "source-exhaustive search found no defensible value"
+        ],
+        "media_state": [
+          "unknown"
+        ],
         "modality": [
           "scRNA-seq"
         ],
         "modality_source": [
-          "manifest.modality"
+          "GEO experiment type"
         ],
         "modality_state": [
-          "manifest_only"
+          "known"
         ],
         "model_ready": [
           "missing"
@@ -1492,6 +1773,72 @@
         ],
         "model_ready_state": [
           "missing"
+        ],
+        "n_counts": [
+          "6211.0",
+          "24596.0",
+          "7687.0",
+          "15501.0",
+          "16434.0",
+          "13064.0",
+          "15588.0",
+          "23998.0",
+          "12124.0",
+          "12042.0",
+          "5920.0",
+          "7626.0",
+          "16126.0",
+          "45014.0",
+          "4316.0",
+          "8082.0",
+          "11507.0",
+          "28530.0",
+          "5725.0",
+          "21872.0",
+          "12593.0",
+          "63516.0",
+          "18979.0",
+          "13240.0",
+          "34677.0"
+        ],
+        "n_counts_source": [
+          "source H5AD ncounts"
+        ],
+        "n_counts_state": [
+          "known"
+        ],
+        "n_genes": [
+          "1422",
+          "3263",
+          "2380",
+          "2678",
+          "2844",
+          "2531",
+          "2843",
+          "3399",
+          "2040",
+          "2403",
+          "1520",
+          "1761",
+          "2795",
+          "4817",
+          "1093",
+          "1825",
+          "1688",
+          "3835",
+          "1513",
+          "3048",
+          "2375",
+          "6158",
+          "2900",
+          "2846",
+          "4462"
+        ],
+        "n_genes_source": [
+          "source H5AD ngenes"
+        ],
+        "n_genes_state": [
+          "known"
         ],
         "ncounts": [
           "6211.0",
@@ -1587,10 +1934,10 @@
           "Mus musculus"
         ],
         "organism_source": [
-          "organism"
+          "GEO GSE115943/GSE106340"
         ],
         "organism_state": [
-          "present"
+          "known"
         ],
         "original_obs_index": [
           "AAACCTGAGACAGGCT-GSM3195694-SchiebingerLander2019_GSE115943",
@@ -1627,6 +1974,72 @@
         ],
         "original_obs_index_state": [
           "present"
+        ],
+        "pct_mito": [
+          "1.7066495",
+          "2.7646773",
+          "4.0457916",
+          "4.322302",
+          "2.5191677",
+          "2.6714635",
+          "3.688735",
+          "2.3460288",
+          "3.2497525",
+          "3.0725794",
+          "3.7162163",
+          "3.2913716",
+          "3.1687958",
+          "2.425912",
+          "22.775719",
+          "4.095521",
+          "3.3631701",
+          "2.6989133",
+          "3.8951964",
+          "3.4016094",
+          "3.351068",
+          "3.12992",
+          "3.4511828",
+          "3.1193354",
+          "1.346714"
+        ],
+        "pct_mito_source": [
+          "source H5AD percent_mito"
+        ],
+        "pct_mito_state": [
+          "known"
+        ],
+        "pct_ribo": [
+          "42.650135",
+          "49.284435",
+          "34.17458",
+          "37.178246",
+          "44.876476",
+          "34.943356",
+          "47.382603",
+          "44.745396",
+          "52.68888",
+          "49.510048",
+          "42.26351",
+          "47.23315",
+          "41.690437",
+          "51.17741",
+          "36.167747",
+          "44.927",
+          "34.283478",
+          "44.483",
+          "42.14847",
+          "37.422276",
+          "38.07671",
+          "41.131367",
+          "41.777756",
+          "32.771904",
+          "37.194683"
+        ],
+        "pct_ribo_source": [
+          "source H5AD percent_ribo"
+        ],
+        "pct_ribo_state": [
+          "known"
         ],
         "percent_mito": [
           "1.7066495",
@@ -1687,56 +2100,61 @@
           "Dox",
           "control"
         ],
-        "perturbation_library": [
-          "missing"
-        ],
+        "perturbation_library": [],
         "perturbation_library_source": [
-          "contract"
+          "dataset design"
         ],
         "perturbation_library_state": [
-          "missing"
+          "not_applicable"
         ],
         "perturbation_source": [
-          "perturbation"
+          "source H5AD"
         ],
         "perturbation_state": [
-          "present"
+          "known",
+          "unknown"
         ],
-        "perturbation_target": [
-          "missing"
-        ],
-        "perturbation_target_id": [
-          "missing"
-        ],
+        "perturbation_target": [],
+        "perturbation_target_id": [],
         "perturbation_target_id_source": [
-          "contract"
+          "dataset design"
         ],
         "perturbation_target_id_state": [
-          "missing"
+          "not_applicable"
         ],
         "perturbation_target_source": [
-          "contract"
+          "dataset design"
         ],
         "perturbation_target_state": [
-          "missing"
+          "not_applicable"
         ],
         "perturbation_technology": [
-          "missing"
+          "chemical induction"
         ],
         "perturbation_technology_source": [
-          "contract"
+          "publication design"
         ],
         "perturbation_technology_state": [
-          "missing"
+          "known",
+          "unknown"
         ],
         "perturbation_type": [
-          "drug"
+          "drug",
+          "none"
         ],
         "perturbation_type_source": [
-          "perturbation_type"
+          "source H5AD perturbation"
         ],
         "perturbation_type_state": [
-          "present"
+          "known",
+          "unknown"
+        ],
+        "pseudotime": [],
+        "pseudotime_source": [
+          "source-exhaustive search found no defensible value"
+        ],
+        "pseudotime_state": [
+          "unknown"
         ],
         "quality_flag": [
           "missing"
@@ -1751,63 +2169,122 @@
           "1.0",
           "2.0"
         ],
-        "response_metric": [
-          "not_applicable"
-        ],
+        "response_metric": [],
         "response_metric_source": [
-          "contract"
+          "dataset design"
         ],
         "response_metric_state": [
           "not_applicable"
         ],
-        "response_source": [
-          "not_applicable"
-        ],
+        "response_source": [],
         "response_source_source": [
-          "contract"
+          "dataset design"
         ],
         "response_source_state": [
           "not_applicable"
         ],
-        "response_value": [
-          "not_applicable"
-        ],
+        "response_value": [],
         "response_value_source": [
-          "contract"
+          "dataset design"
         ],
         "response_value_state": [
           "not_applicable"
         ],
         "sample": [
-          "missing"
+          "GSM3195694",
+          "GSM3195656",
+          "GSM3195696",
+          "GSM3195688",
+          "GSM3195745",
+          "GSM3195723",
+          "GSM3195708",
+          "GSM3195658",
+          "GSM3195765",
+          "GSM3195730",
+          "GSM3195739",
+          "GSM3195742",
+          "GSM3195660",
+          "GSM3195766",
+          "GSM3195760",
+          "GSM3195650",
+          "GSM3195661",
+          "GSM3195670",
+          "GSM3195706",
+          "GSM3195725",
+          "GSM3195733",
+          "GSM3195749",
+          "GSM3195715",
+          "GSM3195714",
+          "GSM3195751"
         ],
         "sample_source": [
-          "contract"
+          "source H5AD GSM"
         ],
         "sample_state": [
-          "missing"
+          "known"
         ],
-        "sensitivity": [
-          "not_applicable"
-        ],
+        "sensitivity": [],
         "sensitivity_source": [
-          "contract"
+          "dataset design"
         ],
         "sensitivity_state": [
           "not_applicable"
         ],
+        "sequencer": [
+          "Illumina HiSeq X Ten"
+        ],
+        "sequencer_source": [
+          "GEO platform GPL21273"
+        ],
+        "sequencer_state": [
+          "known"
+        ],
+        "sex": [],
+        "sex_source": [
+          "source-exhaustive search found no defensible value"
+        ],
+        "sex_state": [
+          "unknown"
+        ],
         "source": [
-          "SchiebingerLander2019_GSE115943",
-          "SchiebingerLander2019_GSE106340"
+          "scPerturb"
         ],
         "source_accession": [
-          "missing"
+          "GSE115943",
+          "GSE106340"
         ],
         "source_accession_source": [
-          "contract"
+          "exact source H5AD"
         ],
         "source_accession_state": [
-          "missing"
+          "known"
+        ],
+        "source_age_label": [
+          "D9",
+          "D2",
+          "D8.5",
+          "D15",
+          "D12.5",
+          "D10.5",
+          "D2.5",
+          "D17.5",
+          "D13.5",
+          "D14.5",
+          "D3",
+          "D18",
+          "D17",
+          "D0.5",
+          "D5.5",
+          "D15.5",
+          "D11.5",
+          "D16",
+          "D13",
+          "iPSC",
+          "D14",
+          "D11",
+          "D4.5",
+          "D5",
+          "D8"
         ],
         "source_cancer": [
           "False"
@@ -1818,18 +2295,21 @@
         "source_organism": [
           "mouse"
         ],
+        "source_original_perturbation_type": [
+          "drug"
+        ],
         "source_replicate": [
           "1.0",
           "2.0"
         ],
         "source_source": [
-          "source"
+          "source Artifact namespace"
         ],
         "source_source_tissue_type": [
           "stem"
         ],
         "source_state": [
-          "present"
+          "known"
         ],
         "source_tissue_type": [
           "stem"
@@ -1861,23 +2341,57 @@
         "target_gene_state": [
           "alias_only"
         ],
+        "technology": [
+          "10x Genomics"
+        ],
+        "technology_source": [
+          "GEO processed 10X payload"
+        ],
+        "technology_state": [
+          "known"
+        ],
         "timepoint": [
-          "missing"
+          "12960.0",
+          "2880.0",
+          "12240.0",
+          "21600.0",
+          "18000.0",
+          "15120.0",
+          "3600.0",
+          "25200.0",
+          "19440.0",
+          "20880.0",
+          "4320.0",
+          "25920.0",
+          "24480.0",
+          "720.0",
+          "7920.0",
+          "22320.0",
+          "16560.0",
+          "23040.0",
+          "18720.0",
+          "20160.0",
+          "15840.0",
+          "6480.0",
+          "7200.0",
+          "11520.0",
+          "10800.0"
         ],
         "timepoint_source": [
-          "contract"
+          "source H5AD age label converted days to minutes"
         ],
         "timepoint_state": [
-          "missing"
+          "known",
+          "unknown"
         ],
         "timepoint_unit": [
-          "missing"
+          "minute"
         ],
         "timepoint_unit_source": [
-          "contract"
+          "canonical unit"
         ],
         "timepoint_unit_state": [
-          "missing"
+          "known"
         ],
         "tissue": [
           "stem"
@@ -1889,22 +2403,29 @@
           "alias_only"
         ],
         "tissue_type": [
-          "stem"
+          "cell culture"
         ],
         "tissue_type_source": [
-          "tissue_type"
+          "publication experimental design"
         ],
         "tissue_type_state": [
-          "present"
+          "known"
         ],
-        "x_semantics": [
-          "missing"
+        "trajectory_id": [
+          "MEF_to_iPSC_reprogramming"
         ],
+        "trajectory_id_source": [
+          "publication design"
+        ],
+        "trajectory_id_state": [
+          "known"
+        ],
+        "x_semantics": [],
         "x_semantics_source": [
-          "contract"
+          "source-exhaustive search found no defensible value"
         ],
         "x_semantics_state": [
-          "missing"
+          "unknown"
         ]
       }
     },
@@ -1938,6 +2459,26 @@
         "size": 25047053,
         "uid": "trSdGyVkTDn5ZkaY0002",
         "version": "0002"
+      },
+      {
+        "created_at": "2026-07-21 19:58:14.197342+00:00",
+        "description": "t_fbb1d519: source-exhaustive SchiebingerLander2019 OBS; exact two-H5AD cell join; GEO/paper temporal semantics; sources=GSE115943,GSE106340",
+        "hash": "6Y_1XU0Q4GbUN2lMW3Fcqg",
+        "key": "SchiebingerLander2019/obs.parquet",
+        "run_uid": "kd5kNW6ZLxBYYfqN",
+        "size": 35228332,
+        "uid": "trSdGyVkTDn5ZkaY0003",
+        "version": "0003"
+      },
+      {
+        "created_at": "2026-07-21 20:08:44.663174+00:00",
+        "description": "t_fbb1d519: source-exhaustive SchiebingerLander2019 OBS; exact two-H5AD cell join; GEO/paper temporal semantics; sources=GSE115943,GSE106340",
+        "hash": "eYM4uPJWFRJBZMu3JgjtwQ",
+        "key": "SchiebingerLander2019/obs.parquet",
+        "run_uid": "TCPcgZwkwP8TuG46",
+        "size": 35229883,
+        "uid": "trSdGyVkTDn5ZkaY0004",
+        "version": "0004"
       }
     ],
     "x": {
@@ -1956,9 +2497,9 @@
   "host": "pert-gym-worker-eu",
   "identity_hypotheses": {
     "current_index_equals_original_obs_index": true,
-    "source_concat_index_equals_current_index": false,
-    "source_concat_index_equals_original_obs_index": false,
-    "source_index_set_equals_current_original_obs_index": false,
+    "source_concat_index_equals_current_index": true,
+    "source_concat_index_equals_original_obs_index": true,
+    "source_index_set_equals_current_original_obs_index": true,
     "source_var_index_equals_latest_var_index": true,
     "source_var_index_equals_linked_var_index": true
   },
@@ -1969,16 +2510,32 @@
     "source_var_rows": 27998,
     "writes": 0
   },
-  "pid": 1007,
+  "pid": 1019,
   "source_union": {
     "cross_source_index_overlap": 0,
     "cross_source_index_overlap_sample": [],
-    "index_sha256": "284c3624dd34189d2e8738320b23b6e7a9ca2e980e4d8512b3f1ea6a80937274",
+    "index_sha256": "a3b31f9877c2c9f22208c10600632ed281edcdaf77744432b7b0a51e115c0037",
     "index_unique": true,
     "rows": 327494,
-    "set_equals_current_original_obs_index": false,
+    "set_equals_current_original_obs_index": true,
     "source_join_mismatch_count": 0,
-    "source_join_mismatches": {},
+    "source_join_mismatches": {
+      "GSM": 0,
+      "age": 0,
+      "cancer": 0,
+      "celltype": 0,
+      "disease": 0,
+      "ncounts": 0,
+      "ngenes": 0,
+      "nperts": 0,
+      "organism": 0,
+      "percent_mito": 0,
+      "percent_ribo": 0,
+      "perturbation": 0,
+      "perturbation_type": 0,
+      "replicate": 0,
+      "tissue_type": 0
+    },
     "var_axes_equal": true,
     "var_index_sha256": "0278aff7e333272b93ef1bade2b9af8d604f63a6c33da90282662e81dd0dc2db"
   },
@@ -2034,33 +2591,33 @@
         },
         "index_name": "cell_barcode",
         "index_sample": [
-          "AAACCTGAGACAGGCT-GSM3195694",
-          "AAACCTGGTGAAAGAG-GSM3195694",
-          "AAACCTGTCCACGAAT-GSM3195694",
-          "AAACCTGTCGGCCGAT-GSM3195694",
-          "AAACGGGCATGGTCAT-GSM3195694",
-          "AAAGATGGTAATCACC-GSM3195694",
-          "AAAGATGGTCGCATAT-GSM3195694",
-          "AAAGCAAGTGGCCCTA-GSM3195694",
-          "AAAGCAAGTGTTGAGG-GSM3195694",
-          "AAAGCAATCATTATCC-GSM3195694",
-          "AAAGCAATCCAGAAGG-GSM3195694",
-          "AAAGCAATCTAACTCT-GSM3195694",
-          "AAAGTAGGTATCAGTC-GSM3195694",
-          "AAAGTAGTCAACGGGA-GSM3195694",
-          "AAAGTAGTCACATACG-GSM3195694",
-          "AAATGCCGTACCGAGA-GSM3195694",
-          "AAATGCCGTAGTACCT-GSM3195694",
-          "AACACGTCAGACTCGC-GSM3195694",
-          "AACACGTTCGGACAAG-GSM3195694",
-          "AACACGTTCGTTTAGG-GSM3195694",
-          "AACCATGCACAGACTT-GSM3195694",
-          "AACCATGCACAGGTTT-GSM3195694",
-          "AACCATGCAGCCACCA-GSM3195694",
-          "AACCATGGTAGGCTGA-GSM3195694",
-          "AACGTTGCATTCCTCG-GSM3195694"
+          "AAACCTGAGACAGGCT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAACCTGGTGAAAGAG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAACCTGTCCACGAAT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAACCTGTCGGCCGAT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAACGGGCATGGTCAT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGATGGTAATCACC-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGATGGTCGCATAT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAAGTGGCCCTA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAAGTGTTGAGG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAATCATTATCC-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAATCCAGAAGG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGCAATCTAACTCT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGTAGGTATCAGTC-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGTAGTCAACGGGA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAAGTAGTCACATACG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAATGCCGTACCGAGA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AAATGCCGTAGTACCT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACACGTCAGACTCGC-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACACGTTCGGACAAG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACACGTTCGTTTAGG-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACCATGCACAGACTT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACCATGCACAGGTTT-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACCATGCAGCCACCA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACCATGGTAGGCTGA-GSM3195694-SchiebingerLander2019_GSE115943",
+          "AACGTTGCATTCCTCG-GSM3195694-SchiebingerLander2019_GSE115943"
         ],
-        "index_sha256": "dbe08b505e8d2a625a663af86e8f912334dda689e8387e7e626dd0ddcde84eb0",
+        "index_sha256": "b63991c9647df037d1d3764f1caa32c7148e7a20193a0056aff5807b4bebe0c2",
         "index_unique": true,
         "non_null": {
           "GSM": 259155,
@@ -2456,33 +3013,33 @@
         },
         "index_name": "cell_barcode",
         "index_sample": [
-          "AAACATACCATACG-GSM2836278",
-          "AAACATTGCAGCTA-GSM2836278",
-          "AAACATTGTAACGC-GSM2836278",
-          "AAACCGTGCCGTTC-GSM2836278",
-          "AAACCGTGGAGATA-GSM2836278",
-          "AAACCGTGTGGTAC-GSM2836278",
-          "AAACGCACCGCAAT-GSM2836278",
-          "AAACGCACGCTGTA-GSM2836278",
-          "AAACGCACGGTGTT-GSM2836278",
-          "AAACGCACTACTCT-GSM2836278",
-          "AAACGCTGCCTAAG-GSM2836278",
-          "AAACGCTGTCACCC-GSM2836278",
-          "AAACGCTGTCTATC-GSM2836278",
-          "AAACGCTGTTTCAC-GSM2836278",
-          "AAACGGCTAGCCAT-GSM2836278",
-          "AAACGGCTGAGGGT-GSM2836278",
-          "AAACGGCTTCGATG-GSM2836278",
-          "AAACTTGAGTGTTG-GSM2836278",
-          "AAACTTGATTCCAT-GSM2836278",
-          "AAAGACGATCCTTA-GSM2836278",
-          "AAAGAGACGCAGTT-GSM2836278",
-          "AAAGATCTCGAATC-GSM2836278",
-          "AAAGCAGATCAGGT-GSM2836278",
-          "AAAGCAGATCTGGA-GSM2836278",
-          "AAAGCAGATGACTG-GSM2836278"
+          "AAACATACCATACG-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACATTGCAGCTA-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACATTGTAACGC-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACCGTGCCGTTC-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACCGTGGAGATA-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACCGTGTGGTAC-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGCACCGCAAT-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGCACGCTGTA-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGCACGGTGTT-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGCACTACTCT-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGCTGCCTAAG-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGCTGTCACCC-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGCTGTCTATC-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGCTGTTTCAC-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGGCTAGCCAT-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGGCTGAGGGT-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACGGCTTCGATG-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACTTGAGTGTTG-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAACTTGATTCCAT-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAAGACGATCCTTA-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAAGAGACGCAGTT-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAAGATCTCGAATC-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAAGCAGATCAGGT-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAAGCAGATCTGGA-GSM2836278-SchiebingerLander2019_GSE106340",
+          "AAAGCAGATGACTG-GSM2836278-SchiebingerLander2019_GSE106340"
         ],
-        "index_sha256": "99682eed9ff7e92d1eb48ca404ebc5924c4769fd49b65a572dcf0657d8a8307e",
+        "index_sha256": "8c24bf1dbe3ba019855e83fa7b3a92d415620dde99f5332a06fa9acdf701d689",
         "index_unique": true,
         "non_null": {
           "GSM": 68339,
