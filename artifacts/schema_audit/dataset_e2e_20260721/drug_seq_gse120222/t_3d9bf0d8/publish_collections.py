@@ -110,16 +110,16 @@ CANONICAL_OBS_FIELDS = (
 
 MATERIALIZED_OBS_EXPECTATIONS: dict[str, dict[str, Any]] = {
     "control_availability": {"kind": "exact", "values": ["dataset_control_available"]},
-    "dose": {"kind": "nonnegative_numeric"},
+    "dose": {"kind": "source_row_mapping", "source_field": "pert_dose"},
     "modality": {
         "kind": "allowed",
         "values": ["bulk", "bulk RNA-seq", "bulk_RNA"],
     },
-    "perturbation": {"kind": "nonempty_string"},
+    "perturbation": {"kind": "source_row_mapping", "source_field": "pert_name"},
     "perturbation_type": {"kind": "exact", "values": ["drug"]},
     "source": {"kind": "exact", "values": ["DRUG-seq"]},
     "source_accession": {"kind": "exact", "values": ["GSE120222"]},
-    "timepoint": {"kind": "nonnegative_numeric"},
+    "timepoint": {"kind": "source_row_mapping", "source_field": "pert_time"},
 }
 
 SOURCE_KNOWN_UNMATERIALIZED = {
@@ -202,18 +202,15 @@ def verify_obs_metadata(obs: pd.DataFrame) -> dict[str, Any]:
                         failures.append(
                             f"{field}: values outside {sorted(expected)}: {observed}"
                         )
-                elif kind == "nonempty_string":
-                    if any(not str(value).strip() for value in series):
-                        failures.append(f"{field}: empty value")
-                elif kind == "nonnegative_numeric":
-                    numeric = pd.to_numeric(series, errors="coerce")
-                    if (
-                        numeric.isna().any()
-                        or not np.isfinite(numeric).all()
-                        or (numeric < 0).any()
-                    ):
+                elif kind == "source_row_mapping":
+                    source_field = expectation["source_field"]
+                    if source_field not in obs or not obs[source_field].notna().all():
                         failures.append(
-                            f"{field}: expected finite non-negative numeric values"
+                            f"{field}: source row mapping {source_field} absent"
+                        )
+                    elif not series.equals(obs[source_field]):
+                        failures.append(
+                            f"{field}: values disagree with source row mapping {source_field}"
                         )
             disposition = {
                 "disposition": "materialized_expected",
@@ -222,6 +219,9 @@ def verify_obs_metadata(obs: pd.DataFrame) -> dict[str, Any]:
             }
             if "values" in expectation:
                 disposition["expected"] = expectation["values"]
+            if "source_field" in expectation:
+                disposition["source_field"] = expectation["source_field"]
+                disposition["row_mapping"] = "exact row-wise equality"
             dispositions[field] = disposition
             continue
 
@@ -297,8 +297,7 @@ def verify_var_metadata(
     if not (var.loc[ensembl_mask, "organism"] == "Homo sapiens").all():
         failures.append("human Ensembl row has wrong organism")
     if not (
-        var.loc[ensembl_mask, "stable_feature_id_namespace"]
-        == "Ensembl stable gene ID"
+        var.loc[ensembl_mask, "stable_feature_id_namespace"] == "Ensembl stable gene ID"
     ).all():
         failures.append("human Ensembl row has wrong namespace")
     if (
@@ -431,8 +430,8 @@ def process_conflicts() -> list[dict[str, Any]]:
 
 
 class ProductHeartbeat:
-    def __init__(self) -> None:
-        self.phase = "preflight"
+    def __init__(self, mode: str) -> None:
+        self.phase = "verify_preflight" if mode == "verify" else "preflight"
         self.current = 0
         self._stop = threading.Event()
         self._thread = threading.Thread(target=self._loop, daemon=True)
@@ -774,7 +773,7 @@ def main() -> int:
     helper_sha256 = os.environ.get("HERMES_HELPER_SHA256", "")
     if not re.fullmatch(r"[0-9a-f]{64}", helper_sha256):
         raise AssertionError("missing exact helper SHA-256 binding")
-    heartbeat = ProductHeartbeat()
+    heartbeat = ProductHeartbeat(mode)
     heartbeat.start()
     handles: list[Any] = []
     tracked = False
@@ -784,7 +783,7 @@ def main() -> int:
         state = preflight(ln)
         handles, lock_paths = acquire_locks()
         state = preflight(ln)
-        heartbeat.transition("writing")
+        heartbeat.transition("verifying" if mode == "verify" else "writing")
         triplet = verify_triplet_payload(state)
         absent_before = [
             key
