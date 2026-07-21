@@ -22,8 +22,8 @@ publisher = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(publisher)
 
 EVIDENCE_DIR = PUBLISHER_PATH.parent
-REVISION_RECEIPT_PATH = EVIDENCE_DIR / "revision_receipt_t_1f13aa0c_r2.json"
-REVISION_HANDOFF_PATH = EVIDENCE_DIR / "integrated_handoff_t_1f13aa0c_r2.json"
+REVISION_RECEIPT_PATH = EVIDENCE_DIR / "revision_receipt_t_eb3a96ca.json"
+REVISION_HANDOFF_PATH = EVIDENCE_DIR / "integrated_handoff_t_eb3a96ca.json"
 
 
 def test_count_nnz_supports_dense_and_sparse_matrices() -> None:

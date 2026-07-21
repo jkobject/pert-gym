@@ -1,0 +1,85 @@
+{
+  "format": "pert-gym.dataset-e2e-integrated-handoff-review-fix/v3",
+  "task_id": "t_eb3a96ca",
+  "producer_task_id": "t_3d9bf0d8",
+  "status": "BLOCKED_LIVE_VERIFY_FOREIGN_LEASE",
+  "code_revision": "82db224c25393bf1b29db73129ab58d89b318967",
+  "dataset": {
+    "canonical_id": "DRUG-seq/GSE120222",
+    "real_dataset_id": "drug-seq/GSE120222",
+    "source_accession": "GSE120222",
+    "source_rows_total": 72,
+    "source_members_total": 1,
+    "organism": "Homo sapiens",
+    "cell_line": "U2OS"
+  },
+  "triplet": {
+    "obs": {
+      "uid": "mKSaEEcH4jyes43Z0002",
+      "key": "DRUG-seq/GSE120222/obs.parquet",
+      "sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975"
+    },
+    "x": {
+      "uid": "hfeVCMInQu1UKhwp0000",
+      "key": "DRUG-seq/GSE120222/X.h5ad",
+      "sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84"
+    },
+    "var": {
+      "uid": "vmqp94W72a1Tl2Xw0002",
+      "key": "DRUG-seq/GSE120222/var.parquet",
+      "sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637"
+    },
+    "shape": [
+      72,
+      60371
+    ],
+    "nnz": 1747564
+  },
+  "collections": {
+    "dataset_uid": "4tKR1YGxdI6AtfNa0000",
+    "global_successor_uid": "Ltjv1RYDCnuxqqRT0000",
+    "predecessor_uid": "qoTeH7T78kjbmIWA0000",
+    "preserved_without_mutation": true
+  },
+  "evidence": {
+    "revision_receipt_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/revision_receipt_t_eb3a96ca.json",
+    "revision_receipt_sha256": "7e59b11b261b24d0890e512dbde0d86ec4f41c90a596f285a2bcc252618c9686",
+    "publisher_sha256": "942ac1e31b7090e6141189ee574f16ce58e0ea7d74f4c410f4fcda26d58c1163",
+    "launcher_sha256": "0f2f7e4ee7a9b8ee9a652db514d0171bad83189ff310e1c7848f273721bcc4f4",
+    "historical_mutation_receipt_sha256": "de688662e6014845d8b115b6cc4b3bc4c012df89d0d0ee7acb25600c4da6038c",
+    "historical_verify_receipt_sha256": "8f374617377b260ac463ae81db4b15ad375a26e7ecdac0814b400e1804c1859a"
+  },
+  "scientific_verifier": {
+    "obs": "perturbation, dose, and timepoint are accepted only when exactly equal to preserved pert_name, pert_dose, and pert_time source columns row by row",
+    "var": "human ENSG exact format and exact Ensembl stable gene ID namespace plus ERCC exact format, namespace, organism, mapping, feature type, partition, and uniqueness validation",
+    "negative_tests": "wrong-but-non-null perturbation/dose/timepoint, absent source mappings, and malformed/duplicate/wrong-organism VAR fail closed"
+  },
+  "verify_only_lifecycle": {
+    "exact_purpose": "review-pr104-drugseq-verify-only",
+    "lease_minutes_max": 60,
+    "absolute_runtime_minutes_max": 90,
+    "renew_only_for_exact_live_remote_payload_pid": true,
+    "terminal_stop_and_lease_clear_readback": true,
+    "verify_heartbeat_never_claims_writing": true
+  },
+  "review": {
+    "pr": "https://github.com/jkobject/pert-gym/pull/104",
+    "local_contract_pass": true,
+    "fresh_independent_eu_verify_only_required": true,
+    "live_verify_blocker": "foreign unexpired t-f1d056cd lease through 20260721t191131z; approved launcher failed closed before lease publication, VM start, or payload dispatch",
+    "mutation_or_replay_authorized": false,
+    "product_delta": 0,
+    "ledger_credit": 0
+  },
+  "safety": {
+    "scope": "local code/test/evidence plus read-only GCE control-plane inspection",
+    "vm_start": false,
+    "gcs_or_lamin_access": false,
+    "collection_or_artifact_mutation": false,
+    "payload_rewrite_or_mutation_replay": false,
+    "deletion_or_cleanup": false,
+    "foreign_lease_modified": false,
+    "ledger_mutation": false,
+    "txgnn_access": false
+  }
+}
