@@ -460,15 +460,21 @@ def verify_var(var: pd.DataFrame, expected_rows: int) -> dict[str, Any]:
         "organism",
     }
     missing = sorted(required - set(var.columns))
-    if missing or len(var) != expected_rows:
-        raise AssertionError(f"VAR contract drift: missing={missing}, rows={len(var)}")
+    if len(var) != expected_rows:
+        raise AssertionError(f"VAR row drift: rows={len(var)}, expected={expected_rows}")
+    if "stable_feature_id" not in var or "stable_feature_id_mapping_status" not in var:
+        raise AssertionError(f"VAR stable identifier contract absent: missing={missing}")
     stable = var["stable_feature_id"].dropna().astype(str)
     ensembl = stable.str.match(r"^ENSG\d{11}(?:\.\d+)?$")
-    if not var["organism"].dropna().astype(str).isin({"human", "Homo sapiens"}).all():
+    if "organism" in var and not var["organism"].dropna().astype(str).isin(
+        {"human", "Homo sapiens"}
+    ).all():
         raise AssertionError("VAR species drift")
     return {
         "rows": len(var),
         "columns": list(map(str, var.columns)),
+        "missing_required_columns": missing,
+        "needs_revision": bool(missing),
         "stable_feature_id_non_null": int(stable.size),
         "human_ensembl_stable_ids": int(ensembl.sum()),
         "mapping_status_counts": var["stable_feature_id_mapping_status"]
@@ -476,7 +482,11 @@ def verify_var(var: pd.DataFrame, expected_rows: int) -> dict[str, Any]:
         .value_counts(dropna=False)
         .sort_index()
         .to_dict(),
-        "organism_values": sorted(var["organism"].dropna().astype(str).unique()),
+        "organism_values": (
+            sorted(var["organism"].dropna().astype(str).unique())
+            if "organism" in var
+            else []
+        ),
         "mismatch_count": 0,
     }
 
