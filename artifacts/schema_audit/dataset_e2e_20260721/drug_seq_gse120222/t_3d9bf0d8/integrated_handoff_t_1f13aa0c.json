@@ -1,0 +1,69 @@
+{
+  "format": "pert-gym.dataset-e2e-integrated-handoff-review-fix/v1",
+  "task_id": "t_1f13aa0c",
+  "producer_task_id": "t_3d9bf0d8",
+  "status": "PASS_REVIEW_REQUIRED",
+  "dataset": {
+    "canonical_id": "DRUG-seq/GSE120222",
+    "real_dataset_id": "drug-seq/GSE120222",
+    "source_accession": "GSE120222",
+    "source_rows_total": 72,
+    "source_members_total": 1,
+    "organism": "Homo sapiens",
+    "cell_line": "U2OS"
+  },
+  "triplet": {
+    "obs": {
+      "uid": "mKSaEEcH4jyes43Z0002",
+      "key": "DRUG-seq/GSE120222/obs.parquet",
+      "sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975"
+    },
+    "x": {
+      "uid": "hfeVCMInQu1UKhwp0000",
+      "key": "DRUG-seq/GSE120222/X.h5ad",
+      "sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84"
+    },
+    "var": {
+      "uid": "vmqp94W72a1Tl2Xw0002",
+      "key": "DRUG-seq/GSE120222/var.parquet",
+      "sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637"
+    },
+    "shape": [72, 60371],
+    "nnz": 1747564
+  },
+  "collections": {
+    "dataset_uid": "4tKR1YGxdI6AtfNa0000",
+    "global_successor_uid": "Ltjv1RYDCnuxqqRT0000",
+    "predecessor_uid": "qoTeH7T78kjbmIWA0000",
+    "preserved_without_mutation": true
+  },
+  "evidence": {
+    "revision_receipt_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/revision_receipt_t_1f13aa0c.json",
+    "revision_receipt_sha256": "38b9f75e8a46e63f4c0fb32fe8012824495941d82ea8050425bf70137438e31b",
+    "publisher_sha256": "35445c50cc8933326f789aa6515b5187579dcf488f44e46ef9b2eb9e5de0de5b",
+    "historical_mutation_receipt_sha256": "de688662e6014845d8b115b6cc4b3bc4c012df89d0d0ee7acb25600c4da6038c",
+    "historical_verify_receipt_sha256": "8f374617377b260ac463ae81db4b15ad375a26e7ecdac0814b400e1804c1859a",
+    "rejected_historical_handoff_sha256": "ae31264f4aa47441cc2fe05b36925a773f0d97f2465b873fa2ffd77d67e716ee"
+  },
+  "scientific_verifier": {
+    "obs": "source-exhaustive explicit dispositions for every canonical field; fail-closed expected-value/rule validation for every materialized field",
+    "var": "human ENSG plus ERCC exact format, namespace, organism, mapping, feature type, partition, and uniqueness validation",
+    "negative_tests": "wrong-but-non-null OBS metadata and malformed, duplicate, wrong-organism, or wrong-mapping VAR metadata fail closed"
+  },
+  "review": {
+    "fresh_independent_eu_verify_only_required": true,
+    "mutation_or_replay_authorized": false,
+    "product_delta": 0,
+    "ledger_credit": 0
+  },
+  "safety": {
+    "scope": "local-only code/evidence/test continuation",
+    "vm_start": false,
+    "cloud_or_gcs_or_lamin_access": false,
+    "collection_or_artifact_mutation": false,
+    "payload_rewrite_or_mutation_replay": false,
+    "deletion_or_cleanup": false,
+    "ledger_mutation": false,
+    "txgnn_access": false
+  }
+}
