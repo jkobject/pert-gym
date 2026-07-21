@@ -326,7 +326,9 @@ def verify_triplet_payload(state: dict[str, Any]) -> dict[str, Any]:
     if "x_semantics" in obs:
         raise AssertionError("unsupported x_semantics was unexpectedly materialized")
     ensembl_rows = int(var["ensembl_gene_id"].notna().sum())
-    ercc_rows = int((var["stable_feature_id_namespace"] == "ERCC").sum())
+    ercc_rows = int(
+        (var["stable_feature_id_namespace"] == "ERCC stable spike-in ID").sum()
+    )
     if (ensembl_rows, ercc_rows) != (60_279, 92):
         raise AssertionError("species-correct VAR disposition drift")
     return {

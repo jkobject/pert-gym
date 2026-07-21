@@ -229,6 +229,15 @@ def main() -> int:
             "var_non_null": {
                 column: int(var[column].notna().sum()) for column in var.columns
             },
+            "var_unique": {
+                column: sorted(map(str, var[column].dropna().unique()))[:100]
+                for column in (
+                    "stable_feature_id_namespace",
+                    "stable_feature_id_mapping_status",
+                    "feature_type",
+                    "organism",
+                )
+            },
         },
         "predecessor": predecessor_snapshot,
         "predecessor_contains_target_uid": OBS_UID in predecessor_uids,
