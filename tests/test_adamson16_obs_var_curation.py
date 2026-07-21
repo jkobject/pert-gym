@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
 from pathlib import Path
 
-import numpy as np
-import pandas as pd
+import pytest
+
+np = pytest.importorskip("numpy")
+pd = pytest.importorskip("pandas")
+pytest.importorskip("anndata")
 
 SCRIPT = (
     Path(__file__).parents[1]
@@ -14,6 +19,7 @@ SPEC = importlib.util.spec_from_file_location("adamson16_curation", SCRIPT)
 assert SPEC is not None and SPEC.loader is not None
 curation = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(curation)
+HANDOFF = SCRIPT.with_name("integrated_handoff.json")
 
 
 def test_table_s1_map_is_source_bound_and_resolves_single_and_combo_guides() -> None:
@@ -70,7 +76,9 @@ def test_var_curation_preserves_rows_and_binds_human_ensembl_namespace() -> None
     assert curation.verify_var(curated, 2)["needs_revision"] is False
 
 
-def test_curation_preserves_existing_columns_and_materializes_source_values(monkeypatch) -> None:
+def test_curation_preserves_existing_columns_and_materializes_source_values(
+    monkeypatch,
+) -> None:
     index = pd.Index(["CELL_A", "CELL_B"], name="cell_barcode")
     obs = pd.DataFrame(
         {
@@ -116,3 +124,32 @@ def test_curation_preserves_existing_columns_and_materializes_source_values(monk
     assert curated["guide_sequence"].tolist()[0] == "GGCTTGTTCGCTGGTGGCGT"
     assert pd.isna(curated["guide_sequence"].iloc[1])
     assert receipt["guide_sequence_known_rows"] == 1
+
+
+def test_integrated_handoff_binds_live_receipts_and_noop_replay() -> None:
+    handoff = json.loads(HANDOFF.read_text())
+
+    assert handoff["status"] == "PASS"
+    assert handoff["source_exhaustive"]["status"] is True
+    assert handoff["source_exhaustive"]["source_join_mismatch_count"] == 0
+    assert handoff["denominators"]["physical_members"] == 3
+    assert handoff["denominators"]["observations"] == 86_111
+    assert handoff["production_writes"]["obs_revisions"] == 3
+    assert handoff["production_writes"]["var_revisions"] == 3
+    assert handoff["replay"] == {
+        "collection_writes": 0,
+        "noop": True,
+        "obs_revisions": 0,
+        "status": "PASS",
+        "var_revisions": 0,
+    }
+    for member in handoff["members"]:
+        assert set(member["canonical_field_dispositions"]) == set(
+            curation.CANONICAL_OBS_FIELDS
+        )
+        assert member["source_join"]["join_mismatch_count"] == 0
+        assert member["var_verdict"]["needs_revision"] is False
+        assert member["var_verdict"]["organism_values"] == ["Homo sapiens"]
+    for evidence in handoff["evidence"].values():
+        path = Path(__file__).parents[1] / evidence["path"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == evidence["sha256"]
