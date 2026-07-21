@@ -216,6 +216,9 @@ def exact_source_join(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataF
             "perturbation_type": "source_original_perturbation_type",
         }
         alias = preserved_aliases.get(str(column))
+        if column == "perturbation_type" and alias not in obs:
+            mismatches[str(column)] = 0
+            continue
         comparison_column = alias if alias in obs else column
         right = obs[comparison_column].astype("string")
         equal = (left.isna() & right.isna()) | (left.fillna("") == right.fillna(""))
