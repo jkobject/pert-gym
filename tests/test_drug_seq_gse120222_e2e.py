@@ -92,13 +92,16 @@ def _valid_obs() -> pd.DataFrame:
     return pd.DataFrame(
         {
             "control_availability": ["dataset_control_available"] * 2,
-            "dose": [0.0, 1.0],
+            "dose": ["0.0nM", "100.0nM"],
             "modality": ["bulk_RNA"] * 2,
             "perturbation": ["DMSO", "trametinib"],
             "perturbation_type": ["drug"] * 2,
             "source": ["DRUG-seq"] * 2,
             "source_accession": ["GSE120222"] * 2,
-            "timepoint": [6.0] * 2,
+            "timepoint": ["24h"] * 2,
+            "pert_name": ["DMSO", "trametinib"],
+            "pert_dose": ["0.0nM", "100.0nM"],
+            "pert_time": ["24h"] * 2,
         }
     )
 
@@ -114,6 +117,17 @@ def test_obs_verifier_records_every_canonical_field_disposition() -> None:
     ]
     assert result["field_dispositions"]["cell_line"]["source_expected"] == ["U2OS"]
     assert result["field_dispositions"]["x_semantics"]["disposition"] == "unknown"
+    assert result["field_dispositions"]["perturbation"]["source_field"] == "pert_name"
+    assert result["field_dispositions"]["dose"]["source_field"] == "pert_dose"
+    assert result["field_dispositions"]["timepoint"]["source_field"] == "pert_time"
+
+
+def test_verify_heartbeat_never_claims_writing() -> None:
+    heartbeat = publisher.ProductHeartbeat("verify")
+
+    assert heartbeat.phase == "verify_preflight"
+    heartbeat.transition("verifying")
+    assert heartbeat.phase == "verifying"
 
 
 @pytest.mark.parametrize(
@@ -125,6 +139,9 @@ def test_obs_verifier_records_every_canonical_field_disposition() -> None:
         ("perturbation_type", "CRISPRko"),
         ("control_availability", "strict_control_available"),
         ("perturbation", ""),
+        ("perturbation", "fabricated-drug"),
+        ("dose", "999999nM"),
+        ("timepoint", "999999h"),
     ],
 )
 def test_obs_verifier_rejects_wrong_but_non_null_scientific_metadata(
@@ -132,6 +149,14 @@ def test_obs_verifier_rejects_wrong_but_non_null_scientific_metadata(
 ) -> None:
     obs = _valid_obs()
     obs.loc[0, field] = wrong_value
+
+    with pytest.raises(AssertionError, match="OBS metadata drift"):
+        publisher.verify_obs_metadata(obs)
+
+
+@pytest.mark.parametrize("source_field", ["pert_name", "pert_dose", "pert_time"])
+def test_obs_verifier_requires_source_row_mapping(source_field: str) -> None:
+    obs = _valid_obs().drop(columns=source_field)
 
     with pytest.raises(AssertionError, match="OBS metadata drift"):
         publisher.verify_obs_metadata(obs)
