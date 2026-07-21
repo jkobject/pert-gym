@@ -54,6 +54,95 @@ DATASET_COLLECTION_KEY = "pert-gym/dataset/DRUG-seq/GSE120222/20260721-e2e"
 GLOBAL_COLLECTION_KEY = "pert-gym/additions/20260721-drug-seq-gse120222-e2e"
 HEARTBEAT_PATH = Path("/tmp/pert-gym") / TASK_ID / "product-heartbeat.jsonl"
 
+# docs/pert_gym_schema.md "Required global obs columns", plus the dataset-level
+# provenance/control fields used by this accepted payload. Every field receives
+# an explicit disposition even when the immutable OBS does not materialize it.
+CANONICAL_OBS_FIELDS = (
+    "dataset",
+    "sample",
+    "cell_id",
+    "donor_id",
+    "batch",
+    "cell_type",
+    "cell_line",
+    "disease",
+    "tissue_type",
+    "organism",
+    "sex",
+    "age",
+    "ethnicity",
+    "sequencer",
+    "technology",
+    "assay",
+    "modality",
+    "media",
+    "is_bulk",
+    "is_pseudobulk",
+    "perturbation",
+    "perturbation_type",
+    "perturbation_technology",
+    "perturbation_library",
+    "guide_id",
+    "guide_sequence",
+    "perturbation_target",
+    "perturbation_target_id",
+    "is_control",
+    "dose",
+    "dose_unit",
+    "timepoint",
+    "trajectory_id",
+    "pseudotime",
+    "is_baseline",
+    "sensitivity",
+    "response_metric",
+    "response_value",
+    "response_source",
+    "n_counts",
+    "n_genes",
+    "pct_mito",
+    "pct_ribo",
+    "is_low_quality",
+    "source",
+    "source_accession",
+    "control_availability",
+    "x_semantics",
+)
+
+MATERIALIZED_OBS_EXPECTATIONS: dict[str, dict[str, Any]] = {
+    "control_availability": {"kind": "exact", "values": ["dataset_control_available"]},
+    "dose": {"kind": "nonnegative_numeric"},
+    "modality": {
+        "kind": "allowed",
+        "values": ["bulk", "bulk RNA-seq", "bulk_RNA"],
+    },
+    "perturbation": {"kind": "nonempty_string"},
+    "perturbation_type": {"kind": "exact", "values": ["drug"]},
+    "source": {"kind": "exact", "values": ["DRUG-seq"]},
+    "source_accession": {"kind": "exact", "values": ["GSE120222"]},
+    "timepoint": {"kind": "nonnegative_numeric"},
+}
+
+SOURCE_KNOWN_UNMATERIALIZED = {
+    "organism": ["Homo sapiens"],
+    "cell_line": ["U2OS"],
+    "assay": ["DRUG-seq"],
+    "perturbation_technology": ["small-molecule treatment profiled by DRUG-seq"],
+}
+
+NOT_APPLICABLE_OBS_FIELDS = {
+    "cell_id",
+    "donor_id",
+    "cell_type",
+    "sex",
+    "age",
+    "ethnicity",
+    "guide_id",
+    "guide_sequence",
+    "perturbation_library",
+    "trajectory_id",
+    "pseudotime",
+}
+
 
 def canonical(value: Any) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
@@ -84,6 +173,200 @@ def available_memory() -> int:
 
 def count_nnz(matrix: Any) -> int:
     return int(matrix.nnz if hasattr(matrix, "nnz") else np.count_nonzero(matrix))
+
+
+def _observed_values(series: pd.Series) -> list[str]:
+    return sorted(map(str, series.dropna().unique()))
+
+
+def verify_obs_metadata(obs: pd.DataFrame) -> dict[str, Any]:
+    failures: list[str] = []
+    dispositions: dict[str, dict[str, Any]] = {}
+    for field in CANONICAL_OBS_FIELDS:
+        if field in MATERIALIZED_OBS_EXPECTATIONS:
+            expectation = MATERIALIZED_OBS_EXPECTATIONS[field]
+            if field not in obs or not obs[field].notna().all():
+                failures.append(f"{field}: required materialized values absent")
+                observed: list[str] = []
+            else:
+                series = obs[field]
+                observed = _observed_values(series)
+                kind = expectation["kind"]
+                if kind in {"exact", "allowed"}:
+                    expected = set(expectation["values"])
+                    if kind == "exact" and set(observed) != expected:
+                        failures.append(
+                            f"{field}: expected {sorted(expected)}, got {observed}"
+                        )
+                    if kind == "allowed" and not set(observed).issubset(expected):
+                        failures.append(
+                            f"{field}: values outside {sorted(expected)}: {observed}"
+                        )
+                elif kind == "nonempty_string":
+                    if any(not str(value).strip() for value in series):
+                        failures.append(f"{field}: empty value")
+                elif kind == "nonnegative_numeric":
+                    numeric = pd.to_numeric(series, errors="coerce")
+                    if (
+                        numeric.isna().any()
+                        or not np.isfinite(numeric).all()
+                        or (numeric < 0).any()
+                    ):
+                        failures.append(
+                            f"{field}: expected finite non-negative numeric values"
+                        )
+            disposition = {
+                "disposition": "materialized_expected",
+                "observed": observed,
+                "validation": expectation["kind"],
+            }
+            if "values" in expectation:
+                disposition["expected"] = expectation["values"]
+            dispositions[field] = disposition
+            continue
+
+        if field in obs:
+            failures.append(
+                f"{field}: materialized without a source-bound expectation; refusing an invented default"
+            )
+        if field in SOURCE_KNOWN_UNMATERIALIZED:
+            dispositions[field] = {
+                "disposition": "source_known_not_materialized",
+                "source_expected": SOURCE_KNOWN_UNMATERIALIZED[field],
+                "observed": [],
+            }
+        elif field in NOT_APPLICABLE_OBS_FIELDS:
+            dispositions[field] = {
+                "disposition": "not_applicable",
+                "expected": ["absent"],
+                "observed": [],
+            }
+        else:
+            dispositions[field] = {
+                "disposition": "unknown",
+                "expected": ["absent"],
+                "observed": [],
+            }
+
+    if failures:
+        raise AssertionError("OBS metadata drift: " + "; ".join(failures))
+    return {
+        "field_dispositions": dispositions,
+        "materialized_fields": sorted(MATERIALIZED_OBS_EXPECTATIONS),
+        "source_exhaustive": True,
+        "mismatch_count": 0,
+    }
+
+
+def verify_var_metadata(
+    var: pd.DataFrame, *, expected_ensembl_rows: int, expected_ercc_rows: int
+) -> dict[str, Any]:
+    required = {
+        "ensembl_gene_id",
+        "stable_feature_id_namespace",
+        "stable_feature_id_mapping_status",
+        "feature_type",
+        "organism",
+    }
+    missing = sorted(required - set(var.columns))
+    if missing:
+        raise AssertionError(f"VAR metadata drift: missing columns {missing}")
+
+    stable_ids = (
+        var["stable_feature_id"].astype("string")
+        if "stable_feature_id" in var
+        else pd.Series(var.index.astype(str), index=var.index, dtype="string")
+    )
+    ensembl_mask = var["ensembl_gene_id"].notna()
+    ercc_mask = var["stable_feature_id_namespace"] == "ERCC stable spike-in ID"
+    failures: list[str] = []
+    if int(ensembl_mask.sum()) != expected_ensembl_rows:
+        failures.append("unexpected human Ensembl row count")
+    if int(ercc_mask.sum()) != expected_ercc_rows:
+        failures.append("unexpected ERCC row count or namespace")
+    if bool((ensembl_mask & ercc_mask).any()) or int(
+        (ensembl_mask | ercc_mask).sum()
+    ) != len(var):
+        failures.append("rows do not partition exactly into Ensembl and ERCC")
+
+    ensembl = var.loc[ensembl_mask, "ensembl_gene_id"].astype(str)
+    if not ensembl.str.fullmatch(r"ENSG\d{11}(?:\.\d+)?").all():
+        failures.append("malformed or non-human Ensembl identifier")
+    if stable_ids.loc[ensembl_mask].astype(str).tolist() != ensembl.tolist():
+        failures.append("stable feature identity disagrees with Ensembl identity")
+    if not (var.loc[ensembl_mask, "organism"] == "Homo sapiens").all():
+        failures.append("human Ensembl row has wrong organism")
+    if (
+        not var.loc[ensembl_mask, "stable_feature_id_namespace"]
+        .astype(str)
+        .str.contains("Ensembl", case=False, regex=False)
+        .all()
+    ):
+        failures.append("human Ensembl row has wrong namespace")
+    if (
+        not var.loc[ensembl_mask, "stable_feature_id_mapping_status"]
+        .astype(str)
+        .str.fullmatch(r"mapped(?:_exact)?")
+        .all()
+    ):
+        failures.append("human Ensembl row has wrong mapping status")
+    if (
+        not var.loc[ensembl_mask, "feature_type"]
+        .astype(str)
+        .str.fullmatch(r"gene", case=False)
+        .all()
+    ):
+        failures.append("human Ensembl row has wrong feature type")
+
+    ercc_ids = stable_ids.loc[ercc_mask].astype(str)
+    if not ercc_ids.str.fullmatch(r"ERCC-\d{5}").all():
+        failures.append("malformed ERCC stable identifier")
+    if (
+        not var.loc[ercc_mask, "organism"]
+        .astype(str)
+        .str.fullmatch(r"not_applicable", case=False)
+        .all()
+    ):
+        failures.append("ERCC row has wrong organism disposition")
+    if (
+        not var.loc[ercc_mask, "stable_feature_id_mapping_status"]
+        .astype(str)
+        .str.fullmatch(r"not_applicable", case=False)
+        .all()
+    ):
+        failures.append("ERCC row has wrong mapping disposition")
+    if (
+        not var.loc[ercc_mask, "feature_type"]
+        .astype(str)
+        .str.fullmatch(r"spike[-_ ]?in", case=False)
+        .all()
+    ):
+        failures.append("ERCC row has wrong feature type")
+    if stable_ids.isna().any() or stable_ids.duplicated().any():
+        failures.append("stable feature IDs are missing or duplicated")
+
+    if failures:
+        raise AssertionError("VAR metadata drift: " + "; ".join(failures))
+    return {
+        "human_ensembl_rows": int(ensembl_mask.sum()),
+        "ercc_rows": int(ercc_mask.sum()),
+        "unique_stable_feature_ids": int(stable_ids.nunique()),
+        "ensembl_format": "^ENSG[0-9]{11}(.[0-9]+)?$",
+        "ercc_format": "^ERCC-[0-9]{5}$",
+        "namespace_disposition": {
+            "human_ensembl": "Ensembl namespace",
+            "ercc": "ERCC stable spike-in ID",
+        },
+        "organism_disposition": {
+            "human_ensembl": "Homo sapiens",
+            "ercc": "not_applicable",
+        },
+        "mapping_status_disposition": {
+            "human_ensembl": "mapped or mapped_exact",
+            "ercc": "not_applicable",
+        },
+        "mismatch_count": 0,
+    }
 
 
 def collection_snapshot(collection: Any) -> tuple[list[Any], dict[str, Any]]:
@@ -309,28 +592,10 @@ def verify_triplet_payload(state: dict[str, Any]) -> dict[str, Any]:
         or nnz != NNZ
     ):
         raise AssertionError("OBS/X/VAR payload denominator or parity drift")
-    canonical_fields = [
-        "control_availability",
-        "dose",
-        "modality",
-        "perturbation",
-        "perturbation_type",
-        "source",
-        "source_accession",
-        "timepoint",
-    ]
-    if any(
-        field not in obs or not obs[field].notna().all() for field in canonical_fields
-    ):
-        raise AssertionError("accepted canonical OBS field coverage drift")
-    if "x_semantics" in obs:
-        raise AssertionError("unsupported x_semantics was unexpectedly materialized")
-    ensembl_rows = int(var["ensembl_gene_id"].notna().sum())
-    ercc_rows = int(
-        (var["stable_feature_id_namespace"] == "ERCC stable spike-in ID").sum()
+    obs_metadata = verify_obs_metadata(obs)
+    var_metadata = verify_var_metadata(
+        var, expected_ensembl_rows=60_279, expected_ercc_rows=92
     )
-    if (ensembl_rows, ercc_rows) != (60_279, 92):
-        raise AssertionError("species-correct VAR disposition drift")
     return {
         "shape": shape,
         "nnz": nnz,
@@ -338,10 +603,12 @@ def verify_triplet_payload(state: dict[str, Any]) -> dict[str, Any]:
         "sha256": observed_sha256,
         "obs_rows_checked": len(obs),
         "var_rows_checked": len(var),
-        "canonical_fields_non_null": canonical_fields,
+        "obs_metadata": obs_metadata,
+        "var_metadata": var_metadata,
+        "canonical_fields_non_null": obs_metadata["materialized_fields"],
         "x_semantics": "unknown; absent rather than invented",
-        "human_ensembl_rows": ensembl_rows,
-        "ercc_rows": ercc_rows,
+        "human_ensembl_rows": var_metadata["human_ensembl_rows"],
+        "ercc_rows": var_metadata["ercc_rows"],
         "mismatch_count": 0,
         "bounded_loader": "backed H5AD metadata plus one complete 72-row matrix slice",
     }
