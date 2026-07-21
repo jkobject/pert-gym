@@ -230,7 +230,14 @@ def main() -> None:
         joined = source_all.reindex(current_original)
         for column in source_all.columns:
             left = joined[column].astype("string")
-            right = current_obs[column].astype("string").reset_index(drop=True)
+            preserved_aliases = {
+                "age": "source_age_label",
+                "organism": "source_organism",
+                "tissue_type": "source_tissue_type",
+                "perturbation_type": "source_original_perturbation_type",
+            }
+            comparison_column = preserved_aliases.get(str(column), str(column))
+            right = current_obs[comparison_column].astype("string").reset_index(drop=True)
             left = left.reset_index(drop=True)
             equal = (left.isna() & right.isna()) | (left.fillna("") == right.fillna(""))
             source_join_mismatches[str(column)] = int((~equal).sum())
