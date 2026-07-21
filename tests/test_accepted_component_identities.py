@@ -188,6 +188,14 @@ def test_builder_rejects_duplicate_accepted_record_events(tmp_path: Path) -> Non
         duplicate_uri
     )
     con.execute("update task_runs set metadata=? where id=2", (json.dumps(metadata),))
+    reviewer_metadata = json.loads(
+        con.execute("select metadata from task_runs where id=102").fetchone()[0]
+    )
+    reviewer_metadata["record_id"] = "record_1"
+    con.execute(
+        "update task_runs set metadata=? where id=102",
+        (json.dumps(reviewer_metadata),),
+    )
     con.commit()
     con.close()
     with pytest.raises(
@@ -230,6 +238,63 @@ def test_builder_rejects_denominator_mismatch(tmp_path: Path) -> None:
         build_ledger(
             catalogue, progress, board, expected_accepted=3, expected_denominator=5
         )
+
+
+def test_acceptance_requires_accepted_object_identity(tmp_path: Path) -> None:
+    catalogue, progress, board = make_inputs(tmp_path)
+    con = sqlite3.connect(board)
+    code_only_pass = {
+        "production_run": False,
+        "verdict": "PASS",
+        "approved": True,
+        "tests": {"focused": "pass"},
+    }
+    con.execute(
+        "update task_runs set metadata=? where id=101",
+        (json.dumps(code_only_pass),),
+    )
+    con.commit()
+    con.close()
+
+    with pytest.raises(
+        LedgerValidationError, match="lacks an independent acceptance binding"
+    ):
+        build_ledger(
+            catalogue, progress, board, expected_accepted=3, expected_denominator=5
+        )
+
+    # The canonical HCT116 reviewer has this shape: it proves the immutable
+    # candidate by exact manifest hash and generation rather than record_id.
+    manifest_bound_review = {
+        "approved": True,
+        "candidate": {
+            "manifest_sha256": f"{1:064x}",
+            "manifest_generation_after": "1000",
+            "manifest_generation_before": "1000",
+        },
+        "verdict": "done",
+    }
+    con = sqlite3.connect(board)
+    con.execute(
+        "update task_runs set metadata=? where id=101",
+        (json.dumps(manifest_bound_review),),
+    )
+    con.commit()
+    con.close()
+
+    ledger = build_ledger(
+        catalogue, progress, board, expected_accepted=3, expected_denominator=5
+    )
+    first_acceptance = next(
+        component["acceptance"]
+        for component in ledger["accepted_components"]
+        if component["record_id"] == "record_1"
+    )
+    assert first_acceptance["binding_evidence"] == {
+        "kind": "exact_manifest_sha256_generation",
+        "manifest_generation": "1000",
+        "manifest_sha256": f"{1:064x}",
+    }
 
 
 def test_validator_rejects_source_digest_drift(tmp_path: Path) -> None:

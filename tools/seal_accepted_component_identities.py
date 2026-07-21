@@ -26,10 +26,19 @@ LEGACY_RECORD_BINDINGS = {
     "t_664e9dc0": "temporal_v4_013_cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno",
 }
 LEGACY_ACCEPTANCE_BINDINGS = {
-    "t_591607e3": "t_802674b1",
+    # Canonical post-production review of the exact immutable HCT116 candidate.
+    "t_591607e3": "t_d2535006",
     # The original linked reviewer failed on mutable QA provenance. This later
     # exact evidence review is the accepted binding for the retained event.
     "t_f196b29f": "t_96c5aeda",
+}
+LEGACY_ACCEPTANCE_RUN_BINDINGS = {
+    "t_591607e3": 2828,
+    "t_f196b29f": 3691,
+}
+SUPPORTING_ACCEPTANCE_BINDINGS = {
+    # Independent readback tester feeding the canonical HCT116 reviewer above.
+    "t_591607e3": (("t_09626817", 2827),),
 }
 LEGACY_MANIFEST_GENERATIONS = {"t_591607e3": "1784029269136670"}
 
@@ -154,13 +163,99 @@ def _approved(metadata: dict[str, Any]) -> bool:
     return bool(verdicts & {"PASS", "APPROVE", "DONE"})
 
 
+def _scalar_values(value: Any, key_path: str = "") -> list[tuple[str, Any]]:
+    found: list[tuple[str, Any]] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            path = f"{key_path}.{key}" if key_path else key
+            found.extend(_scalar_values(child, path))
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            found.extend(_scalar_values(child, f"{key_path}[{index}]"))
+    elif isinstance(value, (str, int)) and not isinstance(value, bool):
+        found.append((key_path, value))
+    return found
+
+
+def _accepted_object_evidence(
+    metadata: dict[str, Any],
+    *,
+    record_id: str,
+    target_logical_key: str,
+    manifest_uri: str,
+    manifest_generation: str | None,
+    manifest_hash: str | None,
+) -> dict[str, Any] | None:
+    scalars = _scalar_values(metadata)
+    scalar_strings = {str(value) for _, value in scalars}
+    if record_id in scalar_strings:
+        return {"kind": "exact_record_id", "record_id": record_id}
+    if target_logical_key and target_logical_key in scalar_strings:
+        return {
+            "kind": "exact_target_logical_key",
+            "target_logical_key": target_logical_key,
+        }
+
+    if not manifest_hash or not manifest_generation:
+        return None
+    scalar_text = "\n".join(str(value) for _, value in scalars)
+    hash_pattern = rf"(?<![0-9a-f]){re.escape(manifest_hash)}(?![0-9a-f])"
+    generation_pattern = rf"(?<!\d){re.escape(manifest_generation)}(?!\d)"
+    if not re.search(hash_pattern, scalar_text) or not re.search(
+        generation_pattern, scalar_text
+    ):
+        return None
+
+    manifest_base_uri = manifest_uri.split("#", 1)[0]
+    candidate_manifest_uris = set()
+    for path, value in scalars:
+        if not isinstance(value, str) or (
+            "manifest" not in path.lower() and "gs://" not in value
+        ):
+            continue
+        for candidate_uri in re.findall(
+            r"gs://[^\s`\"']+/manifest\.json(?:#\d+)?", value
+        ):
+            candidate_manifest_uris.add(candidate_uri.split("#", 1)[0])
+    if candidate_manifest_uris and manifest_base_uri not in candidate_manifest_uris:
+        return None
+    evidence = {
+        "kind": "exact_manifest_sha256_generation",
+        "manifest_generation": manifest_generation,
+        "manifest_sha256": manifest_hash,
+    }
+    if manifest_base_uri in candidate_manifest_uris:
+        evidence = {
+            "kind": "exact_manifest_uri_sha256_generation",
+            "manifest_uri": manifest_base_uri,
+            "manifest_generation": manifest_generation,
+            "manifest_sha256": manifest_hash,
+        }
+    return evidence
+
+
 def _acceptance_binding(
-    con: sqlite3.Connection, event_task_id: str, event_metadata: dict[str, Any]
+    con: sqlite3.Connection,
+    event_task_id: str,
+    event_metadata: dict[str, Any],
+    *,
+    record_id: str,
+    target_logical_key: str,
+    manifest_uri: str,
+    manifest_generation: str | None,
+    manifest_hash: str | None,
 ) -> dict[str, Any]:
-    candidates: list[tuple[int, str, str]] = []
+    candidates: list[tuple[int, str, str, int | None]] = []
     explicit = LEGACY_ACCEPTANCE_BINDINGS.get(event_task_id)
     if explicit:
-        candidates.append((100, "legacy_explicit_independent_gate", explicit))
+        candidates.append(
+            (
+                100,
+                "legacy_explicit_independent_gate",
+                explicit,
+                LEGACY_ACCEPTANCE_RUN_BINDINGS[event_task_id],
+            )
+        )
 
     for path, task_id in _task_ids(event_metadata):
         lower = path.lower()
@@ -169,9 +264,9 @@ def _acceptance_binding(
         ):
             continue
         if "review" in lower or "final_gate" in lower:
-            candidates.append((90, path, task_id))
+            candidates.append((90, path, task_id, None))
         elif "accepted_outcome" in lower or "parent_outcome" in lower:
-            candidates.append((80, path, task_id))
+            candidates.append((80, path, task_id, None))
 
     parent_ids = [
         str(row[0])
@@ -185,12 +280,14 @@ def _acceptance_binding(
             "select assignee from tasks where id=?", (task_id,)
         ).fetchone()
         if row and row[0] == "reviewer":
-            candidates.append((70, "linked_reviewer_parent", task_id))
+            candidates.append((70, "linked_reviewer_parent", task_id, None))
 
     errors: list[str] = []
-    for _, source, task_id in sorted(set(candidates), reverse=True):
+    for _, source, task_id, candidate_run_id in sorted(
+        set(candidates), reverse=True, key=lambda candidate: candidate[:3]
+    ):
         try:
-            row = _task_run(con, task_id)
+            row = _task_run(con, task_id, candidate_run_id)
             metadata = json.loads(row["metadata"] or "{}")
         except (LedgerValidationError, json.JSONDecodeError) as exc:
             errors.append(f"{task_id}: {exc}")
@@ -201,14 +298,58 @@ def _acceptance_binding(
             task_id == explicit and str(metadata.get("verdict", "")).lower() == "done"
         ):
             continue
-        return {
+        binding_evidence = _accepted_object_evidence(
+            metadata,
+            record_id=record_id,
+            target_logical_key=target_logical_key,
+            manifest_uri=manifest_uri,
+            manifest_generation=manifest_generation,
+            manifest_hash=manifest_hash,
+        )
+        if binding_evidence is None:
+            errors.append(f"{task_id}: approval lacks accepted-object identity")
+            continue
+        acceptance = {
             "task_id": task_id,
             "run_id": int(row["id"]),
             "profile": str(row["assignee"]),
             "source": source,
             "verdict": "PASS",
             "metadata_sha256": _metadata_digest(metadata),
+            "binding_evidence": binding_evidence,
         }
+        supporting_evidence = []
+        for supporting_task_id, supporting_run_id in SUPPORTING_ACCEPTANCE_BINDINGS.get(
+            event_task_id, ()
+        ):
+            supporting_row = _task_run(con, supporting_task_id, supporting_run_id)
+            supporting_metadata = json.loads(supporting_row["metadata"] or "{}")
+            supporting_binding = _accepted_object_evidence(
+                supporting_metadata,
+                record_id=record_id,
+                target_logical_key=target_logical_key,
+                manifest_uri=manifest_uri,
+                manifest_generation=manifest_generation,
+                manifest_hash=manifest_hash,
+            )
+            if not _approved(supporting_metadata) or supporting_binding is None:
+                raise LedgerValidationError(
+                    f"supporting acceptance {supporting_task_id} lacks exact object evidence"
+                )
+            supporting_evidence.append(
+                {
+                    "task_id": supporting_task_id,
+                    "run_id": int(supporting_row["id"]),
+                    "profile": str(supporting_row["assignee"]),
+                    "source": "supporting_exact_candidate_test",
+                    "verdict": "PASS",
+                    "metadata_sha256": _metadata_digest(supporting_metadata),
+                    "binding_evidence": supporting_binding,
+                }
+            )
+        if supporting_evidence:
+            acceptance["supporting_evidence"] = supporting_evidence
+        return acceptance
     detail = "; ".join(errors)
     raise LedgerValidationError(
         f"accepted event {event_task_id} lacks an independent acceptance binding"
@@ -366,7 +507,16 @@ def build_ledger(
                         "generation": generation,
                         "sha256": manifest_hash,
                     },
-                    "acceptance": _acceptance_binding(con, task_id, metadata),
+                    "acceptance": _acceptance_binding(
+                        con,
+                        task_id,
+                        metadata,
+                        record_id=record_id,
+                        target_logical_key=target_key,
+                        manifest_uri=live_readback,
+                        manifest_generation=generation,
+                        manifest_hash=manifest_hash,
+                    ),
                     "event_run_metadata_sha256": _metadata_digest(metadata),
                 }
             )
