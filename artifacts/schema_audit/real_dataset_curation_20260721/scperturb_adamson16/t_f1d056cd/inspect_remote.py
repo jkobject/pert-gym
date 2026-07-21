@@ -166,14 +166,24 @@ def main() -> None:
     source_tables: dict[str, Any] = {}
     ena = pd.read_csv(sources["ena_report"]["path"], sep="\t")
     source_tables["ena_report"] = frame_summary(ena)
-    table_s1 = pd.ExcelFile(sources["paper_table_s1"]["path"])
-    source_tables["paper_table_s1"] = {
-        "sheet_names": table_s1.sheet_names,
-        "sheets": {
-            sheet: frame_summary(pd.read_excel(table_s1, sheet_name=sheet))
-            for sheet in table_s1.sheet_names
-        },
-    }
+    table_s1_path = Path(sources["paper_table_s1"]["path"])
+    if table_s1_path.read_bytes()[:2] == b"PK":
+        table_s1 = pd.ExcelFile(table_s1_path)
+        source_tables["paper_table_s1"] = {
+            "status": "parsed",
+            "sheet_names": table_s1.sheet_names,
+            "sheets": {
+                sheet: frame_summary(pd.read_excel(table_s1, sheet_name=sheet))
+                for sheet in table_s1.sheet_names
+            },
+        }
+    else:
+        source_tables["paper_table_s1"] = {
+            "status": "download_wrapper_not_workbook",
+            "content_type": sources["paper_table_s1"]["content_type"],
+            "bytes": sources["paper_table_s1"]["bytes"],
+            "sha256": sources["paper_table_s1"]["sha256"],
+        }
 
     ln = connect_pertdata()
     if ln.setup.settings.instance.slug != "laminlabs/pertdata":
