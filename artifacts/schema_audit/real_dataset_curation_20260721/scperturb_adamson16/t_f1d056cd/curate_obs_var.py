@@ -255,7 +255,7 @@ def load_table_s1() -> tuple[dict[str, str], dict[str, str], dict[str, Any]]:
 
 def reproduce_scperturb_join(
     obs: pd.DataFrame, spec: dict[str, Any]
-) -> tuple[pd.Series, pd.DataFrame, dict[str, Any]]:
+) -> tuple[pd.Series, pd.Series, pd.DataFrame, dict[str, Any]]:
     barcodes_data, barcodes_url = fetch_source(spec, "barcodes.tsv.gz")
     identities_data, identities_url = fetch_source(spec, "cell_identities.csv.gz")
     if sha256_bytes(barcodes_data) != spec["barcodes_sha256"]:
@@ -295,9 +295,11 @@ def reproduce_scperturb_join(
         comparisons[column] = int((~equal).sum())
     if any(comparisons.values()):
         raise AssertionError(f"source join parity mismatch: {comparisons}")
-    gem_group = barcodes["raw_barcode"].astype(str).str.rsplit("-", n=1).str[-1]
+    raw_barcode = barcodes["raw_barcode"].astype(str)
+    raw_barcode.index = obs.index
+    gem_group = raw_barcode.str.rsplit("-", n=1).str[-1]
     gem_group.index = obs.index
-    return gem_group, joined, {
+    return raw_barcode, gem_group, joined, {
         "barcodes_url": barcodes_url,
         "barcodes_sha256": spec["barcodes_sha256"],
         "identities_url": identities_url,
@@ -363,11 +365,11 @@ def curate_obs(
     by_guide: dict[str, str],
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     original = obs.copy(deep=True)
-    gem_group, joined, join_receipt = reproduce_scperturb_join(obs, spec)
+    raw_barcode, gem_group, joined, join_receipt = reproduce_scperturb_join(obs, spec)
     curated = obs.copy(deep=True)
     curated["dataset"] = prefix
     curated["sample"] = spec["gsm"]
-    curated["cell_id"] = curated.index.astype(str)
+    curated["cell_id"] = raw_barcode
     curated["batch"] = "gemgroup_" + gem_group.astype(str)
     curated["sequencer"] = spec["sequencer"]
     curated["technology"] = curated["assay"].astype(str)
@@ -491,6 +493,22 @@ def verify_var(var: pd.DataFrame, expected_rows: int) -> dict[str, Any]:
     }
 
 
+def curate_var(var: pd.DataFrame) -> pd.DataFrame:
+    original = var.copy(deep=True)
+    curated = var.copy(deep=True)
+    stable = curated["stable_feature_id"].astype("string")
+    if not stable.notna().all() or not stable.str.match(
+        r"^ENSG\d{11}(?:\.\d+)?$", na=False
+    ).all():
+        raise AssertionError("refusing species annotation for non-human stable IDs")
+    curated["stable_feature_id_namespace"] = "Ensembl stable gene ID"
+    curated["organism"] = "Homo sapiens"
+    assert_frame_equal(curated.loc[:, original.columns], original)
+    if not curated.index.equals(original.index):
+        raise AssertionError("VAR row order/index drift")
+    return curated
+
+
 def collection_membership(ln: Any, keys: set[str]) -> dict[str, Any]:
     snapshots = {}
     for collection_key in (
@@ -529,13 +547,16 @@ def verify_current(
         x = resolve_feature_artifact(ln, obs_artifact.features.get_values()["X"])
         var = resolve_feature_artifact(ln, x.features.get_values()["var"])
         var_frame = var.load()
+        var_verdict = verify_var(var_frame, len(var_frame))
+        curated_var = curate_var(var_frame)
         curated, source_receipt = curate_obs(
             obs, prefix, spec, by_vector, by_guide
         )
         already_curated = str(obs_artifact.description).startswith(
             f"{TASK_ID}: source-exhaustive Adamson16 OBS"
         )
-        all_curated &= already_curated
+        var_curated = not var_verdict["needs_revision"]
+        all_curated &= already_curated and var_curated
         if already_curated:
             assert_frame_equal(obs, curated, check_categorical=True)
         results.append(
@@ -548,18 +569,23 @@ def verify_current(
                 "rows": len(obs),
                 "source_join": source_receipt,
                 "field_dispositions": field_dispositions(curated),
-                "var_verdict": verify_var(var_frame, len(var_frame)),
+                "var_verdict": var_verdict,
+                "var_curated": var_curated,
                 "already_curated": already_curated,
                 "curated_frame": curated,
+                "curated_var_frame": curated_var,
                 "obs_artifact": obs_artifact,
                 "x_artifact": x,
+                "var_artifact": var,
             }
         )
     return results, all_curated
 
 
-def publish(ln: Any, results: list[dict[str, Any]], helper_sha256: str) -> list[Any]:
-    writes = []
+def publish(
+    ln: Any, results: list[dict[str, Any]], helper_sha256: str
+) -> dict[str, list[Any]]:
+    writes: dict[str, list[Any]] = {"obs": [], "var": []}
     root = Path(tempfile.mkdtemp(prefix=f"{TASK_ID}-adamson16-obs-"))
     ln.track(
         key=f"pert-gym/real-dataset-curation/{DATASET_ID}/{TASK_ID}",
@@ -575,20 +601,36 @@ def publish(ln: Any, results: list[dict[str, Any]], helper_sha256: str) -> list[
     )
     for index, result in enumerate(results, start=1):
         prefix = result["prefix"]
-        path = root / f"obs-{index}.parquet"
-        result["curated_frame"].to_parquet(path)
-        description = (
-            f"{TASK_ID}: source-exhaustive Adamson16 OBS; exact GEO sidecar join; "
-            f"paper Table S1 guide sequences; source={SOURCE_ACCESSION}; member={prefix}"
-        )
-        artifact = ln.Artifact.from_dataframe(
-            path,
-            key=f"{prefix}/obs.parquet",
-            revises=result["obs_artifact"],
-            description=description,
-        ).save()
-        artifact.features.set_values({"X": result["x_artifact"]})
-        writes.append(artifact)
+        if not result["already_curated"]:
+            path = root / f"obs-{index}.parquet"
+            result["curated_frame"].to_parquet(path)
+            description = (
+                f"{TASK_ID}: source-exhaustive Adamson16 OBS; exact GEO sidecar join; "
+                f"paper Table S1 guide sequences; source={SOURCE_ACCESSION}; member={prefix}"
+            )
+            artifact = ln.Artifact.from_dataframe(
+                path,
+                key=f"{prefix}/obs.parquet",
+                revises=result["obs_artifact"],
+                description=description,
+            ).save()
+            artifact.features.set_values({"X": result["x_artifact"]})
+            writes["obs"].append(artifact)
+        if not result["var_curated"]:
+            path = root / f"var-{index}.parquet"
+            result["curated_var_frame"].to_parquet(path)
+            description = (
+                f"{TASK_ID}: Adamson16 human VAR namespace/species annotation; "
+                f"all stable IDs exact ENSG; member={prefix}"
+            )
+            artifact = ln.Artifact.from_dataframe(
+                path,
+                key=f"{prefix}/var.parquet",
+                revises=result["var_artifact"],
+                description=description,
+            ).save()
+            result["x_artifact"].features.set_values({"var": artifact})
+            writes["var"].append(artifact)
         emit_product("writing", index)
     try:
         ln.finish()
@@ -601,7 +643,14 @@ def strip_runtime(result: dict[str, Any]) -> dict[str, Any]:
     return {
         key: value
         for key, value in result.items()
-        if key not in {"curated_frame", "obs_artifact", "x_artifact"}
+        if key
+        not in {
+            "curated_frame",
+            "curated_var_frame",
+            "obs_artifact",
+            "x_artifact",
+            "var_artifact",
+        }
     }
 
 
@@ -625,7 +674,7 @@ def main() -> int:
         "artifacts": ln.Artifact.filter().count(),
         "collections": ln.Collection.filter().count(),
     }
-    writes: list[Any] = []
+    writes: dict[str, list[Any]] = {"obs": [], "var": []}
     if mode == "mutate" and not all_curated:
         metadata = {
             "run_id": TASK_ID,
@@ -660,7 +709,10 @@ def main() -> int:
         "artifacts": ln.Artifact.filter().count(),
         "collections": ln.Collection.filter().count(),
     }
-    write_receipts = [artifact_identity(artifact) for artifact in writes]
+    write_receipts = {
+        role: [artifact_identity(artifact) for artifact in artifacts]
+        for role, artifacts in writes.items()
+    }
     receipt = {
         "format": "pert-gym.real-dataset-obs-var-curation/v2",
         "task_id": TASK_ID,
@@ -684,8 +736,8 @@ def main() -> int:
         "members_after": [strip_runtime(item) for item in final_results],
         "collections": collections_after,
         "writes": {
-            "obs_revisions": len(writes),
-            "var_revisions": 0,
+            "obs_revisions": len(writes["obs"]),
+            "var_revisions": len(writes["var"]),
             "x_revisions": 0,
             "collection_writes": 0,
             "deletions": 0,

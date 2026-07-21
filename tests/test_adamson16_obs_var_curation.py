@@ -50,6 +50,26 @@ def test_field_dispositions_cover_every_canonical_field() -> None:
     assert result["dose"]["disposition"] == "not_applicable"
 
 
+def test_var_curation_preserves_rows_and_binds_human_ensembl_namespace() -> None:
+    frame = pd.DataFrame(
+        {
+            "stable_feature_id": ["ENSG00000123456", "ENSG00000123457"],
+            "stable_feature_id_mapping_status": ["exact_stable_id"] * 2,
+        },
+        index=pd.Index(["GENE_A", "GENE_B"], name="gene_symbol"),
+    )
+
+    curated = curation.curate_var(frame)
+
+    pd.testing.assert_frame_equal(curated.loc[:, frame.columns], frame)
+    assert curated.index.equals(frame.index)
+    assert curated["stable_feature_id_namespace"].unique().tolist() == [
+        "Ensembl stable gene ID"
+    ]
+    assert curated["organism"].unique().tolist() == ["Homo sapiens"]
+    assert curation.verify_var(curated, 2)["needs_revision"] is False
+
+
 def test_curation_preserves_existing_columns_and_materializes_source_values(monkeypatch) -> None:
     index = pd.Index(["CELL_A", "CELL_B"], name="cell_barcode")
     obs = pd.DataFrame(
@@ -74,6 +94,7 @@ def test_curation_preserves_existing_columns_and_materializes_source_values(monk
     def fake_join(frame, spec):
         del frame, spec
         return (
+            pd.Series(["CELL_A-1", "CELL_B-2"], index=index),
             pd.Series(["1", "2"], index=index),
             joined,
             {"join_mismatch_count": 0},
@@ -90,7 +111,7 @@ def test_curation_preserves_existing_columns_and_materializes_source_values(monk
     )
 
     pd.testing.assert_frame_equal(curated.loc[:, original.columns], original)
-    assert curated["cell_id"].tolist() == ["CELL_A", "CELL_B"]
+    assert curated["cell_id"].tolist() == ["CELL_A-1", "CELL_B-2"]
     assert curated["batch"].tolist() == ["gemgroup_1", "gemgroup_2"]
     assert curated["guide_sequence"].tolist()[0] == "GGCTTGTTCGCTGGTGGCGT"
     assert pd.isna(curated["guide_sequence"].iloc[1])
