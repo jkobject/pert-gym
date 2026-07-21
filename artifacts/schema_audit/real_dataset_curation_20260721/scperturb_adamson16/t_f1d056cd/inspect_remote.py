@@ -6,6 +6,7 @@ from __future__ import annotations
 import base64
 import gzip
 import hashlib
+import io
 import json
 import os
 import platform
@@ -120,6 +121,13 @@ def frame_summary(frame: pd.DataFrame) -> dict[str, Any]:
     }
 
 
+def read_maybe_nested_gzip_csv(path: str, **kwargs: Any) -> pd.DataFrame:
+    data = Path(path).read_bytes()
+    while data[:2] == b"\x1f\x8b":
+        data = gzip.decompress(data)
+    return pd.read_csv(io.BytesIO(data), **kwargs)
+
+
 def artifact_identity(artifact: Any) -> dict[str, Any]:
     return {
         "uid": artifact.uid,
@@ -230,13 +238,13 @@ def main() -> None:
         x_artifact = resolve_artifact(ln, features["X"])
         x_features = x_artifact.features.get_values()
         var_artifact = resolve_artifact(ln, x_features["var"])
-        original = pd.read_csv(
+        original = read_maybe_nested_gzip_csv(
             sources[f"{spec['experiment']}:barcodes.tsv.gz"]["path"],
             sep="\t",
             header=None,
             names=["raw_barcode"],
         )
-        identities = pd.read_csv(
+        identities = read_maybe_nested_gzip_csv(
             sources[f"{spec['experiment']}:cell_identities.csv.gz"]["path"],
             index_col=0,
         )
