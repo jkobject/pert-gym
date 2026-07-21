@@ -1,0 +1,2351 @@
+{
+  "canonical_sha256": "521c211b59998447bcb7b528f66caad0c73a2e012c58d8b3a1ef883b147fda5f",
+  "collections": {
+    "pert-gym/base-public/20260621": {
+      "hash": "iYeMjKnPCIp7_MHRa17Ygw",
+      "member_count": 60,
+      "target_key_count": 3,
+      "target_keys_present": [
+        "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
+        "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
+        "scperturb/adamson16_GSM2406681_10X010/obs.parquet"
+      ],
+      "uid": "SM2AjpxEQZ1pEfF30000"
+    },
+    "pert-gym/canonical/20260621": {
+      "hash": "FuT5cWa5QodFHfYbzsyLRw",
+      "member_count": 1056,
+      "target_key_count": 3,
+      "target_keys_present": [
+        "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
+        "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
+        "scperturb/adamson16_GSM2406681_10X010/obs.parquet"
+      ],
+      "uid": "aEWBxMlcWx2d7Cd80000"
+    }
+  },
+  "completed_at": 1784632377,
+  "dataset_id": "scperturb/adamson16",
+  "format": "pert-gym.real-dataset-obs-var-curation/v2",
+  "helper_sha256": "f921f2abdbf4005de4dcbe7ff2c8fc7dad4e4f81f6f0078b1b69eb27655a8957",
+  "host": {
+    "available_memory_bytes": 32922398720,
+    "free_disk_bytes": 291870146560,
+    "hostname": "pert-gym-worker-eu"
+  },
+  "members_after": [
+    {
+      "already_curated": true,
+      "field_dispositions": {
+        "age": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "assay": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "batch": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_id": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_line": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "control_availability": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "dataset": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "disease": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "donor_id": {
+          "disposition": "unknown",
+          "materialized": true,
+          "observed_non_null_sample": [
+            "unknown"
+          ]
+        },
+        "dose": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "dose_unit": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "ethnicity": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "guide_id": {
+          "disposition": "materialized_partial",
+          "known_rows": 5752,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 16
+        },
+        "guide_sequence": {
+          "disposition": "materialized_partial",
+          "known_rows": 0,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 5768
+        },
+        "is_baseline": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_bulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "is_control": {
+          "disposition": "materialized_partial",
+          "known_rows": 3983,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 1785
+        },
+        "is_low_quality": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_pseudobulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "media": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "modality": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_counts": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_genes": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "organism": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_mito": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_ribo": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation": {
+          "disposition": "materialized_partial",
+          "known_rows": 5752,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 16
+        },
+        "perturbation_library": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_target": {
+          "disposition": "materialized_partial",
+          "known_rows": 3983,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 1785
+        },
+        "perturbation_target_id": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "perturbation_technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pseudotime": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_metric": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_source": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_value": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sample": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sensitivity": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sequencer": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sex": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source_accession": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "timepoint": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "tissue_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "trajectory_id": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "x_semantics": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        }
+      },
+      "obs_before": {
+        "created_at": "2026-07-21 11:07:27.879949+00:00",
+        "description": "t_f1d056cd: source-exhaustive Adamson16 OBS; exact GEO sidecar join; paper Table S1 guide sequences; source=GSE90546; member=scperturb/adamson16_GSM2406675_10X001",
+        "hash": "kcwX8APV51gdXeyigTTglg",
+        "key": "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 576451,
+        "uid": "DpXjkZY6NCnsQ1L60002",
+        "version": "0002"
+      },
+      "obs_history_count": 3,
+      "prefix": "scperturb/adamson16_GSM2406675_10X001",
+      "rows": 5768,
+      "source_join": {
+        "barcodes_rows": 5768,
+        "barcodes_sha256": "b44a3d466b03cafe7479ed98b3f6aa9becc9ce3651f17b49f7f77ca03d72cd32",
+        "barcodes_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406675&format=file&file=GSM2406675_10X001_barcodes.tsv.gz",
+        "control_false_rows": 3983,
+        "control_true_rows": 0,
+        "control_unknown_rows": 1785,
+        "guide_id_known_rows": 5752,
+        "guide_sequence_known_rows": 0,
+        "identities_rows": 5758,
+        "identities_sha256": "e0e719dfba62a3651b5ccde1d318973e5a80bba1863dbc98c104ea74ac6f5f34",
+        "identities_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406675&format=file&file=GSM2406675_10X001_cell_identities.csv.gz",
+        "join_mismatch_count": 0,
+        "joined_guide_rows": 5758,
+        "materialized_columns": [],
+        "scperturb_join_semantics": "strip gem-group suffix, make OBS names unique, strip identity suffix, keep first duplicate, left-join to OBS order",
+        "target_known_rows": 3983
+      },
+      "var": {
+        "created_at": "2026-07-21 11:07:33.465452+00:00",
+        "description": "t_f1d056cd: Adamson16 human VAR namespace/species annotation; all stable IDs exact ENSG; member=scperturb/adamson16_GSM2406675_10X001",
+        "hash": "ikI7UhZUMyRIOV2OXAUmiA",
+        "key": "scperturb/adamson16_GSM2406675_10X001/var.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 1564155,
+        "uid": "2j6j7JDLkLjoRLm90002",
+        "version": "0002"
+      },
+      "var_curated": true,
+      "var_verdict": {
+        "columns": [
+          "pert_gym_original_var_index",
+          "gene_symbol",
+          "ncounts",
+          "ncells",
+          "ensembl_gene_id",
+          "stable_feature_id",
+          "stable_feature_id_source",
+          "stable_feature_id_mapping_status",
+          "stable_feature_id_namespace",
+          "organism"
+        ],
+        "human_ensembl_stable_ids": 35635,
+        "mapping_status_counts": {
+          "exact_stable_id": 35635
+        },
+        "mismatch_count": 0,
+        "missing_required_columns": [],
+        "needs_revision": false,
+        "organism_values": [
+          "Homo sapiens"
+        ],
+        "rows": 35635,
+        "stable_feature_id_non_null": 35635
+      },
+      "x": {
+        "created_at": "2025-01-14 14:06:11.954542+00:00",
+        "description": "None",
+        "hash": "aCwEF40-TBS1mNvQa5Vlj6",
+        "key": "scperturb/adamson16_GSM2406675_10X001/X.h5ad",
+        "run_uid": "dJAuwAouSRhDk2ppHwv9",
+        "size": 122497964,
+        "uid": "E7pZHzRaxMWmefk80000",
+        "version": "0000"
+      }
+    },
+    {
+      "already_curated": true,
+      "field_dispositions": {
+        "age": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "assay": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "batch": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_id": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_line": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "control_availability": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "dataset": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "disease": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "donor_id": {
+          "disposition": "unknown",
+          "materialized": true,
+          "observed_non_null_sample": [
+            "unknown"
+          ]
+        },
+        "dose": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "dose_unit": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "ethnicity": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "guide_id": {
+          "disposition": "materialized_partial",
+          "known_rows": 14697,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 309
+        },
+        "guide_sequence": {
+          "disposition": "materialized_partial",
+          "known_rows": 11310,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 3696
+        },
+        "is_baseline": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_bulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "is_control": {
+          "disposition": "materialized_partial",
+          "known_rows": 14696,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 310
+        },
+        "is_low_quality": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_pseudobulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "media": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "modality": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_counts": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_genes": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "organism": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_mito": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_ribo": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation": {
+          "disposition": "materialized_partial",
+          "known_rows": 14697,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 309
+        },
+        "perturbation_library": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_target": {
+          "disposition": "materialized_partial",
+          "known_rows": 11331,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 3675
+        },
+        "perturbation_target_id": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "perturbation_technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pseudotime": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_metric": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_source": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_value": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sample": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sensitivity": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sequencer": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sex": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source_accession": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "timepoint": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "tissue_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "trajectory_id": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "x_semantics": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        }
+      },
+      "obs_before": {
+        "created_at": "2026-07-21 11:08:00.413166+00:00",
+        "description": "t_f1d056cd: source-exhaustive Adamson16 OBS; exact GEO sidecar join; paper Table S1 guide sequences; source=GSE90546; member=scperturb/adamson16_GSM2406677_10X005",
+        "hash": "0QKgec8C98W8T4fRJ4WQ0Q",
+        "key": "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 1653408,
+        "uid": "TuT6kabcWUTNlDw60003",
+        "version": "0003"
+      },
+      "obs_history_count": 4,
+      "prefix": "scperturb/adamson16_GSM2406677_10X005",
+      "rows": 15006,
+      "source_join": {
+        "barcodes_rows": 15006,
+        "barcodes_sha256": "0525bc03ebd7ba7c0b7a777ff9a739330fdaa092568363c9e0e7b85ebce15895",
+        "barcodes_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406677&format=file&file=GSM2406677_10X005_barcodes.tsv.gz",
+        "control_false_rows": 11331,
+        "control_true_rows": 3365,
+        "control_unknown_rows": 310,
+        "guide_id_known_rows": 14697,
+        "guide_sequence_known_rows": 11310,
+        "identities_rows": 14856,
+        "identities_sha256": "fc9cb6314594345057c1b937fa0c7947399f073196a3104963da609be7b74d14",
+        "identities_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406677&format=file&file=GSM2406677_10X005_cell_identities.csv.gz",
+        "join_mismatch_count": 0,
+        "joined_guide_rows": 14710,
+        "materialized_columns": [],
+        "scperturb_join_semantics": "strip gem-group suffix, make OBS names unique, strip identity suffix, keep first duplicate, left-join to OBS order",
+        "target_known_rows": 11331
+      },
+      "var": {
+        "created_at": "2026-07-21 11:08:06.110583+00:00",
+        "description": "t_f1d056cd: Adamson16 human VAR namespace/species annotation; all stable IDs exact ENSG; member=scperturb/adamson16_GSM2406677_10X005",
+        "hash": "e1UFvdrtJrDPJ8nuszfuAQ",
+        "key": "scperturb/adamson16_GSM2406677_10X005/var.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 1486862,
+        "uid": "wn8ozyDwXEXob7mF0002",
+        "version": "0002"
+      },
+      "var_curated": true,
+      "var_verdict": {
+        "columns": [
+          "pert_gym_original_var_index",
+          "gene_symbol",
+          "ncounts",
+          "ncells",
+          "ensembl_gene_id",
+          "stable_feature_id",
+          "stable_feature_id_source",
+          "stable_feature_id_mapping_status",
+          "stable_feature_id_namespace",
+          "organism"
+        ],
+        "human_ensembl_stable_ids": 32738,
+        "mapping_status_counts": {
+          "exact_stable_id": 32738
+        },
+        "mismatch_count": 0,
+        "missing_required_columns": [],
+        "needs_revision": false,
+        "organism_values": [
+          "Homo sapiens"
+        ],
+        "rows": 32738,
+        "stable_feature_id_non_null": 32738
+      },
+      "x": {
+        "created_at": "2025-01-14 09:17:01.493413+00:00",
+        "description": "None",
+        "hash": "KuDuwvrwYdUv45It73z655",
+        "key": "scperturb/adamson16_GSM2406677_10X005/X.h5ad",
+        "run_uid": "dJAuwAouSRhDk2ppHwv9",
+        "size": 513723254,
+        "uid": "eWYpt9tMQVsFpoLG0000",
+        "version": "0000"
+      }
+    },
+    {
+      "already_curated": true,
+      "field_dispositions": {
+        "age": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "assay": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "batch": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_id": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_line": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "control_availability": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "dataset": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "disease": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "donor_id": {
+          "disposition": "unknown",
+          "materialized": true,
+          "observed_non_null_sample": [
+            "unknown"
+          ]
+        },
+        "dose": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "dose_unit": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "ethnicity": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "guide_id": {
+          "disposition": "materialized_partial",
+          "known_rows": 62623,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 2714
+        },
+        "guide_sequence": {
+          "disposition": "materialized_partial",
+          "known_rows": 54306,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 11031
+        },
+        "is_baseline": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_bulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "is_control": {
+          "disposition": "materialized_partial",
+          "known_rows": 55328,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 10009
+        },
+        "is_low_quality": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_pseudobulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "media": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "modality": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_counts": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_genes": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "organism": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_mito": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_ribo": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation": {
+          "disposition": "materialized_partial",
+          "known_rows": 62623,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 2714
+        },
+        "perturbation_library": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_target": {
+          "disposition": "materialized_partial",
+          "known_rows": 55328,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 10009
+        },
+        "perturbation_target_id": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "perturbation_technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pseudotime": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_metric": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_source": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_value": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sample": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sensitivity": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sequencer": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sex": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source_accession": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "timepoint": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "tissue_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "trajectory_id": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "x_semantics": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        }
+      },
+      "obs_before": {
+        "created_at": "2026-07-21 11:08:31.978095+00:00",
+        "description": "t_f1d056cd: source-exhaustive Adamson16 OBS; exact GEO sidecar join; paper Table S1 guide sequences; source=GSE90546; member=scperturb/adamson16_GSM2406681_10X010",
+        "hash": "Ly1OFMFotKelKq1Psus4vA",
+        "key": "scperturb/adamson16_GSM2406681_10X010/obs.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 6854492,
+        "uid": "g4YM4QQh80HYmpde0002",
+        "version": "0002"
+      },
+      "obs_history_count": 3,
+      "prefix": "scperturb/adamson16_GSM2406681_10X010",
+      "rows": 65337,
+      "source_join": {
+        "barcodes_rows": 65337,
+        "barcodes_sha256": "1e0d820343d0c6e17bdab4fef96f4446e223b94861942ccf3d7225818e009836",
+        "barcodes_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406681&format=file&file=GSM2406681_10X010_barcodes.tsv.gz",
+        "control_false_rows": 55328,
+        "control_true_rows": 0,
+        "control_unknown_rows": 10009,
+        "guide_id_known_rows": 62623,
+        "guide_sequence_known_rows": 54306,
+        "identities_rows": 65257,
+        "identities_sha256": "8b40be7a2280c1713bf5a1eb828aad46e70ad3a7000b5f5a1322e51e06c4cf7f",
+        "identities_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406681&format=file&file=GSM2406681_10X010_cell_identities.csv.gz",
+        "join_mismatch_count": 0,
+        "joined_guide_rows": 62724,
+        "materialized_columns": [],
+        "scperturb_join_semantics": "strip gem-group suffix, make OBS names unique, strip identity suffix, keep first duplicate, left-join to OBS order",
+        "target_known_rows": 55328
+      },
+      "var": {
+        "created_at": "2026-07-21 11:08:38.236004+00:00",
+        "description": "t_f1d056cd: Adamson16 human VAR namespace/species annotation; all stable IDs exact ENSG; member=scperturb/adamson16_GSM2406681_10X010",
+        "hash": "4nC2qsYp69TpyT-cNOcLYw",
+        "key": "scperturb/adamson16_GSM2406681_10X010/var.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 1521983,
+        "uid": "5By6mLARgeYAEThC0002",
+        "version": "0002"
+      },
+      "var_curated": true,
+      "var_verdict": {
+        "columns": [
+          "pert_gym_original_var_index",
+          "gene_symbol",
+          "ncounts",
+          "ncells",
+          "ensembl_gene_id",
+          "stable_feature_id",
+          "stable_feature_id_source",
+          "stable_feature_id_mapping_status",
+          "stable_feature_id_namespace",
+          "organism"
+        ],
+        "human_ensembl_stable_ids": 32738,
+        "mapping_status_counts": {
+          "exact_stable_id": 32738
+        },
+        "mismatch_count": 0,
+        "missing_required_columns": [],
+        "needs_revision": false,
+        "organism_values": [
+          "Homo sapiens"
+        ],
+        "rows": 32738,
+        "stable_feature_id_non_null": 32738
+      },
+      "x": {
+        "created_at": "2025-01-14 09:20:58.726165+00:00",
+        "description": "None",
+        "hash": "on2uwLLbAmDlfB4DpKTnln",
+        "key": "scperturb/adamson16_GSM2406681_10X010/X.h5ad",
+        "run_uid": "dJAuwAouSRhDk2ppHwv9",
+        "size": 1913997653,
+        "uid": "h1Xmuenf9GyCOQll0000",
+        "version": "0000"
+      }
+    }
+  ],
+  "members_before": [
+    {
+      "already_curated": true,
+      "field_dispositions": {
+        "age": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "assay": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "batch": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_id": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_line": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "control_availability": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "dataset": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "disease": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "donor_id": {
+          "disposition": "unknown",
+          "materialized": true,
+          "observed_non_null_sample": [
+            "unknown"
+          ]
+        },
+        "dose": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "dose_unit": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "ethnicity": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "guide_id": {
+          "disposition": "materialized_partial",
+          "known_rows": 5752,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 16
+        },
+        "guide_sequence": {
+          "disposition": "materialized_partial",
+          "known_rows": 0,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 5768
+        },
+        "is_baseline": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_bulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "is_control": {
+          "disposition": "materialized_partial",
+          "known_rows": 3983,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 1785
+        },
+        "is_low_quality": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_pseudobulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "media": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "modality": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_counts": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_genes": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "organism": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_mito": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_ribo": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation": {
+          "disposition": "materialized_partial",
+          "known_rows": 5752,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 16
+        },
+        "perturbation_library": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_target": {
+          "disposition": "materialized_partial",
+          "known_rows": 3983,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 1785
+        },
+        "perturbation_target_id": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "perturbation_technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pseudotime": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_metric": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_source": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_value": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sample": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sensitivity": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sequencer": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sex": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source_accession": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "timepoint": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "tissue_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 5768,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "trajectory_id": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "x_semantics": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        }
+      },
+      "obs_before": {
+        "created_at": "2026-07-21 11:07:27.879949+00:00",
+        "description": "t_f1d056cd: source-exhaustive Adamson16 OBS; exact GEO sidecar join; paper Table S1 guide sequences; source=GSE90546; member=scperturb/adamson16_GSM2406675_10X001",
+        "hash": "kcwX8APV51gdXeyigTTglg",
+        "key": "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 576451,
+        "uid": "DpXjkZY6NCnsQ1L60002",
+        "version": "0002"
+      },
+      "obs_history_count": 3,
+      "prefix": "scperturb/adamson16_GSM2406675_10X001",
+      "rows": 5768,
+      "source_join": {
+        "barcodes_rows": 5768,
+        "barcodes_sha256": "b44a3d466b03cafe7479ed98b3f6aa9becc9ce3651f17b49f7f77ca03d72cd32",
+        "barcodes_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406675&format=file&file=GSM2406675_10X001_barcodes.tsv.gz",
+        "control_false_rows": 3983,
+        "control_true_rows": 0,
+        "control_unknown_rows": 1785,
+        "guide_id_known_rows": 5752,
+        "guide_sequence_known_rows": 0,
+        "identities_rows": 5758,
+        "identities_sha256": "e0e719dfba62a3651b5ccde1d318973e5a80bba1863dbc98c104ea74ac6f5f34",
+        "identities_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406675&format=file&file=GSM2406675_10X001_cell_identities.csv.gz",
+        "join_mismatch_count": 0,
+        "joined_guide_rows": 5758,
+        "materialized_columns": [],
+        "scperturb_join_semantics": "strip gem-group suffix, make OBS names unique, strip identity suffix, keep first duplicate, left-join to OBS order",
+        "target_known_rows": 3983
+      },
+      "var": {
+        "created_at": "2026-07-21 11:07:33.465452+00:00",
+        "description": "t_f1d056cd: Adamson16 human VAR namespace/species annotation; all stable IDs exact ENSG; member=scperturb/adamson16_GSM2406675_10X001",
+        "hash": "ikI7UhZUMyRIOV2OXAUmiA",
+        "key": "scperturb/adamson16_GSM2406675_10X001/var.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 1564155,
+        "uid": "2j6j7JDLkLjoRLm90002",
+        "version": "0002"
+      },
+      "var_curated": true,
+      "var_verdict": {
+        "columns": [
+          "pert_gym_original_var_index",
+          "gene_symbol",
+          "ncounts",
+          "ncells",
+          "ensembl_gene_id",
+          "stable_feature_id",
+          "stable_feature_id_source",
+          "stable_feature_id_mapping_status",
+          "stable_feature_id_namespace",
+          "organism"
+        ],
+        "human_ensembl_stable_ids": 35635,
+        "mapping_status_counts": {
+          "exact_stable_id": 35635
+        },
+        "mismatch_count": 0,
+        "missing_required_columns": [],
+        "needs_revision": false,
+        "organism_values": [
+          "Homo sapiens"
+        ],
+        "rows": 35635,
+        "stable_feature_id_non_null": 35635
+      },
+      "x": {
+        "created_at": "2025-01-14 14:06:11.954542+00:00",
+        "description": "None",
+        "hash": "aCwEF40-TBS1mNvQa5Vlj6",
+        "key": "scperturb/adamson16_GSM2406675_10X001/X.h5ad",
+        "run_uid": "dJAuwAouSRhDk2ppHwv9",
+        "size": 122497964,
+        "uid": "E7pZHzRaxMWmefk80000",
+        "version": "0000"
+      }
+    },
+    {
+      "already_curated": true,
+      "field_dispositions": {
+        "age": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "assay": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "batch": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_id": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_line": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "control_availability": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "dataset": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "disease": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "donor_id": {
+          "disposition": "unknown",
+          "materialized": true,
+          "observed_non_null_sample": [
+            "unknown"
+          ]
+        },
+        "dose": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "dose_unit": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "ethnicity": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "guide_id": {
+          "disposition": "materialized_partial",
+          "known_rows": 14697,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 309
+        },
+        "guide_sequence": {
+          "disposition": "materialized_partial",
+          "known_rows": 11310,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 3696
+        },
+        "is_baseline": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_bulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "is_control": {
+          "disposition": "materialized_partial",
+          "known_rows": 14696,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 310
+        },
+        "is_low_quality": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_pseudobulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "media": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "modality": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_counts": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_genes": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "organism": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_mito": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_ribo": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation": {
+          "disposition": "materialized_partial",
+          "known_rows": 14697,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 309
+        },
+        "perturbation_library": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_target": {
+          "disposition": "materialized_partial",
+          "known_rows": 11331,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 3675
+        },
+        "perturbation_target_id": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "perturbation_technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pseudotime": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_metric": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_source": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_value": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sample": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sensitivity": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sequencer": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sex": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source_accession": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "timepoint": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "tissue_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 15006,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "trajectory_id": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "x_semantics": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        }
+      },
+      "obs_before": {
+        "created_at": "2026-07-21 11:08:00.413166+00:00",
+        "description": "t_f1d056cd: source-exhaustive Adamson16 OBS; exact GEO sidecar join; paper Table S1 guide sequences; source=GSE90546; member=scperturb/adamson16_GSM2406677_10X005",
+        "hash": "0QKgec8C98W8T4fRJ4WQ0Q",
+        "key": "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 1653408,
+        "uid": "TuT6kabcWUTNlDw60003",
+        "version": "0003"
+      },
+      "obs_history_count": 4,
+      "prefix": "scperturb/adamson16_GSM2406677_10X005",
+      "rows": 15006,
+      "source_join": {
+        "barcodes_rows": 15006,
+        "barcodes_sha256": "0525bc03ebd7ba7c0b7a777ff9a739330fdaa092568363c9e0e7b85ebce15895",
+        "barcodes_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406677&format=file&file=GSM2406677_10X005_barcodes.tsv.gz",
+        "control_false_rows": 11331,
+        "control_true_rows": 3365,
+        "control_unknown_rows": 310,
+        "guide_id_known_rows": 14697,
+        "guide_sequence_known_rows": 11310,
+        "identities_rows": 14856,
+        "identities_sha256": "fc9cb6314594345057c1b937fa0c7947399f073196a3104963da609be7b74d14",
+        "identities_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406677&format=file&file=GSM2406677_10X005_cell_identities.csv.gz",
+        "join_mismatch_count": 0,
+        "joined_guide_rows": 14710,
+        "materialized_columns": [],
+        "scperturb_join_semantics": "strip gem-group suffix, make OBS names unique, strip identity suffix, keep first duplicate, left-join to OBS order",
+        "target_known_rows": 11331
+      },
+      "var": {
+        "created_at": "2026-07-21 11:08:06.110583+00:00",
+        "description": "t_f1d056cd: Adamson16 human VAR namespace/species annotation; all stable IDs exact ENSG; member=scperturb/adamson16_GSM2406677_10X005",
+        "hash": "e1UFvdrtJrDPJ8nuszfuAQ",
+        "key": "scperturb/adamson16_GSM2406677_10X005/var.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 1486862,
+        "uid": "wn8ozyDwXEXob7mF0002",
+        "version": "0002"
+      },
+      "var_curated": true,
+      "var_verdict": {
+        "columns": [
+          "pert_gym_original_var_index",
+          "gene_symbol",
+          "ncounts",
+          "ncells",
+          "ensembl_gene_id",
+          "stable_feature_id",
+          "stable_feature_id_source",
+          "stable_feature_id_mapping_status",
+          "stable_feature_id_namespace",
+          "organism"
+        ],
+        "human_ensembl_stable_ids": 32738,
+        "mapping_status_counts": {
+          "exact_stable_id": 32738
+        },
+        "mismatch_count": 0,
+        "missing_required_columns": [],
+        "needs_revision": false,
+        "organism_values": [
+          "Homo sapiens"
+        ],
+        "rows": 32738,
+        "stable_feature_id_non_null": 32738
+      },
+      "x": {
+        "created_at": "2025-01-14 09:17:01.493413+00:00",
+        "description": "None",
+        "hash": "KuDuwvrwYdUv45It73z655",
+        "key": "scperturb/adamson16_GSM2406677_10X005/X.h5ad",
+        "run_uid": "dJAuwAouSRhDk2ppHwv9",
+        "size": 513723254,
+        "uid": "eWYpt9tMQVsFpoLG0000",
+        "version": "0000"
+      }
+    },
+    {
+      "already_curated": true,
+      "field_dispositions": {
+        "age": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "assay": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "batch": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_id": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_line": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "cell_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "control_availability": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "dataset": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "disease": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "donor_id": {
+          "disposition": "unknown",
+          "materialized": true,
+          "observed_non_null_sample": [
+            "unknown"
+          ]
+        },
+        "dose": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "dose_unit": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "ethnicity": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "guide_id": {
+          "disposition": "materialized_partial",
+          "known_rows": 62623,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 2714
+        },
+        "guide_sequence": {
+          "disposition": "materialized_partial",
+          "known_rows": 54306,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 11031
+        },
+        "is_baseline": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_bulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "is_control": {
+          "disposition": "materialized_partial",
+          "known_rows": 55328,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 10009
+        },
+        "is_low_quality": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "is_pseudobulk": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "media": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "modality": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_counts": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "n_genes": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "organism": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_mito": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pct_ribo": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation": {
+          "disposition": "materialized_partial",
+          "known_rows": 62623,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 2714
+        },
+        "perturbation_library": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_target": {
+          "disposition": "materialized_partial",
+          "known_rows": 55328,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 10009
+        },
+        "perturbation_target_id": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "perturbation_technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "perturbation_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "pseudotime": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_metric": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_source": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "response_value": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sample": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sensitivity": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "sequencer": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "sex": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "source_accession": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "technology": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "timepoint": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        },
+        "tissue_type": {
+          "disposition": "materialized_complete",
+          "known_rows": 65337,
+          "materialized": true,
+          "source_bound": true,
+          "unknown_rows": 0
+        },
+        "trajectory_id": {
+          "disposition": "not_applicable",
+          "materialized": false
+        },
+        "x_semantics": {
+          "disposition": "unknown",
+          "materialized": false,
+          "observed_non_null_sample": []
+        }
+      },
+      "obs_before": {
+        "created_at": "2026-07-21 11:08:31.978095+00:00",
+        "description": "t_f1d056cd: source-exhaustive Adamson16 OBS; exact GEO sidecar join; paper Table S1 guide sequences; source=GSE90546; member=scperturb/adamson16_GSM2406681_10X010",
+        "hash": "Ly1OFMFotKelKq1Psus4vA",
+        "key": "scperturb/adamson16_GSM2406681_10X010/obs.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 6854492,
+        "uid": "g4YM4QQh80HYmpde0002",
+        "version": "0002"
+      },
+      "obs_history_count": 3,
+      "prefix": "scperturb/adamson16_GSM2406681_10X010",
+      "rows": 65337,
+      "source_join": {
+        "barcodes_rows": 65337,
+        "barcodes_sha256": "1e0d820343d0c6e17bdab4fef96f4446e223b94861942ccf3d7225818e009836",
+        "barcodes_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406681&format=file&file=GSM2406681_10X010_barcodes.tsv.gz",
+        "control_false_rows": 55328,
+        "control_true_rows": 0,
+        "control_unknown_rows": 10009,
+        "guide_id_known_rows": 62623,
+        "guide_sequence_known_rows": 54306,
+        "identities_rows": 65257,
+        "identities_sha256": "8b40be7a2280c1713bf5a1eb828aad46e70ad3a7000b5f5a1322e51e06c4cf7f",
+        "identities_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406681&format=file&file=GSM2406681_10X010_cell_identities.csv.gz",
+        "join_mismatch_count": 0,
+        "joined_guide_rows": 62724,
+        "materialized_columns": [],
+        "scperturb_join_semantics": "strip gem-group suffix, make OBS names unique, strip identity suffix, keep first duplicate, left-join to OBS order",
+        "target_known_rows": 55328
+      },
+      "var": {
+        "created_at": "2026-07-21 11:08:38.236004+00:00",
+        "description": "t_f1d056cd: Adamson16 human VAR namespace/species annotation; all stable IDs exact ENSG; member=scperturb/adamson16_GSM2406681_10X010",
+        "hash": "4nC2qsYp69TpyT-cNOcLYw",
+        "key": "scperturb/adamson16_GSM2406681_10X010/var.parquet",
+        "run_uid": "OgNnZCoPzUVMvxk7",
+        "size": 1521983,
+        "uid": "5By6mLARgeYAEThC0002",
+        "version": "0002"
+      },
+      "var_curated": true,
+      "var_verdict": {
+        "columns": [
+          "pert_gym_original_var_index",
+          "gene_symbol",
+          "ncounts",
+          "ncells",
+          "ensembl_gene_id",
+          "stable_feature_id",
+          "stable_feature_id_source",
+          "stable_feature_id_mapping_status",
+          "stable_feature_id_namespace",
+          "organism"
+        ],
+        "human_ensembl_stable_ids": 32738,
+        "mapping_status_counts": {
+          "exact_stable_id": 32738
+        },
+        "mismatch_count": 0,
+        "missing_required_columns": [],
+        "needs_revision": false,
+        "organism_values": [
+          "Homo sapiens"
+        ],
+        "rows": 32738,
+        "stable_feature_id_non_null": 32738
+      },
+      "x": {
+        "created_at": "2025-01-14 09:20:58.726165+00:00",
+        "description": "None",
+        "hash": "on2uwLLbAmDlfB4DpKTnln",
+        "key": "scperturb/adamson16_GSM2406681_10X010/X.h5ad",
+        "run_uid": "dJAuwAouSRhDk2ppHwv9",
+        "size": 1913997653,
+        "uid": "h1Xmuenf9GyCOQll0000",
+        "version": "0000"
+      }
+    }
+  ],
+  "mode": "verify",
+  "registry_counts": {
+    "after": {
+      "artifacts": 28515,
+      "collections": 38
+    },
+    "before": {
+      "artifacts": 28515,
+      "collections": 38
+    }
+  },
+  "replay_noop": true,
+  "source_denominator": {
+    "biological_datasets": 1,
+    "logical_families": 3,
+    "observations": 86111,
+    "physical_members": 3
+  },
+  "status": "PASS",
+  "table_s1": {
+    "extracted_markdown_sha256": "ec9d7700f4a8f8f9a510d970b51069efba3a21c964929bf70e7016a54704cab5",
+    "map_sha256": "d006e9c56610c72e590ad14f6ac2c048f5a6200ce6d79209998fc358fcb4844e",
+    "row_count": 98,
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/5315571/bin/NIHMS832990-supplement-8.xlsx"
+  },
+  "task_id": "t_f1d056cd",
+  "writes": {
+    "artifacts": {
+      "obs": [],
+      "var": []
+    },
+    "collection_writes": 0,
+    "deletions": 0,
+    "obs_revisions": 0,
+    "var_revisions": 0,
+    "x_revisions": 0
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "accepted_triplet": {
+    "accepted_obs_fields_written": [
+      "control_availability",
+      "dose",
+      "modality",
+      "perturbation",
+      "perturbation_type",
+      "source",
+      "source_accession"
+    ],
+    "nnz": 157793388,
+    "obs_sha256": "8f316a04ccd84f634ffaeeae865c90a8491a235319ff68af0958442318f5bb3d",
+    "obs_uid": "Q7Qaj6dz0CzyQQ9i0002",
+    "shape": [
+      11808,
+      59427
+    ],
+    "var_sha256": "3d997ab104242ee6c78ed41d33cab3cddf4464e3f77439d89f64f51b8096ec56",
+    "var_uid": "sDYMNbN7DkmFB7Dx0001",
+    "x_semantics": "unknown; explicitly not written without evidence",
+    "x_sha256": "174f6bb42e9a3d130f8f11b57e0fff3829c44ad2203d1754158f63e8fef5e172",
+    "x_uid": "72CMoQ6GfgZuTNdL0000"
+  },
+  "canonical_sha256": "7f3868cd340c0874df1332aca73786efdbf9577d1142f1b4950ccf2c5b1acdc8",
+  "completed_at": 1784593405,
+  "counts": {
+    "after_first": {
+      "artifacts": 28509,
+      "collections": 36
+    },
+    "after_replay": {
+      "artifacts": 28509,
+      "collections": 36
+    },
+    "before": {
+      "artifacts": 28503,
+      "collections": 33
+    }
+  },
+  "dataset_id": "ginkgo-datapoints/vcpi",
+  "first_pass": {
+    "added_uids": [
+      "Q7Qaj6dz0CzyQQ9i0002"
+    ],
+    "dataset_collection": {
+      "description": "{\"dataset_id\":\"ginkgo-datapoints/vcpi\",\"format\":\"pert-gym.dataset-e2e-collection/v1\",\"logical_manifest_key\":\"pert-gym/logical/ginkgo-datapoints/vcpi/revisions/ginkgo-vcpi-e2e-t-a8c96b03-r1/manifest.json\",\"logical_promotion_uid\":\"sxuNWuIljSKSF3EC0000\",\"membership_rule\":\"canonical OBS only; follow OBS->X->VAR feature links\",\"n_vars\":59427,\"obs_uid\":\"Q7Qaj6dz0CzyQQ9i0002\",\"real_dataset_id\":\"ginkgo/vcpi\",\"rollback\":\"select exact immutable predecessor Artifacts and Collection\",\"source\":\"Ginkgo VCPI / GDPx2\",\"source_counts_sha256\":\"11c64133a1e2a4269e21f1595b0941c06c00ce959f72496adf3e808763a4e1bf\",\"source_counts_uid\":\"2VyibSgHlpBSmaJn0000\",\"source_rows_total\":11808,\"task_id\":\"t_a8c96b03\",\"var_uid\":\"sDYMNbN7DkmFB7Dx0001\",\"x_uid\":\"72CMoQ6GfgZuTNdL0000\"}",
+      "hash": "HU7O-2tNKIXEEpdPt2SoZw",
+      "key": "pert-gym/dataset/ginkgo-datapoints/vcpi/20260721-e2e",
+      "member_count": 1,
+      "membership_sha256": "2a9c238080ee95c7301776c1bc158113abafb405aa9e953f4f8a60aa8882edb4",
+      "obs_key_count": 1,
+      "uid": "iL7YEVVcSqSmgCot0000",
+      "unique_key_count": 1,
+      "unique_uid_count": 1
+    },
+    "duplicate_key_count": 0,
+    "duplicate_uid_count": 0,
+    "global_successor": {
+      "description": "{\"added_obs_uid\":\"Q7Qaj6dz0CzyQQ9i0002\",\"dataset_id\":\"ginkgo-datapoints/vcpi\",\"format\":\"pert-gym.append-only-dataset-e2e-successor/v1\",\"member_count_after\":1017,\"member_count_before\":1016,\"membership_rule\":\"immutable predecessor union exact current dataset OBS\",\"predecessor_key\":\"pert-gym/additions/20260721-depmap-ccle-26q1-e2e-r2\",\"predecessor_membership_sha256\":\"9052ec0f3df6f680819c9c2db059bf1a943dd643d8192f4f6b4bd30694cda957\",\"predecessor_uid\":\"B9N5cXbu8Cm0RZSj0000\",\"resulting_membership_sha256\":\"27845039a3e3e6cb833cf2f2068f1279fb60a6ab222e42d74ce73d9e07b15517\",\"rollback\":\"select immutable predecessor Collection B9N5cXbu8Cm0RZSj0000\",\"task_id\":\"t_a8c96b03\"}",
+      "hash": "lsA-KQnpRV66FuOawrA6uA",
+      "key": "pert-gym/additions/20260721-ginkgo-vcpi-e2e",
+      "member_count": 1017,
+      "membership_sha256": "27845039a3e3e6cb833cf2f2068f1279fb60a6ab222e42d74ce73d9e07b15517",
+      "obs_key_count": 1017,
+      "uid": "qoTeH7T78kjbmIWA0000",
+      "unique_key_count": 1017,
+      "unique_uid_count": 1017
+    },
+    "predecessor": {
+      "description": "{\"added_obs_uid\":\"kCNSxyUJoJJKRSgE0004\",\"dataset_id\":\"depmap_ccle/26q1\",\"format\":\"pert-gym.append-only-dataset-e2e-successor/v1\",\"member_count_after\":1016,\"member_count_before\":1016,\"membership_rule\":\"immutable predecessor with same-key obsolete OBS replaced by exact current OBS; no duplicate artifact keys\",\"predecessor_key\":\"pert-gym/additions/20260719-temporal-v4-059-drosophila-dorsal-ventral\",\"predecessor_membership_sha256\":\"796581b630386a90f8cc2b4da1df8f46ea7fe6316322e93832c32c245fcf8096\",\"predecessor_uid\":\"WBFxVN9Alr8zFt9T0000\",\"rejected_predecessor_successor_uid\":\"aH1RWvlWo87xGpsb0000\",\"replaced_obs_uid\":\"kCNSxyUJoJJKRSgE0000\",\"resulting_membership_sha256\":\"9052ec0f3df6f680819c9c2db059bf1a943dd643d8192f4f6b4bd30694cda957\",\"rollback\":\"select immutable predecessor Collection WBFxVN9Alr8zFt9T0000\",\"task_id\":\"t_309ee998\"}",
+      "hash": "ImySHsnSBRg8WsSXmRcGzw",
+      "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e-r2",
+      "member_count": 1016,
+      "membership_sha256": "9052ec0f3df6f680819c9c2db059bf1a943dd643d8192f4f6b4bd30694cda957",
+      "obs_key_count": 1016,
+      "uid": "B9N5cXbu8Cm0RZSj0000",
+      "unique_key_count": 1016,
+      "unique_uid_count": 1016
+    },
+    "removed_uids": [],
+    "writes": 2
+  },
+  "format": "pert-gym.dataset-e2e-receipt/v1",
+  "helper_sha256": "b9b952abc830f604b4c4922fd81b6016ebaca71c17ea1aa11f65dcdc9ecb0982",
+  "host": {
+    "disk_free_preflight": 291893121024,
+    "hostname": "pert-gym-worker-eu",
+    "mem_available_preflight": 32839114752
+  },
+  "locks": {
+    "paths": [
+      "/tmp/pert-gym/lamin-writer.lock",
+      "/home/jkobject/work/benchmark-t_661d549b/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/work/pert-gym/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/work/pert-gym-broad-prism-projection-t_ca713733-20260711/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/work/pert-gym-ops-t_31fc2d19/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/work/pert-gym-t_2b7b7563/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/work/pert-gym-t_6a374b3b/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/work/pert-gym-worktrees/t_38753e46/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/work/pert-gym-worktrees/t_55131283/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/work/pert-gym-worktrees/t_6a374b3b/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/work/prism-response-loader-smoke-fbfff78/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/worktrees/pert-gym/t_15ec56af/artifacts/vm_runs/lamin-writer.lock",
+      "/home/jkobject/worktrees/pert-gym/t_be03a9bd/artifacts/vm_runs/lamin-writer.lock",
+      "/tmp/pert-gym/t_a8c96b03/repo-ef33dc2/artifacts/vm_runs/lamin-writer.lock",
+      "/tmp/pert-gym/families/656b6856aed3733a3d9b8c502133156ce5d8374d7b593194dcb34f95205abcee.lock",
+      "/tmp/pert-gym/collections/b332db3aff2bbd894271cbe63c75b85fe92a3ab0e193b585a36abdb4ed489eaf.lock"
+    ],
+    "released": true
+  },
+  "logical_surface": {
+    "logical_key": "pert-gym/logical/ginkgo-datapoints/vcpi",
+    "manifest_nnz": 157793388,
+    "manifest_sha256": "f01af74c1db0e48b40fbf598f9fe31af9c46322aec1dbfe9cea7630e368ab906",
+    "manifest_shape": [
+      11808,
+      59427
+    ],
+    "parity": {
+      "logical_blocks": 2,
+      "max_loader_rows": 5904,
+      "mismatch_count": 0,
+      "nnz_checked": 157793388,
+      "obs_rows_checked": 11808,
+      "rows_checked": 11808,
+      "var_rows_checked": 59427
+    },
+    "publication": {
+      "branch": "jkobject",
+      "collection_key": "pert-gym/candidates/logical-sparse-zarr/20260721/ginkgo-datapoints-vcpi-t-a8c96b03",
+      "collection_manifest_key": "pert-gym/logical/ginkgo-datapoints/vcpi/revisions/ginkgo-vcpi-e2e-t-a8c96b03-r1/collection-manifest.json",
+      "collection_uid": "gIpGxVz1cSH19D4h0000",
+      "manifest_key": "pert-gym/logical/ginkgo-datapoints/vcpi/revisions/ginkgo-vcpi-e2e-t-a8c96b03-r1/manifest.json",
+      "migration_map_key": "pert-gym/logical/ginkgo-datapoints/vcpi/revisions/ginkgo-vcpi-e2e-t-a8c96b03-r1/migration-map.json",
+      "payload_key": "pert-gym/logical/ginkgo-datapoints/vcpi/revisions/ginkgo-vcpi-e2e-t-a8c96b03-r1/payload.tar.gz",
+      "promotion_key": "pert-gym/logical/ginkgo-datapoints/vcpi/promotions/ginkgo-vcpi-e2e-t-a8c96b03-r1.json",
+      "promotion_uid": "sxuNWuIljSKSF3EC0000",
+      "shared_var_key": "vars/3e594b0eeea1b36d949ab7db48613e47f4d54d2a656b0594b5d89ae97a49bea2-f55cfbffddaf19c1adb97e06f4c1720600a20ef5a73e2125581b3cfc8224238a-696bf3650c0a58f77193ee9269c31d71eb737a57ee66723240009421a23abc00/var.parquet"
+    },
+    "revision": "ginkgo-vcpi-e2e-t-a8c96b03-r1",
+    "rollback": "retain legacy triplet and select it by exact UIDs",
+    "schema_fingerprint": "ginkgo-vcpi-var/v1:sDYMNbN7DkmFB7Dx0001:3d997ab104242ee6c78ed41d33cab3cddf4464e3f77439d89f64f51b8096ec56"
+  },
+  "mode": "mutate",
+  "real_dataset_id": "ginkgo/vcpi",
+  "replay": {
+    "added_uids": [
+      "Q7Qaj6dz0CzyQQ9i0002"
+    ],
+    "counts_stable": true,
+    "duplicate_key_count": 0,
+    "duplicate_uid_count": 0,
+    "removed_uids": [],
+    "writes": 0
+  },
+  "source": {
+    "compounds": {
+      "key": "ginkgo-datapoints/vcpi/compounds-GDPx2-2026-02-09.csv",
+      "sha256": "1f6e69e8a7f2f372b1cd948062f12c0e5de4bbcf101752cc7f51f140ce4c1e22",
+      "size": 13818,
+      "uid": "53cXKxjkWFbp4Bmc0000",
+      "url": null
+    },
+    "counts": {
+      "key": "ginkgo-datapoints/vcpi/vcpi_GDPx2_counts.parquet",
+      "sha256": "11c64133a1e2a4269e21f1595b0941c06c00ce959f72496adf3e808763a4e1bf",
+      "size": 411808920,
+      "uid": "2VyibSgHlpBSmaJn0000",
+      "url": "https://ginkgo-datapoints-public.s3.us-east-2.amazonaws.com/datasets/vcpi/vcpi_GDPx2_counts.parquet"
+    },
+    "meta": {
+      "key": "ginkgo-datapoints/vcpi/vcpi_GDPx2_meta.csv",
+      "sha256": "4102ee42ae30db37fbbf3b5bae80e8423d051d53adca2e86352728c7a091b934",
+      "size": 3560321,
+      "uid": "vVkF13lDcCA7fJdd0000",
+      "url": "https://ginkgo-datapoints-public.s3.us-east-2.amazonaws.com/datasets/vcpi/vcpi_GDPx2_meta.csv"
+    }
+  },
+  "status": "PASS",
+  "task_id": "t_a8c96b03",
+  "writes": {
+    "collection_writes": 2,
+    "deletions": 0,
+    "legacy_triplet_rewrites": 0
+  }
+}

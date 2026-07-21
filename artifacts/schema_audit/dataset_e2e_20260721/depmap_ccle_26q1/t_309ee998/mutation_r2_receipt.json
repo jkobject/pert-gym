@@ -1,0 +1,113 @@
+{
+  "branch": "jkobject",
+  "canonical_sha256": "1f1c06713a4ac137f8bdedc386de46f62875e5d961f32b4d676cda2da22df1a3",
+  "completed_at": 1784587833,
+  "dataset_id": "depmap_ccle/26q1",
+  "first_pass": {
+    "added_uids": [
+      "kCNSxyUJoJJKRSgE0004"
+    ],
+    "created": [
+      "global_successor_collection"
+    ],
+    "dataset_collection": {
+      "description": "{\"dataset_id\":\"depmap_ccle/26q1\",\"format\":\"pert-gym.dataset-e2e-collection/v1\",\"membership_rule\":\"canonical OBS only; follow OBS->X->VAR feature links\",\"n_vars\":19215,\"non_default_source_rows\":56,\"obs_uid\":\"kCNSxyUJoJJKRSgE0004\",\"payload_manifest\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/depmap_ccle26q1/revisions/depmap-ccle26q1-default-models-wave01-960f9db1b737f306/manifest.json#1784226218253256\",\"payload_manifest_sha256\":\"ad3d220f2a0550d63d76ff944e93454a658dfa16efe4a3b3be7239ff0e492ecc\",\"rollback\":\"select immutable Artifacts by exact predecessor UIDs\",\"selected_default_model_rows\":1719,\"source\":\"DepMap/CCLE\",\"source_accession\":\"26q1\",\"source_evidence\":\"https://depmap.org/portal/download/all/\",\"source_rows_total\":1775,\"task_id\":\"t_309ee998\",\"var_uid\":\"0S0wAPqgigynI4Av0003\",\"x_uid\":\"fUSYT9ArHdQye5qv0001\"}",
+      "hash": "WTrCJAmC8y3rJupQb9Xn_w",
+      "key": "pert-gym/dataset/depmap_ccle/26q1/20260721-e2e",
+      "member_count": 1,
+      "membership_sha256": "4c9ea52a66181a2a8dc9b515b9b49225a9487d00ac34d7b58a58fb9fc63439cd",
+      "obs_key_count": 1,
+      "uid": "6bVd5NhvcNOXom0s0000",
+      "unique_key_count": 1,
+      "unique_uid_count": 1
+    },
+    "duplicate_count": 0,
+    "global_successor": {
+      "description": "{\"added_obs_uid\":\"kCNSxyUJoJJKRSgE0004\",\"dataset_id\":\"depmap_ccle/26q1\",\"format\":\"pert-gym.append-only-dataset-e2e-successor/v1\",\"member_count_after\":1016,\"member_count_before\":1016,\"membership_rule\":\"immutable predecessor with same-key obsolete OBS replaced by exact current OBS; no duplicate artifact keys\",\"predecessor_key\":\"pert-gym/additions/20260719-temporal-v4-059-drosophila-dorsal-ventral\",\"predecessor_membership_sha256\":\"796581b630386a90f8cc2b4da1df8f46ea7fe6316322e93832c32c245fcf8096\",\"predecessor_uid\":\"WBFxVN9Alr8zFt9T0000\",\"rejected_predecessor_successor_uid\":\"aH1RWvlWo87xGpsb0000\",\"replaced_obs_uid\":\"kCNSxyUJoJJKRSgE0000\",\"resulting_membership_sha256\":\"9052ec0f3df6f680819c9c2db059bf1a943dd643d8192f4f6b4bd30694cda957\",\"rollback\":\"select immutable predecessor Collection WBFxVN9Alr8zFt9T0000\",\"task_id\":\"t_309ee998\"}",
+      "hash": "ImySHsnSBRg8WsSXmRcGzw",
+      "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e-r2",
+      "member_count": 1016,
+      "membership_sha256": "9052ec0f3df6f680819c9c2db059bf1a943dd643d8192f4f6b4bd30694cda957",
+      "obs_key_count": 1016,
+      "uid": "B9N5cXbu8Cm0RZSj0000",
+      "unique_key_count": 1016,
+      "unique_uid_count": 1016
+    },
+    "predecessor": {
+      "description": "{\"expected_unique_obs\":1016,\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"membership_rule\":\"immutable predecessor union exactly one new OBS\",\"new_obs_uid\":\"rt5eRz8opcJXtybp0000\",\"predecessor_uid\":\"gTFAbqEVHm9tFLzV0000\",\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"schema_version\":\"pert-gym.append-only-successor/v1\",\"source_identity\":\"E-MTAB-9304\"}",
+      "hash": "JtWQXByhDd6wVBbNI0_VRw",
+      "key": "pert-gym/additions/20260719-temporal-v4-059-drosophila-dorsal-ventral",
+      "member_count": 1016,
+      "membership_sha256": "796581b630386a90f8cc2b4da1df8f46ea7fe6316322e93832c32c245fcf8096",
+      "obs_key_count": 1016,
+      "uid": "WBFxVN9Alr8zFt9T0000",
+      "unique_key_count": 1016,
+      "unique_uid_count": 1016
+    },
+    "removed_uids": [
+      "kCNSxyUJoJJKRSgE0000"
+    ],
+    "writes": 1
+  },
+  "format": "pert-gym.dataset-e2e-receipt/v1",
+  "helper_sha256": "29d973fb6cc9285c9d098159c6f2dc9dcc28448820222b45fda681406ec79ae1",
+  "host": "pert-gym-worker-eu",
+  "instance": "laminlabs/pertdata",
+  "locks": {
+    "paths": [
+      "/tmp/pert-gym/lamin-writer.lock",
+      "/tmp/pert-gym/current-legacy-writer.lock",
+      "/tmp/pert-gym/families/a3b431f3c66b9ff7de7387e221addf05512b67b1bb5b531efb161e651cc3a190.lock",
+      "/tmp/pert-gym/collections/af4d933164ae527d47bf0a8f96dde3832dc217eaecf1d8cbde4f5680e7c42a62.lock"
+    ],
+    "released": true
+  },
+  "mode": "mutate",
+  "payload": {
+    "manifest": "gs://scperturb/pert-gym/staging/pert-gym/logical/depmap_ccle26q1/revisions/depmap-ccle26q1-default-models-wave01-960f9db1b737f306/manifest.json#1784226218253256",
+    "manifest_sha256": "ad3d220f2a0550d63d76ff944e93454a658dfa16efe4a3b3be7239ff0e492ecc",
+    "n_obs": 1719,
+    "n_vars": 19215,
+    "obs_uid": "kCNSxyUJoJJKRSgE0004",
+    "var_uid": "0S0wAPqgigynI4Av0003",
+    "x_uid": "fUSYT9ArHdQye5qv0001"
+  },
+  "rejected_first_successor": {
+    "description": "{\"added_obs_uid\":\"kCNSxyUJoJJKRSgE0004\",\"dataset_id\":\"depmap_ccle/26q1\",\"format\":\"pert-gym.append-only-dataset-e2e-successor/v1\",\"member_count_after\":1017,\"member_count_before\":1016,\"membership_rule\":\"immutable predecessor union exact current dataset OBS\",\"predecessor_key\":\"pert-gym/additions/20260719-temporal-v4-059-drosophila-dorsal-ventral\",\"predecessor_membership_sha256\":\"796581b630386a90f8cc2b4da1df8f46ea7fe6316322e93832c32c245fcf8096\",\"predecessor_uid\":\"WBFxVN9Alr8zFt9T0000\",\"resulting_membership_sha256\":\"89eaf5e0d08034520b63a584e155331d12ff94b4d0153d09db11f2be6d4d5bae\",\"rollback\":\"select immutable predecessor Collection WBFxVN9Alr8zFt9T0000\",\"task_id\":\"t_309ee998\"}",
+    "hash": "z6blPVzHnMTIpoEpgdtusg",
+    "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e",
+    "member_count": 1017,
+    "membership_sha256": "89eaf5e0d08034520b63a584e155331d12ff94b4d0153d09db11f2be6d4d5bae",
+    "obs_key_count": 1017,
+    "uid": "aH1RWvlWo87xGpsb0000",
+    "unique_key_count": 1016,
+    "unique_uid_count": 1017
+  },
+  "replay": {
+    "added_uids": [
+      "kCNSxyUJoJJKRSgE0004"
+    ],
+    "counts_stable": true,
+    "duplicate_count": 0,
+    "removed_uids": [
+      "kCNSxyUJoJJKRSgE0000"
+    ],
+    "writes": 0
+  },
+  "source": {
+    "evidence_url": "https://depmap.org/portal/download/all/",
+    "non_default_source_rows": 56,
+    "release": "26q1",
+    "selected_default_model_rows": 1719,
+    "source_rows_total": 1775
+  },
+  "status": "PASS",
+  "task_id": "t_309ee998",
+  "writes": {
+    "artifacts": 0,
+    "collections": 1,
+    "deletions": 0,
+    "feature_links": 0,
+    "gcs": 0
+  }
+}
