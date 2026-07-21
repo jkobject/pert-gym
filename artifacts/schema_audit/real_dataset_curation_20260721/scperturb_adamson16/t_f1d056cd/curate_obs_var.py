@@ -343,7 +343,9 @@ def guide_sequences(
 
 
 def add_numbered(frame: pd.DataFrame, field: str, values: list[list[Any]]) -> None:
-    maximum = max((len(items) for items in values), default=0)
+    # Materialize the canonical base field even when this member has no
+    # source-supported value; the disposition remains explicitly partial.
+    maximum = max(1, max((len(items) for items in values), default=0))
     for position in range(maximum):
         column = field if position == 0 else f"{field}_{position + 1}"
         frame[column] = pd.Series(
