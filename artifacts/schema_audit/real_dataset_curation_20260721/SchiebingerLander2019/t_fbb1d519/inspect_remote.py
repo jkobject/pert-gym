@@ -56,6 +56,7 @@ def frame_summary(frame: pd.DataFrame) -> dict[str, Any]:
         "index_name": frame.index.name,
         "index_unique": bool(frame.index.is_unique),
         "index_sha256": ordered_sha256(frame.index),
+        "index_sample": frame.index.astype(str)[:25].tolist(),
         "dtypes": {str(column): str(frame[column].dtype) for column in frame.columns},
         "non_null": {str(column): int(frame[column].notna().sum()) for column in frame.columns},
         "nunique": {str(column): int(frame[column].dropna().astype(str).nunique()) for column in frame.columns},
@@ -215,6 +216,20 @@ def main() -> None:
     if len(source_var_indices[0]) != EXPECTED_N_VARS or not source_var_indices[0].equals(source_var_indices[1]):
         raise AssertionError("source VAR axes differ")
 
+    source_all = pd.concat(source_obs, axis=0, join="outer")
+    current_original = pd.Index(current_obs["original_obs_index"].astype(str))
+    source_set_equals_current_original = set(source_all.index.astype(str)) == set(current_original)
+    source_join_mismatches: dict[str, int] = {}
+    if source_set_equals_current_original:
+        source_all.index = source_all.index.astype(str)
+        joined = source_all.reindex(current_original)
+        for column in source_all.columns:
+            left = joined[column].astype("string")
+            right = current_obs[column].astype("string").reset_index(drop=True)
+            left = left.reset_index(drop=True)
+            equal = (left.isna() & right.isna()) | (left.fillna("") == right.fillna(""))
+            source_join_mismatches[str(column)] = int((~equal).sum())
+
     report = {
         "format": "pert-gym.schiebinger-source-exhaustive-inspection/v1",
         "task_id": TASK_ID,
@@ -234,6 +249,9 @@ def main() -> None:
             "cross_source_index_overlap_sample": overlap.astype(str)[:25].tolist(),
             "var_axes_equal": source_var_indices[0].equals(source_var_indices[1]),
             "var_index_sha256": ordered_sha256(source_var_indices[0]),
+            "set_equals_current_original_obs_index": source_set_equals_current_original,
+            "source_join_mismatches": source_join_mismatches,
+            "source_join_mismatch_count": sum(source_join_mismatches.values()),
         },
         "current": {
             "obs": artifact_identity(obs_artifact),
@@ -257,6 +275,8 @@ def main() -> None:
                 "original_obs_index" in current_obs
                 and concatenated_index.equals(pd.Index(current_obs["original_obs_index"].astype(str)))
             ),
+            "source_index_set_equals_current_original_obs_index": source_set_equals_current_original,
+            "current_index_equals_original_obs_index": current_obs.index.astype(str).equals(current_original),
             "source_var_index_equals_linked_var_index": source_var_indices[0].equals(linked_var.index.astype(str)),
             "source_var_index_equals_latest_var_index": source_var_indices[0].equals(latest_var.index.astype(str)),
         },
