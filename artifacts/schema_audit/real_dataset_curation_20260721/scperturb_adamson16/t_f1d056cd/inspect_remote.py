@@ -204,7 +204,9 @@ def main() -> None:
                 artifact.uid,
             )
         )
-        current = ln.Artifact.get(key=key)
+        current = records[-1]
+        if not bool(getattr(current, "is_latest", False)):
+            raise RuntimeError(f"newest ordered OBS is not latest for {key}")
         frame = current.load()
         if not isinstance(frame, pd.DataFrame):
             raise RuntimeError(f"OBS load did not return DataFrame for {key}")
