@@ -1,0 +1,86 @@
+{
+  "format": "pert-gym.drug-seq-gse120222-mutation-receipt-summary/v1",
+  "task_id": "t_3d9bf0d8",
+  "status": "PASS",
+  "mode": "mutate",
+  "execution_git_head": "6038a39134cc6b306fde4906e9bccfcc5c01de0e",
+  "helper_sha256": "52c8a21be26553612cf21ef5d074488e093d1b04f569ad398d7cd2f64d830989",
+  "full_stdout_receipt_canonical_sha256": "aa8f2f8b426dcdf4d26bafaf37621584a417cb49636deff04fe484c791817675",
+  "source_publication": {
+    "accession": "GSE120222",
+    "doi": "10.1038/s41467-018-06500-x",
+    "pubmed": "30333485",
+    "source_rows_total": 72,
+    "source_members_total": 1
+  },
+  "triplet": {
+    "obs_uid": "mKSaEEcH4jyes43Z0002",
+    "obs_sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975",
+    "x_uid": "hfeVCMInQu1UKhwp0000",
+    "x_sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84",
+    "var_uid": "vmqp94W72a1Tl2Xw0002",
+    "var_sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637",
+    "shape": [72, 60371],
+    "nnz": 1747564,
+    "dtype": "float64",
+    "mismatch_count": 0,
+    "human_ensembl_rows": 60279,
+    "ercc_rows": 92,
+    "x_semantics": "unknown; absent rather than invented"
+  },
+  "representation": {
+    "status": "not_materially_needed",
+    "reason": "accepted X is one 37,790,360-byte payload with 72 rows; bounded backed loading and exact OBS/X/VAR parity passed",
+    "legacy_triplet_retained": true
+  },
+  "predecessor": {
+    "uid": "qoTeH7T78kjbmIWA0000",
+    "key": "pert-gym/additions/20260721-ginkgo-vcpi-e2e",
+    "hash": "lsA-KQnpRV66FuOawrA6uA",
+    "member_count": 1017,
+    "membership_sha256": "27845039a3e3e6cb833cf2f2068f1279fb60a6ab222e42d74ce73d9e07b15517"
+  },
+  "dataset_collection": {
+    "uid": "4tKR1YGxdI6AtfNa0000",
+    "key": "pert-gym/dataset/DRUG-seq/GSE120222/20260721-e2e",
+    "hash": "WuIMnlk3d3DKERMTUwzQ5Q",
+    "member_count": 1,
+    "membership_sha256": "76b573af3c3b0ae29cf01bcb20a69a2d399aaa476025d07a76dafee13d925e1c"
+  },
+  "global_successor": {
+    "uid": "Ltjv1RYDCnuxqqRT0000",
+    "key": "pert-gym/additions/20260721-drug-seq-gse120222-e2e",
+    "hash": "ZsctJFBSIiaKnrIzEh-1-g",
+    "member_count": 1018,
+    "unique_uid_count": 1018,
+    "unique_key_count": 1018,
+    "membership_sha256": "f897f05f9dd920479fe44d14c7b193398642605cfd252e0e5ac67235ec1b2da7",
+    "added_uids": ["mKSaEEcH4jyes43Z0002"],
+    "removed_uids": []
+  },
+  "registry_counts": {
+    "before": {"artifacts": 28509, "collections": 36},
+    "after_first": {"artifacts": 28509, "collections": 38},
+    "after_replay": {"artifacts": 28509, "collections": 38}
+  },
+  "replay": {
+    "writes": 0,
+    "duplicate_uid_count": 0,
+    "duplicate_key_count": 0
+  },
+  "writes": {
+    "collection_writes": 2,
+    "artifact_writes": 0,
+    "triplet_rewrites": 0,
+    "gcs_mutations": 0,
+    "deletions": 0
+  },
+  "product_execution": {
+    "host": "pert-gym-worker-eu",
+    "pid": 1033,
+    "terminal_phase": "accepted",
+    "current": 1,
+    "denominator": 1,
+    "unit": "logical_dataset"
+  }
+}
