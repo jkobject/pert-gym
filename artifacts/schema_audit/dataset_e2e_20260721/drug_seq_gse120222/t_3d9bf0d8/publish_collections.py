@@ -296,12 +296,10 @@ def verify_var_metadata(
         failures.append("stable feature identity disagrees with Ensembl identity")
     if not (var.loc[ensembl_mask, "organism"] == "Homo sapiens").all():
         failures.append("human Ensembl row has wrong organism")
-    if (
-        not var.loc[ensembl_mask, "stable_feature_id_namespace"]
-        .astype(str)
-        .str.contains("Ensembl", case=False, regex=False)
-        .all()
-    ):
+    if not (
+        var.loc[ensembl_mask, "stable_feature_id_namespace"]
+        == "Ensembl stable gene ID"
+    ).all():
         failures.append("human Ensembl row has wrong namespace")
     if (
         not var.loc[ensembl_mask, "stable_feature_id_mapping_status"]
@@ -354,7 +352,7 @@ def verify_var_metadata(
         "ensembl_format": "^ENSG[0-9]{11}(.[0-9]+)?$",
         "ercc_format": "^ERCC-[0-9]{5}$",
         "namespace_disposition": {
-            "human_ensembl": "Ensembl namespace",
+            "human_ensembl": "Ensembl stable gene ID",
             "ercc": "ERCC stable spike-in ID",
         },
         "organism_disposition": {

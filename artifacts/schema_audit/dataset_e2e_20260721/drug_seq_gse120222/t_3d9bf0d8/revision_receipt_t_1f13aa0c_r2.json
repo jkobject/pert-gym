@@ -1,0 +1,66 @@
+{
+  "format": "pert-gym.drug-seq-gse120222-review-fix-receipt/v2",
+  "task_id": "t_1f13aa0c",
+  "producer_task_id": "t_3d9bf0d8",
+  "status": "LOCAL_CONTRACT_PASS_REVIEW_REQUIRED",
+  "product_delta": 0,
+  "ledger_credit": 0,
+  "triplet": {
+    "obs": {
+      "uid": "mKSaEEcH4jyes43Z0002",
+      "key": "DRUG-seq/GSE120222/obs.parquet",
+      "sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975"
+    },
+    "x": {
+      "uid": "hfeVCMInQu1UKhwp0000",
+      "key": "DRUG-seq/GSE120222/X.h5ad",
+      "sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84"
+    },
+    "var": {
+      "uid": "vmqp94W72a1Tl2Xw0002",
+      "key": "DRUG-seq/GSE120222/var.parquet",
+      "sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637"
+    }
+  },
+  "historical_immutable_receipts": {
+    "mutation": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/mutation_receipt.json",
+      "sha256": "de688662e6014845d8b115b6cc4b3bc4c012df89d0d0ee7acb25600c4da6038c",
+      "modified": false
+    },
+    "verify": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/verify_receipt.json",
+      "sha256": "8f374617377b260ac463ae81db4b15ad375a26e7ecdac0814b400e1804c1859a",
+      "modified": false
+    },
+    "rejected_revision_receipt": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/revision_receipt_t_1f13aa0c.json",
+      "sha256": "38b9f75e8a46e63f4c0fb32fe8012824495941d82ea8050425bf70137438e31b",
+      "modified": false
+    },
+    "rejected_revision_handoff": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/integrated_handoff_t_1f13aa0c.json",
+      "sha256": "9a4daef186968a233d2308f01cab667873706eb0ad98e7d2989106e037e0d50d",
+      "modified": false
+    }
+  },
+  "verifier_revision": {
+    "publisher_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/publish_collections.py",
+    "publisher_sha256": "17dd0701f2c1b8d5ef7d3e0ed2a545df6e5ac267cb0a23b73a7f556f109fbfef",
+    "superseded_rejected_head": "dd5ea08ed244da63e3906a25ae54a9301e51f20f",
+    "obs_contract": "all canonical fields explicitly dispositioned; eight accepted materialized fields validated against source-bound values/rules; unsupported fields remain absent with unknown/not_applicable/source-known-not-materialized dispositions",
+    "var_contract": "exact human ENSG format, exact namespace Ensembl stable gene ID, Homo sapiens organism, mapping/gene type plus ERCC format/namespace/not_applicable organism and mapping/spike-in type; complete partition and stable-ID uniqueness",
+    "adversarial_namespace_test": "wrong-but-non-null namespace garbage Ensembl garbage fails closed with VAR metadata drift",
+    "live_verify_only_readback": "pending fresh independent approved-launcher reviewer; this local continuation performed no cloud or Lamin access"
+  },
+  "safety": {
+    "cloud_access": false,
+    "gcs_access": false,
+    "lamin_access": false,
+    "collection_mutation": false,
+    "artifact_mutation": false,
+    "payload_rewrite": false,
+    "mutation_replay": false,
+    "deletion": false
+  }
+}
