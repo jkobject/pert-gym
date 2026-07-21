@@ -135,10 +135,24 @@ def artifact_identity(artifact: Any) -> dict[str, Any]:
 
 def resolve_artifact(ln: Any, value: Any) -> Any:
     if isinstance(value, str):
-        try:
-            return ln.Artifact.get(uid=value)
-        except Exception:
-            return ln.Artifact.get(key=value)
+        uid_records = list(ln.Artifact.filter(uid=value).all())
+        if uid_records:
+            if len(uid_records) != 1:
+                raise RuntimeError(f"duplicate Artifact uid: {value}")
+            return uid_records[0]
+        key_records = list(ln.Artifact.filter(key=value).all())
+        if not key_records:
+            raise RuntimeError(f"unresolved Artifact feature value: {value}")
+        key_records.sort(
+            key=lambda artifact: (
+                str(getattr(artifact, "created_at", "")),
+                artifact.uid,
+            )
+        )
+        current = key_records[-1]
+        if not bool(getattr(current, "is_latest", False)):
+            raise RuntimeError(f"newest ordered Artifact is not latest: {value}")
+        return current
     return value
 
 
