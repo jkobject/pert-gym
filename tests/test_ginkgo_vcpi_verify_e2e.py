@@ -66,7 +66,7 @@ def test_safely_extract_payload_rejects_links(
 
 
 def test_resolve_git_state_observes_head_and_rejects_tracked_drift(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path,
 ) -> None:
     subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
     subprocess.run(
@@ -88,14 +88,20 @@ def test_resolve_git_state_observes_head_and_rejects_tracked_drift(
         capture_output=True,
         text=True,
     ).stdout.strip()
-    monkeypatch.setattr(verifier, "EXPECTED_GIT_HEAD", head)
-
-    assert verifier.resolve_git_state(tmp_path) == {
+    assert verifier.resolve_git_state(tmp_path, expected_head=head) == {
         "root": str(tmp_path.resolve()),
+        "expected_head": head,
         "head": head,
         "tracked_dirty": False,
     }
 
     tracked.write_text("dirty\n", encoding="utf-8")
     with pytest.raises(AssertionError, match="tracked changes"):
+        verifier.resolve_git_state(tmp_path, expected_head=head)
+
+
+def test_resolve_git_state_requires_expected_revision(tmp_path: Path) -> None:
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+
+    with pytest.raises(AssertionError, match="PERT_GYM_EXPECTED_GIT_HEAD is required"):
         verifier.resolve_git_state(tmp_path)

@@ -6,6 +6,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 import tarfile
@@ -18,7 +19,6 @@ from tools.lamin_context import connect_pertdata
 
 HERE = Path(__file__).resolve().parent
 RUNNER_PATH = HERE / "run_e2e.py"
-EXPECTED_GIT_HEAD = "ef33dc21bc50ad8d96b6f58066e5958949886b83"
 SPEC = importlib.util.spec_from_file_location("ginkgo_vcpi_run_e2e", RUNNER_PATH)
 if SPEC is None or SPEC.loader is None:
     raise RuntimeError("cannot load exact mutation runner")
@@ -60,7 +60,13 @@ def sha256_json(value: object) -> str:
     ).hexdigest()
 
 
-def resolve_git_state(start: Path = HERE) -> dict[str, object]:
+def resolve_git_state(
+    start: Path = HERE, expected_head: str | None = None
+) -> dict[str, object]:
+    expected = expected_head or os.environ.get("PERT_GYM_EXPECTED_GIT_HEAD")
+    if expected is None:
+        raise AssertionError("PERT_GYM_EXPECTED_GIT_HEAD is required")
+
     def git(*args: str) -> str:
         result = subprocess.run(
             ["git", "-C", str(start), *args],
@@ -73,13 +79,18 @@ def resolve_git_state(start: Path = HERE) -> dict[str, object]:
     root = Path(git("rev-parse", "--show-toplevel")).resolve()
     head = git("rev-parse", "HEAD")
     dirty_paths = git("status", "--porcelain", "--untracked-files=no").splitlines()
-    if head != EXPECTED_GIT_HEAD:
+    if head != expected:
         raise AssertionError(
-            f"verifier checkout drift: expected {EXPECTED_GIT_HEAD}, observed {head}"
+            f"verifier checkout drift: expected {expected}, observed {head}"
         )
     if dirty_paths:
         raise AssertionError(f"verifier checkout has tracked changes: {dirty_paths}")
-    return {"root": str(root), "head": head, "tracked_dirty": False}
+    return {
+        "root": str(root),
+        "expected_head": expected,
+        "head": head,
+        "tracked_dirty": False,
+    }
 
 
 def safely_extract_payload(payload: Path, destination: Path) -> str:
