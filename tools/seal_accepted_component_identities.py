@@ -294,6 +294,9 @@ def _acceptance_binding(
             continue
         if row["assignee"] not in {"reviewer", "tester", "default"}:
             continue
+        if metadata.get("production_run") is False:
+            errors.append(f"{task_id}: acceptance is explicitly non-production")
+            continue
         if not _approved(metadata) and not (
             task_id == explicit and str(metadata.get("verdict", "")).lower() == "done"
         ):
@@ -332,7 +335,11 @@ def _acceptance_binding(
                 manifest_generation=manifest_generation,
                 manifest_hash=manifest_hash,
             )
-            if not _approved(supporting_metadata) or supporting_binding is None:
+            if (
+                supporting_metadata.get("production_run") is False
+                or not _approved(supporting_metadata)
+                or supporting_binding is None
+            ):
                 raise LedgerValidationError(
                     f"supporting acceptance {supporting_task_id} lacks exact object evidence"
                 )

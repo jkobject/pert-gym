@@ -240,10 +240,28 @@ def test_builder_rejects_denominator_mismatch(tmp_path: Path) -> None:
         )
 
 
-def test_acceptance_requires_accepted_object_identity(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    "identity_token",
+    [
+        {"record_id": "record_1"},
+        {"target_logical_key": "pert-gym/logical/component_1"},
+        {
+            "candidate": {
+                "manifest_sha256": f"{1:064x}",
+                "manifest_generation_after": "1000",
+                "manifest_generation_before": "1000",
+            }
+        },
+    ],
+    ids=("exact-record-id", "exact-logical-key", "exact-manifest-hash-generation"),
+)
+def test_nonproduction_acceptance_rejects_identity_tokens(
+    tmp_path: Path, identity_token: dict[str, object]
+) -> None:
     catalogue, progress, board = make_inputs(tmp_path)
     con = sqlite3.connect(board)
     code_only_pass = {
+        **identity_token,
         "production_run": False,
         "verdict": "PASS",
         "approved": True,
@@ -263,6 +281,9 @@ def test_acceptance_requires_accepted_object_identity(tmp_path: Path) -> None:
             catalogue, progress, board, expected_accepted=3, expected_denominator=5
         )
 
+
+def test_acceptance_requires_accepted_object_identity(tmp_path: Path) -> None:
+    catalogue, progress, board = make_inputs(tmp_path)
     # The canonical HCT116 reviewer has this shape: it proves the immutable
     # candidate by exact manifest hash and generation rather than record_id.
     manifest_bound_review = {
