@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 import anndata as ad
+import numpy as np
 import pandas as pd
 
 from tools.lamin_context import connect_pertdata
@@ -173,7 +174,8 @@ def main() -> int:
     x = ad.read_h5ad(paths["x"], backed="r")
     try:
         shape = [int(x.n_obs), int(x.n_vars)]
-        nnz = int(x.X[:].nnz)
+        matrix = x.X[:]
+        nnz = int(matrix.nnz if hasattr(matrix, "nnz") else np.count_nonzero(matrix))
         x_dtype = str(x.X.dtype)
     finally:
         x.file.close()
