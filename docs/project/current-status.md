@@ -1,6 +1,6 @@
 # pert-gym current status
 
-_Last verified: 2026-07-20 12:36 CEST from `TODO.md`, the strict accepted
+_Last verified: 2026-07-21 21:48 CEST from `TODO.md`, the strict accepted
 product-delta snapshot, and the immutable reviewer handoffs named below. Pending
 work is not counted. `TODO.md` remains the operational dashboard._
 
@@ -12,10 +12,10 @@ work is not counted. `TODO.md` remains the operational dashboard._
 | New families registered on `jkobject` | **10/22** | 12 | `Artifact/rt5eRz8opcJXtybp0000` |
 | New families in the versioned Collection | **10/22** | 12 | `Collection/WBFxVN9Alr8zFt9T0000`; mismatch/drift 0 |
 | Existing recompactions | **9/32** | 23 | GSE216673 reviewer `t_dfcb1549`; exact generation-pinned manifest below |
-| Real datasets with accepted OBS recovery | **6/70** | 64 | latest: depmap_ccle/26q1 reviewer `t_8d1e3b8c` |
+| Real datasets with accepted OBS recovery | **7/70** | 63 | latest: `scperturb/adamson16`; reviewer `t_b40b3f73`, mismatch 0 |
 | Frozen base-public OBS component×field candidates | **33/640** | 607 | SHA-256 `371b2b78c755c5cfdf8fa82d7826e5b2fdbfe48b67ca11e6d2d77ec7b6ff60c2` |
 | Accepted OBS assignments outside that universe | **6** | — | depmap_ccle/26q1; intentionally no `/640` denominator |
-| VAR dataset remediations | **4/70** | 66 | strict ledger; GSE207360 and LINCS evidence awaits conforming exact-once reconciliation |
+| VAR dataset remediations | **5/70** | 65 | latest: `scperturb/adamson16`; SchiebingerLander2019, GSE207360, and LINCS remain pending |
 | External exclusions | **60/60** | 0 | complete |
 
 The canonical surface remains **120 logical families / 1,056 physical members /
@@ -38,9 +38,11 @@ This outcome advances only `existing_recompactions_accepted` **8→9/32**.
 
 ### OBS
 
-The strict OBS ledger is **6/70 datasets**, plus **33/640** assignments in the
+The strict OBS ledger is **7/70 datasets**, plus **33/640** assignments in the
 frozen base-public candidate universe and **6** depmap_ccle/26q1 assignments
-outside it. The outside-universe assignments do not change `/640`.
+outside it. The outside-universe assignments do not change `/640`. The latest
+accepted dataset is `scperturb/adamson16`: reviewer `t_b40b3f73` accepted all
+three members / 86,111 observations at mismatch 0 with zero-write replay no-op.
 
 GSE213921 is **frozen after rejection 3/3**. It must not be auto-rerun. A future
 attempt requires explicit operator authorization and a new bounded contract; it
@@ -48,10 +50,13 @@ does not currently advance any counter.
 
 ### VAR
 
-The strict VAR ledger remains **4/70**. GSE207360 product evidence is rejected at
-the top-level ledger as `unit_mismatch`; LINCS phase1 evidence is rejected as
+The strict VAR ledger is **5/70** after `scperturb/adamson16` advanced it **4→5**
+for all three members under reviewer `t_b40b3f73`'s mismatch-0, zero-write
+readback. GSE207360 product evidence is rejected at the top-level ledger as
+`unit_mismatch`; LINCS phase1 evidence is rejected as
 `before_does_not_match_current`. Both remain pending conforming exact-once
-reconciliation, so neither is anticipated as accepted progress.
+reconciliation. SchiebingerLander2019 is also explicitly pending and is not
+credited by this reconciliation.
 
 ## Count vocabulary
 
