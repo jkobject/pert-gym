@@ -22,8 +22,8 @@ publisher = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(publisher)
 
 EVIDENCE_DIR = PUBLISHER_PATH.parent
-REVISION_RECEIPT_PATH = EVIDENCE_DIR / "revision_receipt_t_1f13aa0c.json"
-REVISION_HANDOFF_PATH = EVIDENCE_DIR / "integrated_handoff_t_1f13aa0c.json"
+REVISION_RECEIPT_PATH = EVIDENCE_DIR / "revision_receipt_t_1f13aa0c_r2.json"
+REVISION_HANDOFF_PATH = EVIDENCE_DIR / "integrated_handoff_t_1f13aa0c_r2.json"
 
 
 def test_count_nnz_supports_dense_and_sparse_matrices() -> None:
@@ -175,6 +175,10 @@ def test_var_verifier_binds_human_ensembl_and_ercc_semantics() -> None:
     assert result["human_ensembl_rows"] == 2
     assert result["ercc_rows"] == 1
     assert result["unique_stable_feature_ids"] == 3
+    assert result["namespace_disposition"] == {
+        "human_ensembl": "Ensembl stable gene ID",
+        "ercc": "ERCC stable spike-in ID",
+    }
     assert result["organism_disposition"] == {
         "human_ensembl": "Homo sapiens",
         "ercc": "not_applicable",
@@ -186,6 +190,11 @@ def test_var_verifier_binds_human_ensembl_and_ercc_semantics() -> None:
     [
         ("ensembl_gene_id", 0, "ENSMUSG00000123456"),
         ("organism", 0, "Mus musculus"),
+        (
+            "stable_feature_id_namespace",
+            0,
+            "garbage Ensembl garbage",
+        ),
         ("stable_feature_id", 2, "ERCC_BAD"),
         ("stable_feature_id_mapping_status", 0, "not_applicable"),
         ("stable_feature_id_mapping_status", 2, "mapped"),
