@@ -27,7 +27,6 @@ EXPECTED_OBS_UID = "trSdGyVkTDn5ZkaY0000"
 EXPECTED_VAR_UID = "cw0Kr6j7qVyrDBP10001"
 EXPECTED_N_OBS = 327_494
 EXPECTED_N_VARS = 27_998
-BILLING_PROJECT = "jkobject-1549353370965"
 SOURCE_KEYS = (
     "scperturb/records/13350497/files/SchiebingerLander2019_GSE115943.h5ad",
     "scperturb/records/13350497/files/SchiebingerLander2019_GSE106340.h5ad",
@@ -107,41 +106,28 @@ def latest_artifact(ln: Any, key: str) -> tuple[Any, list[Any]]:
     return records[-1], records
 
 
-def gcloud_json(*args: str) -> dict[str, Any]:
-    result = subprocess.run(
-        ["gcloud", "storage", *args, f"--billing-project={BILLING_PROJECT}", "--format=json"],
-        check=True,
-        capture_output=True,
-        text=True,
-        timeout=300,
-    )
-    payload = json.loads(result.stdout)
-    if not isinstance(payload, dict):
-        raise AssertionError("expected one GCS object metadata mapping")
-    return payload
-
-
-def download_source(uri: str, destination: Path) -> dict[str, Any]:
-    metadata = gcloud_json("objects", "describe", uri)
+def download_source(ln: Any, key: str, destination: Path) -> dict[str, Any]:
+    records = list(ln.Artifact.filter(key=key).all())
+    if len(records) != 1:
+        raise AssertionError(f"expected one exact source Artifact for {key}: {len(records)}")
+    artifact = records[0]
+    url = str(artifact.path)
+    if not url.startswith("https://zenodo.org/records/13350497/files/"):
+        raise AssertionError(f"unexpected immutable source URL: {url}")
     subprocess.run(
         [
-            "gcloud",
-            "storage",
-            "cp",
-            f"--billing-project={BILLING_PROJECT}",
-            "--no-clobber",
-            uri,
-            str(destination),
+            "curl", "--location", "--fail", "--retry", "3", "--output",
+            str(destination), url,
         ],
         check=True,
         timeout=7200,
     )
+    if destination.stat().st_size != int(artifact.size):
+        raise AssertionError(f"source size drift: {key}")
     return {
-        "uri": uri,
-        "generation": str(metadata.get("generation")),
-        "size": int(metadata["size"]),
-        "md5_hash": metadata.get("md5Hash"),
-        "crc32c": metadata.get("crc32c"),
+        "artifact": artifact_identity(artifact),
+        "url": url,
+        "size": destination.stat().st_size,
         "local_sha256": sha256_file(destination),
         "local_path": str(destination),
     }
@@ -171,13 +157,18 @@ def main() -> None:
         raise RuntimeError("refusing Mac execution")
     root = Path(tempfile.mkdtemp(prefix=f"{TASK_ID}-schiebinger-inspect-"))
 
+    ln = connect_pertdata()
+    if ln.setup.settings.instance.slug != "laminlabs/pertdata":
+        raise AssertionError("wrong Lamin instance")
+    if ln.setup.settings.branch.name != "jkobject":
+        raise AssertionError("wrong Lamin branch")
+
     sources: list[dict[str, Any]] = []
     source_obs: list[pd.DataFrame] = []
     source_var_indices: list[pd.Index] = []
     for position, key in enumerate(SOURCE_KEYS):
-        uri = f"gs://scperturb/{key}"
         path = root / f"source-{position}.h5ad"
-        identity = download_source(uri, path)
+        identity = download_source(ln, key, path)
         backed = ad.read_h5ad(path, backed="r")
         obs = backed.obs.copy()
         var = backed.var.copy()
@@ -197,11 +188,6 @@ def main() -> None:
         source_obs.append(obs)
         source_var_indices.append(var.index.copy())
 
-    ln = connect_pertdata()
-    if ln.setup.settings.instance.slug != "laminlabs/pertdata":
-        raise AssertionError("wrong Lamin instance")
-    if ln.setup.settings.branch.name != "jkobject":
-        raise AssertionError("wrong Lamin branch")
     obs_artifact, obs_history = latest_artifact(ln, f"{PREFIX}/obs.parquet")
     if str(obs_artifact.uid) != EXPECTED_OBS_UID:
         raise AssertionError(f"current OBS UID drift: {obs_artifact.uid}")
