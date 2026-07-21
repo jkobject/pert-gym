@@ -1,0 +1,2124 @@
+{
+  "capacity": {
+    "available_memory_bytes": 32851251200,
+    "free_disk_bytes": 291834695680
+  },
+  "dataset_id": "scperturb/adamson16",
+  "format": "pert-gym.adamson16-source-exhaustive-inspection/v1",
+  "host": "pert-gym-worker-eu",
+  "invariants": {
+    "all_obs_uuid_unique": true,
+    "component_count": 3,
+    "no_x_payload_loaded": true,
+    "total_rows": 86111
+  },
+  "members": {
+    "scperturb/adamson16_GSM2406675_10X001": {
+      "artifact_key": "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
+      "current": {
+        "created_at": "2026-06-26 13:15:42.063948+00:00",
+        "description": "t_47b770a1 non-PRISM scRNA obs_uuid/original_obs_index rewrite using pert_gym.obs_identity.add_obs_identity",
+        "hash": "YcVtfMk42Xo-dJy6JShc-A",
+        "key": "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
+        "run_uid": "4sBwzKbOhgOi64r0",
+        "size": 432520,
+        "uid": "DpXjkZY6NCnsQ1L60001",
+        "version": "0001"
+      },
+      "history": [
+        {
+          "created_at": "2025-07-26 15:04:11.682607+00:00",
+          "description": null,
+          "hash": "zhmakK7wRWwR71foUOajfg",
+          "key": "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
+          "run_uid": "eW4s3Ao3vFQ2TbN8",
+          "size": 168340,
+          "uid": "DpXjkZY6NCnsQ1L60000",
+          "version": "0000"
+        },
+        {
+          "created_at": "2026-06-26 13:15:42.063948+00:00",
+          "description": "t_47b770a1 non-PRISM scRNA obs_uuid/original_obs_index rewrite using pert_gym.obs_identity.add_obs_identity",
+          "hash": "YcVtfMk42Xo-dJy6JShc-A",
+          "key": "scperturb/adamson16_GSM2406675_10X001/obs.parquet",
+          "run_uid": "4sBwzKbOhgOi64r0",
+          "size": 432520,
+          "uid": "DpXjkZY6NCnsQ1L60001",
+          "version": "0001"
+        }
+      ],
+      "links": {
+        "X": {
+          "created_at": "2025-01-14 14:06:11.954542+00:00",
+          "description": null,
+          "hash": "aCwEF40-TBS1mNvQa5Vlj6",
+          "key": "scperturb/adamson16_GSM2406675_10X001/X.h5ad",
+          "run_uid": "dJAuwAouSRhDk2ppHwv9",
+          "size": 122497964,
+          "uid": "E7pZHzRaxMWmefk80000",
+          "version": "0000"
+        },
+        "var": {
+          "created_at": "2026-06-24 19:14:16.729727+00:00",
+          "description": "t_56a127e9: branch-local canonical var revision adding stable species feature IDs; source var uid 2j6j7JDLkLjoRLm90000; strategy normalize_existing_ids",
+          "hash": "juylXckjItoDwM-SB6XyPw",
+          "key": "scperturb/adamson16_GSM2406675_10X001/var.parquet",
+          "run_uid": "YxG18pNo1Yuzrb3D",
+          "size": 1562663,
+          "uid": "2j6j7JDLkLjoRLm90001",
+          "version": "0001"
+        }
+      },
+      "obs": {
+        "columns": [
+          "pert_target",
+          "pert_genetic",
+          "organism",
+          "cell_line",
+          "cell_type",
+          "disease",
+          "tissue_type",
+          "tissue",
+          "assay",
+          "suspension_type",
+          "donor_id",
+          "sex",
+          "self_reported_ethnicity",
+          "development_stage",
+          "pert_name",
+          "pert_type",
+          "read count",
+          "UMI count",
+          "cancer",
+          "ncounts",
+          "ngenes",
+          "percent_mito",
+          "percent_ribo",
+          "nperts",
+          "original_obs_index",
+          "original_obs_index_is_duplicated",
+          "obs_uuid"
+        ],
+        "dtypes": {
+          "UMI count": "float64",
+          "assay": "category",
+          "cancer": "bool",
+          "cell_line": "category",
+          "cell_type": "category",
+          "development_stage": "category",
+          "disease": "category",
+          "donor_id": "category",
+          "ncounts": "float32",
+          "ngenes": "int64",
+          "nperts": "int64",
+          "obs_uuid": "object",
+          "organism": "category",
+          "original_obs_index": "object",
+          "original_obs_index_is_duplicated": "bool",
+          "percent_mito": "float32",
+          "percent_ribo": "float32",
+          "pert_genetic": "category",
+          "pert_name": "category",
+          "pert_target": "category",
+          "pert_type": "category",
+          "read count": "float64",
+          "self_reported_ethnicity": "category",
+          "sex": "category",
+          "suspension_type": "category",
+          "tissue": "category",
+          "tissue_type": "category"
+        },
+        "index_name": "cell_barcode",
+        "index_sample": [
+          "AAACATACACCGAT",
+          "AAACATACAGAGAT",
+          "AAACATACCAGAAA",
+          "AAACATACGTTGAC",
+          "AAACATACTGTTCT"
+        ],
+        "index_unique": true,
+        "non_null": {
+          "UMI count": 5758,
+          "assay": 5768,
+          "cancer": 5768,
+          "cell_line": 5768,
+          "cell_type": 5768,
+          "development_stage": 5768,
+          "disease": 5768,
+          "donor_id": 5768,
+          "ncounts": 5768,
+          "ngenes": 5768,
+          "nperts": 5768,
+          "obs_uuid": 5768,
+          "organism": 5768,
+          "original_obs_index": 5768,
+          "original_obs_index_is_duplicated": 5768,
+          "percent_mito": 5768,
+          "percent_ribo": 5768,
+          "pert_genetic": 5758,
+          "pert_name": 5758,
+          "pert_target": 3983,
+          "pert_type": 5768,
+          "read count": 5758,
+          "self_reported_ethnicity": 5768,
+          "sex": 5768,
+          "suspension_type": 5768,
+          "tissue": 5768,
+          "tissue_type": 5768
+        },
+        "nunique": {
+          "UMI count": 213,
+          "assay": 1,
+          "cancer": 1,
+          "cell_line": 1,
+          "cell_type": 1,
+          "development_stage": 1,
+          "disease": 1,
+          "donor_id": 1,
+          "ncounts": 4481,
+          "ngenes": 1808,
+          "nperts": 3,
+          "obs_uuid": 5768,
+          "organism": 1,
+          "original_obs_index": 5768,
+          "original_obs_index_is_duplicated": 1,
+          "percent_mito": 1,
+          "percent_ribo": 5750,
+          "pert_genetic": 9,
+          "pert_name": 9,
+          "pert_target": 7,
+          "pert_type": 1,
+          "read count": 1878,
+          "self_reported_ethnicity": 1,
+          "sex": 1,
+          "suspension_type": 1,
+          "tissue": 1,
+          "tissue_type": 1
+        },
+        "rows": 5768,
+        "value_samples": {
+          "UMI count": [
+            "98.0",
+            "19.0",
+            "162.0",
+            "51.0",
+            "55.0",
+            "56.0",
+            "18.0",
+            "17.0",
+            "81.0",
+            "10.0",
+            "105.0",
+            "60.0",
+            "76.0",
+            "59.0",
+            "39.0"
+          ],
+          "assay": [
+            "10x 3' v1"
+          ],
+          "cancer": [
+            "True"
+          ],
+          "cell_line": [
+            "K-562"
+          ],
+          "cell_type": [
+            "lymphoblast"
+          ],
+          "development_stage": [
+            "unknown"
+          ],
+          "disease": [
+            "chronic myelogenous leukemia, BCR-ABL1 positive"
+          ],
+          "donor_id": [
+            "unknown"
+          ],
+          "ncounts": [
+            "8138.0",
+            "8980.0",
+            "28610.0",
+            "11346.0",
+            "9864.0",
+            "10470.0",
+            "10649.0",
+            "9293.0",
+            "3857.0",
+            "11813.0",
+            "5999.0",
+            "13635.0",
+            "12443.0",
+            "11297.0",
+            "11571.0"
+          ],
+          "ngenes": [
+            "2412",
+            "2386",
+            "4404",
+            "2815",
+            "2584",
+            "2575",
+            "2660",
+            "2769",
+            "1369",
+            "2689",
+            "1987",
+            "3076",
+            "2845",
+            "2723",
+            "2869"
+          ],
+          "nperts": [
+            "2",
+            "0",
+            "1"
+          ],
+          "obs_uuid": [
+            "d8d325c3-947a-5211-b49e-a2b6b3586c4b",
+            "4674bb35-2cf7-5b86-a3af-5a41ab5f2fd2",
+            "2341b25e-5606-5ace-bf33-4a9fce27a782",
+            "5d85a8de-fc37-55ba-8f1d-155d448dfb23",
+            "711b9c99-885c-58ad-a55a-24e41e332785",
+            "2b5c08ce-49dd-5f65-89c1-810ad14902d9",
+            "a6784c76-9364-5e27-b360-c0ec2d9e84c1",
+            "86cce186-d319-5672-94af-ea5cefb16d94",
+            "81071026-2ba2-5c71-99ad-4d5981a34566",
+            "b21a04fe-33ca-5541-9a5b-4633bc51e3dd",
+            "e96917af-e5de-5d01-9421-54a71e97b20a",
+            "03627426-fb4b-5989-9608-364d9453cb88",
+            "8403d33c-1d79-5efc-9edf-3fa79171a060",
+            "fbdd9ece-67da-5842-af70-630d86469412",
+            "795959f6-f018-5d39-aeef-f66fcf02371c"
+          ],
+          "organism": [
+            "human"
+          ],
+          "original_obs_index": [
+            "AAACATACACCGAT",
+            "AAACATACAGAGAT",
+            "AAACATACCAGAAA",
+            "AAACATACGTTGAC",
+            "AAACATACTGTTCT",
+            "AAACCGTGCAGCTA",
+            "AAACCGTGCCTGAA",
+            "AAACCGTGCGGAGA",
+            "AAACCGTGGAACTC",
+            "AAACCGTGTGGCAT",
+            "AAACGCACCATGGT",
+            "AAACGCACCTGGTA",
+            "AAACGCACGAACCT",
+            "AAACGCACGGATCT",
+            "AAACGCACTCGCAA"
+          ],
+          "original_obs_index_is_duplicated": [
+            "False"
+          ],
+          "percent_mito": [
+            "0.0"
+          ],
+          "percent_ribo": [
+            "34.037846",
+            "40.011135",
+            "40.003494",
+            "35.184204",
+            "35.817112",
+            "36.68577",
+            "40.135223",
+            "27.289358",
+            "38.890327",
+            "38.618473",
+            "30.93849",
+            "37.169052",
+            "37.3463",
+            "37.16916",
+            "34.9408"
+          ],
+          "pert_genetic": [
+            "CREB1_pDS269",
+            "SNAI1_pDS266",
+            "62(mod)_pBA581",
+            "EP300_pDS268",
+            "ZNF326_pDS262",
+            "BHLHE40_pDS258",
+            "SPI1_pDS255",
+            "DDIT3_pDS263",
+            "*"
+          ],
+          "pert_name": [
+            "CREB1_pDS269",
+            "SNAI1_pDS266",
+            "62(mod)_pBA581",
+            "EP300_pDS268",
+            "ZNF326_pDS262",
+            "BHLHE40_pDS258",
+            "SPI1_pDS255",
+            "DDIT3_pDS263",
+            "*"
+          ],
+          "pert_target": [
+            "CREB1",
+            "SNAI1",
+            "EP300",
+            "ZNF326",
+            "BHLHE40",
+            "SPI1",
+            "DDIT3"
+          ],
+          "pert_type": [
+            "genetic"
+          ],
+          "read count": [
+            "1286.0",
+            "296.0",
+            "1829.0",
+            "1580.0",
+            "748.0",
+            "789.0",
+            "802.0",
+            "300.0",
+            "275.0",
+            "1275.0",
+            "122.0",
+            "1695.0",
+            "716.0",
+            "1260.0",
+            "876.0"
+          ],
+          "self_reported_ethnicity": [
+            "unknown"
+          ],
+          "sex": [
+            "female"
+          ],
+          "suspension_type": [
+            "cell"
+          ],
+          "tissue": [
+            "bone marrow"
+          ],
+          "tissue_type": [
+            "cell culture"
+          ]
+        }
+      },
+      "obs_index_sha256": "68ac4a67acc898b14f3b5a6fc97c4c73427cfc86f191108c6e26db143a05787e",
+      "obs_uuid_sha256": "8a18326993086b78c3780bbbe5fc38059665c0eaf0007e6bc482aca07ed134d0",
+      "original_obs_index_sha256": "68ac4a67acc898b14f3b5a6fc97c4c73427cfc86f191108c6e26db143a05787e",
+      "source_spec": {
+        "biosample": "SAMN06055348",
+        "experiment": "GSM2406675_10X001",
+        "experiment_accession": "SRX2400165",
+        "gsm": "GSM2406675",
+        "n_obs": 5768,
+        "sequencer": "Illumina HiSeq 2500",
+        "title": "Pilot TF experiment cells"
+      }
+    },
+    "scperturb/adamson16_GSM2406677_10X005": {
+      "artifact_key": "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
+      "current": {
+        "created_at": "2026-06-26 13:16:40.593307+00:00",
+        "description": "t_47b770a1 non-PRISM scRNA obs_uuid/original_obs_index rewrite using pert_gym.obs_identity.add_obs_identity",
+        "hash": "fUyO2g6jqoyqZNCV3RRzyw",
+        "key": "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
+        "run_uid": "4sBwzKbOhgOi64r0",
+        "size": 1184977,
+        "uid": "TuT6kabcWUTNlDw60002",
+        "version": "0002"
+      },
+      "history": [
+        {
+          "created_at": "2025-07-29 13:46:40.664306+00:00",
+          "description": null,
+          "hash": "mP7KT8y53niLuMy9dXGkvQ",
+          "key": "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
+          "run_uid": "eW4s3Ao3vFQ2TbN8",
+          "size": 498868,
+          "uid": "TuT6kabcWUTNlDw60000",
+          "version": "0000"
+        },
+        {
+          "created_at": "2025-12-17 13:35:37.267604+00:00",
+          "description": null,
+          "hash": "3aNoecVOhYSnLCqPn37fmQ",
+          "key": "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
+          "run_uid": "v1KwYt7zYcMVc6O3",
+          "size": 498325,
+          "uid": "TuT6kabcWUTNlDw60001",
+          "version": "0001"
+        },
+        {
+          "created_at": "2026-06-26 13:16:40.593307+00:00",
+          "description": "t_47b770a1 non-PRISM scRNA obs_uuid/original_obs_index rewrite using pert_gym.obs_identity.add_obs_identity",
+          "hash": "fUyO2g6jqoyqZNCV3RRzyw",
+          "key": "scperturb/adamson16_GSM2406677_10X005/obs.parquet",
+          "run_uid": "4sBwzKbOhgOi64r0",
+          "size": 1184977,
+          "uid": "TuT6kabcWUTNlDw60002",
+          "version": "0002"
+        }
+      ],
+      "links": {
+        "X": {
+          "created_at": "2025-01-14 09:17:01.493413+00:00",
+          "description": null,
+          "hash": "KuDuwvrwYdUv45It73z655",
+          "key": "scperturb/adamson16_GSM2406677_10X005/X.h5ad",
+          "run_uid": "dJAuwAouSRhDk2ppHwv9",
+          "size": 513723254,
+          "uid": "eWYpt9tMQVsFpoLG0000",
+          "version": "0000"
+        },
+        "var": {
+          "created_at": "2026-06-24 19:15:06.277764+00:00",
+          "description": "t_56a127e9: branch-local canonical var revision adding stable species feature IDs; source var uid wn8ozyDwXEXob7mF0000; strategy normalize_existing_ids",
+          "hash": "rGySPtzOnQZyRwgSrtLZFg",
+          "key": "scperturb/adamson16_GSM2406677_10X005/var.parquet",
+          "run_uid": "YxG18pNo1Yuzrb3D",
+          "size": 1485370,
+          "uid": "wn8ozyDwXEXob7mF0001",
+          "version": "0001"
+        }
+      },
+      "obs": {
+        "columns": [
+          "pert_target_multi",
+          "pert_genetic",
+          "organism",
+          "cell_line",
+          "cell_type",
+          "disease",
+          "tissue_type",
+          "tissue",
+          "assay",
+          "suspension_type",
+          "donor_id",
+          "sex",
+          "self_reported_ethnicity",
+          "development_stage",
+          "pert_name",
+          "pert_type",
+          "read count",
+          "UMI count",
+          "cancer",
+          "ncounts",
+          "ngenes",
+          "percent_mito",
+          "percent_ribo",
+          "nperts",
+          "original_obs_index",
+          "original_obs_index_is_duplicated",
+          "obs_uuid"
+        ],
+        "dtypes": {
+          "UMI count": "float64",
+          "assay": "category",
+          "cancer": "bool",
+          "cell_line": "category",
+          "cell_type": "category",
+          "development_stage": "category",
+          "disease": "category",
+          "donor_id": "category",
+          "ncounts": "float32",
+          "ngenes": "int64",
+          "nperts": "int64",
+          "obs_uuid": "object",
+          "organism": "category",
+          "original_obs_index": "object",
+          "original_obs_index_is_duplicated": "bool",
+          "percent_mito": "float32",
+          "percent_ribo": "float32",
+          "pert_genetic": "category",
+          "pert_name": "category",
+          "pert_target_multi": "object",
+          "pert_type": "category",
+          "read count": "float64",
+          "self_reported_ethnicity": "category",
+          "sex": "category",
+          "suspension_type": "category",
+          "tissue": "category",
+          "tissue_type": "category"
+        },
+        "index_name": "cell_barcode",
+        "index_sample": [
+          "AAACATACACTCAG",
+          "AAACATACTCCTAT",
+          "AAACATTGCAGAGG",
+          "AAACATTGGCGAAG",
+          "AAACCGTGATACCG"
+        ],
+        "index_unique": true,
+        "non_null": {
+          "UMI count": 14710,
+          "assay": 15006,
+          "cancer": 15006,
+          "cell_line": 15006,
+          "cell_type": 15006,
+          "development_stage": 15006,
+          "disease": 15006,
+          "donor_id": 15006,
+          "ncounts": 15006,
+          "ngenes": 15006,
+          "nperts": 15006,
+          "obs_uuid": 15006,
+          "organism": 15006,
+          "original_obs_index": 15006,
+          "original_obs_index_is_duplicated": 15006,
+          "percent_mito": 15006,
+          "percent_ribo": 15006,
+          "pert_genetic": 14710,
+          "pert_name": 15006,
+          "pert_target_multi": 11331,
+          "pert_type": 15006,
+          "read count": 14710,
+          "self_reported_ethnicity": 15006,
+          "sex": 15006,
+          "suspension_type": 15006,
+          "tissue": 15006,
+          "tissue_type": 15006
+        },
+        "nunique": {
+          "UMI count": 196,
+          "assay": 1,
+          "cancer": 1,
+          "cell_line": 1,
+          "cell_type": 1,
+          "development_stage": 1,
+          "disease": 1,
+          "donor_id": 1,
+          "ncounts": 11516,
+          "ngenes": 3164,
+          "nperts": 5,
+          "obs_uuid": 15006,
+          "organism": 1,
+          "original_obs_index": 15006,
+          "original_obs_index_is_duplicated": 1,
+          "percent_mito": 14978,
+          "percent_ribo": 14975,
+          "pert_genetic": 20,
+          "pert_name": 21,
+          "pert_target_multi": 15,
+          "pert_type": 1,
+          "read count": 800,
+          "self_reported_ethnicity": 1,
+          "sex": 1,
+          "suspension_type": 1,
+          "tissue": 1,
+          "tissue_type": 1
+        },
+        "rows": 15006,
+        "value_samples": {
+          "UMI count": [
+            "59.0",
+            "37.0",
+            "117.0",
+            "49.0",
+            "124.0",
+            "42.0",
+            "72.0",
+            "29.0",
+            "11.0",
+            "43.0",
+            "40.0",
+            "128.0",
+            "1.0",
+            "20.0",
+            "46.0"
+          ],
+          "assay": [
+            "10x 3' v1"
+          ],
+          "cancer": [
+            "True"
+          ],
+          "cell_line": [
+            "K-562"
+          ],
+          "cell_type": [
+            "lymphoblast"
+          ],
+          "development_stage": [
+            "unknown"
+          ],
+          "disease": [
+            "chronic myelogenous leukemia, BCR-ABL1 positive"
+          ],
+          "donor_id": [
+            "unknown"
+          ],
+          "ncounts": [
+            "24343.0",
+            "27678.0",
+            "24745.0",
+            "30836.0",
+            "33314.0",
+            "23331.0",
+            "23140.0",
+            "16167.0",
+            "21164.0",
+            "22959.0",
+            "21139.0",
+            "26030.0",
+            "25242.0",
+            "19943.0",
+            "14941.0"
+          ],
+          "ngenes": [
+            "4164",
+            "4428",
+            "4371",
+            "4551",
+            "4539",
+            "4106",
+            "4283",
+            "3583",
+            "3968",
+            "4685",
+            "4071",
+            "4367",
+            "4501",
+            "3788",
+            "3284"
+          ],
+          "nperts": [
+            "4",
+            "3",
+            "1",
+            "0",
+            "2"
+          ],
+          "obs_uuid": [
+            "3479f87f-4c73-5c74-a59a-687d15d14fe0",
+            "8de4df8a-8faa-5254-8b10-51f84e5d84d8",
+            "ecbcdd7a-a463-5ce7-8138-7b9406bc52c7",
+            "522ec0f1-89d7-5a0c-af7c-51a217462c9d",
+            "d2071a16-b963-5604-ac10-1f306e218459",
+            "71a1d36e-4b16-587b-b4e3-322cd961b036",
+            "4eb1ba5b-78a8-5bc6-b9a2-af8d29540216",
+            "4d75a99f-6ac7-5ab4-8165-17394be43f0f",
+            "4281e4a0-5ec7-576e-a184-df01fe587ea9",
+            "2a99626c-4d4f-54d2-894d-5c7e6256e63e",
+            "ef98c6e1-8f69-5612-9a44-b68774dcd387",
+            "1f11ce83-a85b-5e9b-b125-a42000369e75",
+            "b09d8b90-61eb-52a7-ab1c-82f46b1deed0",
+            "934498d4-b6c4-5b00-9936-26c7ffacdd50",
+            "0646256d-9189-56a2-aed2-96e1703ee866"
+          ],
+          "organism": [
+            "human"
+          ],
+          "original_obs_index": [
+            "AAACATACACTCAG",
+            "AAACATACTCCTAT",
+            "AAACATTGCAGAGG",
+            "AAACATTGGCGAAG",
+            "AAACCGTGATACCG",
+            "AAACCGTGCTTTAC",
+            "AAACCGTGTGCCAA",
+            "AAACCGTGTGGTTG",
+            "AAACGCACACGCTA",
+            "AAACGCACCCACAA",
+            "AAACGCACCGAACT",
+            "AAACGCACCTACTT",
+            "AAACGCACTACAGC",
+            "AAACGCACTCGATG",
+            "AAACGCACTGTCCC"
+          ],
+          "original_obs_index_is_duplicated": [
+            "False"
+          ],
+          "percent_mito": [
+            "4.5639405",
+            "4.5089965",
+            "3.2006466",
+            "3.132702",
+            "6.5888214",
+            "4.20042",
+            "3.491789",
+            "4.292695",
+            "5.5093555",
+            "8.754737",
+            "3.9405837",
+            "3.3691895",
+            "4.4212027",
+            "6.04222",
+            "3.9087076"
+          ],
+          "percent_ribo": [
+            "32.629505",
+            "28.65814",
+            "31.117397",
+            "29.890388",
+            "35.98487",
+            "35.845013",
+            "31.6465",
+            "32.584896",
+            "33.59951",
+            "18.533037",
+            "29.580397",
+            "32.247406",
+            "29.066635",
+            "32.753345",
+            "37.32682"
+          ],
+          "pert_genetic": [
+            "3x_neg_ctrl_pMJ144-1",
+            "3x_neg_ctrl_pMJ144-2",
+            "ATF6_PERK_IRE1_pMJ158",
+            "ATF6_PERK_pMJ150",
+            "ATF6_only_pMJ145",
+            "PERK_IRE1_pMJ154",
+            "ATF6_IRE1_pMJ152",
+            "IRE1_only_pMJ148",
+            "PERK_only_pMJ146",
+            "*",
+            "XBP1_pBA578",
+            "IER3IP1_pDS003",
+            "PSMA1_pDS007",
+            "PSMD12_pDS009",
+            "C7orf26_pDS004"
+          ],
+          "pert_name": [
+            "3x_neg_ctrl_pMJ144-1",
+            "3x_neg_ctrl_pMJ144-2",
+            "ATF6_PERK_IRE1_pMJ158",
+            "ATF6_PERK_pMJ150",
+            "ATF6_only_pMJ145",
+            "PERK_IRE1_pMJ154",
+            "ATF6_IRE1_pMJ152",
+            "IRE1_only_pMJ148",
+            "PERK_only_pMJ146",
+            "*",
+            "empty",
+            "XBP1_pBA578",
+            "IER3IP1_pDS003",
+            "PSMA1_pDS007",
+            "PSMD12_pDS009"
+          ],
+          "pert_target_multi": [
+            "['ATF6' 'PERK' 'IRE1']",
+            "['ATF6' 'PERK']",
+            "['ATF6']",
+            "['PERK' 'IRE1']",
+            "['ATF6' 'IRE1']",
+            "['IRE1']",
+            "['PERK']",
+            "['XBP1']",
+            "['IER3IP1']",
+            "['PSMA1']",
+            "['PSMD12']",
+            "['C7orf26']",
+            "['ATF4']",
+            "['SNAI1']",
+            "['YIPF5']"
+          ],
+          "pert_type": [
+            "genetic"
+          ],
+          "read count": [
+            "261.0",
+            "132.0",
+            "560.0",
+            "215.0",
+            "567.0",
+            "138.0",
+            "368.0",
+            "57.0",
+            "225.0",
+            "162.0",
+            "662.0",
+            "5.0",
+            "86.0",
+            "237.0",
+            "233.0"
+          ],
+          "self_reported_ethnicity": [
+            "unknown"
+          ],
+          "sex": [
+            "female"
+          ],
+          "suspension_type": [
+            "cell"
+          ],
+          "tissue": [
+            "bone marrow"
+          ],
+          "tissue_type": [
+            "cell culture"
+          ]
+        }
+      },
+      "obs_index_sha256": "3424419e9ed49a794c6bd83747b442e169432ef5b55459ec016f4a7bb0885285",
+      "obs_uuid_sha256": "ec229b2fd635576652783b9b71220ccbec8149cc05b5968b0cd19ff71c687251",
+      "original_obs_index_sha256": "3424419e9ed49a794c6bd83747b442e169432ef5b55459ec016f4a7bb0885285",
+      "source_spec": {
+        "biosample": "SAMN06055346",
+        "experiment": "GSM2406677_10X005",
+        "experiment_accession": "SRX2400167",
+        "gsm": "GSM2406677",
+        "n_obs": 15006,
+        "sequencer": "Illumina HiSeq 4000",
+        "title": "Epistasis experiment cells"
+      }
+    },
+    "scperturb/adamson16_GSM2406681_10X010": {
+      "artifact_key": "scperturb/adamson16_GSM2406681_10X010/obs.parquet",
+      "current": {
+        "created_at": "2026-06-26 13:19:34.259964+00:00",
+        "description": "t_47b770a1 non-PRISM scRNA obs_uuid/original_obs_index rewrite using pert_gym.obs_identity.add_obs_identity",
+        "hash": "AvW9IDVNAE0CKZZV3AZ93g",
+        "key": "scperturb/adamson16_GSM2406681_10X010/obs.parquet",
+        "run_uid": "4sBwzKbOhgOi64r0",
+        "size": 4943539,
+        "uid": "g4YM4QQh80HYmpde0001",
+        "version": "0001"
+      },
+      "history": [
+        {
+          "created_at": "2025-07-26 15:06:28.557231+00:00",
+          "description": null,
+          "hash": "N_wdwNBzaB3_273wv0j9mg",
+          "key": "scperturb/adamson16_GSM2406681_10X010/obs.parquet",
+          "run_uid": "eW4s3Ao3vFQ2TbN8",
+          "size": 2032692,
+          "uid": "g4YM4QQh80HYmpde0000",
+          "version": "0000"
+        },
+        {
+          "created_at": "2026-06-26 13:19:34.259964+00:00",
+          "description": "t_47b770a1 non-PRISM scRNA obs_uuid/original_obs_index rewrite using pert_gym.obs_identity.add_obs_identity",
+          "hash": "AvW9IDVNAE0CKZZV3AZ93g",
+          "key": "scperturb/adamson16_GSM2406681_10X010/obs.parquet",
+          "run_uid": "4sBwzKbOhgOi64r0",
+          "size": 4943539,
+          "uid": "g4YM4QQh80HYmpde0001",
+          "version": "0001"
+        }
+      ],
+      "links": {
+        "X": {
+          "created_at": "2025-01-14 09:20:58.726165+00:00",
+          "description": null,
+          "hash": "on2uwLLbAmDlfB4DpKTnln",
+          "key": "scperturb/adamson16_GSM2406681_10X010/X.h5ad",
+          "run_uid": "dJAuwAouSRhDk2ppHwv9",
+          "size": 1913997653,
+          "uid": "h1Xmuenf9GyCOQll0000",
+          "version": "0000"
+        },
+        "var": {
+          "created_at": "2026-06-24 19:15:40.805583+00:00",
+          "description": "t_56a127e9: branch-local canonical var revision adding stable species feature IDs; source var uid 5By6mLARgeYAEThC0000; strategy normalize_existing_ids",
+          "hash": "nP5ED6C9XGrBUjmXw9wooA",
+          "key": "scperturb/adamson16_GSM2406681_10X010/var.parquet",
+          "run_uid": "YxG18pNo1Yuzrb3D",
+          "size": 1520491,
+          "uid": "5By6mLARgeYAEThC0001",
+          "version": "0001"
+        }
+      },
+      "obs": {
+        "columns": [
+          "pert_target",
+          "pert_genetic",
+          "organism",
+          "cell_line",
+          "cell_type",
+          "disease",
+          "tissue_type",
+          "tissue",
+          "assay",
+          "suspension_type",
+          "donor_id",
+          "sex",
+          "self_reported_ethnicity",
+          "development_stage",
+          "pert_name",
+          "pert_type",
+          "read count",
+          "UMI count",
+          "cancer",
+          "ncounts",
+          "ngenes",
+          "percent_mito",
+          "percent_ribo",
+          "nperts",
+          "original_obs_index",
+          "original_obs_index_is_duplicated",
+          "obs_uuid"
+        ],
+        "dtypes": {
+          "UMI count": "float64",
+          "assay": "category",
+          "cancer": "bool",
+          "cell_line": "category",
+          "cell_type": "category",
+          "development_stage": "category",
+          "disease": "category",
+          "donor_id": "category",
+          "ncounts": "float32",
+          "ngenes": "int64",
+          "nperts": "int64",
+          "obs_uuid": "object",
+          "organism": "category",
+          "original_obs_index": "object",
+          "original_obs_index_is_duplicated": "bool",
+          "percent_mito": "float32",
+          "percent_ribo": "float32",
+          "pert_genetic": "category",
+          "pert_name": "category",
+          "pert_target": "category",
+          "pert_type": "category",
+          "read count": "float64",
+          "self_reported_ethnicity": "category",
+          "sex": "category",
+          "suspension_type": "category",
+          "tissue": "category",
+          "tissue_type": "category"
+        },
+        "index_name": "cell_barcode",
+        "index_sample": [
+          "AAACATACAAGATG",
+          "AAACATACACCTAG",
+          "AAACATACTTCCCG",
+          "AAACATTGAAACAG",
+          "AAACATTGCAGCTA"
+        ],
+        "index_unique": true,
+        "non_null": {
+          "UMI count": 62724,
+          "assay": 65337,
+          "cancer": 65337,
+          "cell_line": 65337,
+          "cell_type": 65337,
+          "development_stage": 65337,
+          "disease": 65337,
+          "donor_id": 65337,
+          "ncounts": 65337,
+          "ngenes": 65337,
+          "nperts": 65337,
+          "obs_uuid": 65337,
+          "organism": 65337,
+          "original_obs_index": 65337,
+          "original_obs_index_is_duplicated": 65337,
+          "percent_mito": 65337,
+          "percent_ribo": 65337,
+          "pert_genetic": 62724,
+          "pert_name": 62724,
+          "pert_target": 55328,
+          "pert_type": 65337,
+          "read count": 62724,
+          "self_reported_ethnicity": 65337,
+          "sex": 65337,
+          "suspension_type": 65337,
+          "tissue": 65337,
+          "tissue_type": 65337
+        },
+        "nunique": {
+          "UMI count": 218,
+          "assay": 1,
+          "cancer": 1,
+          "cell_line": 1,
+          "cell_type": 1,
+          "development_stage": 1,
+          "disease": 1,
+          "donor_id": 1,
+          "ncounts": 23293,
+          "ngenes": 4422,
+          "nperts": 3,
+          "obs_uuid": 65337,
+          "organism": 1,
+          "original_obs_index": 65337,
+          "original_obs_index_is_duplicated": 1,
+          "percent_mito": 64503,
+          "percent_ribo": 64739,
+          "pert_genetic": 114,
+          "pert_name": 114,
+          "pert_target": 90,
+          "pert_type": 1,
+          "read count": 2676,
+          "self_reported_ethnicity": 1,
+          "sex": 1,
+          "suspension_type": 1,
+          "tissue": 1,
+          "tissue_type": 1
+        },
+        "rows": 65337,
+        "value_samples": {
+          "UMI count": [
+            "8.0",
+            "7.0",
+            "10.0",
+            "30.0",
+            "25.0",
+            "20.0",
+            "11.0",
+            "24.0",
+            "31.0",
+            "15.0",
+            "29.0",
+            "17.0",
+            "95.0",
+            "4.0",
+            "14.0"
+          ],
+          "assay": [
+            "10x 3' v1"
+          ],
+          "cancer": [
+            "True"
+          ],
+          "cell_line": [
+            "K-562"
+          ],
+          "cell_type": [
+            "lymphoblast"
+          ],
+          "development_stage": [
+            "unknown"
+          ],
+          "disease": [
+            "chronic myelogenous leukemia, BCR-ABL1 positive"
+          ],
+          "donor_id": [
+            "unknown"
+          ],
+          "ncounts": [
+            "8866.0",
+            "13785.0",
+            "7569.0",
+            "13834.0",
+            "15507.0",
+            "15696.0",
+            "9338.0",
+            "13691.0",
+            "10540.0",
+            "12991.0",
+            "4963.0",
+            "8936.0",
+            "9453.0",
+            "17875.0",
+            "9522.0"
+          ],
+          "ngenes": [
+            "2914",
+            "3818",
+            "2616",
+            "3488",
+            "3620",
+            "3999",
+            "2968",
+            "3531",
+            "3091",
+            "3408",
+            "2061",
+            "2825",
+            "2975",
+            "4159",
+            "2798"
+          ],
+          "nperts": [
+            "2",
+            "1",
+            "0"
+          ],
+          "obs_uuid": [
+            "4773b48e-d09d-5aba-9310-b0b67be71d6f",
+            "4d254ac4-c5a6-5712-9128-fc9c13c882e7",
+            "1ac103b0-dded-52cb-8548-af45017048f0",
+            "2ca1a264-0f12-5e78-b28c-0a9674d4e057",
+            "945ac9ab-45c3-5829-a069-e24dd158a518",
+            "4b037b18-4c31-5863-9bec-bbfa3466110e",
+            "64e4786d-b40c-5d6e-a093-3cb303009c31",
+            "d478a0dc-f919-541e-8f14-5c871fd18a33",
+            "5a16d472-49ca-5e04-82cf-1d8e5216d81d",
+            "066c68a5-e806-5d8c-a8ea-d94ea4362bae",
+            "bc5587e0-8319-5da2-bcf1-9168421a30ee",
+            "940f0130-3fcc-598e-9c71-489391cc6484",
+            "c73342e2-7d3a-5bbb-a613-2752f2d536b7",
+            "e1709544-4f81-584b-a7b9-f0ee01682bb6",
+            "f1d4bf89-2924-52be-82be-88aef629e32b"
+          ],
+          "organism": [
+            "human"
+          ],
+          "original_obs_index": [
+            "AAACATACAAGATG",
+            "AAACATACACCTAG",
+            "AAACATACTTCCCG",
+            "AAACATTGAAACAG",
+            "AAACATTGCAGCTA",
+            "AAACATTGCATTGG",
+            "AAACCGTGCTGTAG",
+            "AAACCGTGGCGTTA",
+            "AAACCGTGGGACTT",
+            "AAACCGTGTCGATG",
+            "AAACCGTGTTCCCG",
+            "AAACGCACCCAAGT",
+            "AAACGCACGACAGG",
+            "AAACGCACTGACTG",
+            "AAACGCTGAGGTCT"
+          ],
+          "original_obs_index_is_duplicated": [
+            "False"
+          ],
+          "percent_mito": [
+            "4.917663",
+            "4.4686255",
+            "5.0601134",
+            "5.0527687",
+            "4.5140905",
+            "3.6314986",
+            "3.116299",
+            "3.966109",
+            "4.193548",
+            "4.541606",
+            "3.908926",
+            "3.782453",
+            "4.527663",
+            "3.5076923",
+            "1.8273472"
+          ],
+          "percent_ribo": [
+            "21.306112",
+            "19.4922",
+            "23.199894",
+            "28.733555",
+            "26.729864",
+            "19.329765",
+            "22.992075",
+            "25.323206",
+            "25.483871",
+            "21.545685",
+            "20.108805",
+            "25.604298",
+            "25.780176",
+            "21.82937",
+            "23.440454"
+          ],
+          "pert_genetic": [
+            "63(mod)_pBA580",
+            "OST4_pDS353",
+            "SEC61A1_pDS031",
+            "EIF2B4_pDS491",
+            "SRPR_pDS482",
+            "IER3IP1_pDS002",
+            "YIPF5_pDS186",
+            "HARS_pDS466",
+            "SLMO2_pDS433",
+            "DAD1_pDS499",
+            "TIMM23_pDS284",
+            "DARS_pDS495",
+            "IER3IP1_pDS110",
+            "AMIGO3_pDS434",
+            "ASCC3_pDS052"
+          ],
+          "pert_name": [
+            "63(mod)_pBA580",
+            "OST4_pDS353",
+            "SEC61A1_pDS031",
+            "EIF2B4_pDS491",
+            "SRPR_pDS482",
+            "IER3IP1_pDS002",
+            "YIPF5_pDS186",
+            "HARS_pDS466",
+            "SLMO2_pDS433",
+            "DAD1_pDS499",
+            "TIMM23_pDS284",
+            "DARS_pDS495",
+            "IER3IP1_pDS110",
+            "AMIGO3_pDS434",
+            "ASCC3_pDS052"
+          ],
+          "pert_target": [
+            "OST4",
+            "SEC61A1",
+            "EIF2B4",
+            "SRPR",
+            "IER3IP1",
+            "YIPF5",
+            "HARS",
+            "SLMO2",
+            "DAD1",
+            "TIMM23",
+            "DARS",
+            "AMIGO3",
+            "ASCC3",
+            "IDH3A",
+            "DNAJC19"
+          ],
+          "pert_type": [
+            "genetic"
+          ],
+          "read count": [
+            "282.0",
+            "331.0",
+            "285.0",
+            "1036.0",
+            "863.0",
+            "509.0",
+            "274.0",
+            "775.0",
+            "954.0",
+            "1153.0",
+            "762.0",
+            "378.0",
+            "1064.0",
+            "610.0",
+            "894.0"
+          ],
+          "self_reported_ethnicity": [
+            "unknown"
+          ],
+          "sex": [
+            "female"
+          ],
+          "suspension_type": [
+            "cell"
+          ],
+          "tissue": [
+            "bone marrow"
+          ],
+          "tissue_type": [
+            "cell culture"
+          ]
+        }
+      },
+      "obs_index_sha256": "7295b50c75c058f88b1d1a0f4cee67829d35db768657e3b93fef665268dd58a9",
+      "obs_uuid_sha256": "b1c507ae3581c8bc58a2d0d22b8c68dc7d347ae130cce26f69e5cc6daeb789c9",
+      "original_obs_index_sha256": "7295b50c75c058f88b1d1a0f4cee67829d35db768657e3b93fef665268dd58a9",
+      "source_spec": {
+        "biosample": "SAMN06055342",
+        "experiment": "GSM2406681_10X010",
+        "experiment_accession": "SRX2400171",
+        "gsm": "GSM2406681",
+        "n_obs": 65337,
+        "sequencer": "Illumina HiSeq 4000",
+        "title": "UPR Perturb-seq experiment cells"
+      }
+    }
+  },
+  "pid": 1662,
+  "source_objects": {
+    "GSM2406675_10X001:barcodes.tsv.gz": {
+      "bytes": 22300,
+      "content_type": "application/octet-stream",
+      "etag": null,
+      "final_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406675&format=file&file=GSM2406675_10X001_barcodes.tsv.gz",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/GSM2406675_10X001-barcodes_tsv_gz.data",
+      "sha256": "b44a3d466b03cafe7479ed98b3f6aa9becc9ce3651f17b49f7f77ca03d72cd32",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406675&format=file&file=GSM2406675_10X001_barcodes.tsv.gz"
+    },
+    "GSM2406675_10X001:cell_identities.csv.gz": {
+      "bytes": 79684,
+      "content_type": "application/octet-stream",
+      "etag": null,
+      "final_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406675&format=file&file=GSM2406675_10X001_cell_identities.csv.gz",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/GSM2406675_10X001-cell_identities_csv_gz.data",
+      "sha256": "e0e719dfba62a3651b5ccde1d318973e5a80bba1863dbc98c104ea74ac6f5f34",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406675&format=file&file=GSM2406675_10X001_cell_identities.csv.gz"
+    },
+    "GSM2406677_10X005:barcodes.tsv.gz": {
+      "bytes": 58348,
+      "content_type": "application/octet-stream",
+      "etag": null,
+      "final_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406677&format=file&file=GSM2406677_10X005_barcodes.tsv.gz",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/GSM2406677_10X005-barcodes_tsv_gz.data",
+      "sha256": "0525bc03ebd7ba7c0b7a777ff9a739330fdaa092568363c9e0e7b85ebce15895",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406677&format=file&file=GSM2406677_10X005_barcodes.tsv.gz"
+    },
+    "GSM2406677_10X005:cell_identities.csv.gz": {
+      "bytes": 184186,
+      "content_type": "application/octet-stream",
+      "etag": null,
+      "final_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406677&format=file&file=GSM2406677_10X005_cell_identities.csv.gz",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/GSM2406677_10X005-cell_identities_csv_gz.data",
+      "sha256": "fc9cb6314594345057c1b937fa0c7947399f073196a3104963da609be7b74d14",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406677&format=file&file=GSM2406677_10X005_cell_identities.csv.gz"
+    },
+    "GSM2406681_10X010:barcodes.tsv.gz": {
+      "bytes": 249427,
+      "content_type": "application/octet-stream",
+      "etag": null,
+      "final_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406681&format=file&file=GSM2406681_10X010_barcodes.tsv.gz",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/GSM2406681_10X010-barcodes_tsv_gz.data",
+      "sha256": "1e0d820343d0c6e17bdab4fef96f4446e223b94861942ccf3d7225818e009836",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406681&format=file&file=GSM2406681_10X010_barcodes.tsv.gz"
+    },
+    "GSM2406681_10X010:cell_identities.csv.gz": {
+      "bytes": 808896,
+      "content_type": "application/octet-stream",
+      "etag": null,
+      "final_url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406681&format=file&file=GSM2406681_10X010_cell_identities.csv.gz",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/GSM2406681_10X010-cell_identities_csv_gz.data",
+      "sha256": "8b40be7a2280c1713bf5a1eb828aad46e70ad3a7000b5f5a1322e51e06c4cf7f",
+      "url": "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM2406681&format=file&file=GSM2406681_10X010_cell_identities.csv.gz"
+    },
+    "converter": {
+      "bytes": 2359,
+      "content_type": "text/plain; charset=utf-8",
+      "etag": "\"a9c5fbf21883405ed38f5855406795f4ce44d88a7611c32c96005f95be41bce3\"",
+      "final_url": "https://raw.githubusercontent.com/sanderlab/scPerturb/master/dataset_processing/scripts/AdamsonWeissman2016.py",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/converter.py",
+      "sha256": "c2f370ec7f8f6bf22836d29ebbf82ceed0e8308460cbfbdee0f1d1b27af3bbcb",
+      "url": "https://raw.githubusercontent.com/sanderlab/scPerturb/master/dataset_processing/scripts/AdamsonWeissman2016.py"
+    },
+    "ena_report": {
+      "bytes": 4790,
+      "content_type": "text/plain",
+      "etag": null,
+      "final_url": "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJNA354963&result=read_experiment&fields=study_accession,sample_accession,experiment_accession,run_accession,scientific_name,instrument_model,library_name,library_strategy,library_source,library_selection,experiment_title,sample_title&format=tsv",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/ena_report.data",
+      "sha256": "a33ce91e56ae2b743bee9254a0d8985f4acc20b31714c5dceb1c684b22ce49c4",
+      "url": "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJNA354963&result=read_experiment&fields=study_accession,sample_accession,experiment_accession,run_accession,scientific_name,instrument_model,library_name,library_strategy,library_source,library_selection,experiment_title,sample_title&format=tsv"
+    },
+    "geo_soft": {
+      "bytes": 3441,
+      "content_type": "application/x-gzip",
+      "etag": null,
+      "final_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE90nnn/GSE90546/soft/GSE90546_family.soft.gz",
+      "http_status": 200,
+      "last_modified": "Mon, 06 Jul 2026 06:03:13 GMT",
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/geo_soft.gz",
+      "sha256": "447e72e6b66b18ef4f50fbc2289790e6d2bc11db090583945e29fac3a557630f",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE90nnn/GSE90546/soft/GSE90546_family.soft.gz"
+    },
+    "paper_html": {
+      "bytes": 356216,
+      "content_type": "text/html; charset=utf-8",
+      "etag": null,
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5315571/",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/paper_html.data",
+      "sha256": "92db475e217805dcfcaf9774420fc8a5a6a75a25b7a2087e94ab40c4b8d2d559",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5315571/"
+    },
+    "paper_table_s1": {
+      "bytes": 1817,
+      "content_type": "text/html; charset=utf-8",
+      "etag": null,
+      "final_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/5315571/bin/NIHMS832990-supplement-10.xlsx",
+      "http_status": 200,
+      "last_modified": null,
+      "path": "/tmp/t_f1d056cd-adamson16-inspect-jr98g7ct/paper_table_s1.xlsx",
+      "sha256": "363c1a83a64e5459578d570ffbd36211b762cafa796def086f6a7ad37bab5326",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/5315571/bin/NIHMS832990-supplement-10.xlsx"
+    }
+  },
+  "source_tables": {
+    "GSM2406675_10X001": {
+      "barcodes": {
+        "columns": [
+          "raw_barcode"
+        ],
+        "dtypes": {
+          "raw_barcode": "object"
+        },
+        "index_name": null,
+        "index_sample": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "index_unique": true,
+        "non_null": {
+          "raw_barcode": 5768
+        },
+        "nunique": {
+          "raw_barcode": 5768
+        },
+        "rows": 5768,
+        "value_samples": {
+          "raw_barcode": [
+            "AAACATACACCGAT-1",
+            "AAACATACAGAGAT-1",
+            "AAACATACCAGAAA-1",
+            "AAACATACGTTGAC-1",
+            "AAACATACTGTTCT-1",
+            "AAACCGTGCAGCTA-1",
+            "AAACCGTGCCTGAA-1",
+            "AAACCGTGCGGAGA-1",
+            "AAACCGTGGAACTC-1",
+            "AAACCGTGTGGCAT-1",
+            "AAACGCACCATGGT-1",
+            "AAACGCACCTGGTA-1",
+            "AAACGCACGAACCT-1",
+            "AAACGCACGGATCT-1",
+            "AAACGCACTCGCAA-1"
+          ]
+        }
+      },
+      "cell_identities": {
+        "columns": [
+          "guide identity",
+          "read count",
+          "UMI count",
+          "coverage",
+          "good coverage",
+          "number of cells"
+        ],
+        "dtypes": {
+          "UMI count": "int64",
+          "coverage": "float64",
+          "good coverage": "bool",
+          "guide identity": "object",
+          "number of cells": "int64",
+          "read count": "int64"
+        },
+        "index_name": "cell BC",
+        "index_sample": [
+          "GTGTCAGATCGTTT-1",
+          "CTACTCCTCTCCAC-1",
+          "TTCTTACTCTGAAC-1",
+          "CAGCCTTGATGACC-1",
+          "CAGTTGGAAATGCC-1"
+        ],
+        "index_unique": true,
+        "non_null": {
+          "UMI count": 5758,
+          "coverage": 5758,
+          "good coverage": 5758,
+          "guide identity": 5758,
+          "number of cells": 5758,
+          "read count": 5758
+        },
+        "nunique": {
+          "UMI count": 213,
+          "coverage": 4314,
+          "good coverage": 2,
+          "guide identity": 9,
+          "number of cells": 6,
+          "read count": 1878
+        },
+        "rows": 5758,
+        "value_samples": {
+          "UMI count": [
+            "633",
+            "466",
+            "437",
+            "314",
+            "286",
+            "326",
+            "318",
+            "290",
+            "280",
+            "276",
+            "267",
+            "264",
+            "218",
+            "222",
+            "213"
+          ],
+          "coverage": [
+            "17.11058452",
+            "19.90772532",
+            "16.99313501",
+            "19.04140127",
+            "19.79370629",
+            "16.76687117",
+            "15.32704403",
+            "16.52413793",
+            "17.09642857",
+            "16.3442029",
+            "16.75280899",
+            "16.09469697",
+            "18.95412844",
+            "17.91891892",
+            "18.33802817"
+          ],
+          "good coverage": [
+            "True",
+            "False"
+          ],
+          "guide identity": [
+            "62(mod)_pBA581",
+            "EP300_pDS268",
+            "BHLHE40_pDS258",
+            "CREB1_pDS269",
+            "DDIT3_pDS263",
+            "ZNF326_pDS262",
+            "SNAI1_pDS266",
+            "SPI1_pDS255",
+            "*"
+          ],
+          "number of cells": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "0",
+            "5"
+          ],
+          "read count": [
+            "10831",
+            "9277",
+            "7426",
+            "5979",
+            "5661",
+            "5466",
+            "4874",
+            "4792",
+            "4787",
+            "4511",
+            "4473",
+            "4249",
+            "4132",
+            "3978",
+            "3906"
+          ]
+        }
+      },
+      "cell_identity_index_without_dash_unique": true
+    },
+    "GSM2406677_10X005": {
+      "barcodes": {
+        "columns": [
+          "raw_barcode"
+        ],
+        "dtypes": {
+          "raw_barcode": "object"
+        },
+        "index_name": null,
+        "index_sample": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "index_unique": true,
+        "non_null": {
+          "raw_barcode": 15006
+        },
+        "nunique": {
+          "raw_barcode": 15006
+        },
+        "rows": 15006,
+        "value_samples": {
+          "raw_barcode": [
+            "AAACATACACTCAG-1",
+            "AAACATACTCCTAT-1",
+            "AAACATTGCAGAGG-1",
+            "AAACATTGGCGAAG-1",
+            "AAACCGTGATACCG-1",
+            "AAACCGTGCTTTAC-1",
+            "AAACCGTGTGCCAA-1",
+            "AAACCGTGTGGTTG-1",
+            "AAACGCACACGCTA-1",
+            "AAACGCACCCACAA-1",
+            "AAACGCACCGAACT-1",
+            "AAACGCACCTACTT-1",
+            "AAACGCACTACAGC-1",
+            "AAACGCACTCGATG-1",
+            "AAACGCACTGTCCC-1"
+          ]
+        }
+      },
+      "cell_identities": {
+        "columns": [
+          "guide identity",
+          "read count",
+          "UMI count",
+          "coverage",
+          "good coverage",
+          "number of cells"
+        ],
+        "dtypes": {
+          "UMI count": "int64",
+          "coverage": "float64",
+          "good coverage": "bool",
+          "guide identity": "object",
+          "number of cells": "int64",
+          "read count": "int64"
+        },
+        "index_name": "cell BC",
+        "index_sample": [
+          "ACGGTATGCTTAGG-3",
+          "ACAATCCTACCCTC-1",
+          "ACGAACACGTGCTA-3",
+          "CTGTGAGATTGGTG-1",
+          "ATGTTGCTAATCGC-2"
+        ],
+        "index_unique": true,
+        "non_null": {
+          "UMI count": 14856,
+          "coverage": 14856,
+          "good coverage": 14856,
+          "guide identity": 14856,
+          "number of cells": 14856,
+          "read count": 14856
+        },
+        "nunique": {
+          "UMI count": 196,
+          "coverage": 5296,
+          "good coverage": 2,
+          "guide identity": 20,
+          "number of cells": 7,
+          "read count": 800
+        },
+        "rows": 14856,
+        "value_samples": {
+          "UMI count": [
+            "645",
+            "455",
+            "322",
+            "369",
+            "228",
+            "223",
+            "235",
+            "304",
+            "300",
+            "216",
+            "214",
+            "179",
+            "209",
+            "218",
+            "162"
+          ],
+          "coverage": [
+            "6.05736434109",
+            "4.77582417582",
+            "6.5",
+            "4.31978319783",
+            "6.74122807018",
+            "6.80717488789",
+            "5.95744680851",
+            "4.53618421053",
+            "4.41333333333",
+            "6.06481481481",
+            "6.07009345794",
+            "7.12290502793",
+            "6.04784688995",
+            "5.6376146789",
+            "7.47530864198"
+          ],
+          "good coverage": [
+            "True",
+            "False"
+          ],
+          "guide identity": [
+            "PERK_IRE1_pMJ154",
+            "ATF6_PERK_IRE1_pMJ158",
+            "3x_neg_ctrl_pMJ144-2",
+            "ATF6_only_pMJ145",
+            "3x_neg_ctrl_pMJ144-1",
+            "ATF6_PERK_pMJ150",
+            "IRE1_only_pMJ148",
+            "ATF6_IRE1_pMJ152",
+            "PERK_only_pMJ146",
+            "*",
+            "IER3IP1_pDS003",
+            "PSMA1_pDS007",
+            "C7orf26_pDS004",
+            "Gal4-4(mod)_pBA582",
+            "XBP1_pBA579"
+          ],
+          "number of cells": [
+            "1",
+            "2",
+            "3",
+            "0",
+            "7",
+            "4",
+            "5"
+          ],
+          "read count": [
+            "3907",
+            "2173",
+            "2093",
+            "1594",
+            "1537",
+            "1518",
+            "1400",
+            "1379",
+            "1324",
+            "1310",
+            "1299",
+            "1275",
+            "1264",
+            "1229",
+            "1211"
+          ]
+        }
+      },
+      "cell_identity_index_without_dash_unique": false
+    },
+    "GSM2406681_10X010": {
+      "barcodes": {
+        "columns": [
+          "raw_barcode"
+        ],
+        "dtypes": {
+          "raw_barcode": "object"
+        },
+        "index_name": null,
+        "index_sample": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "index_unique": true,
+        "non_null": {
+          "raw_barcode": 65337
+        },
+        "nunique": {
+          "raw_barcode": 65337
+        },
+        "rows": 65337,
+        "value_samples": {
+          "raw_barcode": [
+            "AAACATACAAGATG-1",
+            "AAACATACACCTAG-1",
+            "AAACATACTTCCCG-1",
+            "AAACATTGAAACAG-1",
+            "AAACATTGCAGCTA-1",
+            "AAACATTGCATTGG-1",
+            "AAACCGTGCTGTAG-1",
+            "AAACCGTGGCGTTA-1",
+            "AAACCGTGGGACTT-1",
+            "AAACCGTGTCGATG-1",
+            "AAACCGTGTTCCCG-1",
+            "AAACGCACCCAAGT-1",
+            "AAACGCACGACAGG-1",
+            "AAACGCACTGACTG-1",
+            "AAACGCTGAGGTCT-1"
+          ]
+        }
+      },
+      "cell_identities": {
+        "columns": [
+          "guide identity",
+          "read count",
+          "UMI count",
+          "coverage",
+          "good coverage",
+          "number of cells"
+        ],
+        "dtypes": {
+          "UMI count": "int64",
+          "coverage": "float64",
+          "good coverage": "bool",
+          "guide identity": "object",
+          "number of cells": "int64",
+          "read count": "int64"
+        },
+        "index_name": "cell BC",
+        "index_sample": [
+          "TAATGTGAACTGGT-6",
+          "GAAGATGATCTTCA-3",
+          "GCGTAAACAGTCGT-2",
+          "TTCGTATGCTTTAC-5",
+          "AACTTGCTAACTGC-10"
+        ],
+        "index_unique": true,
+        "non_null": {
+          "UMI count": 65257,
+          "coverage": 65257,
+          "good coverage": 65257,
+          "guide identity": 65257,
+          "number of cells": 65257,
+          "read count": 65257
+        },
+        "nunique": {
+          "UMI count": 218,
+          "coverage": 15882,
+          "good coverage": 2,
+          "guide identity": 114,
+          "number of cells": 8,
+          "read count": 2677
+        },
+        "rows": 65257,
+        "value_samples": {
+          "UMI count": [
+            "1557",
+            "1090",
+            "817",
+            "756",
+            "824",
+            "724",
+            "525",
+            "332",
+            "453",
+            "400",
+            "426",
+            "414",
+            "388",
+            "357",
+            "315"
+          ],
+          "coverage": [
+            "29.83429672",
+            "23.52018349",
+            "25.80538556",
+            "27.46031746",
+            "23.79126214",
+            "23.64088398",
+            "22.68380952",
+            "34.31325301",
+            "25.10154525",
+            "27.835",
+            "25.42488263",
+            "25.98309179",
+            "25.39948454",
+            "27.05042017",
+            "29.91428571"
+          ],
+          "good coverage": [
+            "True",
+            "False"
+          ],
+          "guide identity": [
+            "IARS2_pDS090",
+            "SPCS3_pDS402",
+            "CHERP_pDS024",
+            "SLMO2_pDS433",
+            "XRN1_pDS411",
+            "EIF2B2_pDS463",
+            "SYVN1_pDS442",
+            "63(mod)_pBA580",
+            "MANF_pDS027",
+            "SRP68_pDS403",
+            "FARSB_pDS390",
+            "DAD1_pDS499",
+            "SEC63_pDS218",
+            "SARS_pDS467",
+            "SEC61A1_pDS032"
+          ],
+          "number of cells": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "0",
+            "6",
+            "9"
+          ],
+          "read count": [
+            "46452",
+            "25637",
+            "21083",
+            "20760",
+            "19604",
+            "17116",
+            "11909",
+            "11392",
+            "11371",
+            "11134",
+            "10831",
+            "10757",
+            "9855",
+            "9657",
+            "9423"
+          ]
+        }
+      },
+      "cell_identity_index_without_dash_unique": false
+    },
+    "ena_report": {
+      "columns": [
+        "experiment_accession",
+        "run_accession",
+        "study_accession",
+        "sample_accession",
+        "scientific_name",
+        "instrument_model",
+        "library_name",
+        "library_strategy",
+        "library_source",
+        "library_selection",
+        "experiment_title",
+        "sample_title"
+      ],
+      "dtypes": {
+        "experiment_accession": "object",
+        "experiment_title": "object",
+        "instrument_model": "object",
+        "library_name": "float64",
+        "library_selection": "object",
+        "library_source": "object",
+        "library_strategy": "object",
+        "run_accession": "object",
+        "sample_accession": "object",
+        "sample_title": "object",
+        "scientific_name": "object",
+        "study_accession": "object"
+      },
+      "index_name": null,
+      "index_sample": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "index_unique": true,
+      "non_null": {
+        "experiment_accession": 17,
+        "experiment_title": 17,
+        "instrument_model": 17,
+        "library_name": 0,
+        "library_selection": 17,
+        "library_source": 17,
+        "library_strategy": 17,
+        "run_accession": 17,
+        "sample_accession": 17,
+        "sample_title": 17,
+        "scientific_name": 17,
+        "study_accession": 17
+      },
+      "nunique": {
+        "experiment_accession": 17,
+        "experiment_title": 17,
+        "instrument_model": 2,
+        "library_name": 0,
+        "library_selection": 1,
+        "library_source": 1,
+        "library_strategy": 1,
+        "run_accession": 17,
+        "sample_accession": 17,
+        "sample_title": 17,
+        "scientific_name": 1,
+        "study_accession": 1
+      },
+      "rows": 17,
+      "value_samples": {
+        "experiment_accession": [
+          "SRX2400165",
+          "SRX2400167",
+          "SRX2400171",
+          "SRX2400174",
+          "SRX2400166",
+          "SRX2400177",
+          "SRX2400178",
+          "SRX2400173",
+          "SRX2400181",
+          "SRX2400168",
+          "SRX2400169",
+          "SRX2400170",
+          "SRX2400172",
+          "SRX2400175",
+          "SRX2400176"
+        ],
+        "experiment_title": [
+          "Illumina HiSeq 2500 sequencing: GSM2406675: Pilot TF experiment cells Homo sapiens RNA-Seq",
+          "Illumina HiSeq 4000 sequencing: GSM2406677: Epistasis experiment cells Homo sapiens RNA-Seq",
+          "Illumina HiSeq 4000 sequencing: GSM2406681: UPR Perturb-seq experiment cells Homo sapiens RNA-Seq",
+          "Illumina HiSeq 2500 sequencing: GSM2406684: UPR Perturb-seq experiment guide barcodes (gemgroup 3) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 2500 sequencing: GSM2406676: Pilot TF experiment guide barcodes Homo sapiens RNA-Seq",
+          "Illumina HiSeq 2500 sequencing: GSM2406687: UPR Perturb-seq experiment guide barcodes (gemgroup 6) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 2500 sequencing: GSM2406688: UPR Perturb-seq experiment guide barcodes (gemgroup 7) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 2500 sequencing: GSM2406683: UPR Perturb-seq experiment guide barcodes (gemgroup 2) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 2500 sequencing: GSM2406691: UPR Perturb-seq experiment guide barcodes (gemgroup 10) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 4000 sequencing: GSM2406678: Epistasis experiment guide barcodes (gemgroup 1) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 4000 sequencing: GSM2406679: Epistasis experiment guide barcodes (gemgroup 2) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 4000 sequencing: GSM2406680: Epistasis experiment guide barcodes (gemgroup 3) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 2500 sequencing: GSM2406682: UPR Perturb-seq experiment guide barcodes (gemgroup 1) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 2500 sequencing: GSM2406685: UPR Perturb-seq experiment guide barcodes (gemgroup 4) Homo sapiens RNA-Seq",
+          "Illumina HiSeq 2500 sequencing: GSM2406686: UPR Perturb-seq experiment guide barcodes (gemgroup 5) Homo sapiens RNA-Seq"
+        ],
+        "instrument_model": [
+          "Illumina HiSeq 2500",
+          "Illumina HiSeq 4000"
+        ],
+        "library_name": [],
+        "library_selection": [
+          "cDNA"
+        ],
+        "library_source": [
+          "TRANSCRIPTOMIC"
+        ],
+        "library_strategy": [
+          "RNA-Seq"
+        ],
+        "run_accession": [
+          "SRR5082088",
+          "SRR5082090",
+          "SRR5082094",
+          "SRR5082097",
+          "SRR5082089",
+          "SRR5082100",
+          "SRR5082101",
+          "SRR5082096",
+          "SRR5082104",
+          "SRR5082091",
+          "SRR5082092",
+          "SRR5082093",
+          "SRR5082095",
+          "SRR5082098",
+          "SRR5082099"
+        ],
+        "sample_accession": [
+          "SAMN06055348",
+          "SAMN06055346",
+          "SAMN06055342",
+          "SAMN06055339",
+          "SAMN06055347",
+          "SAMN06055336",
+          "SAMN06055335",
+          "SAMN06055340",
+          "SAMN06055332",
+          "SAMN06055345",
+          "SAMN06055344",
+          "SAMN06055343",
+          "SAMN06055341",
+          "SAMN06055338",
+          "SAMN06055337"
+        ],
+        "sample_title": [
+          "Pilot TF experiment cells",
+          "Epistasis experiment cells",
+          "UPR Perturb-seq experiment cells",
+          "UPR Perturb-seq experiment guide barcodes (gemgroup 3)",
+          "Pilot TF experiment guide barcodes",
+          "UPR Perturb-seq experiment guide barcodes (gemgroup 6)",
+          "UPR Perturb-seq experiment guide barcodes (gemgroup 7)",
+          "UPR Perturb-seq experiment guide barcodes (gemgroup 2)",
+          "UPR Perturb-seq experiment guide barcodes (gemgroup 10)",
+          "Epistasis experiment guide barcodes (gemgroup 1)",
+          "Epistasis experiment guide barcodes (gemgroup 2)",
+          "Epistasis experiment guide barcodes (gemgroup 3)",
+          "UPR Perturb-seq experiment guide barcodes (gemgroup 1)",
+          "UPR Perturb-seq experiment guide barcodes (gemgroup 4)",
+          "UPR Perturb-seq experiment guide barcodes (gemgroup 5)"
+        ],
+        "scientific_name": [
+          "Homo sapiens"
+        ],
+        "study_accession": [
+          "PRJNA354963"
+        ]
+      }
+    },
+    "paper_table_s1": {
+      "bytes": 1817,
+      "content_type": "text/html; charset=utf-8",
+      "sha256": "363c1a83a64e5459578d570ffbd36211b762cafa796def086f6a7ad37bab5326",
+      "status": "download_wrapper_not_workbook"
+    }
+  },
+  "task_id": "t_f1d056cd"
+}
