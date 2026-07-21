@@ -295,7 +295,13 @@ def curate_obs(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataFrame, d
         set_field(curated, field, pd.Series(pd.NA, index=curated.index, dtype=dtype), "unknown", "source-exhaustive search found no defensible value")
     if not curated.index.equals(original.index) or len(curated) != EXPECTED_N_OBS:
         raise AssertionError("OBS row order/count drift")
-    preserved = [column for column in original.columns if column.startswith("source_") or column in {"GSM", "replicate", "celltype", "ncounts", "ngenes", "percent_mito", "percent_ribo", "nperts", "original_obs_index", "obs_uuid"}]
+    preserved_names = {
+        "GSM", "replicate", "celltype", "ncounts", "ngenes", "percent_mito",
+        "percent_ribo", "nperts", "original_obs_index", "obs_uuid",
+        "source_replicate", "source_celltype", "source_tissue_type",
+        "source_source_tissue_type", "source_organism", "source_cancer",
+    }
+    preserved = [column for column in original.columns if column in preserved_names]
     assert_frame_equal(curated.loc[:, preserved], original.loc[:, preserved], check_categorical=True)
     if not curated["obs_uuid"].is_unique or not curated["original_obs_index"].is_unique:
         raise AssertionError("OBS identity uniqueness drift")
