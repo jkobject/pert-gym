@@ -256,6 +256,35 @@ def test_processing_decision_notebook_executes_from_repo_root(
             exec("".join(cell["source"]), namespace)
 
 
+def test_retry_receipts_bind_partial_var_and_zero_write_replay() -> None:
+    mutation = json.loads((EVIDENCE / "mutation_retry_receipt.json").read_text())
+    verification = json.loads(
+        (EVIDENCE / "verification_retry_receipt.json").read_text()
+    )
+    assert mutation["canonical_sha256"] == (
+        "dcc2b68f51f17bc115175ec24589ee79710d5f452cf083ac12c1f1f724baca7a"
+    )
+    assert verification["canonical_sha256"] == (
+        "be105bf47d138337f65c75d61a5629bd00382cec7ade73ddbdb18fbfc843bc43"
+    )
+    assert mutation["writes"]["obs_revisions"] == 0
+    assert mutation["writes"]["var_revisions"] == 1
+    assert mutation["writes"]["artifacts"]["var"][0]["uid"] == "rRlvtvSEpbFnek7K0003"
+    assert verification["replay_noop"] is True
+    assert (
+        verification["registry_counts"]["before"]
+        == verification["registry_counts"]["after"]
+    )
+    assert verification["dataset_e2e_v3"]["complete"] is True
+    assert verification["collection_contract"]["verdict"] == "accepted_structural_reuse"
+    assert verification["member_after"]["var_verdict"]["feature_denominator"] == {
+        "standard_ensembl_gene": 44_025,
+        "source_native_custom_lh_not_applicable": 16_401,
+        "unresolved_applicable_unknown": 71,
+        "total": 60_497,
+    }
+
+
 def test_dashboard_reconciles_accepted_ledger_without_gse150062_credit() -> None:
     repo = Path(__file__).parents[1]
     todo = (repo / "TODO.md").read_text()
