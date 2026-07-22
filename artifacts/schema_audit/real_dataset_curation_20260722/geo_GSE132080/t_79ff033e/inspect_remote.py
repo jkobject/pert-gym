@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import base64
 import gzip
 import hashlib
 import json
@@ -62,12 +61,12 @@ def frame_summary(frame: pd.DataFrame) -> dict[str, Any]:
         "index_name": frame.index.name,
         "index_unique": bool(frame.index.is_unique),
         "index_sha256": ordered_sha256(frame.index),
-        "index_sample": frame.index.astype(str)[:20].tolist(),
+        "index_sample": frame.index.astype(str)[:8].tolist(),
         "dtypes": {str(column): str(frame[column].dtype) for column in frame.columns},
         "non_null": {str(column): int(frame[column].notna().sum()) for column in frame.columns},
         "nunique": {str(column): int(frame[column].dropna().astype(str).nunique()) for column in frame.columns},
         "value_samples": {
-            str(column): frame[column].dropna().astype(str).drop_duplicates().head(20).tolist()
+            str(column): frame[column].dropna().astype(str).drop_duplicates().head(8).tolist()
             for column in frame.columns
         },
     }
@@ -124,7 +123,18 @@ def download_sources(root: Path) -> dict[str, Any]:
         ).stdout
         if not path.exists() or path.stat().st_size != expected_size:
             subprocess.run(
-                ["curl", "--location", "--fail", "--retry", "3", "--output", str(path), url],
+                [
+                    "curl",
+                    "--silent",
+                    "--show-error",
+                    "--location",
+                    "--fail",
+                    "--retry",
+                    "3",
+                    "--output",
+                    str(path),
+                    url,
+                ],
                 check=True,
                 timeout=3600,
             )
@@ -295,10 +305,7 @@ def main() -> None:
         "collection": collection_snapshot(ln),
         "invariants": {"source_file_count": len(sources), "source_total_bytes": sum(item["size"] for item in sources.values()), "writes": 0, "x_payload_materialized": False},
     }
-    encoded = base64.b64encode(gzip.compress(canonical(report).encode(), mtime=0)).decode()
-    print("GSE132080_REPORT_GZIP_BASE64_BEGIN")
-    print(encoded)
-    print("GSE132080_REPORT_END")
+    print("GSE132080_REPORT_JSON=" + canonical(report))
 
 
 if __name__ == "__main__":
