@@ -5,16 +5,19 @@ from __future__ import annotations
 
 import gzip
 import hashlib
+import io
 import json
 import os
 import platform
 import subprocess
 import tempfile
+import zipfile
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
 import h5py
+import numpy as np
 import pandas as pd
 
 from tools.lamin_context import connect_pertdata
@@ -33,6 +36,13 @@ FILES = {
     "GSM6297388_filtered_feature_bc_matrix.pert.ill.h5": ("GSM6297388", 88_119_419),
     "GSM6297388_filtered_feature_bc_matrix.pert.ult.h5": ("GSM6297388", 86_235_772),
 }
+SUPPLEMENTARY_URL = (
+    "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9931582/supplementaryFiles"
+)
+SUPPLEMENTARY_TABLE = "41587_2022_1452_MOESM4_ESM.xlsx"
+SUPPLEMENTARY_TABLE_SHA256 = (
+    "ec1380c72943075b9ecd3e2753d32b14c42951c769e862c7a87c609129f9b23a"
+)
 
 
 def canonical(value: Any) -> str:
@@ -163,11 +173,129 @@ def h5_summary(path: Path) -> tuple[dict[str, Any], pd.Index]:
         }, barcodes
 
 
+def load_feature_table() -> tuple[pd.DataFrame, dict[str, Any]]:
+    path = Path(tempfile.gettempdir()) / f"{TASK_ID}-PMC9931582-supplementary.zip"
+    if not path.exists():
+        subprocess.run(
+            [
+                "curl", "--silent", "--show-error", "--location", "--fail",
+                "--retry", "3", "--output", str(path), SUPPLEMENTARY_URL,
+            ],
+            check=True,
+            timeout=1800,
+        )
+    with zipfile.ZipFile(path) as archive:
+        payload = archive.read(SUPPLEMENTARY_TABLE)
+    if hashlib.sha256(payload).hexdigest() != SUPPLEMENTARY_TABLE_SHA256:
+        raise AssertionError("Supplementary Table 4 identity drift")
+    table = pd.read_excel(io.BytesIO(payload), sheet_name="table S4")
+    if (
+        list(table.columns)
+        != ["id", "name", "read", "pattern", "sequence", "feature_type"]
+        or len(table) != 6_155
+        or not table["id"].is_unique
+        or not table["sequence"].is_unique
+    ):
+        raise AssertionError("Supplementary Table 4 schema/content drift")
+    return table, {
+        "url": SUPPLEMENTARY_URL,
+        "archive_size": path.stat().st_size,
+        "archive_sha256": sha256_file(path),
+        "member": SUPPLEMENTARY_TABLE,
+        "member_size": len(payload),
+        "member_sha256": SUPPLEMENTARY_TABLE_SHA256,
+        "rows": len(table),
+        "feature_type_counts": table["feature_type"].value_counts().to_dict(),
+    }
+
+
+def feature_assignments(
+    path: Path, obs: pd.DataFrame, feature_table: pd.DataFrame
+) -> tuple[pd.DataFrame, dict[str, Any]]:
+    with h5py.File(path, "r") as handle:
+        matrix = handle["matrix"]
+        barcodes = decode(matrix["barcodes"][:])
+        features = matrix["features"]
+        names = np.asarray(decode(features["name"][:]), dtype=object)
+        types = np.asarray(decode(features["feature_type"][:]), dtype=object)
+        indices = matrix["indices"][:]
+        indptr = matrix["indptr"][:]
+        data = matrix["data"][:]
+    accepted = pd.Index(obs["original_obs_index"].astype(str))
+    if not barcodes.equals(accepted):
+        raise AssertionError("Illumina feature-barcode/accepted OBS order drift")
+
+    assignments: dict[str, list[Any]] = {
+        "source_guide_top": [],
+        "source_guide_top_count": [],
+        "source_guide_detected_count": [],
+        "source_guide_top_ties": [],
+        "source_hash_top": [],
+        "source_hash_top_count": [],
+        "source_hash_detected_count": [],
+        "source_hash_top_ties": [],
+    }
+    for column in range(len(barcodes)):
+        start, stop = int(indptr[column]), int(indptr[column + 1])
+        cell_indices = indices[start:stop]
+        cell_values = data[start:stop]
+        for label, feature_type in (
+            ("guide", "CRISPR Guide Capture"),
+            ("hash", "Custom"),
+        ):
+            selected = types[cell_indices] == feature_type
+            selected_indices = cell_indices[selected]
+            selected_values = cell_values[selected]
+            if not len(selected_values):
+                assignments[f"source_{label}_top"].append(pd.NA)
+                assignments[f"source_{label}_top_count"].append(0)
+                assignments[f"source_{label}_detected_count"].append(0)
+                assignments[f"source_{label}_top_ties"].append(0)
+                continue
+            maximum = int(selected_values.max())
+            maxima = selected_indices[selected_values == maximum]
+            assignments[f"source_{label}_top"].append(str(names[int(maxima[0])]))
+            assignments[f"source_{label}_top_count"].append(maximum)
+            assignments[f"source_{label}_detected_count"].append(len(selected_values))
+            assignments[f"source_{label}_top_ties"].append(len(maxima))
+    frame = pd.DataFrame(assignments, index=obs.index)
+    frame["source_guide_top"] = frame["source_guide_top"].astype("string")
+    frame["source_hash_top"] = frame["source_hash_top"].astype("string")
+    sequences = feature_table.set_index("id")["sequence"].astype("string")
+    current = obs["guide"].astype("string")
+    if not current.dropna().isin(sequences.index).all():
+        raise AssertionError("accepted guide absent from Supplementary Table 4")
+    frame["source_guide_sequence"] = current.map(sequences).astype("string")
+    comparable = current.notna() & frame["source_guide_top"].notna()
+    matches = current.eq(frame["source_guide_top"]) & comparable
+    mismatch = comparable & ~matches
+    return frame, {
+        "current_guide_non_null": int(current.notna().sum()),
+        "current_guide_sequence_joined": int(frame["source_guide_sequence"].notna().sum()),
+        "top_guide_non_null": int(frame["source_guide_top"].notna().sum()),
+        "current_equals_top_guide": int(matches.sum()),
+        "current_differs_top_guide": int(mismatch.sum()),
+        "current_differs_top_sample": [
+            {
+                "barcode": str(obs.loc[index, "original_obs_index"]),
+                "current": str(current.loc[index]),
+                "top": str(frame.loc[index, "source_guide_top"]),
+            }
+            for index in frame.index[mismatch][:20]
+        ],
+        "guide_top_tie_rows": int((frame["source_guide_top_ties"] > 1).sum()),
+        "hash_top_non_null": int(frame["source_hash_top"].notna().sum()),
+        "hash_top_tie_rows": int((frame["source_hash_top_ties"] > 1).sum()),
+        "hash_top_counts": frame["source_hash_top"].value_counts(dropna=False).to_dict(),
+    }
+
+
 def main() -> None:
     if platform.system() == "Darwin":
         raise RuntimeError("refusing Mac execution")
     capacity = preflight()
     paths, receipts = download_sources()
+    feature_table, feature_table_receipt = load_feature_table()
 
     cells_ill = read_one_column(paths["GSM6297384_cells_counts_Pert_Ill.txt.gz"])
     cells_ult = read_one_column(paths["GSM6297385_cells_counts_Pert_Ult.txt.gz"])
@@ -192,6 +320,11 @@ def main() -> None:
     obs_records.sort(key=lambda item: (str(item.created_at), str(item.uid)))
     obs = obs_records[-1].load()
     accepted = pd.Index(obs["original_obs_index"].astype(str))
+    _, assignment_receipt = feature_assignments(
+        paths["GSM6297388_filtered_feature_bc_matrix.pert.ill.h5"],
+        obs,
+        feature_table,
+    )
 
     axes = {
         "expression_cells_ill": cells_ill,
@@ -223,6 +356,7 @@ def main() -> None:
             "available_memory_bytes": capacity.available_memory_bytes,
         },
         "sources": receipts,
+        "supplementary_table_4": feature_table_receipt,
         "text_previews": {
             name: text_preview(path)
             for name, path in paths.items()
@@ -244,6 +378,7 @@ def main() -> None:
             "rows": len(accepted),
             "axis_sha256": ordered_sha256(accepted),
         },
+        "feature_assignments": assignment_receipt,
         "axis_relations": relations,
         "invariants": {"writes": 0, "downloaded_bytes": sum(item["size"] for item in receipts.values())},
     }
