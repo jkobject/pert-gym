@@ -171,3 +171,15 @@ def test_var_verifier_rejects_x_axis_order_drift(monkeypatch: pytest.MonkeyPatch
     curated = curation.curate_var(var, source)
     with pytest.raises(AssertionError, match="VAR/X"):
         curation.verify_var(curated, source, pd.Index(["LH00001", "GENE1", "AMBIG"]))
+
+
+def test_processing_decision_notebook_executes_from_repo_root(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    notebook_path = EVIDENCE / "GSE150062_processing_decisions.ipynb"
+    notebook = json.loads(notebook_path.read_text())
+    monkeypatch.chdir(Path(__file__).parents[1])
+    namespace: dict[str, Any] = {}
+    for cell in notebook["cells"]:
+        if cell["cell_type"] == "code":
+            exec("".join(cell["source"]), namespace)
