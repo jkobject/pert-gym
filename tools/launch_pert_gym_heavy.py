@@ -4,9 +4,9 @@
 The launcher publishes a task-owned, time-bounded lease to both GCE labels and
 the local compute guard before it starts the VM or dispatches a payload. It then
 proves the exact labels by readback. The legacy long-run mode preserves failed
-payload state for inspection. Verify-only mode instead supervises one exact
-remote payload PID, enforces a short absolute ceiling, and clears terminal lease
-state after stopping the VM.
+payload state for inspection. Minute-bounded writer and verify-only modes instead
+supervise one exact remote payload PID, enforce an absolute ceiling, and clear
+terminal lease state after stopping the VM.
 """
 
 from __future__ import annotations
@@ -32,6 +32,7 @@ INSTANCE_ID = "3715582979673213789"
 MIN_LEASE_HOURS = 8.0
 LEASE_MARGIN_HOURS = 2.0
 DEFAULT_MAX_LEASE_HOURS = 14.0
+MAX_BOUNDED_WRITER_MINUTES = 360.0
 DEFAULT_SSH_READINESS_TIMEOUT_SECONDS = 300.0
 SSH_READINESS_INTERVAL_SECONDS = 5.0
 DEFAULT_LOCAL_LEASE_PATH = (
@@ -85,6 +86,7 @@ def _bounded_control_run(
     *,
     absolute_deadline: float,
     monotonic: Callable[[], float],
+    lifecycle_mode: str = "verify-only",
 ) -> Run:
     """Bound real control-plane subprocesses by the remaining lifecycle time."""
     if run is not _run:
@@ -93,12 +95,12 @@ def _bounded_control_run(
     def bounded(command: list[str]) -> subprocess.CompletedProcess[str]:
         remaining = absolute_deadline - monotonic()
         if remaining <= 0:
-            raise RuntimeError("verify-only absolute ceiling exhausted")
+            raise RuntimeError(f"{lifecycle_mode} absolute ceiling exhausted")
         try:
             return _run(command, timeout_seconds=min(600.0, remaining))
         except subprocess.TimeoutExpired as exc:
             raise RuntimeError(
-                "verify-only control operation exceeded absolute ceiling"
+                f"{lifecycle_mode} control operation exceeded absolute ceiling"
             ) from exc
 
     return bounded
@@ -249,13 +251,12 @@ def _atomic_write_local_lease(
     temporary.replace(path)
 
 
-def _publish_lease(
+def _publish_gce_lease(
     run: Run,
     *,
     task: str,
     purpose: str,
     deadline: datetime,
-    local_lease_path: Path,
     previous: dict[str, str] | None = None,
 ) -> dict[str, str]:
     if previous is not None:
@@ -277,12 +278,6 @@ def _publish_lease(
         operation="GCE lease publication",
     )
     _verify_lease(_describe(run), labels)
-    _atomic_write_local_lease(
-        local_lease_path,
-        task=task,
-        deadline=deadline,
-        purpose=purpose,
-    )
     return labels
 
 
@@ -299,7 +294,7 @@ def _verify_lease_cleared(instance: dict[str, object]) -> None:
         raise RuntimeError(f"terminal lease clear readback mismatch: {remaining!r}")
 
 
-def _clear_terminal_verify_lease(
+def _clear_terminal_lease(
     run: Run,
     *,
     labels: dict[str, str],
@@ -333,6 +328,28 @@ def _clear_terminal_verify_lease(
     )
     _verify_lease_cleared(_describe(run))
     local_lease_path.unlink(missing_ok=True)
+    local_lease_path.with_suffix(local_lease_path.suffix + ".tmp").unlink(
+        missing_ok=True
+    )
+
+
+def _cleanup_terminal_failure(
+    run: Run,
+    *,
+    labels: dict[str, str],
+    local_lease_path: Path,
+    primary: BaseException,
+) -> None:
+    """Compensate exact owned state while preserving the primary failure."""
+    try:
+        _clear_terminal_lease(
+            run,
+            labels=labels,
+            local_lease_path=local_lease_path,
+        )
+    except BaseException as cleanup:
+        primary.add_note(f"terminal cleanup also failed: {cleanup}")
+        raise primary from cleanup
 
 
 def _read_remote_payload_pid(run: Run, path: str) -> int | None:
@@ -475,6 +492,17 @@ def launch_heavy_command(
     task_label(task)
     if not _LABEL_VALUE_RE.fullmatch(purpose):
         raise ValueError("purpose must be an exact GCE label value")
+    minute_lifecycle_requested = (
+        lease_minutes is not None or absolute_max_minutes is not None
+    )
+    if minute_lifecycle_requested and (
+        lease_minutes is None or absolute_max_minutes is None
+    ):
+        raise ValueError(
+            "lease-minutes and absolute-max-minutes must be provided together"
+        )
+    bounded_lifecycle = lease_minutes is not None and absolute_max_minutes is not None
+    lifecycle_mode = "verify-only" if verify_only else "bounded writer"
     if verify_only:
         if purpose == PURPOSE:
             raise ValueError("verify-only launch requires an exact verify-only purpose")
@@ -486,24 +514,33 @@ def launch_heavy_command(
             raise ValueError("verify-only absolute ceiling cannot precede its lease")
         if readiness_timeout_seconds <= 0:
             raise ValueError("SSH readiness timeout must be positive")
-    elif lease_minutes is not None or absolute_max_minutes is not None:
-        raise ValueError("minute lifecycle options require verify-only mode")
+    elif lease_minutes is not None and absolute_max_minutes is not None:
+        if purpose == PURPOSE:
+            raise ValueError("bounded writer launch requires an exact purpose")
+        if not 0 < lease_minutes <= MAX_BOUNDED_WRITER_MINUTES:
+            raise ValueError("bounded writer lease must be at most 360 minutes")
+        if not 0 < absolute_max_minutes <= MAX_BOUNDED_WRITER_MINUTES:
+            raise ValueError(
+                "bounded writer absolute ceiling must be at most 360 minutes"
+            )
+        if absolute_max_minutes < lease_minutes:
+            raise ValueError("bounded writer absolute ceiling cannot precede its lease")
+        if readiness_timeout_seconds <= 0:
+            raise ValueError("SSH readiness timeout must be positive")
     current = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
-    requested = (
-        current + timedelta(minutes=lease_minutes)
-        if verify_only and lease_minutes is not None
-        else lease_deadline(current, eta_hours=eta_hours)
-    )
-    verify_started = monotonic() if verify_only else None
-    absolute_monotonic_deadline = (
-        verify_started + absolute_max_minutes * 60
-        if verify_started is not None and absolute_max_minutes is not None
-        else None
-    )
+    if lease_minutes is not None and absolute_max_minutes is not None:
+        requested = current + timedelta(minutes=lease_minutes)
+        lifecycle_started = monotonic()
+        absolute_monotonic_deadline = lifecycle_started + absolute_max_minutes * 60
+    else:
+        requested = lease_deadline(current, eta_hours=eta_hours)
+        lifecycle_started = None
+        absolute_monotonic_deadline = None
     control_run = (
         _bounded_control_run(
             run,
             absolute_deadline=absolute_monotonic_deadline,
+            lifecycle_mode=lifecycle_mode,
             monotonic=monotonic,
         )
         if absolute_monotonic_deadline is not None
@@ -513,7 +550,7 @@ def launch_heavy_command(
     before = _describe(control_run)
     if before.get("status") not in {"RUNNING", "TERMINATED"}:
         raise RuntimeError(f"refusing instance status {before.get('status')!r}")
-    if verify_only:
+    if bounded_lifecycle:
         before_labels = before.get("labels")
         existing = _parse_label_deadline(
             before_labels.get("lease-until")
@@ -522,23 +559,29 @@ def launch_heavy_command(
         )
         if existing is not None and existing > requested:
             raise RuntimeError(
-                "existing live lease exceeds the requested verify-only lease; refusing to shorten it"
+                f"existing live lease exceeds the requested {lifecycle_mode} lease; "
+                "refusing to shorten it"
             )
     deadline = _effective_deadline(before, task=task, requested=requested, now=current)
-    labels = _publish_lease(
+    labels = _publish_gce_lease(
         control_run,
         task=task,
         purpose=purpose,
         deadline=deadline,
-        local_lease_path=local_lease_path,
     )
 
     try:
+        _atomic_write_local_lease(
+            local_lease_path,
+            task=task,
+            deadline=deadline,
+            purpose=purpose,
+        )
         if (
             absolute_monotonic_deadline is not None
             and monotonic() >= absolute_monotonic_deadline
         ):
-            raise RuntimeError("verify-only absolute ceiling exhausted")
+            raise RuntimeError(f"{lifecycle_mode} absolute ceiling exhausted")
         # A second fresh read closes the lease-readback -> start/dispatch interval.
         immediately_before_launch = _describe(control_run)
         _verify_lease(immediately_before_launch, labels)
@@ -551,27 +594,28 @@ def launch_heavy_command(
             )
         elif status != "RUNNING":
             raise RuntimeError(f"refusing pre-launch instance status {status!r}")
-    except BaseException:
-        if verify_only:
-            _clear_terminal_verify_lease(
+    except BaseException as primary:
+        if bounded_lifecycle:
+            _cleanup_terminal_failure(
                 run,
                 labels=labels,
                 local_lease_path=local_lease_path,
+                primary=primary,
             )
         raise
 
-    if verify_only:
+    if bounded_lifecycle:
         assert lease_minutes is not None and absolute_max_minutes is not None
-        assert verify_started is not None
+        assert lifecycle_started is not None
         assert absolute_monotonic_deadline is not None
-        pid_path = f"/tmp/pert-gym/{task}/verify-payload.pid"
+        pid_path = f"/tmp/pert-gym/{task}/bounded-payload.pid"
         remote = (
             "set -eu; umask 077; "
             f"mkdir -p {shlex.quote(str(Path(pid_path).parent))}; "
             f"printf '%s\\n' $$ > {shlex.quote(pid_path)}; "
             f"exec {shlex.join(list(command))}"
         )
-        started = verify_started
+        started = lifecycle_started
         absolute_deadline = current + timedelta(minutes=absolute_max_minutes)
         renewal_after = started + lease_minutes * 30
         pid: int | None = None
@@ -596,29 +640,31 @@ def launch_heavy_command(
                     "--command",
                     f"rm -f -- {shlex.quote(pid_path)}",
                 ),
-                operation="stale verify payload PID cleanup",
+                operation=f"stale {lifecycle_mode} payload PID cleanup",
             )
             if monotonic() >= absolute_monotonic_deadline:
-                raise RuntimeError("verify-only absolute ceiling exhausted")
+                raise RuntimeError(f"{lifecycle_mode} absolute ceiling exhausted")
             process = payload_start(
                 _gcloud("ssh", INSTANCE, "--zone", ZONE, "--command", remote)
             )
             for _ in range(12):
                 if monotonic() >= absolute_monotonic_deadline:
-                    raise RuntimeError("verify-only absolute ceiling exhausted")
+                    raise RuntimeError(f"{lifecycle_mode} absolute ceiling exhausted")
                 pid = _read_remote_payload_pid(control_run, pid_path)
                 if monotonic() >= absolute_monotonic_deadline:
-                    raise RuntimeError("verify-only absolute ceiling exhausted")
+                    raise RuntimeError(f"{lifecycle_mode} absolute ceiling exhausted")
                 if pid is not None:
                     break
                 if process.poll() is not None:
                     raise RuntimeError(
-                        "verify payload exited before publishing its exact PID"
+                        f"{lifecycle_mode} payload exited before publishing its exact PID"
                     )
                 remaining = absolute_monotonic_deadline - monotonic()
                 sleep(min(5, max(0.0, remaining)))
             if pid is None:
-                raise RuntimeError("verify payload did not publish its exact PID")
+                raise RuntimeError(
+                    f"{lifecycle_mode} payload did not publish its exact PID"
+                )
 
             timed_out = False
             while process.poll() is None:
@@ -642,13 +688,18 @@ def launch_heavy_command(
                         wall_now + timedelta(minutes=lease_minutes), absolute_deadline
                     )
                     if renewed > deadline:
-                        labels = _publish_lease(
+                        labels = _publish_gce_lease(
                             control_run,
                             task=task,
                             purpose=purpose,
                             deadline=renewed,
-                            local_lease_path=local_lease_path,
                             previous=labels,
+                        )
+                        _atomic_write_local_lease(
+                            local_lease_path,
+                            task=task,
+                            deadline=renewed,
+                            purpose=purpose,
                         )
                         deadline = renewed
                         if monotonic() >= absolute_monotonic_deadline:
@@ -659,12 +710,19 @@ def launch_heavy_command(
                 remaining = absolute_monotonic_deadline - monotonic()
                 sleep(min(5, max(0.0, remaining)))
             returncode = 124 if timed_out else process.wait()
-        finally:
-            _clear_terminal_verify_lease(
+        except BaseException as primary:
+            _cleanup_terminal_failure(
                 run,
                 labels=labels,
                 local_lease_path=local_lease_path,
+                primary=primary,
             )
+            raise
+        _clear_terminal_lease(
+            run,
+            labels=labels,
+            local_lease_path=local_lease_path,
+        )
         if timed_out and process is not None:
             try:
                 process.wait(timeout=30)

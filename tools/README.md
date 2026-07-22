@@ -22,3 +22,24 @@ lease by atomic replacement, and performs two exact GCE readbacks before
 launch. A successful terminal payload stops the task-owned VM. A failed
 payload leaves the VM and the original bounded lease intact for inspection;
 the launcher never shortens a live lease.
+
+Production writers that require a shorter hard lifecycle use both minute
+options together and an exact task-specific purpose:
+
+```bash
+uv run python tools/launch_pert_gym_heavy.py \
+  --task t_79ff033e \
+  --eta-hours 2 \
+  --purpose gse132080-obs-var-curation \
+  --lease-minutes 150 \
+  --absolute-max-minutes 180 \
+  --command bash -lc \
+  'cd ~/work/pert-gym && uv run python tools/pert_gym_vm_runner.py --run-id t_79ff033e --allow-lamin-writes --command python tools/curate_gse132080.py'
+```
+
+Minute-bounded writers supervise one exact remote payload PID, renew only while
+that PID is live, terminate at the absolute ceiling, and stop the VM and clear
+the task lease on every terminal path. Both minute options are required, the
+lease cannot exceed the absolute ceiling, and neither value may exceed six
+hours. This is a production-writer lifecycle; do not pass `--verify-only` to a
+command that can write.
