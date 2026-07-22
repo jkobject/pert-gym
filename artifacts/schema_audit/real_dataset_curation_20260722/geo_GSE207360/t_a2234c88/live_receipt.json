@@ -1,5 +1,5 @@
 {
-  "canonical_sha256": "cded3bf2a75352903b52d0607ca6117ab34f70ff65ad84a815713c3bf1815f9c",
+  "canonical_sha256": "1cfffe6662087b3c1e486e810fadfe289a764b3602339142330b4c9bcb26aa89",
   "collections": {
     "pert-gym/additions/20260621": {
       "hash": "GXnxligyjv_jQmZGzENIiA",
@@ -24,7 +24,7 @@
       "uid": "aEWBxMlcWx2d7Cd80000"
     }
   },
-  "completed_at": 1784757061,
+  "completed_at": 1784761725,
   "extractor_sha256": "9ebcd93024fc83ae28ffe84d123ca6c5fb20458494439f46ba2c5722c86e1295",
   "format": "pert-gym.real-dataset-curation-v2/v1",
   "frozen_inputs": [
@@ -45,10 +45,10 @@
       "uncompressed_sha256": "60530cc3a14fe28e1dbf06c9f62b3e993649750069287083e4351aea3f8318df"
     }
   ],
-  "helper_sha256": "7e85c8c0dfe83e063d4c12ca9e7298aed5a181512849d7c18817a00b5923d2b9",
+  "helper_sha256": "7835871c4c4530ab2e3c09144616388457d204212a58d882d73141f646c01f26",
   "host": {
-    "available_memory_bytes": 32804143104,
-    "free_disk_bytes": 279741104128,
+    "available_memory_bytes": 32823832576,
+    "free_disk_bytes": 279460446208,
     "hostname": "pert-gym-worker-eu"
   },
   "member_after": {
@@ -83,10 +83,10 @@
         "unknown_rows": 0
       },
       "cell_line": {
-        "disposition": "not_applicable",
-        "known_rows": 0,
-        "not_applicable_rows": 12487,
-        "source_bound": false,
+        "disposition": "materialized_partial",
+        "known_rows": 10984,
+        "not_applicable_rows": 1503,
+        "source_bound": true,
         "unknown_rows": 0
       },
       "cell_type": {
@@ -148,16 +148,16 @@
       "guide_id": {
         "disposition": "mixed_unknown_not_applicable",
         "known_rows": 0,
-        "not_applicable_rows": 6081,
+        "not_applicable_rows": 6792,
         "source_bound": false,
-        "unknown_rows": 6406
+        "unknown_rows": 5695
       },
       "guide_sequence": {
         "disposition": "mixed_unknown_not_applicable",
         "known_rows": 0,
-        "not_applicable_rows": 6081,
+        "not_applicable_rows": 6792,
         "source_bound": false,
-        "unknown_rows": 6406
+        "unknown_rows": 5695
       },
       "is_baseline": {
         "disposition": "materialized_complete",
@@ -252,29 +252,29 @@
       },
       "perturbation_library": {
         "disposition": "materialized_partial",
-        "known_rows": 6406,
-        "not_applicable_rows": 6081,
+        "known_rows": 5695,
+        "not_applicable_rows": 6792,
         "source_bound": true,
         "unknown_rows": 0
       },
       "perturbation_target": {
         "disposition": "materialized_partial",
-        "known_rows": 6406,
-        "not_applicable_rows": 6081,
+        "known_rows": 5695,
+        "not_applicable_rows": 6792,
         "source_bound": true,
         "unknown_rows": 0
       },
       "perturbation_target_id": {
         "disposition": "mixed_unknown_not_applicable",
         "known_rows": 0,
-        "not_applicable_rows": 6081,
+        "not_applicable_rows": 6792,
         "source_bound": false,
-        "unknown_rows": 6406
+        "unknown_rows": 5695
       },
       "perturbation_technology": {
         "disposition": "materialized_partial",
-        "known_rows": 6406,
-        "not_applicable_rows": 6081,
+        "known_rows": 5695,
+        "not_applicable_rows": 6792,
         "source_bound": true,
         "unknown_rows": 0
       },
@@ -392,16 +392,16 @@
       }
     },
     "obs_before": {
-      "created_at": "2026-07-22 21:42:52.009097+00:00",
-      "description": "t_a2234c88: source-exhaustive GSE207360 OBS; exact 12,487-cell filtered-Seurat join, six murine cell types, WT/KO GSM and day-15/day-90 model semantics, complete 48-field dispositions; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
-      "hash": "rd4dfA8kgWwGpNums0Lniw",
+      "created_at": "2026-07-22 22:58:55.926476+00:00",
+      "description": "t_e8bc7216: source-exhaustive mixed-species GSE207360 OBS; exact 12,487-cell filtered-Seurat join, per-row hg19/mm10 organism, GSC83 tumour versus murine host semantics, species-appropriate QC and direct-versus-exposure perturbation semantics; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+      "hash": "HZm19cFnhQVE6TPO4kL0zg",
       "is_latest": true,
       "key": "prism_collection/GSE207360/obs.parquet",
       "n_observations": 12487,
-      "run_uid": "PuwMmzeBmpztFx5H",
-      "size": 2439750,
-      "uid": "KSAkP0NJF5P5g1mJ0003",
-      "version": "0003"
+      "run_uid": "F5dQh53Vq7ZoMPf8",
+      "size": 2531291,
+      "uid": "KSAkP0NJF5P5g1mJ0004",
+      "version": "0004"
     },
     "obs_history": [
       {
@@ -444,13 +444,25 @@
         "created_at": "2026-07-22 21:42:52.009097+00:00",
         "description": "t_a2234c88: source-exhaustive GSE207360 OBS; exact 12,487-cell filtered-Seurat join, six murine cell types, WT/KO GSM and day-15/day-90 model semantics, complete 48-field dispositions; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
         "hash": "rd4dfA8kgWwGpNums0Lniw",
-        "is_latest": true,
+        "is_latest": false,
         "key": "prism_collection/GSE207360/obs.parquet",
         "n_observations": 12487,
         "run_uid": "PuwMmzeBmpztFx5H",
         "size": 2439750,
         "uid": "KSAkP0NJF5P5g1mJ0003",
         "version": "0003"
+      },
+      {
+        "created_at": "2026-07-22 22:58:55.926476+00:00",
+        "description": "t_e8bc7216: source-exhaustive mixed-species GSE207360 OBS; exact 12,487-cell filtered-Seurat join, per-row hg19/mm10 organism, GSC83 tumour versus murine host semantics, species-appropriate QC and direct-versus-exposure perturbation semantics; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+        "hash": "HZm19cFnhQVE6TPO4kL0zg",
+        "is_latest": true,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "F5dQh53Vq7ZoMPf8",
+        "size": 2531291,
+        "uid": "KSAkP0NJF5P5g1mJ0004",
+        "version": "0004"
       }
     ],
     "source": {
@@ -525,12 +537,11 @@
     },
     "source_join": {
       "cell_type_counts": {
-        "Endothelial": 253,
-        "Macrophage": 1020,
-        "Monocytes": 73,
-        "Neuron": 10594,
-        "Neuron_mouse": 260,
-        "Pericytes": 287
+        "Endothelial": 186,
+        "Macrophage": 832,
+        "Neuron_mouse": 258,
+        "Pericytes": 227,
+        "glioblastoma stem cell": 10984
       },
       "column_mismatches": {
         "Barcode": 0,
@@ -549,17 +560,29 @@
         "seurat_clusters": 0
       },
       "current_rows": 12487,
+      "direct_human_egfr_ko_rows": 5695,
       "geo_samples": {
         "GSM6284971": 6081,
         "GSM6284972": 6406
       },
+      "human_dominant_rows": 10984,
       "join_mismatch_count": 0,
       "join_semantics": "exact filtered Seurat row names to original_obs_index",
       "ko_rows": 6406,
+      "mouse_dominant_rows": 1503,
+      "mouse_egfr_ko_exposure_rows": 711,
       "ordered_source_axis_sha256": "65de59c0c005cbdbbdd3a08d6aba68efb7a0667bd12f7a393cd396a80eeb193b",
       "sample_counts": {
         "KO": 6406,
         "WT": 6081
+      },
+      "source_cell_type_counts": {
+        "Endothelial": 253,
+        "Macrophage": 1020,
+        "Monocytes": 73,
+        "Neuron": 10594,
+        "Neuron_mouse": 260,
+        "Pericytes": 287
       },
       "source_rows": 12487,
       "timepoint_minutes": {
@@ -650,10 +673,10 @@
         "unknown_rows": 0
       },
       "cell_line": {
-        "disposition": "not_applicable",
-        "known_rows": 0,
-        "not_applicable_rows": 12487,
-        "source_bound": false,
+        "disposition": "materialized_partial",
+        "known_rows": 10984,
+        "not_applicable_rows": 1503,
+        "source_bound": true,
         "unknown_rows": 0
       },
       "cell_type": {
@@ -715,16 +738,16 @@
       "guide_id": {
         "disposition": "mixed_unknown_not_applicable",
         "known_rows": 0,
-        "not_applicable_rows": 6081,
+        "not_applicable_rows": 6792,
         "source_bound": false,
-        "unknown_rows": 6406
+        "unknown_rows": 5695
       },
       "guide_sequence": {
         "disposition": "mixed_unknown_not_applicable",
         "known_rows": 0,
-        "not_applicable_rows": 6081,
+        "not_applicable_rows": 6792,
         "source_bound": false,
-        "unknown_rows": 6406
+        "unknown_rows": 5695
       },
       "is_baseline": {
         "disposition": "materialized_complete",
@@ -819,29 +842,29 @@
       },
       "perturbation_library": {
         "disposition": "materialized_partial",
-        "known_rows": 6406,
-        "not_applicable_rows": 6081,
+        "known_rows": 5695,
+        "not_applicable_rows": 6792,
         "source_bound": true,
         "unknown_rows": 0
       },
       "perturbation_target": {
         "disposition": "materialized_partial",
-        "known_rows": 6406,
-        "not_applicable_rows": 6081,
+        "known_rows": 5695,
+        "not_applicable_rows": 6792,
         "source_bound": true,
         "unknown_rows": 0
       },
       "perturbation_target_id": {
         "disposition": "mixed_unknown_not_applicable",
         "known_rows": 0,
-        "not_applicable_rows": 6081,
+        "not_applicable_rows": 6792,
         "source_bound": false,
-        "unknown_rows": 6406
+        "unknown_rows": 5695
       },
       "perturbation_technology": {
         "disposition": "materialized_partial",
-        "known_rows": 6406,
-        "not_applicable_rows": 6081,
+        "known_rows": 5695,
+        "not_applicable_rows": 6792,
         "source_bound": true,
         "unknown_rows": 0
       },
@@ -959,16 +982,16 @@
       }
     },
     "obs_before": {
-      "created_at": "2026-07-22 21:42:52.009097+00:00",
-      "description": "t_a2234c88: source-exhaustive GSE207360 OBS; exact 12,487-cell filtered-Seurat join, six murine cell types, WT/KO GSM and day-15/day-90 model semantics, complete 48-field dispositions; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
-      "hash": "rd4dfA8kgWwGpNums0Lniw",
+      "created_at": "2026-07-22 22:58:55.926476+00:00",
+      "description": "t_e8bc7216: source-exhaustive mixed-species GSE207360 OBS; exact 12,487-cell filtered-Seurat join, per-row hg19/mm10 organism, GSC83 tumour versus murine host semantics, species-appropriate QC and direct-versus-exposure perturbation semantics; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+      "hash": "HZm19cFnhQVE6TPO4kL0zg",
       "is_latest": true,
       "key": "prism_collection/GSE207360/obs.parquet",
       "n_observations": 12487,
-      "run_uid": "PuwMmzeBmpztFx5H",
-      "size": 2439750,
-      "uid": "KSAkP0NJF5P5g1mJ0003",
-      "version": "0003"
+      "run_uid": "F5dQh53Vq7ZoMPf8",
+      "size": 2531291,
+      "uid": "KSAkP0NJF5P5g1mJ0004",
+      "version": "0004"
     },
     "obs_history": [
       {
@@ -1011,13 +1034,25 @@
         "created_at": "2026-07-22 21:42:52.009097+00:00",
         "description": "t_a2234c88: source-exhaustive GSE207360 OBS; exact 12,487-cell filtered-Seurat join, six murine cell types, WT/KO GSM and day-15/day-90 model semantics, complete 48-field dispositions; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
         "hash": "rd4dfA8kgWwGpNums0Lniw",
-        "is_latest": true,
+        "is_latest": false,
         "key": "prism_collection/GSE207360/obs.parquet",
         "n_observations": 12487,
         "run_uid": "PuwMmzeBmpztFx5H",
         "size": 2439750,
         "uid": "KSAkP0NJF5P5g1mJ0003",
         "version": "0003"
+      },
+      {
+        "created_at": "2026-07-22 22:58:55.926476+00:00",
+        "description": "t_e8bc7216: source-exhaustive mixed-species GSE207360 OBS; exact 12,487-cell filtered-Seurat join, per-row hg19/mm10 organism, GSC83 tumour versus murine host semantics, species-appropriate QC and direct-versus-exposure perturbation semantics; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+        "hash": "HZm19cFnhQVE6TPO4kL0zg",
+        "is_latest": true,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "F5dQh53Vq7ZoMPf8",
+        "size": 2531291,
+        "uid": "KSAkP0NJF5P5g1mJ0004",
+        "version": "0004"
       }
     ],
     "source": {
@@ -1092,12 +1127,11 @@
     },
     "source_join": {
       "cell_type_counts": {
-        "Endothelial": 253,
-        "Macrophage": 1020,
-        "Monocytes": 73,
-        "Neuron": 10594,
-        "Neuron_mouse": 260,
-        "Pericytes": 287
+        "Endothelial": 186,
+        "Macrophage": 832,
+        "Neuron_mouse": 258,
+        "Pericytes": 227,
+        "glioblastoma stem cell": 10984
       },
       "column_mismatches": {
         "Barcode": 0,
@@ -1116,17 +1150,29 @@
         "seurat_clusters": 0
       },
       "current_rows": 12487,
+      "direct_human_egfr_ko_rows": 5695,
       "geo_samples": {
         "GSM6284971": 6081,
         "GSM6284972": 6406
       },
+      "human_dominant_rows": 10984,
       "join_mismatch_count": 0,
       "join_semantics": "exact filtered Seurat row names to original_obs_index",
       "ko_rows": 6406,
+      "mouse_dominant_rows": 1503,
+      "mouse_egfr_ko_exposure_rows": 711,
       "ordered_source_axis_sha256": "65de59c0c005cbdbbdd3a08d6aba68efb7a0667bd12f7a393cd396a80eeb193b",
       "sample_counts": {
         "KO": 6406,
         "WT": 6081
+      },
+      "source_cell_type_counts": {
+        "Endothelial": 253,
+        "Macrophage": 1020,
+        "Monocytes": 73,
+        "Neuron": 10594,
+        "Neuron_mouse": 260,
+        "Pericytes": 287
       },
       "source_rows": 12487,
       "timepoint_minutes": {
@@ -1189,17 +1235,17 @@
   "real_dataset_id": "geo/GSE207360",
   "registry_counts": {
     "after": {
-      "artifacts": 28526,
+      "artifacts": 28527,
       "collections": 38
     },
     "before": {
-      "artifacts": 28526,
+      "artifacts": 28527,
       "collections": 38
     }
   },
   "replay_noop": true,
   "rollback": {
-    "preserved_predecessor_uid": "KSAkP0NJF5P5g1mJ0002",
+    "preserved_predecessor_uid": "KSAkP0NJF5P5g1mJ0003",
     "preserved_var_uid": "U8OeHI58YG9Y9Nsb0002",
     "preserved_x_uid": "4IOEQEw4ylx0Zx4c0000"
   },
@@ -1213,7 +1259,7 @@
   },
   "source_manifest_sha256": "67c31791c00717b1cbd6fab962666ecb1afa7f6293c02d20b2ed5e38022e974c",
   "status": "PASS",
-  "task_id": "t_a2234c88",
+  "task_id": "t_e8bc7216",
   "writes": {
     "artifacts": [],
     "collection_writes": 0,

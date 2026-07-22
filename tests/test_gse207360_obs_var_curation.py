@@ -82,7 +82,7 @@ def test_frozen_rows_and_source_manifest_are_bound() -> None:
 
     receipt_manifest = json.loads((MODULE.EVIDENCE_DIR / "receipt_manifest.json").read_text())
     assert receipt_manifest["captured_against_head"] == (
-        "9188264d8d5ba40611264508ad1a0eeb1db8fc79"
+        "cbe143a2a53514246a389ac39051bca14dcb7aa0"
     )
     for name, binding in receipt_manifest["receipts"].items():
         receipt_bytes = (MODULE.EVIDENCE_DIR / name).read_bytes()

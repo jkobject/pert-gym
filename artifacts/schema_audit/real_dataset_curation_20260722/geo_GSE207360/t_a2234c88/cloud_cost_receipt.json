@@ -1,6 +1,6 @@
 {
   "format": "pert-gym.cloud-cost-evidence/v1",
-  "task_id": "t_a2234c88",
+  "task_id": "t_e8bc7216",
   "gcp_project": "jkobject-1549353370965",
   "instance": {
     "name": "pert-gym-worker-eu",
@@ -22,15 +22,15 @@
     "core_unit_price_eur_per_hour": 0.021001396,
     "ram_unit_price_eur_per_giby_hour": 0.002815043,
     "instance_price_eur_per_hour": 0.17408696,
-    "july_runtime_hours_through_final_verification": 158.557419,
-    "july_compute_cost_eur": 27.602779
+    "july_runtime_hours_through_final_verification": 163.009987,
+    "july_compute_cost_eur": 28.377913
   },
   "projection": {
     "basis": "July 2026 accrued e2-highmem-4 start/stop operation intervals plus the full monthly 500 GiB balanced-disk charge; instance terminal state is stopped",
-    "operation_records": 413,
-    "accrued_projected_cost_eur": 71.367779,
+    "operation_records": 678,
+    "accrued_projected_cost_eur": 72.142913,
     "monthly_ceiling_eur": 150.0,
-    "headroom_eur": 78.632221,
+    "headroom_eur": 77.857087,
     "within_ceiling": true
   },
   "pricing_source": {
