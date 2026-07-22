@@ -968,3 +968,86 @@ def test_verify_only_refuses_renewal_after_exact_payload_pid_dies(
         "active-wave": "true",
         "do-not-stop": "true",
     }
+
+
+def test_bounded_writer_accepts_approved_three_hour_lifecycle(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    local_lease = tmp_path / "writer-lease.json"
+    process = FakePayloadProcess(polls_before_exit=1)
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and "cat --" in command[-1]:
+            return completed(command, stdout="4242\n")
+        if "ssh" in command and "kill -0" in command[-1]:
+            return completed(command)
+        return fake(command)
+
+    assert (
+        launcher.launch_heavy_command(
+            task="t_79ff033e",
+            eta_hours=2,
+            command=["uv", "run", "python", "curate_gse132080.py"],
+            purpose="gse132080-obs-var-curation",
+            lease_minutes=150,
+            absolute_max_minutes=180,
+            local_lease_path=local_lease,
+            now=datetime(2026, 7, 22, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=lambda command: process,
+            sleep=lambda seconds: None,
+        )
+        == 0
+    )
+
+    published = next(call for call in fake.calls if "add-labels" in call)
+    labels = published[published.index("--labels") + 1]
+    assert "purpose=gse132080-obs-var-curation" in labels
+    assert "lease-until=20260722t143000z" in labels
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {
+        "active-wave": "true",
+        "do-not-stop": "true",
+    }
+    assert not local_lease.exists()
+
+
+def test_bounded_writer_rejects_lifecycle_over_six_hours_before_publication(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud()
+
+    with pytest.raises(ValueError, match="at most 360 minutes"):
+        launcher.launch_heavy_command(
+            task="t_79ff033e",
+            eta_hours=2,
+            command=["writer"],
+            purpose="gse132080-obs-var-curation",
+            lease_minutes=150,
+            absolute_max_minutes=361,
+            local_lease_path=tmp_path / "lease.json",
+            run=fake,
+        )
+
+    assert not fake.calls
+
+
+def test_minute_lifecycle_options_must_be_provided_together(tmp_path: Path) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud()
+
+    with pytest.raises(ValueError, match="must be provided together"):
+        launcher.launch_heavy_command(
+            task="t_79ff033e",
+            eta_hours=2,
+            command=["writer"],
+            purpose="gse132080-obs-var-curation",
+            lease_minutes=150,
+            local_lease_path=tmp_path / "lease.json",
+            run=fake,
+        )
+
+    assert not fake.calls
