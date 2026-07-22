@@ -34,16 +34,24 @@ def test_source_manifest_binds_publication_table_s5_and_author_reference() -> No
     assert manifest["table_s5"]["rows"] == 78_393
     assert manifest["table_s5"]["sha256"] == curation.PMC_TABLE_SPEC[1]
     assert manifest["author_code"]["commit"] == curation.AUTHOR_COMMIT
-    assert manifest["author_code"]["reference_metadata_sha256"] == curation.AUTHOR_SPECS["unified_metadata.tsv.gz"][1]
+    assert (
+        manifest["author_code"]["reference_metadata_sha256"]
+        == curation.AUTHOR_SPECS["unified_metadata.tsv.gz"][1]
+    )
     assert len(manifest["perturbseq_samples"]["gene_expression"]) == 10
     assert len(manifest["perturbseq_samples"]["direct_guide_capture"]) == 10
-    assert "Do not coerce source-native LH identifiers to Ensembl IDs." in manifest["forbidden_inferences"]
+    assert (
+        "Do not coerce source-native LH identifiers to Ensembl IDs."
+        in manifest["forbidden_inferences"]
+    )
 
 
 def test_cellranger_feature_id_sanitization_matches_geo_spellings() -> None:
     values = pd.Series(["5S_rRNA", "RP11-293G6__B.8", "XXyac-YX65C7_A.3"])
     assert curation.cellranger_feature_ids(values).tolist() == [
-        "5S-rRNA", "RP11-293G6--B.8", "XXyac-YX65C7-A.3"
+        "5S-rRNA",
+        "RP11-293G6--B.8",
+        "XXyac-YX65C7-A.3",
     ]
 
 
@@ -67,7 +75,9 @@ def _obs_fixture() -> tuple[Any, dict[str, Any]]:
     obs = pd.DataFrame(
         {
             "guide": table["Guide identity"],
-            "perturbation": table["Guide target"].replace({"Non-Targeting": "non-targeting"}),
+            "perturbation": table["Guide target"].replace(
+                {"Non-Targeting": "non-targeting"}
+            ),
             "library": table["Library"],
             "trajectory": table["RNA velocity trajectory"],
             "nCount_RNA": [1000, 2000, 3000],
@@ -86,7 +96,9 @@ def _obs_fixture() -> tuple[Any, dict[str, Any]]:
     return obs, {"table": table}
 
 
-def test_curate_obs_materializes_exact_table_s5_semantics(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_curate_obs_materializes_exact_table_s5_semantics(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     obs, source = _obs_fixture()
     monkeypatch.setattr(curation, "EXPECTED_N_OBS", 3)
     curated, receipt = curation.curate_obs(obs, source)
@@ -119,7 +131,11 @@ def test_obs_curation_replay_is_exact(monkeypatch: pytest.MonkeyPatch) -> None:
     replay, receipt = curation.curate_obs(first, source)
     assert receipt["join_mismatch_count"] == 0
     pd.testing.assert_frame_equal(replay, first, check_categorical=True)
-    assert replay["source_original_perturbation"].tolist() == ["GENE1", "non-targeting", "LH00001"]
+    assert replay["source_original_perturbation"].tolist() == [
+        "GENE1",
+        "non-targeting",
+        "LH00001",
+    ]
 
 
 def _var_fixture() -> tuple[Any, dict[str, Any]]:
@@ -135,7 +151,12 @@ def _var_fixture() -> tuple[Any, dict[str, Any]]:
     gene_rows = pd.DataFrame(
         {
             "feature_id": ["GENE1", "LH00001", "AMBIG", "AMBIG"],
-            "gene_id": ["ENSG00000000001", "LH00001", "ENSG00000000002", "ENSG00000000003"],
+            "gene_id": [
+                "ENSG00000000001",
+                "LH00001",
+                "ENSG00000000002",
+                "ENSG00000000003",
+            ],
         }
     )
     display = pd.DataFrame(
@@ -145,7 +166,9 @@ def _var_fixture() -> tuple[Any, dict[str, Any]]:
     return var, {"genes": genes, "gene_rows": gene_rows, "display": display}
 
 
-def test_curate_var_preserves_source_native_lh_and_refuses_fabricated_ensembl(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_curate_var_preserves_source_native_lh_and_refuses_fabricated_ensembl(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     var, source = _var_fixture()
     monkeypatch.setattr(curation, "EXPECTED_N_VARS", 3)
     curated = curation.curate_var(var, source)
@@ -165,7 +188,9 @@ def test_curate_var_preserves_source_native_lh_and_refuses_fabricated_ensembl(mo
     assert verdict["verdict"] == "false"
 
 
-def test_var_verifier_rejects_x_axis_order_drift(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_var_verifier_rejects_x_axis_order_drift(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     var, source = _var_fixture()
     monkeypatch.setattr(curation, "EXPECTED_N_VARS", 3)
     curated = curation.curate_var(var, source)
