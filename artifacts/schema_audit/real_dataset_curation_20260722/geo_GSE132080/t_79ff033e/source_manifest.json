@@ -1,0 +1,101 @@
+{
+  "dataset_id": "prism_collection/GSE132080",
+  "real_dataset_id": "geo/GSE132080",
+  "task_id": "t_79ff033e",
+  "source_authority": "NCBI GEO",
+  "series_accession": "GSE132080",
+  "series_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE132080",
+  "publication": {
+    "title": "Titrating gene expression using libraries of systematically attenuated CRISPR guide RNAs",
+    "doi": "10.1038/s41587-019-0387-5",
+    "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7042810/"
+  },
+  "samples": [
+    {
+      "accession": "GSM3842207",
+      "gemgroup": 1,
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM3842207"
+    },
+    {
+      "accession": "GSM3842208",
+      "gemgroup": 2,
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM3842208"
+    },
+    {
+      "accession": "GSM3842209",
+      "gemgroup": 3,
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM3842209"
+    }
+  ],
+  "files": [
+    {
+      "name": "GSE132080_10X_barcodes.tsv.gz",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE132nnn/GSE132080/suppl/GSE132080_10X_barcodes.tsv.gz",
+      "size": 94141,
+      "sha256": "5ac798d460d21a0ca190f3c11d952ea98fa15ec2f4b2a0ec6d1cde2e7202aa65",
+      "last_modified": "Mon, 03 Jun 2019 11:11:26 GMT",
+      "role": "complete source matrix column axis"
+    },
+    {
+      "name": "GSE132080_10X_genes.tsv.gz",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE132nnn/GSE132080/suppl/GSE132080_10X_genes.tsv.gz",
+      "size": 264786,
+      "sha256": "cb459e6f14a8008e68f2ae535ac5411b6651d278355e9b517ff6a7e43587e603",
+      "last_modified": "Mon, 03 Jun 2019 11:11:26 GMT",
+      "role": "complete source matrix row axis: Ensembl gene ID and source gene symbol"
+    },
+    {
+      "name": "GSE132080_10X_matrix.mtx.gz",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE132nnn/GSE132080/suppl/GSE132080_10X_matrix.mtx.gz",
+      "size": 352247428,
+      "sha256": "7c908fbb76feaccac285209bf2578970873f8b8ec819e2a88ac6b83e3553239d",
+      "last_modified": "Mon, 03 Jun 2019 11:12:49 GMT",
+      "role": "33694 x 23633 raw UMI count matrix with 112125300 stored entries"
+    },
+    {
+      "name": "GSE132080_cell_identities.csv.gz",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE132nnn/GSE132080/suppl/GSE132080_cell_identities.csv.gz",
+      "size": 366158,
+      "sha256": "db9a2bab685004537fccd7aa2b5e19c6c1fc782eca9a4eb1d9275ffe2a19b0a0",
+      "last_modified": "Mon, 03 Jun 2019 11:12:49 GMT",
+      "role": "23608 assigned-cell guide identities and guide-read quality annotations"
+    },
+    {
+      "name": "GSE132080_sgRNA_barcode_sequences_and_phenotypes.csv.gz",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE132nnn/GSE132080/suppl/GSE132080_sgRNA_barcode_sequences_and_phenotypes.csv.gz",
+      "size": 4463,
+      "sha256": "9ddc95fe2b668fe2bad0acd74c9c65daac6d88b4b414c41a363f240fadb2b505",
+      "last_modified": "Thu, 27 Jun 2019 17:07:28 GMT",
+      "role": "128 unique experimental sgRNA sequences and day-5/day-10 phenotypes"
+    }
+  ],
+  "denominator_accounting": {
+    "source_matrix_barcodes": 23633,
+    "assigned_cell_identities": 23608,
+    "excluded_unassigned_barcodes": 25,
+    "excluded_identity": "exact set difference: 10X barcodes minus cell-identities index",
+    "identity_rows_absent_from_matrix_barcodes": 0,
+    "source_features": 33694,
+    "source_ensembl_ids_unique": true,
+    "source_gene_symbols_unique": false,
+    "source_sgRNA_rows": 128
+  },
+  "current_accepted_triplet": {
+    "obs_uid": "lhR6Ny3n8QcVeItH0002",
+    "obs_hash": "koT42ZnpMsA4h7YojGR18Q",
+    "x_uid": "NEbod0p6ws0H5wug0000",
+    "x_hash": "gbMxw1JnmmLnKzWKTWdC_V",
+    "var_uid": "GJ1HqkBSHfDD1o4m0001",
+    "var_hash": "cTno7idkcjb9xcHS7R6c2w"
+  },
+  "query_terms": [
+    "GSE132080",
+    "GSM3842207",
+    "GSM3842208",
+    "GSM3842209",
+    "Jost attenuated sgRNA allelic series",
+    "K562 Perturb-seq"
+  ],
+  "materialization_policy": "All five GEO supplementary files are identity-bound. Canonical OBS rows are the 23608 exact cell-identities index; 25 source matrix barcodes without published guide identity are excluded and enumerated in inspection_report.json. Experimental guide sequences and phenotypes map by removing only the redundant leading target token from guide_identity. Non-targeting controls and '*' unassigned identities are never assigned fabricated guide sequences.",
+  "writes": 0
+}
