@@ -8,23 +8,57 @@
   "publication": {
     "title": "Titrating gene expression using libraries of systematically attenuated CRISPR guide RNAs",
     "doi": "10.1038/s41587-019-0387-5",
-    "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7042810/"
+    "pmid": "31932729",
+    "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7065968/"
   },
   "samples": [
     {
       "accession": "GSM3842207",
       "gemgroup": 1,
+      "role": "single-cell expression library",
+      "paired_guide_barcode_accession": "GSM3842210",
+      "maps_to_obs_sample": true,
       "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM3842207"
     },
     {
       "accession": "GSM3842208",
       "gemgroup": 2,
+      "role": "single-cell expression library",
+      "paired_guide_barcode_accession": "GSM3842211",
+      "maps_to_obs_sample": true,
       "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM3842208"
     },
     {
       "accession": "GSM3842209",
       "gemgroup": 3,
+      "role": "single-cell expression library",
+      "paired_guide_barcode_accession": "GSM3842212",
+      "maps_to_obs_sample": true,
       "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM3842209"
+    },
+    {
+      "accession": "GSM3842210",
+      "gemgroup": 1,
+      "role": "sgRNA barcode library",
+      "paired_expression_accession": "GSM3842207",
+      "maps_to_obs_sample": false,
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM3842210"
+    },
+    {
+      "accession": "GSM3842211",
+      "gemgroup": 2,
+      "role": "sgRNA barcode library",
+      "paired_expression_accession": "GSM3842208",
+      "maps_to_obs_sample": false,
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM3842211"
+    },
+    {
+      "accession": "GSM3842212",
+      "gemgroup": 3,
+      "role": "sgRNA barcode library",
+      "paired_expression_accession": "GSM3842209",
+      "maps_to_obs_sample": false,
+      "url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM3842212"
     }
   ],
   "files": [
@@ -80,7 +114,15 @@
     "source_gene_symbols_unique": false,
     "source_sgRNA_rows": 128
   },
-  "current_accepted_triplet": {
+  "current_live_triplet": {
+    "obs_uid": "lhR6Ny3n8QcVeItH0003",
+    "obs_hash": "bbIr6mgkuM6qcUxeVjWmKw",
+    "x_uid": "NEbod0p6ws0H5wug0000",
+    "x_hash": "gbMxw1JnmmLnKzWKTWdC_V",
+    "var_uid": "GJ1HqkBSHfDD1o4m0002",
+    "var_hash": "7xnAhQFWPI6TRcG-wTWoDQ"
+  },
+  "rollback_triplet": {
     "obs_uid": "lhR6Ny3n8QcVeItH0002",
     "obs_hash": "koT42ZnpMsA4h7YojGR18Q",
     "x_uid": "NEbod0p6ws0H5wug0000",
@@ -93,6 +135,11 @@
     "GSM3842207",
     "GSM3842208",
     "GSM3842209",
+    "GSM3842210",
+    "GSM3842211",
+    "GSM3842212",
+    "PRJNA545894",
+    "SRP200150",
     "Jost attenuated sgRNA allelic series",
     "K562 Perturb-seq"
   ],

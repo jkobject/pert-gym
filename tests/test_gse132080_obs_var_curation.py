@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 from typing import Any
 
@@ -14,10 +15,59 @@ SCRIPT = (
     Path(__file__).parents[1]
     / "artifacts/schema_audit/real_dataset_curation_20260722/geo_GSE132080/t_79ff033e/curate_obs_var.py"
 )
+EVIDENCE = SCRIPT.parent
+SOURCE_MANIFEST = EVIDENCE / "source_manifest.json"
+DECISION_NOTEBOOK = EVIDENCE / "GSE132080_processing_decisions.ipynb"
 SPEC = importlib.util.spec_from_file_location("gse132080_curation", SCRIPT)
 assert SPEC is not None and SPEC.loader is not None
 curation = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(curation)
+
+
+def test_source_manifest_binds_publication_and_all_six_paired_geo_samples() -> None:
+    manifest = json.loads(SOURCE_MANIFEST.read_text())
+    assert manifest["publication"] == {
+        "title": "Titrating gene expression using libraries of systematically attenuated CRISPR guide RNAs",
+        "doi": "10.1038/s41587-019-0387-5",
+        "pmid": "31932729",
+        "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7065968/",
+    }
+    assert [sample["accession"] for sample in manifest["samples"]] == [
+        f"GSM38422{i:02d}" for i in range(7, 13)
+    ]
+    expression = [
+        sample for sample in manifest["samples"] if sample["maps_to_obs_sample"]
+    ]
+    guide_barcodes = [
+        sample for sample in manifest["samples"] if not sample["maps_to_obs_sample"]
+    ]
+    assert [sample["role"] for sample in expression] == [
+        "single-cell expression library"
+    ] * 3
+    assert [sample["role"] for sample in guide_barcodes] == [
+        "sgRNA barcode library"
+    ] * 3
+    assert [sample["paired_guide_barcode_accession"] for sample in expression] == [
+        "GSM3842210",
+        "GSM3842211",
+        "GSM3842212",
+    ]
+    assert [sample["paired_expression_accession"] for sample in guide_barcodes] == [
+        "GSM3842207",
+        "GSM3842208",
+        "GSM3842209",
+    ]
+
+
+def test_processing_decision_notebook_executes_postwrite_evidence_assertions() -> None:
+    nbformat = pytest.importorskip("nbformat")
+    notebook_client = pytest.importorskip("nbclient")
+    notebook = nbformat.read(DECISION_NOTEBOOK, as_version=4)
+    notebook_client.NotebookClient(
+        notebook,
+        timeout=60,
+        resources={"metadata": {"path": str(SCRIPT.parents[5])}},
+    ).execute(cwd=str(SCRIPT.parents[5]))
 
 
 def test_frozen_inputs_match_card_hashes() -> None:
