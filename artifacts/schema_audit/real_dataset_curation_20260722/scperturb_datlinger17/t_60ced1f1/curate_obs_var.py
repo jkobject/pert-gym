@@ -644,8 +644,13 @@ def verify_x_source_parity(
     matrix = source.get("matrix")
     if matrix is None:
         raise AssertionError("source matrix required for X parity")
-    if len(set(x_var) - set(matrix.columns.astype(str))):
-        raise AssertionError("X genes absent from source digital-expression matrix")
+    missing_x_genes = x_var.difference(matrix.columns.astype(str))
+    if len(missing_x_genes):
+        raise AssertionError(
+            "X genes absent from source digital-expression matrix: "
+            f"count={len(missing_x_genes)} sample={missing_x_genes[:20].tolist()} "
+            f"x_sample={x_var[:10].tolist()} source_sample={matrix.columns[:10].tolist()}"
+        )
     selected = matrix.loc[:, x_var]
     mismatch_count = 0
     for start in range(0, EXPECTED_N_OBS, 256):
