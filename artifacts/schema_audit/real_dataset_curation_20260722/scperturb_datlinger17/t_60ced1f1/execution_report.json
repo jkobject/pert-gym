@@ -1,0 +1,85 @@
+{
+  "format": "pert-gym.datlinger17-live-execution/v1",
+  "task_id": "t_60ced1f1",
+  "real_dataset_id": "scperturb/datlinger17",
+  "code": {
+    "branch": "feat/t_60ced1f1-datlinger17-e2e",
+    "execution_sha": "dfc5b061be2141f3bb65067e26614edf1f517fdd"
+  },
+  "source_reconciliation": {
+    "observations": 5905,
+    "guide_library_rows": 116,
+    "guide_sequence_known_rows": 5905,
+    "control_rows": 1320,
+    "geo_samples": 11,
+    "source_features": 36722,
+    "accepted_features": 24389,
+    "source_to_x_value_mismatches": 0,
+    "x_semantics": "raw_counts",
+    "x_source_feature_axis_column": "symbol"
+  },
+  "plan": {
+    "status": "PASS",
+    "canonical_sha256": "f032e716996de9ab927c7cadc23f9b1cea4148bbd44ccc3ec2737ffe80d38885",
+    "writes": 0
+  },
+  "mutate": {
+    "status": "PASS",
+    "canonical_sha256": "5a156567a44246be20992edec0e5c7129934fac2dcc053d3a0b6e8ba49bbdf97",
+    "obs_uid": "sitiyL4128YBC8BS0004",
+    "obs_hash": "gU48Qsw1u6MbLvJMIshIiA",
+    "obs_version": "0004",
+    "obs_rows": 5905,
+    "run_uid": "abRaAYZa9NtgWiWe",
+    "obs_revisions": 1,
+    "var_revisions": 0,
+    "x_revisions": 0,
+    "collection_writes": 0,
+    "deletions": 0
+  },
+  "verify": {
+    "status": "PASS",
+    "canonical_sha256": "ecd7fcdf783e52e0cc2ea423bdf18c7606a103ea8ec1db28d8dc5de58aa1e351",
+    "obs_uid": "sitiyL4128YBC8BS0004",
+    "replay_noop": true,
+    "registry_counts_before": {"artifacts": 28521, "collections": 38},
+    "registry_counts_after": {"artifacts": 28521, "collections": 38}
+  },
+  "unchanged_payloads": {
+    "x_uid": "AVlPOzYBdcrplGXk0000",
+    "x_hash": "xZOVQ8LeticwYF_-a_Ije0",
+    "var_uid": "AYnivbGN3JCRzkN70001",
+    "var_hash": "5-S_Oe8xYvmUro9XcE2mAw"
+  },
+  "collections": {
+    "pert-gym/base-public/20260621": {
+      "uid": "SM2AjpxEQZ1pEfF30000",
+      "member_count": 60,
+      "exact_key_matches": 1
+    },
+    "pert-gym/canonical/20260621": {
+      "uid": "aEWBxMlcWx2d7Cd80000",
+      "member_count": 1056,
+      "exact_key_matches": 1
+    }
+  },
+  "rollback": {
+    "predecessor_obs_uid": "sitiyL4128YBC8BS0003",
+    "predecessor_obs_hash": "sRhCl_7JXA4fSaf4q7BZBg",
+    "x_uid": "AVlPOzYBdcrplGXk0000",
+    "var_uid": "AYnivbGN3JCRzkN70001"
+  },
+  "terminal_control_plane": {
+    "instance": "pert-gym-worker-eu",
+    "zone": "europe-west1-b",
+    "status": "TERMINATED",
+    "lease_labels_remaining": [],
+    "local_lease_remaining": false
+  },
+  "validation": {
+    "targeted": "9 passed",
+    "ruff": "PASS",
+    "ty": "PASS after installing the declared classical extra",
+    "full_suite": "719 passed, then one unrelated host-capacity failure: test_remaining_publication_queue requires more than the 39 GiB free on the Mac"
+  }
+}
