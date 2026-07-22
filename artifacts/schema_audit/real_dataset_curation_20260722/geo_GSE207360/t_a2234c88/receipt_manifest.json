@@ -1,0 +1,28 @@
+{
+  "format": "pert-gym.immutable-receipt-manifest/v1",
+  "real_dataset_id": "geo/GSE207360",
+  "producer_task": "t_a2234c88",
+  "continuation_task": "t_b047ba00",
+  "captured_against_head": "9188264d8d5ba40611264508ad1a0eeb1db8fc79",
+  "receipts": {
+    "live_receipt.json": {
+      "sha256": "44ab595b867988cd70fba69189f11839af4d5102e161396f94bd48a40bc0296e",
+      "canonical_sha256": "cded3bf2a75352903b52d0607ca6117ab34f70ff65ad84a815713c3bf1815f9c",
+      "replay_noop": true,
+      "writes": 0,
+      "deletions": 0
+    },
+    "cloud_cost_receipt.json": {
+      "sha256": "605eff2657a43589162aefcf0420103053396b0b4ca78641e2047c0a4ed7116a",
+      "within_monthly_ceiling": true,
+      "terminal_vm_status": "TERMINATED",
+      "task_scoped_labels_cleared": true
+    }
+  },
+  "code_bindings": {
+    "curate_obs_var.py": "7e85c8c0dfe83e063d4c12ca9e7298aed5a181512849d7c18817a00b5923d2b9",
+    "extract_seurat_metadata.R": "9ebcd93024fc83ae28ffe84d123ca6c5fb20458494439f46ba2c5722c86e1295",
+    "source_manifest.json": "67c31791c00717b1cbd6fab962666ecb1afa7f6293c02d20b2ed5e38022e974c"
+  },
+  "provenance_note": "These byte-identical receipts were captured by the producer replay at the named head and made durable by the continuation without rerunning or mutating GCP, GCS, LaminDB, Collections, or ledgers."
+}

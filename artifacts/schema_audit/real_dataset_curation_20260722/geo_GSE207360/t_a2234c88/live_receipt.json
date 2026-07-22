@@ -1,0 +1,1225 @@
+{
+  "canonical_sha256": "cded3bf2a75352903b52d0607ca6117ab34f70ff65ad84a815713c3bf1815f9c",
+  "collections": {
+    "pert-gym/additions/20260621": {
+      "hash": "GXnxligyjv_jQmZGzENIiA",
+      "member_count": 996,
+      "target_key_matches": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "kYkBznC2fuGmbUbg0000"
+    },
+    "pert-gym/canonical/20260621": {
+      "hash": "FuT5cWa5QodFHfYbzsyLRw",
+      "member_count": 1056,
+      "target_key_matches": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "aEWBxMlcWx2d7Cd80000"
+    }
+  },
+  "completed_at": 1784757061,
+  "extractor_sha256": "9ebcd93024fc83ae28ffe84d123ca6c5fb20458494439f46ba2c5722c86e1295",
+  "format": "pert-gym.real-dataset-curation-v2/v1",
+  "frozen_inputs": [
+    {
+      "binding_path": "artifacts/schema_audit/real_dataset_curation_20260722/geo_GSE132080/t_79ff033e/frozen_inputs/real_biological_dataset_crosswalk_120_families_20260716.json.gz",
+      "gzip_bytes": 52179,
+      "gzip_sha256": "8acbf5b4f6b88ed9676f5403990d01a4a6a755cf8f5ed21af6821a1a5babe908",
+      "original_path": "artifacts/schema_audit/real_biological_dataset_crosswalk_120_families_20260716.json",
+      "uncompressed_bytes": 806794,
+      "uncompressed_sha256": "65388d3d575d99961e2f8fb62d35dd38366d50268068ff144445af6530b54a9b"
+    },
+    {
+      "binding_path": "artifacts/schema_audit/real_dataset_curation_20260722/geo_GSE132080/t_79ff033e/frozen_inputs/final_real_dataset_obs_var_20260717.json.gz",
+      "gzip_bytes": 612434,
+      "gzip_sha256": "28fc912fa9c270ca42a710984b0479dce761cd0467b1467f4602254b543dacff",
+      "original_path": "artifacts/schema_audit/final_real_dataset_obs_var_20260717.json",
+      "uncompressed_bytes": 17879030,
+      "uncompressed_sha256": "60530cc3a14fe28e1dbf06c9f62b3e993649750069287083e4351aea3f8318df"
+    }
+  ],
+  "helper_sha256": "7e85c8c0dfe83e063d4c12ca9e7298aed5a181512849d7c18817a00b5923d2b9",
+  "host": {
+    "available_memory_bytes": 32804143104,
+    "free_disk_bytes": 279741104128,
+    "hostname": "pert-gym-worker-eu"
+  },
+  "member_after": {
+    "already_curated_obs": true,
+    "canonical_field_dispositions": {
+      "age": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 12487
+      },
+      "assay": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "batch": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_id": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_line": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "cell_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "control_availability": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "dataset": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "disease": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "donor_id": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 12487
+      },
+      "dose": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "dose_unit": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "ethnicity": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "guide_id": {
+        "disposition": "mixed_unknown_not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 6081,
+        "source_bound": false,
+        "unknown_rows": 6406
+      },
+      "guide_sequence": {
+        "disposition": "mixed_unknown_not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 6081,
+        "source_bound": false,
+        "unknown_rows": 6406
+      },
+      "is_baseline": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_bulk": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_control": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_low_quality": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_pseudobulk": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "media": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "modality": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "n_counts": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "n_genes": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "organism": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pct_mito": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pct_ribo": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 12487
+      },
+      "perturbation": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_library": {
+        "disposition": "materialized_partial",
+        "known_rows": 6406,
+        "not_applicable_rows": 6081,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_target": {
+        "disposition": "materialized_partial",
+        "known_rows": 6406,
+        "not_applicable_rows": 6081,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_target_id": {
+        "disposition": "mixed_unknown_not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 6081,
+        "source_bound": false,
+        "unknown_rows": 6406
+      },
+      "perturbation_technology": {
+        "disposition": "materialized_partial",
+        "known_rows": 6406,
+        "not_applicable_rows": 6081,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pseudotime": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "response_metric": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "response_source": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "response_value": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "sample": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "sensitivity": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "sequencer": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "sex": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 12487
+      },
+      "source": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "source_accession": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "technology": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "timepoint": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "tissue_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "trajectory_id": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "x_semantics": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      }
+    },
+    "obs_before": {
+      "created_at": "2026-07-22 21:42:52.009097+00:00",
+      "description": "t_a2234c88: source-exhaustive GSE207360 OBS; exact 12,487-cell filtered-Seurat join, six murine cell types, WT/KO GSM and day-15/day-90 model semantics, complete 48-field dispositions; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+      "hash": "rd4dfA8kgWwGpNums0Lniw",
+      "is_latest": true,
+      "key": "prism_collection/GSE207360/obs.parquet",
+      "n_observations": 12487,
+      "run_uid": "PuwMmzeBmpztFx5H",
+      "size": 2439750,
+      "uid": "KSAkP0NJF5P5g1mJ0003",
+      "version": "0003"
+    },
+    "obs_history": [
+      {
+        "created_at": "2026-06-10 19:29:09.048898+00:00",
+        "description": "None",
+        "hash": "7wGywpfKSMlWpFmASFaLrA",
+        "is_latest": false,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "None",
+        "size": 781327,
+        "uid": "KSAkP0NJF5P5g1mJ0000",
+        "version": "0000"
+      },
+      {
+        "created_at": "2026-06-25 18:28:58.315014+00:00",
+        "description": "Canonical obs schema normalization rollout 20260625 continuation: canonical columns plus explicit <field>_state/<field>_source missingness semantics; raw/source columns preserved.",
+        "hash": "ezapD6ANBYvbSF1zIPoy9A",
+        "is_latest": false,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "Hm2APOc1VfJ4m9S9",
+        "size": 1462339,
+        "uid": "KSAkP0NJF5P5g1mJ0001",
+        "version": "0001"
+      },
+      {
+        "created_at": "2026-06-26 15:29:54.742833+00:00",
+        "description": "t_6ebac53a PRISM canonical obs_uuid rewrite: deterministic pert-gym.obs.v1 identity using shared add_obs_identity helper; preserves original_obs_index and obs->X link.",
+        "hash": "aBt3qphtkB7epOFzswv-VA",
+        "is_latest": false,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "HbxqFmLXnR1xjzAZ",
+        "size": 1374641,
+        "uid": "KSAkP0NJF5P5g1mJ0002",
+        "version": "0002"
+      },
+      {
+        "created_at": "2026-07-22 21:42:52.009097+00:00",
+        "description": "t_a2234c88: source-exhaustive GSE207360 OBS; exact 12,487-cell filtered-Seurat join, six murine cell types, WT/KO GSM and day-15/day-90 model semantics, complete 48-field dispositions; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+        "hash": "rd4dfA8kgWwGpNums0Lniw",
+        "is_latest": true,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "PuwMmzeBmpztFx5H",
+        "size": 2439750,
+        "uid": "KSAkP0NJF5P5g1mJ0003",
+        "version": "0003"
+      }
+    ],
+    "source": {
+      "manifest_sha256": "67c31791c00717b1cbd6fab962666ecb1afa7f6293c02d20b2ed5e38022e974c",
+      "metadata_columns": [
+        "orig.ident",
+        "nCount_RNA",
+        "nFeature_RNA",
+        "Sample",
+        "Barcode",
+        "hg19",
+        "mm10",
+        "frac_hg_genes",
+        "hdbscan_cluster",
+        "percent.mt",
+        "percent.mt_mouse",
+        "RNA_snn_res.1",
+        "seurat_clusters",
+        "sample.name",
+        "Cell_type1"
+      ],
+      "metadata_rows": 12487,
+      "metadata_tsv_sha256": "a8b1a08d26e67cbf90ff0d545b2e0cea1c2a0ea52cfd2e241c4273b92d5fbfb4",
+      "r_summary": {
+        "active_ident_counts": {
+          "Endothelial": 253,
+          "Macrophage": 1020,
+          "Monocytes": 73,
+          "Neuron": 10594,
+          "Neuron_mouse": 260,
+          "Pericytes": 287
+        },
+        "active_ident_levels": [
+          "Neuron_mouse",
+          "Neuron",
+          "Pericytes",
+          "Macrophage",
+          "Monocytes",
+          "Endothelial"
+        ],
+        "counts_colnames_equal_metadata": true,
+        "counts_columns": 12487,
+        "counts_integral": true,
+        "counts_max": 2250,
+        "counts_min": 1,
+        "counts_nnz": 56169414,
+        "counts_rows": 60736,
+        "metadata_columns": [
+          "orig.ident",
+          "nCount_RNA",
+          "nFeature_RNA",
+          "Sample",
+          "Barcode",
+          "hg19",
+          "mm10",
+          "frac_hg_genes",
+          "hdbscan_cluster",
+          "percent.mt",
+          "percent.mt_mouse",
+          "RNA_snn_res.1",
+          "seurat_clusters",
+          "sample.name",
+          "Cell_type1"
+        ],
+        "metadata_rows": 12487,
+        "object_class": "Seurat",
+        "seurat_version": "4.0.2"
+      },
+      "sha256": "b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+      "size": 4174159639,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE207nnn/GSE207360/suppl/GSE207360_Human_Mouse_filtered.rds.gz"
+    },
+    "source_join": {
+      "cell_type_counts": {
+        "Endothelial": 253,
+        "Macrophage": 1020,
+        "Monocytes": 73,
+        "Neuron": 10594,
+        "Neuron_mouse": 260,
+        "Pericytes": 287
+      },
+      "column_mismatches": {
+        "Barcode": 0,
+        "Cell_type1": 0,
+        "RNA_snn_res.1": 0,
+        "frac_hg_genes": 0,
+        "hdbscan_cluster": 0,
+        "hg19": 0,
+        "mm10": 0,
+        "nCount_RNA": 0,
+        "nFeature_RNA": 0,
+        "orig.ident": 0,
+        "percent.mt": 0,
+        "percent.mt_mouse": 0,
+        "sample.name": 0,
+        "seurat_clusters": 0
+      },
+      "current_rows": 12487,
+      "geo_samples": {
+        "GSM6284971": 6081,
+        "GSM6284972": 6406
+      },
+      "join_mismatch_count": 0,
+      "join_semantics": "exact filtered Seurat row names to original_obs_index",
+      "ko_rows": 6406,
+      "ordered_source_axis_sha256": "65de59c0c005cbdbbdd3a08d6aba68efb7a0667bd12f7a393cd396a80eeb193b",
+      "sample_counts": {
+        "KO": 6406,
+        "WT": 6081
+      },
+      "source_rows": 12487,
+      "timepoint_minutes": {
+        "129600.0": 6406,
+        "21600.0": 6081
+      },
+      "wt_rows": 6081
+    },
+    "var": {
+      "created_at": "2026-07-19 14:26:40.477801+00:00",
+      "description": "t_0341d7ba: non-destructive mixed-species hg19/mm10 exact positional source-ID remediation; source ledger sha256 e4f404539596476a253049d711e715aa6d18ac55fbfcf9088af03db30d0f80e1; baseline var uid U8OeHI58YG9Y9Nsb0001",
+      "hash": "wv2BwlQShhowaM7AYyu4uQ",
+      "is_latest": true,
+      "key": "prism_collection/GSE207360/var.parquet",
+      "n_observations": 60736,
+      "run_uid": "5JUgoZfE1MxFXTmB",
+      "size": 4083025,
+      "uid": "U8OeHI58YG9Y9Nsb0002",
+      "version": "0002"
+    },
+    "var_verdict": {
+      "human_ensg": 32738,
+      "mismatch_count": 0,
+      "mouse_ensmusg": 27998,
+      "needs_revision": false,
+      "rows": 60736,
+      "stable_feature_id_unique": true,
+      "uid": "U8OeHI58YG9Y9Nsb0002"
+    },
+    "x": {
+      "created_at": "2026-06-10 19:29:19.351308+00:00",
+      "description": "None",
+      "hash": "rLTZFYwmtPyrsHhVQ6_kp-",
+      "is_latest": true,
+      "key": "prism_collection/GSE207360/X.h5ad",
+      "n_observations": 12487,
+      "run_uid": "None",
+      "size": 453049912,
+      "uid": "4IOEQEw4ylx0Zx4c0000",
+      "version": "0000"
+    },
+    "x_semantics": {
+      "dtype": "float32",
+      "hash": "rLTZFYwmtPyrsHhVQ6_kp-",
+      "maximum_stored_value": 2250.0,
+      "minimum_stored_value": 1.0,
+      "non_integral_stored_values": 0,
+      "obs_names_sha256": "65de59c0c005cbdbbdd3a08d6aba68efb7a0667bd12f7a393cd396a80eeb193b",
+      "raw_counts": true,
+      "shape": [
+        12487,
+        60736
+      ],
+      "stored_nonzero": 56169414,
+      "uid": "4IOEQEw4ylx0Zx4c0000",
+      "var_names_sha256": "aa592b3ef2d217646eb95395c0207af7ae0a42c7b27c363710b722982cc1ffb3"
+    }
+  },
+  "member_before": {
+    "already_curated_obs": true,
+    "canonical_field_dispositions": {
+      "age": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 12487
+      },
+      "assay": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "batch": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_id": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_line": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "cell_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "control_availability": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "dataset": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "disease": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "donor_id": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 12487
+      },
+      "dose": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "dose_unit": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "ethnicity": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "guide_id": {
+        "disposition": "mixed_unknown_not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 6081,
+        "source_bound": false,
+        "unknown_rows": 6406
+      },
+      "guide_sequence": {
+        "disposition": "mixed_unknown_not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 6081,
+        "source_bound": false,
+        "unknown_rows": 6406
+      },
+      "is_baseline": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_bulk": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_control": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_low_quality": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_pseudobulk": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "media": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "modality": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "n_counts": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "n_genes": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "organism": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pct_mito": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pct_ribo": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 12487
+      },
+      "perturbation": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_library": {
+        "disposition": "materialized_partial",
+        "known_rows": 6406,
+        "not_applicable_rows": 6081,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_target": {
+        "disposition": "materialized_partial",
+        "known_rows": 6406,
+        "not_applicable_rows": 6081,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_target_id": {
+        "disposition": "mixed_unknown_not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 6081,
+        "source_bound": false,
+        "unknown_rows": 6406
+      },
+      "perturbation_technology": {
+        "disposition": "materialized_partial",
+        "known_rows": 6406,
+        "not_applicable_rows": 6081,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pseudotime": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "response_metric": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "response_source": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "response_value": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "sample": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "sensitivity": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "sequencer": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "sex": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 12487
+      },
+      "source": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "source_accession": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "technology": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "timepoint": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "tissue_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "trajectory_id": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "not_applicable_rows": 12487,
+        "source_bound": false,
+        "unknown_rows": 0
+      },
+      "x_semantics": {
+        "disposition": "materialized_complete",
+        "known_rows": 12487,
+        "not_applicable_rows": 0,
+        "source_bound": true,
+        "unknown_rows": 0
+      }
+    },
+    "obs_before": {
+      "created_at": "2026-07-22 21:42:52.009097+00:00",
+      "description": "t_a2234c88: source-exhaustive GSE207360 OBS; exact 12,487-cell filtered-Seurat join, six murine cell types, WT/KO GSM and day-15/day-90 model semantics, complete 48-field dispositions; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+      "hash": "rd4dfA8kgWwGpNums0Lniw",
+      "is_latest": true,
+      "key": "prism_collection/GSE207360/obs.parquet",
+      "n_observations": 12487,
+      "run_uid": "PuwMmzeBmpztFx5H",
+      "size": 2439750,
+      "uid": "KSAkP0NJF5P5g1mJ0003",
+      "version": "0003"
+    },
+    "obs_history": [
+      {
+        "created_at": "2026-06-10 19:29:09.048898+00:00",
+        "description": "None",
+        "hash": "7wGywpfKSMlWpFmASFaLrA",
+        "is_latest": false,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "None",
+        "size": 781327,
+        "uid": "KSAkP0NJF5P5g1mJ0000",
+        "version": "0000"
+      },
+      {
+        "created_at": "2026-06-25 18:28:58.315014+00:00",
+        "description": "Canonical obs schema normalization rollout 20260625 continuation: canonical columns plus explicit <field>_state/<field>_source missingness semantics; raw/source columns preserved.",
+        "hash": "ezapD6ANBYvbSF1zIPoy9A",
+        "is_latest": false,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "Hm2APOc1VfJ4m9S9",
+        "size": 1462339,
+        "uid": "KSAkP0NJF5P5g1mJ0001",
+        "version": "0001"
+      },
+      {
+        "created_at": "2026-06-26 15:29:54.742833+00:00",
+        "description": "t_6ebac53a PRISM canonical obs_uuid rewrite: deterministic pert-gym.obs.v1 identity using shared add_obs_identity helper; preserves original_obs_index and obs->X link.",
+        "hash": "aBt3qphtkB7epOFzswv-VA",
+        "is_latest": false,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "HbxqFmLXnR1xjzAZ",
+        "size": 1374641,
+        "uid": "KSAkP0NJF5P5g1mJ0002",
+        "version": "0002"
+      },
+      {
+        "created_at": "2026-07-22 21:42:52.009097+00:00",
+        "description": "t_a2234c88: source-exhaustive GSE207360 OBS; exact 12,487-cell filtered-Seurat join, six murine cell types, WT/KO GSM and day-15/day-90 model semantics, complete 48-field dispositions; source sha256 b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+        "hash": "rd4dfA8kgWwGpNums0Lniw",
+        "is_latest": true,
+        "key": "prism_collection/GSE207360/obs.parquet",
+        "n_observations": 12487,
+        "run_uid": "PuwMmzeBmpztFx5H",
+        "size": 2439750,
+        "uid": "KSAkP0NJF5P5g1mJ0003",
+        "version": "0003"
+      }
+    ],
+    "source": {
+      "manifest_sha256": "67c31791c00717b1cbd6fab962666ecb1afa7f6293c02d20b2ed5e38022e974c",
+      "metadata_columns": [
+        "orig.ident",
+        "nCount_RNA",
+        "nFeature_RNA",
+        "Sample",
+        "Barcode",
+        "hg19",
+        "mm10",
+        "frac_hg_genes",
+        "hdbscan_cluster",
+        "percent.mt",
+        "percent.mt_mouse",
+        "RNA_snn_res.1",
+        "seurat_clusters",
+        "sample.name",
+        "Cell_type1"
+      ],
+      "metadata_rows": 12487,
+      "metadata_tsv_sha256": "a8b1a08d26e67cbf90ff0d545b2e0cea1c2a0ea52cfd2e241c4273b92d5fbfb4",
+      "r_summary": {
+        "active_ident_counts": {
+          "Endothelial": 253,
+          "Macrophage": 1020,
+          "Monocytes": 73,
+          "Neuron": 10594,
+          "Neuron_mouse": 260,
+          "Pericytes": 287
+        },
+        "active_ident_levels": [
+          "Neuron_mouse",
+          "Neuron",
+          "Pericytes",
+          "Macrophage",
+          "Monocytes",
+          "Endothelial"
+        ],
+        "counts_colnames_equal_metadata": true,
+        "counts_columns": 12487,
+        "counts_integral": true,
+        "counts_max": 2250,
+        "counts_min": 1,
+        "counts_nnz": 56169414,
+        "counts_rows": 60736,
+        "metadata_columns": [
+          "orig.ident",
+          "nCount_RNA",
+          "nFeature_RNA",
+          "Sample",
+          "Barcode",
+          "hg19",
+          "mm10",
+          "frac_hg_genes",
+          "hdbscan_cluster",
+          "percent.mt",
+          "percent.mt_mouse",
+          "RNA_snn_res.1",
+          "seurat_clusters",
+          "sample.name",
+          "Cell_type1"
+        ],
+        "metadata_rows": 12487,
+        "object_class": "Seurat",
+        "seurat_version": "4.0.2"
+      },
+      "sha256": "b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+      "size": 4174159639,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE207nnn/GSE207360/suppl/GSE207360_Human_Mouse_filtered.rds.gz"
+    },
+    "source_join": {
+      "cell_type_counts": {
+        "Endothelial": 253,
+        "Macrophage": 1020,
+        "Monocytes": 73,
+        "Neuron": 10594,
+        "Neuron_mouse": 260,
+        "Pericytes": 287
+      },
+      "column_mismatches": {
+        "Barcode": 0,
+        "Cell_type1": 0,
+        "RNA_snn_res.1": 0,
+        "frac_hg_genes": 0,
+        "hdbscan_cluster": 0,
+        "hg19": 0,
+        "mm10": 0,
+        "nCount_RNA": 0,
+        "nFeature_RNA": 0,
+        "orig.ident": 0,
+        "percent.mt": 0,
+        "percent.mt_mouse": 0,
+        "sample.name": 0,
+        "seurat_clusters": 0
+      },
+      "current_rows": 12487,
+      "geo_samples": {
+        "GSM6284971": 6081,
+        "GSM6284972": 6406
+      },
+      "join_mismatch_count": 0,
+      "join_semantics": "exact filtered Seurat row names to original_obs_index",
+      "ko_rows": 6406,
+      "ordered_source_axis_sha256": "65de59c0c005cbdbbdd3a08d6aba68efb7a0667bd12f7a393cd396a80eeb193b",
+      "sample_counts": {
+        "KO": 6406,
+        "WT": 6081
+      },
+      "source_rows": 12487,
+      "timepoint_minutes": {
+        "129600.0": 6406,
+        "21600.0": 6081
+      },
+      "wt_rows": 6081
+    },
+    "var": {
+      "created_at": "2026-07-19 14:26:40.477801+00:00",
+      "description": "t_0341d7ba: non-destructive mixed-species hg19/mm10 exact positional source-ID remediation; source ledger sha256 e4f404539596476a253049d711e715aa6d18ac55fbfcf9088af03db30d0f80e1; baseline var uid U8OeHI58YG9Y9Nsb0001",
+      "hash": "wv2BwlQShhowaM7AYyu4uQ",
+      "is_latest": true,
+      "key": "prism_collection/GSE207360/var.parquet",
+      "n_observations": 60736,
+      "run_uid": "5JUgoZfE1MxFXTmB",
+      "size": 4083025,
+      "uid": "U8OeHI58YG9Y9Nsb0002",
+      "version": "0002"
+    },
+    "var_verdict": {
+      "human_ensg": 32738,
+      "mismatch_count": 0,
+      "mouse_ensmusg": 27998,
+      "needs_revision": false,
+      "rows": 60736,
+      "stable_feature_id_unique": true,
+      "uid": "U8OeHI58YG9Y9Nsb0002"
+    },
+    "x": {
+      "created_at": "2026-06-10 19:29:19.351308+00:00",
+      "description": "None",
+      "hash": "rLTZFYwmtPyrsHhVQ6_kp-",
+      "is_latest": true,
+      "key": "prism_collection/GSE207360/X.h5ad",
+      "n_observations": 12487,
+      "run_uid": "None",
+      "size": 453049912,
+      "uid": "4IOEQEw4ylx0Zx4c0000",
+      "version": "0000"
+    },
+    "x_semantics": {
+      "dtype": "float32",
+      "hash": "rLTZFYwmtPyrsHhVQ6_kp-",
+      "maximum_stored_value": 2250.0,
+      "minimum_stored_value": 1.0,
+      "non_integral_stored_values": 0,
+      "obs_names_sha256": "65de59c0c005cbdbbdd3a08d6aba68efb7a0667bd12f7a393cd396a80eeb193b",
+      "raw_counts": true,
+      "shape": [
+        12487,
+        60736
+      ],
+      "stored_nonzero": 56169414,
+      "uid": "4IOEQEw4ylx0Zx4c0000",
+      "var_names_sha256": "aa592b3ef2d217646eb95395c0207af7ae0a42c7b27c363710b722982cc1ffb3"
+    }
+  },
+  "mode": "verify",
+  "real_dataset_id": "geo/GSE207360",
+  "registry_counts": {
+    "after": {
+      "artifacts": 28526,
+      "collections": 38
+    },
+    "before": {
+      "artifacts": 28526,
+      "collections": 38
+    }
+  },
+  "replay_noop": true,
+  "rollback": {
+    "preserved_predecessor_uid": "KSAkP0NJF5P5g1mJ0002",
+    "preserved_var_uid": "U8OeHI58YG9Y9Nsb0002",
+    "preserved_x_uid": "4IOEQEw4ylx0Zx4c0000"
+  },
+  "source_denominator": {
+    "biological_datasets": 1,
+    "features": 60736,
+    "geo_scrna_samples": 2,
+    "logical_families": 1,
+    "observations": 12487,
+    "physical_members": 1
+  },
+  "source_manifest_sha256": "67c31791c00717b1cbd6fab962666ecb1afa7f6293c02d20b2ed5e38022e974c",
+  "status": "PASS",
+  "task_id": "t_a2234c88",
+  "writes": {
+    "artifacts": [],
+    "collection_writes": 0,
+    "deletions": 0,
+    "obs_revisions": 0,
+    "var_revisions": 0,
+    "x_revisions": 0
+  }
+}

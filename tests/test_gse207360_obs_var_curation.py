@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -78,6 +79,34 @@ def test_frozen_rows_and_source_manifest_are_bound() -> None:
     assert filtered["sha256"] == MODULE.SOURCE_SPEC["sha256"]
     assert manifest["geo"]["scrna_samples"][0]["time_days_after_injection"] == 15
     assert manifest["geo"]["scrna_samples"][1]["time_days_after_injection"] == 90
+
+    receipt_manifest = json.loads((MODULE.EVIDENCE_DIR / "receipt_manifest.json").read_text())
+    assert receipt_manifest["captured_against_head"] == (
+        "9188264d8d5ba40611264508ad1a0eeb1db8fc79"
+    )
+    for name, binding in receipt_manifest["receipts"].items():
+        receipt_bytes = (MODULE.EVIDENCE_DIR / name).read_bytes()
+        assert hashlib.sha256(receipt_bytes).hexdigest() == binding["sha256"]
+    for name, expected_sha256 in receipt_manifest["code_bindings"].items():
+        bound_bytes = (MODULE.EVIDENCE_DIR / name).read_bytes()
+        assert hashlib.sha256(bound_bytes).hexdigest() == expected_sha256
+
+    live_receipt = json.loads((MODULE.EVIDENCE_DIR / "live_receipt.json").read_text())
+    assert live_receipt["canonical_sha256"] == receipt_manifest["receipts"][
+        "live_receipt.json"
+    ]["canonical_sha256"]
+    assert live_receipt["replay_noop"] is True
+    assert live_receipt["registry_counts"]["before"] == live_receipt["registry_counts"][
+        "after"
+    ]
+    assert live_receipt["writes"] == {
+        "artifacts": [],
+        "collection_writes": 0,
+        "deletions": 0,
+        "obs_revisions": 0,
+        "var_revisions": 0,
+        "x_revisions": 0,
+    }
 
 
 def test_exact_source_join_rejects_row_drift() -> None:
