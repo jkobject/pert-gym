@@ -137,6 +137,13 @@ def h5_summary(path: Path) -> tuple[dict[str, Any], pd.Index]:
         feature_ids = decode(features["id"][:])
         feature_types = decode(features["feature_type"][:])
         shape = [int(value) for value in matrix["shape"][:]]
+        type_samples: dict[str, list[dict[str, str]]] = {}
+        for feature_type in sorted(set(feature_types)):
+            positions = [i for i, value in enumerate(feature_types) if value == feature_type]
+            type_samples[feature_type] = [
+                {"id": feature_ids[i], "name": feature_names[i]}
+                for i in positions[:20]
+            ]
         return {
             "shape": shape,
             "barcodes": len(barcodes),
@@ -147,6 +154,7 @@ def h5_summary(path: Path) -> tuple[dict[str, Any], pd.Index]:
             "feature_ids_unique": bool(feature_ids.is_unique),
             "feature_names_unique": bool(feature_names.is_unique),
             "feature_type_counts": dict(Counter(feature_types)),
+            "feature_type_samples": type_samples,
             "feature_samples": [
                 {"id": feature_ids[i], "name": feature_names[i], "type": feature_types[i]}
                 for i in range(min(20, len(feature_names)))
