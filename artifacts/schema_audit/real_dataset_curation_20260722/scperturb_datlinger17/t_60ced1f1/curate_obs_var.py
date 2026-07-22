@@ -266,7 +266,9 @@ def load_sources(*, load_matrix: bool = False) -> dict[str, Any]:
             raise AssertionError("source matrix/OBS row denominator drift")
         # The source script binds the transposed expression frame positionally to
         # the metadata-derived OBS axis; pandas otherwise leaves a numeric index.
+        # It then applies AnnData.var_names_make_unique() before publication.
         matrix.index = source_obs.index.copy()
+        matrix.columns = make_index_unique(matrix.columns.astype(str))
         result["matrix"] = matrix
     return result
 

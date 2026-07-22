@@ -66,6 +66,13 @@ def test_frozen_inputs_match_card_hashes() -> None:
     }
 
 
+def test_source_matrix_uses_upstream_positional_obs_and_unique_var_rules() -> None:
+    source = curation.load_sources(load_matrix=True)
+    assert source["matrix"].index.equals(source["obs"].index)
+    assert source["matrix"].columns.is_unique
+    assert source["matrix"].shape == (5905, 36722)
+
+
 def _obs_fixture() -> tuple[Any, dict[str, Any]]:
     index = pd.Index(["cell-a", "cell-b", "cell-c"])
     source_obs = pd.DataFrame(
