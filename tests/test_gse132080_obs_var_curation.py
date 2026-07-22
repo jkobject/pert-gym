@@ -34,6 +34,7 @@ def test_source_guide_name_removes_only_the_redundant_target_prefix() -> None:
         == "ALDOA_+_30077139.23-P1P2_00"
     )
     assert curation.source_guide_name("neg_ctrl_non-targeting_00028") is None
+    assert curation.source_guide_name("*") is None
     with pytest.raises(AssertionError, match="syntax"):
         curation.source_guide_name("unexpected")
 

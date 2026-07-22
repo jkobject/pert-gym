@@ -267,7 +267,7 @@ def exact_source_join(obs: pd.DataFrame, identities: pd.DataFrame) -> tuple[pd.D
 
 
 def source_guide_name(guide_identity: str) -> str | None:
-    if guide_identity.startswith("neg_ctrl_"):
+    if guide_identity == "*" or guide_identity.startswith("neg_ctrl_"):
         return None
     first, separator, remainder = guide_identity.partition("_")
     if not separator or not remainder.startswith(first + "_"):
@@ -307,14 +307,18 @@ def curate_obs(obs: pd.DataFrame, source: dict[str, Any]) -> tuple[pd.DataFrame,
     samples = gemgroup.map(SAMPLE_BY_GEMGROUP).astype("string")
     if samples.isna().any():
         raise AssertionError("unknown gemgroup")
-    guide_id = joined["guide_identity"].astype("string")
+    guide_id = joined["guide_identity"].astype("string").replace({"*": pd.NA})
     sequence = pd.Series(
         [pd.NA if row is None else row["sequence"] for row in mapped_rows],
         index=curated.index, dtype="string",
     )
-    target = original["perturbation"].astype("string")
+    target = original["perturbation"].astype("string").replace(
+        {"*": pd.NA, "unknown": pd.NA}
+    )
     controls = original["is_control"].astype("boolean")
-    expected_controls = guide_id.str.startswith("neg_ctrl_")
+    expected_controls = joined["guide_identity"].astype("string").str.startswith(
+        "neg_ctrl_", na=False
+    )
     if not controls.astype(bool).equals(expected_controls.astype(bool)):
         raise AssertionError("source control semantics drift")
 
@@ -334,13 +338,13 @@ def curate_obs(obs: pd.DataFrame, source: dict[str, Any]) -> tuple[pd.DataFrame,
     set_field(curated, "media", "RPMI + FBS + Pen/Strep/Gln", "known", "GEO growth protocol")
     set_field(curated, "is_bulk", False, "known", "single-cell source")
     set_field(curated, "is_pseudobulk", False, "known", "single-cell source")
-    set_field(curated, "perturbation", target, "known", "source cell identity and sgRNA phenotype table")
+    set_field(curated, "perturbation", target, np.where(target.notna(), "known", "unknown"), "source cell identity and sgRNA phenotype table")
     set_field(curated, "perturbation_type", "CRISPRi", "known", "GEO experimental design")
     set_field(curated, "perturbation_technology", "CRISPR interference", "known", "GEO experimental design")
     set_field(curated, "perturbation_library", "Jost et al. attenuated sgRNA allelic series", "known", "GEO publication")
-    set_field(curated, "guide_id", guide_id, "known", "source cell identities")
+    set_field(curated, "guide_id", guide_id, np.where(guide_id.notna(), "known", "unknown"), "source cell identities")
     set_field(curated, "guide_sequence", sequence, np.where(sequence.notna(), "known", "unknown"), "source sgRNA phenotype table; control sequences not supplied")
-    set_field(curated, "perturbation_target", target, "known", "source cell identity and sgRNA phenotype table")
+    set_field(curated, "perturbation_target", target, np.where(target.notna(), "known", "unknown"), "source cell identity and sgRNA phenotype table")
     set_field(curated, "is_control", controls, "known", "source non-targeting guide identity")
     set_field(curated, "timepoint", 7_200.0, "known", "GEO growth protocol: FACS day 3 plus 2 additional days")
     set_field(curated, "is_low_quality", ~joined["good_coverage"].astype(bool), "known", "inverse source good_coverage flag")
