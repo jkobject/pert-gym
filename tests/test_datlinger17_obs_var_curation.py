@@ -64,6 +64,10 @@ def test_frozen_inputs_match_card_hashes() -> None:
         "65388d3d575d99961e2f8fb62d35dd38366d50268068ff144445af6530b54a9b",
         "60530cc3a14fe28e1dbf06c9f62b3e993649750069287083e4351aea3f8318df",
     }
+    assert curation.EXPECTED_OBS == {
+        "uid": "sitiyL4128YBC8BS0004",
+        "hash": "gU48Qsw1u6MbLvJMIshIiA",
+    }
 
 
 def test_source_matrix_uses_upstream_positional_obs_and_unique_var_rules() -> None:
@@ -98,6 +102,7 @@ def _obs_fixture() -> tuple[Any, dict[str, Any]]:
     obs["organism"] = "Humans (Homo sapiens)"
     obs["sex"] = "male"
     obs["dataset"] = "datlinger17"
+    obs["source_accession"] = "datlinger17"
     obs["modality"] = "scRNA-seq"
     obs["assay"] = "CROP-seq"
     obs["ncounts"] = [100.0, 200.0, 300.0]
@@ -148,6 +153,38 @@ def test_curate_obs_materializes_exact_source_join_and_all_guide_sequences(
     assert dispositions["perturbation_target"]["disposition"] == "materialized_partial"
     assert dispositions["donor_id"]["disposition"] == "unknown"
     assert dispositions["dose"]["disposition"] == "not_applicable"
+
+
+def test_curate_obs_uses_geo_accession_and_rejects_internal_slug(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    obs, source = _obs_fixture()
+    monkeypatch.setattr(curation, "EXPECTED_N_OBS", 3)
+    monkeypatch.setattr(
+        curation,
+        "SAMPLE_BY_CONDITION_REPLICATE",
+        {
+            ("stimulated", "1"): "GSM-A",
+            ("unstimulated", "1"): "GSM-B",
+            ("stimulated", "2"): "GSM-C",
+        },
+    )
+    expected, receipt = curation.curate_obs(obs, source)
+    assert expected["source_accession"].unique().tolist() == ["GSE92872"]
+    assert expected["dataset"].unique().tolist() == ["scperturb/datlinger17"]
+    assert expected["source_original_source_accession"].unique().tolist() == [
+        "datlinger17"
+    ]
+    assert receipt["canonical_source_accession"] == "GSE92872"
+    assert receipt["preserved_source_accession_rows"] == 3
+    assert receipt["preserved_source_accession_values"] == ["datlinger17"]
+
+    wrong = expected.copy(deep=True)
+    wrong["source_accession"] = "datlinger17"
+    assert curation.obs_matches_expected_semantics(expected, expected) is True
+    assert curation.obs_matches_expected_semantics(wrong, expected) is False
+    with pytest.raises(AssertionError, match="semantic"):
+        curation.verify_obs_semantics(wrong, expected)
 
 
 def test_obs_verifier_rejects_wrong_but_non_null_semantics(

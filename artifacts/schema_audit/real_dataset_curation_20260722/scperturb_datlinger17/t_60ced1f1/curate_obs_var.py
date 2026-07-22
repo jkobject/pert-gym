@@ -34,7 +34,7 @@ REAL_DATASET_ID = "scperturb/datlinger17"
 PREFIX = REAL_DATASET_ID
 EXPECTED_N_OBS = 5_905
 EXPECTED_N_VARS = 24_389
-EXPECTED_OBS = {"uid": "sitiyL4128YBC8BS0003", "hash": "sRhCl_7JXA4fSaf4q7BZBg"}
+EXPECTED_OBS = {"uid": "sitiyL4128YBC8BS0004", "hash": "gU48Qsw1u6MbLvJMIshIiA"}
 EXPECTED_X = {"uid": "AVlPOzYBdcrplGXk0000", "hash": "xZOVQ8LeticwYF_-a_Ije0"}
 EXPECTED_VAR = {"uid": "AYnivbGN3JCRzkN70001", "hash": "5-S_Oe8xYvmUro9XcE2mAw"}
 FROZEN_INPUT_BINDINGS_PATH = Path(__file__).with_name("frozen_inputs") / "bindings.json"
@@ -513,9 +513,9 @@ def curate_obs(
     set_field(
         curated,
         "source_accession",
-        "datlinger17",
+        "GSE92872",
         "known",
-        "accepted scPerturb accession",
+        "GEO series accession",
     )
     set_field(
         curated,
@@ -558,12 +558,18 @@ def curate_obs(
         raise AssertionError("OBS row count/order drift")
     if not curated["obs_uuid"].is_unique or not curated["original_obs_index"].is_unique:
         raise AssertionError("OBS identity uniqueness drift")
+    predecessor_accessions = curated["source_original_source_accession"].dropna()
     return curated, {
         **join_receipt,
         "guide_table_rows": len(source["guides"]),
         "guide_sequence_known_rows": int(guide_sequence.notna().sum()),
         "control_rows": int(controls.sum()),
         "geo_samples": int(samples.nunique()),
+        "canonical_source_accession": "GSE92872",
+        "preserved_source_accession_rows": len(predecessor_accessions),
+        "preserved_source_accession_values": sorted(
+            predecessor_accessions.astype(str).unique().tolist()
+        ),
     }
 
 
@@ -602,6 +608,14 @@ def verify_obs_semantics(actual: pd.DataFrame, expected: pd.DataFrame) -> None:
         assert_frame_equal(actual, expected, check_categorical=False)
     except AssertionError as error:
         raise AssertionError("OBS source semantic mismatch") from error
+
+
+def obs_matches_expected_semantics(actual: pd.DataFrame, expected: pd.DataFrame) -> bool:
+    try:
+        verify_obs_semantics(actual, expected)
+    except AssertionError:
+        return False
+    return True
 
 
 def verify_var(var: pd.DataFrame, x_axis: pd.Index) -> dict[str, Any]:
@@ -784,9 +798,7 @@ def verify_current(ln: Any, source: dict[str, Any]) -> tuple[dict[str, Any], boo
     var_verdict = verify_var(var, x_axis)
     obs_curated = str(obs_artifact.description).startswith(
         f"{TASK_ID}: source-exhaustive Datlinger17 OBS"
-    )
-    if obs_curated:
-        verify_obs_semantics(obs, expected_obs)
+    ) and obs_matches_expected_semantics(obs, expected_obs)
     return {
         "obs_before": artifact_identity(obs_artifact),
         "obs_history": [artifact_identity(item) for item in obs_history],
@@ -829,7 +841,7 @@ def publish(ln: Any, result: dict[str, Any], helper_sha256: str) -> list[Any]:
         path,
         key=f"{PREFIX}/obs.parquet",
         revises=result["obs_artifact"],
-        description=f"{TASK_ID}: source-exhaustive Datlinger17 OBS; exact 5905-cell GEO join, all 116 guide IDs/sequences mapped, 11 GSM runs, CRISPRko and 4 h TCR condition semantics",
+        description=f"{TASK_ID}: source-exhaustive Datlinger17 OBS; canonical GSE92872 accession, exact 5905-cell GEO join, all 116 guide IDs/sequences mapped, 11 GSM runs, CRISPRko and 4 h TCR condition semantics",
     ).save()
     obs.features.set_values({"X": result["x_artifact"]})
     try:
