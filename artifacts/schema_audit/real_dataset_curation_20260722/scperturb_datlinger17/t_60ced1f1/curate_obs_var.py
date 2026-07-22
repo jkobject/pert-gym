@@ -647,22 +647,54 @@ def verify_x_source_parity(
     matrix = source.get("matrix")
     if matrix is None:
         raise AssertionError("source matrix required for X parity")
-    if "pert_gym_original_var_index" not in var:
-        raise AssertionError(
-            "VAR lacks pert_gym_original_var_index required for source-matrix parity"
-        )
     if not var.index.astype(str).equals(x_var):
         raise AssertionError("VAR/X feature-axis order drift before source parity")
-    source_feature_axis = pd.Index(var["pert_gym_original_var_index"].astype(str))
-    if not source_feature_axis.is_unique:
-        raise AssertionError("normalized source feature axis is not unique")
-    missing_source_genes = source_feature_axis.difference(matrix.columns.astype(str))
-    if len(missing_source_genes):
-        raise AssertionError(
-            "VAR source genes absent from source digital-expression matrix: "
-            f"count={len(missing_source_genes)} "
-            f"sample={missing_source_genes[:20].tolist()}"
+    source_columns = pd.Index(matrix.columns.astype(str))
+    raw_axis_candidates = {"__index__": pd.Index(var.index.astype(str))}
+    raw_axis_candidates.update(
+        {str(column): pd.Index(var[column].astype(str)) for column in var.columns}
+    )
+    axis_candidates = {
+        name: make_index_unique(axis) for name, axis in raw_axis_candidates.items()
+    }
+    candidate_evidence = {
+        name: {
+            "raw_unique": bool(raw_axis_candidates[name].is_unique),
+            "normalized_unique": bool(axis.is_unique),
+            "source_overlap": int(axis.isin(source_columns).sum()),
+        }
+        for name, axis in axis_candidates.items()
+    }
+    preference = (
+        "gene_symbol",
+        "symbol",
+        "gene_name",
+        "feature_name",
+        "pert_gym_original_var_index",
+        "__index__",
+    )
+    full_matches = [
+        name
+        for name, evidence in candidate_evidence.items()
+        if evidence["normalized_unique"]
+        and evidence["source_overlap"] == EXPECTED_N_VARS
+    ]
+    full_matches.sort(
+        key=lambda name: (
+            preference.index(name) if name in preference else len(preference)
         )
+    )
+    if not full_matches:
+        best = sorted(
+            candidate_evidence.items(),
+            key=lambda item: int(item[1]["source_overlap"]),
+            reverse=True,
+        )[:10]
+        raise AssertionError(
+            f"no VAR column reproduces the source feature axis: best={best}"
+        )
+    source_feature_axis_column = full_matches[0]
+    source_feature_axis = axis_candidates[source_feature_axis_column]
     selected = matrix.loc[:, source_feature_axis]
     mismatch_count = 0
     for start in range(0, EXPECTED_N_OBS, 256):
@@ -677,7 +709,8 @@ def verify_x_source_parity(
         "shape": [backed.n_obs, backed.n_vars],
         "var_names_sha256": ordered_values_sha256(x_var),
         "source_feature_axis_sha256": ordered_values_sha256(source_feature_axis),
-        "source_feature_axis_column": "pert_gym_original_var_index",
+        "source_feature_axis_column": source_feature_axis_column,
+        "source_feature_axis_candidates": candidate_evidence,
         "source_matrix_shape": list(matrix.shape),
         "selected_source_shape": list(selected.shape),
         "source_value_mismatch_count": mismatch_count,
