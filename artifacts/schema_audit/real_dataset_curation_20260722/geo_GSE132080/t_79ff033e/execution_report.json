@@ -1,0 +1,169 @@
+{
+  "biological_owner_task_id": "t_79ff033e",
+  "code": {
+    "launcher_accepted_head": "d94db83b258888cad640622507f7e553497e44d3",
+    "launcher_merge": "036a7a4b4f90833abf9378ee569f0d04db5951f8",
+    "launcher_pr": 112,
+    "pr": 111,
+    "verifier_sha": "a099c8b1d6d81df933a9d9396a3c9007da452d0e",
+    "writer_sha": "5a9544845e64bee6754468ced64e816eb61ed272"
+  },
+  "execution_task_id": "t_9472224e",
+  "format": "pert-gym.gse132080-live-execution/v1",
+  "mutate": {
+    "failure": "replay reconstruction overwrote source_original_dataset; append-only writes completed before terminal semantic verifier rejected GSE132080 vs prism_collection/GSE132080",
+    "new_obs": {
+      "created_at": "2026-07-22 12:26:42.331173+00:00",
+      "description": "t_79ff033e: source-exhaustive GSE132080 OBS; exact 23608-cell identity join, 25 unassigned source barcodes excluded, 128-guide phenotype table mapped",
+      "hash": "bbIr6mgkuM6qcUxeVjWmKw",
+      "key": "prism_collection/GSE132080/obs.parquet",
+      "n_observations": 23608,
+      "run_uid": "akfsv9rXOldGPZLQ",
+      "size": 2089407,
+      "uid": "lhR6Ny3n8QcVeItH0003",
+      "version": "0003"
+    },
+    "new_var": {
+      "created_at": "2026-07-22 12:26:34.992813+00:00",
+      "description": "t_79ff033e: GSE132080 human VAR; preserves 33694-feature X order and duplicate source symbols; binds exact unique ENSG feature_index, namespace and organism",
+      "hash": "7xnAhQFWPI6TRcG-wTWoDQ",
+      "key": "prism_collection/GSE132080/var.parquet",
+      "n_observations": 33694,
+      "run_uid": "akfsv9rXOldGPZLQ",
+      "size": 1681840,
+      "uid": "GJ1HqkBSHfDD1o4m0002",
+      "version": "0002"
+    },
+    "run_uid": "akfsv9rXOldGPZLQ",
+    "status": "POSTWRITE_VERIFIER_FAILED_CLOSED",
+    "x_unchanged": {
+      "created_at": "2026-06-10 13:54:15.631632+00:00",
+      "description": "None",
+      "hash": "gbMxw1JnmmLnKzWKTWdC_V",
+      "key": "prism_collection/GSE132080/X.h5ad",
+      "n_observations": 23608,
+      "run_uid": "None",
+      "size": 899523240,
+      "uid": "NEbod0p6ws0H5wug0000",
+      "version": "0000"
+    }
+  },
+  "product_credit": "withheld pending independent review",
+  "real_dataset_id": "geo/GSE132080",
+  "rollback_identities": {
+    "obs": {
+      "hash": "koT42ZnpMsA4h7YojGR18Q",
+      "key": "prism_collection/GSE132080/obs.parquet",
+      "uid": "lhR6Ny3n8QcVeItH0002"
+    },
+    "var": {
+      "hash": "cTno7idkcjb9xcHS7R6c2w",
+      "key": "prism_collection/GSE132080/var.parquet",
+      "uid": "GJ1HqkBSHfDD1o4m0001"
+    }
+  },
+  "terminal_control_plane": {
+    "instance": "pert-gym-worker-eu",
+    "lease_labels_remaining": [],
+    "local_lease_remaining": false,
+    "status": "TERMINATED",
+    "zone": "europe-west1-b"
+  },
+  "verify": {
+    "canonical_sha256": "5a99e3291c703aef9b8ae53342af19861f15fe5c827d1c7cdb6b35ebaec74680",
+    "collections": {
+      "historical_manifest_identity": "jkobject:GCjqQtGwPzkY",
+      "pert-gym/additions/20260621": {
+        "hash": "GXnxligyjv_jQmZGzENIiA",
+        "member_count": 996,
+        "target_key_matches": [
+          {
+            "key": "prism_collection/GSE132080/obs.parquet",
+            "uid": "lhR6Ny3n8QcVeItH0000"
+          }
+        ],
+        "uid": "kYkBznC2fuGmbUbg0000"
+      },
+      "pert-gym/canonical/20260621": {
+        "hash": "FuT5cWa5QodFHfYbzsyLRw",
+        "member_count": 1056,
+        "target_key_matches": [
+          {
+            "key": "prism_collection/GSE132080/obs.parquet",
+            "uid": "lhR6Ny3n8QcVeItH0000"
+          }
+        ],
+        "uid": "aEWBxMlcWx2d7Cd80000"
+      }
+    },
+    "host": {
+      "available_memory_bytes": 32810995712,
+      "free_disk_bytes": 284667740160,
+      "hostname": "pert-gym-worker-eu"
+    },
+    "mode": "verify",
+    "registry_counts": {
+      "after": {
+        "artifacts": 28520,
+        "collections": 38
+      },
+      "before": {
+        "artifacts": 28520,
+        "collections": 38
+      }
+    },
+    "replay_noop": true,
+    "source_join": {
+      "column_mismatches": {
+        "UMI_count": 0,
+        "coverage": 0,
+        "gemgroup": 0,
+        "good_coverage": 0,
+        "guide_identity": 0,
+        "number_of_cells": 0,
+        "read_count": 0
+      },
+      "control_rows": 2446,
+      "current_rows": 23608,
+      "excluded_unassigned_barcodes": 25,
+      "guide_sequence_known_rows": 20851,
+      "guide_sequence_unknown_control_rows": 2757,
+      "guide_table_rows": 128,
+      "identity_set_match": true,
+      "join_mismatch_count": 0,
+      "join_semantics": "set-equal cell identity then reindex source cell_identities.csv to original_obs_index order",
+      "joined_order_sha256": "d5968eaf722344f1948874bfda118414dc6ae544f5b59a52546d49a0e8113ebe",
+      "source_barcode_rows": 23633,
+      "source_identity_rows": 23608,
+      "source_rows": 23608
+    },
+    "status": "PASS",
+    "var_verdict": {
+      "axis_count_parity": true,
+      "axis_order_parity": true,
+      "axis_order_sha256": "35806881fb416ea7777193a22e15563eaf49e7369d7ac6227bdd1daa04b1f501",
+      "duplicate_index_rows": 68,
+      "index_unique": false,
+      "mismatch_count": 0,
+      "needs_revision": false,
+      "organism_values": [
+        "Homo sapiens"
+      ],
+      "rows": 33694,
+      "stable_feature_id_unique": true,
+      "stable_id_or_index_uniqueness": true,
+      "stable_id_order_sha256": "8283e63a421fe6d2593647b46ae24e84748ace66d2a6a7ff704808b2d8bfb41e"
+    },
+    "writes": {
+      "artifacts": {
+        "obs": [],
+        "var": []
+      },
+      "collection_writes": 0,
+      "deletions": 0,
+      "obs_revisions": 0,
+      "var_revisions": 0,
+      "x_revisions": 0
+    }
+  }
+}
