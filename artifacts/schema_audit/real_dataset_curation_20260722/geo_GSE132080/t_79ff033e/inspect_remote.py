@@ -170,25 +170,29 @@ def axis_relations(obs: pd.DataFrame, barcodes: pd.Index, identities: pd.DataFra
 
 
 def collection_snapshot(ln: Any) -> dict[str, Any]:
-    records = list(ln.Collection.filter(uid="GCjqQtGwPzkY").all())
-    if len(records) != 1:
-        raise AssertionError(f"historical Collection identity drift: {len(records)}")
-    collection = records[0]
-    members = list(collection.artifacts.only("uid", "key").all())
-    matches = [
-        {"uid": str(item.uid), "key": str(item.key)}
-        for item in members
-        if str(item.key) == EXPECTED["obs"]["key"]
-    ]
-    if not matches:
-        raise AssertionError("target key absent from historical Collection")
-    return {
-        "uid": str(collection.uid),
-        "key": str(collection.key),
-        "hash": str(collection.hash),
-        "member_count": len(members),
-        "target_key_matches": matches,
+    snapshots: dict[str, Any] = {
+        "historical_manifest_identity": "jkobject:GCjqQtGwPzkY"
     }
+    for key in ("pert-gym/additions/20260621", "pert-gym/canonical/20260621"):
+        records = list(ln.Collection.filter(key=key).all())
+        if len(records) != 1:
+            raise AssertionError(f"Collection identity drift: {key}={len(records)}")
+        collection = records[0]
+        members = list(collection.artifacts.only("uid", "key").all())
+        matches = [
+            {"uid": str(item.uid), "key": str(item.key)}
+            for item in members
+            if str(item.key) == EXPECTED["obs"]["key"]
+        ]
+        if len(matches) != 1:
+            raise AssertionError(f"target Collection membership drift: {key}")
+        snapshots[key] = {
+            "uid": str(collection.uid),
+            "hash": str(collection.hash),
+            "member_count": len(members),
+            "target_key_matches": matches,
+        }
+    return snapshots
 
 
 def main() -> None:
