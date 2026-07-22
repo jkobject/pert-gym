@@ -1,0 +1,1245 @@
+{
+  "schema_version": 1,
+  "contract_version": "DATASET_E2E_V3",
+  "contract_sha256": "bb786f6619c8a395575fe88c67f3c75bd4c6a545107c1535b02db88be02505a6",
+  "generated_at": "2026-07-22T15:23:00+02:00",
+  "source_board": "pert-gym",
+  "source_task_id": "t_b6c78bfb",
+  "denominator": {
+    "real_datasets": 70,
+    "base_public": 26,
+    "additions": 44
+  },
+  "semantics": {
+    "owner_card_uniqueness": "Exactly one durable product-owner card per real_dataset_id.",
+    "historical_v2_done": "Evidence only; not proof of DATASET_E2E_V3 completion.",
+    "product_delta": "This rebaseline changes no product counter.",
+    "review": "Create exactly one independent reviewer JIT after an immutable owner handoff."
+  },
+  "requirements": [
+    {
+      "id": "reuse_validated_evidence",
+      "requirement": "Preserve and reuse validated source artifacts and accepted revisions; never replay valid work merely to conform to this contract."
+    },
+    {
+      "id": "measured_chunk_decision",
+      "requirement": "Inspect the current physical layout and either record a measured no-op or recompact materially inefficient layouts with exact full-matrix/OBS parity, rollback identity, and ordinary-loader readback."
+    },
+    {
+      "id": "dataset_shared_var",
+      "requirement": "Use one dataset-level VAR across chunks/members when axes are identical and prove every X-axis link; document and independently review genuine axis exceptions."
+    },
+    {
+      "id": "species_correct_ens_id",
+      "requirement": "Use species-correct Ensembl stable IDs with exact feature count, order, and X-axis parity; preserve unresolved source values with explicit mapping evidence."
+    },
+    {
+      "id": "source_exhaustive_obs",
+      "requirement": "Inspect paper, repository records, supplements, and durable documentation; materialize every defensible row-level canonical OBS value through proven joins and preserve unknown/not_applicable with search evidence."
+    },
+    {
+      "id": "canonical_collection_membership",
+      "requirement": "Ensure resulting triplets/chunks are members of the canonical versioned Lamin Collection on laminlabs/pertdata/jkobject with append-only exact identities, duplicate/drift checks, and readback."
+    },
+    {
+      "id": "bounded_execution_and_replay",
+      "requirement": "Run heavy work on the EU VM through the bounded launcher with one writer, then prove immutable readback, replay no-op, zero unrelated drift, and zero residual writer/lease."
+    },
+    {
+      "id": "independent_reviewer",
+      "requirement": "Stop review-required; exactly one independent reviewer validates the immutable revision/live state and owns closure. Only reviewer PASS increments the strict completed-dataset numerator."
+    }
+  ],
+  "records": [
+    {
+      "ordinal": 1,
+      "real_dataset_id": "SchiebingerLander2019",
+      "owner_task_id": "t_fbb1d519",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": true
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 327494,
+      "v2_card_body_sha256": "254cab2ea29acf74551b538f6b3865ce202ea9a5c2f81f5aef6e2cf5cdae6c5e",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 2,
+      "real_dataset_id": "arc-vcc/2025",
+      "owner_task_id": "t_c07f6f6d",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 3,
+      "physical_member_count": 6,
+      "observation_count": 491046,
+      "v2_card_body_sha256": "20402f3431819a515e1563e33acdfb912c98ef94308f3936c312a525a706513f",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 3,
+      "real_dataset_id": "broad_prism_repurposing",
+      "owner_task_id": "t_a15f5366",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 22316860,
+      "v2_card_body_sha256": "9787ec1f2626889ec08176a3565ff4c1c3af7f7a633bac735a509b3a10d660f3",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 4,
+      "real_dataset_id": "cellarity/public-collection",
+      "owner_task_id": "t_9c09e453",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": true
+      },
+      "logical_family_count": 10,
+      "physical_member_count": 10,
+      "observation_count": 2212441,
+      "v2_card_body_sha256": "00e0f02516dd934a31bcf6c32a85beed7dc0b904507cc5266c32539e1fa2f776",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 5,
+      "real_dataset_id": "depmap_ccle/26q1",
+      "owner_task_id": "t_0ab6b8ea",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": true,
+        "strict_var_remediation_accepted_known": true
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 1775,
+      "v2_card_body_sha256": "c3006bd295035fea97d7c146645a3e7d0beee8365b93940ef1bdf32e651bb68e",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 6,
+      "real_dataset_id": "drug-seq/GSE120222",
+      "owner_task_id": "t_f02051bf",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": true,
+        "strict_var_remediation_accepted_known": true
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 72,
+      "v2_card_body_sha256": "87cfeeaeb821a284986bc7bbe0918920a834aee6c57b5a73f66913a14cc2a073",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 7,
+      "real_dataset_id": "geo/GSE120861",
+      "owner_task_id": "t_a1a4f482",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 35,
+      "observation_count": 174711,
+      "v2_card_body_sha256": "b83f63e646173fa68a5570fac4e5a253f1c765458d0e6ed5f4759e34c0d20b81",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 8,
+      "real_dataset_id": "geo/GSE132080",
+      "owner_task_id": "t_79ff033e",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 23608,
+      "v2_card_body_sha256": "705be70f3391ddc51af870215ef349bea242f3e278d16c5ddcd3a686d34c55b8",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 9,
+      "real_dataset_id": "geo/GSE150062",
+      "owner_task_id": "t_680f05a3",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 78393,
+      "v2_card_body_sha256": "333f896b09ae3345c9986b3466b57085d775a7ae0ac30598b8a56d96612603f3",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 10,
+      "real_dataset_id": "geo/GSE161824",
+      "owner_task_id": "t_cd62bb48",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 36,
+      "observation_count": 176040,
+      "v2_card_body_sha256": "6f66804be2d230df669fdbb249cef0607f3ecdd39e7741080a071e2c44927ddb",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 11,
+      "real_dataset_id": "geo/GSE164996",
+      "owner_task_id": "t_5e47ebce",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 25794,
+      "v2_card_body_sha256": "17351505303e33b401a732cf03b23288d1f0a1a428ab1468ba0c9dc518ae664d",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 12,
+      "real_dataset_id": "geo/GSE165291",
+      "owner_task_id": "t_a15eefd7",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 101670,
+      "v2_card_body_sha256": "df2a6de03e17fb8608baa95ec24adb82436dc0fdee0471af8d0f153dc034eee0",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 13,
+      "real_dataset_id": "geo/GSE182308",
+      "owner_task_id": "t_3a3fea8d",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 19,
+      "observation_count": 94962,
+      "v2_card_body_sha256": "8728688ee825d6987dd0dc4c0833fabbdc87e8d7c63364aa00df02536b0c8007",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 14,
+      "real_dataset_id": "geo/GSE190604",
+      "owner_task_id": "t_3fad24aa",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 103805,
+      "v2_card_body_sha256": "35f827ab4989b4340a871f7b63f0685069fa926ca813c0880c850f9e00c80e76",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 15,
+      "real_dataset_id": "geo/GSE195510",
+      "owner_task_id": "t_d34f07f3",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 140709,
+      "v2_card_body_sha256": "0c7be4c02f5e82fc4b084a4537b778dec7aa99d76ed39810d4a5cfa58d18cb43",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 16,
+      "real_dataset_id": "geo/GSE196142",
+      "owner_task_id": "t_408266ef",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 13220,
+      "v2_card_body_sha256": "b856bfa6858e93f8258b64bdb8a6b88499eb140542f5ec1dd7da173d02b4e3a0",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 17,
+      "real_dataset_id": "geo/GSE197452",
+      "owner_task_id": "t_05cef992",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 20811,
+      "v2_card_body_sha256": "fa3cbc81f88e0850d80cbfe75757ad553943bb4e3418ca074a47bd193f203c11",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 18,
+      "real_dataset_id": "geo/GSE203592",
+      "owner_task_id": "t_40b72cca",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 70646,
+      "v2_card_body_sha256": "c27705f9edfa9091ab23d40c9af29dad23bc1d6b43a05ab6c41b762ef5e9249c",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 19,
+      "real_dataset_id": "geo/GSE205310",
+      "owner_task_id": "t_ae94c5fc",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 124963,
+      "v2_card_body_sha256": "4dbf93137b15ff5c1d69102d9fc799a67f250cff3ca967b7f0e95f605f722573",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 20,
+      "real_dataset_id": "geo/GSE206107",
+      "owner_task_id": "t_86c808ba",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 51055,
+      "v2_card_body_sha256": "d02fb18eab9e9558ccc6b0821a002a7795a479321282c2a818525a4d845023e2",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 21,
+      "real_dataset_id": "geo/GSE207360",
+      "owner_task_id": "t_a2234c88",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 12487,
+      "v2_card_body_sha256": "6c11e27cf18346ca1447b93d595c521e2e44259414fb10c4e4fc694405099825",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 22,
+      "real_dataset_id": "geo/GSE212396",
+      "owner_task_id": "t_71fc0093",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 21,
+      "observation_count": 103155,
+      "v2_card_body_sha256": "c87a17075be3771240c8d90dc1ca921abbfa28fd9e864025c4669a98876dc9c8",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 23,
+      "real_dataset_id": "geo/GSE213511",
+      "owner_task_id": "t_d7579537",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 37,
+      "observation_count": 181177,
+      "v2_card_body_sha256": "f22ae1a5644cded4906b6e52daf87fd2c49a783d6e5c54b76ea8ffdd020c8f36",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 24,
+      "real_dataset_id": "geo/GSE213921",
+      "owner_task_id": "t_ed640bc1",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 9797,
+      "v2_card_body_sha256": "7883313983fd70961111c25ecefb89551d8d7fb43b7326c335235bf5621b3b96",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 25,
+      "real_dataset_id": "geo/GSE214844",
+      "owner_task_id": "t_8d2d25a0",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 13,
+      "observation_count": 12487,
+      "v2_card_body_sha256": "9df71e62c3c1f6353bc2a023c9f71a7955a490a3cb34a8c09d18418a7bfeaa1a",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 26,
+      "real_dataset_id": "geo/GSE215253",
+      "owner_task_id": "t_591171f4",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 75,
+      "observation_count": 370636,
+      "v2_card_body_sha256": "2edb55a2d3dee33a9a5fb3d0a5b4b6438f53e09dcfcb6c84141ab59c570e731f",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 27,
+      "real_dataset_id": "geo/GSE216673",
+      "owner_task_id": "t_f191bbfc",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 12,
+      "observation_count": 55156,
+      "v2_card_body_sha256": "77da478f781169a3c288000c9822fe8c6fc0e3fe9af35b179f90bdd5ed03699a",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 28,
+      "real_dataset_id": "geo/GSE217812",
+      "owner_task_id": "t_9bfec939",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 29889,
+      "v2_card_body_sha256": "63124a9baf41a768b3b4327fcc13ffdc502c446d83fd7b19e8cdd55984a94dcb",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 29,
+      "real_dataset_id": "geo/GSE219317",
+      "owner_task_id": "t_faa9c919",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 96,
+      "observation_count": 95279,
+      "v2_card_body_sha256": "137a3e95c3227caf5b27fdcbbff7e5113a246d8cfacca4ecba16d9d078d882b2",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 30,
+      "real_dataset_id": "geo/GSE220974",
+      "owner_task_id": "t_5a352144",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 5,
+      "observation_count": 24661,
+      "v2_card_body_sha256": "de6a93c7106f1b87d7bcda05ee06de1cf1c4de272750e1010c8ded20c82b8888",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 31,
+      "real_dataset_id": "geo/GSE221321",
+      "owner_task_id": "t_e2df72ea",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 43,
+      "observation_count": 210131,
+      "v2_card_body_sha256": "119a191904069f326ec0bd1df07766125a06366836ebaecbfe4ef95bbcee1bec",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 32,
+      "real_dataset_id": "geo/GSE221882",
+      "owner_task_id": "t_2a9cf0a2",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 25241,
+      "v2_card_body_sha256": "9573068a84ab05ccb40d655cc910652d347fc7fb1fb560f2835649b4ce35a7c5",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 33,
+      "real_dataset_id": "geo/GSE225775",
+      "owner_task_id": "t_1e45f362",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 272,
+      "observation_count": 1356998,
+      "v2_card_body_sha256": "122aff3f0f050ebc4503679abd8d4eef6dcf9ca7d8b735e368f343d5b9aa1b3a",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 34,
+      "real_dataset_id": "geo/GSE225807",
+      "owner_task_id": "t_cc1a079b",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 4,
+      "observation_count": 17424,
+      "v2_card_body_sha256": "17526de52ddb66755ad27f6fb294e9b141fd6b33184d6f843a7e32c1cfa10c47",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 35,
+      "real_dataset_id": "geo/GSE229505",
+      "owner_task_id": "t_1acbc3b1",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 26,
+      "observation_count": 126495,
+      "v2_card_body_sha256": "843d5275e5455b8e18e2433bf1c812096320e1eae0d52ca8dc85571cc96f4430",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 36,
+      "real_dataset_id": "geo/GSE236304",
+      "owner_task_id": "t_19817548",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 25220,
+      "v2_card_body_sha256": "3f4cc121ba4aba79401bf373d674127fc72ed7e7d56515e3b51f7742d9890a9d",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 37,
+      "real_dataset_id": "geo/GSE250378",
+      "owner_task_id": "t_8dd37baa",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 141290,
+      "v2_card_body_sha256": "b2cebe63a5e86c67fe73e9da4e508fc2997557d8de7e8b1ed1cd8b48a9e16036",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 38,
+      "real_dataset_id": "geo/GSE261283",
+      "owner_task_id": "t_a7035517",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 33038,
+      "v2_card_body_sha256": "a994ab75701775bc50fcab8c6d2e191b0a4fbca6f78012781b55bc0e90e86028",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 39,
+      "real_dataset_id": "geo/GSE263747",
+      "owner_task_id": "t_e3032708",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 44178,
+      "v2_card_body_sha256": "37ee372c785873db8ae5ff8e48284f42575a04c9d7ed5da764dfa6820b53ecd7",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 40,
+      "real_dataset_id": "ginkgo/vcpi",
+      "owner_task_id": "t_d6acce56",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": true,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 11808,
+      "v2_card_body_sha256": "b4e1863bb22857c2ad40c6d749154b041eb35934035772cff369dc67ff7254eb",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 41,
+      "real_dataset_id": "lincs/phase1",
+      "owner_task_id": "t_60c7849f",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 2,
+      "physical_member_count": 2,
+      "observation_count": 1319138,
+      "v2_card_body_sha256": "f7f062eaf10dc8e0e53d6890d351f2f64fa21a8fdd56781e7df7c26c7e8224c1",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 42,
+      "real_dataset_id": "lincs/phase2",
+      "owner_task_id": "t_8e11b25c",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": true,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 537590,
+      "v2_card_body_sha256": "a746559e7141a3a6288ed4c25314e30bf74b5aa1a4cf0806569df8f5492aa845",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 43,
+      "real_dataset_id": "scperturb/adamson16",
+      "owner_task_id": "t_f1d056cd",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 3,
+      "physical_member_count": 3,
+      "observation_count": 86111,
+      "v2_card_body_sha256": "caa02fbfa26c4fab15bb64366a81c0e6bbd8c6a05f8a4bfc1909cae7d5d3d28c",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 44,
+      "real_dataset_id": "scperturb/aissa21",
+      "owner_task_id": "t_732af16e",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 119071,
+      "v2_card_body_sha256": "4870ff90cb1589e0734281a1442cee20debc38ceabf53278f15caa2ab7327e25",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 45,
+      "real_dataset_id": "scperturb/chang22",
+      "owner_task_id": "t_1efba280",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": true,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 42277,
+      "v2_card_body_sha256": "75f031674876d6cea1f4258328c7ecbc255567e2341bd9bec53d5927888330cb",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 46,
+      "real_dataset_id": "scperturb/datlinger17",
+      "owner_task_id": "t_60ced1f1",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": true,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 5905,
+      "v2_card_body_sha256": "fb7c8ae90ca02cfbaf22532d972b0ffd8a44ed521e6f8a2714c30939745da668",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 47,
+      "real_dataset_id": "scperturb/datlinger21",
+      "owner_task_id": "t_264f481a",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 39194,
+      "v2_card_body_sha256": "6d276a3acdff7ef60d9af9e6ab05e610df31b9bdfba7b8452e1a1329f1d73f94",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 48,
+      "real_dataset_id": "scperturb/dixit16",
+      "owner_task_id": "t_90cd9c44",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 4,
+      "physical_member_count": 4,
+      "observation_count": 170019,
+      "v2_card_body_sha256": "7ed6479f43bc6f47962044b3dd6f55e2760a0251a1faabcefd85af541cf15531",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 49,
+      "real_dataset_id": "scperturb/frangieh21",
+      "owner_task_id": "t_3b01b976",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 218331,
+      "v2_card_body_sha256": "567a8176bc646a5e6985ff32ef57a023b6a73a0a3892a4aaab1beaa429affc81",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 50,
+      "real_dataset_id": "scperturb/gehring-pachter-2019",
+      "owner_task_id": "t_3878a5d1",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 20382,
+      "v2_card_body_sha256": "10a02701abd4345f57fe66d9a5fe41876c6fefd77317dab13e3d787af6d817dc",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 51,
+      "real_dataset_id": "scperturb/mcfarland20",
+      "owner_task_id": "t_bcc18499",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 182875,
+      "v2_card_body_sha256": "a75241cc772d68a335343142d1f9d60a0dfdf267ef60ae90fc14bfdf502742fb",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 52,
+      "real_dataset_id": "scperturb/nadig24",
+      "owner_task_id": "t_366781d8",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 3,
+      "physical_member_count": 84,
+      "observation_count": 816858,
+      "v2_card_body_sha256": "2e4b662ff7b98494ba57e5399b54131f7d02fd061b1f585cbde9121726cede5d",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 53,
+      "real_dataset_id": "scperturb/norman19",
+      "owner_task_id": "t_ce8c2068",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 2,
+      "physical_member_count": 2,
+      "observation_count": 222890,
+      "v2_card_body_sha256": "3aeaa66769a9e459be694b6d7969056ad80bc6924eba274e884d95802082585a",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 54,
+      "real_dataset_id": "scperturb/papalexi21",
+      "owner_task_id": "t_b081252e",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 4,
+      "physical_member_count": 4,
+      "observation_count": 80155,
+      "v2_card_body_sha256": "de44295c9cd8c4143c4dcc373603a180e9bca5d34df62e9049a18a6c8da97fbc",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 55,
+      "real_dataset_id": "scperturb/replogle22",
+      "owner_task_id": "t_e73e4ca3",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 4,
+      "physical_member_count": 55,
+      "observation_count": 2807550,
+      "v2_card_body_sha256": "ea37aaa105dcc1b16532740c1b6403d03705603e4b3c3a81376d23f069496cfe",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 56,
+      "real_dataset_id": "scperturb/shifrut18",
+      "owner_task_id": "t_eee6be3f",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 52236,
+      "v2_card_body_sha256": "02934aa1c8f055622c8abb42f02998e473eeb029b25cfca9d02fd0ee5f866847",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 57,
+      "real_dataset_id": "scperturb/srivatsan20",
+      "owner_task_id": "t_3982a0ac",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 2,
+      "physical_member_count": 2,
+      "observation_count": 823579,
+      "v2_card_body_sha256": "ce35eaaf8217dd760d0c39aed7f966d51f4ec4d63edee025400a48123af867fa",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 58,
+      "real_dataset_id": "scperturb/sunshine23",
+      "owner_task_id": "t_713643f3",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 2,
+      "physical_member_count": 75,
+      "observation_count": 164369,
+      "v2_card_body_sha256": "b3634165391f562c284dfaa115b0f25cd7ab2d03b5d4dfe1352d46bc556ba7a1",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 59,
+      "real_dataset_id": "scperturb/tian19",
+      "owner_task_id": "t_b96111b8",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 3,
+      "physical_member_count": 3,
+      "observation_count": 483458,
+      "v2_card_body_sha256": "9687a1098b3f107ebb71e04723bbfd054495d9ea1decc5d48c36df897237bf69",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 60,
+      "real_dataset_id": "scperturb/tian21",
+      "owner_task_id": "t_5f7ef4d2",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 2,
+      "physical_member_count": 2,
+      "observation_count": 53493,
+      "v2_card_body_sha256": "1a82eb0b7a749bfbcc8d8a7bb7431e8afb4f9e012fcfbff77beb4bf677545d10",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 61,
+      "real_dataset_id": "scperturb/wessels22",
+      "owner_task_id": "t_a5d4ce93",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 30707,
+      "v2_card_body_sha256": "73c1115796a91274796d2ae6f19ace7177561ef09df43330699b720f60a4f80c",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 62,
+      "real_dataset_id": "scperturb/xie-hon-2017",
+      "owner_task_id": "t_f8ad1d3b",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 13283,
+      "v2_card_body_sha256": "55f4b24f763a44ed3764b79e4bc6849ca974b93eae3e1ef87cb3945e96740070",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 63,
+      "real_dataset_id": "scperturb/xu23",
+      "owner_task_id": "t_2090f8ff",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 98315,
+      "v2_card_body_sha256": "5e1ae41d038705faf694783b70f44dabbafd66a1a3542dc46a1940576c6fd1a1",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 64,
+      "real_dataset_id": "scperturb/zhao21",
+      "owner_task_id": "t_3d6500f4",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 165748,
+      "v2_card_body_sha256": "f7cb81dfa403fe2393760bad1c4bfcd348ea2c28e8e90786d037771b531fe8b2",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 65,
+      "real_dataset_id": "tahoe100m/2025-02-25",
+      "owner_task_id": "t_4bb24ef9",
+      "denominator_cohort": "base_public",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": true,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 14,
+      "physical_member_count": 14,
+      "observation_count": 100648790,
+      "v2_card_body_sha256": "7cf8515c9f0988c0b43bde13a48d826ad1365e1dbb972092c610891571a134bd",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 66,
+      "real_dataset_id": "unresolved/sanger_dual_guide_crc/mapping_counts",
+      "owner_task_id": "t_a9d79d07",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 2081431,
+      "v2_card_body_sha256": "980dce1932a28c999498d79ad231f3f2e902fc45d8a3fc28eb3e47dc7d56fc89",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 67,
+      "real_dataset_id": "unresolved/sanger_gdsc/gdsc1",
+      "owner_task_id": "t_8d616789",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 334131,
+      "v2_card_body_sha256": "bca56cc680044b755f32db188f81356b6c90a5c28b3451348f646c2b05daa881",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 68,
+      "real_dataset_id": "unresolved/sanger_gdsc/gdsc2",
+      "owner_task_id": "t_19e08b55",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 243005,
+      "v2_card_body_sha256": "e37c259bd7882e6b0acecb7167d03484dcca758a3091fe3bf6d6ad8a2c4dc012",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 69,
+      "real_dataset_id": "unresolved/sanger_score_crispr",
+      "owner_task_id": "t_b05ec3d1",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 1,
+      "physical_member_count": 1,
+      "observation_count": 1107,
+      "v2_card_body_sha256": "d48a68bc3300884ac6e9acb1b5667e28a19c78bcddf46d58551c4d949c818771",
+      "v3_completion_status": "not_established_by_rebaseline"
+    },
+    {
+      "ordinal": 70,
+      "real_dataset_id": "viperturbseq/2026-publication",
+      "owner_task_id": "t_a461068b",
+      "denominator_cohort": "addition",
+      "prior_evidence_reusable": true,
+      "prior_evidence_snapshot": {
+        "base_public_structural_e2e_accepted_known": false,
+        "strict_obs_recovery_accepted_known": false,
+        "strict_var_remediation_accepted_known": false
+      },
+      "logical_family_count": 7,
+      "physical_member_count": 55,
+      "observation_count": 1273738,
+      "v2_card_body_sha256": "748ae20476251e7174f86a5edfc7fc6f9e2a3d934392eb2e108c02c18a2e44d7",
+      "v3_completion_status": "not_established_by_rebaseline"
+    }
+  ]
+}

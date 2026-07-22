@@ -1,6 +1,6 @@
 # pert-gym current status
 
-_Last verified: 2026-07-22 12:17 CEST from `TODO.md`, the strict accepted
+_Last verified: 2026-07-22 15:23 CEST from `TODO.md`, the strict accepted
 product-delta snapshot, and the immutable reviewer handoffs named below. Pending
 work is not counted. `TODO.md` remains the operational dashboard._
 
@@ -8,6 +8,7 @@ work is not counted. `TODO.md` remains the operational dashboard._
 
 | Metric | Accepted | Remaining | Strict evidence / note |
 |---|---:|---:|---|
+| Integrated datasets under `DATASET_E2E_V3` | **0/70** | 70 | 70 unique durable owners rebaselined; no product delta credited |
 | Publication components | **29/153** | 124 | latest accepted component delta remains Temporal-v4 row 79 / SCP1467 |
 | New families registered on `jkobject` | **10/22** | 12 | `Artifact/rt5eRz8opcJXtybp0000` |
 | New families in the versioned Collection | **10/22** | 12 | `Collection/WBFxVN9Alr8zFt9T0000`; mismatch/drift 0 |
@@ -19,9 +20,19 @@ work is not counted. `TODO.md` remains the operational dashboard._
 | External exclusions | **60/60** | 0 | complete |
 
 The canonical surface remains **120 logical families / 1,056 physical members /
-142,572,358 observations**. Publication components, family registration,
-Collection membership, recompaction, OBS, and VAR are separate units and must
-not be added together.
+142,572,358 observations**. The integrated accepted-dataset numerator is the
+lead completion metric. Publication components, family registration, Collection
+membership, recompaction, OBS, and VAR remain orthogonal acceptance dimensions;
+they must not be added together or substituted for integrated V3 acceptance.
+
+`DATASET_E2E_V3` assigns exactly one durable owner to each of 70 unique
+`real_dataset_id` values (26 base-public + 44 additions). Each owner integrates
+the measured chunk/no-op decision, shared dataset-level VAR where axes match,
+species-correct Ensembl stable IDs with exact X-axis parity, source-exhaustive
+OBS, canonical versioned Collection membership, immutable readback/replay, and
+one JIT independent reviewer. Historical V2 outcomes remain reusable evidence,
+not proof of integrated V3 completion. The inventory is frozen in
+`artifacts/orchestration/dataset_e2e_v3_owner_coverage_20260722.json`.
 
 ## Accepted evidence and pending boundaries
 
@@ -88,6 +99,9 @@ EULA blocker; it must not serialize accessible dataset work.
 
 ## Operating rules
 
+- `DATASET_E2E_V3` is the dataset delivery contract. Only one independent
+  reviewer PASS on the integrated immutable dataset state advances its 0/70
+  numerator; dimension-specific acceptances remain evidence until then.
 - One heavy product writer at a time. Heavy payload, GCS, and broad Lamin work
   runs only on `pert-gym-worker-eu` in `europe-west1-b`, never on the Mac.
 - Connect only through `tools.lamin_context.connect_pertdata()` to

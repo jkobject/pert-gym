@@ -56,6 +56,17 @@ files/docs, expected evidence, and what not to read.
 
 ## Publication and reproducibility
 
+- `DATASET_E2E_V3` is the canonical 70-real-dataset completion contract. Exactly
+  one durable owner card covers each `real_dataset_id` (26 base-public + 44
+  additions); historical V2 outcomes are reusable evidence, not V3 completion.
+- Each owner must integrate the measured chunk/no-op decision, dataset-level
+  shared VAR where axes match, species-correct Ensembl stable IDs with exact
+  X-axis parity, source-exhaustive OBS, canonical versioned Collection
+  membership, immutable readback/replay, and one JIT independent reviewer.
+- Only an independent reviewer PASS for the integrated immutable dataset state
+  advances the strict accepted-datasets numerator. OBS, VAR, recompaction, and
+  Collection counters remain acceptance dimensions and must not be summed or
+  mistaken for integrated completion.
 - One logical dataset has one writer. Publication is append-only and
   crash-recoverable; do not bypass the journal/recovery stages.
 - Per-dataset processing-decision notebooks are the reconstruction layer. They

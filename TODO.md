@@ -1,15 +1,16 @@
 # pert-gym TODO / active source of truth
 
-_Last verified: 2026-07-22 12:17 CEST from the `pert-gym` Kanban board, accepted product-delta ledger, and immutable reviewer handoffs. Pending writers are never counted before independent acceptance._
+_Last verified: 2026-07-22 15:23 CEST from the `pert-gym` Kanban board, accepted product-delta ledger, and immutable reviewer handoffs. Pending writers are never counted before independent acceptance._
 
 ## Product objective / Definition of Done
 
-The project is complete only when every correctly downloadable target dataset is durably represented on `laminlabs/pertdata/jkobject`, all genuinely new families are in a complete append-only Collection, required recompactions have accepted parity/readback and rollback identities, OBS and VAR outcomes are independently certified across the 70 real datasets, exclusions are explicit, and the immutable final gate accepts the whole contract.
+The canonical completion contract is `DATASET_E2E_V3`: each of exactly 70 `real_dataset_id` values (26 base-public + 44 additions) has one durable owner that integrates all applicable source preservation, measured chunk/no-op decision, shared dataset-level VAR, species-correct Ensembl stable IDs with exact X-axis parity, source-exhaustive OBS, canonical versioned Collection membership, immutable readback/replay, and zero residual writer/lease. Historical V2 outcomes remain reusable evidence but are not integrated V3 completion. A dataset advances the strict numerator only after one JIT independent reviewer accepts its immutable integrated state; the project completes when all 70 pass and the immutable final gate accepts the whole contract.
 
 ## Live product counters
 
 | Metric | Accepted | Remaining | Evidence / note |
 |---|---:|---:|---|
+| Integrated datasets accepted under `DATASET_E2E_V3` | **0/70** | 70 | New strict numerator; this rebaseline is bookkeeping only and credits no product delta |
 | Publication components | **29/153** | 124 | Temporal-v4 row 79 / SCP1467 was the latest accepted component delta |
 | New families registered on `jkobject` | **10/22** | 12 | E-MTAB-9304; exact accepted readback `Artifact/rt5eRz8opcJXtybp0000` |
 | New families accepted in versioned Collection | **10/22** | 12 | exact accepted readback `Collection/WBFxVN9Alr8zFt9T0000`, mismatch/drift 0 |
@@ -20,7 +21,7 @@ The project is complete only when every correctly downloadable target dataset is
 | VAR dataset remediations independently accepted | **6/70** | 64 | latest: `SchiebingerLander2019`; reviewer task `t_7cc8c0ac`, accepted VAR Artifact `cw0Kr6j7qVyrDBP10003`, zero-write readback mismatch 0 |
 | External exclusions dispositioned | **60/60** | 0 | complete |
 
-The canonical surface remains **120 logical families / 1,056 physical members / 142,572,358 observations**. `accepted_components`, new-family registration, Collection membership, recompaction, OBS and VAR are separate units and must never be added together.
+The canonical surface remains **120 logical families / 1,056 physical members / 142,572,358 observations**. The integrated accepted-dataset numerator is the lead completion metric. `accepted_components`, new-family registration, Collection membership, recompaction, OBS and VAR remain orthogonal acceptance dimensions and must never be added together or substituted for integrated V3 acceptance.
 
 ### Count vocabulary and audit provenance
 
@@ -34,6 +35,7 @@ The canonical surface remains **120 logical families / 1,056 physical members / 
 
 | Workstream | Current state | Owner / next gate | Completion condition |
 |---|---|---|---|
+| Integrated real-dataset owners | **REBASELINED — 0/70 V3 accepted; 70 unique owners inventoried** | One durable owner per `real_dataset_id`; preserve JIT holds and route exactly one reviewer only after an immutable handoff | All applicable `DATASET_E2E_V3` dimensions accepted together; coverage manifest `artifacts/orchestration/dataset_e2e_v3_owner_coverage_20260722.json` |
 | New-family registration | **ACCEPTED — 10/22** | E-MTAB-9304 exact Artifact `rt5eRz8opcJXtybp0000`; successor Collection `WBFxVN9Alr8zFt9T0000` is accepted at 10/22 | Continue one exact generation-pinned family at a time |
 | Datlinger17 OBS recovery | **ACCEPTED — 4th OBS dataset** | reviewer `t_cab55b02` PASS, 38/38 fresh EU checks | Exact OBS `sitiyL4128YBC8BS0003`: 5,905-row parity, six accepted fields, `perturbation_type` and `x_semantics` honestly absent; counters **4/70** and **25/640** |
 | Chang22 OBS recovery | **ACCEPTED — 5th OBS dataset** | reviewer `t_4c7c7ae2` accepted immutable revision 2: manifest `d2d41e1eadd91b48861f3de48a2e3311df58c92f1ea16aecd5801a540e9c04cf`, exact OBS `ue1GWkOr29VoRN5R0002` | 42,277-row parity and all eight Phase-A fields accepted; counters **5/70** and **33/640** |
@@ -97,6 +99,10 @@ Lane 3 has five direct indispensable parents instead of 76 historical leaf paren
 
 ## Operating rules
 
+- `DATASET_E2E_V3` owns delivery at real-dataset granularity: one owner integrates
+  chunking, shared VAR, ENS-ID, source-exhaustive OBS, canonical Collection, and
+  immutable replay/readback before one independent reviewer. Separate historical
+  lanes are evidence inputs, not independent definitions of dataset completion.
 - One heavy product writer at a time; read-only audits, metadata-only work and local PR work may run in parallel when their contracts prove zero payload materialization.
 - Heavy payload/GCS/Lamin work runs only on `pert-gym-worker-eu` in `europe-west1-b`, never on the Mac.
 - Connect only through `tools.lamin_context.connect_pertdata()` to `laminlabs/pertdata`, branch `jkobject`; never write `main`.
