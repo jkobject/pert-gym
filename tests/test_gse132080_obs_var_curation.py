@@ -132,6 +132,18 @@ def test_obs_verifier_rejects_wrong_but_non_null_semantics(
         curation.verify_obs_semantics(actual, expected)
 
 
+def test_obs_curation_replay_preserves_original_source_values(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    obs, source = _obs_fixture()
+    monkeypatch.setattr(curation, "EXPECTED_N_OBS", 3)
+    first, _ = curation.curate_obs(obs, source)
+    replay, receipt = curation.curate_obs(first, source)
+    assert receipt["join_mismatch_count"] == 0
+    pd.testing.assert_frame_equal(replay, first, check_categorical=True)
+    assert replay["source_original_dataset"].unique().tolist() == ["GSE132080"]
+
+
 def _var_fixture() -> tuple[Any, Any]:
     index = pd.Index(["DUP", "DUP", "UNIQUE"])
     stable = ["ENSG00000000001", "ENSG00000000002", "ENSG00000000003"]

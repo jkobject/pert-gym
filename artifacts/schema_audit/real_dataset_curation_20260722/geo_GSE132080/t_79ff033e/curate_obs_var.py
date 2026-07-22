@@ -301,8 +301,9 @@ def curate_obs(obs: pd.DataFrame, source: dict[str, Any]) -> tuple[pd.DataFrame,
 
     curated = obs.copy(deep=True)
     for field in ("dataset", "cell_line", "disease", "tissue_type", "organism", "is_control", "perturbation", "perturbation_type", "assay", "modality"):
-        if field in original:
-            curated[f"source_original_{field}"] = original[field]
+        source_original = f"source_original_{field}"
+        if field in original and source_original not in original:
+            curated[source_original] = original[field]
     gemgroup = pd.to_numeric(joined["gemgroup"], errors="raise").astype(int)
     samples = gemgroup.map(SAMPLE_BY_GEMGROUP).astype("string")
     if samples.isna().any():
