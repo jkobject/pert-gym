@@ -1014,6 +1014,91 @@ def test_bounded_writer_accepts_approved_three_hour_lifecycle(
     assert not local_lease.exists()
 
 
+def test_bounded_writer_local_lease_failure_stops_and_clears_exact_gce_lease(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="RUNNING")
+    local_lease = tmp_path / "writer-lease.json"
+    payload_started = False
+
+    def fail_local_lease(path: Path, **kwargs: object) -> None:
+        del kwargs
+        path.with_suffix(path.suffix + ".tmp").write_text("partial")
+        raise OSError("local lease persistence failed")
+
+    def payload_start(command: list[str]) -> FakePayloadProcess:
+        nonlocal payload_started
+        payload_started = True
+        return FakePayloadProcess(0)
+
+    monkeypatch.setattr(launcher, "_atomic_write_local_lease", fail_local_lease)
+
+    with pytest.raises(OSError, match="local lease persistence failed"):
+        launcher.launch_heavy_command(
+            task="t_79ff033e",
+            eta_hours=2,
+            command=["writer"],
+            purpose="gse132080-obs-var-curation",
+            lease_minutes=150,
+            absolute_max_minutes=180,
+            local_lease_path=local_lease,
+            now=datetime(2026, 7, 22, 12, 0, tzinfo=timezone.utc),
+            run=fake,
+            payload_start=payload_start,
+        )
+
+    assert payload_started is False
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {
+        "active-wave": "true",
+        "do-not-stop": "true",
+    }
+    assert sum("stop" in call for call in fake.calls) == 1
+    assert sum("remove-labels" in call for call in fake.calls) == 1
+    assert not local_lease.exists()
+    assert not local_lease.with_suffix(".json.tmp").exists()
+
+
+def test_bounded_writer_surfaces_primary_and_cleanup_failures(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="RUNNING")
+
+    def fail_local_lease(*args: object, **kwargs: object) -> None:
+        del args, kwargs
+        raise OSError("local lease persistence failed")
+
+    def fail_stop(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "stop" in command:
+            fake.calls.append(command)
+            return completed(command, returncode=9, stderr="stop denied")
+        return fake(command)
+
+    monkeypatch.setattr(launcher, "_atomic_write_local_lease", fail_local_lease)
+
+    with pytest.raises(OSError, match="local lease persistence failed") as caught:
+        launcher.launch_heavy_command(
+            task="t_79ff033e",
+            eta_hours=2,
+            command=["writer"],
+            purpose="gse132080-obs-var-curation",
+            lease_minutes=150,
+            absolute_max_minutes=180,
+            local_lease_path=tmp_path / "writer-lease.json",
+            now=datetime(2026, 7, 22, 12, 0, tzinfo=timezone.utc),
+            run=fail_stop,
+        )
+
+    assert caught.value.__notes__ == [
+        "terminal cleanup also failed: terminal instance stop failed with rc=9: "
+        "stop denied"
+    ]
+    assert isinstance(caught.value.__cause__, RuntimeError)
+    assert "terminal instance stop failed" in str(caught.value.__cause__)
+
+
 def test_bounded_writer_rejects_lifecycle_over_six_hours_before_publication(
     tmp_path: Path,
 ) -> None:

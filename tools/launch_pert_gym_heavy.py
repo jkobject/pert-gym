@@ -251,13 +251,12 @@ def _atomic_write_local_lease(
     temporary.replace(path)
 
 
-def _publish_lease(
+def _publish_gce_lease(
     run: Run,
     *,
     task: str,
     purpose: str,
     deadline: datetime,
-    local_lease_path: Path,
     previous: dict[str, str] | None = None,
 ) -> dict[str, str]:
     if previous is not None:
@@ -279,12 +278,6 @@ def _publish_lease(
         operation="GCE lease publication",
     )
     _verify_lease(_describe(run), labels)
-    _atomic_write_local_lease(
-        local_lease_path,
-        task=task,
-        deadline=deadline,
-        purpose=purpose,
-    )
     return labels
 
 
@@ -335,6 +328,28 @@ def _clear_terminal_lease(
     )
     _verify_lease_cleared(_describe(run))
     local_lease_path.unlink(missing_ok=True)
+    local_lease_path.with_suffix(local_lease_path.suffix + ".tmp").unlink(
+        missing_ok=True
+    )
+
+
+def _cleanup_terminal_failure(
+    run: Run,
+    *,
+    labels: dict[str, str],
+    local_lease_path: Path,
+    primary: BaseException,
+) -> None:
+    """Compensate exact owned state while preserving the primary failure."""
+    try:
+        _clear_terminal_lease(
+            run,
+            labels=labels,
+            local_lease_path=local_lease_path,
+        )
+    except BaseException as cleanup:
+        primary.add_note(f"terminal cleanup also failed: {cleanup}")
+        raise primary from cleanup
 
 
 def _read_remote_payload_pid(run: Run, path: str) -> int | None:
@@ -516,9 +531,7 @@ def launch_heavy_command(
     if lease_minutes is not None and absolute_max_minutes is not None:
         requested = current + timedelta(minutes=lease_minutes)
         lifecycle_started = monotonic()
-        absolute_monotonic_deadline = (
-            lifecycle_started + absolute_max_minutes * 60
-        )
+        absolute_monotonic_deadline = lifecycle_started + absolute_max_minutes * 60
     else:
         requested = lease_deadline(current, eta_hours=eta_hours)
         lifecycle_started = None
@@ -550,15 +563,20 @@ def launch_heavy_command(
                 "refusing to shorten it"
             )
     deadline = _effective_deadline(before, task=task, requested=requested, now=current)
-    labels = _publish_lease(
+    labels = _publish_gce_lease(
         control_run,
         task=task,
         purpose=purpose,
         deadline=deadline,
-        local_lease_path=local_lease_path,
     )
 
     try:
+        _atomic_write_local_lease(
+            local_lease_path,
+            task=task,
+            deadline=deadline,
+            purpose=purpose,
+        )
         if (
             absolute_monotonic_deadline is not None
             and monotonic() >= absolute_monotonic_deadline
@@ -576,12 +594,13 @@ def launch_heavy_command(
             )
         elif status != "RUNNING":
             raise RuntimeError(f"refusing pre-launch instance status {status!r}")
-    except BaseException:
+    except BaseException as primary:
         if bounded_lifecycle:
-            _clear_terminal_lease(
+            _cleanup_terminal_failure(
                 run,
                 labels=labels,
                 local_lease_path=local_lease_path,
+                primary=primary,
             )
         raise
 
@@ -669,13 +688,18 @@ def launch_heavy_command(
                         wall_now + timedelta(minutes=lease_minutes), absolute_deadline
                     )
                     if renewed > deadline:
-                        labels = _publish_lease(
+                        labels = _publish_gce_lease(
                             control_run,
                             task=task,
                             purpose=purpose,
                             deadline=renewed,
-                            local_lease_path=local_lease_path,
                             previous=labels,
+                        )
+                        _atomic_write_local_lease(
+                            local_lease_path,
+                            task=task,
+                            deadline=renewed,
+                            purpose=purpose,
                         )
                         deadline = renewed
                         if monotonic() >= absolute_monotonic_deadline:
@@ -686,12 +710,19 @@ def launch_heavy_command(
                 remaining = absolute_monotonic_deadline - monotonic()
                 sleep(min(5, max(0.0, remaining)))
             returncode = 124 if timed_out else process.wait()
-        finally:
-            _clear_terminal_lease(
+        except BaseException as primary:
+            _cleanup_terminal_failure(
                 run,
                 labels=labels,
                 local_lease_path=local_lease_path,
+                primary=primary,
             )
+            raise
+        _clear_terminal_lease(
+            run,
+            labels=labels,
+            local_lease_path=local_lease_path,
+        )
         if timed_out and process is not None:
             try:
                 process.wait(timeout=30)
