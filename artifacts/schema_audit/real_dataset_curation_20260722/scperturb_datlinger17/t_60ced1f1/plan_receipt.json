@@ -1,5 +1,5 @@
 {
-  "canonical_sha256": "f032e716996de9ab927c7cadc23f9b1cea4148bbd44ccc3ec2737ffe80d38885",
+  "canonical_sha256": "699442649dc335569484805431f84b452ea9d2e31a9e70516d58a20d42632b9f",
   "collections": {
     "pert-gym/base-public/20260621": {
       "hash": "iYeMjKnPCIp7_MHRa17Ygw",
@@ -24,7 +24,7 @@
       "uid": "aEWBxMlcWx2d7Cd80000"
     }
   },
-  "completed_at": 1784730104,
+  "completed_at": 1784739923,
   "contract_sha256": "bb786f6619c8a395575fe88c67f3c75bd4c6a545107c1535b02db88be02505a6",
   "format": "pert-gym.dataset-e2e-v3/v1",
   "frozen_inputs": [
@@ -45,10 +45,10 @@
       "uncompressed_sha256": "60530cc3a14fe28e1dbf06c9f62b3e993649750069287083e4351aea3f8318df"
     }
   ],
-  "helper_sha256": "5e64af97e311a6d86378ee7af4cda47e1e98a5bb8f5fff6b97637428477592fc",
+  "helper_sha256": "e10f674bfe9ea6f3d0013de815d6aa63e0b30bf81128c8dd678c32c63e8ead1f",
   "host": {
-    "available_memory_bytes": 32813084672,
-    "free_disk_bytes": 284660264960,
+    "available_memory_bytes": 32881549312,
+    "free_disk_bytes": 284670615552,
     "hostname": "pert-gym-worker-eu"
   },
   "member_after": {
@@ -398,15 +398,15 @@
       "x_bytes": 129576869
     },
     "obs_before": {
-      "created_at": "2026-07-18 12:00:43.166529+00:00",
-      "description": "t_81da0742 reviewer-directed append-only correction of sitiyL4128YBC8BS0002; control_availability=dataset_control_available; perturbation_type blocked/absent; x_semantics blocked pending immutable declarations",
-      "hash": "sRhCl_7JXA4fSaf4q7BZBg",
+      "created_at": "2026-07-22 14:25:55.676681+00:00",
+      "description": "t_60ced1f1: source-exhaustive Datlinger17 OBS; exact 5905-cell GEO join, all 116 guide IDs/sequences mapped, 11 GSM runs, CRISPRko and 4 h TCR condition semantics",
+      "hash": "gU48Qsw1u6MbLvJMIshIiA",
       "key": "scperturb/datlinger17/obs.parquet",
-      "n_observations": null,
-      "run_uid": "PeR2G8uVHdfradnK",
-      "size": 490279,
-      "uid": "sitiyL4128YBC8BS0003",
-      "version": "0003"
+      "n_observations": 5905,
+      "run_uid": "abRaAYZa9NtgWiWe",
+      "size": 825513,
+      "uid": "sitiyL4128YBC8BS0004",
+      "version": "0004"
     },
     "obs_history": [
       {
@@ -452,9 +452,21 @@
         "size": 490279,
         "uid": "sitiyL4128YBC8BS0003",
         "version": "0003"
+      },
+      {
+        "created_at": "2026-07-22 14:25:55.676681+00:00",
+        "description": "t_60ced1f1: source-exhaustive Datlinger17 OBS; exact 5905-cell GEO join, all 116 guide IDs/sequences mapped, 11 GSM runs, CRISPRko and 4 h TCR condition semantics",
+        "hash": "gU48Qsw1u6MbLvJMIshIiA",
+        "key": "scperturb/datlinger17/obs.parquet",
+        "n_observations": 5905,
+        "run_uid": "abRaAYZa9NtgWiWe",
+        "size": 825513,
+        "uid": "sitiyL4128YBC8BS0004",
+        "version": "0004"
       }
     ],
     "source_join": {
+      "canonical_source_accession": "GSE92872",
       "column_mismatches": {
         "perturbation": 0,
         "perturbation_2": 0,
@@ -468,6 +480,10 @@
       "join_mismatch_count": 0,
       "join_semantics": "exact source barcode order after AnnData make_index_unique",
       "joined_order_sha256": "bb50f8eae7929d767a929ba40dedb871667474ca2725cb54b9ec5b3946133337",
+      "preserved_source_accession_rows": 5905,
+      "preserved_source_accession_values": [
+        "datlinger17"
+      ],
       "source_rows": 5905
     },
     "source_manifest": {
@@ -936,15 +952,15 @@
       "x_bytes": 129576869
     },
     "obs_before": {
-      "created_at": "2026-07-18 12:00:43.166529+00:00",
-      "description": "t_81da0742 reviewer-directed append-only correction of sitiyL4128YBC8BS0002; control_availability=dataset_control_available; perturbation_type blocked/absent; x_semantics blocked pending immutable declarations",
-      "hash": "sRhCl_7JXA4fSaf4q7BZBg",
+      "created_at": "2026-07-22 14:25:55.676681+00:00",
+      "description": "t_60ced1f1: source-exhaustive Datlinger17 OBS; exact 5905-cell GEO join, all 116 guide IDs/sequences mapped, 11 GSM runs, CRISPRko and 4 h TCR condition semantics",
+      "hash": "gU48Qsw1u6MbLvJMIshIiA",
       "key": "scperturb/datlinger17/obs.parquet",
-      "n_observations": null,
-      "run_uid": "PeR2G8uVHdfradnK",
-      "size": 490279,
-      "uid": "sitiyL4128YBC8BS0003",
-      "version": "0003"
+      "n_observations": 5905,
+      "run_uid": "abRaAYZa9NtgWiWe",
+      "size": 825513,
+      "uid": "sitiyL4128YBC8BS0004",
+      "version": "0004"
     },
     "obs_history": [
       {
@@ -990,9 +1006,21 @@
         "size": 490279,
         "uid": "sitiyL4128YBC8BS0003",
         "version": "0003"
+      },
+      {
+        "created_at": "2026-07-22 14:25:55.676681+00:00",
+        "description": "t_60ced1f1: source-exhaustive Datlinger17 OBS; exact 5905-cell GEO join, all 116 guide IDs/sequences mapped, 11 GSM runs, CRISPRko and 4 h TCR condition semantics",
+        "hash": "gU48Qsw1u6MbLvJMIshIiA",
+        "key": "scperturb/datlinger17/obs.parquet",
+        "n_observations": 5905,
+        "run_uid": "abRaAYZa9NtgWiWe",
+        "size": 825513,
+        "uid": "sitiyL4128YBC8BS0004",
+        "version": "0004"
       }
     ],
     "source_join": {
+      "canonical_source_accession": "GSE92872",
       "column_mismatches": {
         "perturbation": 0,
         "perturbation_2": 0,
@@ -1006,6 +1034,10 @@
       "join_mismatch_count": 0,
       "join_semantics": "exact source barcode order after AnnData make_index_unique",
       "joined_order_sha256": "bb50f8eae7929d767a929ba40dedb871667474ca2725cb54b9ec5b3946133337",
+      "preserved_source_accession_rows": 5905,
+      "preserved_source_accession_values": [
+        "datlinger17"
+      ],
       "source_rows": 5905
     },
     "source_manifest": {
@@ -1131,17 +1163,17 @@
   "real_dataset_id": "scperturb/datlinger17",
   "registry_counts": {
     "after": {
-      "artifacts": 28520,
+      "artifacts": 28523,
       "collections": 38
     },
     "before": {
-      "artifacts": 28520,
+      "artifacts": 28523,
       "collections": 38
     }
   },
   "replay_noop": false,
   "rollback": {
-    "preserved_predecessor_uid": "sitiyL4128YBC8BS0003",
+    "preserved_predecessor_uid": "sitiyL4128YBC8BS0004",
     "preserved_var_uid": "AYnivbGN3JCRzkN70001",
     "preserved_x_uid": "AVlPOzYBdcrplGXk0000"
   },
