@@ -1,0 +1,105 @@
+{
+  "format": "pert-gym.gse207360-source-manifest/v1",
+  "real_dataset_id": "geo/GSE207360",
+  "logical_family": "prism_collection/GSE207360",
+  "publication": {
+    "title": "Atypical vascularization in glioma: tumour cells generate vessel-like structures",
+    "pmid": "38570528",
+    "pmcid": "PMC10991552",
+    "doi": "10.1038/s41467-024-46966-2",
+    "bioc_sha256": "af9219fbcdb519b6162b75ddcfe0147b5a66b20a21ad1153b0dc6dd57688a4ef"
+  },
+  "geo": {
+    "series": {
+      "accession": "GSE207360",
+      "soft_sha256": "c4ca8edc39bbdcb0c270dcf5b4c170d0be1a3e8aff4c9d37febe38e14e5d1d76"
+    },
+    "scrna_samples": [
+      {
+        "accession": "GSM6284971",
+        "soft_sha256": "3f5970c35a57a3de01c537054c6459376ed99402fcd260389ceefb8d8e7e4165",
+        "source_sample_name": "WT",
+        "genotype": "WT",
+        "time_days_after_injection": 15,
+        "model": "human GSC83 cells injected into the brain of an NSG mouse"
+      },
+      {
+        "accession": "GSM6284972",
+        "soft_sha256": "1acd5a02bbee9d3c7b862c852883a8c32cd8a42fbca9d614bdc90f1ed49277d7",
+        "source_sample_name": "KO",
+        "genotype": "EGFR KO",
+        "time_days_after_injection": 90,
+        "model": "human GSC83 cells injected into the brain of an NSG mouse"
+      }
+    ]
+  },
+  "files": [
+    {
+      "name": "GSE207360_Human_Mouse_filtered.rds.gz",
+      "size": 4174159639,
+      "last_modified": "Fri, 01 Jul 2022 16:57:08 GMT",
+      "sha256": "b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+      "role": "canonical 12,487-row filtered Seurat source for the accepted scRNA member",
+      "disposition": "fully inspected; exact ordered source metadata join and count-axis/count-semantics checks"
+    },
+    {
+      "name": "GSE207360_Human_Mouse_unfiltered.rds.gz",
+      "size": 20283435,
+      "last_modified": "Fri, 01 Jul 2022 16:57:09 GMT",
+      "sha256": "fac0fe16110aa6c05ce92553ab7db3374c463bca7d0a63bb2e813ac3110633ab",
+      "role": "1,836-cell rejected/doublet/mouse diagnostic Seurat source",
+      "disposition": "fully inspected; not the accepted filtered OBS denominator"
+    },
+    {
+      "name": "GSE207360_Mm_R_NGS_WTA_v1.0.pkc.gz",
+      "size": 1927503,
+      "last_modified": "Thu, 29 Feb 2024 19:43:28 GMT",
+      "sha256": "40b6cbf2e9363d116ae7b9c8f000f32f0c39c935e5c38907414f946321a20de2",
+      "role": "GeoMx mouse WTA probe metadata",
+      "disposition": "inspected and classified not applicable to the single-cell OBS row axis"
+    },
+    {
+      "name": "GSE207360_Q3_5__Filtered.xlsx",
+      "size": 3947865,
+      "last_modified": "Wed, 28 Feb 2024 22:31:43 GMT",
+      "sha256": "f8310f9aa8bc3d21032a8bf592d374c5062f6c96da900ce3372a180a0fbf1b69",
+      "role": "GeoMx spatial ROI expression and annotation",
+      "disposition": "inspected and classified not applicable to the single-cell OBS row axis"
+    },
+    {
+      "name": "GSE207360_RAW.tar",
+      "size": 1138575360,
+      "last_modified": "Tue, 05 Mar 2024 05:26:28 GMT",
+      "role": "GEO raw archive with two scRNA Cell Ranger tarballs and GeoMx DCC files",
+      "disposition": "authoritative member inventory inspected through filelist.txt; raw scRNA matrices are upstream of the exact filtered Seurat object and spatial DCC rows do not join to this OBS"
+    },
+    {
+      "name": "filelist.txt",
+      "size": 3548,
+      "last_modified": "Tue, 05 Mar 2024 05:26:28 GMT",
+      "sha256": "0d5abc4c881b21f0d856ccb122d232fdf0c83fb00ba75796e763a8570b21d0e1",
+      "role": "authoritative RAW archive member inventory",
+      "disposition": "fully inspected"
+    }
+  ],
+  "analysis_code": {
+    "repository": "https://github.com/mera3113/Vasectasia",
+    "commit": "cea7f3d8a14a3dfa828b8329721dac53a56a4a12",
+    "files": {
+      "README.md": "a869f641bdf80785dcbedfed7ff7317dabc199239d924e842ef2763b37804513",
+      "00_Functions.R": "24ee1110900a22899345131fee73741b5585f64b59a8038a7b43ee908d047186",
+      "01_Data_processing.R": "5ac2889b345a23b0038ab6c18749ad0d8a06e605a91cb3e47b2c740a1fa7201e",
+      "02_Data_visualization.R": "e339124f9d405577d4d1897253342a2ecdfa2f5510c1c295f3667ec339124f9"
+    }
+  },
+  "denominator_accounting": {
+    "biological_datasets": 1,
+    "logical_families": 1,
+    "physical_members": 1,
+    "accepted_observations": 12487,
+    "accepted_features": 60736,
+    "source_filtered_observations": 12487,
+    "source_unfiltered_diagnostic_observations": 1836,
+    "geo_scrna_samples": 2
+  }
+}
