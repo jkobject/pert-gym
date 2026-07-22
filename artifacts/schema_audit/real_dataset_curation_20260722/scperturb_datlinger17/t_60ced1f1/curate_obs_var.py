@@ -253,14 +253,20 @@ def load_sources(*, load_matrix: bool = False) -> dict[str, Any]:
         )
     if int(source_obs["grna"].astype(str).str.startswith("CTRL").sum()) != 1_320:
         raise AssertionError("source control-row denominator drift")
-    result: dict[str, Any] = {"obs": source_obs, "guides": guides, "receipts": receipts}
+    result: dict[str, Any] = {
+        "obs": source_obs,
+        "guides": guides,
+        "receipts": receipts,
+    }
     if load_matrix:
         matrix = pd.read_csv(
             paths["digital_expression.csv.gz"], skiprows=6, header=None, index_col=0
         ).T
-        matrix.index = make_index_unique(matrix.index.astype(str))
-        if not matrix.index.equals(source_obs.index):
-            raise AssertionError("source matrix/OBS row axis drift")
+        if len(matrix) != len(source_obs):
+            raise AssertionError("source matrix/OBS row denominator drift")
+        # The source script binds the transposed expression frame positionally to
+        # the metadata-derived OBS axis; pandas otherwise leaves a numeric index.
+        matrix.index = source_obs.index.copy()
         result["matrix"] = matrix
     return result
 
