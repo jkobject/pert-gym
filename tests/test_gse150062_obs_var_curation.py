@@ -184,8 +184,54 @@ def test_curate_var_preserves_source_native_lh_and_refuses_fabricated_ensembl(
     assert verdict["stable_ensembl_id_features"] == 1
     assert verdict["source_native_lh_features"] == 1
     assert verdict["other_nonpassing_features"] == 1
-    assert verdict["var_ensembl_species_completed"] is False
-    assert verdict["verdict"] == "false"
+    assert verdict["feature_denominator"] == {
+        "standard_ensembl_gene": 1,
+        "source_native_custom_lh_not_applicable": 1,
+        "unresolved_applicable_unknown": 1,
+        "total": 3,
+    }
+    assert verdict["full_feature_ensembl_coverage"] is False
+    assert verdict["var_ensembl_species_completed"] is True
+    assert verdict["verdict"] == "accepted_partial_boundary"
+
+
+def test_structural_collection_reuse_distinguishes_curated_obs_from_anchor() -> None:
+    collections = {
+        "pert-gym/canonical/example": {
+            "uid": "collection-uid",
+            "target_matches": [
+                {
+                    "key": "prism_collection/GSE150062/obs.parquet",
+                    "uid": curation.EXPECTED_STRUCTURAL_COLLECTION_OBS_UID,
+                }
+            ],
+        }
+    }
+    verdict = curation.verify_structural_collection_reuse(
+        collections, curated_obs_uid="CkcQf1IYkOkbxKed0003"
+    )
+    assert verdict["structural_anchor_reused"] is True
+    assert verdict["curated_obs_is_collection_anchor"] is False
+    assert verdict["collection_mutation_in_scope"] is False
+    assert verdict["verdict"] == "accepted_structural_reuse"
+
+
+def test_structural_collection_reuse_rejects_false_current_anchor_claim() -> None:
+    collections = {
+        "pert-gym/canonical/example": {
+            "uid": "collection-uid",
+            "target_matches": [
+                {
+                    "key": "prism_collection/GSE150062/obs.parquet",
+                    "uid": "CkcQf1IYkOkbxKed0003",
+                }
+            ],
+        }
+    }
+    with pytest.raises(AssertionError, match="structural Collection anchor drift"):
+        curation.verify_structural_collection_reuse(
+            collections, curated_obs_uid="CkcQf1IYkOkbxKed0003"
+        )
 
 
 def test_var_verifier_rejects_x_axis_order_drift(
@@ -208,3 +254,13 @@ def test_processing_decision_notebook_executes_from_repo_root(
     for cell in notebook["cells"]:
         if cell["cell_type"] == "code":
             exec("".join(cell["source"]), namespace)
+
+
+def test_dashboard_reconciles_accepted_ledger_without_gse150062_credit() -> None:
+    repo = Path(__file__).parents[1]
+    todo = (repo / "TODO.md").read_text()
+    status = (repo / "docs/project/current-status.md").read_text()
+    for text in (todo, status):
+        assert "**9/70**" in text
+        assert "**8/70**" in text
+        assert "GSE150062 remains pending independent acceptance" in text
