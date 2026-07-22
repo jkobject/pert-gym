@@ -19,12 +19,42 @@ from tools.lamin_context import connect_pertdata
 
 DATASET_ID = "arc-vcc/2025"
 EXPECTED = (
-    ("arc_vcc/2025/test/chunk_0000/obs.parquet", "mGQwo6Kqs9hOdzLl0000", 100_000, "35UCTnLWm1E8AI8l0001"),
-    ("arc_vcc/2025/test/chunk_0001/obs.parquet", "jO1U5UVWKJ6gpS0H0000", 70_846, "jMYzsqDae2UOGaLS0001"),
-    ("arc_vcc/2025/train/chunk_0000/obs.parquet", "kcoW2Hh7iua05uC30000", 100_000, "BEdeusbAG0YhvWen0001"),
-    ("arc_vcc/2025/train/chunk_0001/obs.parquet", "GRgJf9TdsDZqOqGU0000", 100_000, "HWI9cAQzG4x0j3nn0001"),
-    ("arc_vcc/2025/train/chunk_0002/obs.parquet", "RJ3rYBXHNl8c4Lym0000", 21_273, "MvUVFg0pX9Z19W0A0001"),
-    ("arc_vcc/2025/validation/chunk_0000/obs.parquet", "Zk9b1xHT1OX9cUgZ0000", 98_927, "TPAZTaNsYFxzqLXE0001"),
+    (
+        "arc_vcc/2025/test/chunk_0000/obs.parquet",
+        "mGQwo6Kqs9hOdzLl0000",
+        100_000,
+        "35UCTnLWm1E8AI8l0001",
+    ),
+    (
+        "arc_vcc/2025/test/chunk_0001/obs.parquet",
+        "jO1U5UVWKJ6gpS0H0000",
+        70_846,
+        "jMYzsqDae2UOGaLS0001",
+    ),
+    (
+        "arc_vcc/2025/train/chunk_0000/obs.parquet",
+        "kcoW2Hh7iua05uC30000",
+        100_000,
+        "BEdeusbAG0YhvWen0001",
+    ),
+    (
+        "arc_vcc/2025/train/chunk_0001/obs.parquet",
+        "GRgJf9TdsDZqOqGU0000",
+        100_000,
+        "HWI9cAQzG4x0j3nn0001",
+    ),
+    (
+        "arc_vcc/2025/train/chunk_0002/obs.parquet",
+        "RJ3rYBXHNl8c4Lym0000",
+        21_273,
+        "MvUVFg0pX9Z19W0A0001",
+    ),
+    (
+        "arc_vcc/2025/validation/chunk_0000/obs.parquet",
+        "Zk9b1xHT1OX9cUgZ0000",
+        98_927,
+        "TPAZTaNsYFxzqLXE0001",
+    ),
 )
 FROZEN = {
     "artifacts/schema_audit/real_biological_dataset_crosswalk_120_families_20260716.json": "65388d3d575d99961e2f8fb62d35dd38366d50268068ff144445af6530b54a9b",
@@ -55,7 +85,9 @@ def resolve_artifact(ln: Any, value: Any):
 def values_for(artifact: Any) -> dict[str, Any]:
     values = artifact.features.get_values()
     if not isinstance(values, dict):
-        raise TypeError(f"feature values are not a dict for {artifact.uid}: {type(values)!r}")
+        raise TypeError(
+            f"feature values are not a dict for {artifact.uid}: {type(values)!r}"
+        )
     return values
 
 
@@ -68,7 +100,9 @@ def frame_summary(frame: Any) -> dict[str, Any]:
         substantive = text.notna() & ~text.str.strip().str.lower().isin(
             {"", "unknown", "missing", "nan", "none", "null"}
         )
-        examples = [str(value) for value in text[substantive].drop_duplicates().head(8).tolist()]
+        examples = [
+            str(value) for value in text[substantive].drop_duplicates().head(8).tolist()
+        ]
         columns[str(name)] = {
             "dtype": str(series.dtype),
             "nonmissing": nonmissing,
@@ -177,4 +211,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
