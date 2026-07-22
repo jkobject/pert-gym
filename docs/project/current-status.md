@@ -1,6 +1,6 @@
 # pert-gym current status
 
-_Last verified: 2026-07-21 21:48 CEST from `TODO.md`, the strict accepted
+_Last verified: 2026-07-22 12:17 CEST from `TODO.md`, the strict accepted
 product-delta snapshot, and the immutable reviewer handoffs named below. Pending
 work is not counted. `TODO.md` remains the operational dashboard._
 
@@ -12,10 +12,10 @@ work is not counted. `TODO.md` remains the operational dashboard._
 | New families registered on `jkobject` | **10/22** | 12 | `Artifact/rt5eRz8opcJXtybp0000` |
 | New families in the versioned Collection | **10/22** | 12 | `Collection/WBFxVN9Alr8zFt9T0000`; mismatch/drift 0 |
 | Existing recompactions | **9/32** | 23 | GSE216673 reviewer `t_dfcb1549`; exact generation-pinned manifest below |
-| Real datasets with accepted OBS recovery | **7/70** | 63 | latest: `scperturb/adamson16`; reviewer `t_b40b3f73`, mismatch 0 |
+| Real datasets with accepted OBS recovery | **8/70** | 62 | latest: `SchiebingerLander2019`; reviewer task `t_7cc8c0ac`, Artifact `trSdGyVkTDn5ZkaY0004`, zero-write receipt `ae61848d509f86d988596028aad81941eab1d2536ba8b0cc82029ed9266bc1fe`, mismatch 0 |
 | Frozen base-public OBS component×field candidates | **33/640** | 607 | SHA-256 `371b2b78c755c5cfdf8fa82d7826e5b2fdbfe48b67ca11e6d2d77ec7b6ff60c2` |
 | Accepted OBS assignments outside that universe | **6** | — | depmap_ccle/26q1; intentionally no `/640` denominator |
-| VAR dataset remediations | **5/70** | 65 | latest: `scperturb/adamson16`; SchiebingerLander2019, GSE207360, and LINCS remain pending |
+| VAR dataset remediations | **6/70** | 64 | latest: `SchiebingerLander2019`; reviewer task `t_7cc8c0ac`, Artifact `cw0Kr6j7qVyrDBP10003`, GSE207360 and LINCS remain pending |
 | External exclusions | **60/60** | 0 | complete |
 
 The canonical surface remains **120 logical families / 1,056 physical members /
@@ -38,11 +38,15 @@ This outcome advances only `existing_recompactions_accepted` **8→9/32**.
 
 ### OBS
 
-The strict OBS ledger is **7/70 datasets**, plus **33/640** assignments in the
+The strict OBS ledger is **8/70 datasets**, plus **33/640** assignments in the
 frozen base-public candidate universe and **6** depmap_ccle/26q1 assignments
 outside it. The outside-universe assignments do not change `/640`. The latest
-accepted dataset is `scperturb/adamson16`: reviewer `t_b40b3f73` accepted all
-three members / 86,111 observations at mismatch 0 with zero-write replay no-op.
+accepted dataset is `SchiebingerLander2019`: reviewer task `t_7cc8c0ac` accepted
+both source members / 327,494 observations in Artifact `trSdGyVkTDn5ZkaY0004`,
+with zero-write receipt `ae61848d509f86d988596028aad81941eab1d2536ba8b0cc82029ed9266bc1fe`,
+source-join mismatch 0 and replay no-op. The prior accepted
+dataset `scperturb/adamson16` covers all three members / 86,111 observations at
+mismatch 0 with zero-write replay no-op.
 
 GSE213921 is **frozen after rejection 3/3**. It must not be auto-rerun. A future
 attempt requires explicit operator authorization and a new bounded contract; it
@@ -50,13 +54,15 @@ does not currently advance any counter.
 
 ### VAR
 
-The strict VAR ledger is **5/70** after `scperturb/adamson16` advanced it **4→5**
-for all three members under reviewer `t_b40b3f73`'s mismatch-0, zero-write
-readback. GSE207360 product evidence is rejected at the top-level ledger as
+The strict VAR ledger is **6/70** after `SchiebingerLander2019` advanced it
+**5→6** for both source members under reviewer task `t_7cc8c0ac`'s mismatch-0,
+zero-write readback. Accepted VAR Artifact `cw0Kr6j7qVyrDBP10003` contains
+23,795 exact unique mappings and preserves 4,203 unresolved values. The prior
+accepted `scperturb/adamson16` advanced the ledger **4→5** for all three
+members. GSE207360 product evidence is rejected at the top-level ledger as
 `unit_mismatch`; LINCS phase1 evidence is rejected as
 `before_does_not_match_current`. Both remain pending conforming exact-once
-reconciliation. SchiebingerLander2019 is also explicitly pending and is not
-credited by this reconciliation.
+reconciliation.
 
 ## Count vocabulary
 
