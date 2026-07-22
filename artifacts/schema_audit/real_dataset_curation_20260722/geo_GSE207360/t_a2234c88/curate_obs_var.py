@@ -27,12 +27,12 @@ from tools.pert_gym_vm_runner import (
     preflight,
 )
 
-TASK_ID = "t_a2234c88"
+TASK_ID = "t_e8bc7216"
 REAL_DATASET_ID = "geo/GSE207360"
 PREFIX = "prism_collection/GSE207360"
 EXPECTED_N_OBS = 12_487
 EXPECTED_N_VARS = 60_736
-EXPECTED_OBS = {"uid": "KSAkP0NJF5P5g1mJ0002", "hash": "aBt3qphtkB7epOFzswv-VA"}
+EXPECTED_OBS = {"uid": "KSAkP0NJF5P5g1mJ0003", "hash": "rd4dfA8kgWwGpNums0Lniw"}
 EXPECTED_X = {"uid": "4IOEQEw4ylx0Zx4c0000", "hash": "rLTZFYwmtPyrsHhVQ6_kp-"}
 EXPECTED_VAR = {"uid": "U8OeHI58YG9Y9Nsb0002", "hash": "wv2BwlQShhowaM7AYyu4uQ"}
 SOURCE_ROOT = Path("/var/tmp/pert-gym-gse207360")
@@ -326,10 +326,6 @@ def exact_source_join(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataF
     }
 
 
-def mixed_missing(index: pd.Index, control: pd.Series) -> tuple[pd.Series, np.ndarray]:
-    return missing_series(index), np.where(control, "not_applicable", "unknown")
-
-
 def curate_obs(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, Any]]:
     original = obs.copy(deep=True)
     joined, join_receipt = exact_source_join(obs, source)
@@ -337,6 +333,10 @@ def curate_obs(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataFrame, d
     if set(sample_name.unique()) != set(SAMPLE_ACCESSION):
         raise AssertionError("source sample-name vocabulary drift")
     control = sample_name.eq("WT").astype("boolean")
+    human = joined["frac_hg_genes"].astype("Float64").gt(0.5).astype("boolean")
+    mouse = ~human
+    ko = ~control
+    direct_ko = human & ko
     sample = sample_name.map(SAMPLE_ACCESSION).astype("string")
     timepoint = sample_name.map(SAMPLE_TIME_MINUTES).astype("Float64")
     curated = obs.copy(deep=True)
@@ -351,35 +351,58 @@ def curate_obs(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataFrame, d
     set_field(curated, "sample", sample, "known", "exact GEO sample_name join: WT=GSM6284971, KO=GSM6284972")
     set_field(curated, "cell_id", original["original_obs_index"].astype("string"), "known", "filtered Seurat row name")
     set_field(curated, "batch", sample, "known", "GEO biological sample accession")
-    set_field(curated, "cell_type", joined["Cell_type1"].astype("string"), "known", "filtered Seurat Cell_type1 annotation")
-    set_field(curated, "cell_line", missing_series(curated.index), "not_applicable", "observed cells are murine tumour-microenvironment cells; human GSC83 is model context")
+    cell_type = joined["Cell_type1"].astype("string").mask(human, "glioblastoma stem cell")
+    set_field(curated, "cell_type", cell_type, "known", "row-level hg19/mm10 species classification; raw Cell_type1 retained separately")
+    cell_line = pd.Series(np.where(human, "GSC83", pd.NA), index=curated.index, dtype="string")
+    set_field(curated, "cell_line", cell_line, np.where(human, "known", "not_applicable"), "human GSC83 tumour cells versus murine host stroma")
     set_field(curated, "disease", "glioblastoma xenograft model", "known", "publication and GEO experimental model")
     set_field(curated, "tissue_type", "brain xenograft tumour", "known", "GEO treatment and dissociation metadata")
-    set_field(curated, "organism", "Mus musculus", "known", "filtered Seurat mouse-cell lineage annotations and hg19/mm10 separation")
+    organism = pd.Series(np.where(human, "Homo sapiens", "Mus musculus"), index=curated.index, dtype="string")
+    set_field(curated, "organism", organism, "known", "filtered Seurat frac_hg_genes > 0.5 row-level species classification")
     set_field(curated, "sequencer", "Illumina NovaSeq 6000", "known", "GEO platform GPL24676")
     set_field(curated, "technology", "10x Genomics Chromium Single Cell 3' v3", "known", "GEO library protocol")
     set_field(curated, "assay", "10x 3' Gene Expression v3", "known", "GEO library protocol")
     set_field(curated, "modality", "scRNA-seq", "known", "GEO experiment type")
     set_field(curated, "is_bulk", False, "known", "single-cell source")
     set_field(curated, "is_pseudobulk", False, "known", "single-cell source")
-    set_field(curated, "perturbation", pd.Series(np.where(control, "control", "EGFR"), index=curated.index, dtype="string"), "known", "GEO genotype joined by sample.name")
-    set_field(curated, "perturbation_type", pd.Series(np.where(control, "none", "CRISPRko"), index=curated.index, dtype="string"), "known", "publication CRISPR/Cas9 EGFR/EGFRvIII knockout")
-    set_field(curated, "perturbation_technology", pd.Series(np.where(control, pd.NA, "CRISPR/Cas9 knockout"), index=curated.index, dtype="string"), np.where(control, "not_applicable", "known"), "publication Methods")
+    perturbation = pd.Series(
+        np.select(
+            [direct_ko, human & control, mouse & ko],
+            ["EGFR", "control", "EGFR-knockout tumour exposure"],
+            default="control tumour exposure",
+        ),
+        index=curated.index,
+        dtype="string",
+    )
+    perturbation_type = pd.Series(
+        np.select([direct_ko, human & control], ["CRISPRko", "none"], default="exposure"),
+        index=curated.index,
+        dtype="string",
+    )
+    set_field(curated, "perturbation", perturbation, "known", "direct human tumour edit or explicit murine host exposure context")
+    set_field(curated, "perturbation_type", perturbation_type, "known", "row-level species plus GEO tumour genotype")
+    direct_technology = pd.Series(np.where(direct_ko, "CRISPR/Cas9 knockout", pd.NA), index=curated.index, dtype="string")
+    set_field(curated, "perturbation_technology", direct_technology, np.where(direct_ko, "known", "not_applicable"), "publication Methods; direct edit applies only to human KO tumour cells")
     library = "Transomic EGFR CRISPR guide set TEDH-1024003/TEDH-1024000/TEDH-1024001/TEDH-1055978"
-    set_field(curated, "perturbation_library", pd.Series(np.where(control, pd.NA, library), index=curated.index, dtype="string"), np.where(control, "not_applicable", "known"), "publication Methods; sample does not identify one guide")
-    guide_id, guide_state = mixed_missing(curated.index, control)
-    set_field(curated, "guide_id", guide_id, guide_state, "WT has no guide; KO clone-to-guide identity absent from all sources")
-    guide_sequence, sequence_state = mixed_missing(curated.index, control)
-    set_field(curated, "guide_sequence", guide_sequence, sequence_state, "WT has no guide; guide sequences absent from GEO, paper, supplement and analysis code")
-    set_field(curated, "perturbation_target", pd.Series(np.where(control, pd.NA, "EGFR"), index=curated.index, dtype="string"), np.where(control, "not_applicable", "known"), "GEO genotype and publication")
-    target_id, target_state = mixed_missing(curated.index, control)
-    set_field(curated, "perturbation_target_id", target_id, target_state, "WT has no target; no release-pinned target identifier in inspected sources")
+    direct_library = pd.Series(np.where(direct_ko, library, pd.NA), index=curated.index, dtype="string")
+    set_field(curated, "perturbation_library", direct_library, np.where(direct_ko, "known", "not_applicable"), "publication Methods; applies only to directly edited human KO tumour cells")
+    guide_id = missing_series(curated.index)
+    set_field(curated, "guide_id", guide_id, np.where(direct_ko, "unknown", "not_applicable"), "direct KO clone-to-guide identity absent; no guide applies to control or host cells")
+    guide_sequence = missing_series(curated.index)
+    set_field(curated, "guide_sequence", guide_sequence, np.where(direct_ko, "unknown", "not_applicable"), "guide sequences absent; no guide applies to control or host cells")
+    direct_target = pd.Series(np.where(direct_ko, "EGFR", pd.NA), index=curated.index, dtype="string")
+    set_field(curated, "perturbation_target", direct_target, np.where(direct_ko, "known", "not_applicable"), "direct target applies only to edited human tumour cells")
+    target_id = missing_series(curated.index)
+    set_field(curated, "perturbation_target_id", target_id, np.where(direct_ko, "unknown", "not_applicable"), "no release-pinned identifier for direct KO; no target applies to control or host cells")
     set_field(curated, "is_control", control, "known", "GEO intact-EGFR WT versus depleted-EGFR KO genotype")
     set_field(curated, "timepoint", timepoint, "known", "GEO time after intracranial injection: WT day 15, KO day 90; converted to minutes")
     set_field(curated, "is_baseline", control, "known", "isogenic intact-EGFR WT reference group")
     set_field(curated, "n_counts", joined["nCount_RNA"].astype("Float64"), "known", "filtered Seurat nCount_RNA")
     set_field(curated, "n_genes", joined["nFeature_RNA"].astype("Int64"), "known", "filtered Seurat nFeature_RNA")
-    set_field(curated, "pct_mito", (joined["percent.mt_mouse"].astype("Float64") * 100.0), "known", "filtered Seurat mouse mitochondrial fraction converted to percent")
+    pct_mito = joined["percent.mt_mouse"].astype("Float64").mask(
+        human, joined["percent.mt"].astype("Float64")
+    ) * 100.0
+    set_field(curated, "pct_mito", pct_mito, "known", "species-appropriate filtered Seurat mitochondrial fraction converted to percent")
     set_field(curated, "is_low_quality", False, "known", "published filtered Seurat object after doublet/QC filtering")
     set_field(curated, "source", "GEO", "known", "GEO series and complete source manifest")
     set_field(curated, "source_accession", "GSE207360", "known", "GEO series accession")
@@ -395,6 +418,12 @@ def curate_obs(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataFrame, d
     curated["source_geo_sample"] = sample
     curated["source_model_human_cell_line"] = "GSC83"
     curated["source_model_mouse_strain"] = "NSG"
+    curated["source_model_tumour_genotype"] = sample_name.map({"WT": "EGFR-intact", "KO": "EGFR-knockout"}).astype("string")
+    curated["source_observed_cell_relationship"] = pd.Series(
+        np.where(human, "human xenograft tumour cell", "murine host stromal cell"),
+        index=curated.index,
+        dtype="string",
+    )
     curated["source_time_days_after_injection"] = sample_name.map({"WT": 15.0, "KO": 90.0}).astype("Float64")
     curated["source_filtered_rds_sha256"] = SOURCE_SPEC["sha256"]
     curated["source_analysis_code_commit"] = "cea7f3d8a14a3dfa828b8329721dac53a56a4a12"
@@ -407,6 +436,10 @@ def curate_obs(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataFrame, d
         **join_receipt,
         "wt_rows": int(control.sum()),
         "ko_rows": int((~control).sum()),
+        "human_dominant_rows": int(human.sum()),
+        "mouse_dominant_rows": int(mouse.sum()),
+        "direct_human_egfr_ko_rows": int(direct_ko.sum()),
+        "mouse_egfr_ko_exposure_rows": int((mouse & ko).sum()),
         "geo_samples": {str(key): int(value) for key, value in sample.value_counts().items()},
         "timepoint_minutes": {str(key): int(value) for key, value in timepoint.value_counts().items()},
         "cell_type_counts": {str(key): int(value) for key, value in curated["cell_type"].value_counts().items()},
@@ -511,9 +544,23 @@ def verify_current(ln: Any, source: pd.DataFrame, source_summary: dict[str, Any]
     if len(obs) != EXPECTED_N_OBS:
         raise AssertionError("OBS denominator drift")
     expected_obs, join_receipt = curate_obs(obs, source)
+    observed_strata = {
+        "human_dominant_rows": join_receipt["human_dominant_rows"],
+        "mouse_dominant_rows": join_receipt["mouse_dominant_rows"],
+        "source_neuron_rows": join_receipt["cell_type_counts"].get("Neuron", 0),
+    }
+    expected_strata = {
+        "human_dominant_rows": 10_984,
+        "mouse_dominant_rows": 1_503,
+        "source_neuron_rows": 10_594,
+    }
+    if observed_strata != expected_strata:
+        raise AssertionError(f"mixed-species source strata drift: {observed_strata}")
     var = var_artifact.load()
     var_verdict = verify_var(var)
-    curated = str(obs_artifact.description).startswith(f"{TASK_ID}: source-exhaustive GSE207360 OBS") and obs_matches_expected_semantics(obs, expected_obs)
+    curated = str(obs_artifact.description).startswith(
+        f"{TASK_ID}: source-exhaustive mixed-species GSE207360 OBS"
+    ) and obs_matches_expected_semantics(obs, expected_obs)
     return {
         "obs_before": artifact_identity(obs_artifact),
         "obs_history": [artifact_identity(item) for item in history],
@@ -565,7 +612,7 @@ def publish(ln: Any, result: dict[str, Any], helper_sha256: str) -> list[Any]:
         path,
         key=f"{PREFIX}/obs.parquet",
         revises=result["obs_artifact"],
-        description=f"{TASK_ID}: source-exhaustive GSE207360 OBS; exact 12,487-cell filtered-Seurat join, six murine cell types, WT/KO GSM and day-15/day-90 model semantics, complete 48-field dispositions; source sha256 {SOURCE_SPEC['sha256']}",
+        description=f"{TASK_ID}: source-exhaustive mixed-species GSE207360 OBS; exact 12,487-cell filtered-Seurat join, per-row hg19/mm10 organism, GSC83 tumour versus murine host semantics, species-appropriate QC and direct-versus-exposure perturbation semantics; source sha256 {SOURCE_SPEC['sha256']}",
     ).save()
     obs.features.set_values({"X": result["x_artifact"]})
     try:

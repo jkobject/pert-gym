@@ -32,17 +32,17 @@ def source_frame() -> pd.DataFrame:
             "orig.ident": ["SeuratProject"] * 4,
             "nCount_RNA": [1000, 2000, 3000, 4000],
             "nFeature_RNA": [300, 400, 500, 600],
-            "Sample": ["KO", "WT", "KO", "WT"],
+            "Sample": ["KO", "WT", "WT", "KO"],
             "Barcode": ["a", "b", "c", "d"],
-            "hg19": [0, 0, 0, 0],
-            "mm10": [1000, 2000, 3000, 4000],
-            "frac_hg_genes": [0.0, 0.0, 0.0, 0.0],
+            "hg19": [900, 0, 2100, 800],
+            "mm10": [100, 2000, 900, 3200],
+            "frac_hg_genes": [0.9, 0.0, 0.7, 0.2],
             "hdbscan_cluster": [1, 2, 3, 4],
-            "percent.mt": [0.0, 0.0, 0.0, 0.0],
+            "percent.mt": [0.05, 0.06, 0.07, 0.08],
             "percent.mt_mouse": [0.01, 0.02, 0.03, 0.04],
             "RNA_snn_res.1": [0, 1, 2, 3],
             "seurat_clusters": [0, 1, 2, 3],
-            "sample.name": ["KO", "WT", "KO", "WT"],
+            "sample.name": ["KO", "WT", "WT", "KO"],
             "Cell_type1": ["Neuron", "Macrophage", "Endothelial", "Pericytes"],
         },
         index=index,
@@ -137,24 +137,45 @@ def test_curate_obs_materializes_source_exhaustive_semantics() -> None:
     assert receipt["wt_rows"] == 2
     assert receipt["ko_rows"] == 2
 
-    assert curated["sample"].tolist() == ["GSM6284972", "GSM6284971", "GSM6284972", "GSM6284971"]
-    assert curated["timepoint"].tolist() == [129_600.0, 21_600.0, 129_600.0, 21_600.0]
-    assert curated["perturbation"].tolist() == ["EGFR", "control", "EGFR", "control"]
-    assert curated["perturbation_type"].tolist() == ["CRISPRko", "none", "CRISPRko", "none"]
-    assert curated["is_control"].tolist() == [False, True, False, True]
-    assert curated["is_baseline"].tolist() == [False, True, False, True]
-    assert curated["cell_type"].tolist() == source["Cell_type1"].tolist()
-    assert curated["organism"].eq("Mus musculus").all()
+    assert curated["sample"].tolist() == ["GSM6284972", "GSM6284971", "GSM6284971", "GSM6284972"]
+    assert curated["timepoint"].tolist() == [129_600.0, 21_600.0, 21_600.0, 129_600.0]
+    assert curated["perturbation"].tolist() == [
+        "EGFR",
+        "control tumour exposure",
+        "control",
+        "EGFR-knockout tumour exposure",
+    ]
+    assert curated["perturbation_type"].tolist() == [
+        "CRISPRko",
+        "exposure",
+        "none",
+        "exposure",
+    ]
+    assert curated["is_control"].tolist() == [False, True, True, False]
+    assert curated["is_baseline"].tolist() == [False, True, True, False]
+    assert curated["cell_type"].tolist() == [
+        "glioblastoma stem cell",
+        "Macrophage",
+        "glioblastoma stem cell",
+        "Pericytes",
+    ]
+    assert curated["organism"].tolist() == [
+        "Homo sapiens",
+        "Mus musculus",
+        "Homo sapiens",
+        "Mus musculus",
+    ]
     assert curated["source_accession"].eq("GSE207360").all()
     assert curated["x_semantics"].eq("raw_counts").all()
-    assert curated["pct_mito"].tolist() == [1.0, 2.0, 3.0, 4.0]
+    assert curated["pct_mito"].tolist() == pytest.approx([5.0, 2.0, 7.0, 4.0])
     assert curated["source_original_perturbation"].tolist() == obs["perturbation"].tolist()
     assert curated["source_original_organism"].eq("mouse").all()
     assert curated["source_seurat_Sample"].tolist() == source["Sample"].tolist()
+    assert curated["source_seurat_Cell_type1"].tolist() == source["Cell_type1"].tolist()
 
-    ko = ~curated["is_control"].astype(bool)
-    assert curated.loc[ko, "guide_id_state"].eq("unknown").all()
-    assert curated.loc[~ko, "guide_id_state"].eq("not_applicable").all()
+    direct_ko = source["frac_hg_genes"].gt(0.5) & source["sample.name"].eq("KO")
+    assert curated.loc[direct_ko, "guide_id_state"].eq("unknown").all()
+    assert curated.loc[~direct_ko, "guide_id_state"].eq("not_applicable").all()
     assert curated["ethnicity_state"].eq("not_applicable").all()
     assert curated["donor_id_state"].eq("unknown").all()
 
@@ -164,6 +185,47 @@ def test_curate_obs_materializes_source_exhaustive_semantics() -> None:
     assert dispositions["guide_id"]["disposition"] == "mixed_unknown_not_applicable"
     assert dispositions["ethnicity"]["disposition"] == "not_applicable"
     assert dispositions["donor_id"]["disposition"] == "unknown"
+
+
+def test_curate_obs_assigns_cell_identity_from_row_level_species_evidence() -> None:
+    source = source_frame()
+    curated, receipt = MODULE.curate_obs(predecessor_frame(source), source)
+
+    human = source["frac_hg_genes"].gt(0.5)
+    mouse = ~human
+    assert curated.loc[human, "organism"].eq("Homo sapiens").all()
+    assert curated.loc[human, "cell_line"].eq("GSC83").all()
+    assert curated.loc[human, "cell_type"].eq("glioblastoma stem cell").all()
+    assert curated.loc[mouse, "organism"].eq("Mus musculus").all()
+    assert curated.loc[mouse, "cell_line"].isna().all()
+    assert curated.loc[mouse, "cell_line_state"].eq("not_applicable").all()
+    assert receipt["human_dominant_rows"] == 2
+    assert receipt["mouse_dominant_rows"] == 2
+
+
+def test_curate_obs_reserves_direct_egfr_edit_for_human_ko_cells() -> None:
+    source = source_frame()
+    curated, _ = MODULE.curate_obs(predecessor_frame(source), source)
+
+    human_ko = source["frac_hg_genes"].gt(0.5) & source["sample.name"].eq("KO")
+    mouse_ko = source["frac_hg_genes"].le(0.5) & source["sample.name"].eq("KO")
+    assert curated.loc[human_ko, "perturbation"].eq("EGFR").all()
+    assert curated.loc[human_ko, "perturbation_type"].eq("CRISPRko").all()
+    assert curated.loc[human_ko, "perturbation_target"].eq("EGFR").all()
+    assert curated.loc[mouse_ko, "perturbation"].eq("EGFR-knockout tumour exposure").all()
+    assert curated.loc[mouse_ko, "perturbation_type"].eq("exposure").all()
+    assert curated.loc[mouse_ko, "perturbation_target"].isna().all()
+    assert curated.loc[mouse_ko, "perturbation_target_state"].eq("not_applicable").all()
+
+
+def test_curate_obs_uses_species_appropriate_mitochondrial_qc() -> None:
+    source = source_frame()
+    curated, _ = MODULE.curate_obs(predecessor_frame(source), source)
+
+    human = source["frac_hg_genes"].gt(0.5)
+    mouse = ~human
+    assert curated.loc[human, "pct_mito"].tolist() == pytest.approx([5.0, 7.0])
+    assert curated.loc[mouse, "pct_mito"].tolist() == pytest.approx([2.0, 4.0])
 
 
 def test_curate_obs_is_idempotent() -> None:
