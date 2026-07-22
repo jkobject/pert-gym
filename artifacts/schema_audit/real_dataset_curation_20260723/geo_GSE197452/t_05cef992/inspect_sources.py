@@ -286,7 +286,10 @@ def feature_assignments(
         "guide_top_tie_rows": int((frame["source_guide_top_ties"] > 1).sum()),
         "hash_top_non_null": int(frame["source_hash_top"].notna().sum()),
         "hash_top_tie_rows": int((frame["source_hash_top_ties"] > 1).sum()),
-        "hash_top_counts": frame["source_hash_top"].value_counts(dropna=False).to_dict(),
+        "hash_top_counts": {
+            ("<NA>" if pd.isna(key) else str(key)): int(value)
+            for key, value in frame["source_hash_top"].value_counts(dropna=False).items()
+        },
     }
 
 
