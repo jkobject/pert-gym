@@ -136,6 +136,12 @@ def test_curate_obs_materializes_source_exhaustive_semantics() -> None:
     assert receipt["join_mismatch_count"] == 0
     assert receipt["wt_rows"] == 2
     assert receipt["ko_rows"] == 2
+    assert receipt["source_cell_type_counts"] == {
+        "Neuron": 1,
+        "Macrophage": 1,
+        "Endothelial": 1,
+        "Pericytes": 1,
+    }
 
     assert curated["sample"].tolist() == ["GSM6284972", "GSM6284971", "GSM6284971", "GSM6284972"]
     assert curated["timepoint"].tolist() == [129_600.0, 21_600.0, 21_600.0, 129_600.0]

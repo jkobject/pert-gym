@@ -322,7 +322,9 @@ def exact_source_join(obs: pd.DataFrame, source: pd.DataFrame) -> tuple[pd.DataF
         "ordered_source_axis_sha256": ordered_sha256(keys),
         "join_semantics": "exact filtered Seurat row names to original_obs_index",
         "sample_counts": {str(key): int(value) for key, value in joined["sample.name"].value_counts().items()},
-        "cell_type_counts": {str(key): int(value) for key, value in joined["Cell_type1"].value_counts().items()},
+        "source_cell_type_counts": {
+            str(key): int(value) for key, value in joined["Cell_type1"].value_counts().items()
+        },
     }
 
 
@@ -547,7 +549,7 @@ def verify_current(ln: Any, source: pd.DataFrame, source_summary: dict[str, Any]
     observed_strata = {
         "human_dominant_rows": join_receipt["human_dominant_rows"],
         "mouse_dominant_rows": join_receipt["mouse_dominant_rows"],
-        "source_neuron_rows": join_receipt["cell_type_counts"].get("Neuron", 0),
+        "source_neuron_rows": join_receipt["source_cell_type_counts"].get("Neuron", 0),
     }
     expected_strata = {
         "human_dominant_rows": 10_984,
