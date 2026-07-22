@@ -23,6 +23,7 @@ TASK_ID = "t_79ff033e"
 PREFIX = "prism_collection/GSE132080"
 EXPECTED_N_OBS = 23_608
 EXPECTED_N_VARS = 33_694
+EXPECTED_SOURCE_N_OBS = 23_633
 EXPECTED = {
     "obs": {"uid": "lhR6Ny3n8QcVeItH0002", "key": f"{PREFIX}/obs.parquet"},
     "x": {"uid": "NEbod0p6ws0H5wug0000", "key": f"{PREFIX}/X.h5ad"},
@@ -223,9 +224,16 @@ def main() -> None:
     if len(obs) != EXPECTED_N_OBS or len(var) != EXPECTED_N_VARS:
         raise AssertionError("accepted triplet denominator drift")
     matrix_header = read_matrix_header(matrix_path)
-    if sorted((matrix_header["rows"], matrix_header["columns"])) != sorted((EXPECTED_N_OBS, EXPECTED_N_VARS)):
+    if (matrix_header["rows"], matrix_header["columns"]) != (
+        EXPECTED_N_VARS,
+        EXPECTED_SOURCE_N_OBS,
+    ):
         raise AssertionError(f"source matrix shape drift: {matrix_header}")
-    if len(barcodes) != EXPECTED_N_OBS or len(genes) != EXPECTED_N_VARS or len(identities) != EXPECTED_N_OBS:
+    if (
+        len(barcodes) != EXPECTED_SOURCE_N_OBS
+        or len(genes) != EXPECTED_N_VARS
+        or len(identities) != EXPECTED_N_OBS
+    ):
         raise AssertionError("source sidecar denominator drift")
 
     stable = var["stable_feature_id"].astype("string") if "stable_feature_id" in var else pd.Series([], dtype="string")
@@ -268,6 +276,15 @@ def main() -> None:
             "identities_index_unique": bool(identities.index.is_unique),
             "barcodes_equal_identity_index": barcodes.equals(identities.index.astype(str)),
             "barcodes_set_equal_identity_index": set(barcodes) == set(identities.index.astype(str)),
+            "barcodes_without_identity_count": len(
+                barcodes.difference(identities.index.astype(str))
+            ),
+            "barcodes_without_identity_sample": barcodes.difference(
+                identities.index.astype(str)
+            )[:50].tolist(),
+            "identity_without_barcode_count": len(
+                identities.index.astype(str).difference(barcodes)
+            ),
             "genes_index0_unique": bool(genes.iloc[:, 0].is_unique),
             "genes_index1_unique": bool(genes.iloc[:, -1].is_unique),
         },
