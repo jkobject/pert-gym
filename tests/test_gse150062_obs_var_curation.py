@@ -192,7 +192,38 @@ def test_curate_var_preserves_source_native_lh_and_refuses_fabricated_ensembl(
     }
     assert verdict["full_feature_ensembl_coverage"] is False
     assert verdict["var_ensembl_species_completed"] is True
+    assert verdict["var_feature_identity_species_disposition_completed"] is True
+    assert verdict["var_ensembl_species_completion_basis"] == (
+        "source_bound_disposition_complete_not_full_coverage"
+    )
     assert verdict["verdict"] == "accepted_partial_boundary"
+
+
+@pytest.mark.parametrize("tampering", ["different_ensg", "moved_lh"])
+def test_var_verifier_rejects_row_level_source_identity_tampering(
+    monkeypatch: pytest.MonkeyPatch, tampering: str
+) -> None:
+    var, source = _var_fixture()
+    monkeypatch.setattr(curation, "EXPECTED_N_VARS", 3)
+    monkeypatch.setattr(curation, "EXPECTED_STABLE_ENSG_COUNT", 1)
+    monkeypatch.setattr(curation, "EXPECTED_SOURCE_LH_COUNT", 1)
+    curated = curation.curate_var(var, source)
+    if tampering == "different_ensg":
+        curated.loc["GENE1", "stable_feature_id"] = "ENSG00000000009"
+        curated.loc["GENE1", "ensembl_gene_id"] = "ENSG00000000009"
+    else:
+        curated.loc["LH00001", "source_native_lh_id"] = pd.NA
+        curated.loc["AMBIG", "source_native_lh_id"] = "LH00001"
+        curated.loc["LH00001", "feature_contract_class"] = (
+            "unresolved_source_gene_feature"
+        )
+        curated.loc["AMBIG", "feature_contract_class"] = (
+            "source_native_custom_lh_feature"
+        )
+        curated.loc["LH00001", "ensembl_id_state"] = "unknown"
+        curated.loc["AMBIG", "ensembl_id_state"] = "not_applicable"
+    with pytest.raises(AssertionError, match="source-bound row mismatch"):
+        curation.verify_var(curated, source, curated.index)
 
 
 def test_structural_collection_reuse_distinguishes_curated_obs_from_anchor() -> None:

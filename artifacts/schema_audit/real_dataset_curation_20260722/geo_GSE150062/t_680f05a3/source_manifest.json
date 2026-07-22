@@ -63,12 +63,12 @@
     "timepoint": "D8 is materialized as 11520 minutes from initiation of neural induction.",
     "cell_state": "RNA velocity trajectory is preserved as trajectory_id; it is not relabeled as a cell ontology identity.",
     "var_authority": "The author-commit unified_metadata feature_id axis is exact and source-native after the documented Cell Ranger underscore-to-hyphen sanitization affecting 29 IDs. Its gene_id is used only when unambiguous; no Ensembl ID is fabricated for custom LH features.",
-    "strict_var_boundary": "16401 source-native LH gene IDs and additional ambiguous/noncanonical gene IDs prevent the literal all-features Ensembl criterion from passing; organism and exact source feature provenance remain complete."
+    "strict_var_boundary": "The canonical VAR remediation metric is complete only as a source-bound identity/species/disposition contract: 44025 standard genes have exact source-backed ENSG IDs, 16401 source-native custom LH features are exact-ENSG not_applicable, and 71 unresolved applicable features remain unknown. Full-feature Ensembl coverage is separately false; no identifier is fabricated."
   },
   "forbidden_inferences": [
     "Do not infer perturbation target from guide-string parsing when Table S5 supplies it.",
     "Do not coerce source-native LH identifiers to Ensembl IDs.",
     "Do not treat RNA-velocity trajectory categories as measured pseudotime.",
-    "Do not claim VAR_ENSEMBL_SPECIES_COMPLETED for features without a unique source-backed Ensembl stable gene ID."
+    "Do not claim full-feature Ensembl coverage for features without a unique source-backed Ensembl stable gene ID; VAR_ENSEMBL_SPECIES_COMPLETED denotes exact source identity, human species, and an explicit known/not_applicable/unknown Ensembl disposition for every row."
   ]
 }

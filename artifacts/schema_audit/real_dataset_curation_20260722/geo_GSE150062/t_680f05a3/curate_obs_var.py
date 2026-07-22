@@ -732,6 +732,38 @@ def verify_var(
         raise AssertionError("VAR/X axis drift")
     if not var.index.astype(str).equals(source["genes"].astype(str)):
         raise AssertionError("VAR/source axis drift")
+    source_bound_columns = [
+        "stable_feature_id",
+        "ensembl_gene_id",
+        "source_reference_gene_ids",
+        "source_reference_gene_id_count",
+        "source_native_gene_id",
+        "source_native_lh_id",
+        "source_gene_name",
+        "source_display_name",
+        "stable_feature_id_namespace",
+        "stable_feature_id_source",
+        "stable_feature_id_mapping_status",
+        "stable_feature_id_candidate_count",
+        "feature_contract_class",
+        "ensembl_id_state",
+        "organism",
+        "feature_index",
+        "feature_index_namespace",
+        "feature_index_source",
+    ]
+    missing_columns = sorted(set(source_bound_columns) - set(var.columns))
+    if missing_columns:
+        raise AssertionError(f"VAR source-bound columns missing: {missing_columns}")
+    expected_var = curate_var(var, source)
+    try:
+        assert_frame_equal(
+            var[source_bound_columns],
+            expected_var[source_bound_columns],
+            check_categorical=True,
+        )
+    except AssertionError as error:
+        raise AssertionError(f"VAR source-bound row mismatch: {error}") from error
     if (
         not var["feature_index"]
         .astype("string")
@@ -788,6 +820,10 @@ def verify_var(
         "axis_order_sha256": ordered_sha256(var.index),
         "full_feature_ensembl_coverage": stable_count == len(var),
         "var_ensembl_species_completed": disposition_complete,
+        "var_feature_identity_species_disposition_completed": disposition_complete,
+        "var_ensembl_species_completion_basis": (
+            "source_bound_disposition_complete_not_full_coverage"
+        ),
         "verdict": "accepted_partial_boundary",
         "reason": "44025 standard genes have exact source-backed ENSG IDs; 16401 source-native custom LH features are explicitly not applicable to exact ENSG assignment; 71 unresolved applicable features remain unknown; no identifier was fabricated",
     }
