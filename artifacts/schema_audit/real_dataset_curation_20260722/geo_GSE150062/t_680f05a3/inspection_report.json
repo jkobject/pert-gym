@@ -1,0 +1,1371 @@
+{
+  "axis_relations": {
+    "obs_index": {
+      "ordered_equals_table_s5": true,
+      "set_equals_table_s5": true,
+      "sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "unique": true
+    },
+    "original_obs_index": {
+      "ordered_equals_table_s5": true,
+      "set_equals_table_s5": true,
+      "sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "unique": true
+    }
+  },
+  "capacity": {
+    "available_memory_bytes": 32868425728,
+    "free_disk_bytes": 284659015680
+  },
+  "collection": {
+    "pert-gym/additions/20260621": {
+      "hash": "GXnxligyjv_jQmZGzENIiA",
+      "member_count": 996,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "kYkBznC2fuGmbUbg0000"
+    },
+    "pert-gym/additions/20260624-tiny-tail-minimal": {
+      "hash": "vdFZS7um8nZZaAvy2c3TPA",
+      "member_count": 990,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "4k78ixIrCnBndSWK0000"
+    },
+    "pert-gym/additions/20260717-c-elegans-pilot": {
+      "hash": "ZN8aqwyEXFpyKWcIkCIhgg",
+      "member_count": 991,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "uA0lyIvPz0wvwkho0000"
+    },
+    "pert-gym/additions/20260718-odd001099-gse138002": {
+      "hash": "g7z8r2TTwtnj192C2Ra7tA",
+      "member_count": 1004,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "M3RK4i6Alb6IY3MW0000"
+    },
+    "pert-gym/additions/20260718-odd001111-gse130238": {
+      "hash": "qPVTqqfNQjYFLGeIiZGiEw",
+      "member_count": 1003,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "TwC9RNVYX56GXQrQ0000"
+    },
+    "pert-gym/additions/20260718-odd001154-gse194214": {
+      "hash": "hxBAjNYvEwzRQjXW9nKpLw",
+      "member_count": 992,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "Kx7T3b75KmqnDhmv0000"
+    },
+    "pert-gym/additions/20260718-odd001155-gse196799": {
+      "hash": "u2ombBSmaDVI3OsTMBh8Kg",
+      "member_count": 1002,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "nhx8lM9cElyfHDNq0000"
+    },
+    "pert-gym/additions/20260718-temporal-v4-098-multiciliated-differentiation": {
+      "hash": "PazpnU8IsyK0lliETQ4DSA",
+      "member_count": 1012,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "t5vYC6ws9hUoxiCw0000"
+    },
+    "pert-gym/additions/20260719-temporal-v4-059-drosophila-dorsal-ventral": {
+      "hash": "JtWQXByhDd6wVBbNI0_VRw",
+      "member_count": 1016,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "WBFxVN9Alr8zFt9T0000"
+    },
+    "pert-gym/additions/20260719-temporal-v4-109-stable-chambered-cardioids": {
+      "hash": "VCRuYPFJFF48IfsjuLbh1w",
+      "member_count": 1013,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "s4nGi0cl9DIcBwiR0000"
+    },
+    "pert-gym/additions/20260719-temporal-v4-116-perturbase-gse107185": {
+      "hash": "O3SYC-ko5RHB9bAB4HWNKw",
+      "member_count": 1015,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "gTFAbqEVHm9tFLzV0000"
+    },
+    "pert-gym/additions/20260719-temporal-v4-133-zebrafish-retina-regeneration": {
+      "hash": "_6lKH1wifEr64imo92RXaw",
+      "member_count": 1014,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "4KzIQvzliuWg8R0k0000"
+    },
+    "pert-gym/additions/20260721-depmap-ccle-26q1-e2e": {
+      "hash": "z6blPVzHnMTIpoEpgdtusg",
+      "member_count": 1017,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "aH1RWvlWo87xGpsb0000"
+    },
+    "pert-gym/additions/20260721-depmap-ccle-26q1-e2e-r2": {
+      "hash": "ImySHsnSBRg8WsSXmRcGzw",
+      "member_count": 1016,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "B9N5cXbu8Cm0RZSj0000"
+    },
+    "pert-gym/additions/20260721-drug-seq-gse120222-e2e": {
+      "hash": "ZsctJFBSIiaKnrIzEh-1-g",
+      "member_count": 1018,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "Ltjv1RYDCnuxqqRT0000"
+    },
+    "pert-gym/additions/20260721-ginkgo-vcpi-e2e": {
+      "hash": "lsA-KQnpRV66FuOawrA6uA",
+      "member_count": 1017,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "qoTeH7T78kjbmIWA0000"
+    },
+    "pert-gym/canonical/20260621": {
+      "hash": "FuT5cWa5QodFHfYbzsyLRw",
+      "member_count": 1056,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "aEWBxMlcWx2d7Cd80000"
+    },
+    "pert-gym/canonical/20260624-shared-var": {
+      "hash": "7p8d_e1ecBStZ6MZ-d38fQ",
+      "member_count": 1057,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "38lC0mmlfUMGLa6i0000"
+    },
+    "pert-gym/canonical/20260624-shared-var-alias": {
+      "hash": "lvslAxNMvMgRpLFOFVyJjA",
+      "member_count": 1055,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "gdJ6mLdlfCLWFxAE0000"
+    },
+    "pert-gym/canonical/20260624-tiny-tail-minimal": {
+      "hash": "NbAuUlPCPxCxCIntDiJiNw",
+      "member_count": 1050,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "WyS1x7L3j7ml1PRx0000"
+    }
+  },
+  "current": {
+    "links": {
+      "obs_to_x": true,
+      "x_to_var": true
+    },
+    "obs": {
+      "created_at": "2026-06-26 15:19:06.098459+00:00",
+      "description": "t_6ebac53a PRISM canonical obs_uuid rewrite: deterministic pert-gym.obs.v1 identity using shared add_obs_identity helper; preserves original_obs_index and obs->X link.",
+      "hash": "RxO1IC-WRR_NBv3j3RW8bA",
+      "key": "prism_collection/GSE150062/obs.parquet",
+      "n_observations": 78393,
+      "run_uid": "HbxqFmLXnR1xjzAZ",
+      "size": 9761455,
+      "uid": "CkcQf1IYkOkbxKed0002",
+      "version": "0002"
+    },
+    "obs_frame": {
+      "columns": [
+        "orig.ident",
+        "nCount_RNA",
+        "nFeature_RNA",
+        "nCount_grna",
+        "nFeature_grna",
+        "sample",
+        "condition",
+        "UMI_count",
+        "z_score",
+        "guide",
+        "perturbation",
+        "singlet_status",
+        "percent_mito",
+        "percent_ribo",
+        "qc_cluster",
+        "nCount_SCT",
+        "nFeature_SCT",
+        "S.Score",
+        "G2M.Score",
+        "Phase",
+        "louvain_cluster_lo",
+        "louvain_cluster_mid",
+        "louvain_cluster_hi",
+        "seurat_clusters",
+        "leiden_cluster_lo",
+        "leiden_cluster_mid",
+        "leiden_cluster_hi",
+        "low_res_cluster",
+        "trajectory",
+        "library",
+        "primary_pheno",
+        "diff_pheno",
+        "diff_hit_direction",
+        "tissue_type",
+        "organism",
+        "perturbation_type",
+        "disease",
+        "is_control",
+        "cancer",
+        "cell_line",
+        "dataset",
+        "modality",
+        "assay",
+        "original_obs_index",
+        "original_obs_index_is_duplicated",
+        "obs_uuid"
+      ],
+      "dtypes": {
+        "G2M.Score": "float64",
+        "Phase": "category",
+        "S.Score": "float64",
+        "UMI_count": "int64",
+        "assay": "object",
+        "cancer": "bool",
+        "cell_line": "object",
+        "condition": "category",
+        "dataset": "object",
+        "diff_hit_direction": "category",
+        "diff_pheno": "float64",
+        "disease": "category",
+        "guide": "category",
+        "is_control": "bool",
+        "leiden_cluster_hi": "int64",
+        "leiden_cluster_lo": "int64",
+        "leiden_cluster_mid": "int64",
+        "library": "category",
+        "louvain_cluster_hi": "int64",
+        "louvain_cluster_lo": "int64",
+        "louvain_cluster_mid": "int64",
+        "low_res_cluster": "int64",
+        "modality": "object",
+        "nCount_RNA": "int64",
+        "nCount_SCT": "int64",
+        "nCount_grna": "int64",
+        "nFeature_RNA": "int64",
+        "nFeature_SCT": "int64",
+        "nFeature_grna": "int64",
+        "obs_uuid": "object",
+        "organism": "object",
+        "orig.ident": "category",
+        "original_obs_index": "object",
+        "original_obs_index_is_duplicated": "bool",
+        "percent_mito": "float64",
+        "percent_ribo": "float64",
+        "perturbation": "category",
+        "perturbation_type": "category",
+        "primary_pheno": "category",
+        "qc_cluster": "category",
+        "sample": "category",
+        "seurat_clusters": "int64",
+        "singlet_status": "category",
+        "tissue_type": "category",
+        "trajectory": "category",
+        "z_score": "float64"
+      },
+      "index_name": null,
+      "index_sample": [
+        "AAACGAATCAGACCGC-1_1",
+        "AAAGGGCCAGAGAATT-1_1",
+        "AAAGGGCCATGAGAAT-1_1",
+        "AAAGTCCCATGGCACC-1_1",
+        "AAAGTCCTCGAGTACT-1_1",
+        "AACAAAGGTAGCTTAC-1_1",
+        "AACAAAGTCCCTGTTG-1_1",
+        "AACAACCCAAGCGCAA-1_1"
+      ],
+      "index_sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "index_unique": true,
+      "non_null": {
+        "G2M.Score": 78393,
+        "Phase": 78393,
+        "S.Score": 78393,
+        "UMI_count": 78393,
+        "assay": 78393,
+        "cancer": 78393,
+        "cell_line": 78393,
+        "condition": 78393,
+        "dataset": 78393,
+        "diff_hit_direction": 78393,
+        "diff_pheno": 78393,
+        "disease": 78393,
+        "guide": 78393,
+        "is_control": 78393,
+        "leiden_cluster_hi": 78393,
+        "leiden_cluster_lo": 78393,
+        "leiden_cluster_mid": 78393,
+        "library": 78393,
+        "louvain_cluster_hi": 78393,
+        "louvain_cluster_lo": 78393,
+        "louvain_cluster_mid": 78393,
+        "low_res_cluster": 78393,
+        "modality": 78393,
+        "nCount_RNA": 78393,
+        "nCount_SCT": 78393,
+        "nCount_grna": 78393,
+        "nFeature_RNA": 78393,
+        "nFeature_SCT": 78393,
+        "nFeature_grna": 78393,
+        "obs_uuid": 78393,
+        "organism": 78393,
+        "orig.ident": 78393,
+        "original_obs_index": 78393,
+        "original_obs_index_is_duplicated": 78393,
+        "percent_mito": 78393,
+        "percent_ribo": 78393,
+        "perturbation": 78393,
+        "perturbation_type": 78393,
+        "primary_pheno": 56704,
+        "qc_cluster": 78393,
+        "sample": 78393,
+        "seurat_clusters": 78393,
+        "singlet_status": 78393,
+        "tissue_type": 78393,
+        "trajectory": 78393,
+        "z_score": 78393
+      },
+      "nunique": {
+        "G2M.Score": 78393,
+        "Phase": 3,
+        "S.Score": 78393,
+        "UMI_count": 1683,
+        "assay": 1,
+        "cancer": 1,
+        "cell_line": 1,
+        "condition": 2,
+        "dataset": 1,
+        "diff_hit_direction": 4,
+        "diff_pheno": 241,
+        "disease": 1,
+        "guide": 491,
+        "is_control": 2,
+        "leiden_cluster_hi": 24,
+        "leiden_cluster_lo": 18,
+        "leiden_cluster_mid": 21,
+        "library": 3,
+        "louvain_cluster_hi": 26,
+        "louvain_cluster_lo": 19,
+        "louvain_cluster_mid": 23,
+        "low_res_cluster": 18,
+        "modality": 1,
+        "nCount_RNA": 22869,
+        "nCount_SCT": 5028,
+        "nCount_grna": 1704,
+        "nFeature_RNA": 6308,
+        "nFeature_SCT": 3283,
+        "nFeature_grna": 46,
+        "obs_uuid": 78393,
+        "organism": 1,
+        "orig.ident": 6,
+        "original_obs_index": 78393,
+        "original_obs_index_is_duplicated": 1,
+        "percent_mito": 76840,
+        "percent_ribo": 77407,
+        "perturbation": 241,
+        "perturbation_type": 1,
+        "primary_pheno": 4,
+        "qc_cluster": 3,
+        "sample": 6,
+        "seurat_clusters": 24,
+        "singlet_status": 3,
+        "tissue_type": 1,
+        "trajectory": 4,
+        "z_score": 59201
+      },
+      "rows": 78393,
+      "value_samples": {
+        "G2M.Score": [
+          "-0.508880381546708",
+          "-0.713116805419836",
+          "-0.610750178643872",
+          "-0.621693352458596",
+          "-0.9129663493521",
+          "-0.200562033999952",
+          "1.77622952970465",
+          "-0.688320653361612",
+          "5.61704031041094",
+          "-0.358736529327967",
+          "-0.455360920795305",
+          "-0.720494839314602"
+        ],
+        "Phase": [
+          "S",
+          "G1",
+          "G2M"
+        ],
+        "S.Score": [
+          "0.557782003631348",
+          "0.656808138692099",
+          "-0.60575925313054",
+          "0.680115122915008",
+          "-0.0246939397010598",
+          "2.04087906654406",
+          "-0.265420723877703",
+          "-0.209264572336582",
+          "0.051980391442727",
+          "-0.238009131695024",
+          "-0.52471357144231",
+          "-0.469158910310708"
+        ],
+        "UMI_count": [
+          "45",
+          "407",
+          "649",
+          "805",
+          "518",
+          "398",
+          "242",
+          "440",
+          "53",
+          "208",
+          "194",
+          "632"
+        ],
+        "assay": [
+          "Perturb-seq"
+        ],
+        "cancer": [
+          "True"
+        ],
+        "cell_line": [
+          "unknown"
+        ],
+        "condition": [
+          "test",
+          "control"
+        ],
+        "dataset": [
+          "GSE150062"
+        ],
+        "diff_hit_direction": [
+          "Non-hit",
+          "Positive Hit",
+          "Negative Hit",
+          "Control"
+        ],
+        "diff_pheno": [
+          "-0.235597861581382",
+          "1.92585862895258",
+          "2.11774467639511",
+          "-0.0587912708731428",
+          "0.877919856727607",
+          "-0.881055016819343",
+          "-0.0378470145028783",
+          "-0.873866323311408",
+          "1.43428589775877",
+          "0.995974424718611",
+          "0.0051085985323102",
+          "-0.0101508641505779"
+        ],
+        "disease": [
+          "non-cancer"
+        ],
+        "guide": [
+          "sgLH02412_1",
+          "sgIMMP1L_1",
+          "sgPCGF2_1",
+          "sgWNT5B_1",
+          "sgAMBRA1_2",
+          "sgZMYM2_1",
+          "sgLH10263_2",
+          "sgLH16376_1",
+          "sgDDIT4_1",
+          "sgLH13351_2",
+          "sgLH03957_1",
+          "sgLH06838_1"
+        ],
+        "is_control": [
+          "False",
+          "True"
+        ],
+        "leiden_cluster_hi": [
+          "6",
+          "9",
+          "7",
+          "5",
+          "3",
+          "14",
+          "11",
+          "12",
+          "2",
+          "13",
+          "10",
+          "1"
+        ],
+        "leiden_cluster_lo": [
+          "8",
+          "3",
+          "9",
+          "5",
+          "1",
+          "11",
+          "4",
+          "2",
+          "10",
+          "6",
+          "12",
+          "15"
+        ],
+        "leiden_cluster_mid": [
+          "8",
+          "11",
+          "7",
+          "5",
+          "4",
+          "9",
+          "12",
+          "3",
+          "2",
+          "13",
+          "1",
+          "6"
+        ],
+        "library": [
+          "lncRNA",
+          "Coding",
+          "Control"
+        ],
+        "louvain_cluster_hi": [
+          "4",
+          "11",
+          "9",
+          "14",
+          "3",
+          "13",
+          "6",
+          "8",
+          "10",
+          "1",
+          "12",
+          "7"
+        ],
+        "louvain_cluster_lo": [
+          "8",
+          "2",
+          "7",
+          "4",
+          "1",
+          "6",
+          "3",
+          "11",
+          "10",
+          "0",
+          "5",
+          "12"
+        ],
+        "louvain_cluster_mid": [
+          "5",
+          "10",
+          "6",
+          "3",
+          "1",
+          "13",
+          "9",
+          "11",
+          "2",
+          "12",
+          "8",
+          "0"
+        ],
+        "low_res_cluster": [
+          "9",
+          "4",
+          "7",
+          "5",
+          "1",
+          "6",
+          "10",
+          "3",
+          "12",
+          "0",
+          "2",
+          "16"
+        ],
+        "modality": [
+          "scRNA-seq"
+        ],
+        "nCount_RNA": [
+          "22521",
+          "15066",
+          "20844",
+          "14015",
+          "34393",
+          "35195",
+          "23953",
+          "14275",
+          "20088",
+          "14233",
+          "14819",
+          "17311"
+        ],
+        "nCount_SCT": [
+          "13140",
+          "12935",
+          "13208",
+          "12833",
+          "12716",
+          "12761",
+          "13175",
+          "12808",
+          "13167",
+          "12960",
+          "13088",
+          "13044"
+        ],
+        "nCount_grna": [
+          "69",
+          "426",
+          "670",
+          "820",
+          "535",
+          "416",
+          "257",
+          "456",
+          "77",
+          "229",
+          "209",
+          "647"
+        ],
+        "nFeature_RNA": [
+          "5346",
+          "3902",
+          "5095",
+          "4028",
+          "6566",
+          "6616",
+          "5430",
+          "3842",
+          "5044",
+          "3531",
+          "4273",
+          "4329"
+        ],
+        "nFeature_SCT": [
+          "4749",
+          "3900",
+          "4764",
+          "4028",
+          "4257",
+          "4225",
+          "4628",
+          "3841",
+          "4775",
+          "3530",
+          "4272",
+          "4290"
+        ],
+        "nFeature_grna": [
+          "19",
+          "11",
+          "16",
+          "13",
+          "14",
+          "15",
+          "12",
+          "9",
+          "5",
+          "8",
+          "17",
+          "20"
+        ],
+        "obs_uuid": [
+          "f57b63c3-ab0d-5ddc-bf17-9b6638cb678f",
+          "db3be5eb-d43f-5d72-b830-dfe4ed4f19a4",
+          "daeb42f9-4990-57d9-9da5-f41944d156a3",
+          "6e2319ec-8e38-5b36-95ad-444145ef7305",
+          "a6cd7d4f-8839-5333-af04-11a69dd21058",
+          "c26869ef-a82d-5664-97a8-d287be3bfab6",
+          "dfbaea0a-5cbc-53a9-ae44-013d097e7414",
+          "0c9cc555-571b-5ff9-b915-b7c798774999",
+          "f069af91-2b64-5644-8be6-217c8273006a",
+          "80d13b7b-5e44-5f44-92c7-88211d554220",
+          "e8dfc0d0-d465-51c2-adfc-637a1203c192",
+          "d0539517-d8ef-57f3-b95d-fc1b5f4b3a09"
+        ],
+        "organism": [
+          "Humans (Homo sapiens)"
+        ],
+        "orig.ident": [
+          "diff_1",
+          "diff_2",
+          "diff_3",
+          "diff_4",
+          "diff_5",
+          "diff_6"
+        ],
+        "original_obs_index": [
+          "AAACGAATCAGACCGC-1_1",
+          "AAAGGGCCAGAGAATT-1_1",
+          "AAAGGGCCATGAGAAT-1_1",
+          "AAAGTCCCATGGCACC-1_1",
+          "AAAGTCCTCGAGTACT-1_1",
+          "AACAAAGGTAGCTTAC-1_1",
+          "AACAAAGTCCCTGTTG-1_1",
+          "AACAACCCAAGCGCAA-1_1",
+          "AACAGGGCACGGTGAA-1_1",
+          "AACAGGGGTACGAAAT-1_1",
+          "AACCAACCACTCCTTG-1_1",
+          "AACCAACGTGCGCTCA-1_1"
+        ],
+        "original_obs_index_is_duplicated": [
+          "False"
+        ],
+        "percent_mito": [
+          "7.65507748323787",
+          "5.90070357095447",
+          "6.58222989829207",
+          "6.25044595076703",
+          "6.49550780682116",
+          "7.87611876687029",
+          "8.39143322339582",
+          "6.32574430823117",
+          "6.05834328952608",
+          "13.2579217311881",
+          "8.13145286456576",
+          "7.85627635607417"
+        ],
+        "percent_ribo": [
+          "29.0440033746281",
+          "28.9791583698394",
+          "27.3028209556707",
+          "30.189083125223",
+          "28.9913645218504",
+          "26.0718852109675",
+          "26.8024882060702",
+          "32.0140105078809",
+          "24.7958980485862",
+          "28.2863767301342",
+          "23.679060665362",
+          "31.4424354456704"
+        ],
+        "perturbation": [
+          "LH02412",
+          "IMMP1L",
+          "PCGF2",
+          "WNT5B",
+          "AMBRA1",
+          "ZMYM2",
+          "LH10263",
+          "LH16376",
+          "DDIT4",
+          "LH13351",
+          "LH03957",
+          "LH06838"
+        ],
+        "perturbation_type": [
+          "CRISPRi"
+        ],
+        "primary_pheno": [
+          "Differentiation",
+          "Dual",
+          "Control",
+          "Proliferation"
+        ],
+        "qc_cluster": [
+          "QC2",
+          "QC1",
+          "QC3"
+        ],
+        "sample": [
+          "diff_1",
+          "diff_2",
+          "diff_3",
+          "diff_4",
+          "diff_5",
+          "diff_6"
+        ],
+        "seurat_clusters": [
+          "6",
+          "9",
+          "7",
+          "5",
+          "3",
+          "14",
+          "11",
+          "12",
+          "2",
+          "13",
+          "10",
+          "1"
+        ],
+        "singlet_status": [
+          "cellranger",
+          "Pure",
+          "Replogle"
+        ],
+        "tissue_type": [
+          "iPSCs (induced pluripotent stem cells)"
+        ],
+        "trajectory": [
+          "Cell Cycle",
+          "NSC",
+          "Non-NSC",
+          "Other"
+        ],
+        "z_score": [
+          "1.08853681168423",
+          "1.26909108064449",
+          "0.908249386632309",
+          "1.66150647107708",
+          "0.757062207767995",
+          "1.05046874113941",
+          "0.78435312120807",
+          "0.822530583335306",
+          "0.692233749960233",
+          "0.757368983638542",
+          "1.01837297561381",
+          "1.11653388338768"
+        ]
+      }
+    },
+    "obs_history": [
+      {
+        "created_at": "2026-06-10 14:40:22.643872+00:00",
+        "description": "None",
+        "hash": "oev-HVsNzPfHIgsaS4UQVg",
+        "key": "prism_collection/GSE150062/obs.parquet",
+        "n_observations": 78393,
+        "run_uid": "None",
+        "size": 6213144,
+        "uid": "CkcQf1IYkOkbxKed0000",
+        "version": "0000"
+      },
+      {
+        "created_at": "2026-06-25 18:16:37.432044+00:00",
+        "description": "Canonical obs schema normalization rollout 20260625 continuation: canonical columns plus explicit <field>_state/<field>_source missingness semantics; raw/source columns preserved.",
+        "hash": "k3lsxP_EcAQkb6gy7gIf4A",
+        "key": "prism_collection/GSE150062/obs.parquet",
+        "n_observations": 78393,
+        "run_uid": "7LXsSvYlWW348f7G",
+        "size": 11807670,
+        "uid": "CkcQf1IYkOkbxKed0001",
+        "version": "0001"
+      },
+      {
+        "created_at": "2026-06-26 15:19:06.098459+00:00",
+        "description": "t_6ebac53a PRISM canonical obs_uuid rewrite: deterministic pert-gym.obs.v1 identity using shared add_obs_identity helper; preserves original_obs_index and obs->X link.",
+        "hash": "RxO1IC-WRR_NBv3j3RW8bA",
+        "key": "prism_collection/GSE150062/obs.parquet",
+        "n_observations": 78393,
+        "run_uid": "HbxqFmLXnR1xjzAZ",
+        "size": 9761455,
+        "uid": "CkcQf1IYkOkbxKed0002",
+        "version": "0002"
+      }
+    ],
+    "obs_matches_card_prewrite_uid": false,
+    "var": {
+      "created_at": "2026-06-24 17:23:18.924550+00:00",
+      "description": "t_56a127e9: branch-local canonical var revision adding stable species feature IDs; source var uid rRlvtvSEpbFnek7K0000; strategy ensembl_biomart_external_gene_name_lookup",
+      "hash": "DRBbggoibkDnUwVXt9j2sg",
+      "key": "prism_collection/GSE150062/var.parquet",
+      "n_observations": 60497,
+      "run_uid": "YxG18pNo1Yuzrb3D",
+      "size": 1955692,
+      "uid": "rRlvtvSEpbFnek7K0001",
+      "version": "0001"
+    },
+    "var_frame": {
+      "columns": [
+        "pert_gym_original_var_index",
+        "pert_gym_source_gene_symbol",
+        "ensembl_gene_id",
+        "stable_feature_id",
+        "stable_feature_id_source",
+        "stable_feature_id_mapping_status",
+        "stable_feature_id_candidate_count"
+      ],
+      "dtypes": {
+        "ensembl_gene_id": "object",
+        "pert_gym_original_var_index": "object",
+        "pert_gym_source_gene_symbol": "object",
+        "stable_feature_id": "object",
+        "stable_feature_id_candidate_count": "int64",
+        "stable_feature_id_mapping_status": "object",
+        "stable_feature_id_source": "object"
+      },
+      "index_name": "gene_symbol",
+      "index_sample": [
+        "DDX11L1",
+        "MIR1302-11",
+        "OR4G4P",
+        "OR4G11P",
+        "OR4F5",
+        "CICP27",
+        "RP11-34P13.9",
+        "RP4-669L17.10"
+      ],
+      "index_sha256": "27ee86db7e6b15617c6183a9e69036dd1be2057ca576684bdfa5b72e6c5f91aa",
+      "index_unique": true,
+      "non_null": {
+        "ensembl_gene_id": 22513,
+        "pert_gym_original_var_index": 60497,
+        "pert_gym_source_gene_symbol": 60497,
+        "stable_feature_id": 22513,
+        "stable_feature_id_candidate_count": 60497,
+        "stable_feature_id_mapping_status": 60497,
+        "stable_feature_id_source": 60497
+      },
+      "nunique": {
+        "ensembl_gene_id": 22513,
+        "pert_gym_original_var_index": 60497,
+        "pert_gym_source_gene_symbol": 60497,
+        "stable_feature_id": 22513,
+        "stable_feature_id_candidate_count": 27,
+        "stable_feature_id_mapping_status": 3,
+        "stable_feature_id_source": 1
+      },
+      "rows": 60497,
+      "value_samples": {
+        "ensembl_gene_id": [
+          "ENSG00000223972",
+          "ENSG00000283801",
+          "ENSG00000268020",
+          "ENSG00000240361",
+          "ENSG00000186092",
+          "ENSG00000233750",
+          "ENSG00000284733",
+          "ENSG00000225972",
+          "ENSG00000225630",
+          "ENSG00000240409",
+          "ENSG00000248527",
+          "ENSG00000268663"
+        ],
+        "pert_gym_original_var_index": [
+          "DDX11L1",
+          "MIR1302-11",
+          "OR4G4P",
+          "OR4G11P",
+          "OR4F5",
+          "CICP27",
+          "RP11-34P13.9",
+          "RP4-669L17.10",
+          "LH00001",
+          "LH00002",
+          "RP4-669L17.8",
+          "RP4-669L17.4"
+        ],
+        "pert_gym_source_gene_symbol": [
+          "DDX11L1",
+          "MIR1302-11",
+          "OR4G4P",
+          "OR4G11P",
+          "OR4F5",
+          "CICP27",
+          "RP11-34P13.9",
+          "RP4-669L17.10",
+          "LH00001",
+          "LH00002",
+          "RP4-669L17.8",
+          "RP4-669L17.4"
+        ],
+        "stable_feature_id": [
+          "ENSG00000223972",
+          "ENSG00000283801",
+          "ENSG00000268020",
+          "ENSG00000240361",
+          "ENSG00000186092",
+          "ENSG00000233750",
+          "ENSG00000284733",
+          "ENSG00000225972",
+          "ENSG00000225630",
+          "ENSG00000240409",
+          "ENSG00000248527",
+          "ENSG00000268663"
+        ],
+        "stable_feature_id_candidate_count": [
+          "1",
+          "0",
+          "2",
+          "4",
+          "29",
+          "3",
+          "8",
+          "5",
+          "14",
+          "7",
+          "6",
+          "15"
+        ],
+        "stable_feature_id_mapping_status": [
+          "mapped_exact_external_gene_name_unique",
+          "unmapped_symbol",
+          "ambiguous_multiple_ensembl_ids"
+        ],
+        "stable_feature_id_source": [
+          "ensembl_biomart_external_gene_name_hsapiens_gene_ensembl_index"
+        ]
+      }
+    },
+    "var_matches_card_prewrite_uid": true,
+    "var_uniqueness": {
+      "index_unique": true,
+      "stable_feature_id_ensg": 22513,
+      "stable_feature_id_non_null": 22513,
+      "stable_feature_id_present": true,
+      "stable_feature_id_unique_non_null": true
+    },
+    "x": {
+      "created_at": "2026-06-10 14:40:34.967521+00:00",
+      "description": "None",
+      "hash": "GuWO74YMmAykleWtRSS8LY",
+      "key": "prism_collection/GSE150062/X.h5ad",
+      "n_observations": 78393,
+      "run_uid": "None",
+      "size": 2285493320,
+      "uid": "11Cz4UCdFjK8eYy30000",
+      "version": "0000"
+    },
+    "x_axis": {
+      "backed_only": true,
+      "obs_names_equal_table": true,
+      "obs_names_sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "shape": [
+        78393,
+        60497
+      ],
+      "var_names_equal_current_var": true,
+      "var_names_sha256": "27ee86db7e6b15617c6183a9e69036dd1be2057ca576684bdfa5b72e6c5f91aa",
+      "x_encoding": "_CSCDataset"
+    }
+  },
+  "format": "pert-gym.gse150062-source-inspection/v1",
+  "host": "pert-gym-worker-eu",
+  "invariants": {
+    "physical_members": 1,
+    "source_table_s5_rows": 78393,
+    "writes": 0
+  },
+  "pid": 1221,
+  "real_dataset_id": "geo/GSE150062",
+  "source_tables": {
+    "barcodes": {
+      "ordered_sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "rows": 78393,
+      "unique": true
+    },
+    "genes": {
+      "ordered_sha256": "27ee86db7e6b15617c6183a9e69036dd1be2057ca576684bdfa5b72e6c5f91aa",
+      "rows": 60497,
+      "unique": true
+    },
+    "sgrna_features": {
+      "gene_label_ordered_sha256": "12cf2975d5fa1cc152c62099558ea0b8a56843af368b8c940037058e86b11c8b",
+      "library_label_ordered_sha256": "6b21e0474de928d07c41395f953f99de54494cbeed33171054aeefa3266e8f12",
+      "note": "GEO exposes separate one-column gene and feature labels; they are independently bound, not asserted semantically identical",
+      "rows": 492,
+      "unique_gene_labels": true,
+      "unique_library_labels": true
+    },
+    "table_s5": {
+      "columns": [
+        "Cell barcode",
+        "Guide identity",
+        "Guide target",
+        "Library",
+        "RNA velocity trajectory",
+        "Gene expression UMI",
+        "Gene expression complexity",
+        "CRISPRi sgRNA UMI",
+        "Protospacer",
+        "Batch"
+      ],
+      "dtypes": {
+        "Batch": "string",
+        "CRISPRi sgRNA UMI": "string",
+        "Cell barcode": "string",
+        "Gene expression UMI": "string",
+        "Gene expression complexity": "string",
+        "Guide identity": "string",
+        "Guide target": "string",
+        "Library": "string",
+        "Protospacer": "string",
+        "RNA velocity trajectory": "string"
+      },
+      "index_name": "Cell barcode",
+      "index_sample": [
+        "AAACGAATCAGACCGC-1_1",
+        "AAAGGGCCAGAGAATT-1_1",
+        "AAAGGGCCATGAGAAT-1_1",
+        "AAAGTCCCATGGCACC-1_1",
+        "AAAGTCCTCGAGTACT-1_1",
+        "AACAAAGGTAGCTTAC-1_1",
+        "AACAAAGTCCCTGTTG-1_1",
+        "AACAACCCAAGCGCAA-1_1"
+      ],
+      "index_sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "index_unique": true,
+      "non_null": {
+        "Batch": 78393,
+        "CRISPRi sgRNA UMI": 78393,
+        "Cell barcode": 78393,
+        "Gene expression UMI": 78393,
+        "Gene expression complexity": 78393,
+        "Guide identity": 78393,
+        "Guide target": 78393,
+        "Library": 78393,
+        "Protospacer": 78393,
+        "RNA velocity trajectory": 78393
+      },
+      "nunique": {
+        "Batch": 6,
+        "CRISPRi sgRNA UMI": 1683,
+        "Cell barcode": 78393,
+        "Gene expression UMI": 22869,
+        "Gene expression complexity": 6308,
+        "Guide identity": 491,
+        "Guide target": 241,
+        "Library": 3,
+        "Protospacer": 491,
+        "RNA velocity trajectory": 4
+      },
+      "rows": 78393,
+      "value_samples": {
+        "Batch": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "CRISPRi sgRNA UMI": [
+          "45",
+          "407",
+          "649",
+          "805",
+          "518",
+          "398",
+          "242",
+          "440",
+          "53",
+          "208",
+          "194",
+          "632"
+        ],
+        "Cell barcode": [
+          "AAACGAATCAGACCGC-1_1",
+          "AAAGGGCCAGAGAATT-1_1",
+          "AAAGGGCCATGAGAAT-1_1",
+          "AAAGTCCCATGGCACC-1_1",
+          "AAAGTCCTCGAGTACT-1_1",
+          "AACAAAGGTAGCTTAC-1_1",
+          "AACAAAGTCCCTGTTG-1_1",
+          "AACAACCCAAGCGCAA-1_1",
+          "AACAGGGCACGGTGAA-1_1",
+          "AACAGGGGTACGAAAT-1_1",
+          "AACCAACCACTCCTTG-1_1",
+          "AACCAACGTGCGCTCA-1_1"
+        ],
+        "Gene expression UMI": [
+          "22521",
+          "15066",
+          "20844",
+          "14015",
+          "34393",
+          "35195",
+          "23953",
+          "14275",
+          "20088",
+          "14233",
+          "14819",
+          "17311"
+        ],
+        "Gene expression complexity": [
+          "5346",
+          "3902",
+          "5095",
+          "4028",
+          "6566",
+          "6616",
+          "5430",
+          "3842",
+          "5044",
+          "3531",
+          "4273",
+          "4329"
+        ],
+        "Guide identity": [
+          "sgLH02412_1",
+          "sgIMMP1L_1",
+          "sgPCGF2_1",
+          "sgWNT5B_1",
+          "sgAMBRA1_2",
+          "sgZMYM2_1",
+          "sgLH10263_2",
+          "sgLH16376_1",
+          "sgDDIT4_1",
+          "sgLH13351_2",
+          "sgLH03957_1",
+          "sgLH06838_1"
+        ],
+        "Guide target": [
+          "LH02412",
+          "IMMP1L",
+          "PCGF2",
+          "WNT5B",
+          "AMBRA1",
+          "ZMYM2",
+          "LH10263",
+          "LH16376",
+          "DDIT4",
+          "LH13351",
+          "LH03957",
+          "LH06838"
+        ],
+        "Library": [
+          "lncRNA",
+          "Coding",
+          "Control"
+        ],
+        "Protospacer": [
+          "GACCCTTACCCTGATGGCCG",
+          "GAAAGGACGGTCGACTTCGG",
+          "GCGGAACAGGGTCTGCCCGG",
+          "GAGAAGACTGGAATCAGGTG",
+          "GGACAACTCAGCCCTCGACC",
+          "GCGACACGCACAACTCCGCT",
+          "GGGTCTGTTTCTGTCGACTG",
+          "GCAGGCCTCCACCGCCTCAG",
+          "GCTAGGGCGCAGCAGGCCAA",
+          "GTTGGCCACAGACAGTAGGG",
+          "GTGAAAGTATTGATCTCGGT",
+          "GACCTGCATAGGCAGTGCTT"
+        ],
+        "RNA velocity trajectory": [
+          "Cell Cycle",
+          "NSC",
+          "Non-NSC",
+          "Other"
+        ]
+      }
+    }
+  },
+  "sources": {
+    "GSE150062_perturbseq_barcodes.tsv.gz": {
+      "sha256": "d86f132cc056002f55f67ce7658b6dcb1930e0bb577dc173cc958226d7fe4e37",
+      "size": 338738,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE150nnn/GSE150062/suppl/GSE150062_perturbseq_barcodes.tsv.gz"
+    },
+    "GSE150062_perturbseq_features.tsv.gz": {
+      "sha256": "90e1a3254c97215191bf9dbae0a603e6fb1b908da731e5505395a805fb790b28",
+      "size": 222231,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE150nnn/GSE150062/suppl/GSE150062_perturbseq_features.tsv.gz"
+    },
+    "GSE150062_perturbseq_genes.tsv.gz": {
+      "sha256": "b6d13a64dca80162b49414a0967522326e77b58b40b08da93a672ffe0b6afa57",
+      "size": 222165,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE150nnn/GSE150062/suppl/GSE150062_perturbseq_genes.tsv.gz"
+    },
+    "GSE150062_sgrna_barcodes.tsv.gz": {
+      "sha256": "d86f132cc056002f55f67ce7658b6dcb1930e0bb577dc173cc958226d7fe4e37",
+      "size": 338738,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE150nnn/GSE150062/suppl/GSE150062_sgrna_barcodes.tsv.gz"
+    },
+    "GSE150062_sgrna_features.tsv.gz": {
+      "sha256": "e0b66b2ba30c18d07c33ba861793857b2984c6aa2251e6c4ccd4cb1695b6bae3",
+      "size": 2763,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE150nnn/GSE150062/suppl/GSE150062_sgrna_features.tsv.gz"
+    },
+    "GSE150062_sgrna_genes.tsv.gz": {
+      "sha256": "fc7f4c16c63f5238cf57fbe0e56c670c05f3fb31d1f278a2068979743fb896d4",
+      "size": 1428,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE150nnn/GSE150062/suppl/GSE150062_sgrna_genes.tsv.gz"
+    },
+    "Table_S5_mmc6.xlsx": {
+      "sha256": "fd307e6aec5a0044e0ec135594ed1d3071d3efb609809faa1f0ef91d111b465c",
+      "size": 5338747,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/9903861/bin/mmc6.xlsx"
+    }
+  },
+  "task_id": "t_680f05a3"
+}
