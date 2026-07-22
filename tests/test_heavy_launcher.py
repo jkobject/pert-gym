@@ -14,8 +14,14 @@ def _launcher():
     return launch_pert_gym_heavy
 
 
-def completed(command: list[str], *, returncode: int = 0, stdout: str = ""):
-    return subprocess.CompletedProcess(command, returncode, stdout, "")
+def completed(
+    command: list[str],
+    *,
+    returncode: int = 0,
+    stdout: str = "",
+    stderr: str = "",
+):
+    return subprocess.CompletedProcess(command, returncode, stdout, stderr)
 
 
 class FakeGcloud:
@@ -39,6 +45,11 @@ class FakeGcloud:
             self.instance["labels"].update(
                 item.split("=", maxsplit=1) for item in labels_arg.split(",")
             )
+            return completed(command)
+        if "remove-labels" in command:
+            keys = command[command.index("--labels") + 1].split(",")
+            for key in keys:
+                self.instance["labels"].pop(key, None)
             return completed(command)
         if "start" in command:
             self.instance["status"] = "RUNNING"
@@ -267,6 +278,30 @@ def test_default_payload_transport_streams_without_python_timeout(
     assert observed.get("timeout") is None
 
 
+def test_default_verify_control_transport_uses_only_remaining_absolute_time(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    launcher = _launcher()
+    observed: dict[str, object] = {}
+    clock = ExactClock()
+    clock.value = 4.0
+
+    def fake_subprocess_run(command: list[str], **kwargs: object):
+        observed["command"] = command
+        observed.update(kwargs)
+        return completed(command)
+
+    monkeypatch.setattr(launcher.subprocess, "run", fake_subprocess_run)
+    bounded = launcher._bounded_control_run(
+        launcher._run,
+        absolute_deadline=6.0,
+        monotonic=clock.monotonic,
+    )
+
+    assert bounded(["gcloud", "compute", "ssh"]).returncode == 0
+    assert observed["timeout"] == pytest.approx(2.0)
+
+
 def test_clean_terminal_stop_allows_next_task_to_replace_expired_labels(
     tmp_path: Path,
 ) -> None:
@@ -343,3 +378,593 @@ def test_task_identity_is_exact_and_fail_closed(task: str) -> None:
 
     with pytest.raises(ValueError, match="task id"):
         launcher.task_label(task)
+
+
+class FakePayloadProcess:
+    def __init__(self, polls_before_exit: int, returncode: int = 0) -> None:
+        self.polls_before_exit = polls_before_exit
+        self.returncode = returncode
+        self.killed = False
+
+    def poll(self) -> int | None:
+        if self.killed:
+            return 124
+        if self.polls_before_exit > 0:
+            self.polls_before_exit -= 1
+            return None
+        return self.returncode
+
+    def wait(self, timeout: float | None = None) -> int:
+        del timeout
+        return 124 if self.killed else self.returncode
+
+
+class FakeClock:
+    def __init__(self) -> None:
+        self.value = 0.0
+
+    def monotonic(self) -> float:
+        return self.value
+
+    def sleep(self, seconds: float) -> None:
+        self.value += max(seconds, 300)
+
+
+class ExactClock:
+    def __init__(self, *, on_sleep=None) -> None:
+        self.value = 0.0
+        self.on_sleep = on_sleep
+
+    def monotonic(self) -> float:
+        return self.value
+
+    def sleep(self, seconds: float) -> None:
+        self.value += seconds
+        if self.on_sleep is not None:
+            self.on_sleep()
+
+
+def test_verify_only_waits_for_delayed_ssh_readiness_before_pid_operations(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    process = FakePayloadProcess(polls_before_exit=0)
+    readiness_attempts = 0
+    operations: list[str] = []
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        nonlocal readiness_attempts
+        if "ssh" in command and command[-1] == "true":
+            operations.append("readiness")
+            readiness_attempts += 1
+            if readiness_attempts < 3:
+                return completed(
+                    command,
+                    returncode=255,
+                    stderr="ssh: connect to host 1.2.3.4 port 22: Connection refused",
+                )
+            return completed(command)
+        if "ssh" in command and "rm -f --" in command[-1]:
+            operations.append("pid-cleanup")
+        if "ssh" in command and "cat --" in command[-1]:
+            return completed(command, stdout="4242\n")
+        return fake(command)
+
+    def payload_start(command: list[str]) -> FakePayloadProcess:
+        operations.append("payload-start")
+        return process
+
+    assert (
+        launcher.launch_heavy_command(
+            task="t_24eb37f7",
+            eta_hours=0.1,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=5,
+            absolute_max_minutes=10,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=payload_start,
+            monotonic=ExactClock().monotonic,
+            sleep=lambda seconds: None,
+        )
+        == 0
+    )
+    assert readiness_attempts == 3
+    assert operations == [
+        "readiness",
+        "readiness",
+        "readiness",
+        "pid-cleanup",
+        "payload-start",
+    ]
+
+
+def test_verify_only_readiness_timeout_stops_and_clears_exact_lease(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    clock = ExactClock()
+    local_lease = tmp_path / "lease.json"
+    payload_started = False
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and command[-1] == "true":
+            return completed(command, returncode=255, stderr="Connection refused")
+        return fake(command)
+
+    def payload_start(command: list[str]) -> FakePayloadProcess:
+        nonlocal payload_started
+        payload_started = True
+        return FakePayloadProcess(0)
+
+    with pytest.raises(RuntimeError, match="SSH readiness timeout exhausted"):
+        launcher.launch_heavy_command(
+            task="t_24eb37f7",
+            eta_hours=0.1,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=5,
+            absolute_max_minutes=10,
+            readiness_timeout_seconds=10,
+            local_lease_path=local_lease,
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=payload_start,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+
+    assert payload_started is False
+    assert not any("rm -f --" in call[-1] for call in fake.calls if "ssh" in call)
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {"active-wave": "true", "do-not-stop": "true"}
+    assert not local_lease.exists()
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        "Permission denied (publickey).",
+        "Host key verification failed.",
+    ],
+)
+def test_verify_only_readiness_does_not_retry_auth_or_host_key_failure(
+    tmp_path: Path, error: str
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    attempts = 0
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        nonlocal attempts
+        if "ssh" in command and command[-1] == "true":
+            attempts += 1
+            return completed(
+                command,
+                returncode=255,
+                stderr=error,
+            )
+        return fake(command)
+
+    with pytest.raises(RuntimeError, match="non-retryable SSH readiness failure"):
+        launcher.launch_heavy_command(
+            task="t_24eb37f7",
+            eta_hours=0.1,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=5,
+            absolute_max_minutes=10,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            sleep=lambda seconds: None,
+        )
+    assert attempts == 1
+    assert fake.instance["status"] == "TERMINATED"
+
+
+def test_verify_only_readiness_rechecks_exact_lease_ownership_before_retry(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    attempts = 0
+
+    def replace_owner() -> None:
+        fake.instance["labels"]["task"] = "t-deadbeef"
+
+    clock = ExactClock(on_sleep=replace_owner)
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        nonlocal attempts
+        if "ssh" in command and command[-1] == "true":
+            attempts += 1
+            return completed(command, returncode=255, stderr="Connection refused")
+        return fake(command)
+
+    with pytest.raises(RuntimeError, match="lease label readback mismatch"):
+        launcher.launch_heavy_command(
+            task="t_24eb37f7",
+            eta_hours=0.1,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=5,
+            absolute_max_minutes=10,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+    assert attempts == 1
+    assert fake.instance["status"] == "RUNNING"
+    assert fake.instance["labels"]["task"] == "t-deadbeef"
+    assert not any("rm -f --" in call[-1] for call in fake.calls if "ssh" in call)
+
+
+def test_verify_only_readiness_never_crosses_absolute_ceiling(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    clock = ExactClock()
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and command[-1] == "true":
+            return completed(command, returncode=255, stderr="Connection timed out")
+        return fake(command)
+
+    with pytest.raises(RuntimeError, match="SSH readiness absolute ceiling exhausted"):
+        launcher.launch_heavy_command(
+            task="t_24eb37f7",
+            eta_hours=0.1,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=0.05,
+            absolute_max_minutes=0.1,
+            readiness_timeout_seconds=60,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+
+    assert clock.value == pytest.approx(6.0)
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {"active-wave": "true", "do-not-stop": "true"}
+
+
+def test_verify_only_readiness_success_after_absolute_ceiling_never_dispatches(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    clock = ExactClock()
+    payload_started = False
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and command[-1] == "true":
+            clock.value = 7.0
+            return completed(command)
+        return fake(command)
+
+    def payload_start(command: list[str]) -> FakePayloadProcess:
+        nonlocal payload_started
+        payload_started = True
+        return FakePayloadProcess(0)
+
+    with pytest.raises(RuntimeError, match="SSH readiness absolute ceiling exhausted"):
+        launcher.launch_heavy_command(
+            task="t_24eb37f7",
+            eta_hours=0.1,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=0.05,
+            absolute_max_minutes=0.1,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=payload_start,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+
+    assert payload_started is False
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {"active-wave": "true", "do-not-stop": "true"}
+
+
+def test_verify_only_absolute_ceiling_includes_lease_publication(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    clock = ExactClock()
+    payload_started = False
+
+    def delayed_publication(command: list[str]) -> subprocess.CompletedProcess[str]:
+        result = fake(command)
+        if "add-labels" in command:
+            clock.value = 7.0
+        return result
+
+    def payload_start(command: list[str]) -> FakePayloadProcess:
+        nonlocal payload_started
+        payload_started = True
+        return FakePayloadProcess(0)
+
+    with pytest.raises(RuntimeError, match="verify-only absolute ceiling exhausted"):
+        launcher.launch_heavy_command(
+            task="t_24eb37f7",
+            eta_hours=0.1,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=0.05,
+            absolute_max_minutes=0.1,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=delayed_publication,
+            payload_start=payload_start,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+
+    assert payload_started is False
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {"active-wave": "true", "do-not-stop": "true"}
+
+
+def test_verify_only_pid_read_crossing_absolute_ceiling_fails_closed(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    clock = ExactClock()
+    process = FakePayloadProcess(polls_before_exit=10)
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and "cat --" in command[-1]:
+            clock.value = 7.0
+            return completed(command, stdout="4242\n")
+        return fake(command)
+
+    with pytest.raises(RuntimeError, match="verify-only absolute ceiling exhausted"):
+        launcher.launch_heavy_command(
+            task="t_24eb37f7",
+            eta_hours=0.1,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=0.05,
+            absolute_max_minutes=0.1,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=lambda command: process,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {"active-wave": "true", "do-not-stop": "true"}
+
+
+def test_verify_only_start_failure_cleans_valid_owner_lease(tmp_path: Path) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    local_lease = tmp_path / "lease.json"
+
+    def failing_start(command: list[str]) -> subprocess.CompletedProcess[str]:
+        result = fake(command)
+        if "start" in command:
+            return completed(command, returncode=1, stderr="control response lost")
+        return result
+
+    with pytest.raises(RuntimeError, match="instance start failed"):
+        launcher.launch_heavy_command(
+            task="t_24eb37f7",
+            eta_hours=0.1,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=5,
+            absolute_max_minutes=10,
+            local_lease_path=local_lease,
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=failing_start,
+        )
+
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {"active-wave": "true", "do-not-stop": "true"}
+    assert not local_lease.exists()
+
+
+def test_verify_only_launcher_uses_bounded_purpose_and_clears_terminal_lease(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    local_lease = tmp_path / "verify-lease.json"
+    process = FakePayloadProcess(polls_before_exit=1)
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and "cat --" in command[-1]:
+            return completed(command, stdout="4242\n")
+        if "ssh" in command and "kill -0" in command[-1]:
+            return completed(command)
+        return fake(command)
+
+    assert (
+        launcher.launch_heavy_command(
+            task="t_eb3a96ca",
+            eta_hours=0.5,
+            command=["uv", "run", "python", "verify.py"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=60,
+            absolute_max_minutes=90,
+            local_lease_path=local_lease,
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=lambda command: process,
+            sleep=lambda seconds: None,
+        )
+        == 0
+    )
+
+    published = next(call for call in fake.calls if "add-labels" in call)
+    labels = published[published.index("--labels") + 1]
+    assert "purpose=review-pr104-drugseq-verify-only" in labels
+    assert "lease-until=20260721t130000z" in labels
+    assert fake.instance["status"] == "TERMINATED"
+    assert (
+        not {
+            "owner",
+            "project",
+            "purpose",
+            "task",
+            "lease-until",
+        }
+        & fake.instance["labels"].keys()
+    )
+    assert not local_lease.exists()
+
+
+def test_verify_only_policy_rejects_unbounded_lifecycle_before_publication(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud()
+    base = {
+        "task": "t_eb3a96ca",
+        "eta_hours": 0.5,
+        "command": ["verify"],
+        "purpose": "review-pr104-drugseq-verify-only",
+        "verify_only": True,
+        "local_lease_path": tmp_path / "lease.json",
+        "run": fake,
+    }
+
+    with pytest.raises(ValueError, match="at most 60 minutes"):
+        launcher.launch_heavy_command(
+            **base,
+            lease_minutes=61,
+            absolute_max_minutes=90,
+        )
+    with pytest.raises(ValueError, match="at most 90 minutes"):
+        launcher.launch_heavy_command(
+            **base,
+            lease_minutes=60,
+            absolute_max_minutes=91,
+        )
+    with pytest.raises(ValueError, match="exact verify-only purpose"):
+        launcher.launch_heavy_command(
+            **{**base, "purpose": launcher.PURPOSE},
+            lease_minutes=60,
+            absolute_max_minutes=90,
+        )
+
+    assert not fake.calls
+
+
+def test_verify_only_renewal_requires_exact_live_pid_and_honors_absolute_ceiling(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="RUNNING")
+    process = FakePayloadProcess(polls_before_exit=20)
+    clock = FakeClock()
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and "cat --" in command[-1] and "kill" not in command[-1]:
+            return completed(command, stdout="4242\n")
+        if "ssh" in command and "kill -0" in command[-1]:
+            return completed(command)
+        return fake(command)
+
+    assert (
+        launcher.launch_heavy_command(
+            task="t_eb3a96ca",
+            eta_hours=0.25,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=10,
+            absolute_max_minutes=20,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=lambda command: process,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+        == 124
+    )
+
+    publications = [call for call in fake.calls if "add-labels" in call]
+    assert len(publications) >= 2
+    lease_values = [
+        dict(
+            item.split("=", maxsplit=1)
+            for item in call[call.index("--labels") + 1].split(",")
+        )["lease-until"]
+        for call in publications
+    ]
+    assert max(lease_values) == "20260721t122000z"
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {
+        "active-wave": "true",
+        "do-not-stop": "true",
+    }
+
+
+def test_verify_only_refuses_renewal_after_exact_payload_pid_dies(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="RUNNING")
+    process = FakePayloadProcess(polls_before_exit=5)
+    clock = FakeClock()
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and "cat --" in command[-1] and "kill" not in command[-1]:
+            return completed(command, stdout="4242\n")
+        if "ssh" in command and "kill -0" in command[-1]:
+            return completed(command, returncode=1)
+        return fake(command)
+
+    with pytest.raises(RuntimeError, match="exact live payload PID"):
+        launcher.launch_heavy_command(
+            task="t_eb3a96ca",
+            eta_hours=0.25,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=10,
+            absolute_max_minutes=20,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=lambda command: process,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+
+    assert len([call for call in fake.calls if "add-labels" in call]) == 1
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {
+        "active-wave": "true",
+        "do-not-stop": "true",
+    }
