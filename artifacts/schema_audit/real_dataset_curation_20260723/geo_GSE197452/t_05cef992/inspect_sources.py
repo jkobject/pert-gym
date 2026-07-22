@@ -114,6 +114,14 @@ def read_one_column(path: Path) -> pd.Index:
     return pd.Index(frame.iloc[:, 0].astype(str))
 
 
+def read_gene_table(path: Path) -> pd.DataFrame:
+    frame = pd.read_csv(path, sep="\t", header=None, dtype="string")
+    if frame.shape[1] != 3:
+        raise AssertionError(f"expected three-column source gene axis: {path.name}={frame.shape}")
+    frame.columns = ["gene_id", "gene_symbol", "feature_type"]
+    return frame
+
+
 def decode(values: Any) -> pd.Index:
     return pd.Index(
         [item.decode() if isinstance(item, bytes) else str(item) for item in values]
@@ -155,8 +163,8 @@ def main() -> None:
 
     cells_ill = read_one_column(paths["GSM6297384_cells_counts_Pert_Ill.txt.gz"])
     cells_ult = read_one_column(paths["GSM6297385_cells_counts_Pert_Ult.txt.gz"])
-    genes_ill = read_one_column(paths["GSM6297384_genes_counts_Pert_Ill.txt.gz"])
-    genes_ult = read_one_column(paths["GSM6297385_genes_counts_Pert_Ult.txt.gz"])
+    genes_ill = read_gene_table(paths["GSM6297384_genes_counts_Pert_Ill.txt.gz"])
+    genes_ult = read_gene_table(paths["GSM6297385_genes_counts_Pert_Ult.txt.gz"])
     matrix_ill = matrix_market_header(paths["GSM6297384_expression_counts_Pert_Ill.txt.gz"])
     matrix_ult = matrix_market_header(paths["GSM6297385_expression_counts_Pert_Ult.txt.gz"])
     h5_ill, h5_barcodes_ill = h5_summary(
@@ -215,10 +223,12 @@ def main() -> None:
         "expression": {
             "ill": matrix_ill,
             "ult": matrix_ult,
-            "gene_axes_order_equal": genes_ill.equals(genes_ult),
-            "gene_axes_set_equal": set(genes_ill) == set(genes_ult),
-            "gene_axis_ill_sha256": ordered_sha256(genes_ill),
-            "gene_axis_ult_sha256": ordered_sha256(genes_ult),
+            "gene_tables_equal": genes_ill.equals(genes_ult),
+            "gene_ids_unique": bool(genes_ill["gene_id"].is_unique),
+            "gene_symbols_unique": bool(genes_ill["gene_symbol"].is_unique),
+            "gene_id_axis_sha256": ordered_sha256(pd.Index(genes_ill["gene_id"])),
+            "gene_symbol_axis_sha256": ordered_sha256(pd.Index(genes_ill["gene_symbol"])),
+            "gene_table_sample": genes_ill.head(12).to_dict(orient="records"),
         },
         "feature_matrices": {"ill": h5_ill, "ult": h5_ult},
         "accepted_obs": {
