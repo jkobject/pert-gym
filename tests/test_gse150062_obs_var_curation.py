@@ -290,6 +290,11 @@ def test_dashboard_reconciles_accepted_ledger_without_gse150062_credit() -> None
     todo = (repo / "TODO.md").read_text()
     status = (repo / "docs/project/current-status.md").read_text()
     for text in (todo, status):
-        assert "**9/70**" in text
-        assert "**8/70**" in text
+        assert "9/70" in text
+        assert "8/70" in text
         assert "GSE150062 remains pending independent acceptance" in text
+        assert "t_3bb03773" in text
+        assert "lhR6Ny3n8QcVeItH0003" in text
+        assert "GJ1HqkBSHfDD1o4m0002" in text
+        assert "t_2c228f48" in text
+        assert "AYnivbGN3JCRzkN70001" in text
