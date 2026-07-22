@@ -629,7 +629,10 @@ def verify_var(var: pd.DataFrame, x_axis: pd.Index) -> dict[str, Any]:
 
 
 def verify_x_source_parity(
-    artifact: Any, source: dict[str, Any], expected_obs_order: pd.Index
+    artifact: Any,
+    var: pd.DataFrame,
+    source: dict[str, Any],
+    expected_obs_order: pd.Index,
 ) -> tuple[pd.Index, dict[str, Any]]:
     if {"uid": str(artifact.uid), "hash": str(artifact.hash)} != EXPECTED_X:
         raise AssertionError("accepted X identity drift")
@@ -644,14 +647,23 @@ def verify_x_source_parity(
     matrix = source.get("matrix")
     if matrix is None:
         raise AssertionError("source matrix required for X parity")
-    missing_x_genes = x_var.difference(matrix.columns.astype(str))
-    if len(missing_x_genes):
+    if "pert_gym_original_var_index" not in var:
         raise AssertionError(
-            "X genes absent from source digital-expression matrix: "
-            f"count={len(missing_x_genes)} sample={missing_x_genes[:20].tolist()} "
-            f"x_sample={x_var[:10].tolist()} source_sample={matrix.columns[:10].tolist()}"
+            "VAR lacks pert_gym_original_var_index required for source-matrix parity"
         )
-    selected = matrix.loc[:, x_var]
+    if not var.index.astype(str).equals(x_var):
+        raise AssertionError("VAR/X feature-axis order drift before source parity")
+    source_feature_axis = pd.Index(var["pert_gym_original_var_index"].astype(str))
+    if not source_feature_axis.is_unique:
+        raise AssertionError("normalized source feature axis is not unique")
+    missing_source_genes = source_feature_axis.difference(matrix.columns.astype(str))
+    if len(missing_source_genes):
+        raise AssertionError(
+            "VAR source genes absent from source digital-expression matrix: "
+            f"count={len(missing_source_genes)} "
+            f"sample={missing_source_genes[:20].tolist()}"
+        )
+    selected = matrix.loc[:, source_feature_axis]
     mismatch_count = 0
     for start in range(0, EXPECTED_N_OBS, 256):
         stop = min(EXPECTED_N_OBS, start + 256)
@@ -664,6 +676,8 @@ def verify_x_source_parity(
         **EXPECTED_X,
         "shape": [backed.n_obs, backed.n_vars],
         "var_names_sha256": ordered_values_sha256(x_var),
+        "source_feature_axis_sha256": ordered_values_sha256(source_feature_axis),
+        "source_feature_axis_column": "pert_gym_original_var_index",
         "source_matrix_shape": list(matrix.shape),
         "selected_source_shape": list(selected.shape),
         "source_value_mismatch_count": mismatch_count,
@@ -727,10 +741,13 @@ def verify_current(ln: Any, source: dict[str, Any]) -> tuple[dict[str, Any], boo
     if len(obs) != EXPECTED_N_OBS or len(obs) > 50_000:
         raise AssertionError("OBS bounded denominator drift")
     expected_obs, join_receipt = curate_obs(obs, source)
-    x_axis, x_receipt = verify_x_source_parity(
-        x_artifact, source, pd.Index(obs["original_obs_index"].astype(str))
-    )
     var = var_artifact.load()
+    x_axis, x_receipt = verify_x_source_parity(
+        x_artifact,
+        var,
+        source,
+        pd.Index(obs["original_obs_index"].astype(str)),
+    )
     var_verdict = verify_var(var, x_axis)
     obs_curated = str(obs_artifact.description).startswith(
         f"{TASK_ID}: source-exhaustive Datlinger17 OBS"
