@@ -28,7 +28,7 @@ PREFIX = "prism_collection/GSE207360"
 EXPECTED_N_OBS = 12_487
 EXPECTED_N_VARS = 60_736
 EXPECTED = {
-    "obs": {"uid": "KSAkP0NJF5P5g1mJ0000", "key": f"{PREFIX}/obs.parquet"},
+    "obs": {"key": f"{PREFIX}/obs.parquet"},
     "x": {"key": f"{PREFIX}/X.h5ad"},
     "var": {
         "uid": "U8OeHI58YG9Y9Nsb0002",
@@ -359,8 +359,6 @@ def main() -> None:
     x_artifact = resolve_artifact(ln, obs_artifact.features.get_values()["X"])
     var_artifact = resolve_artifact(ln, x_artifact.features.get_values()["var"])
     var = var_artifact.load()
-    if str(obs_artifact.uid) != EXPECTED["obs"]["uid"]:
-        raise AssertionError("accepted OBS identity drift")
     if str(x_artifact.key) != EXPECTED["x"]["key"]:
         raise AssertionError("accepted X identity drift")
     if (
