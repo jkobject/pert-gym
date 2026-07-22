@@ -888,6 +888,8 @@ def test_verify_only_renewal_requires_exact_live_pid_and_honors_absolute_ceiling
     clock = FakeClock()
 
     def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and "payload-heartbeat" in command[-1]:
+            return completed(command, stdout="4242 600 600\n")
         if "ssh" in command and "cat --" in command[-1] and "kill" not in command[-1]:
             return completed(command, stdout="4242\n")
         if "ssh" in command and "kill -0" in command[-1]:
@@ -1131,6 +1133,69 @@ def test_minute_lifecycle_options_must_be_provided_together(tmp_path: Path) -> N
             command=["writer"],
             purpose="gse132080-obs-var-curation",
             lease_minutes=150,
+            local_lease_path=tmp_path / "lease.json",
+            run=fake,
+        )
+
+    assert not fake.calls
+
+
+def test_bounded_lifecycle_refuses_renewal_without_fresh_payload_heartbeat(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="RUNNING")
+    process = FakePayloadProcess(polls_before_exit=5)
+    clock = FakeClock()
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and "payload-heartbeat" in command[-1]:
+            return completed(command, stdout="4242 0 601\n")
+        if "ssh" in command and "cat --" in command[-1] and "kill" not in command[-1]:
+            return completed(command, stdout="4242\n")
+        if "ssh" in command and "kill -0" in command[-1]:
+            return completed(command)
+        return fake(command)
+
+    with pytest.raises(RuntimeError, match="fresh exact payload heartbeat"):
+        launcher.launch_heavy_command(
+            task="t_cf959e37",
+            eta_hours=0.25,
+            command=["writer"],
+            purpose="broad-prism-obs-curation",
+            lease_minutes=10,
+            absolute_max_minutes=20,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 22, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=lambda command: process,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+
+    assert fake.instance["status"] == "TERMINATED"
+    assert len([call for call in fake.calls if "add-labels" in call]) == 1
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        ["uv", "run", "python", "tools/curate_broad_prism_obs.py"],
+        ["uv", "run", "python", "-m", "tools.curate_broad_prism_obs"],
+    ],
+)
+def test_broad_prism_writer_requires_minute_bounds_before_publication(
+    tmp_path: Path, command: list[str]
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud()
+
+    with pytest.raises(ValueError, match="Broad PRISM writer requires"):
+        launcher.launch_heavy_command(
+            task="t_cf959e37",
+            eta_hours=2,
+            command=command,
+            purpose="broad-prism-obs-curation",
             local_lease_path=tmp_path / "lease.json",
             run=fake,
         )

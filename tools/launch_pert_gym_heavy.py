@@ -33,6 +33,7 @@ MIN_LEASE_HOURS = 8.0
 LEASE_MARGIN_HOURS = 2.0
 DEFAULT_MAX_LEASE_HOURS = 14.0
 MAX_BOUNDED_WRITER_MINUTES = 360.0
+MAX_PAYLOAD_HEARTBEAT_AGE_SECONDS = 600
 DEFAULT_SSH_READINESS_TIMEOUT_SECONDS = 300.0
 SSH_READINESS_INTERVAL_SECONDS = 5.0
 DEFAULT_LOCAL_LEASE_PATH = (
@@ -377,6 +378,43 @@ def _remote_payload_is_live(run: Run, path: str, pid: int) -> bool:
     ).returncode
 
 
+def _remote_payload_has_fresh_heartbeat(
+    run: Run,
+    *,
+    heartbeat_path: str,
+    expected_pid: int,
+) -> bool:
+    command = (
+        "set -eu; "
+        f"heartbeat=$(cat -- {shlex.quote(heartbeat_path)}); "
+        "now=$(date +%s); "
+        'printf "%s %s\\n" "$heartbeat" "$now" '
+        "# payload-heartbeat"
+    )
+    result = run(_gcloud("ssh", INSTANCE, "--zone", ZONE, "--command", command))
+    if result.returncode:
+        return False
+    fields = (result.stdout or "").strip().split()
+    if len(fields) != 3:
+        return False
+    try:
+        heartbeat_pid, heartbeat_at, now = (int(field) for field in fields)
+    except ValueError:
+        return False
+    age = now - heartbeat_at
+    return (
+        heartbeat_pid == expected_pid and 0 <= age <= MAX_PAYLOAD_HEARTBEAT_AGE_SECONDS
+    )
+
+
+def _is_broad_prism_command(command: Sequence[str]) -> bool:
+    return any(
+        Path(argument).name == "curate_broad_prism_obs.py"
+        or argument == "tools.curate_broad_prism_obs"
+        for argument in command
+    )
+
+
 def _signal_remote_payload(run: Run, path: str, pid: int) -> None:
     path_q = shlex.quote(path)
     command = f'test "$(cat -- {path_q})" = {pid} && kill -TERM {pid}'
@@ -495,6 +533,10 @@ def launch_heavy_command(
     minute_lifecycle_requested = (
         lease_minutes is not None or absolute_max_minutes is not None
     )
+    if _is_broad_prism_command(command) and not minute_lifecycle_requested:
+        raise ValueError(
+            "Broad PRISM writer requires lease-minutes and absolute-max-minutes"
+        )
     if minute_lifecycle_requested and (
         lease_minutes is None or absolute_max_minutes is None
     ):
@@ -609,10 +651,14 @@ def launch_heavy_command(
         assert lifecycle_started is not None
         assert absolute_monotonic_deadline is not None
         pid_path = f"/tmp/pert-gym/{task}/bounded-payload.pid"
+        heartbeat_path = f"/tmp/pert-gym/{task}/bounded-payload.heartbeat"
         remote = (
             "set -eu; umask 077; "
             f"mkdir -p {shlex.quote(str(Path(pid_path).parent))}; "
+            f"rm -f -- {shlex.quote(heartbeat_path)} "
+            f"{shlex.quote(heartbeat_path + '.partial')}; "
             f"printf '%s\\n' $$ > {shlex.quote(pid_path)}; "
+            f"export PERT_GYM_PAYLOAD_HEARTBEAT_PATH={shlex.quote(heartbeat_path)}; "
             f"exec {shlex.join(list(command))}"
         )
         started = lifecycle_started
@@ -638,7 +684,9 @@ def launch_heavy_command(
                     "--zone",
                     ZONE,
                     "--command",
-                    f"rm -f -- {shlex.quote(pid_path)}",
+                    f"rm -f -- {shlex.quote(pid_path)} "
+                    f"{shlex.quote(heartbeat_path)} "
+                    f"{shlex.quote(heartbeat_path + '.partial')}",
                 ),
                 operation=f"stale {lifecycle_mode} payload PID cleanup",
             )
@@ -679,6 +727,14 @@ def launch_heavy_command(
                     if not _remote_payload_is_live(control_run, pid_path, pid):
                         raise RuntimeError(
                             "refusing lease renewal without the exact live payload PID"
+                        )
+                    if not _remote_payload_has_fresh_heartbeat(
+                        control_run,
+                        heartbeat_path=heartbeat_path,
+                        expected_pid=pid,
+                    ):
+                        raise RuntimeError(
+                            "refusing lease renewal without a fresh exact payload heartbeat"
                         )
                     if monotonic() >= absolute_monotonic_deadline:
                         _signal_remote_payload(run, pid_path, pid)
@@ -764,6 +820,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--absolute-max-minutes", type=float)
     parser.add_argument("--command", nargs=argparse.REMAINDER, required=True)
     args = parser.parse_args(argv)
+    if _is_broad_prism_command(args.command) and (
+        args.lease_minutes is None or args.absolute_max_minutes is None
+    ):
+        parser.error(
+            "Broad PRISM writer requires --lease-minutes and --absolute-max-minutes"
+        )
     return launch_heavy_command(
         task=args.task,
         eta_hours=args.eta_hours,
