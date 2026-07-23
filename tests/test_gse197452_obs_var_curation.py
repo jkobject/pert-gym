@@ -234,14 +234,16 @@ def test_successor_description_binds_predecessor_and_exact_replacement() -> None
             self.key = key
 
     predecessor = Item("pred", "pert-gym/additions/pred")
-    old = Item(curation.EXPECTED_OBS_UID, curation.OBS_KEY)
+    old = Item("historic", curation.OBS_KEY)
     other = Item("other", "other/key")
     new = Item("new", curation.OBS_KEY)
     description = json.loads(
-        curation.successor_description(new, predecessor, [old, other], [new, other])
+        curation.successor_description(
+            new, old, predecessor, [old, other], [new, other]
+        )
     )
     assert description["predecessor_uid"] == "pred"
-    assert description["replaced_obs_uid"] == curation.EXPECTED_OBS_UID
+    assert description["replaced_obs_uid"] == "historic"
     assert description["added_obs_uid"] == "new"
     assert description["member_count_before"] == description["member_count_after"] == 2
 

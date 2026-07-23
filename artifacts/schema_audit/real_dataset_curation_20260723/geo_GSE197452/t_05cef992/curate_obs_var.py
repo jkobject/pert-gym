@@ -824,7 +824,11 @@ def prepare(ln: Any, source: dict[str, Any]) -> dict[str, Any]:
 
 
 def successor_description(
-    new_obs: Any, predecessor: Any, before: list[Any], after: list[Any]
+    new_obs: Any,
+    replaced_obs: Any,
+    predecessor: Any,
+    before: list[Any],
+    after: list[Any],
 ) -> str:
     return canonical(
         {
@@ -834,7 +838,7 @@ def successor_description(
             "predecessor_uid": str(predecessor.uid),
             "predecessor_key": str(predecessor.key),
             "predecessor_membership_sha256": membership_sha256(before),
-            "replaced_obs_uid": EXPECTED_OBS_UID,
+            "replaced_obs_uid": str(replaced_obs.uid),
             "added_obs_uid": str(new_obs.uid),
             "member_count_before": len(before),
             "member_count_after": len(after),
@@ -855,13 +859,13 @@ def ensure_successor(
     if len(before) != PREDECESSOR_MEMBER_COUNT:
         raise AssertionError("predecessor Collection member count drift")
     matches = [item for item in before if str(item.key) == OBS_KEY]
-    if len(matches) != 1 or str(matches[0].uid) != EXPECTED_OBS_UID:
+    if len(matches) != 1 or str(matches[0].uid) == str(new_obs.uid):
         raise AssertionError("predecessor target OBS membership drift")
     after = [item for item in before if str(item.key) != OBS_KEY] + [new_obs]
     keys = [str(item.key) for item in after]
     if len(keys) != len(set(keys)) or len(after) != len(before):
         raise AssertionError("successor Collection key uniqueness/count drift")
-    description = successor_description(new_obs, predecessor, before, after)
+    description = successor_description(new_obs, matches[0], predecessor, before, after)
     existing = list(ln.Collection.filter(key=SUCCESSOR_COLLECTION_KEY).all())
     created = False
     if existing:
