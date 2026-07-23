@@ -1015,6 +1015,14 @@ def main() -> int:
             )
             stack.enter_context(distributed_lamin_writer_lease(metadata))
             fresh = prepare(ln, source)
+            ln.track(
+                params={
+                    "task_id": TASK_ID,
+                    "real_dataset_id": REAL_DATASET_ID,
+                    "mode": mode,
+                    "helper_sha256": helper_sha256,
+                }
+            )
             obs, obs_created = publish(ln, fresh, helper_sha256)
             successor, collection_created, collection_receipt = ensure_successor(
                 ln, obs, allow_create=True
