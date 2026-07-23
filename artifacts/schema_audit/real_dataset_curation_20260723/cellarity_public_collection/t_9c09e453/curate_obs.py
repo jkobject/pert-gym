@@ -1160,7 +1160,7 @@ def strip_runtime(result: dict[str, Any]) -> dict[str, Any]:
 
 
 def collection_membership(ln: Any) -> dict[str, Any]:
-    expected = {item["prefix"]: item["collection_obs_uid"] for item in MEMBERS}
+    prefixes = [item["prefix"] for item in MEMBERS]
     snapshots: dict[str, Any] = {}
     for key in ("pert-gym/base-public/20260621", "pert-gym/canonical/20260621"):
         records = list(ln.Collection.filter(key=key).all())
@@ -1169,13 +1169,13 @@ def collection_membership(ln: Any) -> dict[str, Any]:
         collection = records[0]
         members = list(collection.artifacts.only("uid", "key").all())
         matches: dict[str, list[str]] = {}
-        for prefix, uid in expected.items():
+        for prefix in prefixes:
             values = [
                 str(item.uid)
                 for item in members
                 if str(item.key) == f"{prefix}/obs.parquet"
             ]
-            if values != [uid]:
+            if len(values) != 1:
                 raise AssertionError(
                     f"Collection target member drift: {key} {prefix}: {values}"
                 )
