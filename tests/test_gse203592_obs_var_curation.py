@@ -200,7 +200,7 @@ def test_processing_decision_notebook_contains_executable_postwrite_assertions()
         if cell.get("cell_type") == "code"
     ]
     combined = "\n".join(sources)
-    assert 'obs.features.get_values()["X"]' in combined
+    assert 'obs_artifact.features.get_values()["X"]' in combined
     assert 'x.features.get_values()["var"]' in combined
     assert "ENSMUSG" in combined
     assert "guide_sequence_state" in combined
