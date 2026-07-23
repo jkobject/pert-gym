@@ -760,6 +760,7 @@ def verify_current(
     var = var_artifact.load()
     curated_obs = curate_obs(obs, x_semantics=x_semantics)
     curated_var = curate_var(var, by_symbol)
+    proposed_var_verdict = verify_var(curated_var, x_axis)
     obs_curated = str(obs_artifact.description).startswith(
         f"{TASK_ID}: source-exhaustive GSE203592 OBS"
     )
@@ -814,6 +815,7 @@ def verify_current(
             "guide_sequence_known_rows": 0,
         },
         "var_verdict": var_verdict,
+        "proposed_var_verdict": proposed_var_verdict,
         "already_curated_obs": obs_curated,
         "already_curated_var": var_curated,
         "curated_obs": curated_obs,
