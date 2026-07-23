@@ -707,21 +707,21 @@ def verify_var(var: pd.DataFrame, source: dict[str, Any]) -> dict[str, Any]:
     genes = source["genes"]
     expected_ids = pd.Index(source["feature_ids"])
     expected_names = pd.Index(source["feature_names"])
-    if (
-        len(var) != EXPECTED_N_VARS
-        or not stable.is_unique
-        or not stable.str.fullmatch(r"ENSG\d{11}", na=False).all()
-        or not pd.Index(stable.astype(str)).equals(expected_ids)
-        or not accepted_symbol_axis_matches(
+    checks = {
+        "rows": len(var) == EXPECTED_N_VARS,
+        "stable_unique": bool(stable.is_unique),
+        "stable_syntax": bool(stable.str.fullmatch(r"ENSG\d{11}", na=False).all()),
+        "stable_axis": pd.Index(stable.astype(str)).equals(expected_ids),
+        "symbol_axis": accepted_symbol_axis_matches(
             expected_names,
             expected_ids,
             pd.Index(var.index.astype(str)),
-        )
-        or not genes["gene_symbol"]
-        .astype(str)
-        .equals(pd.Series(expected_names, index=genes.index))
-    ):
-        raise AssertionError("VAR exact human ENSG/source axis drift")
+        ),
+        "source_gene_symbols": genes["gene_symbol"].astype(str).tolist()
+        == expected_names.tolist(),
+    }
+    if not all(checks.values()):
+        raise AssertionError(f"VAR exact human ENSG/source axis drift: {checks}")
     return {
         "rows": len(var),
         "stable_feature_id_unique": True,
