@@ -11,6 +11,7 @@ import sys
 import tempfile
 import time
 import urllib.request
+import warnings
 from contextlib import ExitStack
 from pathlib import Path
 from typing import Any
@@ -38,6 +39,8 @@ from tools.pert_gym_vm_runner import (
     lamin_writer_lease,
     preflight,
 )
+
+warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 
 TASK_ID = "t_05cef992"
 REAL_DATASET_ID = "geo:GSE197452"
