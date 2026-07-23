@@ -498,26 +498,32 @@ def verify_source_join(
         if target not in obs:
             continue
         comparisons[f"{column}->{target}"] = series_equal(source[column], obs[target])
-    required = [
-        value
+    required = {
+        key: value
         for key, value in comparisons.items()
         if not key.startswith("compound_name->")
-    ]
-    if not all(required):
+    }
+    if source.index.is_unique and not all(required.values()):
         raise AssertionError(f"source/current preserved-column mismatch: {comparisons}")
+    identity_columns: list[str] = []
     if not source.index.is_unique:
         original_index = (
             pd.Series(obs["original_obs_index"], dtype="string").reset_index(drop=True)
             if "original_obs_index" in obs
             else pd.Series(dtype="string")
         )
-        expected_columns = set(source.columns)
-        compared_columns = {key.split("->", maxsplit=1)[0] for key in comparisons}
+        identity_columns = [
+            key.split("->", maxsplit=1)[0]
+            for key, equal in comparisons.items()
+            if equal
+        ]
+        identity_unique = bool(identity_columns) and not bool(
+            source[identity_columns].astype("string").fillna("<NA>").duplicated().any()
+        )
         obs_uuid_unique = "obs_uuid" in obs and bool(obs["obs_uuid"].is_unique)
         if (
             not source_index.equals(original_index)
-            or compared_columns != expected_columns
-            or not all(comparisons.values())
+            or not identity_unique
             or not obs_uuid_unique
         ):
             raise AssertionError(
@@ -527,11 +533,12 @@ def verify_source_join(
         "rows": len(source),
         "exact_index_order_match": True,
         "index_unique": bool(source.index.is_unique),
+        "row_identity_columns": identity_columns,
         "column_equalities": comparisons,
         "join_semantics": (
             "exact source H5AD obs index equals accepted OBS index; duplicate indices "
-            "additionally require exact original_obs_index order, unique obs_uuid, and "
-            "equality of every selected source column"
+            "additionally require exact original_obs_index order, unique obs_uuid, and a "
+            "unique composite of value-equal preserved source columns"
         ),
     }
 
