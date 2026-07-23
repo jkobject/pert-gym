@@ -717,8 +717,11 @@ def verify_var(var: pd.DataFrame, source: dict[str, Any]) -> dict[str, Any]:
             expected_ids,
             pd.Index(var.index.astype(str)),
         ),
-        "source_gene_symbols": genes["gene_symbol"].astype(str).tolist()
-        == expected_names.tolist(),
+        "source_gene_symbols": accepted_symbol_axis_matches(
+            expected_names,
+            expected_ids,
+            pd.Index(genes["gene_symbol"].astype(str)),
+        ),
     }
     if not all(checks.values()):
         raise AssertionError(f"VAR exact human ENSG/source axis drift: {checks}")
