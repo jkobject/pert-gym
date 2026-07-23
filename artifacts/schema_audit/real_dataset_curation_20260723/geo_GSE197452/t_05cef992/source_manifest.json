@@ -88,12 +88,12 @@
       "key": "prism_collection/GSE197452_Perturb-seq/obs.parquet"
     },
     "x": {
-      "uid": "GY4hnHN7sO2Kcf7V0000",
-      "hash": "U8lvHt6Ka3DE3TT0C6I7Sw",
+      "uid": "GYQBTGssvyua7wmc0000",
+      "hash": "1fnOGlEvms7NaqTV_Bc76o",
       "key": "prism_collection/GSE197452_Perturb-seq/X.h5ad"
     },
     "var": {
-      "uid": "eJnnmYkdjC3QxLlC0001",
+      "uid": "eJMdIf8H75RMWWK90001",
       "key": "prism_collection/GSE197452_Perturb-seq/var.parquet"
     },
     "additions_predecessor": {
