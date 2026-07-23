@@ -1,0 +1,131 @@
+from __future__ import annotations
+
+import importlib.util
+import json
+from pathlib import Path
+
+import pandas as pd
+import pytest
+
+SCRIPT = (
+    Path(__file__).parents[1] / "artifacts/schema_audit/real_dataset_curation_20260723/"
+    "cellarity_public_collection/t_9c09e453/curate_obs.py"
+)
+SPEC = importlib.util.spec_from_file_location("cellarity_obs_curation", SCRIPT)
+assert SPEC is not None and SPEC.loader is not None
+curation = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(curation)
+EVIDENCE_ROOT = SCRIPT.parent
+
+
+def member(kind: str, rows: int) -> dict:
+    spec = next(item for item in curation.MEMBERS if item["kind"] == kind)
+    return {**spec, "n_obs": rows}
+
+
+def base_obs(index: list[str]) -> pd.DataFrame:
+    return pd.DataFrame(
+        {"obs_uuid": [f"uuid-{value}" for value in index]},
+        index=pd.Index(index),
+    )
+
+
+def test_pre_demultiplexing_raw_rows_do_not_claim_treatment() -> None:
+    index = ["c1", "c2"]
+    source = pd.DataFrame(
+        {
+            "LIBRARY_ID": ["L1", "L2"],
+            "n_counts": [100.0, 200.0],
+            "percent_mito": [0.1, 0.2],
+            "sample_name": ["Day 1_Lib 1", "Day 2_Lib 1"],
+        },
+        index=index,
+    )
+
+    curated = curation.curate_obs(
+        base_obs(index), source, member("gse305979_raw", len(index))
+    )
+
+    assert curated["perturbation"].isna().all()
+    assert curated["perturbation_state"].eq("unknown").all()
+    assert curated["is_control"].isna().all()
+    assert curated["timepoint"].tolist() == [1440.0, 2880.0]
+    assert curated["is_baseline"].eq(False).all()
+
+
+def test_pseudobulk_distinguishes_vehicle_from_compound_dose() -> None:
+    index = ["s1", "s2"]
+    source = pd.DataFrame(
+        {
+            "bio_sample_id": ["sample-1", "sample-2"],
+            "cell_id": ["A375", "A549"],
+            "compound_name": ["DMSO", "Drug A"],
+            "dose_uM": [pd.NA, 1.0],
+            "library_id": ["L1", "L2"],
+            "replicate": [1, 1],
+            "timepoint_hr": [24.0, 24.0],
+        },
+        index=index,
+    )
+
+    curated = curation.curate_obs(
+        base_obs(index), source, member("gse306429_pseudobulk", len(index))
+    )
+
+    assert curated["is_pseudobulk"].eq(True).all()
+    assert curated["is_control"].tolist() == [True, False]
+    assert curated["dose_state"].tolist() == ["not_applicable", "known"]
+    assert pd.isna(curated.loc["s1", "dose"])
+    assert curated.loc["s2", "dose"] == 1.0
+    assert curated["cell_line"].tolist() == ["A375", "A549"]
+
+
+def test_every_canonical_field_has_value_state_and_source_columns() -> None:
+    index = ["c1"]
+    source = pd.DataFrame(
+        {
+            "CELL_ID": ["CCL-171"],
+            "CONCENTRATION_UM": [0.0],
+            "LIBRARY_ID": ["L1"],
+            "TIMEPOINT_HOURS": [0.0],
+        },
+        index=index,
+    )
+    curated = curation.curate_obs(
+        base_obs(index), source, member("gse305979_day0_raw", 1)
+    )
+
+    for field in curation.CANONICAL_OBS_FIELDS:
+        assert field in curated
+        assert f"{field}_state" in curated
+        assert f"{field}_source" in curated
+    assert curated.loc["c1", "perturbation"] == "No treatment"
+    assert bool(curated.loc["c1", "is_control"])
+    assert bool(curated.loc["c1", "is_baseline"])
+
+
+def test_source_join_requires_exact_unique_index_order() -> None:
+    obs = base_obs(["a", "b"])
+    source = pd.DataFrame({"LIBRARY_ID": ["L1", "L2"]}, index=["b", "a"])
+
+    with pytest.raises(AssertionError, match="exact index join failed"):
+        curation.verify_source_join(obs, source, member("gse305979_day0_raw", len(obs)))
+
+
+def test_frozen_bindings_and_source_manifest_cover_exact_live_identities() -> None:
+    manifest = json.loads((EVIDENCE_ROOT / "source_manifest.json").read_text())
+    inspection = json.loads((EVIDENCE_ROOT / "source_inspection.json").read_text())
+    manifest_by_name = {
+        item["filename"]: item for item in manifest["target_source_objects"]
+    }
+
+    assert len(manifest_by_name) == len(curation.MEMBERS) == 10
+    assert sum(item["n_obs"] for item in manifest_by_name.values()) == 2_212_441
+    for spec, inspected in zip(curation.MEMBERS, inspection["members"], strict=True):
+        assert (
+            manifest_by_name[spec["filename"]]["sha256"]
+            == inspected["source"]["sha256"]
+        )
+        assert spec["x_hash"] == inspected["accepted_artifacts"]["x"]["hash"]
+        assert spec["var_uid"] == inspected["accepted_artifacts"]["var"]["uid"]
+    assert len(curation.load_frozen_inputs()["inputs"]) == 2

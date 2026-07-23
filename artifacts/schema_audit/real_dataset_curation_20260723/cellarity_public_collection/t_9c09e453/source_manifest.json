@@ -1,0 +1,554 @@
+{
+  "authority_objects": [
+    {
+      "accession": "GSE305370",
+      "sha256": "6d6c27efb59bd4239d8ce8ae4bed9ae9c8a96ab2c33d667bf2d23e5f2b0e4a48",
+      "size": 11820,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305370/soft/GSE305370_family.soft.gz"
+    },
+    {
+      "accession": "GSE305979",
+      "sha256": "a8a43c044c12d510b35d26b6bb0586d4a0b0ce6a4741f7bc1c043d313f70ada9",
+      "size": 7252,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305979/soft/GSE305979_family.soft.gz"
+    },
+    {
+      "accession": "GSE306429",
+      "sha256": "c248ffd97109cd2e5dba5e7afdfdb56fbf3a95887e3406a563a588fa2385ffcb",
+      "size": 52648,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE306nnn/GSE306429/soft/GSE306429_family.soft.gz"
+    },
+    {
+      "accession": "GSE305370",
+      "sha256": "4c3f4335f341a330da4e3134a71bd752cf6120f3a753983cc9fcaf38b7e9c246",
+      "size": 5131,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305370/suppl/GSE305370_README.md.txt"
+    }
+  ],
+  "format": "pert-gym.source-manifest/v1",
+  "frozen_inputs": [
+    {
+      "binding_path": "artifacts/schema_audit/real_dataset_curation_20260723/cellarity_public_collection/t_9c09e453/frozen_inputs/real_biological_dataset_crosswalk_120_families_20260716.json.gz",
+      "compression": "gzip level 9, mtime=0",
+      "gzip_bytes": 52179,
+      "gzip_sha256": "8acbf5b4f6b88ed9676f5403990d01a4a6a755cf8f5ed21af6821a1a5babe908",
+      "original_path": "artifacts/schema_audit/real_biological_dataset_crosswalk_120_families_20260716.json",
+      "uncompressed_bytes": 806794,
+      "uncompressed_sha256": "65388d3d575d99961e2f8fb62d35dd38366d50268068ff144445af6530b54a9b"
+    },
+    {
+      "binding_path": "artifacts/schema_audit/real_dataset_curation_20260723/cellarity_public_collection/t_9c09e453/frozen_inputs/final_real_dataset_obs_var_20260717.json.gz",
+      "compression": "gzip level 9, mtime=0",
+      "gzip_bytes": 612434,
+      "gzip_sha256": "28fc912fa9c270ca42a710984b0479dce761cd0467b1467f4602254b543dacff",
+      "original_path": "artifacts/schema_audit/final_real_dataset_obs_var_20260717.json",
+      "uncompressed_bytes": 17879030,
+      "uncompressed_sha256": "60530cc3a14fe28e1dbf06c9f62b3e993649750069287083e4351aea3f8318df"
+    }
+  ],
+  "inspection_receipt": {
+    "generation": 1784791363764350,
+    "sha256": "465dfc1be6f2ba46a59e18d208a4ef5966f76290a4d7200cb1a298f857f32619",
+    "size": 145458,
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/curation/cellarity/t_9c09e453/source-inspection-20260723T072243Z.json"
+  },
+  "publication_identity": {
+    "doi": "10.1126/science.adi8577",
+    "geo_accessions": [
+      "GSE305370",
+      "GSE305979",
+      "GSE306429"
+    ]
+  },
+  "real_dataset_id": "cellarity/public-collection",
+  "scope": {
+    "biological_datasets": 1,
+    "logical_families": 10,
+    "observations": 2212441,
+    "physical_members": 10,
+    "target_payloads": 10
+  },
+  "source_exhaustiveness": {
+    "article_access": "DOI metadata cited; no row-level article constants are materialized without per-artifact homogeneity in GEO/source H5AD evidence.",
+    "auxiliary_sources": "GSE305370 per-donor/day H5MU and GSE306429 raw/limma objects were inventoried but are not row authorities for the 10 accepted target H5ADs; no values are inferred from filenames or cross-object row order.",
+    "geo_supplementary_directories_inspected": [
+      "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305370/suppl/",
+      "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305979/suppl/",
+      "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE306nnn/GSE306429/suppl/"
+    ],
+    "target_rule": "Every accepted Cellarity logical family is bound to its exact same-named GEO H5AD, with immutable payload SHA-256 and exact row/index parity."
+  },
+  "target_source_objects": [
+    {
+      "accession": "GSE305370",
+      "filename": "GSE305370_citeseq_alldonors_alldays.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": true,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": true
+        },
+        "source_obs_columns": [
+          "BP",
+          "EryP",
+          "HSC",
+          "MasP",
+          "MkP",
+          "MoP",
+          "NeuP",
+          "cell_type",
+          "donor",
+          "doublet_scores",
+          "doublet_scores_smoothed",
+          "library",
+          "log1p_n_genes_by_counts",
+          "log1p_total_counts",
+          "log1p_total_counts_mt",
+          "n_counts",
+          "n_genes",
+          "n_genes_by_counts",
+          "pct_counts_in_top_100_genes",
+          "pct_counts_in_top_200_genes",
+          "pct_counts_in_top_500_genes",
+          "pct_counts_in_top_50_genes",
+          "pct_counts_mt",
+          "predicted_doublets",
+          "time",
+          "total_counts",
+          "total_counts_mt"
+        ],
+        "source_var_index_sha256": "30b71d9d578cfaf85209159e34d127affe1058da193b7c0bd12244d075d7636e",
+        "source_var_rows": 15567
+      },
+      "logical_family": "cellarity/GSE305370/GSE305370_citeseq_alldonors_alldays",
+      "n_obs": 134583,
+      "sha256": "7b48dcc6a088e44686adce7af2848e1ec8490cb37c8743a4734d95961fd69f52",
+      "size": 5182373057,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305370/suppl/GSE305370_citeseq_alldonors_alldays.h5ad"
+    },
+    {
+      "accession": "GSE305370",
+      "filename": "GSE305370_multiome_alldonors_alldays.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": true,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": true
+        },
+        "source_obs_columns": [
+          "BP",
+          "EryP",
+          "HSC",
+          "MasP",
+          "MkP",
+          "MoP",
+          "NeuP",
+          "category_fragment",
+          "category_mt",
+          "cell_type_atac",
+          "cell_type_rna",
+          "doublet_scores",
+          "doublet_scores_smoothed",
+          "leiden_allcomps",
+          "leiden_corrRemoved",
+          "library",
+          "log1p_n_genes_by_counts",
+          "log1p_total_counts",
+          "log1p_total_counts_mt",
+          "log_total_fragment_counts",
+          "lsi_1",
+          "n_counts",
+          "n_features_per_cell",
+          "n_genes",
+          "n_genes_by_counts",
+          "nuc_signal_filter",
+          "nucleosome_signal",
+          "pct_counts_in_top_100_genes",
+          "pct_counts_in_top_200_genes",
+          "pct_counts_in_top_500_genes",
+          "pct_counts_in_top_50_genes",
+          "pct_counts_mt_atac",
+          "pct_counts_mt_rna",
+          "predicted_doublets",
+          "total_counts",
+          "total_counts_mt",
+          "total_fragment_counts",
+          "tss_score"
+        ],
+        "source_var_index_sha256": "b1ce5e3505f6b973106afad0cc52e29f17c17f5c1d91190f28e2e623a5606963",
+        "source_var_rows": 252818
+      },
+      "logical_family": "cellarity/GSE305370/GSE305370_multiome_alldonors_alldays",
+      "n_obs": 164462,
+      "sha256": "71c403153ce049016cacddf691beb4629c84f3ac90cb79c4b2bf08e8f27a69d1",
+      "size": 12518412710,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305370/suppl/GSE305370_multiome_alldonors_alldays.h5ad"
+    },
+    {
+      "accession": "GSE305370",
+      "filename": "GSE305370_rna_combined_with_velocity_and_refined_annotations.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": false,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": false
+        },
+        "source_obs_columns": [
+          "BP",
+          "EryP",
+          "HSC",
+          "MasP",
+          "MkP",
+          "MoP",
+          "NeuP",
+          "cell_type",
+          "cell_type_abbr",
+          "day",
+          "donor",
+          "doublet_scores",
+          "doublet_scores_smoothed",
+          "initial_size",
+          "initial_size_spliced",
+          "initial_size_unspliced",
+          "leiden",
+          "library",
+          "log1p_n_genes_by_counts",
+          "log1p_total_counts",
+          "log1p_total_counts_mt",
+          "n_counts",
+          "n_genes",
+          "n_genes_by_counts",
+          "pct_counts_in_top_100_genes",
+          "pct_counts_in_top_200_genes",
+          "pct_counts_in_top_500_genes",
+          "pct_counts_in_top_50_genes",
+          "pct_counts_mt",
+          "predicted_doublets",
+          "total_counts",
+          "total_counts_mt"
+        ],
+        "source_var_index_sha256": "ef081dd45f27a29c2d62b550c51d75b4a45a7aac0e5c6115d4a7b8b85e9192d9",
+        "source_var_rows": 14275
+      },
+      "logical_family": "cellarity/GSE305370/GSE305370_rna_combined_with_velocity_and_refined_annotations",
+      "n_obs": 135341,
+      "sha256": "7d0085f6a7bdaf1c052e3d75fc81ae7edb64ae2d92ecea0746bdda74c7320c12",
+      "size": 25654664714,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305370/suppl/GSE305370_rna_combined_with_velocity_and_refined_annotations.h5ad"
+    },
+    {
+      "accession": "GSE305979",
+      "filename": "GSE305979_day0-7_normalized_counts_with_celltype_annotations.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": true,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": true
+        },
+        "source_obs_columns": [
+          "ASSAY_ID",
+          "BIO_EXPERIMENT_ID",
+          "CDNA_BARCODE",
+          "CELL_ID",
+          "CONCENTRATION_UM",
+          "CONTAINER_FORMAT",
+          "CONTAINER_ID",
+          "EXPERIMENT_ID",
+          "FLOWCELL_ID",
+          "I5_NAME",
+          "I5_SEQ",
+          "I7_NAME",
+          "I7_SEQ",
+          "LIBPREP_ID",
+          "LIBRARY_BARCODE",
+          "LIBRARY_ID",
+          "LIBRARY_TYPE",
+          "PLATE_ID",
+          "PLATE_NAME",
+          "POOL_ID",
+          "POOL_NAME",
+          "SEQ_POOL_BARCODE",
+          "SEQ_POOL_ID",
+          "SPECIES",
+          "TEST_SAMPLE",
+          "TIMEPOINT",
+          "TIMEPOINT_HOURS",
+          "UNIQUE_POOL",
+          "barcode",
+          "cell_type",
+          "compound_name",
+          "doublet_scores",
+          "doublet_scores_smoothed",
+          "lib_rank",
+          "library",
+          "n_counts",
+          "n_genes",
+          "norm_factor",
+          "percent_mito",
+          "predicted_doublets",
+          "replicate",
+          "symphony_per_cell_dist"
+        ],
+        "source_var_index_sha256": "4f9fa12b0988a94ed12433b1511076420c943a63d12cb86aebf6e6adf451ad47",
+        "source_var_rows": 36674
+      },
+      "logical_family": "cellarity/GSE305979/GSE305979_day0-7_normalized_counts_with_celltype_annotations",
+      "n_obs": 146735,
+      "sha256": "05374826f732b94b3559095aa4d372b792f420558740765e7d6f60ac0b54a29c",
+      "size": 2984499642,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305979/suppl/GSE305979_day0-7_normalized_counts_with_celltype_annotations.h5ad"
+    },
+    {
+      "accession": "GSE305979",
+      "filename": "GSE305979_day0_raw_counts.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": true,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": true
+        },
+        "source_obs_columns": [
+          "ASSAY_ID",
+          "BIO_EXPERIMENT_ID",
+          "CDNA_BARCODE",
+          "CELL_ID",
+          "COMMON_NAME",
+          "CONCENTRATION_UM",
+          "CONTAINER_FORMAT",
+          "CONTAINER_ID",
+          "EXPERIMENT_ID",
+          "FLOWCELL_ID",
+          "I5_NAME",
+          "I5_SEQ",
+          "I7_NAME",
+          "I7_SEQ",
+          "LIBPREP_ID",
+          "LIBRARY_BARCODE",
+          "LIBRARY_ID",
+          "LIBRARY_TYPE",
+          "PLATE_ID",
+          "PLATE_NAME",
+          "POOL_ID",
+          "POOL_NAME",
+          "SEQ_POOL_BARCODE",
+          "SEQ_POOL_ID",
+          "SPECIES",
+          "TARGET_CELL_NUMBER",
+          "TEST_SAMPLE",
+          "TIMEPOINT_HOURS",
+          "UNIQUE_POOL",
+          "barcode"
+        ],
+        "source_var_index_sha256": "ca4bc6fffb30d3f82f639252d57ebb775e0f02f7b0e5fd8d15976cd6833f04f2",
+        "source_var_rows": 58676
+      },
+      "logical_family": "cellarity/GSE305979/GSE305979_day0_raw_counts",
+      "n_obs": 2875,
+      "sha256": "2c21b792f4a12bcfb0f4c5ff1fb8185b720565a3114ff4bc98e89ed769103176",
+      "size": 42727199,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305979/suppl/GSE305979_day0_raw_counts.h5ad"
+    },
+    {
+      "accession": "GSE305979",
+      "filename": "GSE305979_day1-7_demuxed_counts.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": true,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": true
+        },
+        "source_obs_columns": [
+          "ASSAY_ID",
+          "BIO_EXPERIMENT_ID",
+          "BIO_SAMPLE_ID_x",
+          "BIO_SAMPLE_ID_y",
+          "CDNA_BARCODE",
+          "CELL_ID",
+          "CONCENTRATION_UM",
+          "CONTAINER_FORMAT",
+          "CONTAINER_ID",
+          "EXPERIMENT_ID",
+          "FLOWCELL_ID",
+          "HTO_classification",
+          "HTO_hashtag",
+          "I5_NAME",
+          "I5_SEQ",
+          "I7_NAME",
+          "I7_SEQ",
+          "LIBPREP_ID",
+          "LIBRARY_BARCODE",
+          "LIBRARY_ID",
+          "LIBRARY_TYPE",
+          "PLATE_ID",
+          "PLATE_NAME",
+          "POOL_ID",
+          "POOL_NAME",
+          "Pool",
+          "SEQ_POOL_BARCODE",
+          "SEQ_POOL_ID",
+          "SPECIES",
+          "TARGET_CELLS",
+          "TEST_SAMPLE",
+          "TIMEPOINT_HOURS",
+          "UNIQUE_POOL",
+          "WELL_ID",
+          "barcode",
+          "compound_name",
+          "n_counts",
+          "percent_mito",
+          "sample_name"
+        ],
+        "source_var_index_sha256": "ca4bc6fffb30d3f82f639252d57ebb775e0f02f7b0e5fd8d15976cd6833f04f2",
+        "source_var_rows": 58676
+      },
+      "logical_family": "cellarity/GSE305979/GSE305979_day1-7_demuxed_counts",
+      "n_obs": 143396,
+      "sha256": "f60525c952fcab98418285dfd799f1df2650a636037deb630b80af4d6501f763",
+      "size": 1373371436,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305979/suppl/GSE305979_day1-7_demuxed_counts.h5ad"
+    },
+    {
+      "accession": "GSE305979",
+      "filename": "GSE305979_day1-7_raw_counts.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": true,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": true
+        },
+        "source_obs_columns": [
+          "ASSAY_ID",
+          "CDNA_BARCODE",
+          "EXPERIMENT_ID",
+          "FLOWCELL_ID",
+          "I5_NAME",
+          "I5_SEQ",
+          "I7_NAME",
+          "I7_SEQ",
+          "ID",
+          "LIBPREP_ID",
+          "LIBRARY_BARCODE",
+          "LIBRARY_ID",
+          "LIBRARY_TYPE",
+          "SEQ_POOL_BARCODE",
+          "SEQ_POOL_ID",
+          "SPECIES",
+          "TARGET_CELLS",
+          "barcode",
+          "n_counts",
+          "percent_mito",
+          "sample_name"
+        ],
+        "source_var_index_sha256": "ca4bc6fffb30d3f82f639252d57ebb775e0f02f7b0e5fd8d15976cd6833f04f2",
+        "source_var_rows": 58676
+      },
+      "logical_family": "cellarity/GSE305979/GSE305979_day1-7_raw_counts",
+      "n_obs": 223971,
+      "sha256": "0ec15fc30d9ec745c914dc0b0ab2bdd8d70db5cca4f3f55e3e48f19167684bfd",
+      "size": 1904213868,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE305nnn/GSE305979/suppl/GSE305979_day1-7_raw_counts.h5ad"
+    },
+    {
+      "accession": "GSE306429",
+      "filename": "GSE306429_combined_demuxed.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": true,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": true
+        },
+        "source_obs_columns": [
+          "antibody_id",
+          "bio_sample_id",
+          "cell_id",
+          "col",
+          "compound_name",
+          "dose_uM",
+          "library_id",
+          "plate",
+          "replicate",
+          "row",
+          "timepoint_hr",
+          "well"
+        ],
+        "source_var_index_sha256": "cd28ef5753f523e073b12ff25bd0cc470b5b1c8905e99c504af0195bc1ea41c1",
+        "source_var_rows": 13290
+      },
+      "logical_family": "cellarity/GSE306429/GSE306429_combined_demuxed",
+      "n_obs": 1257778,
+      "sha256": "84e060343b2d85a18524b149ba8101c3aa4082ecc0ce2a560fd9d96b86dfe9b1",
+      "size": 25588029957,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE306nnn/GSE306429/suppl/GSE306429_combined_demuxed.h5ad"
+    },
+    {
+      "accession": "GSE306429",
+      "filename": "GSE306429_combined_pseudobulk.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": true,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": true
+        },
+        "source_obs_columns": [
+          "antibody_id",
+          "bio_sample_id",
+          "cell_id",
+          "col",
+          "compound_name",
+          "dose_uM",
+          "library_id",
+          "plate",
+          "replicate",
+          "row",
+          "timepoint_hr",
+          "well"
+        ],
+        "source_var_index_sha256": "cd28ef5753f523e073b12ff25bd0cc470b5b1c8905e99c504af0195bc1ea41c1",
+        "source_var_rows": 13290
+      },
+      "logical_family": "cellarity/GSE306429/GSE306429_combined_pseudobulk",
+      "n_obs": 1737,
+      "sha256": "ca113616caae7619c12b9acb0ed47c8abcd0867c3932f02b6316a83db32d2644",
+      "size": 119871669,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE306nnn/GSE306429/suppl/GSE306429_combined_pseudobulk.h5ad"
+    },
+    {
+      "accession": "GSE306429",
+      "filename": "GSE306429_combined_vscores.h5ad",
+      "inspection": {
+        "exact_source_index_join": {
+          "source_index_equals_accepted_index": true,
+          "source_index_equals_original_obs_index": true,
+          "source_index_set_equals_accepted_index": true,
+          "source_index_set_equals_original_obs_index": true
+        },
+        "source_obs_columns": [
+          "cell_id",
+          "compound_name",
+          "dose_uM",
+          "library_id",
+          "plate",
+          "replicate",
+          "well"
+        ],
+        "source_var_index_sha256": "cd28ef5753f523e073b12ff25bd0cc470b5b1c8905e99c504af0195bc1ea41c1",
+        "source_var_rows": 13290
+      },
+      "logical_family": "cellarity/GSE306429/GSE306429_combined_vscores",
+      "n_obs": 1563,
+      "sha256": "64c596346f810670586fb1ae0c0ca3c854e745505624aa5e6f2b35d574fe01d8",
+      "size": 77748812,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE306nnn/GSE306429/suppl/GSE306429_combined_vscores.h5ad"
+    }
+  ],
+  "task_id": "t_9c09e453"
+}
