@@ -135,6 +135,14 @@ def ordered_sha256(values: pd.Index) -> str:
     return hashlib.sha256("\n".join(values.astype(str)).encode()).hexdigest()
 
 
+def multiset_sha256(values: pd.Index) -> str:
+    hashed = pd.util.hash_pandas_object(
+        pd.Index(values.astype(str)), index=False
+    ).to_numpy(copy=True)
+    hashed.sort()
+    return hashlib.sha256(hashed.tobytes()).hexdigest()
+
+
 def source_url(member: dict[str, Any]) -> str:
     accession = member["accession"]
     stem = accession[:6] + "nnn"
@@ -207,12 +215,10 @@ def frame_summary(frame: pd.DataFrame) -> dict[str, Any]:
     }
 
 
-def normalized_equal(left: pd.Series, right: pd.Series) -> bool:
-    if len(left) != len(right):
-        return False
-    lvalue = left.astype("string").fillna("<NA>").reset_index(drop=True)
-    rvalue = right.astype("string").fillna("<NA>").reset_index(drop=True)
-    return bool(lvalue.equals(rvalue))
+def normalized_sha256(series: pd.Series) -> str:
+    normalized = series.astype("string").fillna("<NA>").reset_index(drop=True)
+    hashed = pd.util.hash_pandas_object(normalized, index=False).to_numpy()
+    return hashlib.sha256(hashed.tobytes()).hexdigest()
 
 
 def inspect_member(ln: Any, member: dict[str, Any], root: Path) -> dict[str, Any]:
@@ -222,10 +228,6 @@ def inspect_member(ln: Any, member: dict[str, Any], root: Path) -> dict[str, Any
     var_key = f"{prefix}/var.parquet"
     source_path, source_receipt = download(member, root)
 
-    accepted_artifact = exact_artifact(ln, member["obs_uid"], obs_key)
-    x_artifact = exact_artifact(ln, member["x_uid"], x_key)
-    var_artifact = exact_artifact(ln, member["var_uid"], var_key)
-    accepted = accepted_artifact.load()
     source_adata = ad.read_h5ad(source_path, backed="r")
     try:
         source = source_adata.obs.copy()
@@ -234,32 +236,49 @@ def inspect_member(ln: Any, member: dict[str, Any], root: Path) -> dict[str, Any
     finally:
         source_adata.file.close()
 
-    if len(source) != member["n_obs"] or len(accepted) != member["n_obs"]:
-        raise AssertionError(f"OBS denominator drift: {prefix}")
     source_index = pd.Index(source.index.astype(str))
+    if len(source) != member["n_obs"]:
+        raise AssertionError(f"source OBS denominator drift: {prefix}")
+    source_summary = frame_summary(source)
+    source_column_hashes = {
+        str(column): normalized_sha256(source[column]) for column in source.columns
+    }
+    source_index_ordered_sha256 = ordered_sha256(source_index)
+    source_index_multiset_sha256 = multiset_sha256(source_index)
+    del source
+
+    accepted_artifact = exact_artifact(ln, member["obs_uid"], obs_key)
+    x_artifact = exact_artifact(ln, member["x_uid"], x_key)
+    var_artifact = exact_artifact(ln, member["var_uid"], var_key)
+    accepted = accepted_artifact.load()
+    if len(accepted) != member["n_obs"]:
+        raise AssertionError(f"accepted OBS denominator drift: {prefix}")
     accepted_index = pd.Index(accepted.index.astype(str))
     original = (
         pd.Index(accepted["original_obs_index"].astype(str))
         if "original_obs_index" in accepted
         else pd.Index([])
     )
-    common = sorted(set(source.columns).intersection(accepted.columns))
+    common = sorted(set(source_column_hashes).intersection(accepted.columns))
     common_equal = {
-        str(column): normalized_equal(source[column], accepted[column])
+        str(column): source_column_hashes[str(column)]
+        == normalized_sha256(accepted[column])
         for column in common
     }
     result = {
         "identity": dict(member),
         "source": source_receipt,
-        "source_obs": frame_summary(source),
+        "source_obs": source_summary,
         "accepted_obs": frame_summary(accepted),
         "axis_relations": {
-            "source_index_equals_accepted_index": source_index.equals(accepted_index),
-            "source_index_equals_original_obs_index": source_index.equals(original),
-            "source_index_set_equals_accepted_index": len(source_index) == len(accepted_index)
-            and set(source_index) == set(accepted_index),
-            "source_index_set_equals_original_obs_index": len(source_index) == len(original)
-            and set(source_index) == set(original),
+            "source_index_equals_accepted_index": source_index_ordered_sha256
+            == ordered_sha256(accepted_index),
+            "source_index_equals_original_obs_index": source_index_ordered_sha256
+            == ordered_sha256(original),
+            "source_index_set_equals_accepted_index": source_index_multiset_sha256
+            == multiset_sha256(accepted_index),
+            "source_index_set_equals_original_obs_index": source_index_multiset_sha256
+            == multiset_sha256(original),
         },
         "common_column_equalities": common_equal,
         "source_var": {
@@ -273,7 +292,7 @@ def inspect_member(ln: Any, member: dict[str, Any], root: Path) -> dict[str, Any
             "var": {"uid": str(var_artifact.uid), "hash": str(var_artifact.hash)},
         },
     }
-    del accepted, source
+    del accepted
     return result
 
 
