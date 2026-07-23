@@ -440,7 +440,13 @@ def curate_obs(
     guide = baseline["guide"].astype("string")
     if not guide.fillna("").equals(assignments["source_guide_top"].fillna("")):
         raise AssertionError("accepted guide differs from exact source top guide")
-    controls = guide.str.startswith("NO_SITE_", na=False).astype("boolean")
+    controls = (
+        baseline["perturbation"]
+        .astype("string")
+        .str.casefold()
+        .eq("non-targeting")
+        .astype("boolean")
+    )
     if not baseline["is_control"].astype("boolean").equals(controls):
         raise AssertionError("accepted control semantics drift")
     condition = pd.Series(
@@ -600,7 +606,13 @@ def curate_obs(
         "known",
         "non-targeting guide control semantics",
     )
-    set_field(curated, "is_control", controls, "known", "NO_SITE guide identity")
+    set_field(
+        curated,
+        "is_control",
+        controls,
+        "known",
+        "accepted source-derived non-targeting label (NO_SITE, ONE_NON-GENE_SITE, or Background guide)",
+    )
     set_field(
         curated,
         "control_availability",
