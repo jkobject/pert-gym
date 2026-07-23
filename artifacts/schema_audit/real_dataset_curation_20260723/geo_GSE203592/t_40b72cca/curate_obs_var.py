@@ -696,7 +696,17 @@ def verify_var(var: pd.DataFrame, x_axis: pd.Index) -> dict[str, Any]:
         raise AssertionError("VAR mouse stable-ID contract drift")
     coverage = float(stable.notna().mean())
     if coverage < 0.99:
-        raise AssertionError("VAR mouse stable-ID coverage below 99%")
+        statuses = {
+            str(key): int(value)
+            for key, value in var["stable_feature_id_mapping_status"]
+            .astype("string")
+            .value_counts(dropna=False)
+            .items()
+        }
+        raise AssertionError(
+            f"VAR mouse stable-ID coverage below 99%: coverage={coverage}, "
+            f"statuses={statuses}"
+        )
     if not var["organism"].astype("string").eq("Mus musculus").all():
         raise AssertionError("VAR organism drift")
     feature_index = var["feature_index"].astype("string")
