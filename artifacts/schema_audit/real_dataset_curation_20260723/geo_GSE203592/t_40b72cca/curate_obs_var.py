@@ -337,15 +337,27 @@ def curate_obs(obs: pd.DataFrame, *, x_semantics: str | None) -> pd.DataFrame:
         )
     original = obs.copy(deep=True)
     curated = obs.copy(deep=True)
-    for field in CANONICAL_OBS_FIELDS:
-        if field in original and f"prior_canonical_{field}" not in original:
-            curated[f"prior_canonical_{field}"] = original[field]
+    already_curated_frame = all(
+        f"{field}_state" in original.columns for field in CANONICAL_OBS_FIELDS
+    )
+    if not already_curated_frame:
+        for field in CANONICAL_OBS_FIELDS:
+            if field in original and f"prior_canonical_{field}" not in original:
+                curated[f"prior_canonical_{field}"] = original[field]
 
     controls = original["is_control"].astype("boolean")
     expected_controls = original["condition"].astype("string").eq("control")
     if not controls.astype(bool).equals(expected_controls.astype(bool)):
         raise AssertionError("control semantics drift")
-    source_cell_type = original["tissue_type"].astype("string")
+    source_cell_type_column = "tissue_type"
+    for preserved_column in (
+        "source_original_tissue_type",
+        "prior_canonical_tissue_type",
+    ):
+        if preserved_column in original.columns:
+            source_cell_type_column = preserved_column
+            break
+    source_cell_type = original[source_cell_type_column].astype("string")
     if source_cell_type.nunique(dropna=True) != 1 or source_cell_type.iloc[0] != (
         "CD8+ tumor infiltrating T cells"
     ):
@@ -562,6 +574,7 @@ def curate_obs(obs: pd.DataFrame, *, x_semantics: str | None) -> pd.DataFrame:
         np.where(controls, "known", "not_applicable"),
         "source guide/control annotation",
     )
+    curated["pert_gym_curation_task_id"] = TASK_ID
 
     if len(curated) != EXPECTED_N_OBS or not curated.index.equals(original.index):
         raise AssertionError("OBS row count/order drift")
@@ -781,7 +794,10 @@ def verify_current(
         f"{TASK_ID}: GSE203592 mouse VAR"
     )
     if obs_curated:
-        verify_obs_semantics(obs, curated_obs)
+        try:
+            verify_obs_semantics(obs, curated_obs)
+        except AssertionError:
+            obs_curated = False
     var_verdict = (
         verify_var(var, x_axis)
         if var_curated

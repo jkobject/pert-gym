@@ -130,6 +130,8 @@ def test_obs_curation_materializes_joinable_source_fields_and_explicit_unknowns(
     assert curated["pct_mito"].tolist() == [1.0, 2.0, 3.0, 4.0]
     assert curated["x_semantics"].unique().tolist() == ["raw_counts"]
     assert curated["prior_canonical_organism"].unique().tolist() == ["mouse"]
+    replay = curation.curate_obs(curated, x_semantics="raw_counts")
+    pd.testing.assert_frame_equal(replay, curated)
 
 
 def test_obs_curation_rejects_control_disagreement(
