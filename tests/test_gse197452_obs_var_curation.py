@@ -246,6 +246,16 @@ def test_successor_description_binds_predecessor_and_exact_replacement() -> None
     assert description["member_count_before"] == description["member_count_after"] == 2
 
 
+def test_var_symbol_axis_allows_only_stable_id_disambiguation() -> None:
+    source = pd.Index(["DUP", "DUP", "UNIQUE"])
+    stable = pd.Index(["ENSG00000000001", "ENSG00000000002", "ENSG00000000003"])
+    accepted = pd.Index(["DUP", "DUP_ENSG00000000002", "UNIQUE"])
+    assert curation.accepted_symbol_axis_matches(source, stable, accepted)
+    assert not curation.accepted_symbol_axis_matches(
+        source, stable, pd.Index(["DUP", "WRONG", "UNIQUE"])
+    )
+
+
 def test_processing_decision_notebook_executes_postwrite_evidence_assertions() -> None:
     nbformat = pytest.importorskip("nbformat")
     notebook_client = pytest.importorskip("nbclient")

@@ -295,6 +295,19 @@ def normalized_csr(matrix: Any) -> sparse.csr_matrix:
     return result
 
 
+def accepted_symbol_axis_matches(
+    source_names: pd.Index, stable_ids: pd.Index, accepted_names: pd.Index
+) -> bool:
+    if not (len(source_names) == len(stable_ids) == len(accepted_names)):
+        return False
+    return all(
+        accepted == source or accepted == f"{source}_{stable}"
+        for source, stable, accepted in zip(
+            source_names, stable_ids, accepted_names, strict=True
+        )
+    )
+
+
 def matrix_and_qc(
     x_artifact: Any, var: pd.DataFrame, source: dict[str, Any]
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
@@ -338,10 +351,14 @@ def matrix_and_qc(
         raise AssertionError("source gene feature positions drift")
     source_matrix = normalized_csr(full[:EXPECTED_N_VARS, :].transpose())
     stable = var["stable_feature_id"].astype(str)
-    source_symbols = pd.Index(var["pert_gym_original_var_index"].astype(str))
+    accepted_names = pd.Index(var.index.astype(str))
     if (
         not feature_ids[:EXPECTED_N_VARS].equals(pd.Index(stable))
-        or not feature_names[:EXPECTED_N_VARS].equals(source_symbols)
+        or not accepted_symbol_axis_matches(
+            feature_names[:EXPECTED_N_VARS],
+            feature_ids[:EXPECTED_N_VARS],
+            accepted_names,
+        )
         or not barcodes.equals(pd.Index(source["accepted_barcodes"]))
     ):
         raise AssertionError("source/X/VAR axis drift")
@@ -353,9 +370,7 @@ def matrix_and_qc(
             raise AssertionError("accepted X shape drift")
         if not pd.Index(adata.obs_names.astype(str)).equals(barcodes):
             raise AssertionError("accepted X observation axis drift")
-        if not pd.Index(adata.var_names.astype(str)).equals(
-            pd.Index(var.index.astype(str))
-        ):
+        if not pd.Index(adata.var_names.astype(str)).equals(accepted_names):
             raise AssertionError("accepted X feature axis drift")
         if (
             not np.array_equal(source_matrix.indptr, accepted.indptr)
@@ -697,8 +712,10 @@ def verify_var(var: pd.DataFrame, source: dict[str, Any]) -> dict[str, Any]:
         or not stable.is_unique
         or not stable.str.fullmatch(r"ENSG\d{11}", na=False).all()
         or not pd.Index(stable.astype(str)).equals(expected_ids)
-        or not pd.Index(var["pert_gym_original_var_index"].astype(str)).equals(
-            expected_names
+        or not accepted_symbol_axis_matches(
+            expected_names,
+            expected_ids,
+            pd.Index(var.index.astype(str)),
         )
         or not genes["gene_symbol"]
         .astype(str)
