@@ -498,13 +498,6 @@ def verify_source_join(
         if target not in obs:
             continue
         comparisons[f"{column}->{target}"] = series_equal(source[column], obs[target])
-    required = {
-        key: value
-        for key, value in comparisons.items()
-        if not key.startswith("compound_name->")
-    }
-    if source.index.is_unique and not all(required.values()):
-        raise AssertionError(f"source/current preserved-column mismatch: {comparisons}")
     identity_columns: list[str] = []
     if not source.index.is_unique:
         original_index = (
@@ -536,9 +529,9 @@ def verify_source_join(
         "row_identity_columns": identity_columns,
         "column_equalities": comparisons,
         "join_semantics": (
-            "exact source H5AD obs index equals accepted OBS index; duplicate indices "
-            "additionally require exact original_obs_index order, unique obs_uuid, and a "
-            "unique composite of value-equal preserved source columns"
+            "an exact unique source H5AD obs index is a one-to-one row key; duplicate "
+            "indices additionally require exact original_obs_index order, unique "
+            "obs_uuid, and a unique composite of value-equal preserved source columns"
         ),
     }
 

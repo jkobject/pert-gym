@@ -124,6 +124,19 @@ def test_source_join_normalizes_equivalent_string_index_dtypes() -> None:
     assert result["rows"] == 2
 
 
+def test_source_join_uses_unique_index_when_curated_columns_changed() -> None:
+    obs = base_obs(["a", "b"])
+    obs["cell_line"] = ["normalized-1", "normalized-2"]
+    source = pd.DataFrame({"cell_id": ["raw-1", "raw-2"]}, index=obs.index)
+
+    result = curation.verify_source_join(
+        obs, source, member("gse306429_demuxed", len(obs))
+    )
+
+    assert result["index_unique"] is True
+    assert result["column_equalities"] == {"cell_id->cell_line": False}
+
+
 def test_source_join_proves_non_unique_pseudobulk_rows() -> None:
     index = ["0", "0"]
     source = pd.DataFrame(
