@@ -472,10 +472,9 @@ def verify_source_join(
 ) -> dict[str, Any]:
     if len(obs) != spec["n_obs"] or len(source) != spec["n_obs"]:
         raise AssertionError("source/current row denominator drift")
-    if (
-        not source.index.equals(pd.Index(obs.index.astype(str)))
-        or not source.index.is_unique
-    ):
+    source_index = pd.Series(source.index, dtype="string").reset_index(drop=True)
+    obs_index = pd.Series(obs.index, dtype="string").reset_index(drop=True)
+    if not source_index.equals(obs_index) or not source.index.is_unique:
         raise AssertionError(
             f"source/current exact index join failed: {spec['prefix']}"
         )

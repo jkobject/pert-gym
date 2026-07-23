@@ -112,6 +112,18 @@ def test_source_join_requires_exact_unique_index_order() -> None:
         curation.verify_source_join(obs, source, member("gse305979_day0_raw", len(obs)))
 
 
+def test_source_join_normalizes_equivalent_string_index_dtypes() -> None:
+    obs = base_obs(["a", "b"])
+    obs.index = pd.Index(pd.Series(["a", "b"], dtype="string"))
+    source = pd.DataFrame({"LIBRARY_ID": ["L1", "L2"]}, index=["a", "b"])
+
+    result = curation.verify_source_join(
+        obs, source, member("gse305979_day0_raw", len(obs))
+    )
+
+    assert result["rows"] == 2
+
+
 def test_source_join_compares_author_alias_before_normalized_column() -> None:
     obs = base_obs(["a", "b"])
     obs["cell_type"] = ["ontology A", "ontology B"]
