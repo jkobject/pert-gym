@@ -139,6 +139,7 @@ def test_source_join_proves_non_unique_pseudobulk_rows() -> None:
         index=index,
     )
     obs = source.copy()
+    obs["cell_line"] = ["normalized-1", "normalized-2"]
     obs["original_obs_index"] = index
     obs["obs_uuid"] = ["uuid-1", "uuid-2"]
 
@@ -148,6 +149,7 @@ def test_source_join_proves_non_unique_pseudobulk_rows() -> None:
 
     assert result["index_unique"] is False
     assert len(result["column_equalities"]) == len(source.columns)
+    assert result["column_equalities"]["cell_id->cell_id"] is True
 
 
 def test_source_join_rejects_non_unique_rows_without_stable_identity() -> None:

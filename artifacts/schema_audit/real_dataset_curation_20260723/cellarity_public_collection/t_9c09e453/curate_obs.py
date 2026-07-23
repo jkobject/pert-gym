@@ -488,7 +488,13 @@ def verify_source_join(
     comparisons: dict[str, bool] = {}
     for column in source.columns:
         alias = aliases.get(column)
-        target = alias if alias in obs else column
+        target = (
+            column
+            if column == "cell_id" and column in obs
+            else alias
+            if alias in obs
+            else column
+        )
         if target not in obs:
             continue
         comparisons[f"{column}->{target}"] = series_equal(source[column], obs[target])
