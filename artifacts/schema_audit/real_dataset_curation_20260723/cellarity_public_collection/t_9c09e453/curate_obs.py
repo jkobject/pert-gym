@@ -474,7 +474,7 @@ def verify_source_join(
         raise AssertionError("source/current row denominator drift")
     source_index = pd.Series(source.index, dtype="string").reset_index(drop=True)
     obs_index = pd.Series(obs.index, dtype="string").reset_index(drop=True)
-    if not source_index.equals(obs_index) or not source.index.is_unique:
+    if not source_index.equals(obs_index):
         raise AssertionError(
             f"source/current exact index join failed: {spec['prefix']}"
         )
@@ -486,7 +486,8 @@ def verify_source_join(
     }
     comparisons: dict[str, bool] = {}
     for column in source.columns:
-        target = aliases.get(column, column)
+        alias = aliases.get(column)
+        target = alias if alias in obs else column
         if target not in obs:
             continue
         comparisons[f"{column}->{target}"] = series_equal(source[column], obs[target])
@@ -497,12 +498,34 @@ def verify_source_join(
     ]
     if not all(required):
         raise AssertionError(f"source/current preserved-column mismatch: {comparisons}")
+    if not source.index.is_unique:
+        original_index = (
+            pd.Series(obs["original_obs_index"], dtype="string").reset_index(drop=True)
+            if "original_obs_index" in obs
+            else pd.Series(dtype="string")
+        )
+        expected_columns = set(source.columns)
+        compared_columns = {key.split("->", maxsplit=1)[0] for key in comparisons}
+        obs_uuid_unique = "obs_uuid" in obs and bool(obs["obs_uuid"].is_unique)
+        if (
+            not source_index.equals(original_index)
+            or compared_columns != expected_columns
+            or not all(comparisons.values())
+            or not obs_uuid_unique
+        ):
+            raise AssertionError(
+                f"non-unique source index lacks exact row identity proof: {spec['prefix']}"
+            )
     return {
         "rows": len(source),
         "exact_index_order_match": True,
-        "index_unique": True,
+        "index_unique": bool(source.index.is_unique),
         "column_equalities": comparisons,
-        "join_semantics": "exact source H5AD obs index equals accepted OBS index; source columns are copied by row order only after equality proof",
+        "join_semantics": (
+            "exact source H5AD obs index equals accepted OBS index; duplicate indices "
+            "additionally require exact original_obs_index order, unique obs_uuid, and "
+            "equality of every selected source column"
+        ),
     }
 
 

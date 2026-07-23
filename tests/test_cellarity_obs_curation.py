@@ -124,6 +124,40 @@ def test_source_join_normalizes_equivalent_string_index_dtypes() -> None:
     assert result["rows"] == 2
 
 
+def test_source_join_proves_non_unique_pseudobulk_rows() -> None:
+    index = ["0", "0"]
+    source = pd.DataFrame(
+        {
+            "bio_sample_id": ["sample-1", "sample-2"],
+            "cell_id": ["A375", "A549"],
+            "compound_name": ["DMSO", "Drug A"],
+            "dose_uM": [pd.NA, 1.0],
+            "library_id": ["L1", "L2"],
+            "replicate": [1, 1],
+            "timepoint_hr": [24.0, 24.0],
+        },
+        index=index,
+    )
+    obs = source.copy()
+    obs["original_obs_index"] = index
+    obs["obs_uuid"] = ["uuid-1", "uuid-2"]
+
+    result = curation.verify_source_join(
+        obs, source, member("gse306429_pseudobulk", len(obs))
+    )
+
+    assert result["index_unique"] is False
+    assert len(result["column_equalities"]) == len(source.columns)
+
+
+def test_source_join_rejects_non_unique_rows_without_stable_identity() -> None:
+    obs = base_obs(["0", "0"])
+    source = pd.DataFrame({"LIBRARY_ID": ["L1", "L2"]}, index=["0", "0"])
+
+    with pytest.raises(AssertionError, match="lacks exact row identity proof"):
+        curation.verify_source_join(obs, source, member("gse305979_day0_raw", len(obs)))
+
+
 def test_source_join_compares_author_alias_before_normalized_column() -> None:
     obs = base_obs(["a", "b"])
     obs["cell_type"] = ["ontology A", "ontology B"]
