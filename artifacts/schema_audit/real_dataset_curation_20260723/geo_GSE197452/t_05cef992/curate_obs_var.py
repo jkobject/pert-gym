@@ -449,10 +449,10 @@ def curate_obs(
     )
     if not baseline["is_control"].astype("boolean").equals(controls):
         raise AssertionError("accepted control semantics drift")
-    condition = pd.Series(
-        np.where(controls, "control", "test"), index=curated.index, dtype="string"
-    )
-    if not baseline["condition"].astype("string").equals(condition):
+    condition = pd.Series(pd.NA, index=curated.index, dtype="string")
+    condition.loc[controls.astype(bool)] = "control"
+    condition.loc[guide.notna() & ~controls.astype(bool)] = "test"
+    if not baseline["condition"].astype("string").equals(condition.fillna("unknown")):
         raise AssertionError("accepted condition semantics drift")
     target = baseline["perturbation"].astype("string").replace({"unknown": pd.NA})
     sequence = assignments["source_guide_sequence"].astype("string")
@@ -603,7 +603,7 @@ def curate_obs(
         curated,
         "condition",
         condition,
-        "known",
+        np.where(condition.notna(), "known", "unknown"),
         "non-targeting guide control semantics",
     )
     set_field(

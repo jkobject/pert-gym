@@ -69,7 +69,7 @@ def _obs_fixture() -> tuple[Any, Any, Any]:
         {
             "guide": ["GENE1_1", "NO_SITE_1", pd.NA],
             "perturbation": ["GENE1", "Non-targeting", "unknown"],
-            "condition": ["test", "control", "test"],
+            "condition": ["test", "control", "unknown"],
             "is_control": [False, True, False],
             "dataset": "GSE197452",
             "cell_line": "A375",
