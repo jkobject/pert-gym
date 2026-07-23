@@ -52,13 +52,20 @@ def frame_summary(frame: pd.DataFrame) -> dict[str, Any]:
         "index_sha256": ordered_sha256(frame.index),
         "index_sample": frame.index.astype(str)[:12].tolist(),
         "dtypes": {str(column): str(frame[column].dtype) for column in frame.columns},
-        "non_null": {str(column): int(frame[column].notna().sum()) for column in frame.columns},
+        "non_null": {
+            str(column): int(frame[column].notna().sum()) for column in frame.columns
+        },
         "nunique": {
             str(column): int(frame[column].dropna().astype(str).nunique())
             for column in frame.columns
         },
         "value_samples": {
-            str(column): frame[column].dropna().astype(str).drop_duplicates().head(12).tolist()
+            str(column): frame[column]
+            .dropna()
+            .astype(str)
+            .drop_duplicates()
+            .head(12)
+            .tolist()
             for column in frame.columns
         },
     }
@@ -102,7 +109,9 @@ def resolve_artifact(ln: Any, value: Any) -> Any:
 
 
 def collection_snapshot(ln: Any) -> dict[str, Any]:
-    snapshots: dict[str, Any] = {"historical_manifest_identity": "jkobject:GCjqQtGwPzkY"}
+    snapshots: dict[str, Any] = {
+        "historical_manifest_identity": "jkobject:GCjqQtGwPzkY"
+    }
     for key in ("pert-gym/additions/20260621", "pert-gym/canonical/20260621"):
         records = list(ln.Collection.filter(key=key).all())
         if len(records) != 1:
@@ -141,7 +150,11 @@ def main() -> None:
     x_artifact = resolve_artifact(ln, obs_artifact.features.get_values()["X"])
     var_artifact = resolve_artifact(ln, x_artifact.features.get_values()["var"])
     var = var_artifact.load()
-    for role, artifact in (("obs", obs_artifact), ("x", x_artifact), ("var", var_artifact)):
+    for role, artifact in (
+        ("obs", obs_artifact),
+        ("x", x_artifact),
+        ("var", var_artifact),
+    ):
         expected = EXPECTED[role]
         if str(artifact.uid) != expected["uid"] or str(artifact.key) != expected["key"]:
             raise AssertionError(
@@ -195,12 +208,18 @@ def main() -> None:
                 ),
             },
             "axis": {
-                "obs_index_equals_x_obs_names": obs.index.astype(str).equals(x_obs_axis),
+                "obs_index_equals_x_obs_names": obs.index.astype(str).equals(
+                    x_obs_axis
+                ),
                 "original_obs_index_equals_x_obs_names": (
                     "original_obs_index" in obs
-                    and pd.Index(obs["original_obs_index"].astype(str)).equals(x_obs_axis)
+                    and pd.Index(obs["original_obs_index"].astype(str)).equals(
+                        x_obs_axis
+                    )
                 ),
-                "var_index_equals_x_var_names": var.index.astype(str).equals(x_var_axis),
+                "var_index_equals_x_var_names": var.index.astype(str).equals(
+                    x_var_axis
+                ),
             },
             "links": {"obs_to_x": True, "x_to_var": True},
         },

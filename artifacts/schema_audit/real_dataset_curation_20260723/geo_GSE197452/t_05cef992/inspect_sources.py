@@ -76,8 +76,16 @@ def download_sources() -> tuple[dict[str, Path], dict[str, Any]]:
         if not path.exists() or path.stat().st_size != expected_size:
             subprocess.run(
                 [
-                    "curl", "--silent", "--show-error", "--location", "--fail",
-                    "--retry", "3", "--output", str(path), url,
+                    "curl",
+                    "--silent",
+                    "--show-error",
+                    "--location",
+                    "--fail",
+                    "--retry",
+                    "3",
+                    "--output",
+                    str(path),
+                    url,
                 ],
                 check=True,
                 timeout=3600,
@@ -120,14 +128,18 @@ def matrix_market_header(path: Path) -> dict[str, Any]:
 def read_one_column(path: Path) -> pd.Index:
     frame = pd.read_csv(path, sep="\t", header=None, dtype="string")
     if frame.shape[1] != 1:
-        raise AssertionError(f"expected one-column source axis: {path.name}={frame.shape}")
+        raise AssertionError(
+            f"expected one-column source axis: {path.name}={frame.shape}"
+        )
     return pd.Index(frame.iloc[:, 0].astype(str))
 
 
 def read_gene_table(path: Path) -> pd.DataFrame:
     frame = pd.read_csv(path, sep="\t", header=None, dtype="string")
     if frame.shape[1] != 3:
-        raise AssertionError(f"expected three-column source gene axis: {path.name}={frame.shape}")
+        raise AssertionError(
+            f"expected three-column source gene axis: {path.name}={frame.shape}"
+        )
     frame.columns = ["gene_id", "gene_symbol", "feature_type"]
     return frame
 
@@ -149,10 +161,11 @@ def h5_summary(path: Path) -> tuple[dict[str, Any], pd.Index]:
         shape = [int(value) for value in matrix["shape"][:]]
         type_samples: dict[str, list[dict[str, str]]] = {}
         for feature_type in sorted(set(feature_types)):
-            positions = [i for i, value in enumerate(feature_types) if value == feature_type]
+            positions = [
+                i for i, value in enumerate(feature_types) if value == feature_type
+            ]
             type_samples[feature_type] = [
-                {"id": feature_ids[i], "name": feature_names[i]}
-                for i in positions[:20]
+                {"id": feature_ids[i], "name": feature_names[i]} for i in positions[:20]
             ]
         return {
             "shape": shape,
@@ -166,7 +179,11 @@ def h5_summary(path: Path) -> tuple[dict[str, Any], pd.Index]:
             "feature_type_counts": dict(Counter(feature_types)),
             "feature_type_samples": type_samples,
             "feature_samples": [
-                {"id": feature_ids[i], "name": feature_names[i], "type": feature_types[i]}
+                {
+                    "id": feature_ids[i],
+                    "name": feature_names[i],
+                    "type": feature_types[i],
+                }
                 for i in range(min(20, len(feature_names)))
             ],
             "nnz": int(len(matrix["data"])),
@@ -178,8 +195,16 @@ def load_feature_table() -> tuple[pd.DataFrame, dict[str, Any]]:
     if not path.exists():
         subprocess.run(
             [
-                "curl", "--silent", "--show-error", "--location", "--fail",
-                "--retry", "3", "--output", str(path), SUPPLEMENTARY_URL,
+                "curl",
+                "--silent",
+                "--show-error",
+                "--location",
+                "--fail",
+                "--retry",
+                "3",
+                "--output",
+                str(path),
+                SUPPLEMENTARY_URL,
             ],
             check=True,
             timeout=1800,
@@ -271,7 +296,9 @@ def feature_assignments(
     mismatch = comparable & ~matches
     return frame, {
         "current_guide_non_null": int(current.notna().sum()),
-        "current_guide_sequence_joined": int(frame["source_guide_sequence"].notna().sum()),
+        "current_guide_sequence_joined": int(
+            frame["source_guide_sequence"].notna().sum()
+        ),
         "top_guide_non_null": int(frame["source_guide_top"].notna().sum()),
         "current_equals_top_guide": int(matches.sum()),
         "current_differs_top_guide": int(mismatch.sum()),
@@ -288,7 +315,9 @@ def feature_assignments(
         "hash_top_tie_rows": int((frame["source_hash_top_ties"] > 1).sum()),
         "hash_top_counts": {
             ("<NA>" if pd.isna(key) else str(key)): int(value)
-            for key, value in frame["source_hash_top"].value_counts(dropna=False).items()
+            for key, value in frame["source_hash_top"]
+            .value_counts(dropna=False)
+            .items()
         },
     }
 
@@ -304,8 +333,12 @@ def main() -> None:
     cells_ult = read_one_column(paths["GSM6297385_cells_counts_Pert_Ult.txt.gz"])
     genes_ill = read_gene_table(paths["GSM6297384_genes_counts_Pert_Ill.txt.gz"])
     genes_ult = read_gene_table(paths["GSM6297385_genes_counts_Pert_Ult.txt.gz"])
-    matrix_ill = matrix_market_header(paths["GSM6297384_expression_counts_Pert_Ill.txt.gz"])
-    matrix_ult = matrix_market_header(paths["GSM6297385_expression_counts_Pert_Ult.txt.gz"])
+    matrix_ill = matrix_market_header(
+        paths["GSM6297384_expression_counts_Pert_Ill.txt.gz"]
+    )
+    matrix_ult = matrix_market_header(
+        paths["GSM6297385_expression_counts_Pert_Ult.txt.gz"]
+    )
     h5_ill, h5_barcodes_ill = h5_summary(
         paths["GSM6297388_filtered_feature_bc_matrix.pert.ill.h5"]
     )
@@ -340,7 +373,8 @@ def main() -> None:
             "rows": len(axis),
             "unique": bool(axis.is_unique),
             "ordered_equals_accepted": axis.equals(accepted),
-            "set_equals_accepted": len(axis) == len(accepted) and set(axis) == set(accepted),
+            "set_equals_accepted": len(axis) == len(accepted)
+            and set(axis) == set(accepted),
             "accepted_missing_from_source": len(accepted.difference(axis)),
             "source_missing_from_accepted": len(axis.difference(accepted)),
             "accepted_missing_sample": accepted.difference(axis)[:20].tolist(),
@@ -372,7 +406,9 @@ def main() -> None:
             "gene_ids_unique": bool(genes_ill["gene_id"].is_unique),
             "gene_symbols_unique": bool(genes_ill["gene_symbol"].is_unique),
             "gene_id_axis_sha256": ordered_sha256(pd.Index(genes_ill["gene_id"])),
-            "gene_symbol_axis_sha256": ordered_sha256(pd.Index(genes_ill["gene_symbol"])),
+            "gene_symbol_axis_sha256": ordered_sha256(
+                pd.Index(genes_ill["gene_symbol"])
+            ),
             "gene_table_sample": genes_ill.head(12).to_dict(orient="records"),
         },
         "feature_matrices": {"ill": h5_ill, "ult": h5_ult},
@@ -383,7 +419,10 @@ def main() -> None:
         },
         "feature_assignments": assignment_receipt,
         "axis_relations": relations,
-        "invariants": {"writes": 0, "downloaded_bytes": sum(item["size"] for item in receipts.values())},
+        "invariants": {
+            "writes": 0,
+            "downloaded_bytes": sum(item["size"] for item in receipts.values()),
+        },
     }
     print("GSE197452_SOURCE_INSPECTION=" + canonical(report), flush=True)
 
