@@ -158,14 +158,20 @@ def latest_artifact(ln: Any, key: str) -> tuple[Any, list[Any]]:
 
 
 def artifact_by_uid(ln: Any, uid: str) -> Any:
-    records = list(ln.Artifact.filter(uid=uid).all())
+    records = [
+        record for record in ln.Artifact.filter(uid=uid).all() if str(record.uid) == uid
+    ]
     if len(records) != 1:
         raise AssertionError(f"artifact identity drift: {uid}")
     return records[0]
 
 
 def collection_by_uid(ln: Any, uid: str) -> Any:
-    records = list(ln.Collection.filter(uid=uid).all())
+    records = [
+        record
+        for record in ln.Collection.filter(uid=uid).all()
+        if str(record.uid) == uid
+    ]
     if len(records) != 1:
         raise AssertionError(f"Collection identity drift: {uid}")
     return records[0]
