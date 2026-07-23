@@ -1,0 +1,83 @@
+{
+  "format": "pert-gym.real-dataset-e2e-curation/v3",
+  "task_id": "t_05cef992",
+  "real_dataset_id": "geo:GSE197452",
+  "dataset_id": "prism_collection/GSE197452_Perturb-seq",
+  "status": "PASS",
+  "mode": "verify",
+  "completed_at": 1784770814,
+  "canonical_sha256": "195f26c86910f7681ea08c3115517bd65522645b583f1d8ff78fac7fec61c76f",
+  "helper_sha256": "ac7ef99fbe235c8aee83d3048b60ac069c26d155bb10b88b322611c6f6511ac8",
+  "source_manifest_sha256": "5b321642f97abf4d2258e8ef96e48871f7f97fe5bd29e9e7181c197289e5c7b5",
+  "expected_obs_sha256": "de1127037b3c62e7cb4caaab56dd87a783f8f5113e494accbe57962763c24146",
+  "obs_receipt": {
+    "rows": 20811,
+    "control_rows": 2422,
+    "guide_rows": 20784,
+    "guide_sequence_rows": 20784,
+    "hash_top_known_rows": 20805,
+    "hash_top_tie_rows": 1589
+  },
+  "assignments": {
+    "current_differs_top_guide": 0,
+    "current_equals_top_guide": 20784,
+    "current_guide_non_null": 20784,
+    "current_guide_sequence_joined": 20784,
+    "guide_top_tie_rows": 763,
+    "hash_top_non_null": 20805,
+    "hash_top_tie_rows": 1589,
+    "top_guide_non_null": 20784
+  },
+  "x": {
+    "shape": [20811, 33694],
+    "nnz": 62236958,
+    "source_exact_value_parity": true,
+    "x_semantics": "raw_counts",
+    "x_rewrite_required": false,
+    "source_barcode_axis_sha256": "2f5c107930a431f2e5361daba77be3d2e3dad68ec93dc16544acf97da85b6efb",
+    "source_feature_id_axis_sha256": "8283e63a421fe6d2593647b46ae24e84748ace66d2a6a7ff704808b2d8bfb41e",
+    "accepted_var_index_axis_sha256": "78d4b64bf13d8eef0c36469ccc9d99ee47ed75b9bcc22d4f097a29599939bf80"
+  },
+  "var": {
+    "rows": 33694,
+    "stable_feature_id_unique": true,
+    "species": "Homo sapiens",
+    "source_axis_parity": true,
+    "needs_revision": false,
+    "text_gene_to_h5_name_mismatch_count": 49
+  },
+  "latest_obs": {
+    "uid": "6UsaktwOJjkXPM3L0003",
+    "key": "prism_collection/GSE197452_Perturb-seq/obs.parquet",
+    "hash": "u3oXeP21Hbtp-AU-xynQJg",
+    "size": 2684221
+  },
+  "obs_history_count": 4,
+  "collections": {
+    "predecessor": {
+      "uid": "Ltjv1RYDCnuxqqRT0000",
+      "key": "pert-gym/additions/20260721-drug-seq-gse120222-e2e",
+      "member_count": 1018,
+      "membership_sha256": "045b4a61263321748e7338185f68d87152195e9179671dce14720bdd5d1fcf89"
+    },
+    "successor": {
+      "uid": "ZTXfvA5YDoaqrd750000",
+      "key": "pert-gym/additions/20260723-gse197452-e2e",
+      "member_count": 1018,
+      "membership_sha256": "802f600b9bd162d1a9891db0b9097a41a2a7eb70976d8871d41b29e41486aed1",
+      "target_obs_uid": "6UsaktwOJjkXPM3L0003"
+    }
+  },
+  "writes": {
+    "obs_revisions": 0,
+    "x_revisions": 0,
+    "var_revisions": 0,
+    "collection_writes": 0,
+    "deletions": 0
+  },
+  "registry_counts": {
+    "before": {"artifacts": 28529, "collections": 39},
+    "after": {"artifacts": 28529, "collections": 39}
+  },
+  "replay_noop": true
+}

@@ -1,0 +1,116 @@
+{
+  "format": "pert-gym.gse197452-source-manifest/v1",
+  "task_id": "t_05cef992",
+  "real_dataset_id": "geo:GSE197452",
+  "dataset_id": "prism_collection/GSE197452_Perturb-seq",
+  "source_authorities": {
+    "geo": {
+      "accession": "GSE197452",
+      "perturb_seq_expression_samples": [
+        "GSM6297384",
+        "GSM6297385"
+      ],
+      "feature_barcode_sample": "GSM6297388",
+      "family_soft": {
+        "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE197nnn/GSE197452/soft/GSE197452_family.soft.gz",
+        "size": 4242,
+        "sha256": "261f980aedefe1e952fd5bd352840f58da1e69451498a45bab28dba10a43b5b0"
+      }
+    },
+    "publication": {
+      "doi": "10.1038/s41587-022-01452-6",
+      "pmcid": "PMC9931582",
+      "pubmed": "36109685",
+      "full_text_xml": {
+        "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9931582/fullTextXML",
+        "size": 162396,
+        "sha256": "8e02729b29ce2ba083b9fe7e7632ecfc6b1fedf8124dd26974030250dd411565"
+      },
+      "supplementary_table_4": {
+        "archive_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9931582/supplementaryFiles",
+        "archive_observed_size": 43155951,
+        "member": "41587_2022_1452_MOESM4_ESM.xlsx",
+        "member_size": 258161,
+        "member_sha256": "ec1380c72943075b9ecd3e2753d32b14c42951c769e862c7a87c609129f9b23a",
+        "sheet": "table S4",
+        "rows": 6155,
+        "guide_rows": 6127,
+        "hash_rows": 8,
+        "antibody_rows": 20
+      }
+    }
+  },
+  "payloads": {
+    "GSM6297384_cells_counts_Pert_Ill.txt.gz": {
+      "sample": "GSM6297384",
+      "size": 90886,
+      "sha256": "fddb5e816fe8ee4ee0c3222edf20d2078ff5e243b90cf9c091d4d658d2094971"
+    },
+    "GSM6297384_expression_counts_Pert_Ill.txt.gz": {
+      "sample": "GSM6297384",
+      "size": 193966012,
+      "sha256": "c4afd4d179b7764374ed1ce3fdb59023f7f889c1c1242be550213910c98c5cba"
+    },
+    "GSM6297384_genes_counts_Pert_Ill.txt.gz": {
+      "sample": "GSM6297384",
+      "size": 243917,
+      "sha256": "c686414630734ef7226ba363196e58b2bb46529424ed42b4fa0ec6dccc404545"
+    },
+    "GSM6297385_cells_counts_Pert_Ult.txt.gz": {
+      "sample": "GSM6297385",
+      "size": 91334,
+      "sha256": "46309e3f4d566943d98fc0b6367383963773203ce587c4ea6ebed99972ecb79c"
+    },
+    "GSM6297385_expression_counts_Pert_Ult.txt.gz": {
+      "sample": "GSM6297385",
+      "size": 193163948,
+      "sha256": "f2dba46238cea69a2ab9feb773e6c0742a24ce2ca2766a7dc1b833d6f33c182f"
+    },
+    "GSM6297385_genes_counts_Pert_Ult.txt.gz": {
+      "sample": "GSM6297385",
+      "size": 243917,
+      "sha256": "b57c27b979db9c850138278f9938efeef2f6a49b3c66ccf89c29155e37ce0268"
+    },
+    "GSM6297388_filtered_feature_bc_matrix.pert.ill.h5": {
+      "sample": "GSM6297388",
+      "size": 88119419,
+      "sha256": "ff29fef5367e65ab899e308ade177894d7bb93cb44ec9e9765ae592e916a5496"
+    },
+    "GSM6297388_filtered_feature_bc_matrix.pert.ult.h5": {
+      "sample": "GSM6297388",
+      "size": 86235772,
+      "sha256": "5912471bbef029ae9cda9a9813e34836bcfd54d9cd2fbeff9429b6b8a52e66f8"
+    }
+  },
+  "frozen_lamin_inputs": {
+    "obs": {
+      "uid": "6UsaktwOJjkXPM3L0002",
+      "key": "prism_collection/GSE197452_Perturb-seq/obs.parquet"
+    },
+    "x": {
+      "uid": "GYQBTGssvyua7wmc0000",
+      "hash": "1fnOGlEvms7NaqTV_Bc76o",
+      "key": "prism_collection/GSE197452_Perturb-seq/X.h5ad"
+    },
+    "var": {
+      "uid": "eJMdIf8H75RMWWK90001",
+      "key": "prism_collection/GSE197452_Perturb-seq/var.parquet"
+    },
+    "additions_predecessor": {
+      "uid": "Ltjv1RYDCnuxqqRT0000",
+      "key": "pert-gym/additions/20260721-drug-seq-gse120222-e2e",
+      "member_count": 1018
+    }
+  },
+  "source_denominator": {
+    "biological_datasets": 1,
+    "logical_families": 1,
+    "accepted_observations": 20811,
+    "accepted_features": 33694,
+    "illumina_expression_observations": 20811,
+    "ultima_expression_observations": 20936,
+    "illumina_feature_barcodes": 20811,
+    "ultima_feature_barcodes": 20907,
+    "feature_barcode_features": 39849
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "format": "pert-gym.gse197452-inspection/v1",
+  "task_id": "t_05cef992",
+  "real_dataset_id": "geo:GSE197452",
+  "status": "PASS",
+  "source_identity": {
+    "geo_series": "GSE197452",
+    "paper_pmid": "36109685",
+    "paper_pmcid": "PMC9931582",
+    "relevant_samples": [
+      "GSM6297384",
+      "GSM6297385",
+      "GSM6297388",
+      "GSM6297389"
+    ],
+    "accepted_source_sample": "GSM6297384",
+    "accepted_source_feature_matrix": "GSM6297388"
+  },
+  "live_artifacts_before_write": {
+    "obs_uid": "6UsaktwOJjkXPM3L0002",
+    "x_uid": "GYQBTGssvyua7wmc0000",
+    "x_hash": "1fnOGlEvms7NaqTV_Bc76o",
+    "var_uid": "eJMdIf8H75RMWWK90001"
+  },
+  "source_axes": {
+    "accepted_obs_rows": 20811,
+    "accepted_var_rows": 33694,
+    "accepted_matrix_shape": [20811, 33694],
+    "accepted_matrix_nnz": 62236958,
+    "accepted_barcodes_equal_illumina_h5": true,
+    "accepted_h5ad_values_equal_illumina_h5_gene_expression": true,
+    "accepted_stable_feature_ids_equal_illumina_h5_ensembl_ids": true,
+    "source_barcode_axis_sha256": "2f5c107930a431f2e5361daba77be3d2e3dad68ec93dc16544acf97da85b6efb",
+    "source_feature_id_axis_sha256": "8283e63a421fe6d2593647b46ae24e84748ace66d2a6a7ff704808b2d8bfb41e",
+    "accepted_var_index_axis_sha256": "78d4b64bf13d8eef0c36469ccc9d99ee47ed75b9bcc22d4f097a29599939bf80",
+    "x_semantics": "raw_counts"
+  },
+  "source_assignments": {
+    "current_guide_non_null": 20784,
+    "source_top_guide_non_null": 20784,
+    "current_guide_differs_source_top": 0,
+    "guide_sequence_joined": 20784,
+    "guide_top_tie_rows": 763,
+    "hash_top_known_rows": 20805,
+    "hash_top_tie_rows": 1589,
+    "hash_top_missing_rows": 6,
+    "decision": "retain exact accepted guide assignment and bind sequences; retain source hash-top counts as provenance but leave canonical batch unknown because the published demultiplex label is absent and 1589 top-count ties exist"
+  },
+  "typed_modalities": {
+    "gene_expression": 33694,
+    "crispr_guide_capture": 6127,
+    "antibody_capture": 20,
+    "cell_hashing": 8
+  },
+  "var_decision": {
+    "rewrite_required": false,
+    "reason": "exact unique human ENSG axis and source/X parity remain intact",
+    "matrix_market_name_to_h5_name_mismatch_count": 49,
+    "name_note": "the source-authored text matrix uses duplicate .1 suffixes and hyphen transformations; H5 ENSG IDs are the exact authoritative feature identity"
+  },
+  "x_decision": {
+    "rewrite_required": false,
+    "reason": "accepted H5AD has exact sparse raw-count value parity with GSM6297388 Illumina gene-expression matrix"
+  },
+  "write_policy": {
+    "obs": "append-only revision required",
+    "x": "retain",
+    "var": "retain",
+    "collection": "new immutable additions successor required",
+    "deletions": 0
+  }
+}

@@ -183,6 +183,14 @@ not in this README.
 
 Important current source states:
 
+- PRISM `GSE197452_Perturb-seq` is source-exhaustively curated under
+  `../artifacts/schema_audit/real_dataset_curation_20260723/geo_GSE197452/t_05cef992/`.
+  The accepted 20,811-cell/33,694-gene H5AD is exactly value-equal to the GEO
+  Illumina raw-count feature matrix (`GSM6297388`), so X and the exact unique
+  human-ENSG VAR are retained. OBS revision `6UsaktwOJjkXPM3L0003` binds all
+  20,784 assigned guides to Supplementary Table 4 sequences and records HTO
+  top-count evidence without inventing demultiplex batches; immutable additions
+  successor Collection `ZTXfvA5YDoaqrd750000` contains the revised OBS.
 - PRISM has chunked/canonical members plus a residual Drive/source queue; unresolved
   rows remain blocked by quota/private-link/source access and should not be marked
   done from metadata-only probes.

@@ -1,0 +1,73 @@
+{
+  "format": "pert-gym.real-dataset-e2e-curation/v3",
+  "task_id": "t_05cef992",
+  "real_dataset_id": "geo:GSE197452",
+  "dataset_id": "prism_collection/GSE197452_Perturb-seq",
+  "status": "PASS",
+  "execution": "append-only crash recovery completed",
+  "code_lineage": {
+    "writer_commit": "36694c5",
+    "writer_helper_sha256": "0038f834f6145db15a8ad04e868ef901d51128b21b580192932c119b087a0b5b",
+    "recovery_commit": "4d72058",
+    "terminal_replay_commit": "33e0f44",
+    "terminal_replay_helper_sha256": "ac7ef99fbe235c8aee83d3048b60ac069c26d155bb10b88b322611c6f6511ac8"
+  },
+  "durable_writes_observed": {
+    "obs_revisions": 1,
+    "collection_writes": 1,
+    "x_revisions": 0,
+    "var_revisions": 0,
+    "deletions": 0
+  },
+  "recovery_sequence": [
+    "OBS revision 6UsaktwOJjkXPM3L0003 was saved and read back before the first run failed closed on a stale assumption about the predecessor's historical same-key member",
+    "the recovery run replaced the predecessor's exact same-key historical OBS member 6UsaktwOJjkXPM3L0000 with 6UsaktwOJjkXPM3L0003 and saved Collection ZTXfvA5YDoaqrd750000",
+    "subsequent mutate and verify replays performed zero artifact or Collection writes"
+  ],
+  "expected_obs_sha256": "de1127037b3c62e7cb4caaab56dd87a783f8f5113e494accbe57962763c24146",
+  "latest_obs": {
+    "uid": "6UsaktwOJjkXPM3L0003",
+    "key": "prism_collection/GSE197452_Perturb-seq/obs.parquet",
+    "hash": "u3oXeP21Hbtp-AU-xynQJg",
+    "size": 2684221,
+    "created_at": "2026-07-23 01:17:40.389801+00:00"
+  },
+  "obs": {
+    "rows": 20811,
+    "control_rows": 2422,
+    "guide_rows": 20784,
+    "guide_sequence_rows": 20784,
+    "hash_top_known_rows": 20805,
+    "hash_top_tie_rows": 1589
+  },
+  "x": {
+    "uid": "GYQBTGssvyua7wmc0000",
+    "shape": [20811, 33694],
+    "nnz": 62236958,
+    "x_semantics": "raw_counts",
+    "source_exact_value_parity": true,
+    "rewrite_required": false
+  },
+  "var": {
+    "uid": "eJMdIf8H75RMWWK90001",
+    "rows": 33694,
+    "stable_feature_id_unique": true,
+    "species": "Homo sapiens",
+    "source_axis_parity": true,
+    "rewrite_required": false
+  },
+  "collection": {
+    "predecessor_uid": "Ltjv1RYDCnuxqqRT0000",
+    "predecessor_key": "pert-gym/additions/20260721-drug-seq-gse120222-e2e",
+    "predecessor_member_count": 1018,
+    "predecessor_membership_sha256": "045b4a61263321748e7338185f68d87152195e9179671dce14720bdd5d1fcf89",
+    "replaced_obs_uid": "6UsaktwOJjkXPM3L0000",
+    "successor_uid": "ZTXfvA5YDoaqrd750000",
+    "successor_key": "pert-gym/additions/20260723-gse197452-e2e",
+    "successor_member_count": 1018,
+    "successor_membership_sha256": "802f600b9bd162d1a9891db0b9097a41a2a7eb70976d8871d41b29e41486aed1",
+    "target_obs_uid": "6UsaktwOJjkXPM3L0003",
+    "duplicate_keys": 0
+  },
+  "rollback": "select immutable predecessor Collection Ltjv1RYDCnuxqqRT0000 and accepted OBS revision 6UsaktwOJjkXPM3L0002; no accepted artifacts were deleted"
+}
