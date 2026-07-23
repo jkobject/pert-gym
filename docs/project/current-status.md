@@ -1,6 +1,6 @@
 # pert-gym current status
 
-_Last verified: 2026-07-22 12:17 CEST from `TODO.md`, the strict accepted
+_Last verified: 2026-07-23 03:43 CEST from `TODO.md`, the strict accepted
 product-delta snapshot, and the immutable reviewer handoffs named below. Pending
 work is not counted. `TODO.md` remains the operational dashboard._
 
@@ -47,6 +47,13 @@ with zero-write receipt `ae61848d509f86d988596028aad81941eab1d2536ba8b0cc82029ed
 source-join mismatch 0 and replay no-op. The prior accepted
 dataset `scperturb/adamson16` covers all three members / 86,111 observations at
 mismatch 0 with zero-write replay no-op.
+
+`GSE197452` producer task `t_05cef992` is complete but **not yet accepted**:
+source-exhaustive readback proves exact 20,811×33,694 Illumina raw-count parity,
+OBS `6UsaktwOJjkXPM3L0003` contains 20,784 exact guide-sequence joins, immutable
+additions successor `ZTXfvA5YDoaqrd750000` has 1,018 unique-key members, and
+verify replay wrote nothing. Independent review is still required, so the strict
+OBS and VAR counters above remain unchanged.
 
 GSE213921 is **frozen after rejection 3/3**. It must not be auto-rerun. A future
 attempt requires explicit operator authorization and a new bounded contract; it
