@@ -112,6 +112,19 @@ def test_source_join_requires_exact_unique_index_order() -> None:
         curation.verify_source_join(obs, source, member("gse305979_day0_raw", len(obs)))
 
 
+def test_source_join_compares_author_alias_before_normalized_column() -> None:
+    obs = base_obs(["a", "b"])
+    obs["cell_type"] = ["ontology A", "ontology B"]
+    obs["cell_type_from_author"] = ["author A", "author B"]
+    source = pd.DataFrame({"cell_type": ["author A", "author B"]}, index=obs.index)
+
+    result = curation.verify_source_join(
+        obs, source, member("gse305370_citeseq", len(obs))
+    )
+
+    assert result["column_equalities"] == {"cell_type->cell_type_from_author": True}
+
+
 def test_frozen_bindings_and_source_manifest_cover_exact_live_identities() -> None:
     manifest = json.loads((EVIDENCE_ROOT / "source_manifest.json").read_text())
     inspection = json.loads((EVIDENCE_ROOT / "source_inspection.json").read_text())

@@ -483,10 +483,11 @@ def verify_source_join(
         "cell_type": "cell_type_from_author",
         "cell_type_rna": "cell_type_from_author",
         "compound_name": "pert_name",
+        "time": "time_from_author",
     }
     comparisons: dict[str, bool] = {}
     for column in source.columns:
-        target = column if column in obs else aliases.get(column)
+        target = aliases.get(column, column)
         if target not in obs:
             continue
         comparisons[f"{column}->{target}"] = series_equal(source[column], obs[target])
