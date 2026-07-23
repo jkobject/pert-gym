@@ -13,8 +13,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import anndata as ad
+import h5py
 import pandas as pd
+from anndata.io import read_elem
 from google.cloud import storage
 
 from tools.lamin_context import connect_pertdata
@@ -196,16 +197,19 @@ def bounded_samples(series: pd.Series, limit: int = 12) -> list[str]:
     return values.tolist()
 
 
+def series_summary(series: pd.Series) -> dict[str, Any]:
+    return {
+        "dtype": str(series.dtype),
+        "non_null": int(series.notna().sum()),
+        "unique_non_null": int(series.nunique(dropna=True)),
+        "samples": bounded_samples(series),
+    }
+
+
 def frame_summary(frame: pd.DataFrame) -> dict[str, Any]:
     columns: dict[str, Any] = {}
     for column in frame.columns:
-        series = frame[column]
-        columns[str(column)] = {
-            "dtype": str(series.dtype),
-            "non_null": int(series.notna().sum()),
-            "unique_non_null": int(series.nunique(dropna=True)),
-            "samples": bounded_samples(series),
-        }
+        columns[str(column)] = series_summary(frame[column])
     return {
         "rows": len(frame),
         "columns": columns,
@@ -221,6 +225,53 @@ def normalized_sha256(series: pd.Series) -> str:
     return hashlib.sha256(hashed.tobytes()).hexdigest()
 
 
+def _frame_axis(group: h5py.Group) -> pd.Index:
+    index_name = group.attrs["_index"]
+    if isinstance(index_name, bytes):
+        index_name = index_name.decode()
+    values = read_elem(group[str(index_name)])
+    return pd.Index(pd.Series(values, dtype="string").astype(str))
+
+
+def inspect_source_h5ad(path: Path) -> dict[str, Any]:
+    with h5py.File(path, "r") as handle:
+        obs_group = handle["obs"]
+        if not isinstance(obs_group, h5py.Group):
+            raise AssertionError("source H5AD obs is not a dataframe group")
+        column_order = obs_group.attrs["column-order"]
+        columns = [
+            item.decode() if isinstance(item, bytes) else str(item)
+            for item in column_order
+        ]
+        summaries: dict[str, Any] = {}
+        hashes: dict[str, str] = {}
+        for column in columns:
+            series = pd.Series(read_elem(obs_group[column]))
+            summaries[column] = series_summary(series)
+            hashes[column] = normalized_sha256(series)
+        obs_index = _frame_axis(obs_group)
+
+        var_group = handle["var"]
+        if not isinstance(var_group, h5py.Group):
+            raise AssertionError("source H5AD var is not a dataframe group")
+        var_index = _frame_axis(var_group)
+    return {
+        "obs_summary": {
+            "rows": len(obs_index),
+            "columns": summaries,
+            "index_unique": bool(obs_index.is_unique),
+            "index_sha256": ordered_sha256(obs_index),
+            "index_samples": obs_index[:12].tolist(),
+        },
+        "column_hashes": hashes,
+        "obs_index": obs_index,
+        "n_vars": len(var_index),
+        "var_index_unique": bool(var_index.is_unique),
+        "var_index_sha256": ordered_sha256(var_index),
+        "var_index_samples": var_index[:12].tolist(),
+    }
+
+
 def inspect_member(ln: Any, member: dict[str, Any], root: Path) -> dict[str, Any]:
     prefix = member["prefix"]
     obs_key = f"{prefix}/obs.parquet"
@@ -228,24 +279,14 @@ def inspect_member(ln: Any, member: dict[str, Any], root: Path) -> dict[str, Any
     var_key = f"{prefix}/var.parquet"
     source_path, source_receipt = download(member, root)
 
-    source_adata = ad.read_h5ad(source_path, backed="r")
-    try:
-        source = source_adata.obs.copy()
-        source_n_vars = int(source_adata.n_vars)
-        source_var_names = pd.Index(source_adata.var_names.astype(str))
-    finally:
-        source_adata.file.close()
-
-    source_index = pd.Index(source.index.astype(str))
-    if len(source) != member["n_obs"]:
+    source_result = inspect_source_h5ad(source_path)
+    source_index = source_result["obs_index"]
+    if len(source_index) != member["n_obs"]:
         raise AssertionError(f"source OBS denominator drift: {prefix}")
-    source_summary = frame_summary(source)
-    source_column_hashes = {
-        str(column): normalized_sha256(source[column]) for column in source.columns
-    }
+    source_summary = source_result["obs_summary"]
+    source_column_hashes = source_result["column_hashes"]
     source_index_ordered_sha256 = ordered_sha256(source_index)
     source_index_multiset_sha256 = multiset_sha256(source_index)
-    del source
 
     accepted_artifact = exact_artifact(ln, member["obs_uid"], obs_key)
     x_artifact = exact_artifact(ln, member["x_uid"], x_key)
@@ -282,12 +323,16 @@ def inspect_member(ln: Any, member: dict[str, Any], root: Path) -> dict[str, Any
         },
         "common_column_equalities": common_equal,
         "source_var": {
-            "rows": source_n_vars,
-            "index_sha256": ordered_sha256(source_var_names),
-            "index_samples": source_var_names[:12].tolist(),
+            "rows": source_result["n_vars"],
+            "index_unique": source_result["var_index_unique"],
+            "index_sha256": source_result["var_index_sha256"],
+            "index_samples": source_result["var_index_samples"],
         },
         "accepted_artifacts": {
-            "obs": {"uid": str(accepted_artifact.uid), "hash": str(accepted_artifact.hash)},
+            "obs": {
+                "uid": str(accepted_artifact.uid),
+                "hash": str(accepted_artifact.hash),
+            },
             "x": {"uid": str(x_artifact.uid), "hash": str(x_artifact.hash)},
             "var": {"uid": str(var_artifact.uid), "hash": str(var_artifact.hash)},
         },
@@ -302,7 +347,9 @@ def upload_report(report: dict[str, Any]) -> dict[str, Any]:
     client = storage.Client(project=BILLING_PROJECT)
     blob = client.bucket("scperturb", user_project=BILLING_PROJECT).blob(object_name)
     payload = canonical(report).encode() + b"\n"
-    blob.upload_from_string(payload, content_type="application/json", if_generation_match=0)
+    blob.upload_from_string(
+        payload, content_type="application/json", if_generation_match=0
+    )
     blob.reload()
     return {
         "uri": f"gs://scperturb/{object_name}",
