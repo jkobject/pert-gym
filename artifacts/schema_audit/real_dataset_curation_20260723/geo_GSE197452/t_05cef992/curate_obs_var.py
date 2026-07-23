@@ -338,9 +338,10 @@ def matrix_and_qc(
         raise AssertionError("source gene feature positions drift")
     source_matrix = normalized_csr(full[:EXPECTED_N_VARS, :].transpose())
     stable = var["stable_feature_id"].astype(str)
+    source_symbols = pd.Index(var["pert_gym_original_var_index"].astype(str))
     if (
         not feature_ids[:EXPECTED_N_VARS].equals(pd.Index(stable))
-        or not feature_names[:EXPECTED_N_VARS].equals(pd.Index(var.index.astype(str)))
+        or not feature_names[:EXPECTED_N_VARS].equals(source_symbols)
         or not barcodes.equals(pd.Index(source["accepted_barcodes"]))
     ):
         raise AssertionError("source/X/VAR axis drift")
@@ -353,7 +354,7 @@ def matrix_and_qc(
         if not pd.Index(adata.obs_names.astype(str)).equals(barcodes):
             raise AssertionError("accepted X observation axis drift")
         if not pd.Index(adata.var_names.astype(str)).equals(
-            feature_names[:EXPECTED_N_VARS]
+            pd.Index(var.index.astype(str))
         ):
             raise AssertionError("accepted X feature axis drift")
         if (
@@ -391,6 +392,9 @@ def matrix_and_qc(
         "source_feature_id_axis_sha256": ordered_sha256(feature_ids[:EXPECTED_N_VARS]),
         "source_feature_name_axis_sha256": ordered_sha256(
             feature_names[:EXPECTED_N_VARS]
+        ),
+        "accepted_var_index_axis_sha256": ordered_sha256(
+            pd.Index(var.index.astype(str))
         ),
         "x_semantics": "raw_counts",
         "x_rewrite_required": False,
@@ -693,7 +697,9 @@ def verify_var(var: pd.DataFrame, source: dict[str, Any]) -> dict[str, Any]:
         or not stable.is_unique
         or not stable.str.fullmatch(r"ENSG\d{11}", na=False).all()
         or not pd.Index(stable.astype(str)).equals(expected_ids)
-        or not pd.Index(var.index.astype(str)).equals(expected_names)
+        or not pd.Index(var["pert_gym_original_var_index"].astype(str)).equals(
+            expected_names
+        )
         or not genes["gene_symbol"]
         .astype(str)
         .equals(pd.Series(expected_names, index=genes.index))
