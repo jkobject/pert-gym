@@ -1152,18 +1152,23 @@ def current_member(
         )
     obs = obs_artifact.load()
     join = verify_source_join(obs, source, spec)
+    already = str(obs_artifact.description).startswith(
+        f"{TASK_ID}: source-exhaustive Cellarity OBS"
+    )
     x_artifact = resolve_artifact(ln, obs_artifact.features.get_values()["X"])
     if str(x_artifact.uid) != spec["x_uid"] or str(x_artifact.hash) != spec["x_hash"]:
         raise AssertionError(f"OBS->X identity drift: {spec['prefix']}")
     var_artifact = resolve_artifact(ln, x_artifact.features.get_values()["var"])
     if str(var_artifact.uid) != spec["var_uid"]:
         raise AssertionError(f"X->VAR identity drift: {spec['prefix']}")
-    curated = curate_obs(obs, source, spec)
-    already = str(obs_artifact.description).startswith(
-        f"{TASK_ID}: source-exhaustive Cellarity OBS"
-    )
     if already:
+        baseline_artifact = resolve_artifact(ln, spec["before_obs_uid"])
+        baseline_obs = baseline_artifact.load()
+        verify_source_join(baseline_obs, source, spec)
+        curated = curate_obs(baseline_obs, source, spec)
         verify_obs(obs, curated)
+    else:
+        curated = curate_obs(obs, source, spec)
     return {
         "obs_artifact": obs_artifact,
         "x_artifact": x_artifact,
