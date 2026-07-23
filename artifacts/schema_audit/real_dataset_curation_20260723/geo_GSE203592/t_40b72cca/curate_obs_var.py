@@ -260,15 +260,21 @@ def map_mouse_features(
     symbols: pd.Index, by_symbol: dict[str, list[str]]
 ) -> pd.DataFrame:
     axis_groups: dict[str, list[tuple[int, int]]] = defaultdict(list)
-    for position, symbol in enumerate(symbols.astype(str)):
-        base, suffix = split_unique_symbol(symbol)
-        axis_groups[base].append((suffix, position))
-
     stable = pd.Series(pd.NA, index=range(len(symbols)), dtype="string")
     status = pd.Series(
         "unmapped_release93_symbol", index=range(len(symbols)), dtype="string"
     )
     candidate_count = pd.Series(0, index=range(len(symbols)), dtype="Int64")
+    for position, symbol in enumerate(symbols.astype(str)):
+        exact_ids = by_symbol.get(symbol, [])
+        if len(exact_ids) == 1:
+            stable.iloc[position] = exact_ids[0]
+            status.iloc[position] = "mapped_exact_release93_gene_name"
+            candidate_count.iloc[position] = 1
+            continue
+        base, suffix = split_unique_symbol(symbol)
+        axis_groups[base].append((suffix, position))
+
     for base, members in axis_groups.items():
         members.sort()
         source_ids = by_symbol.get(base, [])
@@ -276,10 +282,7 @@ def map_mouse_features(
         observed_suffixes = [suffix for suffix, _ in members]
         for _, position in members:
             candidate_count.iloc[position] = len(source_ids)
-        if len(source_ids) == 1 and len(members) == 1 and observed_suffixes == [0]:
-            stable.iloc[members[0][1]] = source_ids[0]
-            status.iloc[members[0][1]] = "mapped_exact_release93_gene_name"
-        elif len(source_ids) == len(members) and observed_suffixes == expected_suffixes:
+        if len(source_ids) == len(members) and observed_suffixes == expected_suffixes:
             for source_id, (_, position) in zip(source_ids, members, strict=True):
                 stable.iloc[position] = source_id
                 status.iloc[position] = "mapped_release93_make_unique_order"

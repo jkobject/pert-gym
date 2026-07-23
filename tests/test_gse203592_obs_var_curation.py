@@ -43,13 +43,14 @@ def test_source_manifest_closes_search_without_inventing_guide_sequences() -> No
 def test_mouse_mapping_uses_release_order_only_for_complete_make_unique_groups() -> (
     None
 ):
-    symbols = pd.Index(["A", "B", "B.1", "C", "D"])
+    symbols = pd.Index(["A", "B", "B.1", "C", "D", "Legit.1"])
     mapping = curation.map_mouse_features(
         symbols,
         {
             "A": ["ENSMUSG00000000001"],
             "B": ["ENSMUSG00000000002", "ENSMUSG00000000003"],
             "C": ["ENSMUSG00000000004", "ENSMUSG00000000005"],
+            "Legit.1": ["ENSMUSG00000000006"],
         },
     )
     assert mapping["stable_feature_id"].tolist() == [
@@ -58,6 +59,7 @@ def test_mouse_mapping_uses_release_order_only_for_complete_make_unique_groups()
         "ENSMUSG00000000003",
         pd.NA,
         pd.NA,
+        "ENSMUSG00000000006",
     ]
     assert mapping.loc["C", "stable_feature_id_mapping_status"] == (
         "ambiguous_release93_gene_name"
