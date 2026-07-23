@@ -171,6 +171,18 @@ def test_source_join_compares_author_alias_before_normalized_column() -> None:
     assert result["column_equalities"] == {"cell_type->cell_type_from_author": True}
 
 
+def test_source_join_compares_cell_id_to_cell_line_alias() -> None:
+    obs = base_obs(["a", "b"])
+    obs["cell_line"] = ["A375", "A549"]
+    source = pd.DataFrame({"cell_id": ["A375", "A549"]}, index=obs.index)
+
+    result = curation.verify_source_join(
+        obs, source, member("gse306429_vscores", len(obs))
+    )
+
+    assert result["column_equalities"] == {"cell_id->cell_line": True}
+
+
 def test_frozen_bindings_and_source_manifest_cover_exact_live_identities() -> None:
     manifest = json.loads((EVIDENCE_ROOT / "source_manifest.json").read_text())
     inspection = json.loads((EVIDENCE_ROOT / "source_inspection.json").read_text())

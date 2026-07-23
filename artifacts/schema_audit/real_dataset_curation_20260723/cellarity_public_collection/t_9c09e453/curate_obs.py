@@ -479,6 +479,7 @@ def verify_source_join(
             f"source/current exact index join failed: {spec['prefix']}"
         )
     aliases = {
+        "cell_id": "cell_line",
         "cell_type": "cell_type_from_author",
         "cell_type_rna": "cell_type_from_author",
         "compound_name": "pert_name",
