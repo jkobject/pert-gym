@@ -142,3 +142,9 @@ def test_frozen_bindings_and_source_manifest_cover_exact_live_identities() -> No
         assert spec["x_hash"] == inspected["accepted_artifacts"]["x"]["hash"]
         assert spec["var_uid"] == inspected["accepted_artifacts"]["var"]["uid"]
     assert len(curation.load_frozen_inputs()["inputs"]) == 2
+
+
+def test_gse305370_rna_uses_latest_obs_identity() -> None:
+    spec = next(item for item in curation.MEMBERS if item["kind"] == "gse305370_rna")
+
+    assert spec["before_obs_uid"] == "RJbcZEfscysBCeMj0001"

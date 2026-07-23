@@ -142,7 +142,7 @@ MEMBERS = (
         "accession": "GSE305370",
         "prefix": "cellarity/GSE305370/GSE305370_rna_combined_with_velocity_and_refined_annotations",
         "filename": "GSE305370_rna_combined_with_velocity_and_refined_annotations.h5ad",
-        "before_obs_uid": "RJbcZEfscysBCeMj0000",
+        "before_obs_uid": "RJbcZEfscysBCeMj0001",
         "collection_obs_uid": "RJbcZEfscysBCeMj0000",
         "x_uid": "YarbYWCMuzxYlHi10000",
         "x_hash": "yI8iJQKMAPLA8xZIbea3Bw",

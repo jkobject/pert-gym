@@ -49,7 +49,7 @@ MEMBERS = (
         "accession": "GSE305370",
         "prefix": "cellarity/GSE305370/GSE305370_rna_combined_with_velocity_and_refined_annotations",
         "filename": "GSE305370_rna_combined_with_velocity_and_refined_annotations.h5ad",
-        "obs_uid": "RJbcZEfscysBCeMj0000",
+        "obs_uid": "RJbcZEfscysBCeMj0001",
         "x_uid": "YarbYWCMuzxYlHi10000",
         "var_uid": "h9D2Ff07ruRv3kJe0002",
         "n_obs": 135_341,
