@@ -43,7 +43,7 @@ frozen base-public candidate universe and **6** depmap_ccle/26q1 assignments
 outside it. The outside-universe assignments do not change `/640`. The prior
 named snapshot reached eight datasets through `SchiebingerLander2019`; the
 authoritative product ledger owns the two additional accepted identities,
-including the accepted GSE197452 and Datlinger17 outcomes. GSE150062
+GSE132080 and GSE197452. Datlinger17 is the latest accepted VAR delta. GSE150062
 remains pending independent acceptance and contributes no counter delta in this
 PR.
 
