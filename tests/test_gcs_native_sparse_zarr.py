@@ -118,6 +118,7 @@ class WriteArguments(TypedDict):
     min_block_bytes: int
     min_rows: int
     obs: pd.DataFrame
+    peak_rss_reader: Any
     revision: str
     schema_fingerprint: str
     source_generation: str
@@ -761,6 +762,10 @@ def write(
             "max_block_bytes": 10_000,
             "min_rows": 1,
             "max_rows": 2,
+            # Production reads process-wide peak RSS, which depends on every test
+            # that ran before this helper. Keep writer tests deterministic; tests
+            # of RSS failures inject their own sequence.
+            "peak_rss_reader": lambda: 1,
         }
         | changes,
     )
