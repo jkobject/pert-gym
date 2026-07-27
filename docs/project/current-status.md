@@ -12,10 +12,10 @@ work is not counted. `TODO.md` remains the operational dashboard._
 | New families registered on `jkobject` | **10/22** | 12 | `Artifact/rt5eRz8opcJXtybp0000` |
 | New families in the versioned Collection | **10/22** | 12 | `Collection/WBFxVN9Alr8zFt9T0000`; mismatch/drift 0 |
 | Existing recompactions | **9/32** | 23 | GSE216673 reviewer `t_dfcb1549`; exact generation-pinned manifest below |
-| Real datasets with accepted OBS recovery | **8/70** | 62 | latest: `SchiebingerLander2019`; reviewer task `t_7cc8c0ac`, Artifact `trSdGyVkTDn5ZkaY0004`, zero-write receipt `ae61848d509f86d988596028aad81941eab1d2536ba8b0cc82029ed9266bc1fe`, mismatch 0 |
+| Real datasets with accepted OBS recovery | **10/70** | 60 | accepted history includes `geo/GSE132080` reviewer `t_3bb03773`, OBS `lhR6Ny3n8QcVeItH0003`, plus current-main GSE197452; GSE150062 remains pending independent acceptance and receives no anticipatory credit |
 | Frozen base-public OBS component×field candidates | **33/640** | 607 | SHA-256 `371b2b78c755c5cfdf8fa82d7826e5b2fdbfe48b67ca11e6d2d77ec7b6ff60c2` |
 | Accepted OBS assignments outside that universe | **6** | — | depmap_ccle/26q1; intentionally no `/640` denominator |
-| VAR dataset remediations | **6/70** | 64 | latest: `SchiebingerLander2019`; reviewer task `t_7cc8c0ac`, Artifact `cw0Kr6j7qVyrDBP10003`, GSE207360 and LINCS remain pending |
+| VAR dataset remediations | **8/70** | 62 | latest accepted delta: `scperturb/datlinger17` reviewer `t_2c228f48`, VAR `AYnivbGN3JCRzkN70001`; GSE150062 remains pending independent acceptance |
 | External exclusions | **60/60** | 0 | complete |
 
 The canonical surface remains **120 logical families / 1,056 physical members /
@@ -38,22 +38,21 @@ This outcome advances only `existing_recompactions_accepted` **8→9/32**.
 
 ### OBS
 
-The strict OBS ledger is **8/70 datasets**, plus **33/640** assignments in the
+The strict OBS ledger is **10/70 datasets**, plus **33/640** assignments in the
 frozen base-public candidate universe and **6** depmap_ccle/26q1 assignments
-outside it. The outside-universe assignments do not change `/640`. The latest
-accepted dataset is `SchiebingerLander2019`: reviewer task `t_7cc8c0ac` accepted
-both source members / 327,494 observations in Artifact `trSdGyVkTDn5ZkaY0004`,
-with zero-write receipt `ae61848d509f86d988596028aad81941eab1d2536ba8b0cc82029ed9266bc1fe`,
-source-join mismatch 0 and replay no-op. The prior accepted
-dataset `scperturb/adamson16` covers all three members / 86,111 observations at
-mismatch 0 with zero-write replay no-op.
+outside it. The outside-universe assignments do not change `/640`. The prior
+named snapshot reached eight datasets through `SchiebingerLander2019`; the
+authoritative product ledger owns the two additional accepted identities,
+GSE132080 and GSE197452. Datlinger17 is the latest accepted VAR delta. GSE150062
+remains pending independent acceptance and contributes no counter delta in this
+PR.
 
-`GSE197452` producer task `t_05cef992` is complete but **not yet accepted**:
+`GSE197452` is accepted on current main:
 source-exhaustive readback proves exact 20,811×33,694 Illumina raw-count parity,
 OBS `6UsaktwOJjkXPM3L0003` contains 20,784 exact guide-sequence joins, immutable
 additions successor `ZTXfvA5YDoaqrd750000` has 1,018 unique-key members, and
-verify replay wrote nothing. Independent review is still required, so the strict
-OBS and VAR counters above remain unchanged.
+verify replay wrote nothing. This accepted outcome is included in the strict OBS
+counter above.
 
 GSE213921 is **frozen after rejection 3/3**. It must not be auto-rerun. A future
 attempt requires explicit operator authorization and a new bounded contract; it
@@ -61,15 +60,16 @@ does not currently advance any counter.
 
 ### VAR
 
-The strict VAR ledger is **6/70** after `SchiebingerLander2019` advanced it
-**5→6** for both source members under reviewer task `t_7cc8c0ac`'s mismatch-0,
-zero-write readback. Accepted VAR Artifact `cw0Kr6j7qVyrDBP10003` contains
-23,795 exact unique mappings and preserves 4,203 unresolved values. The prior
-accepted `scperturb/adamson16` advanced the ledger **4→5** for all three
-members. GSE207360 product evidence is rejected at the top-level ledger as
-`unit_mismatch`; LINCS phase1 evidence is rejected as
-`before_does_not_match_current`. Both remain pending conforming exact-once
-reconciliation.
+The strict VAR ledger is **8/70** at the GSE150062 retry gate. After the prior
+**6/70** snapshot, `geo/GSE132080` reviewer `t_3bb03773` authorized **6→7/70**
+for exact VAR `GJ1HqkBSHfDD1o4m0002`; `scperturb/datlinger17` reviewer
+`t_2c228f48` then authorized **7→8/70** for exact VAR
+`AYnivbGN3JCRzkN70001`. GSE150062 remains pending independent acceptance and
+contributes no counter delta in this PR. Its candidate boundary is explicit:
+44,025 source-backed ENSG features, 16,401 source-native custom `LH` features
+whose exact ENSG assignment is `not_applicable`, and 71 unresolved applicable
+features retained as `unknown`; all 60,497 retain source identity, human species,
+and X-axis parity.
 
 ## Count vocabulary
 

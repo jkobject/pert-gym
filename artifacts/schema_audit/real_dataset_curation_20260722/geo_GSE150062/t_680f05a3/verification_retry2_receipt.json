@@ -1,0 +1,987 @@
+{
+  "canonical_sha256": "b0fb2b41fd903bc746d606864ca29bd2f062ba04f2012e6352b3c4bae55bd6e0",
+  "collection_contract": {
+    "accepted_structural_obs_uid": "CkcQf1IYkOkbxKed0000",
+    "collection_mutation_in_scope": false,
+    "curated_obs_is_collection_anchor": false,
+    "curated_obs_uid": "CkcQf1IYkOkbxKed0003",
+    "matching_versioned_collections": 20,
+    "structural_anchor_reused": true,
+    "verdict": "accepted_structural_reuse"
+  },
+  "collections": {
+    "pert-gym/additions/20260621": {
+      "hash": "GXnxligyjv_jQmZGzENIiA",
+      "member_count": 996,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "kYkBznC2fuGmbUbg0000"
+    },
+    "pert-gym/additions/20260624-tiny-tail-minimal": {
+      "hash": "vdFZS7um8nZZaAvy2c3TPA",
+      "member_count": 990,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "4k78ixIrCnBndSWK0000"
+    },
+    "pert-gym/additions/20260717-c-elegans-pilot": {
+      "hash": "ZN8aqwyEXFpyKWcIkCIhgg",
+      "member_count": 991,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "uA0lyIvPz0wvwkho0000"
+    },
+    "pert-gym/additions/20260718-odd001099-gse138002": {
+      "hash": "g7z8r2TTwtnj192C2Ra7tA",
+      "member_count": 1004,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "M3RK4i6Alb6IY3MW0000"
+    },
+    "pert-gym/additions/20260718-odd001111-gse130238": {
+      "hash": "qPVTqqfNQjYFLGeIiZGiEw",
+      "member_count": 1003,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "TwC9RNVYX56GXQrQ0000"
+    },
+    "pert-gym/additions/20260718-odd001154-gse194214": {
+      "hash": "hxBAjNYvEwzRQjXW9nKpLw",
+      "member_count": 992,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "Kx7T3b75KmqnDhmv0000"
+    },
+    "pert-gym/additions/20260718-odd001155-gse196799": {
+      "hash": "u2ombBSmaDVI3OsTMBh8Kg",
+      "member_count": 1002,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "nhx8lM9cElyfHDNq0000"
+    },
+    "pert-gym/additions/20260718-temporal-v4-098-multiciliated-differentiation": {
+      "hash": "PazpnU8IsyK0lliETQ4DSA",
+      "member_count": 1012,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "t5vYC6ws9hUoxiCw0000"
+    },
+    "pert-gym/additions/20260719-temporal-v4-059-drosophila-dorsal-ventral": {
+      "hash": "JtWQXByhDd6wVBbNI0_VRw",
+      "member_count": 1016,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "WBFxVN9Alr8zFt9T0000"
+    },
+    "pert-gym/additions/20260719-temporal-v4-109-stable-chambered-cardioids": {
+      "hash": "VCRuYPFJFF48IfsjuLbh1w",
+      "member_count": 1013,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "s4nGi0cl9DIcBwiR0000"
+    },
+    "pert-gym/additions/20260719-temporal-v4-116-perturbase-gse107185": {
+      "hash": "O3SYC-ko5RHB9bAB4HWNKw",
+      "member_count": 1015,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "gTFAbqEVHm9tFLzV0000"
+    },
+    "pert-gym/additions/20260719-temporal-v4-133-zebrafish-retina-regeneration": {
+      "hash": "_6lKH1wifEr64imo92RXaw",
+      "member_count": 1014,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "4KzIQvzliuWg8R0k0000"
+    },
+    "pert-gym/additions/20260721-depmap-ccle-26q1-e2e": {
+      "hash": "z6blPVzHnMTIpoEpgdtusg",
+      "member_count": 1017,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "aH1RWvlWo87xGpsb0000"
+    },
+    "pert-gym/additions/20260721-depmap-ccle-26q1-e2e-r2": {
+      "hash": "ImySHsnSBRg8WsSXmRcGzw",
+      "member_count": 1016,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "B9N5cXbu8Cm0RZSj0000"
+    },
+    "pert-gym/additions/20260721-drug-seq-gse120222-e2e": {
+      "hash": "ZsctJFBSIiaKnrIzEh-1-g",
+      "member_count": 1018,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "Ltjv1RYDCnuxqqRT0000"
+    },
+    "pert-gym/additions/20260721-ginkgo-vcpi-e2e": {
+      "hash": "lsA-KQnpRV66FuOawrA6uA",
+      "member_count": 1017,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "qoTeH7T78kjbmIWA0000"
+    },
+    "pert-gym/canonical/20260621": {
+      "hash": "FuT5cWa5QodFHfYbzsyLRw",
+      "member_count": 1056,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "aEWBxMlcWx2d7Cd80000"
+    },
+    "pert-gym/canonical/20260624-shared-var": {
+      "hash": "7p8d_e1ecBStZ6MZ-d38fQ",
+      "member_count": 1057,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "38lC0mmlfUMGLa6i0000"
+    },
+    "pert-gym/canonical/20260624-shared-var-alias": {
+      "hash": "lvslAxNMvMgRpLFOFVyJjA",
+      "member_count": 1055,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "gdJ6mLdlfCLWFxAE0000"
+    },
+    "pert-gym/canonical/20260624-tiny-tail-minimal": {
+      "hash": "NbAuUlPCPxCxCIntDiJiNw",
+      "member_count": 1050,
+      "target_matches": [
+        {
+          "key": "prism_collection/GSE150062/obs.parquet",
+          "uid": "CkcQf1IYkOkbxKed0000"
+        }
+      ],
+      "uid": "WyS1x7L3j7ml1PRx0000"
+    }
+  },
+  "completed_at": 1784747853,
+  "dataset_e2e_v3": {
+    "complete": true,
+    "curated_obs_is_collection_anchor": false,
+    "matrix_axis_parity": true,
+    "obs_completed": true,
+    "physical_member_count": 1,
+    "status": "complete",
+    "var_ensembl_species_completed": true,
+    "versioned_collection_structural_reuse": true
+  },
+  "dataset_id": "prism_collection/GSE150062",
+  "format": "pert-gym.real-dataset-obs-var-curation/v3",
+  "helper_sha256": "a9624404ec575a217c48aba3d213d08232ff17217c1147c3eb8c56fc2a3b5ad4",
+  "host": {
+    "available_memory_bytes": 32862879744,
+    "free_disk_bytes": 284552065024,
+    "hostname": "pert-gym-worker-eu"
+  },
+  "member_after": {
+    "already_curated_obs": true,
+    "already_curated_var": true,
+    "canonical_field_dispositions": {
+      "age": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "assay": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "batch": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_id": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_line": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "dataset": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "disease": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "donor_id": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "dose": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "dose_unit": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "ethnicity": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "guide_sequence": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_baseline": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_bulk": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_control": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_low_quality": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_pseudobulk": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "media": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "modality": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "molecule_sequence": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "n_counts": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "n_genes": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "organism": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pct_mito": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pct_ribo": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_library": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_technology": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pseudotime": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "response_metric": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "response_source": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "response_value": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "sample": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "sensitivity": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "sequencer": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "sex": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "technology": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "timepoint": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "tissue_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "trajectory_id": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      }
+    },
+    "obs_before": {
+      "created_at": "2026-07-22 16:05:46.358516+00:00",
+      "description": "t_680f05a3: source-exhaustive GSE150062 OBS; exact 78393-row Table S5 join with protospacer, target, library, trajectory, batch and QC semantics",
+      "hash": "_yy1Dn0rGA84AVtobdWucA",
+      "key": "prism_collection/GSE150062/obs.parquet",
+      "n_observations": 78393,
+      "run_uid": "lRpylUNjT9EHtg0S",
+      "size": 13019121,
+      "uid": "CkcQf1IYkOkbxKed0003",
+      "version": "0003"
+    },
+    "obs_completed": true,
+    "obs_history_count": 4,
+    "source_join": {
+      "column_mismatches": {
+        "UMI_count": 0,
+        "guide": 0,
+        "is_control": 0,
+        "library": 0,
+        "nCount_RNA": 0,
+        "nFeature_RNA": 0,
+        "perturbation": 0,
+        "sample": 0,
+        "trajectory": 0
+      },
+      "control_rows": 3423,
+      "current_rows": 78393,
+      "guide_sequence_known_rows": 78393,
+      "identity_order_match": true,
+      "join_mismatch_count": 0,
+      "joined_order_sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "qc_complete_rows": 78393,
+      "source_rows": 78393,
+      "trajectory_known_rows": 78393
+    },
+    "source_manifest_sha256": "da79be51af2564758a179eb6481e6559f3a229644859dea39436fa22104b8594",
+    "var_before": {
+      "created_at": "2026-07-22 18:50:59.350706+00:00",
+      "description": "t_680f05a3: source-exhaustive GSE150062 VAR; exact 60497-feature Wu unified-reference identity and human organism; 44025 source-backed ENSG, 16401 source-native custom LH not-applicable to exact ENSG, 71 unresolved unknown; no fabrication",
+      "hash": "0FFIKr8WD0m_fuCgN9ISOg",
+      "key": "prism_collection/GSE150062/var.parquet",
+      "n_observations": 60497,
+      "run_uid": "2YOI3wrVOGuzL2sd",
+      "size": 5321736,
+      "uid": "rRlvtvSEpbFnek7K0003",
+      "version": "0003"
+    },
+    "var_verdict": {
+      "axis_order_parity": true,
+      "axis_order_sha256": "27ee86db7e6b15617c6183a9e69036dd1be2057ca576684bdfa5b72e6c5f91aa",
+      "biological_features_total": 60497,
+      "correct_species_features": 60497,
+      "ensembl_disposition_complete": true,
+      "feature_denominator": {
+        "source_native_custom_lh_not_applicable": 16401,
+        "standard_ensembl_gene": 44025,
+        "total": 60497,
+        "unresolved_applicable_unknown": 71
+      },
+      "feature_index_unique": true,
+      "full_feature_ensembl_coverage": false,
+      "other_nonpassing_features": 71,
+      "reason": "44025 standard genes have exact source-backed ENSG IDs; 16401 source-native custom LH features are explicitly not applicable to exact ENSG assignment; 71 unresolved applicable features remain unknown; no identifier was fabricated",
+      "source_native_lh_features": 16401,
+      "stable_ensembl_id_features": 44025,
+      "var_ensembl_species_completed": true,
+      "var_ensembl_species_completion_basis": "source_bound_disposition_complete_not_full_coverage",
+      "var_feature_identity_species_disposition_completed": true,
+      "verdict": "accepted_partial_boundary"
+    },
+    "x": {
+      "created_at": "2026-06-10 14:40:34.967521+00:00",
+      "description": "None",
+      "hash": "GuWO74YMmAykleWtRSS8LY",
+      "key": "prism_collection/GSE150062/X.h5ad",
+      "n_observations": 78393,
+      "run_uid": "None",
+      "size": 2285493320,
+      "uid": "11Cz4UCdFjK8eYy30000",
+      "version": "0000"
+    },
+    "x_axis": {
+      "backed_only": true,
+      "hash": "GuWO74YMmAykleWtRSS8LY",
+      "obs_names_sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "shape": [
+        78393,
+        60497
+      ],
+      "uid": "11Cz4UCdFjK8eYy30000",
+      "var_names_sha256": "27ee86db7e6b15617c6183a9e69036dd1be2057ca576684bdfa5b72e6c5f91aa"
+    }
+  },
+  "member_before": {
+    "already_curated_obs": true,
+    "already_curated_var": true,
+    "canonical_field_dispositions": {
+      "age": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "assay": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "batch": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_id": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_line": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "cell_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "dataset": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "disease": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "donor_id": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "dose": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "dose_unit": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "ethnicity": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "guide_sequence": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_baseline": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_bulk": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_control": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_low_quality": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "is_pseudobulk": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "media": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "modality": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "molecule_sequence": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "n_counts": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "n_genes": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "organism": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pct_mito": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pct_ribo": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_library": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_technology": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "perturbation_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "pseudotime": {
+        "disposition": "unknown",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "response_metric": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "response_source": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "response_value": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "sample": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "sensitivity": {
+        "disposition": "not_applicable",
+        "known_rows": 0,
+        "source_bound": false,
+        "unknown_rows": 78393
+      },
+      "sequencer": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "sex": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "technology": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "timepoint": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "tissue_type": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      },
+      "trajectory_id": {
+        "disposition": "materialized_complete",
+        "known_rows": 78393,
+        "source_bound": true,
+        "unknown_rows": 0
+      }
+    },
+    "obs_before": {
+      "created_at": "2026-07-22 16:05:46.358516+00:00",
+      "description": "t_680f05a3: source-exhaustive GSE150062 OBS; exact 78393-row Table S5 join with protospacer, target, library, trajectory, batch and QC semantics",
+      "hash": "_yy1Dn0rGA84AVtobdWucA",
+      "key": "prism_collection/GSE150062/obs.parquet",
+      "n_observations": 78393,
+      "run_uid": "lRpylUNjT9EHtg0S",
+      "size": 13019121,
+      "uid": "CkcQf1IYkOkbxKed0003",
+      "version": "0003"
+    },
+    "obs_completed": true,
+    "obs_history_count": 4,
+    "source_join": {
+      "column_mismatches": {
+        "UMI_count": 0,
+        "guide": 0,
+        "is_control": 0,
+        "library": 0,
+        "nCount_RNA": 0,
+        "nFeature_RNA": 0,
+        "perturbation": 0,
+        "sample": 0,
+        "trajectory": 0
+      },
+      "control_rows": 3423,
+      "current_rows": 78393,
+      "guide_sequence_known_rows": 78393,
+      "identity_order_match": true,
+      "join_mismatch_count": 0,
+      "joined_order_sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "qc_complete_rows": 78393,
+      "source_rows": 78393,
+      "trajectory_known_rows": 78393
+    },
+    "source_manifest_sha256": "da79be51af2564758a179eb6481e6559f3a229644859dea39436fa22104b8594",
+    "var_before": {
+      "created_at": "2026-07-22 18:50:59.350706+00:00",
+      "description": "t_680f05a3: source-exhaustive GSE150062 VAR; exact 60497-feature Wu unified-reference identity and human organism; 44025 source-backed ENSG, 16401 source-native custom LH not-applicable to exact ENSG, 71 unresolved unknown; no fabrication",
+      "hash": "0FFIKr8WD0m_fuCgN9ISOg",
+      "key": "prism_collection/GSE150062/var.parquet",
+      "n_observations": 60497,
+      "run_uid": "2YOI3wrVOGuzL2sd",
+      "size": 5321736,
+      "uid": "rRlvtvSEpbFnek7K0003",
+      "version": "0003"
+    },
+    "var_verdict": {
+      "axis_order_parity": true,
+      "axis_order_sha256": "27ee86db7e6b15617c6183a9e69036dd1be2057ca576684bdfa5b72e6c5f91aa",
+      "biological_features_total": 60497,
+      "correct_species_features": 60497,
+      "ensembl_disposition_complete": true,
+      "feature_denominator": {
+        "source_native_custom_lh_not_applicable": 16401,
+        "standard_ensembl_gene": 44025,
+        "total": 60497,
+        "unresolved_applicable_unknown": 71
+      },
+      "feature_index_unique": true,
+      "full_feature_ensembl_coverage": false,
+      "other_nonpassing_features": 71,
+      "reason": "44025 standard genes have exact source-backed ENSG IDs; 16401 source-native custom LH features are explicitly not applicable to exact ENSG assignment; 71 unresolved applicable features remain unknown; no identifier was fabricated",
+      "source_native_lh_features": 16401,
+      "stable_ensembl_id_features": 44025,
+      "var_ensembl_species_completed": true,
+      "var_ensembl_species_completion_basis": "source_bound_disposition_complete_not_full_coverage",
+      "var_feature_identity_species_disposition_completed": true,
+      "verdict": "accepted_partial_boundary"
+    },
+    "x": {
+      "created_at": "2026-06-10 14:40:34.967521+00:00",
+      "description": "None",
+      "hash": "GuWO74YMmAykleWtRSS8LY",
+      "key": "prism_collection/GSE150062/X.h5ad",
+      "n_observations": 78393,
+      "run_uid": "None",
+      "size": 2285493320,
+      "uid": "11Cz4UCdFjK8eYy30000",
+      "version": "0000"
+    },
+    "x_axis": {
+      "backed_only": true,
+      "hash": "GuWO74YMmAykleWtRSS8LY",
+      "obs_names_sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88",
+      "shape": [
+        78393,
+        60497
+      ],
+      "uid": "11Cz4UCdFjK8eYy30000",
+      "var_names_sha256": "27ee86db7e6b15617c6183a9e69036dd1be2057ca576684bdfa5b72e6c5f91aa"
+    }
+  },
+  "mode": "verify",
+  "real_dataset_id": "geo/GSE150062",
+  "registry_counts": {
+    "after": {
+      "artifacts": 28525,
+      "collections": 38
+    },
+    "before": {
+      "artifacts": 28525,
+      "collections": 38
+    }
+  },
+  "replay_noop": true,
+  "source_denominator": {
+    "biological_datasets": 1,
+    "features": 60497,
+    "logical_families": 1,
+    "observations": 78393,
+    "physical_members": 1
+  },
+  "source_manifest_sha256": "da79be51af2564758a179eb6481e6559f3a229644859dea39436fa22104b8594",
+  "status": "PASS",
+  "task_id": "t_680f05a3",
+  "writes": {
+    "artifacts": {
+      "obs": [],
+      "var": []
+    },
+    "collection_writes": 0,
+    "deletions": 0,
+    "obs_revisions": 0,
+    "var_revisions": 0,
+    "x_revisions": 0
+  }
+}

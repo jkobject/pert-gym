@@ -1,0 +1,74 @@
+{
+  "dataset": {
+    "accession": "GSE150062",
+    "title": "Dual genome-wide coding and lncRNA screens in neural induction of induced pluripotent stem cells",
+    "biological_unit": "one day-8 Perturb-seq experiment in male CRISPRi WTC11 iPSCs undergoing dual-SMAD-inhibition neural induction",
+    "physical_members": 1,
+    "accepted_observations": 78393,
+    "accepted_expression_features": 60497
+  },
+  "publication": {
+    "title": "Dual genome-wide coding and lncRNA screens in neural induction of induced pluripotent stem cells",
+    "doi": "10.1016/j.xgen.2022.100177",
+    "pmid": "36381608",
+    "pmc": "PMC9648144",
+    "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9648144/"
+  },
+  "author_code": {
+    "repository": "https://github.com/davidwumdphd/dualgenomewide",
+    "paper_alias": "https://github.com/symbiologist/dualgenomewide",
+    "commit": "4285c7f5e81eaada87cf668b7fa4039f4ff3b1c9",
+    "reference_metadata_path": "analysis/reference/output/02_unified_reference/unified_metadata.tsv.gz",
+    "reference_metadata_bytes": 9302370,
+    "reference_metadata_sha256": "c1ac69e9aa3f6bc3ed43df116ae125ab9cf7a9612456db579576a191aea8b68b",
+    "display_names_path": "analysis/reference/output/02_unified_reference/unified_display_names.tsv.gz",
+    "display_names_bytes": 439619,
+    "display_names_sha256": "7bccfafa7ac9f6e01e8db7bdecb25e3f4afc52cabd343c9db5c4ab367ad605c5"
+  },
+  "table_s5": {
+    "description": "Filtered singlet Perturb-seq barcodes with guide, target, library, RNA-velocity trajectory, QC counts, protospacer and batch",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/9903861/bin/mmc6.xlsx",
+    "bytes": 5338747,
+    "sha256": "fd307e6aec5a0044e0ec135594ed1d3071d3efb609809faa1f0ef91d111b465c",
+    "sheet": "TableS5",
+    "header_row_zero_based": 2,
+    "rows": 78393,
+    "cell_barcode_order_sha256": "70f0732cfa9b73479d02a0927475c0cb755e99477db36bb3ea8b7b359e44ef88"
+  },
+  "geo_processed_files": [
+    {"name": "GSE150062_perturbseq_barcodes.tsv.gz", "bytes": 338738, "sha256": "d86f132cc056002f55f67ce7658b6dcb1930e0bb577dc173cc958226d7fe4e37"},
+    {"name": "GSE150062_perturbseq_features.tsv.gz", "bytes": 222231, "sha256": "90e1a3254c97215191bf9dbae0a603e6fb1b908da731e5505395a805fb790b28"},
+    {"name": "GSE150062_perturbseq_genes.tsv.gz", "bytes": 222165, "sha256": "b6d13a64dca80162b49414a0967522326e77b58b40b08da93a672ffe0b6afa57"},
+    {"name": "GSE150062_sgrna_barcodes.tsv.gz", "bytes": 338738, "sha256": "d86f132cc056002f55f67ce7658b6dcb1930e0bb577dc173cc958226d7fe4e37"},
+    {"name": "GSE150062_sgrna_features.tsv.gz", "bytes": 2763, "sha256": "e0b66b2ba30c18d07c33ba861793857b2984c6aa2251e6c4ccd4cb1695b6bae3"},
+    {"name": "GSE150062_sgrna_genes.tsv.gz", "bytes": 1428, "sha256": "fc7f4c16c63f5238cf57fbe0e56c670c05f3fb31d1f278a2068979743fb896d4"}
+  ],
+  "perturbseq_samples": {
+    "gene_expression": ["GSM5346261", "GSM5346262", "GSM5346263", "GSM5346264", "GSM5346265", "GSM5346266", "GSM5346267", "GSM5346268", "GSM5346269", "GSM5346270"],
+    "direct_guide_capture": ["GSM5346271", "GSM5346272", "GSM5346273", "GSM5346274", "GSM5346275", "GSM5346276", "GSM5346277", "GSM5346278", "GSM5346279", "GSM5346280"],
+    "shared_characteristics": {
+      "source_name": "iPSC WTC",
+      "time": "D8",
+      "gene_expression_library_type": "Gene Expression",
+      "guide_library_type": "CRISPR gRNA Capture",
+      "treatment": "Dual SMAD-inhibition neural induction medium",
+      "technology": "10x Genomics Chromium 3' Assay v3",
+      "sequencing": "PE100",
+      "instrument": "Illumina NovaSeq 6000"
+    }
+  },
+  "curation_decisions": {
+    "obs_authority": "Table S5 is the exact accepted-cell authority; its barcode order equals GEO barcodes, X.obs_names and current original_obs_index.",
+    "controls": "Guide target Non-Targeting plus Library Control defines strict non-targeting controls; Table S5 supplies protospacers for every accepted row.",
+    "timepoint": "D8 is materialized as 11520 minutes from initiation of neural induction.",
+    "cell_state": "RNA velocity trajectory is preserved as trajectory_id; it is not relabeled as a cell ontology identity.",
+    "var_authority": "The author-commit unified_metadata feature_id axis is exact and source-native after the documented Cell Ranger underscore-to-hyphen sanitization affecting 29 IDs. Its gene_id is used only when unambiguous; no Ensembl ID is fabricated for custom LH features.",
+    "strict_var_boundary": "The canonical VAR remediation metric is complete only as a source-bound identity/species/disposition contract: 44025 standard genes have exact source-backed ENSG IDs, 16401 source-native custom LH features are exact-ENSG not_applicable, and 71 unresolved applicable features remain unknown. Full-feature Ensembl coverage is separately false; no identifier is fabricated."
+  },
+  "forbidden_inferences": [
+    "Do not infer perturbation target from guide-string parsing when Table S5 supplies it.",
+    "Do not coerce source-native LH identifiers to Ensembl IDs.",
+    "Do not treat RNA-velocity trajectory categories as measured pseudotime.",
+    "Do not claim full-feature Ensembl coverage for features without a unique source-backed Ensembl stable gene ID; VAR_ENSEMBL_SPECIES_COMPLETED denotes exact source identity, human species, and an explicit known/not_applicable/unknown Ensembl disposition for every row."
+  ]
+}
