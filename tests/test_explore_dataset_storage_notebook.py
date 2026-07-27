@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 import nbformat
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK = ROOT / "notebooks/explore_dataset_storage.ipynb"
@@ -22,6 +25,10 @@ def load_builder():
 
 def notebook_text(notebook):
     return "\n".join(cell.source for cell in notebook.cells)
+
+
+def cell_source(notebook, cell_id):
+    return next(cell.source for cell in notebook.cells if cell.id == cell_id)
 
 
 def test_notebook_is_substantial_pedagogical_and_output_free():
@@ -77,6 +84,13 @@ def test_notebook_is_read_only_and_bounds_payload_access():
     assert 'ad.read_h5ad(path, backed="r")' in text
     assert "MAX_LAMIN_METADATA_BYTES" in text
     assert "MAX_LAMIN_ROWS" in text
+    assert "MAX_LOCAL_ENTRIES" in text
+    assert "entries_seen >= max_entries" in text
+    assert "MAX_GCS_RESULTS" in text
+    assert '"maxResults": max_results' in text
+    assert "MAX_GCS_RESPONSE_BYTES + 1" in text
+    assert "raise RuntimeError(f\"GCS listing failed" in text
+    assert "selected_obs.size is None" in text
     assert "--recursive" not in text
     assert "to_memory(" not in text
     banned_writes = [
@@ -92,6 +106,89 @@ def test_notebook_is_read_only_and_bounds_payload_access():
     ]
     for marker in banned_writes:
         assert marker not in text
+
+
+def test_local_scan_bounds_every_visited_entry(tmp_path):
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    namespace = {}
+    for cell_id in ["imports", "small-helpers", "local-options"]:
+        exec(cell_source(notebook, cell_id), namespace)
+    scan_definition = cell_source(notebook, "local-scan").split("\n\nlocal_files =", 1)[0]
+    exec(scan_definition, namespace)
+
+    for index in range(12):
+        path = tmp_path / f"irrelevant-{index}"
+        path.write_text("x")
+    frame = namespace["scan_local_data"]([tmp_path], max_files=100, max_entries=5)
+    assert frame.attrs["entries_seen"] == 5
+    assert frame.attrs["scan_truncated"] is True
+
+
+def test_gcs_listing_is_server_and_response_bounded_and_fails_closed(monkeypatch):
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    namespace = {}
+    for cell_id in ["imports", "small-helpers", "gcs-options", "gcs-helper"]:
+        exec(cell_source(notebook, cell_id), namespace)
+    namespace["gcloud_adc_token"] = lambda timeout: "test-token"
+
+    seen = {}
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def read(self, limit):
+            seen["read_limit"] = limit
+            return json.dumps(
+                {
+                    "prefixes": ["prefix/child/"],
+                    "items": [{"name": "prefix/file.h5ad", "size": "7"}],
+                    "nextPageToken": "more",
+                }
+            ).encode()
+
+    def bounded_urlopen(request, timeout):
+        seen["url"] = request.full_url
+        return Response()
+
+    namespace["urlopen"] = bounded_urlopen
+    frame = namespace["list_gcs_level"]("gs://bucket/prefix/", max_results=7)
+    query = parse_qs(urlparse(seen["url"]).query)
+    assert query["maxResults"] == ["7"]
+    assert query["delimiter"] == ["/"]
+    assert query["userProject"] == [namespace["GCS_BILLING_PROJECT"]]
+    assert seen["read_limit"] == namespace["MAX_GCS_RESPONSE_BYTES"] + 1
+    assert frame.attrs["listing_truncated"] is True
+
+    def denied(*args, **kwargs):
+        raise PermissionError("denied")
+
+    namespace["urlopen"] = denied
+    with pytest.raises(RuntimeError, match="GCS listing failed"):
+        namespace["list_gcs_level"]("gs://bucket/prefix/", max_results=7)
+
+
+def test_unknown_lamin_size_refuses_load(capsys):
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+
+    class UnknownSizeArtifact:
+        key = "dataset/obs.parquet"
+        size = None
+
+        def load(self):
+            raise AssertionError("unknown-size payload must not be loaded")
+
+    namespace = {
+        "selected_obs": UnknownSizeArtifact(),
+        "human_bytes": lambda value: str(value),
+        "display": lambda value: None,
+    }
+    exec(cell_source(notebook, "lamin-preview"), namespace)
+    assert namespace["lamin_preview"] is None
+    assert "Refusing metadata load with unknown size" in capsys.readouterr().out
 
 
 def test_presets_cover_multilayer_and_unpublished_examples():

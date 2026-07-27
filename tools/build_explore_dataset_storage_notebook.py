@@ -93,8 +93,12 @@ large local MatrixMarket downloads, a GCS source copy, and published Lamin tripl
         code(
             """
 from pathlib import Path
+import json
+import os
 import re
 import subprocess
+from urllib.parse import quote, urlencode, urlparse
+from urllib.request import Request, urlopen
 import zipfile
 
 import pandas as pd
@@ -193,39 +197,61 @@ DATA_SUFFIXES = {
     ".parquet", ".csv", ".tsv", ".zip", ".tar", ".gz",
 }
 MAX_LOCAL_FILES = 10_000
+MAX_LOCAL_ENTRIES = 20_000
 """,
             "local-options",
         ),
         code(
             """
-def scan_local_data(roots, max_files=MAX_LOCAL_FILES):
+def scan_local_data(roots, max_files=MAX_LOCAL_FILES, max_entries=MAX_LOCAL_ENTRIES):
     rows = []
+    entries_seen = 0
+    truncated = False
     for root in roots:
         if not root.exists():
             continue
-        for path in root.rglob("*"):
-            if len(rows) >= max_files:
-                break
+        pending = [root]
+        while pending and not truncated:
+            current = pending.pop()
             try:
-                path_lower = str(path).lower()
-                if "openclaw-repair" in path_lower:
-                    continue
-                if path.is_file() and path.suffix.lower() in DATA_SUFFIXES:
-                    rows.append({
-                        "root": str(root),
-                        "path": str(path),
-                        "name": path.name,
-                        "suffix": path.suffix.lower(),
-                        "bytes": path.stat().st_size,
-                        "size": human_bytes(path.stat().st_size),
-                    })
+                entries = os.scandir(current)
             except OSError:
                 continue
-    return pd.DataFrame(rows)
+            with entries:
+                for entry in entries:
+                    if entries_seen >= max_entries or len(rows) >= max_files:
+                        truncated = True
+                        break
+                    entries_seen += 1
+                    path = Path(entry.path)
+                    path_lower = str(path).lower()
+                    if "openclaw-repair" in path_lower:
+                        continue
+                    try:
+                        if entry.is_dir(follow_symlinks=False):
+                            pending.append(path)
+                        elif entry.is_file(follow_symlinks=False) and path.suffix.lower() in DATA_SUFFIXES:
+                            size = entry.stat(follow_symlinks=False).st_size
+                            rows.append({
+                                "root": str(root),
+                                "path": str(path),
+                                "name": path.name,
+                                "suffix": path.suffix.lower(),
+                                "bytes": size,
+                                "size": human_bytes(size),
+                            })
+                    except OSError:
+                        continue
+            if truncated:
+                break
+    frame = pd.DataFrame(rows)
+    frame.attrs.update(entries_seen=entries_seen, scan_truncated=truncated)
+    return frame
 
 
 local_files = scan_local_data(LOCAL_ROOTS)
 print(f"Found {len(local_files):,} local data-like files")
+print(f"Inspected {local_files.attrs['entries_seen']:,} filesystem entries; truncated={local_files.attrs['scan_truncated']}")
 print("Total visible bytes:", human_bytes(local_files["bytes"].sum()) if len(local_files) else "0 B")
 local_files.sort_values("bytes", ascending=False).head(20)
 """,
@@ -350,32 +376,71 @@ PROCESSED_GCS_ROOTS = [
     "gs://scperturb/pert-gym/staging/xatlas/orion/",
 ]
 GCLOUD_TIMEOUT_SECONDS = 120
+GCS_BILLING_PROJECT = "jkobject-1549353370965"
+MAX_GCS_RESULTS = 500
+MAX_GCS_RESPONSE_BYTES = 2 * 1024**2
 """,
             "gcs-options",
         ),
         code(
             """
-def list_gcs_level(uri, timeout=GCLOUD_TIMEOUT_SECONDS):
+def gcloud_adc_token(timeout=GCLOUD_TIMEOUT_SECONDS):
+    completed = subprocess.run(
+        ["gcloud", "auth", "application-default", "print-access-token"],
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+        check=False,
+    )
+    if completed.returncode != 0 or not completed.stdout.strip():
+        raise RuntimeError(f"Google ADC unavailable: {completed.stderr.strip()}")
+    return completed.stdout.strip()
+
+
+def list_gcs_level(uri, timeout=GCLOUD_TIMEOUT_SECONDS, max_results=MAX_GCS_RESULTS):
     if not uri.startswith("gs://"):
         raise ValueError("Expected a gs:// URI")
-    command = ["gcloud", "storage", "ls", "--long", uri]
-    completed = subprocess.run(command, capture_output=True, text=True, timeout=timeout, check=False)
-    if completed.returncode != 0:
-        return pd.DataFrame([{"kind": "error", "uri": uri, "message": completed.stderr.strip()}])
+    parsed = urlparse(uri)
+    bucket = parsed.netloc
+    object_name = parsed.path.lstrip("/")
+    token = gcloud_adc_token(timeout)
+    if object_name and not uri.endswith("/"):
+        query = urlencode({"userProject": GCS_BILLING_PROJECT, "fields": "name,size,updated"})
+        endpoint = (
+            f"https://storage.googleapis.com/storage/v1/b/{quote(bucket, safe='')}/o/"
+            f"{quote(object_name, safe='')}?{query}"
+        )
+    else:
+        query = urlencode({
+            "prefix": object_name,
+            "delimiter": "/",
+            "maxResults": max_results,
+            "userProject": GCS_BILLING_PROJECT,
+            "fields": "items(name,size,updated),prefixes,nextPageToken",
+        })
+        endpoint = f"https://storage.googleapis.com/storage/v1/b/{quote(bucket, safe='')}/o?{query}"
+    request = Request(endpoint, headers={"Authorization": f"Bearer {token}"})
+    try:
+        with urlopen(request, timeout=timeout) as response:
+            payload = response.read(MAX_GCS_RESPONSE_BYTES + 1)
+    except Exception as error:
+        raise RuntimeError(f"GCS listing failed for {uri}: {error}") from error
+    if len(payload) > MAX_GCS_RESPONSE_BYTES:
+        raise RuntimeError(f"GCS response exceeded {MAX_GCS_RESPONSE_BYTES} bytes for {uri}")
+    document = json.loads(payload)
     rows = []
-    for line in completed.stdout.splitlines():
-        stripped = line.strip()
-        if not stripped or stripped.startswith("TOTAL:"):
-            continue
-        parts = stripped.split()
-        if stripped.startswith("gs://") and stripped.endswith("/"):
-            rows.append({"kind": "prefix", "uri": stripped, "bytes": None, "size": ""})
-        elif len(parts) >= 3 and parts[0].isdigit() and parts[-1].startswith("gs://"):
-            size = int(parts[0])
-            rows.append({"kind": "object", "uri": parts[-1], "bytes": size, "size": human_bytes(size)})
-        elif stripped.startswith("gs://"):
-            rows.append({"kind": "object", "uri": stripped, "bytes": None, "size": ""})
-    return pd.DataFrame(rows)
+    if "name" in document:
+        size = int(document["size"])
+        rows.append({"kind": "object", "uri": f"gs://{bucket}/{document['name']}", "bytes": size, "size": human_bytes(size)})
+    else:
+        for child_prefix in document.get("prefixes", []):
+            rows.append({"kind": "prefix", "uri": f"gs://{bucket}/{child_prefix}", "bytes": None, "size": ""})
+        for item in document.get("items", []):
+            size = int(item["size"])
+            rows.append({"kind": "object", "uri": f"gs://{bucket}/{item['name']}", "bytes": size, "size": human_bytes(size)})
+    frame = pd.DataFrame(rows)
+    frame.attrs.update(result_limit=max_results, listing_truncated=bool(document.get("nextPageToken")))
+    return frame
 """,
             "gcs-helper",
         ),
@@ -829,7 +894,9 @@ MAX_LAMIN_METADATA_BYTES = 20 * 1024**2
 lamin_preview = None
 if selected_obs is None:
     print("No matching obs.parquet was found")
-elif (selected_obs.size or 0) > MAX_LAMIN_METADATA_BYTES:
+elif selected_obs.size is None:
+    print("Refusing metadata load with unknown size:", selected_obs.key)
+elif selected_obs.size > MAX_LAMIN_METADATA_BYTES:
     print("Refusing metadata load:", selected_obs.key, human_bytes(selected_obs.size))
 else:
     lamin_preview = selected_obs.load()
