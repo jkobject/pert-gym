@@ -1,0 +1,28 @@
+{
+  "bucketList": {
+    "buckets": [
+      {
+        "bucket": "scperturb",
+        "prefixList": {
+          "includedObjectPrefixes": [
+            "pert-gym/staging/pert-gym/curation/",
+            "pert-gym/staging/xatlas/"
+          ]
+        }
+      }
+    ]
+  },
+  "completeTime": "2026-07-27T14:43:50.833288405Z",
+  "counters": {
+    "succeededObjectCount": "3682814",
+    "totalBytesFound": "298582552226",
+    "totalBytesTransformed": "298569052440",
+    "totalObjectCount": "3682814"
+  },
+  "createTime": "2026-07-27T14:30:06.391566440Z",
+  "deleteObject": {},
+  "description": "Delete bounded prefixes immediately after verified dry-run: user-authorized curation and XAtlas derived outputs",
+  "name": "projects/jkobject-1549353370965/locations/global/jobs/canonical-xatlas-delete-v3-20260727",
+  "scheduleTime": "2026-07-27T14:30:06.327592697Z",
+  "state": "SUCCEEDED"
+}

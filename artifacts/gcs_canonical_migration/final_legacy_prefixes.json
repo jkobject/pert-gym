@@ -1,0 +1,1073 @@
+{
+  "pert-gym/staging/": {
+    "children": [
+      "pert-gym/staging/logical/",
+      "pert-gym/staging/pert-gym/",
+      "pert-gym/staging/vars/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/logical/": {
+    "children": [
+      "pert-gym/staging/logical/prism_collection/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/logical/prism_collection/": {
+    "children": [
+      "pert-gym/staging/logical/prism_collection/GSE214844/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/logical/prism_collection/GSE214844/": {
+    "children": [
+      "pert-gym/staging/logical/prism_collection/GSE214844/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/logical/prism_collection/GSE214844/revisions/": {
+    "children": [
+      "pert-gym/staging/logical/prism_collection/GSE214844/revisions/gse214844-existing13-t_d350c30c-v2/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/arc_vcc/",
+      "pert-gym/staging/pert-gym/logical/depmap_ccle26q1/",
+      "pert-gym/staging/pert-gym/logical/gse326326_hesta/",
+      "pert-gym/staging/pert-gym/logical/lincs_level2/",
+      "pert-gym/staging/pert-gym/logical/mosta_stds0000058/",
+      "pert-gym/staging/pert-gym/logical/perturbase_gse216481/",
+      "pert-gym/staging/pert-gym/logical/prism_collection/",
+      "pert-gym/staging/pert-gym/logical/rxrx19a/",
+      "pert-gym/staging/pert-gym/logical/rxrx2/",
+      "pert-gym/staging/pert-gym/logical/sanger_dualguide_crc/",
+      "pert-gym/staging/pert-gym/logical/sanger_gdsc1/",
+      "pert-gym/staging/pert-gym/logical/sanger_gdsc2/",
+      "pert-gym/staging/pert-gym/logical/sanger_score/",
+      "pert-gym/staging/pert-gym/logical/stds0000060/",
+      "pert-gym/staging/pert-gym/logical/strand_jurkat/",
+      "pert-gym/staging/pert-gym/logical/strand_k562/",
+      "pert-gym/staging/pert-gym/logical/strand_rpe1/",
+      "pert-gym/staging/pert-gym/logical/stt0000071/",
+      "pert-gym/staging/pert-gym/logical/tcell_d4_rest/",
+      "pert-gym/staging/pert-gym/logical/temporal/",
+      "pert-gym/staging/pert-gym/logical/virtual_cell_vcpi/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/arc_vcc/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/arc_vcc/2025/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/arc_vcc/2025/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/arc_vcc/2025/test/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/depmap_ccle26q1/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/depmap_ccle26q1/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/depmap_ccle26q1/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/depmap_ccle26q1/revisions/depmap-ccle26q1-default-models-wave01-960f9db1b737f306/",
+      "pert-gym/staging/pert-gym/logical/depmap_ccle26q1/revisions/depmap-ccle26q1-wave01-b48178b90c216eb2/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/gse326326_hesta/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/gse326326_hesta/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/gse326326_hesta/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/gse326326_hesta/revisions/gse326326-hesta-wave02-e5869e8b840b4337/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/lincs_level2/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/lincs_level2/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/lincs_level2/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/lincs_level2/revisions/lincs-level2-20260716T155948Z-070357ad/",
+      "pert-gym/staging/pert-gym/logical/lincs_level2/revisions/lincs-level2-20260716T161341Z-0558329e/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/mosta_stds0000058/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/mosta_stds0000058/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/mosta_stds0000058/workloads/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/mosta_stds0000058/workloads/mosta-stds0000058-wave02-47c4bcb7c221bd62/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/perturbase_gse216481/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/perturbase_gse216481/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/perturbase_gse216481/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/perturbase_gse216481/revisions/perturbase-gse216481-20260716T171000Z-1737d34d/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/prism_collection/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/prism_collection/GSE161824/",
+      "pert-gym/staging/pert-gym/logical/prism_collection/GSE216673/",
+      "pert-gym/staging/pert-gym/logical/prism_collection/GSE220974/",
+      "pert-gym/staging/pert-gym/logical/prism_collection/GSE225807/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/prism_collection/GSE161824/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/prism_collection/GSE161824/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/prism_collection/GSE216673/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/prism_collection/GSE216673/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/prism_collection/GSE220974/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/prism_collection/GSE220974/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/prism_collection/GSE225807/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/prism_collection/GSE225807/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/rxrx19a/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/rxrx19a/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/rxrx19a/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/rxrx19a/revisions/rxrx19a-wave01-c7b405cf632bd3b9/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/rxrx2/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/rxrx2/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/rxrx2/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/rxrx2/revisions/rxrx2-wave01-b4b8965c26485415/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/sanger_dualguide_crc/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/sanger_dualguide_crc/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/sanger_dualguide_crc/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/sanger_dualguide_crc/revisions/sanger-dualguide-crc-wave01-8ea9ddaaf2cce3b0/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/sanger_gdsc1/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/sanger_gdsc1/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/sanger_gdsc1/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/sanger_gdsc1/revisions/sanger-gdsc1-wave01-09858fcfed328bd2/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/sanger_gdsc2/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/sanger_gdsc2/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/sanger_gdsc2/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/sanger_gdsc2/revisions/sanger-gdsc2-wave01-39096cae8651c60b/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/sanger_score/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/sanger_score/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/sanger_score/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/sanger_score/revisions/sanger-score-wave01-4b7eaa694937315d/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/stds0000060/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/stds0000060/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/stds0000060/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/stds0000060/revisions/stds0000060-five-h5ad-wave02-5988f0759e560a02/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/strand_jurkat/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/strand_jurkat/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/strand_jurkat/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/strand_jurkat/revisions/strand-jurkat-wave02-179221bb132d2a44/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/strand_k562/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/strand_k562/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/strand_k562/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/strand_k562/revisions/strand-k562-wave02-d403f1e6e025b412/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/strand_rpe1/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/strand_rpe1/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/strand_rpe1/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/strand_rpe1/revisions/strand-rpe1-wave02-78edc9c3f49866ec/",
+      "pert-gym/staging/pert-gym/logical/strand_rpe1/revisions/strand-rpe1-wave02-b35170b59f4df235/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/stt0000071/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/stt0000071/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/stt0000071/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T162204Z-02688128/",
+      "pert-gym/staging/pert-gym/logical/stt0000071/revisions/stt0000071-20260716T164254Z-374d55c2/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/tcell_d4_rest/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/tcell_d4_rest/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/tcell_d4_rest/workloads/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/tcell_d4_rest/workloads/tcell-d4-rest-wave02-8d70ea0a50466cb7/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/a_cell_of_the_developing_human_outflow_tract_of_the_heart_and_its_adult_aortic_v/",
+      "pert-gym/staging/pert-gym/logical/temporal/a_human_fetal_lung_cell_uncovers_proximal_distal_gradients_of_differentiation_an/",
+      "pert-gym/staging/pert-gym/logical/temporal/a_multimodal_of_the_adolescent_brain_reveals_gene_regulatory_networks_linking_de/",
+      "pert-gym/staging/pert-gym/logical/temporal/a_single_cell_atlas_of_de_novo_beta_cell_regeneration_reveals_the_contribution_o/",
+      "pert-gym/staging/pert-gym/logical/temporal/a_single_cell_transcriptome_atlas_of_the_developing_zebrafish_hindbrain/",
+      "pert-gym/staging/pert-gym/logical/temporal/a_transcriptional_timelapse_of_mouse_embryonic_development_from_gastrula_to_pup/",
+      "pert-gym/staging/pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/",
+      "pert-gym/staging/pert-gym/logical/temporal/an_integrated_transcriptomic_cell_of_human_neural_organoids/",
+      "pert-gym/staging/pert-gym/logical/temporal/analysis_of_prenatal_and_postnatal_human_cortical_development/",
+      "pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/",
+      "pert-gym/staging/pert-gym/logical/temporal/cell_culture_differentiation_and_proliferation_conditions_influence_the_in_vitro/",
+      "pert-gym/staging/pert-gym/logical/temporal/cell_types_of_the_human_retina_and_its_organoids_at_resolution/",
+      "pert-gym/staging/pert-gym/logical/temporal/cellular_and_spatial_drivers_of_unresolved_injury_and_functional_decline_in_the/",
+      "pert-gym/staging/pert-gym/logical/temporal/cellular_development_and_evolution_of_the_mammalian_cerebellum/",
+      "pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/",
+      "pert-gym/staging/pert-gym/logical/temporal/charting_human_development_using_a_multi_endodermal_organ_and_organoid_models/",
+      "pert-gym/staging/pert-gym/logical/temporal/chromatin_accessibility_during_human_first_trimester_neurodevelopment/",
+      "pert-gym/staging/pert-gym/logical/temporal/compartmentalization_and_synergy_of_osteoblasts_drive_bone_formation_in_the_rege/",
+      "pert-gym/staging/pert-gym/logical/temporal/comprehensive_cell_of_the_first_trimester_developing_human_brain/",
+      "pert-gym/staging/pert-gym/logical/temporal/developmental_regulation_of_endothelial_to_hematopoietic_transition_from_ipscs/",
+      "pert-gym/staging/pert-gym/logical/temporal/developmental_trajectories_of_thalamic_nuclei_revealed_by_transcriptome_profilin/",
+      "pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/",
+      "pert-gym/staging/pert-gym/logical/temporal/drosophila_embryogenesis_continuum/",
+      "pert-gym/staging/pert-gym/logical/temporal/early_human_lung_immune_cell_development_and_its_role_in_epithelial_cell_fate/",
+      "pert-gym/staging/pert-gym/logical/temporal/early_role_for_a_na_k_atpase_atp1a3_in_brain_development/",
+      "pert-gym/staging/pert-gym/logical/temporal/extended_mouse_organogenesis/",
+      "pert-gym/staging/pert-gym/logical/temporal/generation_of_complex_human_induced_pluripotent_stem_cell_derived_bone_marrow_or/",
+      "pert-gym/staging/pert-gym/logical/temporal/gonadal_single_cell_rna_seq_of_sea_lamprey_sexual_differentiation/",
+      "pert-gym/staging/pert-gym/logical/temporal/hipsc_derived_retinal_organoid_subpopulations_from_healthy_and_poag_donors/",
+      "pert-gym/staging/pert-gym/logical/temporal/htan_chop_a_longitudinal_of_pediatric_high_grade_glioma/",
+      "pert-gym/staging/pert-gym/logical/temporal/htan_chop_longitudinal_multiomic_of_high_risk_neuroblastoma_reveals_chemotherapy/",
+      "pert-gym/staging/pert-gym/logical/temporal/human_fetal_lateral_ganglionic_eminence_at_7_9_and_11_post_conceptional_weeks/",
+      "pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/",
+      "pert-gym/staging/pert-gym/logical/temporal/inflammatory_blockade_prevents_injury_to_the_developing_pulmonary_gas_exchange_s/",
+      "pert-gym/staging/pert-gym/logical/temporal/integrated_adult_and_foetal_heart/",
+      "pert-gym/staging/pert-gym/logical/temporal/integrated_human_endoderm_derived_organoids_cell_heoca/",
+      "pert-gym/staging/pert-gym/logical/temporal/mapping_the_developing_human_immune_system_across_organs/",
+      "pert-gym/staging/pert-gym/logical/temporal/mapping_the_temporal_and_spatial_dynamics_of_the_human_endometrium_in_vivo_and_i/",
+      "pert-gym/staging/pert-gym/logical/temporal/micropatterned_organoid_platform_for_human_forebrain_development/",
+      "pert-gym/staging/pert-gym/logical/temporal/molecular_and_cellular_dynamics_of_the_developing_human_neocortex_at_resolution/",
+      "pert-gym/staging/pert-gym/logical/temporal/molecular_logic_of_cellular_diversification_in_the_mammalian_cerebral_cortex/",
+      "pert-gym/staging/pert-gym/logical/temporal/mouse_gastrulation_and_early_organogenesis/",
+      "pert-gym/staging/pert-gym/logical/temporal/multiomic_analysis_of_thymocyte_development_reveals_drivers_of_cd4_t_cell_and_cd/",
+      "pert-gym/staging/pert-gym/logical/temporal/multiomic_of_human_cortical_development_in_down_syndrome/",
+      "pert-gym/staging/pert-gym/logical/temporal/nasc_seq/",
+      "pert-gym/staging/pert-gym/logical/temporal/neural_organoid_hormonal_noha/",
+      "pert-gym/staging/pert-gym/logical/temporal/nine_tissue_types_expressing_hand_gfp_in_developing_drosophila_embryos/",
+      "pert-gym/staging/pert-gym/logical/temporal/non_fibrotic_stromal_wound_repopulation_in_rabbit/",
+      "pert-gym/staging/pert-gym/logical/temporal/of_control_and_vpa_treated_dorsal_forebrain_organoids/",
+      "pert-gym/staging/pert-gym/logical/temporal/of_spinal_cord_injury_in_mice_reveals_a_pro_regenerative_signature_in_spinocereb/",
+      "pert-gym/staging/pert-gym/logical/temporal/of_the_human_embryonic_meninges_at_5_13_weeks_post_conception/",
+      "pert-gym/staging/pert-gym/logical/temporal/organogenetic_transcriptomes_of_drosophila_embryo_at_single_cell_resolution/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001097_gse106245/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001100_gse118184/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001126_gse142526/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001132_gse152212/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001137_gse158999/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001138_gse162547/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001151_gse148093/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/",
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/",
+      "pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/",
+      "pert-gym/staging/pert-gym/logical/temporal/pdpn_fibroblasts_from_various_timepoints_in_mouse_fibrotic_lung_disease/",
+      "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/",
+      "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse122662/",
+      "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse127202/",
+      "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse142078/",
+      "pert-gym/staging/pert-gym/logical/temporal/rabbit_embryo_pgc_emergence_single_cell_rna_seq/",
+      "pert-gym/staging/pert-gym/logical/temporal/reconstruction_of_the_early_maternal_fetal_interface_in_humans/",
+      "pert-gym/staging/pert-gym/logical/temporal/rna_seq_of_slice_explant_cultures_of_human_embryo_telencephalon_cultured_using_t/",
+      "pert-gym/staging/pert-gym/logical/temporal/roadmap_of_human_gonadal_development/",
+      "pert-gym/staging/pert-gym/logical/temporal/scnt_seq/",
+      "pert-gym/staging/pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/",
+      "pert-gym/staging/pert-gym/logical/temporal/scslam_seq/",
+      "pert-gym/staging/pert-gym/logical/temporal/simultaneous_profiling_of_transcription_and_chromatin_accessibility_at_the_level/",
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_atlas_of_early_chick_development/",
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_characterization_of_anterior_segment_development_cell_types_pathways/",
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_reconstruction_of_developmental_trajectories_during_zebrafish_embryo/",
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_rna_seq_of_blastomeres_from_2_to_32_cell_stage_mouse_embryos/",
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_transcriptome_of_cortical_inhibitory_neurons_from_the_developing_mou/",
+      "pert-gym/staging/pert-gym/logical/temporal/single_nucleus_transcriptomic_of_human_foetal_tendon/",
+      "pert-gym/staging/pert-gym/logical/temporal/six_cell_types_in_the_developing_drosophila_embryonic_heart/",
+      "pert-gym/staging/pert-gym/logical/temporal/spatial_and_cell_type_transcriptional_landscape_of_human_cerebellar_development/",
+      "pert-gym/staging/pert-gym/logical/temporal/spatial_multiomics_map_of_trophoblast_development_in_early_pregnancy/",
+      "pert-gym/staging/pert-gym/logical/temporal/spatial_transcriptomic_maps_of_whole_mouse_embryos_reveal_principles_of_neural_t/",
+      "pert-gym/staging/pert-gym/logical/temporal/spatially_organizing_tomato_callus_cells_identifies_shoot_regeneration_network/",
+      "pert-gym/staging/pert-gym/logical/temporal/spatially_resolved_single_cell_atlas_of_human_gastrulation/",
+      "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_analysis_of_human_intestinal_development_at_resolution/",
+      "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_dynamics_of_postnatal_vascularization_in_mouse_brain/",
+      "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_mapping_of_zebrafish_embryogenesis_stereo_seq_and_scrna_seq/",
+      "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_single_cell_atlas_of_suture_stem_cell_dynamics_in_craniosynostosi/",
+      "pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/",
+      "pert-gym/staging/pert-gym/logical/temporal/time_resolved_analysis_of_brca1_associated_mammary_tumourigenesis_reveals_aberra/",
+      "pert-gym/staging/pert-gym/logical/temporal/trajectory_resolved_human_kidney_organoid_developmental_toxicity_model/",
+      "pert-gym/staging/pert-gym/logical/temporal/transcriptomic_analyses_of_the_dynamic_local_and_systemic_response_to_cardiac_in/",
+      "pert-gym/staging/pert-gym/logical/temporal/transcriptomic_landscape_of_the_blastema_niche_in_regenerating_adult_axolotl_lim/",
+      "pert-gym/staging/pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior/",
+      "pert-gym/staging/pert-gym/logical/temporal/zebrahub/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/a_cell_of_the_developing_human_outflow_tract_of_the_heart_and_its_adult_aortic_v/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/a_cell_of_the_developing_human_outflow_tract_of_the_heart_and_its_adult_aortic_v/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/a_human_fetal_lung_cell_uncovers_proximal_distal_gradients_of_differentiation_an/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/a_human_fetal_lung_cell_uncovers_proximal_distal_gradients_of_differentiation_an/datasets/",
+      "pert-gym/staging/pert-gym/logical/temporal/a_human_fetal_lung_cell_uncovers_proximal_distal_gradients_of_differentiation_an/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/a_multimodal_of_the_adolescent_brain_reveals_gene_regulatory_networks_linking_de/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/a_multimodal_of_the_adolescent_brain_reveals_gene_regulatory_networks_linking_de/datasets/",
+      "pert-gym/staging/pert-gym/logical/temporal/a_multimodal_of_the_adolescent_brain_reveals_gene_regulatory_networks_linking_de/publication-runs/",
+      "pert-gym/staging/pert-gym/logical/temporal/a_multimodal_of_the_adolescent_brain_reveals_gene_regulatory_networks_linking_de/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/a_single_cell_atlas_of_de_novo_beta_cell_regeneration_reveals_the_contribution_o/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/a_single_cell_atlas_of_de_novo_beta_cell_regeneration_reveals_the_contribution_o/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/a_single_cell_transcriptome_atlas_of_the_developing_zebrafish_hindbrain/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/a_single_cell_transcriptome_atlas_of_the_developing_zebrafish_hindbrain/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/a_transcriptional_timelapse_of_mouse_embryonic_development_from_gastrula_to_pup/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/a_transcriptional_timelapse_of_mouse_embryonic_development_from_gastrula_to_pup/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/an_integrated_transcriptomic_cell_of_human_neural_organoids/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/an_integrated_transcriptomic_cell_of_human_neural_organoids/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/analysis_of_prenatal_and_postnatal_human_cortical_development/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/analysis_of_prenatal_and_postnatal_human_cortical_development/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/cell_culture_differentiation_and_proliferation_conditions_influence_the_in_vitro/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/cell_culture_differentiation_and_proliferation_conditions_influence_the_in_vitro/revisions/",
+      "pert-gym/staging/pert-gym/logical/temporal/cell_culture_differentiation_and_proliferation_conditions_influence_the_in_vitro/var/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/cell_types_of_the_human_retina_and_its_organoids_at_resolution/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/cell_types_of_the_human_retina_and_its_organoids_at_resolution/revisions/",
+      "pert-gym/staging/pert-gym/logical/temporal/cell_types_of_the_human_retina_and_its_organoids_at_resolution/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/cellular_and_spatial_drivers_of_unresolved_injury_and_functional_decline_in_the/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/cellular_and_spatial_drivers_of_unresolved_injury_and_functional_decline_in_the/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/cellular_development_and_evolution_of_the_mammalian_cerebellum/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/cellular_development_and_evolution_of_the_mammalian_cerebellum/revisions/",
+      "pert-gym/staging/pert-gym/logical/temporal/cellular_development_and_evolution_of_the_mammalian_cerebellum/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/revisions/",
+      "pert-gym/staging/pert-gym/logical/temporal/cerebellar_organoid_using_microfluidics_and_combinatorial_barcoding_based_techno/var/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/charting_human_development_using_a_multi_endodermal_organ_and_organoid_models/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/charting_human_development_using_a_multi_endodermal_organ_and_organoid_models/revisions/",
+      "pert-gym/staging/pert-gym/logical/temporal/charting_human_development_using_a_multi_endodermal_organ_and_organoid_models/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/chromatin_accessibility_during_human_first_trimester_neurodevelopment/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/chromatin_accessibility_during_human_first_trimester_neurodevelopment/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/compartmentalization_and_synergy_of_osteoblasts_drive_bone_formation_in_the_rege/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/compartmentalization_and_synergy_of_osteoblasts_drive_bone_formation_in_the_rege/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/comprehensive_cell_of_the_first_trimester_developing_human_brain/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/comprehensive_cell_of_the_first_trimester_developing_human_brain/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/developmental_regulation_of_endothelial_to_hematopoietic_transition_from_ipscs/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/developmental_regulation_of_endothelial_to_hematopoietic_transition_from_ipscs/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/developmental_trajectories_of_thalamic_nuclei_revealed_by_transcriptome_profilin/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/developmental_trajectories_of_thalamic_nuclei_revealed_by_transcriptome_profilin/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/drosophila_embryogenesis_continuum/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/drosophila_embryogenesis_continuum/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/early_human_lung_immune_cell_development_and_its_role_in_epithelial_cell_fate/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/early_human_lung_immune_cell_development_and_its_role_in_epithelial_cell_fate/datasets/",
+      "pert-gym/staging/pert-gym/logical/temporal/early_human_lung_immune_cell_development_and_its_role_in_epithelial_cell_fate/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/early_role_for_a_na_k_atpase_atp1a3_in_brain_development/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/early_role_for_a_na_k_atpase_atp1a3_in_brain_development/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/extended_mouse_organogenesis/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/extended_mouse_organogenesis/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/generation_of_complex_human_induced_pluripotent_stem_cell_derived_bone_marrow_or/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/generation_of_complex_human_induced_pluripotent_stem_cell_derived_bone_marrow_or/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/gonadal_single_cell_rna_seq_of_sea_lamprey_sexual_differentiation/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/gonadal_single_cell_rna_seq_of_sea_lamprey_sexual_differentiation/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/hipsc_derived_retinal_organoid_subpopulations_from_healthy_and_poag_donors/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/hipsc_derived_retinal_organoid_subpopulations_from_healthy_and_poag_donors/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/htan_chop_a_longitudinal_of_pediatric_high_grade_glioma/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/htan_chop_a_longitudinal_of_pediatric_high_grade_glioma/datasets/",
+      "pert-gym/staging/pert-gym/logical/temporal/htan_chop_a_longitudinal_of_pediatric_high_grade_glioma/materialization/",
+      "pert-gym/staging/pert-gym/logical/temporal/htan_chop_a_longitudinal_of_pediatric_high_grade_glioma/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/htan_chop_longitudinal_multiomic_of_high_risk_neuroblastoma_reveals_chemotherapy/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/htan_chop_longitudinal_multiomic_of_high_risk_neuroblastoma_reveals_chemotherapy/builds/",
+      "pert-gym/staging/pert-gym/logical/temporal/htan_chop_longitudinal_multiomic_of_high_risk_neuroblastoma_reveals_chemotherapy/datasets/",
+      "pert-gym/staging/pert-gym/logical/temporal/htan_chop_longitudinal_multiomic_of_high_risk_neuroblastoma_reveals_chemotherapy/materialization/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/human_fetal_lateral_ganglionic_eminence_at_7_9_and_11_post_conceptional_weeks/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/human_fetal_lateral_ganglionic_eminence_at_7_9_and_11_post_conceptional_weeks/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/datasets/",
+      "pert-gym/staging/pert-gym/logical/temporal/human_fetal_retina_v1_unraveling_the_developmental_heterogeneity_within_the_huma/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/inflammatory_blockade_prevents_injury_to_the_developing_pulmonary_gas_exchange_s/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/inflammatory_blockade_prevents_injury_to_the_developing_pulmonary_gas_exchange_s/revisions/",
+      "pert-gym/staging/pert-gym/logical/temporal/inflammatory_blockade_prevents_injury_to_the_developing_pulmonary_gas_exchange_s/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/integrated_adult_and_foetal_heart/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/integrated_adult_and_foetal_heart/revisions/",
+      "pert-gym/staging/pert-gym/logical/temporal/integrated_adult_and_foetal_heart/workloads/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/integrated_human_endoderm_derived_organoids_cell_heoca/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/integrated_human_endoderm_derived_organoids_cell_heoca/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/mapping_the_developing_human_immune_system_across_organs/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/mapping_the_developing_human_immune_system_across_organs/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/mapping_the_temporal_and_spatial_dynamics_of_the_human_endometrium_in_vivo_and_i/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/mapping_the_temporal_and_spatial_dynamics_of_the_human_endometrium_in_vivo_and_i/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/micropatterned_organoid_platform_for_human_forebrain_development/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/micropatterned_organoid_platform_for_human_forebrain_development/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/molecular_and_cellular_dynamics_of_the_developing_human_neocortex_at_resolution/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/molecular_and_cellular_dynamics_of_the_developing_human_neocortex_at_resolution/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/molecular_logic_of_cellular_diversification_in_the_mammalian_cerebral_cortex/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/molecular_logic_of_cellular_diversification_in_the_mammalian_cerebral_cortex/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/mouse_gastrulation_and_early_organogenesis/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/mouse_gastrulation_and_early_organogenesis/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/multiomic_analysis_of_thymocyte_development_reveals_drivers_of_cd4_t_cell_and_cd/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/multiomic_analysis_of_thymocyte_development_reveals_drivers_of_cd4_t_cell_and_cd/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/multiomic_of_human_cortical_development_in_down_syndrome/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/multiomic_of_human_cortical_development_in_down_syndrome/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/nasc_seq/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/nasc_seq/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/neural_organoid_hormonal_noha/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/neural_organoid_hormonal_noha/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/nine_tissue_types_expressing_hand_gfp_in_developing_drosophila_embryos/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/nine_tissue_types_expressing_hand_gfp_in_developing_drosophila_embryos/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/non_fibrotic_stromal_wound_repopulation_in_rabbit/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/non_fibrotic_stromal_wound_repopulation_in_rabbit/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/of_control_and_vpa_treated_dorsal_forebrain_organoids/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/of_control_and_vpa_treated_dorsal_forebrain_organoids/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/of_spinal_cord_injury_in_mice_reveals_a_pro_regenerative_signature_in_spinocereb/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/of_spinal_cord_injury_in_mice_reveals_a_pro_regenerative_signature_in_spinocereb/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/of_the_human_embryonic_meninges_at_5_13_weeks_post_conception/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/of_the_human_embryonic_meninges_at_5_13_weeks_post_conception/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organogenetic_transcriptomes_of_drosophila_embryo_at_single_cell_resolution/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organogenetic_transcriptomes_of_drosophila_embryo_at_single_cell_resolution/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001097_gse106245/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001097_gse106245/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001100_gse118184/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001100_gse118184/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001126_gse142526/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001126_gse142526/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001132_gse152212/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001132_gse152212/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001137_gse158999/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001137_gse158999/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001138_gse162547/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001138_gse162547/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001151_gse148093/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001151_gse148093/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/overlapping_transcriptional_programs_promote_survival_and_axonal_regeneration_of/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/pdpn_fibroblasts_from_various_timepoints_in_mouse_fibrotic_lung_disease/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/pdpn_fibroblasts_from_various_timepoints_in_mouse_fibrotic_lung_disease/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse122662/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse122662/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse127202/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse127202/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse142078/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/perturbase_gse142078/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/rabbit_embryo_pgc_emergence_single_cell_rna_seq/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/rabbit_embryo_pgc_emergence_single_cell_rna_seq/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/reconstruction_of_the_early_maternal_fetal_interface_in_humans/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/reconstruction_of_the_early_maternal_fetal_interface_in_humans/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/rna_seq_of_slice_explant_cultures_of_human_embryo_telencephalon_cultured_using_t/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/rna_seq_of_slice_explant_cultures_of_human_embryo_telencephalon_cultured_using_t/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/roadmap_of_human_gonadal_development/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/roadmap_of_human_gonadal_development/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/scnt_seq/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/scnt_seq/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/scslam_seq/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/scslam_seq/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/simultaneous_profiling_of_transcription_and_chromatin_accessibility_at_the_level/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/simultaneous_profiling_of_transcription_and_chromatin_accessibility_at_the_level/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/single_cell_atlas_of_early_chick_development/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_atlas_of_early_chick_development/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/single_cell_characterization_of_anterior_segment_development_cell_types_pathways/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_characterization_of_anterior_segment_development_cell_types_pathways/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/single_cell_reconstruction_of_developmental_trajectories_during_zebrafish_embryo/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_reconstruction_of_developmental_trajectories_during_zebrafish_embryo/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/single_cell_rna_seq_of_blastomeres_from_2_to_32_cell_stage_mouse_embryos/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_rna_seq_of_blastomeres_from_2_to_32_cell_stage_mouse_embryos/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/single_cell_transcriptome_of_cortical_inhibitory_neurons_from_the_developing_mou/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/single_cell_transcriptome_of_cortical_inhibitory_neurons_from_the_developing_mou/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/single_nucleus_transcriptomic_of_human_foetal_tendon/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/single_nucleus_transcriptomic_of_human_foetal_tendon/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/six_cell_types_in_the_developing_drosophila_embryonic_heart/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/six_cell_types_in_the_developing_drosophila_embryonic_heart/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/spatial_and_cell_type_transcriptional_landscape_of_human_cerebellar_development/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/spatial_and_cell_type_transcriptional_landscape_of_human_cerebellar_development/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/spatial_multiomics_map_of_trophoblast_development_in_early_pregnancy/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/spatial_multiomics_map_of_trophoblast_development_in_early_pregnancy/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/spatial_transcriptomic_maps_of_whole_mouse_embryos_reveal_principles_of_neural_t/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/spatial_transcriptomic_maps_of_whole_mouse_embryos_reveal_principles_of_neural_t/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/spatially_organizing_tomato_callus_cells_identifies_shoot_regeneration_network/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/spatially_organizing_tomato_callus_cells_identifies_shoot_regeneration_network/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/spatially_resolved_single_cell_atlas_of_human_gastrulation/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/spatially_resolved_single_cell_atlas_of_human_gastrulation/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_analysis_of_human_intestinal_development_at_resolution/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_analysis_of_human_intestinal_development_at_resolution/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_dynamics_of_postnatal_vascularization_in_mouse_brain/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_dynamics_of_postnatal_vascularization_in_mouse_brain/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_mapping_of_zebrafish_embryogenesis_stereo_seq_and_scrna_seq/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_mapping_of_zebrafish_embryogenesis_stereo_seq_and_scrna_seq/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_single_cell_atlas_of_suture_stem_cell_dynamics_in_craniosynostosi/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/spatiotemporal_single_cell_atlas_of_suture_stem_cell_dynamics_in_craniosynostosi/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/time_resolved_analysis_of_brca1_associated_mammary_tumourigenesis_reveals_aberra/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/time_resolved_analysis_of_brca1_associated_mammary_tumourigenesis_reveals_aberra/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/trajectory_resolved_human_kidney_organoid_developmental_toxicity_model/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/trajectory_resolved_human_kidney_organoid_developmental_toxicity_model/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/transcriptomic_analyses_of_the_dynamic_local_and_systemic_response_to_cardiac_in/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/transcriptomic_analyses_of_the_dynamic_local_and_systemic_response_to_cardiac_in/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/transcriptomic_landscape_of_the_blastema_niche_in_regenerating_adult_axolotl_lim/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/transcriptomic_landscape_of_the_blastema_niche_in_regenerating_adult_axolotl_lim/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior/revisions/",
+      "pert-gym/staging/pert-gym/logical/temporal/type_i_interferon_responsive_microglia_shape_cortical_development_and_behavior/var/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/temporal/zebrahub/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/temporal/zebrahub/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/virtual_cell_vcpi/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/virtual_cell_vcpi/revisions/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/pert-gym/logical/virtual_cell_vcpi/revisions/": {
+    "children": [
+      "pert-gym/staging/pert-gym/logical/virtual_cell_vcpi/revisions/virtual-cell-vcpi-wave02-f5c0b45714b5a6de/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/vars/": {
+    "children": [
+      "pert-gym/staging/vars/1f0c75cde519aaf3448274e8405335b1014003aedc24a50b05f725b693985855-bb636f120ad0994798ed2af02d4bd531a7775eb53cba78c8bb003a18ef0617b6-dddb002b1734e8f7b3946e39f700d101eaeb859dc48b7a2aad13e4d48ee77d37/",
+      "pert-gym/staging/vars/e29ff3512b4c2440759bfb2a34577049b2f49df786b3e19c2a91b565de47b38e-894a292cd2676fb08dc09b62e8f9d295383d215739407772df9659e4f77cd4f4-77bd355828dabd44520f2e7791c0439a44fb9dc44397c5dedd8392a2da144e91/",
+      "pert-gym/staging/vars/f93bdffeb89f8834c139246547641a50a77f4475fd17071cfdfa29770972c7be-12be5684fe966f0f2250e9c50fa21793b227b64e9dbec6c70a67cc89ae19bbde-b625c387d9b0ec694847586a45230e7205754f9938621aea60a32fe3e09cbe1c/"
+    ],
+    "direct_objects": false
+  },
+  "pert-gym/staging/vars/1f0c75cde519aaf3448274e8405335b1014003aedc24a50b05f725b693985855-bb636f120ad0994798ed2af02d4bd531a7775eb53cba78c8bb003a18ef0617b6-dddb002b1734e8f7b3946e39f700d101eaeb859dc48b7a2aad13e4d48ee77d37/": {
+    "children": [],
+    "direct_objects": true
+  },
+  "pert-gym/staging/vars/e29ff3512b4c2440759bfb2a34577049b2f49df786b3e19c2a91b565de47b38e-894a292cd2676fb08dc09b62e8f9d295383d215739407772df9659e4f77cd4f4-77bd355828dabd44520f2e7791c0439a44fb9dc44397c5dedd8392a2da144e91/": {
+    "children": [],
+    "direct_objects": true
+  },
+  "pert-gym/staging/vars/f93bdffeb89f8834c139246547641a50a77f4475fd17071cfdfa29770972c7be-12be5684fe966f0f2250e9c50fa21793b227b64e9dbec6c70a67cc89ae19bbde-b625c387d9b0ec694847586a45230e7205754f9938621aea60a32fe3e09cbe1c/": {
+    "children": [],
+    "direct_objects": true
+  }
+}
