@@ -205,14 +205,17 @@ def test_canonical_gcs_hierarchy_is_explicit_and_legacy_is_not_canonicalized():
     notebook = nbformat.read(NOTEBOOK, as_version=4)
     text = notebook_text(notebook)
     for marker in [
-        'EXPECTED_TOP_LEVEL = {"README.md", "data/", "other/"}',
+        'EXPECTED_TOP_LEVEL = {"README.md", "data/", "other/", ".lamindb/"}',
         'EXPECTED_DATA_LEVEL = {"raw/", "cleaned/"}',
         'RAW_GCS_ROOTS = ["gs://scperturb/data/raw/"]',
         'CLEANED_GCS_ROOTS = ["gs://scperturb/data/cleaned/"]',
         'OTHER_GCS_ROOTS = ["gs://scperturb/other/"]',
-        "X_<member>.h5ad",
-        "obs_<member>.parquet",
+        "X.h5ad",
+        "X_chunk_<NNNN>.h5ad",
+        "obs.parquet",
+        "obs_chunk_<NNNN>.parquet",
         "var.parquet",
+        "other/README.md",
         "unexpected_or_legacy",
     ]:
         assert marker in text

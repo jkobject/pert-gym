@@ -47,10 +47,13 @@ gs://scperturb/
 │   │   └── <NAME>/...
 │   └── cleaned/
 │       └── <NAME>/
-│           ├── X_<member>.h5ad
+│           ├── X.h5ad or X_chunk_<NNNN>.h5ad
+│           ├── obs.parquet or obs_chunk_<NNNN>.parquet
 │           ├── var.parquet
-│           └── obs_<member>.parquet
-└── other/...
+│           └── README.md
+├── other/
+│   └── README.md
+└── .lamindb/  # hidden technical compatibility prefix
 ```
 
 The notebook compares that target contract with the **live bucket**. Missing
@@ -67,8 +70,8 @@ relabelled as canonical.
 |---|---|---|
 | Local working/download | Raw downloads, extracted matrices, temporary caches | `data/main/`, `data/gcs_cache/`, `~/Downloads/` |
 | GCS raw | Source material grouped by dataset | `gs://scperturb/data/raw/<NAME>/...` |
-| GCS cleaned | Processed members grouped by dataset | `gs://scperturb/data/cleaned/<NAME>/{X_*.h5ad,var.parquet,obs_*.parquet}` |
-| GCS other | README-adjacent material that is neither raw nor cleaned dataset data | `gs://scperturb/other/...` |
+| GCS cleaned | One H5AD/OBS pair (or numbered chunks), one shared VAR, and one README per dataset | `gs://scperturb/data/cleaned/<NAME>/` |
+| GCS other | The explicitly allowlisted auxiliary README only | `gs://scperturb/other/README.md` |
 | LaminDB | Registered artifacts, triplets, feature links and versioned Collections | `laminlabs/pertdata`, branch `jkobject` |
 
 GCS cleaned storage is not LaminDB. A cleaned GCS directory can exist without a matching
@@ -147,10 +150,10 @@ PRESETS = {
     },
     "XAtlas HCT116": {
         "local_query": "xatlas",
-        "gcs_raw": "gs://scperturb/data/raw/XAtlas_HCT116/",
-        "gcs_cleaned": "gs://scperturb/data/cleaned/XAtlas_HCT116/",
+        "gcs_raw": "gs://scperturb/data/raw/xatlas_orion/",
+        "gcs_cleaned": "gs://scperturb/data/cleaned/xatlas_orion/",
         "lamin_query": "xatlas/orion/hct116",
-        "note": "Huge raw source, processed sparse-Zarr staging, and many Lamin chunks.",
+        "note": "Canonical raw source; no conforming canonical H5AD triplet is claimed yet.",
     },
     "GSE216481": {
         "local_query": "GSE216481",
@@ -161,8 +164,8 @@ PRESETS = {
     },
     "Artista T37": {
         "local_query": "t37_artista",
-        "gcs_raw": "gs://scperturb/data/raw/Artista_T37/",
-        "gcs_cleaned": "gs://scperturb/data/cleaned/Artista_T37/",
+        "gcs_raw": "gs://scperturb/data/raw/STDS0000056/",
+        "gcs_cleaned": "gs://scperturb/data/cleaned/STDS0000056/",
         "lamin_query": "t37_artista",
         "note": "A useful example of working/staged data with no same-key Lamin match.",
     },
@@ -387,7 +390,7 @@ GCS_BUCKET_ROOT = "gs://scperturb/"
 RAW_GCS_ROOTS = ["gs://scperturb/data/raw/"]
 CLEANED_GCS_ROOTS = ["gs://scperturb/data/cleaned/"]
 OTHER_GCS_ROOTS = ["gs://scperturb/other/"]
-EXPECTED_TOP_LEVEL = {"README.md", "data/", "other/"}
+EXPECTED_TOP_LEVEL = {"README.md", "data/", "other/", ".lamindb/"}
 EXPECTED_DATA_LEVEL = {"raw/", "cleaned/"}
 GCLOUD_TIMEOUT_SECONDS = 120
 GCS_BILLING_PROJECT = "jkobject-1549353370965"
