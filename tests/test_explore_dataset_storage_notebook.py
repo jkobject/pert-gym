@@ -41,6 +41,7 @@ def test_notebook_is_substantial_pedagogical_and_output_free():
     assert all(cell.get("id") for cell in notebook.cells)
     assert all(cell.get("execution_count") is None for cell in code)
     assert all(cell.get("outputs") == [] for cell in code)
+    assert notebook.metadata.kernelspec.name == "python3"
 
 
 def test_notebook_explores_actual_storage_layers_not_progress_exports():
@@ -220,6 +221,56 @@ def test_canonical_gcs_hierarchy_is_explicit_and_legacy_is_not_canonicalized():
     ]:
         assert marker in text
     assert "gs://scperturb/pert-gym/staging/" not in text
+
+
+def test_notebook_reconciles_raw_cleaned_and_lamin_from_compact_receipts():
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    text = notebook_text(notebook)
+    required = [
+        "cleaned_direct_datasets.json",
+        "raw_plan.jsonl",
+        "final_layout_readback.json",
+        "final_legacy_prefixes.json",
+        "lamin_key_remap_receipt.json",
+        "raw_cleaned_reconciliation",
+        "cleaned_without_same_name_raw",
+        "raw_without_same_name_cleaned",
+        "canonical_lamin_artifacts",
+        "old Lamin keys remaining",
+        "121 cleaned names without an exact same-name raw prefix",
+        "107 raw names without an exact same-name cleaned directory",
+    ]
+    for marker in required:
+        assert marker in text
+
+
+def test_receipt_reconciliation_has_exact_review_counts():
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    namespace = {}
+    for cell_id in ["imports", "migration-audit-load"]:
+        exec(cell_source(notebook, cell_id), namespace)
+
+    summary = namespace["migration_summary"]
+    assert summary == {
+        "raw_dataset_prefixes": 111,
+        "cleaned_datasets": 125,
+        "cleaned_data_objects_moved": 375,
+        "cleaned_readmes_added": 125,
+        "cleaned_objects": 500,
+        "same_name_raw_and_cleaned": 4,
+        "cleaned_without_same_name_raw": 121,
+        "raw_without_same_name_cleaned": 107,
+        "lamin_artifacts_remapped": 69,
+    }
+    frame = namespace["raw_cleaned_reconciliation"]
+    assert len(frame) == 232
+    assert frame["dataset_name"].is_unique
+    assert set(frame["relationship"]) == {
+        "same name in raw and cleaned",
+        "cleaned unit; no exact same-name raw prefix",
+        "raw source package; no exact same-name cleaned unit",
+    }
+    assert set(namespace["lamin_remap"]["changes"][0]) == {"new_key", "old_key", "uid"}
 
 
 def test_generator_matches_committed_notebook():

@@ -30,12 +30,13 @@ def build():
             """
 # Explore the pert-gym storage hierarchy and actual datasets
 
-This notebook explores **data objects**, not Kanban cards or progress reports.
-It answers three concrete questions:
+This notebook explores **data objects and migration evidence**, not Kanban cards or progress reports.
+It answers four concrete questions:
 
 1. Which source files live under the canonical `data/raw/<NAME>/` hierarchy?
 2. Which processed triplets live under `data/cleaned/<NAME>/`?
-3. Which artifacts and Collections already exist in LaminDB?
+3. Why are there 125 cleaned dataset units but only 111 raw source prefixes?
+4. Which GCS objects were represented in LaminDB, and were those Artifact keys remapped correctly?
 
 The canonical bucket contract is:
 
@@ -660,7 +661,215 @@ gcs_browse.head(200)
         ),
         md(
             """
-## 4. Query actual LaminDB objects
+## 4. Review the canonical migration from compact receipts
+
+This section is **offline-first**: it reads the versioned audit package under
+`artifacts/gcs_canonical_migration/`, not millions of bucket objects. The live GCS
+cells above remain the bounded readback. The receipt view records:
+
+- the 111 canonical raw source prefixes;
+- the 125 accepted cleaned dataset units and their 375 data objects;
+- the 125 dataset README files added afterwards, yielding 500 cleaned objects;
+- the exact legacy surfaces deliberately retained;
+- the Lamin Artifact keys that actually existed and were remapped.
+
+These receipts describe the immutable migration revision. Rerun the live cells when
+you need to detect drift after that revision.
+""",
+            "migration-audit-section",
+        ),
+        code(
+            """
+AUDIT_DIR = Path("artifacts/gcs_canonical_migration")
+required_audit_files = [
+    "raw_plan.jsonl",
+    "cleaned_direct_datasets.json",
+    "final_layout_readback.json",
+    "final_legacy_prefixes.json",
+    "lamin_key_remap_receipt.json",
+]
+missing_audit_files = [name for name in required_audit_files if not (AUDIT_DIR / name).is_file()]
+if missing_audit_files:
+    raise FileNotFoundError(
+        "Run this notebook from the repository root; missing audit files: "
+        + ", ".join(missing_audit_files)
+    )
+
+raw_plan = [json.loads(line) for line in (AUDIT_DIR / "raw_plan.jsonl").read_text().splitlines() if line]
+cleaned_receipt = json.loads((AUDIT_DIR / "cleaned_direct_datasets.json").read_text())
+layout_readback = json.loads((AUDIT_DIR / "final_layout_readback.json").read_text())
+legacy_readback = json.loads((AUDIT_DIR / "final_legacy_prefixes.json").read_text())
+lamin_remap = json.loads((AUDIT_DIR / "lamin_key_remap_receipt.json").read_text())
+
+raw_names = {
+    row["destination"].split("/", 3)[2]
+    for row in raw_plan
+    if isinstance(row.get("destination"), str)
+    and row["destination"].startswith("data/raw/")
+}
+cleaned_names = set(cleaned_receipt["datasets"])
+same_name = raw_names & cleaned_names
+cleaned_without_same_name_raw = cleaned_names - raw_names
+raw_without_same_name_cleaned = raw_names - cleaned_names
+cleaned_data_objects_moved = sum(
+    len(metadata.get("sources", {}))
+    for metadata in cleaned_receipt["datasets"].values()
+)
+cleaned_readmes_added = layout_readback["cleaned_objects"] - cleaned_data_objects_moved
+
+assert len(raw_names) == layout_readback["raw_dataset_prefixes"]
+assert len(cleaned_names) == layout_readback["cleaned_datasets"]
+assert cleaned_data_objects_moved == 3 * len(cleaned_names)
+assert cleaned_readmes_added == len(cleaned_names)
+
+migration_summary = {
+    "raw_dataset_prefixes": layout_readback["raw_dataset_prefixes"],
+    "cleaned_datasets": layout_readback["cleaned_datasets"],
+    "cleaned_data_objects_moved": cleaned_data_objects_moved,
+    "cleaned_readmes_added": cleaned_readmes_added,
+    "cleaned_objects": layout_readback["cleaned_objects"],
+    "same_name_raw_and_cleaned": len(same_name),
+    "cleaned_without_same_name_raw": len(cleaned_without_same_name_raw),
+    "raw_without_same_name_cleaned": len(raw_without_same_name_cleaned),
+    "lamin_artifacts_remapped": lamin_remap["changed"],
+}
+
+rows = []
+for dataset_name in sorted(raw_names | cleaned_names):
+    in_raw = dataset_name in raw_names
+    in_cleaned = dataset_name in cleaned_names
+    if in_raw and in_cleaned:
+        relationship = "same name in raw and cleaned"
+    elif in_cleaned:
+        relationship = "cleaned unit; no exact same-name raw prefix"
+    else:
+        relationship = "raw source package; no exact same-name cleaned unit"
+    cleaned_metadata = cleaned_receipt["datasets"].get(dataset_name, {})
+    source_path = next(
+        (item.get("name", "") for item in cleaned_metadata.get("sources", {}).values()),
+        "",
+    )
+    if dataset_name.startswith("cellxgene-"):
+        cleaned_unit_kind = "CellxGene child dataset"
+    elif dataset_name.startswith("GSM"):
+        cleaned_unit_kind = "sample split from a larger study"
+    elif "/datasets/" in source_path:
+        cleaned_unit_kind = "child dataset from an accepted logical family"
+    elif in_cleaned:
+        cleaned_unit_kind = "direct accepted logical dataset"
+    else:
+        cleaned_unit_kind = "not applicable: raw-only source package"
+    rows.append({
+        "dataset_name": dataset_name,
+        "in_raw": in_raw,
+        "in_cleaned": in_cleaned,
+        "relationship": relationship,
+        "cleaned_unit_kind": cleaned_unit_kind,
+        "accepted_record_id": cleaned_metadata.get("record_id", ""),
+        "source_path_before_migration": source_path,
+    })
+raw_cleaned_reconciliation = pd.DataFrame(rows)
+
+pd.DataFrame([migration_summary])
+""",
+            "migration-audit-load",
+        ),
+        md(
+            """
+### Why 125 cleaned is not expected to equal 111 raw
+
+The two folders use different units of identity:
+
+- **`raw/<NAME>/` is a source-package inventory.** One prefix can contain an archive,
+  images, or a multi-dataset upstream collection. A raw package can also remain
+  unprocessed.
+- **`cleaned/<NAME>/` is a publishable biological matrix unit.** One accepted source
+  family can split into several child datasets or samples, each with its own
+  `X`/`obs`/`var` triplet and README.
+- Therefore this is not “14 unexplained extra datasets”. The exact name-set comparison
+  is **4 shared names**, **121 cleaned names without an exact same-name raw prefix**, and
+  **107 raw names without an exact same-name cleaned directory**.
+- Most cleaned-only names are deliberate children such as CellxGene UUID datasets or
+  GSM samples. Their provenance remains visible in `accepted_record_id` and
+  `source_path_before_migration` below.
+
+An exact-name mismatch is not missing provenance. It means that source-package identity
+and publishable-unit identity are not a bijection. The migration receipts preserve the
+accepted **logical production path**, but they do not encode a validated direct parent
+edge from every cleaned unit back to one canonical `raw/<NAME>/` prefix; the notebook
+therefore does not invent that join.
+""",
+            "raw-cleaned-explanation",
+        ),
+        code(
+            """
+relationship_counts = (
+    raw_cleaned_reconciliation
+    .groupby(["relationship", "cleaned_unit_kind"], dropna=False)
+    .size()
+    .rename("dataset_names")
+    .reset_index()
+    .sort_values(["relationship", "dataset_names"], ascending=[True, False])
+)
+display(relationship_counts)
+print("Exact same-name overlap:", sorted(same_name))
+""",
+            "raw-cleaned-counts",
+        ),
+        code(
+            """
+# Change this filter to inspect raw-only, cleaned-only, or exact-name matches.
+RECONCILIATION_FILTER = "cleaned unit; no exact same-name raw prefix"
+raw_cleaned_reconciliation.loc[
+    raw_cleaned_reconciliation["relationship"] == RECONCILIATION_FILTER,
+    [
+        "dataset_name",
+        "cleaned_unit_kind",
+        "accepted_record_id",
+        "source_path_before_migration",
+    ],
+].head(200)
+""",
+            "raw-cleaned-review-table",
+        ),
+        md(
+            """
+### Legacy surfaces intentionally retained
+
+Only these historical areas remain under `pert-gym/staging/`: `logical/`,
+`pert-gym/logical/`, and `vars/`. They hold accepted-manifest history, sparse/Zarr or
+incomplete products, and older shared feature spaces that cannot be made canonical by
+renaming alone. They are review evidence and conversion backlog, not members of
+`data/cleaned/`. See `docs/adr/0001-logical-sparse-zarr.md` for the sparse/Zarr rule.
+""",
+            "legacy-explanation",
+        ),
+        code(
+            """
+legacy_surface_rows = []
+for prefix in [
+    "pert-gym/staging/logical/",
+    "pert-gym/staging/pert-gym/logical/",
+    "pert-gym/staging/vars/",
+]:
+    entry = legacy_readback.get(prefix, {})
+    legacy_surface_rows.append({
+        "prefix": prefix,
+        "immediate_children": len(entry.get("children", [])),
+        "direct_objects": entry.get("direct_objects", False),
+        "why_retained": {
+            "pert-gym/staging/logical/": "historical logical manifests/revisions",
+            "pert-gym/staging/pert-gym/logical/": "sparse/Zarr, incomplete, and historical logical products",
+            "pert-gym/staging/vars/": "older shared feature spaces pending explicit decommission",
+        }[prefix],
+    })
+pd.DataFrame(legacy_surface_rows)
+""",
+            "legacy-review",
+        ),
+        md(
+            """
+## 5. Query actual LaminDB objects
 
 This connects through the repository helper to `laminlabs/pertdata`, branch
 `jkobject`. It does not use a local progress file. Collection counts, artifact
@@ -678,6 +887,55 @@ assert ln.setup.settings.branch.name == "jkobject"
 print("Connected:", ln.setup.settings.instance.slug, "branch", ln.setup.settings.branch.name)
 """,
             "lamin-connect",
+        ),
+        md(
+            """
+### Verify the key remapping against live LaminDB
+
+The GCS migration moved **375 data objects** (three per cleaned dataset), but only
+**69 of those objects had Artifact records in this Lamin branch**. Those 69 records
+were updated in place: their UIDs stayed stable while their human-readable keys moved
+from historical `pert-gym/staging/...` paths to `data/cleaned/...`.
+
+The `.lamindb/` bucket prefix is separate: it is Lamin's technical storage namespace,
+not a list of canonical project keys, and it was deliberately not moved.
+""",
+            "lamin-remap-explain",
+        ),
+        code(
+            """
+expected_lamin_keys = {change["new_key"] for change in lamin_remap["changes"]}
+old_lamin_keys = {change["old_key"] for change in lamin_remap["changes"]}
+canonical_queryset = ln.Artifact.filter(
+    is_latest=True,
+    key__startswith="data/cleaned/",
+).order_by("key")
+canonical_lamin_rows = []
+for artifact in canonical_queryset[:500]:
+    canonical_lamin_rows.append({
+        "key": artifact.key,
+        "uid": artifact.uid,
+        "suffix": artifact.suffix,
+        "bytes": artifact.size,
+        "size": human_bytes(artifact.size),
+        "storage_path": str(artifact.path),
+    })
+canonical_lamin_artifacts = pd.DataFrame(canonical_lamin_rows)
+live_canonical_keys = set(canonical_lamin_artifacts.get("key", []))
+old_lamin_keys_remaining = ln.Artifact.filter(key__in=sorted(old_lamin_keys)).count()
+
+lamin_remap_readback = pd.DataFrame([{
+    "receipt_rows": len(lamin_remap["changes"]),
+    "live_latest_canonical_keys": len(live_canonical_keys),
+    "receipt_keys_missing_live": len(expected_lamin_keys - live_canonical_keys),
+    "unexpected_live_canonical_keys": len(live_canonical_keys - expected_lamin_keys),
+    "old Lamin keys remaining": old_lamin_keys_remaining,
+    "uids_stable_in_receipt": len({change["uid"] for change in lamin_remap["changes"]}),
+}])
+display(lamin_remap_readback)
+canonical_lamin_artifacts.head(100)
+""",
+            "lamin-remap-readback",
         ),
         md(
             """
@@ -988,7 +1246,7 @@ matrix_location
         ),
         md(
             """
-## 5. Combined location/status view
+## 6. Combined location/status view
 
 This summary is deliberately multi-valued. It does not erase raw copies merely
 because Lamin exists, and it does not call a raw download "processed".
@@ -1042,7 +1300,7 @@ dataset is absent. The hierarchy check above is the authority for migration gaps
         ),
         md(
             """
-## 6. Try the useful examples
+## 7. Try the useful examples
 
 Change only `SELECTED_DATASET` near the top and rerun all cells:
 
@@ -1059,7 +1317,7 @@ the result auditable and easy to correct.
         ),
         md(
             """
-## 7. What this notebook does not claim
+## 8. What this notebook does not claim
 
 - Presence in Lamin is not the same as acceptance into the latest versioned
   Collection or full `DATASET_E2E_V3` completion.
@@ -1080,6 +1338,8 @@ You now have direct handles to the data:
 
 - local file paths and backed/header inspection;
 - live GCS source and processed prefixes with object sizes;
+- the compact migration receipts, exact raw/cleaned set differences, and retained legacy surfaces;
+- a live readback of canonical Lamin Artifact keys against the remap receipt;
 - live Lamin Collection keys, Artifact keys/UIDs, remote paths and feature links;
 - a combined view that preserves every physical layer.
 
@@ -1094,9 +1354,9 @@ biological dataset, which real payloads exist in each storage system?”
         cells=cells,
         metadata={
             "kernelspec": {
-                "display_name": "pert-gym (project uv)",
+                "display_name": "Python 3 (pert-gym project environment)",
                 "language": "python",
-                "name": "pert-gym",
+                "name": "python3",
             },
             "language_info": {"name": "python", "version": "3.11"},
         },
