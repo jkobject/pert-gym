@@ -85,6 +85,10 @@ def test_notebook_is_read_only_and_bounds_payload_access():
     assert 'ad.read_h5ad(path, backed="r")' in text
     assert "MAX_LAMIN_METADATA_BYTES" in text
     assert "MAX_LAMIN_ROWS" in text
+    assert "MAX_COLLECTION_ROWS" in text
+    assert 'collection_queryset[:MAX_COLLECTION_ROWS]' in text
+    assert 'uid__in=sorted(matched_uids)' in text
+    assert '.artifacts.all().values_list("uid", flat=True)' not in text
     assert "MAX_LOCAL_ENTRIES" in text
     assert "entries_seen >= max_entries" in text
     assert "MAX_GCS_RESULTS" in text

@@ -1207,14 +1207,18 @@ artifacts form the complete triplet.
         ),
         code(
             """
+MAX_COLLECTION_ROWS = 100
+collection_queryset = ln.Collection.filter(key__startswith="pert-gym/").order_by("key")
+collection_count = collection_queryset.count()
 collection_rows = []
-for collection in ln.Collection.filter(key__startswith="pert-gym/").order_by("key"):
+for collection in collection_queryset[:MAX_COLLECTION_ROWS]:
     collection_rows.append({
         "key": collection.key,
         "uid": collection.uid,
         "members": collection.artifacts.count(),
     })
 collections = pd.DataFrame(collection_rows)
+print(f"{collection_count:,} Collections match; showing {len(collections):,}")
 collections
 """,
             "collections",
@@ -1395,7 +1399,14 @@ Collection version, so both facts are shown.
             """
 CANONICAL_COLLECTION_KEY = "pert-gym/canonical/20260621"
 canonical = ln.Collection.get(key=CANONICAL_COLLECTION_KEY)
-canonical_uids = set(canonical.artifacts.all().values_list("uid", flat=True))
+matched_uids = set(lamin_matches.get("uid", pd.Series(dtype=str)))
+canonical_uids = set()
+if matched_uids:
+    canonical_uids = set(
+        canonical.artifacts.filter(uid__in=sorted(matched_uids)).values_list(
+            "uid", flat=True
+        )
+    )
 if len(lamin_matches):
     lamin_matches["in_canonical_20260621"] = lamin_matches["uid"].isin(canonical_uids)
     display(lamin_matches.head(MAX_LAMIN_ROWS))
