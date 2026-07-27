@@ -49,7 +49,6 @@ def test_notebook_explores_actual_storage_layers_not_progress_exports():
     required = [
         "scan_local_data",
         "inspect_local_payload",
-        "gcloud storage ls",
         "list_gcs_level",
         "connect_pertdata",
         "ln.Collection",
@@ -58,10 +57,10 @@ def test_notebook_explores_actual_storage_layers_not_progress_exports():
         "features.get_values",
         "selected_obs.load()",
         "local working/download",
-        "GCS processed/logical",
+        "GCS cleaned",
         "LaminDB latest artifacts",
         "raw_candidates",
-        "processed_not_lamin",
+        "cleaned_not_lamin",
         "locations_with_lamin",
         "lamin_artifact_matches",
     ]
@@ -196,10 +195,28 @@ def test_presets_cover_multilayer_and_unpublished_examples():
     text = notebook_text(notebook)
     for dataset in ["SCP211", "GSE132080", "XAtlas HCT116", "GSE216481", "Artista T37"]:
         assert dataset in text
-    assert "manual_downloads/2026-06-23/downloads_cleanup/SCP211/" in text
-    assert "pert-gym/logical/" in text
+    assert "gs://scperturb/data/raw/SCP211/" in text
+    assert "gs://scperturb/data/cleaned/SCP211/" in text
     assert "laminlabs/pertdata" in text
     assert 'SELECTED_DATASET = "SCP211"' in text
+
+
+def test_canonical_gcs_hierarchy_is_explicit_and_legacy_is_not_canonicalized():
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    text = notebook_text(notebook)
+    for marker in [
+        'EXPECTED_TOP_LEVEL = {"README.md", "data/", "other/"}',
+        'EXPECTED_DATA_LEVEL = {"raw/", "cleaned/"}',
+        'RAW_GCS_ROOTS = ["gs://scperturb/data/raw/"]',
+        'CLEANED_GCS_ROOTS = ["gs://scperturb/data/cleaned/"]',
+        'OTHER_GCS_ROOTS = ["gs://scperturb/other/"]',
+        "X_<member>.h5ad",
+        "obs_<member>.parquet",
+        "var.parquet",
+        "unexpected_or_legacy",
+    ]:
+        assert marker in text
+    assert "gs://scperturb/pert-gym/staging/" not in text
 
 
 def test_generator_matches_committed_notebook():

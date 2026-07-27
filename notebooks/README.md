@@ -4,10 +4,11 @@ Store exploratory and reproducible analysis notebooks here.
 
 ## Dataset storage explorer
 
-- `explore_dataset_storage.ipynb` explores the **actual data objects** across
-  local downloads/working directories, raw GCS staging, processed/logical GCS
-  staging, and live LaminDB Collections/Artifacts. It shows real paths, URIs,
-  UIDs, sizes, observation counts, feature links, and bounded payload previews.
+- `explore_dataset_storage.ipynb` compares the live bucket with the canonical
+  `gs://scperturb/{README.md,data/{raw,cleaned}/<NAME>,other}` hierarchy, then
+  explores actual local objects and live LaminDB Collections/Artifacts. It
+  reports missing hierarchy roots as migration gaps instead of relabelling the
+  legacy `pert-gym/` tree as canonical.
 - The notebook is read-only and navigates GCS one level at a time; it never
   recursively walks sparse-Zarr object trees or materializes a large remote
   matrix on the Mac.

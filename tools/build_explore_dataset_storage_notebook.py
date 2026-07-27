@@ -28,18 +28,34 @@ def build():
     cells = [
         md(
             """
-# Explore the actual pert-gym datasets and where they live
+# Explore the pert-gym storage hierarchy and actual datasets
 
 This notebook explores **data objects**, not Kanban cards or progress reports.
 It answers three concrete questions:
 
-1. Which source files have been downloaded but still live as raw/working data?
-2. Which processed outputs exist in project GCS staging?
+1. Which source files live under the canonical `data/raw/<NAME>/` hierarchy?
+2. Which processed triplets live under `data/cleaned/<NAME>/`?
 3. Which artifacts and Collections already exist in LaminDB?
 
-The same biological dataset may appear in several layers at once. That is useful:
-a raw copy can coexist with processed staging and a published Lamin triplet. The
-notebook shows every matching location instead of forcing one misleading status.
+The canonical bucket contract is:
+
+```text
+gs://scperturb/
+├── README.md
+├── data/
+│   ├── raw/
+│   │   └── <NAME>/...
+│   └── cleaned/
+│       └── <NAME>/
+│           ├── X_<member>.h5ad
+│           ├── var.parquet
+│           └── obs_<member>.parquet
+└── other/...
+```
+
+The notebook compares that target contract with the **live bucket**. Missing
+canonical roots are reported as migration gaps; legacy paths are not silently
+relabelled as canonical.
 """,
             "title",
         ),
@@ -50,13 +66,14 @@ notebook shows every matching location instead of forcing one misleading status.
 | Layer | What is there | Typical location |
 |---|---|---|
 | Local working/download | Raw downloads, extracted matrices, temporary caches | `data/main/`, `data/gcs_cache/`, `~/Downloads/` |
-| GCS source staging | Durable temporary copy of downloaded sources | `gs://scperturb/pert-gym/staging/data/main/`, `manual_downloads/`, `sources/` |
-| GCS processed staging | Converted/chunked/Zarr outputs awaiting or supporting publication | `gs://scperturb/pert-gym/staging/pert-gym/logical/` and source-specific logical prefixes |
+| GCS raw | Source material grouped by dataset | `gs://scperturb/data/raw/<NAME>/...` |
+| GCS cleaned | Processed members grouped by dataset | `gs://scperturb/data/cleaned/<NAME>/{X_*.h5ad,var.parquet,obs_*.parquet}` |
+| GCS other | README-adjacent material that is neither raw nor cleaned dataset data | `gs://scperturb/other/...` |
 | LaminDB | Registered artifacts, triplets, feature links and versioned Collections | `laminlabs/pertdata`, branch `jkobject` |
 
-GCS staging is not LaminDB. A processed GCS directory can exist without a matching
+GCS cleaned storage is not LaminDB. A cleaned GCS directory can exist without a matching
 Lamin artifact. Conversely, a Lamin artifact may point to Lamin-managed S3 storage
-and no longer need its old project staging copy.
+and no longer need a project-bucket copy.
 """,
             "layers",
         ),
@@ -67,13 +84,13 @@ and no longer need its old project staging copy.
 Everything here is read-only:
 
 - local files are opened only for metadata or backed inspection;
-- GCS uses `gcloud storage ls`, never `cp`, `mv`, `rm`, or upload;
+- GCS uses bounded read-only JSON API listings, never `cp`, `mv`, `rm`, or upload;
 - Lamin uses filters, Collection membership, feature links, and small metadata loads;
 - no large remote `X` matrix is materialized on the Mac.
 
-The notebook deliberately refuses recursive GCS listings. Some logical sparse-Zarr
-prefixes contain hundreds of thousands of physical objects. Navigate one level at
-a time instead.
+The notebook deliberately refuses recursive GCS listings. Navigate one level at
+a time instead. It does not migrate the legacy `pert-gym/` tree into this target
+layout; migration requires a separate reviewed operation.
 """,
             "safety",
         ),
@@ -85,8 +102,10 @@ Start with one of the presets, then edit or add a dictionary entry. Each preset
 contains independent search terms because the same dataset can use different
 names in a browser download, GCS path, and Lamin key.
 
-`SCP211` is the default because it currently demonstrates all three layers:
-large local MatrixMarket downloads, a GCS source copy, and published Lamin triplets.
+`SCP211` is the default because it demonstrates local source files and published
+Lamin triplets. Its canonical GCS raw/cleaned locations are queried directly; if
+they are absent, the notebook reports that absence rather than falling back to a
+legacy prefix.
 """,
             "choose-explain",
         ),
@@ -114,36 +133,36 @@ pd.set_option("display.max_colwidth", 140)
 PRESETS = {
     "SCP211": {
         "local_query": "SCP211",
-        "gcs_raw": "gs://scperturb/pert-gym/staging/manual_downloads/2026-06-23/downloads_cleanup/SCP211/",
-        "gcs_processed": None,
+        "gcs_raw": "gs://scperturb/data/raw/SCP211/",
+        "gcs_cleaned": "gs://scperturb/data/cleaned/SCP211/",
         "lamin_query": "scp211",
-        "note": "Raw copies remain local and on GCS; seven triplets are visible in Lamin.",
+        "note": "Canonical raw/cleaned locations plus the matching Lamin artifacts.",
     },
     "GSE132080": {
         "local_query": "GSE132080",
-        "gcs_raw": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE132080.h5ad",
-        "gcs_processed": None,
+        "gcs_raw": "gs://scperturb/data/raw/GSE132080/",
+        "gcs_cleaned": "gs://scperturb/data/cleaned/GSE132080/",
         "lamin_query": "GSE132080",
-        "note": "A staged source H5AD and a published Lamin obs/X/var triplet.",
+        "note": "Canonical raw/cleaned locations plus a published Lamin obs/X/var triplet.",
     },
     "XAtlas HCT116": {
         "local_query": "xatlas",
-        "gcs_raw": "gs://scperturb/pert-gym/staging/sources/xatlas/orion/hct116/",
-        "gcs_processed": "gs://scperturb/pert-gym/staging/xatlas/orion/hct116_filtered_dual_guide_cells/logical_sparse_zarr/",
+        "gcs_raw": "gs://scperturb/data/raw/XAtlas_HCT116/",
+        "gcs_cleaned": "gs://scperturb/data/cleaned/XAtlas_HCT116/",
         "lamin_query": "xatlas/orion/hct116",
         "note": "Huge raw source, processed sparse-Zarr staging, and many Lamin chunks.",
     },
     "GSE216481": {
         "local_query": "GSE216481",
-        "gcs_raw": "gs://scperturb/pert-gym/staging/data/main/temporal_pretraining/perturbase_t29/",
-        "gcs_processed": "gs://scperturb/pert-gym/staging/pert-gym/logical/perturbase_gse216481/",
+        "gcs_raw": "gs://scperturb/data/raw/GSE216481/",
+        "gcs_cleaned": "gs://scperturb/data/cleaned/GSE216481/",
         "lamin_query": "GSE216481",
-        "note": "Raw and processed staging plus currently visible Lamin chunks.",
+        "note": "Canonical raw/cleaned locations plus currently visible Lamin chunks.",
     },
     "Artista T37": {
         "local_query": "t37_artista",
-        "gcs_raw": "gs://scperturb/pert-gym/staging/data/main/t37_artista/",
-        "gcs_processed": None,
+        "gcs_raw": "gs://scperturb/data/raw/Artista_T37/",
+        "gcs_cleaned": "gs://scperturb/data/cleaned/Artista_T37/",
         "lamin_query": "t37_artista",
         "note": "A useful example of working/staged data with no same-key Lamin match.",
     },
@@ -354,27 +373,22 @@ local_preview
         ),
         md(
             """
-## 3. Browse actual GCS staging
+## 3. Compare the canonical hierarchy with the live bucket
 
 The following helper lists exactly one hierarchy level. It never downloads an
-object and never performs a recursive walk. This matters because the staging
-bucket currently contains very large raw files and sparse-Zarr trees with huge
-physical object counts.
+object and never performs a recursive walk. This keeps the live comparison
+bounded even when a dataset contains many members.
 """,
             "gcs-section",
         ),
         code(
             """
-RAW_GCS_ROOTS = [
-    "gs://scperturb/pert-gym/staging/data/main/",
-    "gs://scperturb/pert-gym/staging/manual_downloads/",
-    "gs://scperturb/pert-gym/staging/manual_temporal/",
-    "gs://scperturb/pert-gym/staging/sources/",
-]
-PROCESSED_GCS_ROOTS = [
-    "gs://scperturb/pert-gym/staging/pert-gym/logical/",
-    "gs://scperturb/pert-gym/staging/xatlas/orion/",
-]
+GCS_BUCKET_ROOT = "gs://scperturb/"
+RAW_GCS_ROOTS = ["gs://scperturb/data/raw/"]
+CLEANED_GCS_ROOTS = ["gs://scperturb/data/cleaned/"]
+OTHER_GCS_ROOTS = ["gs://scperturb/other/"]
+EXPECTED_TOP_LEVEL = {"README.md", "data/", "other/"}
+EXPECTED_DATA_LEVEL = {"raw/", "cleaned/"}
 GCLOUD_TIMEOUT_SECONDS = 120
 GCS_BILLING_PROJECT = "jkobject-1549353370965"
 MAX_GCS_RESULTS = 500
@@ -446,11 +460,56 @@ def list_gcs_level(uri, timeout=GCLOUD_TIMEOUT_SECONDS, max_results=MAX_GCS_RESU
         ),
         md(
             """
-### Raw/source staging roots
+### Validate the bucket shape before inspecting datasets
 
-These are live directory-level listings. Open one by copying its URI into
-`GCS_BROWSE_URI` below. The command does not infer processing status from a report;
-it shows what GCS currently contains.
+The expected hierarchy and the observed hierarchy are kept separate. A missing
+`data/raw/`, `data/cleaned/`, `other/`, or root README is a visible migration
+gap—not an empty successful dataset inventory.
+""",
+            "gcs-contract-explain",
+        ),
+        code(
+            """
+def child_name(uri, parent):
+    return uri.removeprefix(parent).rstrip("/") + ("/" if uri.endswith("/") else "")
+
+
+bucket_top = list_gcs_level(GCS_BUCKET_ROOT)
+observed_top = {
+    child_name(uri, GCS_BUCKET_ROOT)
+    for uri in bucket_top.get("uri", pd.Series(dtype=str))
+}
+data_top = list_gcs_level("gs://scperturb/data/")
+observed_data = {
+    child_name(uri, "gs://scperturb/data/")
+    for uri in data_top.get("uri", pd.Series(dtype=str))
+}
+hierarchy_check = pd.DataFrame([
+    {
+        "level": "gs://scperturb/",
+        "expected": sorted(EXPECTED_TOP_LEVEL),
+        "observed": sorted(observed_top),
+        "missing": sorted(EXPECTED_TOP_LEVEL - observed_top),
+        "unexpected_or_legacy": sorted(observed_top - EXPECTED_TOP_LEVEL),
+    },
+    {
+        "level": "gs://scperturb/data/",
+        "expected": sorted(EXPECTED_DATA_LEVEL),
+        "observed": sorted(observed_data),
+        "missing": sorted(EXPECTED_DATA_LEVEL - observed_data),
+        "unexpected_or_legacy": sorted(observed_data - EXPECTED_DATA_LEVEL),
+    },
+])
+hierarchy_check
+""",
+            "gcs-contract-check",
+        ),
+        md(
+            """
+### Canonical raw datasets
+
+Each child of `data/raw/` is a dataset `<NAME>`. Its descendants retain the
+upstream/source organization needed for reconstruction.
 """,
             "gcs-raw-roots-explain",
         ),
@@ -469,24 +528,24 @@ raw_root_listing.head(100)
         ),
         md(
             """
-### Processed/logical staging roots
+### Canonical cleaned datasets
 
-A prefix under `pert-gym/logical/` generally contains processed candidate data,
-revisions, chunks, manifests or Zarr arrays. Its existence still does not prove
-that a matching artifact was registered in Lamin; we check Lamin separately.
+Each child of `data/cleaned/` is the same dataset `<NAME>`. Members follow the
+explicit `X_*.h5ad`, `var.parquet`, and `obs_*.parquet` convention. Presence here
+still does not prove registration in Lamin; we check Lamin separately.
 """,
             "gcs-processed-roots-explain",
         ),
         code(
             """
-processed_root_tables = []
-for root in PROCESSED_GCS_ROOTS:
+cleaned_root_tables = []
+for root in CLEANED_GCS_ROOTS:
     table = list_gcs_level(root)
     if len(table):
         table.insert(0, "root", root)
-        processed_root_tables.append(table)
-processed_root_listing = pd.concat(processed_root_tables, ignore_index=True) if processed_root_tables else pd.DataFrame()
-processed_root_listing.head(100)
+        cleaned_root_tables.append(table)
+cleaned_root_listing = pd.concat(cleaned_root_tables, ignore_index=True) if cleaned_root_tables else pd.DataFrame()
+cleaned_root_listing.head(100)
 """,
             "gcs-processed-roots",
         ),
@@ -494,26 +553,17 @@ processed_root_listing.head(100)
             """
 ### Build a live inventory of meaningful local and GCS dataset entries
 
-The top of `manual_downloads/` contains dates rather than datasets, while
-`pert-gym/logical/temporal/` contains another dataset level. These roots descend
-to the first meaningful dataset/family name without recursively walking payloads.
-The resulting table contains real paths and prefixes, not a saved progress export.
+The children of `data/raw/` and `data/cleaned/` are already the meaningful
+dataset names. The resulting table contains live paths and prefixes, not a saved
+progress export or a reconstruction of the legacy `pert-gym/` tree.
 """,
             "layer-inventory-explain",
         ),
         code(
             """
 MEANINGFUL_GCS_ROOTS = {
-    "raw/source staged": [
-        "gs://scperturb/pert-gym/staging/data/main/",
-        "gs://scperturb/pert-gym/staging/manual_downloads/2026-06-23/downloads_cleanup/",
-        "gs://scperturb/pert-gym/staging/manual_temporal/2026-06-23/",
-        "gs://scperturb/pert-gym/staging/sources/xatlas/orion/",
-    ],
-    "processed/logical staged": [
-        "gs://scperturb/pert-gym/staging/pert-gym/logical/",
-        "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/",
-    ],
+    "GCS raw": RAW_GCS_ROOTS,
+    "GCS cleaned": CLEANED_GCS_ROOTS,
 }
 
 
@@ -568,7 +618,7 @@ as definitive absence.
             """
 ### Inspect the selected dataset's GCS locations
 
-The preset supplies an exact raw URI and, when known, an exact processed URI.
+The preset supplies exact canonical raw and cleaned dataset prefixes.
 Listings remain one level deep. Change either URI to descend into a child prefix.
 """,
             "gcs-selected-explain",
@@ -576,15 +626,15 @@ Listings remain one level deep. Change either URI to descend into a child prefix
         code(
             """
 selected_gcs_raw = list_gcs_level(selection["gcs_raw"]) if selection.get("gcs_raw") else pd.DataFrame()
-selected_gcs_processed = (
-    list_gcs_level(selection["gcs_processed"])
-    if selection.get("gcs_processed")
+selected_gcs_cleaned = (
+    list_gcs_level(selection["gcs_cleaned"])
+    if selection.get("gcs_cleaned")
     else pd.DataFrame()
 )
-print("RAW/STAGED SOURCE:", selection.get("gcs_raw"))
+print("RAW:", selection.get("gcs_raw"))
 display(selected_gcs_raw.head(100))
-print("PROCESSED/LOGICAL STAGING:", selection.get("gcs_processed"))
-display(selected_gcs_processed.head(100))
+print("CLEANED:", selection.get("gcs_cleaned"))
+display(selected_gcs_cleaned.head(100))
 """,
             "gcs-selected",
         ),
@@ -691,9 +741,9 @@ For every meaningful local/GCS entry, the notebook performs a live same-key
 Lamin lookup. Common path aliases are explicit below. The result is deliberately
 phrased as evidence:
 
-- raw/source location where preprocessing is not demonstrated;
-- processed/logical GCS location without a same-key Lamin match;
-- a real Lamin artifact match, while preserving any remaining source/staging copy.
+- canonical raw location where preprocessing is not demonstrated;
+- canonical cleaned GCS location without a same-key Lamin match;
+- a real Lamin artifact match, while preserving any remaining raw/cleaned copy.
 
 A same-key miss is shown as a candidate, not asserted as biological absence.
 """,
@@ -730,17 +780,17 @@ for token in classified["dataset_token"].drop_duplicates():
         match_counts[token] = ln.Artifact.filter(is_latest=True, key__icontains=term).count()
 classified["lamin_search_term"] = classified["dataset_token"].map(lamin_term)
 classified["lamin_artifact_matches"] = classified["dataset_token"].map(match_counts).fillna(0).astype(int)
-processed_tokens = set(
-    classified.loc[classified["layer"] == "processed/logical staged", "dataset_token"].str.lower()
+cleaned_tokens = set(
+    classified.loc[classified["layer"] == "GCS cleaned", "dataset_token"].str.lower()
 )
 
 
 def evidence_category(row):
     if row["lamin_artifact_matches"] > 0:
-        return "present in LaminDB (source/staging copy may remain)"
-    if row["layer"] == "processed/logical staged" or row["dataset_token"].lower() in processed_tokens:
-        return "processed/logical staged; no same-key Lamin match"
-    return "raw/downloaded candidate; preprocessing not demonstrated"
+        return "present in LaminDB (raw/cleaned GCS copy may remain)"
+    if row["layer"] == "GCS cleaned" or row["dataset_token"].lower() in cleaned_tokens:
+        return "GCS cleaned; no same-key Lamin match"
+    return "raw/downloaded candidate; cleaning not demonstrated"
 
 
 classified["evidence_category"] = classified.apply(evidence_category, axis=1)
@@ -760,7 +810,7 @@ bounded live comparison. Inspect aliases before treating any row as unfinished.
         code(
             """
 raw_candidates = classified[
-    classified["evidence_category"] == "raw/downloaded candidate; preprocessing not demonstrated"
+    classified["evidence_category"] == "raw/downloaded candidate; cleaning not demonstrated"
 ]
 raw_candidates[["dataset_token", "layer", "location", "lamin_search_term"]].head(200)
 """,
@@ -768,20 +818,20 @@ raw_candidates[["dataset_token", "layer", "location", "lamin_search_term"]].head
         ),
         md(
             """
-#### B. Processed/logical staging without a same-key Lamin match
+#### B. Cleaned GCS data without a same-key Lamin match
 
-These are the closest answer to “preprocessed and staged, but not yet in
-LaminDB.” The exact revision beneath each prefix still needs inspection before
-publication.
+These are the closest answer to “cleaned and stored in the canonical GCS
+hierarchy, but not yet in LaminDB.” Exact member identity still needs inspection
+before publication.
 """,
             "processed-candidates-explain",
         ),
         code(
             """
-processed_not_lamin = classified[
-    classified["evidence_category"] == "processed/logical staged; no same-key Lamin match"
+cleaned_not_lamin = classified[
+    classified["evidence_category"] == "GCS cleaned; no same-key Lamin match"
 ]
-processed_not_lamin[["dataset_token", "location", "lamin_search_term"]].head(200)
+cleaned_not_lamin[["dataset_token", "location", "lamin_search_term"]].head(200)
 """,
             "processed-candidates",
         ),
@@ -945,27 +995,23 @@ because Lamin exists, and it does not call a raw download "processed".
         code(
             """
 local_present = bool(len(local_matches))
-gcs_raw_present = bool(len(selected_gcs_raw)) and not (
-    len(selected_gcs_raw) == 1 and selected_gcs_raw.iloc[0].get("kind") == "error"
-)
-gcs_processed_present = bool(len(selected_gcs_processed)) and not (
-    len(selected_gcs_processed) == 1 and selected_gcs_processed.iloc[0].get("kind") == "error"
-)
+gcs_raw_present = bool(len(selected_gcs_raw))
+gcs_cleaned_present = bool(len(selected_gcs_cleaned))
 lamin_present = lamin_match_count > 0
 
 if lamin_present:
     primary_state = "present in LaminDB"
-elif gcs_processed_present:
-    primary_state = "processed/staged on GCS; no matching Lamin key found"
+elif gcs_cleaned_present:
+    primary_state = "cleaned on canonical GCS; no matching Lamin key found"
 elif local_present or gcs_raw_present:
-    primary_state = "downloaded/raw staged; no processed GCS or matching Lamin key found"
+    primary_state = "raw/local only; no canonical cleaned GCS or matching Lamin key found"
 else:
-    primary_state = "not found with the configured locations/aliases"
+    primary_state = "not found with the configured canonical locations/aliases"
 
 location_summary = pd.DataFrame([
     {"layer": "local working/download", "present": local_present, "location": ", ".join(str(p) for p in LOCAL_ROOTS), "matches": len(local_matches)},
-    {"layer": "GCS raw/source staging", "present": gcs_raw_present, "location": selection.get("gcs_raw"), "matches": len(selected_gcs_raw)},
-    {"layer": "GCS processed/logical", "present": gcs_processed_present, "location": selection.get("gcs_processed"), "matches": len(selected_gcs_processed)},
+    {"layer": "GCS raw", "present": gcs_raw_present, "location": selection.get("gcs_raw"), "matches": len(selected_gcs_raw)},
+    {"layer": "GCS cleaned", "present": gcs_cleaned_present, "location": selection.get("gcs_cleaned"), "matches": len(selected_gcs_cleaned)},
     {"layer": "LaminDB latest artifacts", "present": lamin_present, "location": "laminlabs/pertdata / jkobject", "matches": lamin_match_count},
 ])
 print(SELECTED_DATASET, "→", primary_state)
@@ -978,16 +1024,16 @@ display(location_summary)
 ### How to interpret overlap
 
 - **Local + GCS raw + Lamin**: data are published, but redundant source/working
-  copies still exist. This is the current default `SCP211` example.
-- **GCS processed + no Lamin match**: a genuine staged-publication candidate,
-  subject to checking aliases and the exact intended revision.
-- **Local/GCS raw only**: downloaded or source-staged, but preprocessing/publication
+  copies may still exist.
+- **GCS cleaned + no Lamin match**: a canonical cleaned-data candidate, subject
+  to checking aliases and exact member identity.
+- **Local/GCS raw only**: downloaded/source data exist, but cleaning/publication
   is not demonstrated by these locations.
-- **Lamin only**: durable managed data exist; old project staging may have been
-  cleaned or may use a different prefix.
+- **Lamin only**: durable managed data exist; canonical GCS paths may not yet be
+  populated or may no longer be needed.
 
 A substring miss is not a deletion claim. Adjust aliases before concluding that a
-dataset is absent.
+dataset is absent. The hierarchy check above is the authority for migration gaps.
 """,
             "overlap-interpretation",
         ),
@@ -997,11 +1043,11 @@ dataset is absent.
 
 Change only `SELECTED_DATASET` near the top and rerun all cells:
 
-- `SCP211`: raw copies plus Lamin triplets;
-- `GSE132080`: a staged H5AD plus a Lamin triplet;
-- `XAtlas HCT116`: huge raw source, processed sparse-Zarr, and many Lamin chunks;
-- `GSE216481`: raw and logical staging plus Lamin chunks under a different key shape;
-- `Artista T37`: local/staged working data with no same-key Lamin match.
+- `SCP211`: canonical raw/cleaned paths plus Lamin triplets;
+- `GSE132080`: canonical dataset paths plus a Lamin triplet;
+- `XAtlas HCT116`: canonical dataset paths plus many Lamin chunks;
+- `GSE216481`: canonical dataset paths plus Lamin chunks under a different key shape;
+- `Artista T37`: canonical paths and an example with no same-key Lamin match.
 
 Then add the dataset you care about to `PRESETS`. Keeping aliases explicit makes
 the result auditable and easy to correct.
