@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 import nbformat
+import pandas as pd
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -271,6 +272,76 @@ def test_receipt_reconciliation_has_exact_review_counts():
         "raw source package; no exact same-name cleaned unit",
     }
     assert set(namespace["lamin_remap"]["changes"][0]) == {"new_key", "old_key", "uid"}
+
+
+def test_notebook_exposes_dataset_inventory_with_sizes_and_csv_export():
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    text = notebook_text(notebook)
+    for marker in [
+        "dataset_inventory",
+        "build_dataset_inventory",
+        "export_dataset_inventory_csv",
+        "raw_bytes",
+        "cleaned_bytes",
+        "lamin_bytes",
+        "in_raw",
+        "in_cleaned",
+        "in_lamindb",
+        "storage_membership",
+    ]:
+        assert marker in text
+
+
+def test_dataset_inventory_aggregates_each_storage_layer_by_name():
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    namespace = {}
+    for cell_id in ["imports", "dataset-inventory-helper"]:
+        exec(cell_source(notebook, cell_id), namespace)
+
+    raw_plan = [
+        {"action": "move", "destination": "data/raw/A/a.bin", "size": 10},
+        {"action": "move", "destination": "data/raw/A/b.bin", "size": 20},
+        {"action": "delete", "destination": None, "size": 999},
+    ]
+    cleaned_plan = [
+        {"action": "move", "destination": "data/cleaned/B/X.h5ad", "size": 30},
+        {"action": "move", "destination": "data/cleaned/B/obs.parquet", "size": 4},
+    ]
+    readmes = {"objects": [{"name": "data/cleaned/B/README.md", "size": 2}]}
+    lamin = pd.DataFrame(
+        [
+            {"key": "data/cleaned/B/X.h5ad", "bytes": 30, "size": "30 B"},
+            {"key": "data/cleaned/B/obs.parquet", "bytes": 4, "size": "4 B"},
+        ]
+    )
+
+    inventory = namespace["build_dataset_inventory"](
+        raw_plan, cleaned_plan, readmes, lamin
+    ).set_index("dataset_name")
+    assert list(inventory.index) == ["A", "B"]
+    assert inventory.loc["A", ["raw_bytes", "raw_objects"]].tolist() == [30, 2]
+    assert inventory.loc["B", ["cleaned_bytes", "cleaned_objects"]].tolist() == [36, 3]
+    assert inventory.loc["B", ["lamin_bytes", "lamin_artifacts"]].tolist() == [34, 2]
+    assert inventory.loc["A", "storage_membership"] == "raw only"
+    assert inventory.loc["B", "storage_membership"] == "cleaned + LaminDB"
+
+
+def test_cleaned_loader_supports_h5ad_obs_and_var_by_dataset_name():
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    namespace = {}
+    for cell_id in ["imports", "gcs-options", "cleaned-loader"]:
+        exec(cell_source(notebook, cell_id), namespace)
+
+    paths = namespace["cleaned_dataset_paths"]("SCP211")
+    assert paths == {
+        "h5ad": "gs://scperturb/data/cleaned/SCP211/X.h5ad",
+        "obs": "gs://scperturb/data/cleaned/SCP211/obs.parquet",
+        "var": "gs://scperturb/data/cleaned/SCP211/var.parquet",
+    }
+    with pytest.raises(ValueError, match="part"):
+        namespace["load_cleaned_dataset"]("SCP211", part="matrix")
+    with pytest.raises(ValueError, match="dataset_name"):
+        namespace["cleaned_dataset_paths"]("../escape")
 
 
 def test_generator_matches_committed_notebook():

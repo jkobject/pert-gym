@@ -31,12 +31,14 @@ def build():
 # Explore the pert-gym storage hierarchy and actual datasets
 
 This notebook explores **data objects and migration evidence**, not Kanban cards or progress reports.
-It answers four concrete questions:
+It answers six concrete questions:
 
 1. Which source files live under the canonical `data/raw/<NAME>/` hierarchy?
 2. Which processed triplets live under `data/cleaned/<NAME>/`?
-3. Why are there 125 cleaned dataset units but only 111 raw source prefixes?
-4. Which GCS objects were represented in LaminDB, and were those Artifact keys remapped correctly?
+3. Which names exist in raw, cleaned, and LaminDB, and how large is each layer?
+4. Why are there 125 cleaned dataset units but only 111 raw source prefixes?
+5. Which GCS objects were represented in LaminDB, and were those Artifact keys remapped correctly?
+6. How can one load a cleaned H5AD—or only its `obs` or `var` table—by name?
 
 The canonical bucket contract is:
 
@@ -85,12 +87,13 @@ and no longer need a project-bucket copy.
             """
 ## Safety
 
-Everything here is read-only:
+Everything here is cloud-read-only:
 
 - local files are opened only for metadata or backed inspection;
-- GCS uses bounded read-only JSON API listings, never `cp`, `mv`, `rm`, or upload;
+- GCS inventory uses bounded JSON API listings, never `mv`, `rm`, or upload;
 - Lamin uses filters, Collection membership, feature links, and small metadata loads;
-- no large remote `X` matrix is materialized on the Mac.
+- the explicit cleaned loader reads one named object; H5AD reads default to a 1 GB
+  safety limit and are never triggered automatically.
 
 The notebook deliberately refuses recursive GCS listings. Navigate one level at
 a time instead. It does not migrate the legacy `pert-gym/` tree into this target
@@ -464,6 +467,81 @@ def list_gcs_level(uri, timeout=GCLOUD_TIMEOUT_SECONDS, max_results=MAX_GCS_RESU
         ),
         md(
             """
+### Load one cleaned dataset by name
+
+`load_cleaned_dataset(name)` downloads only that dataset's `X.h5ad` and returns an
+in-memory `AnnData`. Use `part="obs"` or `part="var"` to read just the corresponding
+Parquet table without downloading `X`. H5AD reads have a default 1 GB safety limit;
+raise `max_h5ad_bytes` explicitly if you really want a larger matrix on this machine.
+""",
+            "cleaned-loader-explain",
+        ),
+        code(
+            """
+def cleaned_dataset_paths(dataset_name):
+    if not isinstance(dataset_name, str) or re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", dataset_name) is None:
+        raise ValueError("dataset_name must be one safe canonical path segment")
+    root = f"gs://scperturb/data/cleaned/{dataset_name}"
+    return {
+        "h5ad": f"{root}/X.h5ad",
+        "obs": f"{root}/obs.parquet",
+        "var": f"{root}/var.parquet",
+    }
+
+
+def _cleaned_gcs_filesystem():
+    import gcsfs
+
+    return gcsfs.GCSFileSystem(
+        token="google_default",
+        project=GCS_BILLING_PROJECT,
+        requester_pays=True,
+    )
+
+
+def load_cleaned_dataset(dataset_name, part="h5ad", *, max_h5ad_bytes=1_000_000_000):
+    if part not in {"h5ad", "obs", "var"}:
+        raise ValueError("part must be one of: 'h5ad', 'obs', 'var'")
+    uri = cleaned_dataset_paths(dataset_name)[part]
+    remote_key = uri.removeprefix("gs://")
+    fs = _cleaned_gcs_filesystem()
+    if part in {"obs", "var"}:
+        with fs.open(remote_key, "rb") as handle:
+            return pd.read_parquet(handle)
+
+    import tempfile
+    import anndata as ad
+
+    remote_bytes = int(fs.info(remote_key)["size"])
+    if max_h5ad_bytes is not None and remote_bytes > max_h5ad_bytes:
+        raise ValueError(
+            f"{uri} is {human_bytes(remote_bytes)}, above the "
+            f"max_h5ad_bytes={human_bytes(max_h5ad_bytes)} safety limit"
+        )
+    with tempfile.NamedTemporaryFile(suffix=".h5ad", delete=False) as handle:
+        local_path = Path(handle.name)
+    try:
+        fs.get_file(remote_key, str(local_path))
+        return ad.read_h5ad(local_path)
+    finally:
+        local_path.unlink(missing_ok=True)
+""",
+            "cleaned-loader",
+        ),
+        md(
+            """
+Examples—change only the name or `part`:
+
+```python
+adata = load_cleaned_dataset("SCP1467")
+obs = load_cleaned_dataset("SCP1467", part="obs")
+var = load_cleaned_dataset("SCP1467", part="var")
+```
+""",
+            "cleaned-loader-examples",
+        ),
+        md(
+            """
 ### Validate the bucket shape before inspecting datasets
 
 The expected hierarchy and the observed hierarchy are kept separate. A missing
@@ -680,10 +758,109 @@ you need to detect drift after that revision.
         ),
         code(
             """
+def _dataset_name_from_key(key, prefix):
+    if not isinstance(key, str) or not key.startswith(prefix):
+        return None
+    relative = key[len(prefix):]
+    if "/" not in relative:
+        return None
+    dataset_name = relative.split("/", 1)[0]
+    return dataset_name or None
+
+
+def _aggregate_inventory_rows(rows, *, prefix, key_field, action_field=None):
+    totals = {}
+    for row in rows:
+        if action_field and row.get(action_field) != "move":
+            continue
+        dataset_name = _dataset_name_from_key(row.get(key_field), prefix)
+        if dataset_name is None:
+            continue
+        entry = totals.setdefault(dataset_name, {"objects": 0, "bytes": 0})
+        numeric_size = row.get("bytes")
+        if numeric_size is None:
+            numeric_size = row.get("size", 0)
+        entry["objects"] += 1
+        entry["bytes"] += int(numeric_size or 0)
+    return totals
+
+
+def _compact_size(value):
+    value = int(value)
+    for unit in ["B", "KB", "MB", "GB", "TB"]:
+        if value < 1024 or unit == "TB":
+            return f"{value:.0f} {unit}" if unit == "B" else f"{value:.2f} {unit}"
+        value /= 1024
+
+
+def build_dataset_inventory(raw_plan, cleaned_plan, readme_receipt, lamin_artifacts):
+    # Return one row per canonical name with presence, object counts, and sizes.
+    raw = _aggregate_inventory_rows(
+        raw_plan, prefix="data/raw/", key_field="destination", action_field="action"
+    )
+    cleaned = _aggregate_inventory_rows(
+        cleaned_plan,
+        prefix="data/cleaned/",
+        key_field="destination",
+        action_field="action",
+    )
+    readmes = _aggregate_inventory_rows(
+        readme_receipt.get("objects", []), prefix="data/cleaned/", key_field="name"
+    )
+    for dataset_name, values in readmes.items():
+        entry = cleaned.setdefault(dataset_name, {"objects": 0, "bytes": 0})
+        entry["objects"] += values["objects"]
+        entry["bytes"] += values["bytes"]
+
+    lamin_rows = [] if lamin_artifacts is None else lamin_artifacts.to_dict("records")
+    lamin = _aggregate_inventory_rows(
+        lamin_rows, prefix="data/cleaned/", key_field="key"
+    )
+    records = []
+    for dataset_name in sorted(set(raw) | set(cleaned) | set(lamin)):
+        raw_values = raw.get(dataset_name, {"objects": 0, "bytes": 0})
+        cleaned_values = cleaned.get(dataset_name, {"objects": 0, "bytes": 0})
+        lamin_values = lamin.get(dataset_name, {"objects": 0, "bytes": 0})
+        in_raw = bool(raw_values["objects"])
+        in_cleaned = bool(cleaned_values["objects"])
+        in_lamindb = bool(lamin_values["objects"])
+        layers = [
+            label
+            for present, label in [
+                (in_raw, "raw"),
+                (in_cleaned, "cleaned"),
+                (in_lamindb, "LaminDB"),
+            ]
+            if present
+        ]
+        records.append({
+            "dataset_name": dataset_name,
+            "storage_membership": " + ".join(layers) if len(layers) > 1 else f"{layers[0]} only",
+            "in_raw": in_raw,
+            "raw_objects": raw_values["objects"],
+            "raw_bytes": raw_values["bytes"],
+            "raw_size": _compact_size(raw_values["bytes"]),
+            "in_cleaned": in_cleaned,
+            "cleaned_objects": cleaned_values["objects"],
+            "cleaned_bytes": cleaned_values["bytes"],
+            "cleaned_size": _compact_size(cleaned_values["bytes"]),
+            "in_lamindb": in_lamindb,
+            "lamin_artifacts": lamin_values["objects"],
+            "lamin_bytes": lamin_values["bytes"],
+            "lamin_size": _compact_size(lamin_values["bytes"]),
+        })
+    return pd.DataFrame(records)
+""",
+            "dataset-inventory-helper",
+        ),
+        code(
+            """
 AUDIT_DIR = Path("artifacts/gcs_canonical_migration")
 required_audit_files = [
     "raw_plan.jsonl",
+    "cleaned_direct_plan.jsonl",
     "cleaned_direct_datasets.json",
+    "cleaned_readme_receipt.json",
     "final_layout_readback.json",
     "final_legacy_prefixes.json",
     "lamin_key_remap_receipt.json",
@@ -696,7 +873,13 @@ if missing_audit_files:
     )
 
 raw_plan = [json.loads(line) for line in (AUDIT_DIR / "raw_plan.jsonl").read_text().splitlines() if line]
+cleaned_plan = [
+    json.loads(line)
+    for line in (AUDIT_DIR / "cleaned_direct_plan.jsonl").read_text().splitlines()
+    if line
+]
 cleaned_receipt = json.loads((AUDIT_DIR / "cleaned_direct_datasets.json").read_text())
+cleaned_readmes = json.loads((AUDIT_DIR / "cleaned_readme_receipt.json").read_text())
 layout_readback = json.loads((AUDIT_DIR / "final_layout_readback.json").read_text())
 legacy_readback = json.loads((AUDIT_DIR / "final_legacy_prefixes.json").read_text())
 lamin_remap = json.loads((AUDIT_DIR / "lamin_key_remap_receipt.json").read_text())
@@ -936,6 +1119,81 @@ display(lamin_remap_readback)
 canonical_lamin_artifacts.head(100)
 """,
             "lamin-remap-readback",
+        ),
+        md(
+            """
+### One inventory table across raw, cleaned, and LaminDB
+
+`dataset_inventory` is the CSV-shaped review table: one row per canonical name, booleans
+for each layer, object counts, exact bytes, and human-readable sizes. `lamin_bytes` is
+**catalog coverage of cleaned objects**, not an additional physical copy to add to the
+GCS total. The three filtered DataFrames below expose raw-only names, every cleaned
+name, and every name represented by a canonical Lamin Artifact.
+""",
+            "dataset-inventory-explain",
+        ),
+        code(
+            """
+dataset_inventory = build_dataset_inventory(
+    raw_plan,
+    cleaned_plan,
+    cleaned_readmes,
+    canonical_lamin_artifacts,
+)
+assert len(dataset_inventory) == 232
+assert dataset_inventory["in_raw"].sum() == 111
+assert dataset_inventory["in_cleaned"].sum() == 125
+assert dataset_inventory["in_lamindb"].sum() == 23
+
+inventory_summary = (
+    dataset_inventory
+    .groupby("storage_membership", dropna=False)
+    .agg(
+        datasets=("dataset_name", "size"),
+        raw_bytes=("raw_bytes", "sum"),
+        cleaned_bytes=("cleaned_bytes", "sum"),
+        lamin_bytes=("lamin_bytes", "sum"),
+    )
+    .reset_index()
+)
+for column in ["raw", "cleaned", "lamin"]:
+    inventory_summary[f"{column}_size"] = inventory_summary[f"{column}_bytes"].map(_compact_size)
+display(inventory_summary)
+with pd.option_context("display.max_rows", None):
+    display(dataset_inventory)
+""",
+            "dataset-inventory-build",
+        ),
+        code(
+            """
+raw_only_datasets = dataset_inventory.query("in_raw and not in_cleaned and not in_lamindb").copy()
+cleaned_datasets = dataset_inventory.query("in_cleaned").copy()
+lamindb_datasets = dataset_inventory.query("in_lamindb").copy()
+
+print(
+    f"raw only: {len(raw_only_datasets)} | "
+    f"cleaned: {len(cleaned_datasets)} | "
+    f"represented in LaminDB: {len(lamindb_datasets)}"
+)
+display(raw_only_datasets)
+display(cleaned_datasets)
+display(lamindb_datasets)
+""",
+            "dataset-inventory-filters",
+        ),
+        code(
+            """
+def export_dataset_inventory_csv(path="dataset_storage_inventory.csv"):
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    dataset_inventory.to_csv(destination, index=False)
+    return destination.resolve()
+
+
+# Uncomment to export all 232 rows next to the notebook, or choose another path.
+# export_dataset_inventory_csv()
+""",
+            "dataset-inventory-export",
         ),
         md(
             """
