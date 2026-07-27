@@ -2,16 +2,17 @@
 
 Store exploratory and reproducible analysis notebooks here.
 
-## Dataset-curation progress
+## Dataset storage explorer
 
-- `explore_dataset_curation_progress.ipynb` is the explainable, offline-first
-  dashboard for the 70 biological dataset owner cards. It separates ingestion
-  evidence, workflow completion, strict accepted counters, source manifests, and
-  optional bounded Lamin metadata instead of collapsing them into one score.
-- Refresh its versioned snapshot with
-  `tools/export_dataset_curation_progress.py`; the exporter opens the Kanban
-  database read-only. Regenerate the notebook deterministically with
-  `tools/build_explore_dataset_curation_notebook.py`.
+- `explore_dataset_storage.ipynb` explores the **actual data objects** across
+  local downloads/working directories, raw GCS staging, processed/logical GCS
+  staging, and live LaminDB Collections/Artifacts. It shows real paths, URIs,
+  UIDs, sizes, observation counts, feature links, and bounded payload previews.
+- The notebook is read-only and navigates GCS one level at a time; it never
+  recursively walks sparse-Zarr object trees or materializes a large remote
+  matrix on the Mac.
+- Regenerate it deterministically with
+  `tools/build_explore_dataset_storage_notebook.py`.
 
 ## Current canonical Lamin exploration
 
