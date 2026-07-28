@@ -1,0 +1,2004 @@
+{
+  "branch": "jkobject",
+  "cell_type_ontology_map": null,
+  "chunk_verdict": "One 16086x33694 CSR triplet (uint32, 69866889 bytes) is appropriate; no chunking or shared-var indirection is needed, and its X links to one exact same-prefix var.",
+  "current_X": {
+    "obs_index_sha256_ordered": "ef29dab9266c41eee78de1343c07d9f9f78a383157e2ea1c7484cdbee9cd304c",
+    "obs_index_unique": true,
+    "shape": [
+      16086,
+      33694
+    ],
+    "var_index_sha256_ordered": "7eb86babb45d8bfedc121c1d964603857d4b54d062de98bd2f84739a284ce304",
+    "var_index_unique": true,
+    "x_dtype": "uint32",
+    "x_encoding_type": "csr_matrix",
+    "x_encoding_version": "0.1.0",
+    "x_group_members": [
+      "data",
+      "indices",
+      "indptr"
+    ],
+    "x_hdf5_type": "Group"
+  },
+  "current_identity": {
+    "canonical_artifacts": {
+      "X": {
+        "created_at": "2026-07-18 11:03:38.493589+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259138549796\",\"object_sha256\":\"40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386\",\"role\":\"X\",\"source_identity\":\"GSE130238;ODD001111\"}",
+        "feature_values": {
+          "var": "data/cleaned/GSE130238/var.parquet"
+        },
+        "hash": "r-S8FfGVzoK2RdOe6ZX5bg",
+        "is_latest": true,
+        "key": "data/cleaned/GSE130238/X.h5ad",
+        "latest_exact_key_candidates": [
+          {
+            "created_at": "2026-07-18 11:03:38.493589+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259138549796\",\"object_sha256\":\"40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386\",\"role\":\"X\",\"source_identity\":\"GSE130238;ODD001111\"}",
+            "hash": "r-S8FfGVzoK2RdOe6ZX5bg",
+            "is_latest": true,
+            "key": "data/cleaned/GSE130238/X.h5ad",
+            "n_observations": null,
+            "otype": "AnnData",
+            "size": 69866889,
+            "suffix": ".h5ad",
+            "uid": "lVUodgrG2F2izaVd0000"
+          }
+        ],
+        "n_observations": null,
+        "otype": "AnnData",
+        "payload_evidence": {
+          "downloaded_bytes": 69866889,
+          "downloaded_sha256": "40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386",
+          "path_exists": true,
+          "remote_stat": "gs://scperturb/data/cleaned/GSE130238/X.h5ad:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              69866889\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               +aOlsw==\n  Hash (MD5):                  r+S8FfGVzoK2RdOe6ZX5bg==\n  ETag:                        CK+M+t/p8pUDEAE=\n  Generation:                  1785154234123823\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 69866889 bytes (66.63MiB)\n",
+          "uri": "gs://scperturb/data/cleaned/GSE130238/X.h5ad"
+        },
+        "size": 69866889,
+        "suffix": ".h5ad",
+        "uid": "lVUodgrG2F2izaVd0000"
+      },
+      "obs": {
+        "created_at": "2026-07-18 11:03:37.000379+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259137524552\",\"object_sha256\":\"a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5\",\"role\":\"obs\",\"source_identity\":\"GSE130238;ODD001111\"}",
+        "feature_values": {
+          "X": "data/cleaned/GSE130238/X.h5ad"
+        },
+        "hash": "mh5igcwpyGAjU5hzN2ZkcQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE130238/obs.parquet",
+        "latest_exact_key_candidates": [
+          {
+            "created_at": "2026-07-18 11:03:37.000379+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259137524552\",\"object_sha256\":\"a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5\",\"role\":\"obs\",\"source_identity\":\"GSE130238;ODD001111\"}",
+            "hash": "mh5igcwpyGAjU5hzN2ZkcQ",
+            "is_latest": true,
+            "key": "data/cleaned/GSE130238/obs.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 322412,
+            "suffix": ".parquet",
+            "uid": "hMei5vxivF2GH5DV0000"
+          }
+        ],
+        "n_observations": null,
+        "otype": "DataFrame",
+        "payload_evidence": {
+          "downloaded_bytes": 322412,
+          "downloaded_sha256": "a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5",
+          "path_exists": true,
+          "remote_stat": "gs://scperturb/data/cleaned/GSE130238/obs.parquet:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              322412\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               UxD8nQ==\n  Hash (MD5):                  mh5igcwpyGAjU5hzN2ZkcQ==\n  ETag:                        CMe4/d/p8pUDEAE=\n  Generation:                  1785154234178631\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 322412 bytes (314.86kiB)\n",
+          "uri": "gs://scperturb/data/cleaned/GSE130238/obs.parquet"
+        },
+        "size": 322412,
+        "suffix": ".parquet",
+        "uid": "hMei5vxivF2GH5DV0000"
+      },
+      "var": {
+        "created_at": "2026-07-18 11:03:39.956464+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259139759146\",\"object_sha256\":\"704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00\",\"role\":\"var\",\"source_identity\":\"GSE130238;ODD001111\"}",
+        "feature_values": {},
+        "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE130238/var.parquet",
+        "latest_exact_key_candidates": [
+          {
+            "created_at": "2026-07-18 11:03:39.956464+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259139759146\",\"object_sha256\":\"704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00\",\"role\":\"var\",\"source_identity\":\"GSE130238;ODD001111\"}",
+            "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+            "is_latest": true,
+            "key": "data/cleaned/GSE130238/var.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 841985,
+            "suffix": ".parquet",
+            "uid": "y0V1sLQ45pbtf6oS0000"
+          }
+        ],
+        "n_observations": null,
+        "otype": "DataFrame",
+        "payload_evidence": {
+          "downloaded_bytes": 841985,
+          "downloaded_sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+          "path_exists": true,
+          "remote_stat": "gs://scperturb/data/cleaned/GSE130238/var.parquet:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              841985\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               hRfz3g==\n  Hash (MD5):                  qsk8P6eGsDjuO+qVSHuvXQ==\n  ETag:                        CI66/d/p8pUDEAE=\n  Generation:                  1785154234178830\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 841985 bytes (822.25kiB)\n",
+          "uri": "gs://scperturb/data/cleaned/GSE130238/var.parquet"
+        },
+        "size": 841985,
+        "suffix": ".parquet",
+        "uid": "y0V1sLQ45pbtf6oS0000"
+      }
+    },
+    "canonical_prefix": "data/cleaned/GSE130238",
+    "payload_inspection": {
+      "artifacts": {
+        "X": {
+          "created_at": "2026-07-18 11:03:38.493589+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259138549796\",\"object_sha256\":\"40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386\",\"role\":\"X\",\"source_identity\":\"GSE130238;ODD001111\"}",
+          "hash": "r-S8FfGVzoK2RdOe6ZX5bg",
+          "is_latest": true,
+          "key": "data/cleaned/GSE130238/X.h5ad",
+          "latest_exact_key_candidates": [
+            {
+              "created_at": "2026-07-18 11:03:38.493589+00:00",
+              "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259138549796\",\"object_sha256\":\"40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386\",\"role\":\"X\",\"source_identity\":\"GSE130238;ODD001111\"}",
+              "hash": "r-S8FfGVzoK2RdOe6ZX5bg",
+              "is_latest": true,
+              "key": "data/cleaned/GSE130238/X.h5ad",
+              "n_observations": null,
+              "otype": "AnnData",
+              "size": 69866889,
+              "suffix": ".h5ad",
+              "uid": "lVUodgrG2F2izaVd0000"
+            }
+          ],
+          "n_observations": null,
+          "otype": "AnnData",
+          "payload_evidence": {
+            "downloaded_bytes": 69866889,
+            "downloaded_sha256": "40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386",
+            "path_exists": true,
+            "remote_stat": "gs://scperturb/data/cleaned/GSE130238/X.h5ad:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              69866889\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               +aOlsw==\n  Hash (MD5):                  r+S8FfGVzoK2RdOe6ZX5bg==\n  ETag:                        CK+M+t/p8pUDEAE=\n  Generation:                  1785154234123823\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 69866889 bytes (66.63MiB)\n",
+            "uri": "gs://scperturb/data/cleaned/GSE130238/X.h5ad"
+          },
+          "size": 69866889,
+          "suffix": ".h5ad",
+          "uid": "lVUodgrG2F2izaVd0000"
+        },
+        "obs": {
+          "created_at": "2026-07-18 11:03:37.000379+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259137524552\",\"object_sha256\":\"a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5\",\"role\":\"obs\",\"source_identity\":\"GSE130238;ODD001111\"}",
+          "hash": "mh5igcwpyGAjU5hzN2ZkcQ",
+          "is_latest": true,
+          "key": "data/cleaned/GSE130238/obs.parquet",
+          "latest_exact_key_candidates": [
+            {
+              "created_at": "2026-07-18 11:03:37.000379+00:00",
+              "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259137524552\",\"object_sha256\":\"a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5\",\"role\":\"obs\",\"source_identity\":\"GSE130238;ODD001111\"}",
+              "hash": "mh5igcwpyGAjU5hzN2ZkcQ",
+              "is_latest": true,
+              "key": "data/cleaned/GSE130238/obs.parquet",
+              "n_observations": null,
+              "otype": "DataFrame",
+              "size": 322412,
+              "suffix": ".parquet",
+              "uid": "hMei5vxivF2GH5DV0000"
+            }
+          ],
+          "n_observations": null,
+          "otype": "DataFrame",
+          "payload_evidence": {
+            "downloaded_bytes": 322412,
+            "downloaded_sha256": "a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5",
+            "path_exists": true,
+            "remote_stat": "gs://scperturb/data/cleaned/GSE130238/obs.parquet:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              322412\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               UxD8nQ==\n  Hash (MD5):                  mh5igcwpyGAjU5hzN2ZkcQ==\n  ETag:                        CMe4/d/p8pUDEAE=\n  Generation:                  1785154234178631\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 322412 bytes (314.86kiB)\n",
+            "uri": "gs://scperturb/data/cleaned/GSE130238/obs.parquet"
+          },
+          "size": 322412,
+          "suffix": ".parquet",
+          "uid": "hMei5vxivF2GH5DV0000"
+        },
+        "var": {
+          "created_at": "2026-07-18 11:03:39.956464+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259139759146\",\"object_sha256\":\"704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00\",\"role\":\"var\",\"source_identity\":\"GSE130238;ODD001111\"}",
+          "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+          "is_latest": true,
+          "key": "data/cleaned/GSE130238/var.parquet",
+          "latest_exact_key_candidates": [
+            {
+              "created_at": "2026-07-18 11:03:39.956464+00:00",
+              "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259139759146\",\"object_sha256\":\"704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00\",\"role\":\"var\",\"source_identity\":\"GSE130238;ODD001111\"}",
+              "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+              "is_latest": true,
+              "key": "data/cleaned/GSE130238/var.parquet",
+              "n_observations": null,
+              "otype": "DataFrame",
+              "size": 841985,
+              "suffix": ".parquet",
+              "uid": "y0V1sLQ45pbtf6oS0000"
+            }
+          ],
+          "n_observations": null,
+          "otype": "DataFrame",
+          "payload_evidence": {
+            "downloaded_bytes": 841985,
+            "downloaded_sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+            "path_exists": true,
+            "remote_stat": "gs://scperturb/data/cleaned/GSE130238/var.parquet:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              841985\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               hRfz3g==\n  Hash (MD5):                  qsk8P6eGsDjuO+qVSHuvXQ==\n  ETag:                        CI66/d/p8pUDEAE=\n  Generation:                  1785154234178830\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 841985 bytes (822.25kiB)\n",
+            "uri": "gs://scperturb/data/cleaned/GSE130238/var.parquet"
+          },
+          "size": 841985,
+          "suffix": ".parquet",
+          "uid": "y0V1sLQ45pbtf6oS0000"
+        }
+      },
+      "prefix": "data/cleaned/GSE130238",
+      "relation_to_canonical": "canonical"
+    }
+  },
+  "current_obs_inventory": {
+    "columns": {
+      "assay": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "10x-like GEO MatrixMarket scRNA-seq"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "development_stage": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 4888,
+            "value": "6 month"
+          },
+          {
+            "count": 4832,
+            "value": "1 month"
+          },
+          {
+            "count": 3208,
+            "value": "10 month"
+          },
+          {
+            "count": 3158,
+            "value": "3 month"
+          }
+        ],
+        "unique_non_null": 4
+      },
+      "is_control": {
+        "dtype": "bool",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 11254,
+            "value": "False"
+          },
+          {
+            "count": 4832,
+            "value": "True"
+          }
+        ],
+        "unique_non_null": 2
+      },
+      "organism": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "Homo sapiens"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "organoiddb_id": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "ODD001111"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "reprogramming_strategy": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "Retroviral"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "sample_accession": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 4888,
+            "value": "GSM3734296"
+          },
+          {
+            "count": 4832,
+            "value": "GSM3734294"
+          },
+          {
+            "count": 3208,
+            "value": "GSM3734297"
+          },
+          {
+            "count": 3158,
+            "value": "GSM3734295"
+          }
+        ],
+        "unique_non_null": 4
+      },
+      "sample_title": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 4888,
+            "value": "6 month cortical organoids"
+          },
+          {
+            "count": 4832,
+            "value": "1 month cortical organoids"
+          },
+          {
+            "count": 3208,
+            "value": "10 month cortical organoids"
+          },
+          {
+            "count": 3158,
+            "value": "3 month cortical organoids"
+          }
+        ],
+        "unique_non_null": 4
+      },
+      "source_accession": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "GSE130238"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "source_cell_barcode": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 3,
+            "value": "TAGCCGGTCGATAGAA-1"
+          },
+          {
+            "count": 3,
+            "value": "TGCTACCAGATGCCAG-1"
+          },
+          {
+            "count": 2,
+            "value": "CACATAGAGCAGCCTC-1"
+          },
+          {
+            "count": 2,
+            "value": "GCAATCAAGGTCATCT-1"
+          },
+          {
+            "count": 2,
+            "value": "ACGTCAATCCTATTCA-1"
+          },
+          {
+            "count": 2,
+            "value": "ACGTCAATCCTCGCAT-1"
+          },
+          {
+            "count": 2,
+            "value": "CAGCGACTCAGCTGGC-1"
+          },
+          {
+            "count": 2,
+            "value": "TCTCATAGTCTTGATG-1"
+          },
+          {
+            "count": 2,
+            "value": "CACATAGCATGCGCAC-1"
+          },
+          {
+            "count": 2,
+            "value": "GTCTCGTTCTATCGCC-1"
+          },
+          {
+            "count": 2,
+            "value": "TCGTACCAGGAATCGC-1"
+          },
+          {
+            "count": 2,
+            "value": "TTGCGTCCATTGGGCC-1"
+          },
+          {
+            "count": 2,
+            "value": "CTCAGAAGTACGAAAT-1"
+          },
+          {
+            "count": 2,
+            "value": "CCCAGTTTCATTTGGG-1"
+          },
+          {
+            "count": 2,
+            "value": "CACAGGCAGAAGGTGA-1"
+          },
+          {
+            "count": 2,
+            "value": "GTTAAGCAGACTGGGT-1"
+          },
+          {
+            "count": 2,
+            "value": "TGACTAGAGCTAACTC-1"
+          },
+          {
+            "count": 2,
+            "value": "ACGTCAAAGGATGGAA-1"
+          },
+          {
+            "count": 2,
+            "value": "GTCACGGTCGAACTGT-1"
+          },
+          {
+            "count": 2,
+            "value": "GGACAGAAGGCTATCT-1"
+          }
+        ],
+        "unique_non_null": 15934
+      },
+      "source_cell_line": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "WT - iPSC"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "source_file": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 4888,
+            "value": "GSM3734296_6M_cortical_organoids_matrix.mtx.gz"
+          },
+          {
+            "count": 4832,
+            "value": "GSM3734294_1M_cortical_organoids_matrix.mtx.gz"
+          },
+          {
+            "count": 3208,
+            "value": "GSM3734297_10M_cortical_organoids_matrix.mtx.gz"
+          },
+          {
+            "count": 3158,
+            "value": "GSM3734295_3M_cortical_organoids_matrix.mtx.gz"
+          }
+        ],
+        "unique_non_null": 4
+      },
+      "source_matrix_semantics": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "raw UMI count matrix"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "source_name": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "Cortical organoids"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "source_passage": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "37"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "timepoint": {
+        "dtype": "int64",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 4888,
+            "value": "6"
+          },
+          {
+            "count": 4832,
+            "value": "1"
+          },
+          {
+            "count": 3208,
+            "value": "10"
+          },
+          {
+            "count": 3158,
+            "value": "3"
+          }
+        ],
+        "unique_non_null": 4
+      },
+      "timepoint_unit": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "month"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "tissue": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "cerebral cortex organoid"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "trajectory_id": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16086,
+        "top_values": [
+          {
+            "count": 16086,
+            "value": "GSE130238:cortical_organoid"
+          }
+        ],
+        "unique_non_null": 1
+      }
+    },
+    "index_name": "cell_id",
+    "index_sha256_ordered": "ef29dab9266c41eee78de1343c07d9f9f78a383157e2ea1c7484cdbee9cd304c",
+    "index_summary": {
+      "dtype": "string",
+      "empty_string": 0,
+      "has_control_character": 0,
+      "missing": 0,
+      "missing_fraction": 0.0,
+      "rows": 16086,
+      "top_values": [
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTGTCATCTGCCAGG-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734294:AAACCTGAGAATTGTG-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734294:AAACCTGAGCAACGGT-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734294:AAACCTGGTGCCTTGG-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734294:AAACCTGTCCACTGGG-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734294:AAACCTGTCGAACGGA-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTCCTCAGGAATTAC-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTCCTCAGCGGATCA-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTCCTCAGACAGGCT-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTATGCTCGTCCGTT-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTATGCTCCTCAATT-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTACTGTCTGGGCCA-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTACTGTCTGCAAGT-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTACTGTCTCTTATG-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTACTGTCTCGTATT-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTACTGGTGATAAAC-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTACTGGTAGGCATG-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTACTGCACGTGAGA-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTTACTGAGTTCGCGC-1"
+        },
+        {
+          "count": 1,
+          "value": "GSM3734297:TTGTAGGTCACCAGGC-1"
+        }
+      ],
+      "unique_non_null": 16086
+    },
+    "index_unique": true,
+    "shape": [
+      16086,
+      19
+    ]
+  },
+  "current_var_inventory": {
+    "columns": {
+      "feature_id": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 1,
+            "value": "ENSG00000268674"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000243485"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000237613"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000186092"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000238009"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000239945"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000239906"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000241599"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000279928"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000279457"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000228463"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000236743"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000236601"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000237094"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000274847"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000277400"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000278704"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000274792"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000275249"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000276760"
+          }
+        ],
+        "unique_non_null": 33694
+      },
+      "feature_namespace": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 33694,
+            "value": "Ensembl gene ID"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "feature_type": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 33694,
+            "value": "Gene Expression"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "gene_symbol": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 2,
+            "value": "TIMM10B"
+          },
+          {
+            "count": 2,
+            "value": "CFAP99"
+          },
+          {
+            "count": 2,
+            "value": "LINC00864"
+          },
+          {
+            "count": 2,
+            "value": "SERPINA3"
+          },
+          {
+            "count": 2,
+            "value": "ECSCR"
+          },
+          {
+            "count": 2,
+            "value": "TBC1D26"
+          },
+          {
+            "count": 2,
+            "value": "RAET1E-AS1"
+          },
+          {
+            "count": 2,
+            "value": "MATR3"
+          },
+          {
+            "count": 2,
+            "value": "PRICKLE2-AS1"
+          },
+          {
+            "count": 2,
+            "value": "C1QTNF9B-AS1"
+          },
+          {
+            "count": 2,
+            "value": "CCDC7"
+          },
+          {
+            "count": 2,
+            "value": "ATRIP"
+          },
+          {
+            "count": 2,
+            "value": "PRICKLE4"
+          },
+          {
+            "count": 2,
+            "value": "CAPS"
+          },
+          {
+            "count": 2,
+            "value": "PABPC1L2B-AS1"
+          },
+          {
+            "count": 2,
+            "value": "FAM231C"
+          },
+          {
+            "count": 2,
+            "value": "PGM5-AS1"
+          },
+          {
+            "count": 2,
+            "value": "C11orf71"
+          },
+          {
+            "count": 2,
+            "value": "IGHV2-70"
+          },
+          {
+            "count": 2,
+            "value": "RABL6"
+          }
+        ],
+        "unique_non_null": 33660
+      },
+      "genome_build": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 33694,
+            "value": "GRCh38"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "organism": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 33694,
+            "value": "Homo sapiens"
+          }
+        ],
+        "unique_non_null": 1
+      }
+    },
+    "identifier_audit": {
+      "duplicate_count": 0,
+      "patterns": {
+        "actual_tab": {
+          "count": 0,
+          "examples": []
+        },
+        "carriage_return_or_newline": {
+          "count": 0,
+          "examples": []
+        },
+        "ensembl_gene": {
+          "count": 33694,
+          "examples": [
+            "ENSG00000243485",
+            "ENSG00000237613",
+            "ENSG00000186092",
+            "ENSG00000238009",
+            "ENSG00000239945",
+            "ENSG00000239906",
+            "ENSG00000241599",
+            "ENSG00000279928",
+            "ENSG00000279457",
+            "ENSG00000228463",
+            "ENSG00000236743",
+            "ENSG00000236601",
+            "ENSG00000237094",
+            "ENSG00000278566",
+            "ENSG00000230021",
+            "ENSG00000235146",
+            "ENSG00000273547",
+            "ENSG00000229905",
+            "ENSG00000237491",
+            "ENSG00000177757"
+          ]
+        },
+        "flybase_gene": {
+          "count": 0,
+          "examples": []
+        },
+        "leading_or_trailing_whitespace": {
+          "count": 0,
+          "examples": []
+        },
+        "literal_backslash_t": {
+          "count": 0,
+          "examples": []
+        },
+        "literal_slash_t": {
+          "count": 0,
+          "examples": []
+        }
+      },
+      "rows": 33694,
+      "tab_split_structure": {
+        "first_field_blank": 0,
+        "first_field_examples": [
+          "ENSG00000243485",
+          "ENSG00000237613",
+          "ENSG00000186092",
+          "ENSG00000238009",
+          "ENSG00000239945",
+          "ENSG00000239906",
+          "ENSG00000241599",
+          "ENSG00000279928",
+          "ENSG00000279457",
+          "ENSG00000228463",
+          "ENSG00000236743",
+          "ENSG00000236601",
+          "ENSG00000237094",
+          "ENSG00000278566",
+          "ENSG00000230021",
+          "ENSG00000235146",
+          "ENSG00000273547",
+          "ENSG00000229905",
+          "ENSG00000237491",
+          "ENSG00000177757"
+        ],
+        "first_field_unique": true,
+        "parts": 1
+      },
+      "unique": true
+    },
+    "index_name": "feature_id",
+    "index_sha256_ordered": "7eb86babb45d8bfedc121c1d964603857d4b54d062de98bd2f84739a284ce304",
+    "index_summary": {
+      "dtype": "string",
+      "empty_string": 0,
+      "has_control_character": 0,
+      "missing": 0,
+      "missing_fraction": 0.0,
+      "rows": 33694,
+      "top_values": [
+        {
+          "count": 1,
+          "value": "ENSG00000268674"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000243485"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000237613"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000186092"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000238009"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000239945"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000239906"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000241599"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000279928"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000279457"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000228463"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000236743"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000236601"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000237094"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000274847"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000277400"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000278704"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000274792"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000275249"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000276760"
+        }
+      ],
+      "unique_non_null": 33694
+    },
+    "index_unique": true,
+    "shape": [
+      33694,
+      6
+    ]
+  },
+  "dataset": "GSE130238",
+  "dataset_metadata_proposal": {
+    "organoiddb_id": "ODD001111",
+    "reprogramming_strategy": "Retroviral",
+    "source_accession": "GSE130238",
+    "source_matrix_semantics": "raw UMI count matrix",
+    "source_name": "Cortical organoids",
+    "x_semantics": "raw_counts"
+  },
+  "derived_obs_proposal": {
+    "cell_id": "sample accession + source barcode; assert global uniqueness.",
+    "is_baseline": "True only at 1 month; False at 3/6/10 months.",
+    "is_control": "True for all rows because there is no perturbation arm.",
+    "obs_uuid": "pert_gym.obs_identity.add_obs_identity with canonical dataset/prefix.",
+    "original_obs_index": "Exact current ordered OBS index before revision.",
+    "perturbation": "none",
+    "perturbation_type": "none",
+    "timepoint": "Blocked until the project names a month-to-minute convention; never silently treat month integers as minutes.",
+    "timepoint_state": "unknown pending unit convention; source month remains complete."
+  },
+  "format": "pert-gym.first10-cohort-a-correction-plan/v1",
+  "instance": "laminlabs/pertdata",
+  "live_audited_at": "2026-07-28T11:50:07.592685+00:00",
+  "live_evidence_file": "artifacts/first10_audit/cohort_a/GSE130238.audit.json",
+  "obs_column_decisions": {
+    "assay": {
+      "action": "keep",
+      "reason": "Inference-relevant assay constant.",
+      "target": "assay"
+    },
+    "development_stage": {
+      "action": "map_preserve",
+      "reason": "Preserve exact 1/3/6/10 month source label.",
+      "target": "timepoint_original_label"
+    },
+    "is_control": {
+      "action": "replace_and_preserve_as_baseline",
+      "reason": "Current field marks month 1 only and therefore encodes baseline, not perturbation control.",
+      "target": "is_baseline"
+    },
+    "organism": {
+      "action": "keep",
+      "reason": "Inference-relevant organism constant.",
+      "target": "organism"
+    },
+    "organoiddb_id": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Dataset-wide source identifier.",
+      "target": "organoiddb_id"
+    },
+    "reprogramming_strategy": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Dataset-wide descriptive protocol field.",
+      "target": "reprogramming_strategy"
+    },
+    "sample_accession": {
+      "action": "map_keep",
+      "reason": "Stable GEO sample join key.",
+      "target": "sample"
+    },
+    "sample_title": {
+      "action": "map_preserve",
+      "reason": "Source-backed sample description.",
+      "target": "source_sample_title"
+    },
+    "source_accession": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Dataset-wide provenance.",
+      "target": "source_accession"
+    },
+    "source_cell_barcode": {
+      "action": "preserve",
+      "reason": "Source barcode can repeat across samples and must be namespaced by sample.",
+      "target": "source_cell_barcode"
+    },
+    "source_cell_line": {
+      "action": "map_keep",
+      "reason": "Constant but inference-relevant WT-iPSC context.",
+      "target": "cell_line"
+    },
+    "source_file": {
+      "action": "map_preserve",
+      "reason": "Sample-varying raw provenance.",
+      "target": "source_file"
+    },
+    "source_matrix_semantics": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Dataset-wide X semantics.",
+      "target": "x_semantics"
+    },
+    "source_name": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Dataset-wide description.",
+      "target": "source_name"
+    },
+    "source_passage": {
+      "action": "map_keep",
+      "reason": "Constant but potentially inference-relevant culture context.",
+      "target": "passage"
+    },
+    "timepoint": {
+      "action": "rename_preserve",
+      "reason": "Source unit is month, not canonical minutes.",
+      "target": "timepoint_original_value"
+    },
+    "timepoint_unit": {
+      "action": "rename_preserve",
+      "reason": "Preserve exact month unit.",
+      "target": "timepoint_original_unit"
+    },
+    "tissue": {
+      "action": "map_keep",
+      "reason": "Inference-relevant organoid tissue context.",
+      "target": "tissue_type"
+    },
+    "trajectory_id": {
+      "action": "keep",
+      "reason": "One explicit cortical-organoid developmental trajectory.",
+      "target": "trajectory_id"
+    }
+  },
+  "proposed_post_fix_obs_schema": [
+    "obs_uuid",
+    "original_obs_index",
+    "dataset",
+    "sample",
+    "cell_id",
+    "organism",
+    "cell_line",
+    "passage",
+    "tissue_type",
+    "assay",
+    "modality",
+    "trajectory_id",
+    "timepoint",
+    "timepoint_state",
+    "timepoint_original_value",
+    "timepoint_original_unit",
+    "timepoint_original_label",
+    "source_sample_title",
+    "perturbation",
+    "perturbation_type",
+    "is_control",
+    "is_baseline",
+    "source_cell_barcode",
+    "source_file"
+  ],
+  "raw_provenance": {
+    "confidence": "high",
+    "manifests": [
+      {
+        "artifact": {
+          "created_at": "2026-07-18 11:03:41.417686+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259142259072\",\"object_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"role\":\"manifest\",\"source_identity\":\"GSE130238;ODD001111\"}",
+          "hash": "OidNrm74SK3o5MfD2FGxIg",
+          "is_latest": true,
+          "key": "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/manifest.json",
+          "n_observations": null,
+          "otype": null,
+          "size": 20084,
+          "suffix": ".json",
+          "uid": "pDSGVXmg4jHQEzZe0000"
+        },
+        "payload": {
+          "actual_artifact_inventory": [
+            {
+              "filename": "obs.parquet",
+              "generation": "1784259137524552",
+              "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/obs.parquet#1784259137524552",
+              "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/obs.parquet",
+              "producer_generation_readback": {
+                "generation": "1784259137524552",
+                "sha256": "a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5",
+                "size_bytes": 322412
+              },
+              "role": "obs",
+              "sha256": "a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5",
+              "size_bytes": 322412,
+              "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/obs.parquet"
+            },
+            {
+              "filename": "X.h5ad",
+              "generation": "1784259138549796",
+              "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/X.h5ad#1784259138549796",
+              "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/X.h5ad",
+              "producer_generation_readback": {
+                "generation": "1784259138549796",
+                "sha256": "40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386",
+                "size_bytes": 69866889
+              },
+              "role": "X",
+              "sha256": "40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386",
+              "size_bytes": 69866889,
+              "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/X.h5ad"
+            },
+            {
+              "filename": "var.parquet",
+              "generation": "1784259139759146",
+              "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/var.parquet#1784259139759146",
+              "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/var.parquet",
+              "producer_generation_readback": {
+                "generation": "1784259139759146",
+                "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+                "size_bytes": 841985
+              },
+              "role": "var",
+              "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+              "size_bytes": 841985,
+              "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/var.parquet"
+            }
+          ],
+          "artifact_count": 3,
+          "bounded_wave": {
+            "assignment_count": 1,
+            "id": "publication-wave-10-of-13",
+            "number": 10,
+            "outcome_task_id": "t_51a8d0a6",
+            "singular": true
+          },
+          "bounded_wave_assignment": {
+            "accepted_evidence": null,
+            "existing_builder": null,
+            "outcome_task_id": "t_51a8d0a6",
+            "record_id": "temporal_v4_097_organoiddb_odd001111_gse130238",
+            "status": "triage",
+            "wave": 10
+          },
+          "catalogue_row_ids": [
+            97
+          ],
+          "component": "OrganoidDB Odd001111 Cerebral cortex organoid development scRNA-seq",
+          "control_inputs": {
+            "catalogue": {
+              "sha256": "4d31f341b60163ba1bcf6293746b9f8fe483cbccf6cd975367ed62a30467fdea"
+            },
+            "graph": {
+              "sha256": "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98"
+            },
+            "publication_manifest": {
+              "sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4"
+            }
+          },
+          "controlling_record": {
+            "catalogue_origins": [
+              "temporal_pretraining_datasets_v4"
+            ],
+            "catalogue_row_ids": [
+              97
+            ],
+            "classification": "executable",
+            "collection_membership": {
+              "artifact_keys_sample": [],
+              "authoritative_coverage_note": "metadata match only; no live Lamin assertion",
+              "canonical_20260621_member_count": 0,
+              "categories": {}
+            },
+            "completion_state": "source_executable_not_completion",
+            "component": "OrganoidDB Odd001111 Cerebral cortex organoid development scRNA-seq",
+            "denominator_basis": "temporal_pretraining_datasets_v4 retained row + upstream immutable accession/collection identity",
+            "downloadable": "yes",
+            "evidence_paths": [
+              "data/temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv"
+            ],
+            "exact_remaining_work": "Resolve exact payload manifest and execute EU-worker backed conversion/publication with readback; catalogue/source probe alone is never completion.",
+            "exclusion_reason": "",
+            "existing_lamin_coverage": "no matched member in unified_collection_manifest_20260621",
+            "expected_denominator_verbatim": "catalogue logical row; cells=unknown",
+            "logical_dataset": "organoiddb Odd001111 GSE130238",
+            "modality": "scRNA-seq",
+            "modality_contract": "expression_like_obs_X_var",
+            "pilot_or_probe_is_complete": false,
+            "record_id": "temporal_v4_097_organoiddb_odd001111_gse130238",
+            "source_bytes": null,
+            "source_integrity_identity": [
+              "upstream_immutable_identity:GSE130238;ODD001111"
+            ],
+            "source_n_obs": null,
+            "source_n_vars": null,
+            "source_object_identity": "GSE130238;ODD001111",
+            "source_uri": "http://www.inbirg.com/organoid_db/detail/Odd001111",
+            "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001111_gse130238",
+            "target_shared_var_identity": "sha256(canonical ordered var identifiers + organism + feature namespace); compute on EU worker before publication",
+            "target_zarr_or_block_plan": "EU-worker backed probe then adaptive sparse row blocks; never Mac payload"
+          },
+          "dataset": {
+            "consumer_readback_reached_built_data": true,
+            "links": {
+              "X_to_var": "identical ordered Ensembl feature_id",
+              "obs_to_X": "identical ordered cell_id"
+            },
+            "matrix_build_inventory": {
+              "finite_value_sum": 86379368,
+              "max_count": 3012,
+              "nnz_stored": 29387863,
+              "shape": [
+                16086,
+                33694
+              ]
+            },
+            "objects": {
+              "X": {
+                "filename": "X.h5ad",
+                "generation": "1784259138549796",
+                "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/X.h5ad#1784259138549796",
+                "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/X.h5ad",
+                "producer_generation_readback": {
+                  "generation": "1784259138549796",
+                  "sha256": "40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386",
+                  "size_bytes": 69866889
+                },
+                "role": "X",
+                "sha256": "40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386",
+                "size_bytes": 69866889,
+                "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/X.h5ad"
+              },
+              "obs": {
+                "filename": "obs.parquet",
+                "generation": "1784259137524552",
+                "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/obs.parquet#1784259137524552",
+                "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/obs.parquet",
+                "producer_generation_readback": {
+                  "generation": "1784259137524552",
+                  "sha256": "a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5",
+                  "size_bytes": 322412
+                },
+                "role": "obs",
+                "sha256": "a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5",
+                "size_bytes": 322412,
+                "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/obs.parquet"
+              },
+              "var": {
+                "filename": "var.parquet",
+                "generation": "1784259139759146",
+                "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/var.parquet#1784259139759146",
+                "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/var.parquet",
+                "producer_generation_readback": {
+                  "generation": "1784259139759146",
+                  "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+                  "size_bytes": 841985
+                },
+                "role": "var",
+                "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+                "size_bytes": 841985,
+                "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238/var.parquet"
+              }
+            },
+            "prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/datasets/GSE130238",
+            "quality_disposition": "included_exactly_once",
+            "readback": {
+              "control_observations": 4832,
+              "matrix": {
+                "data_dtype": "uint32",
+                "data_sha256": "172d9adf8f1e6409fd182295f7b75ed979b60bee103a85eca786d4b12af637fb",
+                "finite_value_sum": 86379368,
+                "format": "csr",
+                "indices_sha256": "916276f76de5da750f287316bed97a68a43ea1508a8bbefe7715e8e942079efd",
+                "indptr_sha256": "f640cdcedd7a265d8c47adc6a6c4532ece792761039c1d0d086620d870a52ace",
+                "max_count": 3012,
+                "nnz_stored": 29387863,
+                "shape": [
+                  16086,
+                  33694
+                ]
+              },
+              "obs_columns": [
+                "source_accession",
+                "organoiddb_id",
+                "sample_accession",
+                "sample_title",
+                "source_file",
+                "source_cell_barcode",
+                "source_name",
+                "source_cell_line",
+                "source_passage",
+                "development_stage",
+                "reprogramming_strategy",
+                "timepoint",
+                "timepoint_unit",
+                "organism",
+                "assay",
+                "tissue",
+                "is_control",
+                "trajectory_id",
+                "source_matrix_semantics"
+              ],
+              "obs_index_sha256": "ffc9585290bb2a4bf4b6a4dc515bb025807d64631dc647ae313697d13f0ad64c",
+              "sample_count": 4,
+              "shape": [
+                16086,
+                33694
+              ],
+              "timepoint_counts": {
+                "1": 4832,
+                "10": 3208,
+                "3": 3158,
+                "6": 4888
+              },
+              "timepoints_months": [
+                1,
+                3,
+                6,
+                10
+              ],
+              "var_columns": [
+                "feature_id",
+                "gene_symbol",
+                "feature_type",
+                "feature_namespace",
+                "organism",
+                "genome_build"
+              ],
+              "var_index_sha256": "9682c0cd068db48c2678becac6c3bd38aa378216aeb471fb1138096e9552500c"
+            }
+          },
+          "dataset_count": 1,
+          "immutability": {
+            "generation_pinned": true,
+            "manifest_written_last": true,
+            "overwrite_refused": true
+          },
+          "ledger": {
+            "accepted_delta_at_build": 0,
+            "catalogue_row_ids": [
+              97
+            ],
+            "debits": {
+              "dropped_observations": 0,
+              "exclusions": 0,
+              "product_credit": 0
+            },
+            "input_accounting": {
+              "accounted_inputs": 6,
+              "controls": 3,
+              "expected_inputs": 6,
+              "geo_tar_members": 12,
+              "upstream_source_objects": 3
+            },
+            "note": "Build submission only; independent test/review is required before accepted publication credit.",
+            "observation_accounting": {
+              "catalogue_source_n_obs_verbatim": 0,
+              "excluded_n_obs": 0,
+              "materialized_n_obs": 16086,
+              "resolved_source_n_obs": 16086
+            },
+            "output_accounting": {
+              "accounted_outputs": 5,
+              "expected_outputs": 5,
+              "ledger_objects": 1,
+              "manifest_objects": 1,
+              "triplet_artifacts": 3
+            },
+            "record_id": "temporal_v4_097_organoiddb_odd001111_gse130238",
+            "sample_accounting": {
+              "geo_samples": 4,
+              "materialized_samples": 4,
+              "matrix_members": 4
+            },
+            "schema_version": "pert-gym.proposed-publication-ledger/v2",
+            "submission_id": "pert-gym-ledger:materialized-build:t_3d42dc3e:temporal_v4_097_organoiddb_odd001111_gse130238",
+            "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+            "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001111_gse130238",
+            "wave": {
+              "assignment_count": 1,
+              "id": "publication-wave-10-of-13",
+              "number": 10,
+              "outcome_task_id": "t_51a8d0a6",
+              "singular": true
+            }
+          },
+          "ledger_object": {
+            "generation": "1784259142084154",
+            "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/ledger.json#1784259142084154",
+            "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/ledger.json",
+            "sha256": "12ac79778da3ccac5a32592b30a0bef46d83aa34f94ac276cb4bd719c3529118",
+            "size_bytes": 1444,
+            "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/ledger.json"
+          },
+          "missingness": {
+            "absent_source_fields": [
+              "donor_age",
+              "donor_sex",
+              "donor_ethnicity",
+              "disease",
+              "cell_type_annotation",
+              "source_low_quality_flag",
+              "cell_level_qc_metrics"
+            ],
+            "affected_observations": 16086,
+            "age_state": "donor age is absent; organoid developmental month 1/3/6/10 is retained and is not donor age; no observation excluded",
+            "catalogue_cells_field": 0,
+            "catalogue_cells_field_state": "missing/unknown denominator in frozen catalogue; resolved from all four GEO 10x matrices",
+            "dependency_created": false,
+            "excluded_observations": 0,
+            "excluded_records": 0,
+            "metadata_state": "GEO sample accession/title, organoid age, source cell line/passage, reprogramming strategy, source name, source file, and cell barcode are retained; absent donor and cell annotations remain explicit missingness",
+            "non_excluding": true,
+            "quality_state": "GEO supplies raw UMI matrices but no accepted cell-level low-quality flag or exclusion threshold; all 16,086 cells are retained"
+          },
+          "observation_count": 16086,
+          "provenance": {
+            "builder_script": "/tmp/t_3d42dc3e-build/input/build_component.py",
+            "builder_script_sha256": "a390185e8091c80646a94e02b3402a626ec299496182ecd9086a9aca6cc7bbc3",
+            "command": "uv run python build_component.py --input /tmp/t_3d42dc3e-build/input --output /tmp/t_3d42dc3e-build/output",
+            "finished_unix": 1784259142.119586,
+            "host": "pert-gym-worker-eu",
+            "started_unix": 1784259122.4585664
+          },
+          "record_id": "temporal_v4_097_organoiddb_odd001111_gse130238",
+          "revision": "temporal-v4-097-wave10-5ff8f71ce3914160",
+          "revision_prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160",
+          "sample_count": 4,
+          "schema_version": "pert-gym.materialized-component/v2",
+          "source_identity": {
+            "accession": "GSE130238",
+            "organoiddb_id": "ODD001111",
+            "raw_tar_member_count": 12,
+            "raw_tar_member_inventory": [
+              {
+                "compressed_sha256": "b28e23ef7853f92897e70ca0b1f51e716e8489df2356dc81b4196d3cab618873",
+                "compressed_size_bytes": 20150,
+                "name": "GSM3734294_1M_cortical_organoids_barcodes.tsv.gz"
+              },
+              {
+                "compressed_sha256": "7d2bdc8f2e8dc1722aa0c31fb2496fae63d0f0dbaa0c86eefe77c56623d814c9",
+                "compressed_size_bytes": 264505,
+                "name": "GSM3734294_1M_cortical_organoids_genes.tsv.gz"
+              },
+              {
+                "compressed_sha256": "3c4b1428c30ec440faaf25df7183f800a683f85c291573c5f912d9185bc0ffb4",
+                "compressed_size_bytes": 35543236,
+                "name": "GSM3734294_1M_cortical_organoids_matrix.mtx.gz"
+              },
+              {
+                "compressed_sha256": "2fa9fbdab98beb9619d3372a80e476ab89c5299eb764520a93099c2c1e8fae50",
+                "compressed_size_bytes": 13739,
+                "name": "GSM3734295_3M_cortical_organoids_barcodes.tsv.gz"
+              },
+              {
+                "compressed_sha256": "136f490b2f78687dc4b69ece70e17647a28f0065012a4f041bd9171f813dc70b",
+                "compressed_size_bytes": 264505,
+                "name": "GSM3734295_3M_cortical_organoids_genes.tsv.gz"
+              },
+              {
+                "compressed_sha256": "e5cfe5a1984842f8c21b70fc53d5730854a199c73edf937f330c2f7fc04f230e",
+                "compressed_size_bytes": 21109975,
+                "name": "GSM3734295_3M_cortical_organoids_matrix.mtx.gz"
+              },
+              {
+                "compressed_sha256": "7467b20c3c8b89e1cd139b03fbc1615cba5df382a050052f19763b2aa467be1b",
+                "compressed_size_bytes": 20226,
+                "name": "GSM3734296_6M_cortical_organoids_barcodes.tsv.gz"
+              },
+              {
+                "compressed_sha256": "9e6adbfd5a6febd1bb17a7b5ab29fe600fd309ee8388183a82784f1bde74c56d",
+                "compressed_size_bytes": 264505,
+                "name": "GSM3734296_6M_cortical_organoids_genes.tsv.gz"
+              },
+              {
+                "compressed_sha256": "65dd3e7bd2c8518df8abacd4e5c93ba46b7ab45f67306c485f6afc5d292bdf3e",
+                "compressed_size_bytes": 21834840,
+                "name": "GSM3734296_6M_cortical_organoids_matrix.mtx.gz"
+              },
+              {
+                "compressed_sha256": "6ebb037451964c85bfc3f02e02b8aa5dff6dbc50df0e34d1f977469eaca7bce2",
+                "compressed_size_bytes": 13910,
+                "name": "GSM3734297_10M_cortical_organoids_barcodes.tsv.gz"
+              },
+              {
+                "compressed_sha256": "07665ae61f826602424f759bf58dad779a2d1a007069144130a5b886774a7d35",
+                "compressed_size_bytes": 264505,
+                "name": "GSM3734297_10M_cortical_organoids_genes.tsv.gz"
+              },
+              {
+                "compressed_sha256": "841d2d6f6838e080fea0dc00cd7ba67293da100f3335f2144568783dbdaff004",
+                "compressed_size_bytes": 12799113,
+                "name": "GSM3734297_10M_cortical_organoids_matrix.mtx.gz"
+              }
+            ],
+            "source_object_identity": "GSE130238;ODD001111",
+            "upstream_objects": {
+              "geo_filelist": {
+                "http_headers": {
+                  "Content-Length": "1100",
+                  "ETag": null,
+                  "Last-Modified": "Fri, 26 Apr 2019 17:13:55 GMT"
+                },
+                "sha256": "6baab4fb135129725114985d98a42b576150ff83010333f9101a2c5451b7cfd9",
+                "size_bytes": 1100,
+                "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE130nnn/GSE130238/suppl/filelist.txt"
+              },
+              "geo_raw_tar": {
+                "http_headers": {
+                  "Content-Length": "92426240",
+                  "ETag": null,
+                  "Last-Modified": "Fri, 26 Apr 2019 17:13:55 GMT"
+                },
+                "sha256": "d64fa1e32a28c2a9a048e45710e77535f199d2f45023df822ba0429c562a596f",
+                "size_bytes": 92426240,
+                "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE130nnn/GSE130238/suppl/GSE130238_RAW.tar"
+              },
+              "geo_soft": {
+                "http_headers": {
+                  "Content-Length": "2972",
+                  "ETag": null,
+                  "Last-Modified": "Sun, 10 May 2026 04:41:24 GMT"
+                },
+                "sha256": "a0cbbbe97e15b8667b89ccea0aadaa62433642cb5ddb789999a8efd3590b1ea6",
+                "size_bytes": 2972,
+                "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE130nnn/GSE130238/soft/GSE130238_family.soft.gz"
+              }
+            },
+            "verified": true
+          },
+          "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001111_gse130238",
+          "task_id": "t_3d42dc3e",
+          "triplet_count": 1,
+          "variable_count": 33694
+        },
+        "payload_evidence": {
+          "downloaded_bytes": 20084,
+          "downloaded_sha256": "5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555",
+          "path_exists": true,
+          "remote_stat": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/manifest.json:\n  Creation Time:               2026-07-17T03:32:22Z\n  Update Time:                 2026-07-17T03:32:22Z\n  Storage Class Update Time:   2026-07-17T03:32:22Z\n  Storage Class:               STANDARD\n  Content-Length:              20084\n  Content-Type:                application/json\n  Hash (CRC32C):               jcapdw==\n  Hash (MD5):                  OidNrm74SK3o5MfD2FGxIg==\n  ETag:                        CICj8qLj2JUDEAE=\n  Generation:                  1784259142259072\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 20084 bytes (19.61kiB)\n",
+          "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/manifest.json"
+        }
+      }
+    ],
+    "related_lamin_artifacts": [
+      {
+        "created_at": "2026-06-22 08:57:02.671210+00:00",
+        "description": "Temporal pretraining X for GSE130238 / Odd001111: GEO MatrixMarket cells x genes",
+        "hash": "GYhRXrNIT2BAjjS_WE2sje",
+        "is_latest": true,
+        "key": "temporal_pretraining/organoiddb/GSE130238_cortical_organoid_months/X.h5ad",
+        "n_observations": 16086,
+        "otype": "AnnData",
+        "size": 71238878,
+        "suffix": ".h5ad",
+        "uid": "4FDLc7GBFiy3vLMm0000"
+      },
+      {
+        "created_at": "2026-06-22 08:56:56.381708+00:00",
+        "description": "Temporal pretraining obs for GSE130238 / Odd001111: OrganoidDB Odd001111 Cerebral cortex organoid development scRNA-seq",
+        "hash": "jd0XDWuw0heW5ftsrrykdw",
+        "is_latest": true,
+        "key": "temporal_pretraining/organoiddb/GSE130238_cortical_organoid_months/obs.parquet",
+        "n_observations": 16086,
+        "otype": "DataFrame",
+        "size": 327149,
+        "suffix": ".parquet",
+        "uid": "FZUAKWgDYj9jyTvL0000"
+      },
+      {
+        "created_at": "2026-06-22 08:57:12.831939+00:00",
+        "description": "Temporal pretraining var for GSE130238 / Odd001111: GEO 10x feature table",
+        "hash": "vC1cKuZSNE0s7kZic1Sf3w",
+        "is_latest": true,
+        "key": "temporal_pretraining/organoiddb/GSE130238_cortical_organoid_months/var.parquet",
+        "n_observations": 33694,
+        "otype": "DataFrame",
+        "size": 839964,
+        "suffix": ".parquet",
+        "uid": "JPISgvZmbWt0Lrbm0000"
+      },
+      {
+        "created_at": "2026-07-18 11:03:37.000379+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259137524552\",\"object_sha256\":\"a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5\",\"role\":\"obs\",\"source_identity\":\"GSE130238;ODD001111\"}",
+        "hash": "mh5igcwpyGAjU5hzN2ZkcQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE130238/obs.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 322412,
+        "suffix": ".parquet",
+        "uid": "hMei5vxivF2GH5DV0000"
+      },
+      {
+        "created_at": "2026-07-18 11:03:38.493589+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259138549796\",\"object_sha256\":\"40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386\",\"role\":\"X\",\"source_identity\":\"GSE130238;ODD001111\"}",
+        "hash": "r-S8FfGVzoK2RdOe6ZX5bg",
+        "is_latest": true,
+        "key": "data/cleaned/GSE130238/X.h5ad",
+        "n_observations": null,
+        "otype": "AnnData",
+        "size": 69866889,
+        "suffix": ".h5ad",
+        "uid": "lVUodgrG2F2izaVd0000"
+      },
+      {
+        "created_at": "2026-07-18 11:03:41.417686+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259142259072\",\"object_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"role\":\"manifest\",\"source_identity\":\"GSE130238;ODD001111\"}",
+        "hash": "OidNrm74SK3o5MfD2FGxIg",
+        "is_latest": true,
+        "key": "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001111_gse130238/revisions/temporal-v4-097-wave10-5ff8f71ce3914160/manifest.json",
+        "n_observations": null,
+        "otype": null,
+        "size": 20084,
+        "suffix": ".json",
+        "uid": "pDSGVXmg4jHQEzZe0000"
+      },
+      {
+        "created_at": "2026-07-18 11:03:39.956464+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259139759146\",\"object_sha256\":\"704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00\",\"role\":\"var\",\"source_identity\":\"GSE130238;ODD001111\"}",
+        "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE130238/var.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 841985,
+        "suffix": ".parquet",
+        "uid": "y0V1sLQ45pbtf6oS0000"
+      }
+    ]
+  },
+  "read_only": true,
+  "remediation_steps": [
+    "Revise OBS only; preserve row order and existing X/var artifacts.",
+    "Separate no-perturbation control semantics from earliest-time baseline semantics.",
+    "Add global OBS identity, canonical sample/cell/tissue/cell-line fields and explicit source/state fields.",
+    "Re-link revised obs to exact X lVUodgrG2F2izaVd0000 and verify X->var y0V1sLQ45pbtf6oS0000."
+  ],
+  "residual_risks": [
+    "No cell-type annotation is present in GEO/live OBS; it remains unknown unless a paper/source supplement provides a joinable per-cell mapping.",
+    "Canonical minute conversion is blocked on a named month-unit convention; source month values are not missing."
+  ],
+  "scientific_identity": {
+    "assay": "10x single-cell RNA-seq / Cell Ranger 2.1.1",
+    "modality": "scRNA-seq",
+    "organism": "Homo sapiens",
+    "organism_ontology_term": "NCBITaxon:9606",
+    "organoiddb_id": "ODD001111",
+    "source_accession": "GSE130238",
+    "title": "Complex oscillatory waves emerging from cortical organoids model early human brain network development"
+  },
+  "source_evidence": [
+    {
+      "bytes": 2972,
+      "sha256": "a0cbbbe97e15b8667b89ccea0aadaa62433642cb5ddb789999a8efd3590b1ea6",
+      "supports": "four source samples at 1/3/6/10 months, WT-iPSC, passage 37, Cell Ranger 2.1.1, hg38 and raw feature-barcode matrices",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE130nnn/GSE130238/soft/GSE130238_family.soft.gz"
+    },
+    {
+      "doi": "10.1016/j.stem.2019.08.002",
+      "supports": "controlling publication and cortical-organoid developmental interpretation",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31474560/"
+    }
+  ],
+  "task_id": "t_2122b5f4",
+  "temporal_verdict": {
+    "action": "Retain the varying source month as timepoint_original_value/unit and trajectory; derive canonical minutes only under a named project month-unit convention.",
+    "evidence": "Live OBS and GEO both show 1/3/6/10 month cortical organoids with 4832/3158/4888/3208 cells.",
+    "verdict": "temporal_month_resolved_single_trajectory"
+  },
+  "triplet_validation": {
+    "X_var_link": {
+      "key": "data/cleaned/GSE130238/var.parquet",
+      "latest_exact_key_candidate_count": 1,
+      "raw_key": "data/cleaned/GSE130238/var.parquet",
+      "raw_uid": null,
+      "resolved": true,
+      "uid": "y0V1sLQ45pbtf6oS0000"
+    },
+    "X_var_link_is_exact": true,
+    "obs_X_link": {
+      "key": "data/cleaned/GSE130238/X.h5ad",
+      "latest_exact_key_candidate_count": 1,
+      "raw_key": "data/cleaned/GSE130238/X.h5ad",
+      "raw_uid": null,
+      "resolved": true,
+      "uid": "lVUodgrG2F2izaVd0000"
+    },
+    "obs_X_link_is_exact": true,
+    "obs_index_equal_X_obs_index": true,
+    "obs_rows_equal_X_rows": true,
+    "same_prefix_var": true,
+    "same_prefix_var_latest_candidates": [
+      {
+        "created_at": "2026-07-18 11:03:39.956464+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001111_gse130238\",\"manifest_generation\":\"1784259142259072\",\"manifest_sha256\":\"5452da86662d4113c41f19efe0d5dc722a5b574e17d3516c114e2901ca1ef555\",\"object_generation\":\"1784259139759146\",\"object_sha256\":\"704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00\",\"role\":\"var\",\"source_identity\":\"GSE130238;ODD001111\"}",
+        "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE130238/var.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 841985,
+        "suffix": ".parquet",
+        "uid": "y0V1sLQ45pbtf6oS0000"
+      }
+    ],
+    "var_index_equal_X_var_index": true,
+    "var_rows_equal_X_columns": true
+  },
+  "validators": [
+    "Every current OBS column has exactly one keep/drop/map/derive decision.",
+    "OBS row count/order and X obs index hash are unchanged by OBS-only revisions.",
+    "VAR row count/order equals X var axis; identifiers are unique and control-character-free.",
+    "obs->X and X->var resolve to exact intended keys/UIDs and every payload exists by fresh readback.",
+    "The X artifact links to one exact same-prefix var.parquet.",
+    "Missing applicable values use unknown; genuinely inapplicable values use not_applicable.",
+    "Global obs identity validates and is unique."
+  ],
+  "var_plan": {
+    "evidence": "33694 unique ENSG identifiers; zero tabs, control characters, whitespace defects or duplicates; exact X ordered-axis parity.",
+    "steps": [
+      "Retain the current ordered var and its human/hg38 source fields.",
+      "Assert index == feature_id, feature_namespace Ensembl, organism Homo sapiens and exact X n_vars/order.",
+      "Do not rewrite X or var for OBS-only remediation."
+    ],
+    "verdict": "valid_source_ensembl_human_axis"
+  }
+}

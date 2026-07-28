@@ -1,0 +1,1434 @@
+{
+  "branch": "jkobject",
+  "cell_type_ontology_map": null,
+  "chunk_verdict": "One 119362x16936 CSR triplet is appropriate (accepted X was 189224969 bytes); the 1000-row chunk_0000 is a partial legacy fallback, not a complete dataset and must not enter the canonical Collection.",
+  "current_X": {
+    "obs_index_sha256_ordered": "1a0d837dd859e0846fe3e3eed02e973d10d184ad448391baa58e51b6bd0f09c7",
+    "obs_index_unique": true,
+    "shape": [
+      1000,
+      16936
+    ],
+    "var_index_sha256_ordered": "7209c7ef29490eb0c4381bbfdb102853b6a0b6832ee6a77a1d2f600ab7d42a6c",
+    "var_index_unique": true,
+    "x_dtype": "float64",
+    "x_encoding_type": "csr_matrix",
+    "x_encoding_version": "0.1.0",
+    "x_group_members": [
+      "data",
+      "indices",
+      "indptr"
+    ],
+    "x_hdf5_type": "Group"
+  },
+  "current_identity": {
+    "canonical_artifacts": {
+      "X": {
+        "created_at": "2026-07-19 17:57:09.043152+00:00",
+        "description": "{\"accepted_revision\":\"temporal-v4-059-wave07-8eab4b672153da2e\",\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"manifest_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/manifest.json#1784249115412273\",\"manifest_sha256\":\"fafb0b5c876e56fb62108f07b5998242a078a0ca69d9dea49a7e49fa77b71729\",\"metadata_missingness\":null,\"n_obs\":119362,\"n_vars\":16936,\"ordered_axis_identity\":{\"data_dtype\":\"int32\",\"data_sha256\":\"6286eba9f5bbd110476653566ca1e93499aae18064a2a9898e5a313681b8ded1\",\"format\":\"csr\",\"indices_dtype\":\"int32\",\"indices_sha256\":\"8444a185fc9f35fc5d8332afe6789f160e77c3f60b032c777b21a126cd92cb8f\",\"indptr_dtype\":\"int32\",\"indptr_sha256\":\"78798539df3a908a014241740ef777b665b86f96b2280dbff627f9a6b104dd1e\",\"nnz\":79887285,\"obs_index_name\":\"cell_id\",\"obs_index_sha256\":\"7b6dd50d404016bd4b588967130e0cf997056a5014f88d79800f02ff7d4d8100\",\"shape\":[119362,16936],\"var_index_name\":\"gene_id\",\"var_index_sha256\":\"c057c8294d4b36d736a5efa85000efd9bceb7cc0a71c89043adde68e0dc7e797\"},\"payload_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/X.h5ad#1784249106069704\",\"payload_sha256\":\"094c617ff8ddbbf632d1b781a1e18394addf77b44f8d1f27659f91b71c5a764a\",\"payload_size_bytes\":189224969,\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"role\":\"X\",\"schema_version\":\"pert-gym.external-triplet-registration/v1\",\"source_identity\":\"E-MTAB-9304\",\"source_uri\":\"https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9304\"}",
+        "feature_values": {
+          "var": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/var.parquet"
+        },
+        "hash": "XSaXLTX4wybTzIwqP_GWCw",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/X.h5ad",
+        "latest_exact_key_candidates": [
+          {
+            "created_at": "2026-07-19 17:57:09.043152+00:00",
+            "description": "{\"accepted_revision\":\"temporal-v4-059-wave07-8eab4b672153da2e\",\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"manifest_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/manifest.json#1784249115412273\",\"manifest_sha256\":\"fafb0b5c876e56fb62108f07b5998242a078a0ca69d9dea49a7e49fa77b71729\",\"metadata_missingness\":null,\"n_obs\":119362,\"n_vars\":16936,\"ordered_axis_identity\":{\"data_dtype\":\"int32\",\"data_sha256\":\"6286eba9f5bbd110476653566ca1e93499aae18064a2a9898e5a313681b8ded1\",\"format\":\"csr\",\"indices_dtype\":\"int32\",\"indices_sha256\":\"8444a185fc9f35fc5d8332afe6789f160e77c3f60b032c777b21a126cd92cb8f\",\"indptr_dtype\":\"int32\",\"indptr_sha256\":\"78798539df3a908a014241740ef777b665b86f96b2280dbff627f9a6b104dd1e\",\"nnz\":79887285,\"obs_index_name\":\"cell_id\",\"obs_index_sha256\":\"7b6dd50d404016bd4b588967130e0cf997056a5014f88d79800f02ff7d4d8100\",\"shape\":[119362,16936],\"var_index_name\":\"gene_id\",\"var_index_sha256\":\"c057c8294d4b36d736a5efa85000efd9bceb7cc0a71c89043adde68e0dc7e797\"},\"payload_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/X.h5ad#1784249106069704\",\"payload_sha256\":\"094c617ff8ddbbf632d1b781a1e18394addf77b44f8d1f27659f91b71c5a764a\",\"payload_size_bytes\":189224969,\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"role\":\"X\",\"schema_version\":\"pert-gym.external-triplet-registration/v1\",\"source_identity\":\"E-MTAB-9304\",\"source_uri\":\"https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9304\"}",
+            "hash": "XSaXLTX4wybTzIwqP_GWCw",
+            "is_latest": true,
+            "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/X.h5ad",
+            "n_observations": null,
+            "otype": "AnnData",
+            "size": 189224969,
+            "suffix": ".h5ad",
+            "uid": "At3j5L0or4eqfgAD0000"
+          }
+        ],
+        "n_observations": null,
+        "otype": "AnnData",
+        "payload_evidence": {
+          "error": "ERROR: (gcloud.storage.ls) One or more URLs matched no objects.",
+          "path_exists": false,
+          "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/X.h5ad"
+        },
+        "size": 189224969,
+        "suffix": ".h5ad",
+        "uid": "At3j5L0or4eqfgAD0000"
+      },
+      "obs": {
+        "created_at": "2026-07-19 17:57:08.195301+00:00",
+        "description": "{\"accepted_revision\":\"temporal-v4-059-wave07-8eab4b672153da2e\",\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"manifest_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/manifest.json#1784249115412273\",\"manifest_sha256\":\"fafb0b5c876e56fb62108f07b5998242a078a0ca69d9dea49a7e49fa77b71729\",\"metadata_missingness\":{\"cell_type\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"control\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"donor\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"qc\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"source_quality\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362}},\"n_obs\":119362,\"n_vars\":16936,\"ordered_axis_identity\":{\"data_dtype\":\"int32\",\"data_sha256\":\"6286eba9f5bbd110476653566ca1e93499aae18064a2a9898e5a313681b8ded1\",\"format\":\"csr\",\"indices_dtype\":\"int32\",\"indices_sha256\":\"8444a185fc9f35fc5d8332afe6789f160e77c3f60b032c777b21a126cd92cb8f\",\"indptr_dtype\":\"int32\",\"indptr_sha256\":\"78798539df3a908a014241740ef777b665b86f96b2280dbff627f9a6b104dd1e\",\"nnz\":79887285,\"obs_index_name\":\"cell_id\",\"obs_index_sha256\":\"7b6dd50d404016bd4b588967130e0cf997056a5014f88d79800f02ff7d4d8100\",\"shape\":[119362,16936],\"var_index_name\":\"gene_id\",\"var_index_sha256\":\"c057c8294d4b36d736a5efa85000efd9bceb7cc0a71c89043adde68e0dc7e797\"},\"payload_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/obs.parquet#1784249103758312\",\"payload_sha256\":\"686b2b7835c7c1ee93754507735172fcf221123e17f37c388e3531ae3fbb8662\",\"payload_size_bytes\":663457,\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"role\":\"obs\",\"schema_version\":\"pert-gym.external-triplet-registration/v1\",\"source_identity\":\"E-MTAB-9304\",\"source_uri\":\"https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9304\"}",
+        "feature_values": {
+          "X": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/X.h5ad"
+        },
+        "hash": "FlaPwoaX2ZTXdhvc2oCj7Q",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/obs.parquet",
+        "latest_exact_key_candidates": [
+          {
+            "created_at": "2026-07-19 17:57:08.195301+00:00",
+            "description": "{\"accepted_revision\":\"temporal-v4-059-wave07-8eab4b672153da2e\",\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"manifest_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/manifest.json#1784249115412273\",\"manifest_sha256\":\"fafb0b5c876e56fb62108f07b5998242a078a0ca69d9dea49a7e49fa77b71729\",\"metadata_missingness\":{\"cell_type\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"control\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"donor\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"qc\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"source_quality\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362}},\"n_obs\":119362,\"n_vars\":16936,\"ordered_axis_identity\":{\"data_dtype\":\"int32\",\"data_sha256\":\"6286eba9f5bbd110476653566ca1e93499aae18064a2a9898e5a313681b8ded1\",\"format\":\"csr\",\"indices_dtype\":\"int32\",\"indices_sha256\":\"8444a185fc9f35fc5d8332afe6789f160e77c3f60b032c777b21a126cd92cb8f\",\"indptr_dtype\":\"int32\",\"indptr_sha256\":\"78798539df3a908a014241740ef777b665b86f96b2280dbff627f9a6b104dd1e\",\"nnz\":79887285,\"obs_index_name\":\"cell_id\",\"obs_index_sha256\":\"7b6dd50d404016bd4b588967130e0cf997056a5014f88d79800f02ff7d4d8100\",\"shape\":[119362,16936],\"var_index_name\":\"gene_id\",\"var_index_sha256\":\"c057c8294d4b36d736a5efa85000efd9bceb7cc0a71c89043adde68e0dc7e797\"},\"payload_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/obs.parquet#1784249103758312\",\"payload_sha256\":\"686b2b7835c7c1ee93754507735172fcf221123e17f37c388e3531ae3fbb8662\",\"payload_size_bytes\":663457,\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"role\":\"obs\",\"schema_version\":\"pert-gym.external-triplet-registration/v1\",\"source_identity\":\"E-MTAB-9304\",\"source_uri\":\"https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9304\"}",
+            "hash": "FlaPwoaX2ZTXdhvc2oCj7Q",
+            "is_latest": true,
+            "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/obs.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 663457,
+            "suffix": ".parquet",
+            "uid": "rt5eRz8opcJXtybp0000"
+          }
+        ],
+        "n_observations": null,
+        "otype": "DataFrame",
+        "payload_evidence": {
+          "error": "ERROR: (gcloud.storage.ls) One or more URLs matched no objects.",
+          "path_exists": false,
+          "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/obs.parquet"
+        },
+        "size": 663457,
+        "suffix": ".parquet",
+        "uid": "rt5eRz8opcJXtybp0000"
+      },
+      "var": {
+        "created_at": "2026-07-19 17:57:09.870950+00:00",
+        "description": "{\"accepted_revision\":\"temporal-v4-059-wave07-8eab4b672153da2e\",\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"manifest_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/manifest.json#1784249115412273\",\"manifest_sha256\":\"fafb0b5c876e56fb62108f07b5998242a078a0ca69d9dea49a7e49fa77b71729\",\"metadata_missingness\":null,\"n_obs\":119362,\"n_vars\":16936,\"ordered_axis_identity\":{\"data_dtype\":\"int32\",\"data_sha256\":\"6286eba9f5bbd110476653566ca1e93499aae18064a2a9898e5a313681b8ded1\",\"format\":\"csr\",\"indices_dtype\":\"int32\",\"indices_sha256\":\"8444a185fc9f35fc5d8332afe6789f160e77c3f60b032c777b21a126cd92cb8f\",\"indptr_dtype\":\"int32\",\"indptr_sha256\":\"78798539df3a908a014241740ef777b665b86f96b2280dbff627f9a6b104dd1e\",\"nnz\":79887285,\"obs_index_name\":\"cell_id\",\"obs_index_sha256\":\"7b6dd50d404016bd4b588967130e0cf997056a5014f88d79800f02ff7d4d8100\",\"shape\":[119362,16936],\"var_index_name\":\"gene_id\",\"var_index_sha256\":\"c057c8294d4b36d736a5efa85000efd9bceb7cc0a71c89043adde68e0dc7e797\"},\"payload_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/var.parquet#1784249106462370\",\"payload_sha256\":\"17f94a66ced6ec8897d578d1a4a46db03c1a7b97d9b6dd357a64a6b063921a15\",\"payload_size_bytes\":99145,\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"role\":\"var\",\"schema_version\":\"pert-gym.external-triplet-registration/v1\",\"source_identity\":\"E-MTAB-9304\",\"source_uri\":\"https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9304\"}",
+        "feature_values": {},
+        "hash": "LT3t0VDZYpWGvR9_t4Cokg",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/var.parquet",
+        "latest_exact_key_candidates": [
+          {
+            "created_at": "2026-07-19 17:57:09.870950+00:00",
+            "description": "{\"accepted_revision\":\"temporal-v4-059-wave07-8eab4b672153da2e\",\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"manifest_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/manifest.json#1784249115412273\",\"manifest_sha256\":\"fafb0b5c876e56fb62108f07b5998242a078a0ca69d9dea49a7e49fa77b71729\",\"metadata_missingness\":null,\"n_obs\":119362,\"n_vars\":16936,\"ordered_axis_identity\":{\"data_dtype\":\"int32\",\"data_sha256\":\"6286eba9f5bbd110476653566ca1e93499aae18064a2a9898e5a313681b8ded1\",\"format\":\"csr\",\"indices_dtype\":\"int32\",\"indices_sha256\":\"8444a185fc9f35fc5d8332afe6789f160e77c3f60b032c777b21a126cd92cb8f\",\"indptr_dtype\":\"int32\",\"indptr_sha256\":\"78798539df3a908a014241740ef777b665b86f96b2280dbff627f9a6b104dd1e\",\"nnz\":79887285,\"obs_index_name\":\"cell_id\",\"obs_index_sha256\":\"7b6dd50d404016bd4b588967130e0cf997056a5014f88d79800f02ff7d4d8100\",\"shape\":[119362,16936],\"var_index_name\":\"gene_id\",\"var_index_sha256\":\"c057c8294d4b36d736a5efa85000efd9bceb7cc0a71c89043adde68e0dc7e797\"},\"payload_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/var.parquet#1784249106462370\",\"payload_sha256\":\"17f94a66ced6ec8897d578d1a4a46db03c1a7b97d9b6dd357a64a6b063921a15\",\"payload_size_bytes\":99145,\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"role\":\"var\",\"schema_version\":\"pert-gym.external-triplet-registration/v1\",\"source_identity\":\"E-MTAB-9304\",\"source_uri\":\"https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9304\"}",
+            "hash": "LT3t0VDZYpWGvR9_t4Cokg",
+            "is_latest": true,
+            "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/var.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 99145,
+            "suffix": ".parquet",
+            "uid": "cvoiSPVFrjufRvVu0000"
+          }
+        ],
+        "n_observations": null,
+        "otype": "DataFrame",
+        "payload_evidence": {
+          "error": "ERROR: (gcloud.storage.ls) One or more URLs matched no objects.",
+          "path_exists": false,
+          "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/var.parquet"
+        },
+        "size": 99145,
+        "suffix": ".parquet",
+        "uid": "cvoiSPVFrjufRvVu0000"
+      }
+    },
+    "canonical_prefix": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq",
+    "payload_inspection": {
+      "artifacts": {
+        "X": {
+          "created_at": "2026-07-02 14:48:31.214199+00:00",
+          "description": null,
+          "hash": "7-ivr14nqyac8W1k2slwQQ",
+          "is_latest": true,
+          "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/X.h5ad",
+          "latest_exact_key_candidates": [
+            {
+              "created_at": "2026-07-02 14:48:31.214199+00:00",
+              "description": null,
+              "hash": "7-ivr14nqyac8W1k2slwQQ",
+              "is_latest": true,
+              "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/X.h5ad",
+              "n_observations": 1000,
+              "otype": "AnnData",
+              "size": 3080031,
+              "suffix": ".h5ad",
+              "uid": "W5sAi80K57e1UY1h0000"
+            }
+          ],
+          "n_observations": 1000,
+          "otype": "AnnData",
+          "payload_evidence": {
+            "downloaded_bytes": 3080031,
+            "downloaded_sha256": "fc3609a1f7d5ee125e5068e90499c6b179b846b3c7bb56c6cafd1763d3cd8913",
+            "path_exists": true,
+            "remote_stat": "non-GCS artifact materialized through Lamin cache",
+            "uri": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/W5sAi80K57e1UY1h0000.h5ad"
+          },
+          "size": 3080031,
+          "suffix": ".h5ad",
+          "uid": "W5sAi80K57e1UY1h0000"
+        },
+        "obs": {
+          "created_at": "2026-07-02 16:18:46.311749+00:00",
+          "description": null,
+          "hash": "ak2oLi0vjZBE8WezDb0d8g",
+          "is_latest": true,
+          "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/obs.parquet",
+          "latest_exact_key_candidates": [
+            {
+              "created_at": "2026-07-02 16:18:46.311749+00:00",
+              "description": null,
+              "hash": "ak2oLi0vjZBE8WezDb0d8g",
+              "is_latest": true,
+              "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/obs.parquet",
+              "n_observations": 1000,
+              "otype": "DataFrame",
+              "size": 33246,
+              "suffix": ".parquet",
+              "uid": "kYqsPvi6pqoSTRAR0002"
+            }
+          ],
+          "n_observations": 1000,
+          "otype": "DataFrame",
+          "payload_evidence": {
+            "downloaded_bytes": 33246,
+            "downloaded_sha256": "0dac81c40483852f0b926f305d602364c4607a9f6485c3a1c3ecde97785b99b7",
+            "path_exists": true,
+            "remote_stat": "non-GCS artifact materialized through Lamin cache",
+            "uri": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/kYqsPvi6pqoSTRAR0002.parquet"
+          },
+          "size": 33246,
+          "suffix": ".parquet",
+          "uid": "kYqsPvi6pqoSTRAR0002"
+        },
+        "var": {
+          "created_at": "2026-07-02 14:48:33.433439+00:00",
+          "description": null,
+          "hash": "EBwXuZ5Z6dQ6A-I37dcc6g",
+          "is_latest": true,
+          "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/var.parquet",
+          "latest_exact_key_candidates": [
+            {
+              "created_at": "2026-07-02 14:48:33.433439+00:00",
+              "description": null,
+              "hash": "EBwXuZ5Z6dQ6A-I37dcc6g",
+              "is_latest": true,
+              "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/var.parquet",
+              "n_observations": 16936,
+              "otype": "DataFrame",
+              "size": 178539,
+              "suffix": ".parquet",
+              "uid": "gCFkvr755oijxBU00000"
+            }
+          ],
+          "n_observations": 16936,
+          "otype": "DataFrame",
+          "payload_evidence": {
+            "downloaded_bytes": 178539,
+            "downloaded_sha256": "7af2df5a8bcc7f1582a6e1803618299579de5ff84930d278dcb180983f767e79",
+            "path_exists": true,
+            "remote_stat": "non-GCS artifact materialized through Lamin cache",
+            "uri": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/gCFkvr755oijxBU00000.parquet"
+          },
+          "size": 178539,
+          "suffix": ".parquet",
+          "uid": "gCFkvr755oijxBU00000"
+        }
+      },
+      "prefix": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000",
+      "relation_to_canonical": "fallback_noncanonical_partial_payload"
+    }
+  },
+  "current_obs_inventory": {
+    "columns": {
+      "assay": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "GXA Single Cell Expression Atlas MatrixMarket raw counts"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "dataset": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "E-MTAB-9304"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "design_factor_value_inferred_cell_type_authors_labels": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 891,
+        "missing_fraction": 0.891,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 17,
+            "value": "mesoderm1"
+          },
+          {
+            "count": 16,
+            "value": "cellularisation1"
+          },
+          {
+            "count": 13,
+            "value": "cellularisation2"
+          },
+          {
+            "count": 10,
+            "value": "ectoderm1"
+          },
+          {
+            "count": 9,
+            "value": "mesoderm2"
+          },
+          {
+            "count": 9,
+            "value": "ectoderm3"
+          },
+          {
+            "count": 9,
+            "value": "ectoderm2"
+          },
+          {
+            "count": 7,
+            "value": "neural1"
+          },
+          {
+            "count": 5,
+            "value": "amnioserosa"
+          },
+          {
+            "count": 4,
+            "value": "haemocytes1"
+          },
+          {
+            "count": 4,
+            "value": "neural2"
+          },
+          {
+            "count": 3,
+            "value": "pole cells"
+          },
+          {
+            "count": 2,
+            "value": "terminal"
+          },
+          {
+            "count": 1,
+            "value": "haemocytes2"
+          }
+        ],
+        "unique_non_null": 14
+      },
+      "design_factor_value_inferred_cell_type_ontology_labels": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 891,
+        "missing_fraction": 0.891,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 29,
+            "value": "stage 5 embryo"
+          },
+          {
+            "count": 28,
+            "value": "ectoderm anlage"
+          },
+          {
+            "count": 26,
+            "value": "mesoderm anlage"
+          },
+          {
+            "count": 11,
+            "value": "embryonic neuroblast"
+          },
+          {
+            "count": 5,
+            "value": "embryonic/larval hemocyte"
+          },
+          {
+            "count": 5,
+            "value": "amnioserosa"
+          },
+          {
+            "count": 3,
+            "value": "primordial germ cell"
+          },
+          {
+            "count": 2,
+            "value": "embryonic terminal segment"
+          }
+        ],
+        "unique_non_null": 8
+      },
+      "design_factor_value_ontology_term_inferred_cell_type_authors_labels": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 1000,
+        "missing_fraction": 1.0,
+        "rows": 1000,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "design_factor_value_ontology_term_inferred_cell_type_ontology_labels": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 997,
+        "missing_fraction": 0.997,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 3,
+            "value": "http://purl.obolibrary.org/obo/CL_0000670"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "design_factor_value_ontology_term_strain": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 1000,
+        "missing_fraction": 1.0,
+        "rows": 1000,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "design_factor_value_strain": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "w[*]; P{EGFP-PCNA}attP2"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "design_ontology_term_age": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 1000,
+        "missing_fraction": 1.0,
+        "rows": 1000,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "design_ontology_term_developmental_stage": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 1000,
+        "missing_fraction": 1.0,
+        "rows": 1000,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "design_ontology_term_genotype": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 1000,
+        "missing_fraction": 1.0,
+        "rows": 1000,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "design_ontology_term_organism_part": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 1000,
+        "missing_fraction": 1.0,
+        "rows": 1000,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "design_ontology_term_strain": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 1000,
+        "missing_fraction": 1.0,
+        "rows": 1000,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "design_sample_characteristic_age": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "2.5 to 3.5 hour"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "design_sample_characteristic_developmental_stage": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "stage 5 embryo"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "design_sample_characteristic_genotype": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "w[*]; P{EGFP-PCNA}attP2"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "design_sample_characteristic_organism_part": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "whole embryo"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "design_sample_characteristic_strain": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "w[*]; P{EGFP-PCNA}attP2"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "developmental_time_label": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "2.5 to 3.5 hour"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "developmental_time_label_source": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "Sample Characteristic[age]"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "modality": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "scRNA-seq"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "organism": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "drosophila melanogaster"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "perturbation": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "developmental_time"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "perturbation_type": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "developmental_timecourse"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "source_accession": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "E-MTAB-9304"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "source_experiment_design_path": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "/home/jkobject/work/pert-gym/data/gxa_batch_b/E-MTAB-9304.experiment_design.tsv"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "source_raw_zip_path": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "/home/jkobject/work/pert-gym/data/gxa_batch_b/E-MTAB-9304.quantification_raw.zip"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "source_title": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "Drosophila embryo dorsal-ventral patterning scRNA-seq"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "timepoint_source_hint": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 1000,
+        "top_values": [
+          {
+            "count": 1000,
+            "value": "developmental/time labels from experiment design"
+          }
+        ],
+        "unique_non_null": 1
+      }
+    },
+    "index_name": "cell_id",
+    "index_sha256_ordered": "1a0d837dd859e0846fe3e3eed02e973d10d184ad448391baa58e51b6bd0f09c7",
+    "index_summary": {
+      "dtype": "string",
+      "empty_string": 0,
+      "has_control_character": 0,
+      "missing": 0,
+      "missing_fraction": 0.0,
+      "rows": 1000,
+      "top_values": [
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGGGAAGAAGTCTA"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AAACCCAAGACTTAAG"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AAACCCAAGAGGTTAT"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AAACCCAAGAGTCAGC"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AAACCCAAGAGTGACC"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AAACCCAAGCATATGA"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AAACCCAAGCGATGAC"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AAACCCAAGCGCTGCT"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAATCCACTTTA"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAATCATTGGTG"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAATCAACCTTT"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAAGTTCATCGA"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAAGTGGTTTAC"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAAGTGAGCGAT"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAAGTAGTGATA"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAAGTACTAGCT"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAAGTACGACTT"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAAGTACCGTCG"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAAGTAATCAGA"
+        },
+        {
+          "count": 1,
+          "value": "SAMEA7039590-AACGAAAGTAACTTCG"
+        }
+      ],
+      "unique_non_null": 1000
+    },
+    "index_unique": true,
+    "shape": [
+      1000,
+      29
+    ]
+  },
+  "current_var_inventory": {
+    "columns": {
+      "source_accession": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 16936,
+        "top_values": [
+          {
+            "count": 16936,
+            "value": "E-MTAB-9304"
+          }
+        ],
+        "unique_non_null": 1
+      }
+    },
+    "identifier_audit": {
+      "duplicate_count": 0,
+      "patterns": {
+        "actual_tab": {
+          "count": 16936,
+          "examples": [
+            "FBgn0000003\tFBgn0000003",
+            "FBgn0000008\tFBgn0000008",
+            "FBgn0000014\tFBgn0000014",
+            "FBgn0000015\tFBgn0000015",
+            "FBgn0000017\tFBgn0000017",
+            "FBgn0000018\tFBgn0000018",
+            "FBgn0000022\tFBgn0000022",
+            "FBgn0000024\tFBgn0000024",
+            "FBgn0000028\tFBgn0000028",
+            "FBgn0000032\tFBgn0000032",
+            "FBgn0000036\tFBgn0000036",
+            "FBgn0000037\tFBgn0000037",
+            "FBgn0000038\tFBgn0000038",
+            "FBgn0000039\tFBgn0000039",
+            "FBgn0000042\tFBgn0000042",
+            "FBgn0000043\tFBgn0000043",
+            "FBgn0000044\tFBgn0000044",
+            "FBgn0000045\tFBgn0000045",
+            "FBgn0000046\tFBgn0000046",
+            "FBgn0000047\tFBgn0000047"
+          ]
+        },
+        "carriage_return_or_newline": {
+          "count": 0,
+          "examples": []
+        },
+        "ensembl_gene": {
+          "count": 0,
+          "examples": []
+        },
+        "flybase_gene": {
+          "count": 0,
+          "examples": []
+        },
+        "leading_or_trailing_whitespace": {
+          "count": 0,
+          "examples": []
+        },
+        "literal_backslash_t": {
+          "count": 0,
+          "examples": []
+        },
+        "literal_slash_t": {
+          "count": 0,
+          "examples": []
+        }
+      },
+      "rows": 16936,
+      "tab_split_structure": {
+        "first_field_blank": 0,
+        "first_field_examples": [
+          "FBgn0000003",
+          "FBgn0000008",
+          "FBgn0000014",
+          "FBgn0000015",
+          "FBgn0000017",
+          "FBgn0000018",
+          "FBgn0000022",
+          "FBgn0000024",
+          "FBgn0000028",
+          "FBgn0000032",
+          "FBgn0000036",
+          "FBgn0000037",
+          "FBgn0000038",
+          "FBgn0000039",
+          "FBgn0000042",
+          "FBgn0000043",
+          "FBgn0000044",
+          "FBgn0000045",
+          "FBgn0000046",
+          "FBgn0000047"
+        ],
+        "first_field_unique": true,
+        "parts": 2,
+        "second_field_blank": 0,
+        "second_field_examples": [
+          "FBgn0000003",
+          "FBgn0000008",
+          "FBgn0000014",
+          "FBgn0000015",
+          "FBgn0000017",
+          "FBgn0000018",
+          "FBgn0000022",
+          "FBgn0000024",
+          "FBgn0000028",
+          "FBgn0000032",
+          "FBgn0000036",
+          "FBgn0000037",
+          "FBgn0000038",
+          "FBgn0000039",
+          "FBgn0000042",
+          "FBgn0000043",
+          "FBgn0000044",
+          "FBgn0000045",
+          "FBgn0000046",
+          "FBgn0000047"
+        ]
+      },
+      "unique": true
+    },
+    "index_name": "gene_id",
+    "index_sha256_ordered": "7209c7ef29490eb0c4381bbfdb102853b6a0b6832ee6a77a1d2f600ab7d42a6c",
+    "index_summary": {
+      "dtype": "string",
+      "empty_string": 0,
+      "has_control_character": 16936,
+      "missing": 0,
+      "missing_fraction": 0.0,
+      "rows": 16936,
+      "top_values": [
+        {
+          "count": 1,
+          "value": "RR51478_transposable_element\tRR51478_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "FBgn0000003\tFBgn0000003"
+        },
+        {
+          "count": 1,
+          "value": "FBgn0000008\tFBgn0000008"
+        },
+        {
+          "count": 1,
+          "value": "FBgn0000014\tFBgn0000014"
+        },
+        {
+          "count": 1,
+          "value": "FBgn0000015\tFBgn0000015"
+        },
+        {
+          "count": 1,
+          "value": "FBgn0000017\tFBgn0000017"
+        },
+        {
+          "count": 1,
+          "value": "FBgn0000018\tFBgn0000018"
+        },
+        {
+          "count": 1,
+          "value": "FBgn0000022\tFBgn0000022"
+        },
+        {
+          "count": 1,
+          "value": "RR49755_transposable_element\tRR49755_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR49603_transposable_element\tRR49603_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR49033_transposable_element\tRR49033_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR49017_transposable_element\tRR49017_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR48945_transposable_element\tRR48945_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR48902_transposable_element\tRR48902_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR48810_transposable_element\tRR48810_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR48532_transposable_element\tRR48532_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR48497_transposable_element\tRR48497_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR48408_transposable_element\tRR48408_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR48406_transposable_element\tRR48406_transposable_element"
+        },
+        {
+          "count": 1,
+          "value": "RR48405_transposable_element\tRR48405_transposable_element"
+        }
+      ],
+      "unique_non_null": 16936
+    },
+    "index_unique": true,
+    "shape": [
+      16936,
+      1
+    ]
+  },
+  "dataset": "E-MTAB-9304",
+  "dataset_metadata_proposal": {
+    "age_original": "2.5 to 3.5 hour",
+    "developmental_stage": "stage 5 embryo",
+    "organism_part": "whole embryo",
+    "sex": "mixed",
+    "source_title": "Single-cell RNA-seq of Drosophila embryos to investigate gene expression during dorsal-ventral patterning"
+  },
+  "derived_obs_proposal": {
+    "cell_id": "Exact authoritative GXA Assay value.",
+    "cell_type_state": "present where source label exists; unknown otherwise.",
+    "is_baseline": "not_applicable because this is not a time series.",
+    "is_control": "True only for the two source control genotypes; False for gd7/Toll mutants.",
+    "obs_uuid": "pert_gym.obs_identity.add_obs_identity with canonical dataset/prefix.",
+    "original_obs_index": "Exact authoritative GXA Assay value.",
+    "perturbation": "control for w[1118] and w[*]; P{EGFP-PCNA}attP2; otherwise exact maternal genotype gd7, Tollrm9/rm10, or Toll10B.",
+    "perturbation_type": "none for controls; maternal_genetic for the three source-declared mutant-mother conditions.",
+    "sample": "Source sample prefix in Assay (SAMEA accession), validated against SDRF."
+  },
+  "format": "pert-gym.first10-cohort-a-correction-plan/v1",
+  "instance": "laminlabs/pertdata",
+  "live_audited_at": "2026-07-28T11:49:37.105081+00:00",
+  "live_evidence_file": "artifacts/first10_audit/cohort_a/E-MTAB-9304.audit.json",
+  "obs_column_decisions": {
+    "assay": {
+      "action": "keep",
+      "reason": "Inference-relevant assay constant.",
+      "target": "assay"
+    },
+    "dataset": {
+      "action": "map",
+      "reason": "Use the stable logical dataset key.",
+      "target": "dataset"
+    },
+    "design_factor_value_inferred_cell_type_authors_labels": {
+      "action": "map_preserve",
+      "reason": "Author labels are source evidence for 16786 cells; missing rows stay unknown.",
+      "target": "source_cell_type_author"
+    },
+    "design_factor_value_inferred_cell_type_ontology_labels": {
+      "action": "map_preserve",
+      "reason": "Use source ontology labels as canonical text where present; do not fill absent cells.",
+      "target": "cell_type"
+    },
+    "design_factor_value_ontology_term_inferred_cell_type_authors_labels": {
+      "action": "drop",
+      "reason": "Entirely missing in the inspected payload.",
+      "target": null
+    },
+    "design_factor_value_ontology_term_inferred_cell_type_ontology_labels": {
+      "action": "map_preserve",
+      "reason": "Retain the source term only where present; absence remains unknown.",
+      "target": "cell_type_ontology_term"
+    },
+    "design_factor_value_ontology_term_strain": {
+      "action": "drop",
+      "reason": "Entirely missing.",
+      "target": null
+    },
+    "design_factor_value_strain": {
+      "action": "map_preserve",
+      "reason": "Variable experimental genotype/strain evidence; keep even where canonical genotype differs textually.",
+      "target": "source_strain"
+    },
+    "design_ontology_term_age": {
+      "action": "drop",
+      "reason": "Entirely missing and age is dataset-wide.",
+      "target": null
+    },
+    "design_ontology_term_developmental_stage": {
+      "action": "drop",
+      "reason": "Entirely missing and stage is dataset-wide.",
+      "target": null
+    },
+    "design_ontology_term_genotype": {
+      "action": "drop",
+      "reason": "Entirely missing; do not invent ontology mappings.",
+      "target": null
+    },
+    "design_ontology_term_organism_part": {
+      "action": "drop",
+      "reason": "Entirely missing and organism part is dataset-wide.",
+      "target": null
+    },
+    "design_ontology_term_strain": {
+      "action": "drop",
+      "reason": "Entirely missing.",
+      "target": null
+    },
+    "design_sample_characteristic_age": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Constant single stage; not a temporal observation axis.",
+      "target": "age_original"
+    },
+    "design_sample_characteristic_developmental_stage": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Constant single stage.",
+      "target": "developmental_stage"
+    },
+    "design_sample_characteristic_genotype": {
+      "action": "map_preserve",
+      "reason": "Variable in the full source and required to distinguish control from maternal pathway mutants.",
+      "target": "genotype"
+    },
+    "design_sample_characteristic_organism_part": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Constant whole embryo.",
+      "target": "organism_part"
+    },
+    "design_sample_characteristic_strain": {
+      "action": "map_preserve",
+      "reason": "Variable in the full source and useful conditioning/provenance.",
+      "target": "source_strain"
+    },
+    "developmental_time_label": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Constant and therefore not a temporal cell covariate.",
+      "target": "age_original"
+    },
+    "developmental_time_label_source": {
+      "action": "drop",
+      "reason": "Internal harness lineage; source citation belongs in dataset provenance.",
+      "target": null
+    },
+    "modality": {
+      "action": "keep",
+      "reason": "Inference-relevant modality constant.",
+      "target": "modality"
+    },
+    "organism": {
+      "action": "normalize_keep",
+      "reason": "Normalize capitalization and retain as inference-relevant constant.",
+      "target": "organism"
+    },
+    "perturbation": {
+      "action": "replace",
+      "reason": "Current developmental_time value is biologically wrong; derive from genotype.",
+      "target": "perturbation"
+    },
+    "perturbation_type": {
+      "action": "replace",
+      "reason": "Use none for controls and maternal_genetic for gd7/Toll mutants.",
+      "target": "perturbation_type"
+    },
+    "source_accession": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Dataset-wide provenance.",
+      "target": "source_accession"
+    },
+    "source_experiment_design_path": {
+      "action": "drop",
+      "reason": "Host-local non-portable path; replace with immutable URL and checksum.",
+      "target": null
+    },
+    "source_raw_zip_path": {
+      "action": "drop",
+      "reason": "Host-local non-portable path; replace with immutable source/receipt identity.",
+      "target": null
+    },
+    "source_title": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Dataset-wide description.",
+      "target": "source_title"
+    },
+    "timepoint_source_hint": {
+      "action": "drop",
+      "reason": "Vague harness hint contradicted by the single-stage source distribution.",
+      "target": null
+    }
+  },
+  "proposed_post_fix_obs_schema": [
+    "obs_uuid",
+    "original_obs_index",
+    "dataset",
+    "sample",
+    "cell_id",
+    "organism",
+    "assay",
+    "modality",
+    "genotype",
+    "source_strain",
+    "cell_type",
+    "cell_type_ontology_term",
+    "source_cell_type_author",
+    "perturbation",
+    "perturbation_type",
+    "is_control",
+    "is_baseline"
+  ],
+  "raw_provenance": {
+    "confidence": "source_high_live_payload_broken",
+    "manifests": [],
+    "related_lamin_artifacts": [
+      {
+        "created_at": "2026-07-19 17:57:09.043152+00:00",
+        "description": "{\"accepted_revision\":\"temporal-v4-059-wave07-8eab4b672153da2e\",\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"manifest_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/manifest.json#1784249115412273\",\"manifest_sha256\":\"fafb0b5c876e56fb62108f07b5998242a078a0ca69d9dea49a7e49fa77b71729\",\"metadata_missingness\":null,\"n_obs\":119362,\"n_vars\":16936,\"ordered_axis_identity\":{\"data_dtype\":\"int32\",\"data_sha256\":\"6286eba9f5bbd110476653566ca1e93499aae18064a2a9898e5a313681b8ded1\",\"format\":\"csr\",\"indices_dtype\":\"int32\",\"indices_sha256\":\"8444a185fc9f35fc5d8332afe6789f160e77c3f60b032c777b21a126cd92cb8f\",\"indptr_dtype\":\"int32\",\"indptr_sha256\":\"78798539df3a908a014241740ef777b665b86f96b2280dbff627f9a6b104dd1e\",\"nnz\":79887285,\"obs_index_name\":\"cell_id\",\"obs_index_sha256\":\"7b6dd50d404016bd4b588967130e0cf997056a5014f88d79800f02ff7d4d8100\",\"shape\":[119362,16936],\"var_index_name\":\"gene_id\",\"var_index_sha256\":\"c057c8294d4b36d736a5efa85000efd9bceb7cc0a71c89043adde68e0dc7e797\"},\"payload_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/X.h5ad#1784249106069704\",\"payload_sha256\":\"094c617ff8ddbbf632d1b781a1e18394addf77b44f8d1f27659f91b71c5a764a\",\"payload_size_bytes\":189224969,\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"role\":\"X\",\"schema_version\":\"pert-gym.external-triplet-registration/v1\",\"source_identity\":\"E-MTAB-9304\",\"source_uri\":\"https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9304\"}",
+        "hash": "XSaXLTX4wybTzIwqP_GWCw",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/X.h5ad",
+        "n_observations": null,
+        "otype": "AnnData",
+        "size": 189224969,
+        "suffix": ".h5ad",
+        "uid": "At3j5L0or4eqfgAD0000"
+      },
+      {
+        "created_at": "2026-07-02 14:48:31.214199+00:00",
+        "description": null,
+        "hash": "7-ivr14nqyac8W1k2slwQQ",
+        "is_latest": true,
+        "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/X.h5ad",
+        "n_observations": 1000,
+        "otype": "AnnData",
+        "size": 3080031,
+        "suffix": ".h5ad",
+        "uid": "W5sAi80K57e1UY1h0000"
+      },
+      {
+        "created_at": "2026-07-19 17:57:09.870950+00:00",
+        "description": "{\"accepted_revision\":\"temporal-v4-059-wave07-8eab4b672153da2e\",\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"manifest_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/manifest.json#1784249115412273\",\"manifest_sha256\":\"fafb0b5c876e56fb62108f07b5998242a078a0ca69d9dea49a7e49fa77b71729\",\"metadata_missingness\":null,\"n_obs\":119362,\"n_vars\":16936,\"ordered_axis_identity\":{\"data_dtype\":\"int32\",\"data_sha256\":\"6286eba9f5bbd110476653566ca1e93499aae18064a2a9898e5a313681b8ded1\",\"format\":\"csr\",\"indices_dtype\":\"int32\",\"indices_sha256\":\"8444a185fc9f35fc5d8332afe6789f160e77c3f60b032c777b21a126cd92cb8f\",\"indptr_dtype\":\"int32\",\"indptr_sha256\":\"78798539df3a908a014241740ef777b665b86f96b2280dbff627f9a6b104dd1e\",\"nnz\":79887285,\"obs_index_name\":\"cell_id\",\"obs_index_sha256\":\"7b6dd50d404016bd4b588967130e0cf997056a5014f88d79800f02ff7d4d8100\",\"shape\":[119362,16936],\"var_index_name\":\"gene_id\",\"var_index_sha256\":\"c057c8294d4b36d736a5efa85000efd9bceb7cc0a71c89043adde68e0dc7e797\"},\"payload_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/var.parquet#1784249106462370\",\"payload_sha256\":\"17f94a66ced6ec8897d578d1a4a46db03c1a7b97d9b6dd357a64a6b063921a15\",\"payload_size_bytes\":99145,\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"role\":\"var\",\"schema_version\":\"pert-gym.external-triplet-registration/v1\",\"source_identity\":\"E-MTAB-9304\",\"source_uri\":\"https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9304\"}",
+        "hash": "LT3t0VDZYpWGvR9_t4Cokg",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/var.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 99145,
+        "suffix": ".parquet",
+        "uid": "cvoiSPVFrjufRvVu0000"
+      },
+      {
+        "created_at": "2026-07-02 14:48:33.433439+00:00",
+        "description": null,
+        "hash": "EBwXuZ5Z6dQ6A-I37dcc6g",
+        "is_latest": true,
+        "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/var.parquet",
+        "n_observations": 16936,
+        "otype": "DataFrame",
+        "size": 178539,
+        "suffix": ".parquet",
+        "uid": "gCFkvr755oijxBU00000"
+      },
+      {
+        "created_at": "2026-07-02 14:48:26.048935+00:00",
+        "description": null,
+        "hash": "VIMSIIauZMhjJvXVQzkHsQ",
+        "is_latest": false,
+        "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/obs.parquet",
+        "n_observations": 1000,
+        "otype": "DataFrame",
+        "size": 17861,
+        "suffix": ".parquet",
+        "uid": "kYqsPvi6pqoSTRAR0000"
+      },
+      {
+        "created_at": "2026-07-02 16:11:38.266763+00:00",
+        "description": null,
+        "hash": "fQ2TjdA9XTnmlpgcOBQoHg",
+        "is_latest": false,
+        "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/obs.parquet",
+        "n_observations": 1000,
+        "otype": "DataFrame",
+        "size": 32950,
+        "suffix": ".parquet",
+        "uid": "kYqsPvi6pqoSTRAR0001"
+      },
+      {
+        "created_at": "2026-07-02 16:18:46.311749+00:00",
+        "description": null,
+        "hash": "ak2oLi0vjZBE8WezDb0d8g",
+        "is_latest": true,
+        "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/obs.parquet",
+        "n_observations": 1000,
+        "otype": "DataFrame",
+        "size": 33246,
+        "suffix": ".parquet",
+        "uid": "kYqsPvi6pqoSTRAR0002"
+      },
+      {
+        "created_at": "2026-07-19 17:57:08.195301+00:00",
+        "description": "{\"accepted_revision\":\"temporal-v4-059-wave07-8eab4b672153da2e\",\"logical_key\":\"pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"manifest_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/manifest.json#1784249115412273\",\"manifest_sha256\":\"fafb0b5c876e56fb62108f07b5998242a078a0ca69d9dea49a7e49fa77b71729\",\"metadata_missingness\":{\"cell_type\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"control\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"donor\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"qc\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362},\"source_quality\":{\"missing_count\":119362,\"state\":\"unknown\",\"total_observations\":119362}},\"n_obs\":119362,\"n_vars\":16936,\"ordered_axis_identity\":{\"data_dtype\":\"int32\",\"data_sha256\":\"6286eba9f5bbd110476653566ca1e93499aae18064a2a9898e5a313681b8ded1\",\"format\":\"csr\",\"indices_dtype\":\"int32\",\"indices_sha256\":\"8444a185fc9f35fc5d8332afe6789f160e77c3f60b032c777b21a126cd92cb8f\",\"indptr_dtype\":\"int32\",\"indptr_sha256\":\"78798539df3a908a014241740ef777b665b86f96b2280dbff627f9a6b104dd1e\",\"nnz\":79887285,\"obs_index_name\":\"cell_id\",\"obs_index_sha256\":\"7b6dd50d404016bd4b588967130e0cf997056a5014f88d79800f02ff7d4d8100\",\"shape\":[119362,16936],\"var_index_name\":\"gene_id\",\"var_index_sha256\":\"c057c8294d4b36d736a5efa85000efd9bceb7cc0a71c89043adde68e0dc7e797\"},\"payload_generation_uri\":\"gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/revisions/temporal-v4-059-wave07-8eab4b672153da2e/datasets/E-MTAB-9304/obs.parquet#1784249103758312\",\"payload_sha256\":\"686b2b7835c7c1ee93754507735172fcf221123e17f37c388e3531ae3fbb8662\",\"payload_size_bytes\":663457,\"record_id\":\"temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq\",\"role\":\"obs\",\"schema_version\":\"pert-gym.external-triplet-registration/v1\",\"source_identity\":\"E-MTAB-9304\",\"source_uri\":\"https://www.ebi.ac.uk/gxa/sc/experiments/E-MTAB-9304\"}",
+        "hash": "FlaPwoaX2ZTXdhvc2oCj7Q",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/obs.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 663457,
+        "suffix": ".parquet",
+        "uid": "rt5eRz8opcJXtybp0000"
+      }
+    ]
+  },
+  "read_only": true,
+  "remediation_steps": [
+    "Fail closed on the live defect: accepted canonical obs/X/var records exist but all three GCS payloads are absent; the accepted manifest generation URI is also the required provenance anchor.",
+    "Rebuild/restore from the authoritative GXA design and raw MatrixMarket source, preserving the recorded accepted axis hashes where parity is possible.",
+    "Create revised obs/var/X only after full source row/feature parity; do not revise the 1000-row fallback into the canonical key.",
+    "Apply the OBS and VAR decisions above, re-link obs->X->var, and validate payload existence by generation-pinned readback."
+  ],
+  "residual_risks": [
+    "The canonical payloads are missing and the accepted manifest was not discovered by the bounded Lamin query, so the full accepted canonical OBS schema and matrix cannot be read back in this audit.",
+    "Only source-backed cell labels may be restored; 102576 source rows without labels remain unknown."
+  ],
+  "scientific_identity": {
+    "assay": "10x 3' v3 single-cell RNA-seq",
+    "modality": "scRNA-seq",
+    "organism": "Drosophila melanogaster",
+    "organism_ontology_term": "NCBITaxon:7227",
+    "source_accession": "E-MTAB-9304",
+    "title": "Single-cell RNA-seq of Drosophila embryos during dorsal-ventral patterning"
+  },
+  "source_evidence": [
+    {
+      "bytes": 24463,
+      "sha256": "169ba5b1673d2ed36b66b311b096f336783b0edd4a7f1b4491a065863e337925",
+      "supports": "title, organism, assay class, control and gd7/Toll mutant design",
+      "url": "https://www.ebi.ac.uk/biostudies/api/v1/studies/E-MTAB-9304"
+    },
+    {
+      "bytes": 31858845,
+      "sha256": "2bc4db0fd6e7460841deb5a942dc6180edd1fbd8b75acf87e337f44ecad7db5c",
+      "supports": "119362 cell rows, genotype/strain, constant 2.5-3.5 hour and stage 5, partial author/ontology cell labels",
+      "url": "https://www.ebi.ac.uk/gxa/sc/experiment/E-MTAB-9304/download?fileType=experiment-design&accessKey="
+    },
+    {
+      "bytes": 21122,
+      "sha256": "ae47756c10e3512c65fb8b5e56c8a5adad4d72c60509664a7b77ce3afc1524c9",
+      "supports": "20 assay rows, source samples, 10x v3 protocol, age unit, genotype and FASTQ relations",
+      "url": "https://www.ebi.ac.uk/biostudies/files/E-MTAB-9304/E-MTAB-9304.sdrf.txt"
+    }
+  ],
+  "task_id": "t_2122b5f4",
+  "temporal_verdict": {
+    "action": "Remove cell-level timepoint/developmental-time fields; retain age and stage once in dataset metadata. Do not label developmental stage as a perturbation.",
+    "evidence": "All 119362 authoritative design rows are 2.5-3.5 hour, stage 5 embryo; no within-dataset time variation exists.",
+    "verdict": "non_temporal_single_stage"
+  },
+  "triplet_validation": {
+    "X_var_link": {
+      "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/var.parquet",
+      "latest_exact_key_candidate_count": 1,
+      "raw_key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/var.parquet",
+      "raw_uid": null,
+      "resolved": true,
+      "uid": "gCFkvr755oijxBU00000"
+    },
+    "X_var_link_is_exact": true,
+    "obs_X_link": {
+      "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/X.h5ad",
+      "latest_exact_key_candidate_count": 1,
+      "raw_key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/X.h5ad",
+      "raw_uid": null,
+      "resolved": true,
+      "uid": "W5sAi80K57e1UY1h0000"
+    },
+    "obs_X_link_is_exact": true,
+    "obs_index_equal_X_obs_index": true,
+    "obs_rows_equal_X_rows": true,
+    "same_prefix_var": true,
+    "same_prefix_var_latest_candidates": [
+      {
+        "created_at": "2026-07-02 14:48:33.433439+00:00",
+        "description": null,
+        "hash": "EBwXuZ5Z6dQ6A-I37dcc6g",
+        "is_latest": true,
+        "key": "temporal_pretraining/gxa/E-MTAB-9304_drosophila_dorsal_ventral_patterning/chunk_0000/var.parquet",
+        "n_observations": 16936,
+        "otype": "DataFrame",
+        "size": 178539,
+        "suffix": ".parquet",
+        "uid": "gCFkvr755oijxBU00000"
+      }
+    ],
+    "var_index_equal_X_var_index": true,
+    "var_rows_equal_X_columns": true
+  },
+  "validators": [
+    "Every current OBS column has exactly one keep/drop/map/derive decision.",
+    "OBS row count/order and X obs index hash are unchanged by OBS-only revisions.",
+    "VAR row count/order equals X var axis; identifiers are unique and control-character-free.",
+    "obs->X and X->var resolve to exact intended keys/UIDs and every payload exists by fresh readback.",
+    "The X artifact links to one exact same-prefix var.parquet.",
+    "Missing applicable values use unknown; genuinely inapplicable values use not_applicable.",
+    "Global obs identity validates and is unique."
+  ],
+  "var_plan": {
+    "evidence": "All 16936 inspected legacy var indices contain one actual TAB, not '/t' or a literal backslash-t. The first field is nonblank and unique; both fields must be preserved before choosing the identifier.",
+    "steps": [
+      "Restore or reconstruct the 119362-row canonical generation before revision; all three accepted canonical payload URIs currently return no object.",
+      "Parse the authoritative GXA mtx_rows record as two tab-delimited fields without stripping arbitrary characters.",
+      "Set feature_id/index from field 1 only after asserting ^FBgn[0-9]+$ and uniqueness; preserve field 2 as source_gene_label.",
+      "Require 16936 rows and exact X ordered-axis parity before publication.",
+      "Set organism Drosophila melanogaster, feature_namespace FlyBase, and mapping_state source_exact; do not map through human/mouse Ensembl."
+    ],
+    "verdict": "malformed_authoritative_row_pair_in_legacy_payload_and_canonical_payload_unavailable"
+  }
+}

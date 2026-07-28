@@ -1,0 +1,3105 @@
+{
+  "branch": "jkobject",
+  "cell_type_ontology_map": {
+    "AC/HC_Precurs": {
+      "label": "AC/HC_Precurs",
+      "status": "unknown_composite_label",
+      "term": null
+    },
+    "Amacrine Cells": {
+      "label": "amacrine cell",
+      "status": "source_label_to_exact_broad_CL",
+      "term": "CL:0000561"
+    },
+    "BC/Photo_Precurs": {
+      "label": "BC/Photo_Precurs",
+      "status": "unknown_composite_label",
+      "term": null
+    },
+    "Bipolar Cells": {
+      "label": "retinal bipolar neuron",
+      "status": "source_label_to_exact_broad_CL",
+      "term": "CL:0000748"
+    },
+    "Cones": {
+      "label": "retinal cone cell",
+      "status": "source_label_to_exact_broad_CL",
+      "term": "CL:0000573"
+    },
+    "Horizontal Cells": {
+      "label": "retina horizontal cell",
+      "status": "source_label_to_exact_broad_CL",
+      "term": "CL:0000745"
+    },
+    "Muller Glia": {
+      "label": "Mueller cell",
+      "status": "source_label_to_exact_broad_CL",
+      "term": "CL:0000636"
+    },
+    "Neurogenic Cells": {
+      "label": "Neurogenic Cells",
+      "status": "unknown_no_exact_CL_mapping",
+      "term": null
+    },
+    "RPCs": {
+      "label": "retinal progenitor cell",
+      "status": "source_label_to_exact_broad_CL",
+      "term": "CL:0002672"
+    },
+    "Retinal Ganglion Cells": {
+      "label": "retinal ganglion cell",
+      "status": "source_label_to_exact_broad_CL",
+      "term": "CL:0000740"
+    },
+    "Rods": {
+      "label": "retinal rod cell",
+      "status": "source_label_to_exact_broad_CL",
+      "term": "CL:0000604"
+    }
+  },
+  "chunk_verdict": "One 118555x33694 CSR int32 triplet (416010806 bytes) is appropriate and its X links to one exact same-prefix var; size alone does not justify new chunks. Move the 3D UMAP to typed obsm rather than changing X.",
+  "current_X": {
+    "obs_index_sha256_ordered": "1ea7d49918df4604d348e86713934d0ed284ab6242f24614c6218a6264cb127b",
+    "obs_index_unique": true,
+    "shape": [
+      118555,
+      33694
+    ],
+    "var_index_sha256_ordered": "7eb86babb45d8bfedc121c1d964603857d4b54d062de98bd2f84739a284ce304",
+    "var_index_unique": true,
+    "x_dtype": "int32",
+    "x_encoding_type": "csr_matrix",
+    "x_encoding_version": "0.1.0",
+    "x_group_members": [
+      "data",
+      "indices",
+      "indptr"
+    ],
+    "x_hdf5_type": "Group"
+  },
+  "current_identity": {
+    "canonical_artifacts": {
+      "X": {
+        "created_at": "2026-07-18 12:46:24.806144+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259076336212\",\"object_sha256\":\"02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a\",\"role\":\"X\",\"source_identity\":\"GSE138002;ODD001099\"}",
+        "feature_values": {
+          "var": "data/cleaned/GSE138002/var.parquet"
+        },
+        "hash": "kz2RwTzkiAv3f-OFnKYKoQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE138002/X.h5ad",
+        "latest_exact_key_candidates": [
+          {
+            "created_at": "2026-07-18 12:46:24.806144+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259076336212\",\"object_sha256\":\"02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a\",\"role\":\"X\",\"source_identity\":\"GSE138002;ODD001099\"}",
+            "hash": "kz2RwTzkiAv3f-OFnKYKoQ",
+            "is_latest": true,
+            "key": "data/cleaned/GSE138002/X.h5ad",
+            "n_observations": null,
+            "otype": "AnnData",
+            "size": 416010806,
+            "suffix": ".h5ad",
+            "uid": "GPge5BVaaXcCGgsU0000"
+          }
+        ],
+        "n_observations": null,
+        "otype": "AnnData",
+        "payload_evidence": {
+          "downloaded_bytes": 416010806,
+          "downloaded_sha256": "02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a",
+          "path_exists": true,
+          "remote_stat": "gs://scperturb/data/cleaned/GSE138002/X.h5ad:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              416010806\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               s7dV4A==\n  Hash (MD5):                  kz2RwTzkiAv3f+OFnKYKoQ==\n  ETag:                        CMaB+9/p8pUDEAE=\n  Generation:                  1785154234138822\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 416010806 bytes (396.74MiB)\n",
+          "uri": "gs://scperturb/data/cleaned/GSE138002/X.h5ad"
+        },
+        "size": 416010806,
+        "suffix": ".h5ad",
+        "uid": "GPge5BVaaXcCGgsU0000"
+      },
+      "obs": {
+        "created_at": "2026-07-18 12:46:23.331586+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259070906873\",\"object_sha256\":\"46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1\",\"role\":\"obs\",\"source_identity\":\"GSE138002;ODD001099\"}",
+        "feature_values": {
+          "X": "data/cleaned/GSE138002/X.h5ad"
+        },
+        "hash": "Z4ldVTqTA2urrS9KOpa8EQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE138002/obs.parquet",
+        "latest_exact_key_candidates": [
+          {
+            "created_at": "2026-07-18 12:46:23.331586+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259070906873\",\"object_sha256\":\"46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1\",\"role\":\"obs\",\"source_identity\":\"GSE138002;ODD001099\"}",
+            "hash": "Z4ldVTqTA2urrS9KOpa8EQ",
+            "is_latest": true,
+            "key": "data/cleaned/GSE138002/obs.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 7169552,
+            "suffix": ".parquet",
+            "uid": "MfCWePqr8F4TThDo0000"
+          }
+        ],
+        "n_observations": null,
+        "otype": "DataFrame",
+        "payload_evidence": {
+          "downloaded_bytes": 7169552,
+          "downloaded_sha256": "46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1",
+          "path_exists": true,
+          "remote_stat": "gs://scperturb/data/cleaned/GSE138002/obs.parquet:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              7169552\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               zt2X2g==\n  Hash (MD5):                  Z4ldVTqTA2urrS9KOpa8EQ==\n  ETag:                        CPWx/N/p8pUDEAE=\n  Generation:                  1785154234161397\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 7169552 bytes (6.84MiB)\n",
+          "uri": "gs://scperturb/data/cleaned/GSE138002/obs.parquet"
+        },
+        "size": 7169552,
+        "suffix": ".parquet",
+        "uid": "MfCWePqr8F4TThDo0000"
+      },
+      "var": {
+        "created_at": "2026-07-18 12:46:26.274136+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259082417171\",\"object_sha256\":\"30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779\",\"role\":\"var\",\"source_identity\":\"GSE138002;ODD001099\"}",
+        "feature_values": {},
+        "hash": "JCkkGacA4SiPEMqy5gVxHQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE138002/var.parquet",
+        "latest_exact_key_candidates": [
+          {
+            "created_at": "2026-07-18 12:46:26.274136+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259082417171\",\"object_sha256\":\"30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779\",\"role\":\"var\",\"source_identity\":\"GSE138002;ODD001099\"}",
+            "hash": "JCkkGacA4SiPEMqy5gVxHQ",
+            "is_latest": true,
+            "key": "data/cleaned/GSE138002/var.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 841345,
+            "suffix": ".parquet",
+            "uid": "jib8jqqYfSI3vzIW0000"
+          }
+        ],
+        "n_observations": null,
+        "otype": "DataFrame",
+        "payload_evidence": {
+          "downloaded_bytes": 841345,
+          "downloaded_sha256": "30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779",
+          "path_exists": true,
+          "remote_stat": "gs://scperturb/data/cleaned/GSE138002/var.parquet:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              841345\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               z4Z0MQ==\n  Hash (MD5):                  JCkkGacA4SiPEMqy5gVxHQ==\n  ETag:                        CP3piuDp8pUDEAE=\n  Generation:                  1785154234397949\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 841345 bytes (821.63kiB)\n",
+          "uri": "gs://scperturb/data/cleaned/GSE138002/var.parquet"
+        },
+        "size": 841345,
+        "suffix": ".parquet",
+        "uid": "jib8jqqYfSI3vzIW0000"
+      }
+    },
+    "canonical_prefix": "data/cleaned/GSE138002",
+    "payload_inspection": {
+      "artifacts": {
+        "X": {
+          "created_at": "2026-07-18 12:46:24.806144+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259076336212\",\"object_sha256\":\"02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a\",\"role\":\"X\",\"source_identity\":\"GSE138002;ODD001099\"}",
+          "hash": "kz2RwTzkiAv3f-OFnKYKoQ",
+          "is_latest": true,
+          "key": "data/cleaned/GSE138002/X.h5ad",
+          "latest_exact_key_candidates": [
+            {
+              "created_at": "2026-07-18 12:46:24.806144+00:00",
+              "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259076336212\",\"object_sha256\":\"02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a\",\"role\":\"X\",\"source_identity\":\"GSE138002;ODD001099\"}",
+              "hash": "kz2RwTzkiAv3f-OFnKYKoQ",
+              "is_latest": true,
+              "key": "data/cleaned/GSE138002/X.h5ad",
+              "n_observations": null,
+              "otype": "AnnData",
+              "size": 416010806,
+              "suffix": ".h5ad",
+              "uid": "GPge5BVaaXcCGgsU0000"
+            }
+          ],
+          "n_observations": null,
+          "otype": "AnnData",
+          "payload_evidence": {
+            "downloaded_bytes": 416010806,
+            "downloaded_sha256": "02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a",
+            "path_exists": true,
+            "remote_stat": "gs://scperturb/data/cleaned/GSE138002/X.h5ad:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              416010806\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               s7dV4A==\n  Hash (MD5):                  kz2RwTzkiAv3f+OFnKYKoQ==\n  ETag:                        CMaB+9/p8pUDEAE=\n  Generation:                  1785154234138822\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 416010806 bytes (396.74MiB)\n",
+            "uri": "gs://scperturb/data/cleaned/GSE138002/X.h5ad"
+          },
+          "size": 416010806,
+          "suffix": ".h5ad",
+          "uid": "GPge5BVaaXcCGgsU0000"
+        },
+        "obs": {
+          "created_at": "2026-07-18 12:46:23.331586+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259070906873\",\"object_sha256\":\"46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1\",\"role\":\"obs\",\"source_identity\":\"GSE138002;ODD001099\"}",
+          "hash": "Z4ldVTqTA2urrS9KOpa8EQ",
+          "is_latest": true,
+          "key": "data/cleaned/GSE138002/obs.parquet",
+          "latest_exact_key_candidates": [
+            {
+              "created_at": "2026-07-18 12:46:23.331586+00:00",
+              "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259070906873\",\"object_sha256\":\"46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1\",\"role\":\"obs\",\"source_identity\":\"GSE138002;ODD001099\"}",
+              "hash": "Z4ldVTqTA2urrS9KOpa8EQ",
+              "is_latest": true,
+              "key": "data/cleaned/GSE138002/obs.parquet",
+              "n_observations": null,
+              "otype": "DataFrame",
+              "size": 7169552,
+              "suffix": ".parquet",
+              "uid": "MfCWePqr8F4TThDo0000"
+            }
+          ],
+          "n_observations": null,
+          "otype": "DataFrame",
+          "payload_evidence": {
+            "downloaded_bytes": 7169552,
+            "downloaded_sha256": "46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1",
+            "path_exists": true,
+            "remote_stat": "gs://scperturb/data/cleaned/GSE138002/obs.parquet:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              7169552\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               zt2X2g==\n  Hash (MD5):                  Z4ldVTqTA2urrS9KOpa8EQ==\n  ETag:                        CPWx/N/p8pUDEAE=\n  Generation:                  1785154234161397\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 7169552 bytes (6.84MiB)\n",
+            "uri": "gs://scperturb/data/cleaned/GSE138002/obs.parquet"
+          },
+          "size": 7169552,
+          "suffix": ".parquet",
+          "uid": "MfCWePqr8F4TThDo0000"
+        },
+        "var": {
+          "created_at": "2026-07-18 12:46:26.274136+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259082417171\",\"object_sha256\":\"30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779\",\"role\":\"var\",\"source_identity\":\"GSE138002;ODD001099\"}",
+          "hash": "JCkkGacA4SiPEMqy5gVxHQ",
+          "is_latest": true,
+          "key": "data/cleaned/GSE138002/var.parquet",
+          "latest_exact_key_candidates": [
+            {
+              "created_at": "2026-07-18 12:46:26.274136+00:00",
+              "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259082417171\",\"object_sha256\":\"30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779\",\"role\":\"var\",\"source_identity\":\"GSE138002;ODD001099\"}",
+              "hash": "JCkkGacA4SiPEMqy5gVxHQ",
+              "is_latest": true,
+              "key": "data/cleaned/GSE138002/var.parquet",
+              "n_observations": null,
+              "otype": "DataFrame",
+              "size": 841345,
+              "suffix": ".parquet",
+              "uid": "jib8jqqYfSI3vzIW0000"
+            }
+          ],
+          "n_observations": null,
+          "otype": "DataFrame",
+          "payload_evidence": {
+            "downloaded_bytes": 841345,
+            "downloaded_sha256": "30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779",
+            "path_exists": true,
+            "remote_stat": "gs://scperturb/data/cleaned/GSE138002/var.parquet:\n  Creation Time:               2026-07-27T12:10:34Z\n  Update Time:                 2026-07-27T12:10:34Z\n  Storage Class Update Time:   2026-07-27T12:10:34Z\n  Storage Class:               STANDARD\n  Content-Length:              841345\n  Content-Type:                application/octet-stream\n  Hash (CRC32C):               z4Z0MQ==\n  Hash (MD5):                  JCkkGacA4SiPEMqy5gVxHQ==\n  ETag:                        CP3piuDp8pUDEAE=\n  Generation:                  1785154234397949\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 841345 bytes (821.63kiB)\n",
+            "uri": "gs://scperturb/data/cleaned/GSE138002/var.parquet"
+          },
+          "size": 841345,
+          "suffix": ".parquet",
+          "uid": "jib8jqqYfSI3vzIW0000"
+        }
+      },
+      "prefix": "data/cleaned/GSE138002",
+      "relation_to_canonical": "canonical"
+    }
+  },
+  "current_obs_inventory": {
+    "columns": {
+      "age": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 12693,
+            "value": "Hgw20"
+          },
+          {
+            "count": 11618,
+            "value": "Adult"
+          },
+          {
+            "count": 9912,
+            "value": "Hgw13"
+          },
+          {
+            "count": 8974,
+            "value": "Hgw9"
+          },
+          {
+            "count": 8231,
+            "value": "Hgw19"
+          },
+          {
+            "count": 8058,
+            "value": "Hgw11"
+          },
+          {
+            "count": 7480,
+            "value": "Hgw15"
+          },
+          {
+            "count": 7382,
+            "value": "Hpnd8"
+          },
+          {
+            "count": 7161,
+            "value": "Hgw24"
+          },
+          {
+            "count": 6034,
+            "value": "Hgw17"
+          },
+          {
+            "count": 5919,
+            "value": "42_Day"
+          },
+          {
+            "count": 5467,
+            "value": "Hgw12"
+          },
+          {
+            "count": 5424,
+            "value": "59_Day"
+          },
+          {
+            "count": 3565,
+            "value": "Hgw18"
+          },
+          {
+            "count": 3196,
+            "value": "Hgw16"
+          },
+          {
+            "count": 2958,
+            "value": "Hgw14"
+          },
+          {
+            "count": 2230,
+            "value": "Hgw22"
+          },
+          {
+            "count": 2054,
+            "value": "Hgw27"
+          },
+          {
+            "count": 175,
+            "value": "30_Day"
+          },
+          {
+            "count": 24,
+            "value": "24_Day"
+          }
+        ],
+        "unique_non_null": 20
+      },
+      "assay": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 118555,
+            "value": "10x Genomics V2 single-cell RNA-sequencing"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "cell_id": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGTCAGTCTCCATC.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.AACTCCCGTTTAGGAA.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.AGATCTGTCTTGCATT.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.AGCAGCCTCCGCTGTT.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.AGGGAGTTCGTAGATC.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.ATTATCCTCGCCCTTA.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.CATGCCTTCCAAACAC.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.CCAATCCCAGGCGATA.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.CGCGGTATCCCTAATT.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.CGTCACTTCACTTCAT.1"
+          },
+          {
+            "count": 1,
+            "value": "X24_Day.CGTTCTGTCCAAACTG.1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGGTTAGTACGCGA.1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGGTTAGCCGTCGT.1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGGTTAGATCGGGT.1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCTCGAGGTAG.1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCGTCTCATCC.1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCCATTGCGGC.1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCCATGTAGTC.1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCCAATGGATA.1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCAGTAGGTGC.1"
+          }
+        ],
+        "unique_non_null": 118555
+      },
+      "cell_type": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 37857,
+            "value": "RPCs"
+          },
+          {
+            "count": 22677,
+            "value": "Rods"
+          },
+          {
+            "count": 11105,
+            "value": "Amacrine Cells"
+          },
+          {
+            "count": 10261,
+            "value": "Retinal Ganglion Cells"
+          },
+          {
+            "count": 9761,
+            "value": "Bipolar Cells"
+          },
+          {
+            "count": 6905,
+            "value": "Cones"
+          },
+          {
+            "count": 6882,
+            "value": "Horizontal Cells"
+          },
+          {
+            "count": 4617,
+            "value": "Muller Glia"
+          },
+          {
+            "count": 4040,
+            "value": "Neurogenic Cells"
+          },
+          {
+            "count": 2550,
+            "value": "BC/Photo_Precurs"
+          },
+          {
+            "count": 1900,
+            "value": "AC/HC_Precurs"
+          }
+        ],
+        "unique_non_null": 11
+      },
+      "dataset": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 118555,
+            "value": "pert-gym/logical/temporal/organoiddb_odd001099_gse138002"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "disease": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 118555,
+        "missing_fraction": 1.0,
+        "rows": 118555,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "donor_id": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 118555,
+        "missing_fraction": 1.0,
+        "rows": 118555,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "ethnicity": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 118555,
+        "missing_fraction": 1.0,
+        "rows": 118555,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "is_control": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 118555,
+        "missing_fraction": 1.0,
+        "rows": 118555,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "is_low_quality": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 118555,
+        "missing_fraction": 1.0,
+        "rows": 118555,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "is_organoid": {
+        "dtype": "bool",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 107037,
+            "value": "False"
+          },
+          {
+            "count": 11518,
+            "value": "True"
+          }
+        ],
+        "unique_non_null": 2
+      },
+      "modality": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 118555,
+            "value": "scRNA-seq"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "organism": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 118555,
+            "value": "Homo sapiens"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "organoiddb_id": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 118555,
+            "value": "ODD001099"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "sample": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 11618,
+            "value": "Adult"
+          },
+          {
+            "count": 9912,
+            "value": "Hgw13"
+          },
+          {
+            "count": 8974,
+            "value": "Hgw9"
+          },
+          {
+            "count": 8058,
+            "value": "Hgw11"
+          },
+          {
+            "count": 7633,
+            "value": "Hgw20_rep2"
+          },
+          {
+            "count": 7480,
+            "value": "Hgw15"
+          },
+          {
+            "count": 6034,
+            "value": "Hgw17"
+          },
+          {
+            "count": 5919,
+            "value": "42_Day"
+          },
+          {
+            "count": 5467,
+            "value": "Hgw12"
+          },
+          {
+            "count": 5424,
+            "value": "59_Day"
+          },
+          {
+            "count": 5060,
+            "value": "Hgw20_rep1"
+          },
+          {
+            "count": 4468,
+            "value": "Hgw24_rep2"
+          },
+          {
+            "count": 4332,
+            "value": "Hgw19_rep1"
+          },
+          {
+            "count": 4010,
+            "value": "Hpnd8_rep1"
+          },
+          {
+            "count": 3899,
+            "value": "Hgw19_rep2"
+          },
+          {
+            "count": 3565,
+            "value": "Hgw18"
+          },
+          {
+            "count": 3372,
+            "value": "Hpnd8_rep2"
+          },
+          {
+            "count": 3196,
+            "value": "Hgw16"
+          },
+          {
+            "count": 2958,
+            "value": "Hgw14"
+          },
+          {
+            "count": 2693,
+            "value": "Hgw24_rep1"
+          }
+        ],
+        "unique_non_null": 24
+      },
+      "sex": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 118555,
+        "missing_fraction": 1.0,
+        "rows": 118555,
+        "top_values": [],
+        "unique_non_null": 0
+      },
+      "source_accession": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 118555,
+            "value": "GSE138002"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "source_age_label": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 12693,
+            "value": "Hgw20"
+          },
+          {
+            "count": 11618,
+            "value": "Adult"
+          },
+          {
+            "count": 9912,
+            "value": "Hgw13"
+          },
+          {
+            "count": 8974,
+            "value": "Hgw9"
+          },
+          {
+            "count": 8231,
+            "value": "Hgw19"
+          },
+          {
+            "count": 8058,
+            "value": "Hgw11"
+          },
+          {
+            "count": 7480,
+            "value": "Hgw15"
+          },
+          {
+            "count": 7382,
+            "value": "Hpnd8"
+          },
+          {
+            "count": 7161,
+            "value": "Hgw24"
+          },
+          {
+            "count": 6034,
+            "value": "Hgw17"
+          },
+          {
+            "count": 5919,
+            "value": "42_Day"
+          },
+          {
+            "count": 5467,
+            "value": "Hgw12"
+          },
+          {
+            "count": 5424,
+            "value": "59_Day"
+          },
+          {
+            "count": 3565,
+            "value": "Hgw18"
+          },
+          {
+            "count": 3196,
+            "value": "Hgw16"
+          },
+          {
+            "count": 2958,
+            "value": "Hgw14"
+          },
+          {
+            "count": 2230,
+            "value": "Hgw22"
+          },
+          {
+            "count": 2054,
+            "value": "Hgw27"
+          },
+          {
+            "count": 175,
+            "value": "30_Day"
+          },
+          {
+            "count": 24,
+            "value": "24_Day"
+          }
+        ],
+        "unique_non_null": 20
+      },
+      "source_barcode": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGTCAGTCTCCATC-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.AACTCCCGTTTAGGAA-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.AGATCTGTCTTGCATT-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.AGCAGCCTCCGCTGTT-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.AGGGAGTTCGTAGATC-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.ATTATCCTCGCCCTTA-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.CATGCCTTCCAAACAC-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.CCAATCCCAGGCGATA-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.CGCGGTATCCCTAATT-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.CGTCACTTCACTTCAT-1"
+          },
+          {
+            "count": 1,
+            "value": "24_Day.CGTTCTGTCCAAACTG-1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGGTTAGTACGCGA-1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGGTTAGCCGTCGT-1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGGTTAGATCGGGT-1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCTCGAGGTAG-1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCGTCTCATCC-1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCCATTGCGGC-1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCCATGTAGTC-1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCCAATGGATA-1"
+          },
+          {
+            "count": 1,
+            "value": "Hpnd8_rep2.TTTGCGCAGTAGGTGC-1"
+          }
+        ],
+        "unique_non_null": 118555
+      },
+      "source_cell_type": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 37857,
+            "value": "RPCs"
+          },
+          {
+            "count": 22677,
+            "value": "Rods"
+          },
+          {
+            "count": 11105,
+            "value": "Amacrine Cells"
+          },
+          {
+            "count": 10261,
+            "value": "Retinal Ganglion Cells"
+          },
+          {
+            "count": 9761,
+            "value": "Bipolar Cells"
+          },
+          {
+            "count": 6905,
+            "value": "Cones"
+          },
+          {
+            "count": 6882,
+            "value": "Horizontal Cells"
+          },
+          {
+            "count": 4617,
+            "value": "Muller Glia"
+          },
+          {
+            "count": 4040,
+            "value": "Neurogenic Cells"
+          },
+          {
+            "count": 2550,
+            "value": "BC/Photo_Precurs"
+          },
+          {
+            "count": 1900,
+            "value": "AC/HC_Precurs"
+          }
+        ],
+        "unique_non_null": 11
+      },
+      "source_num_genes_expressed": {
+        "dtype": "int64",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 109,
+            "value": "1433"
+          },
+          {
+            "count": 107,
+            "value": "1244"
+          },
+          {
+            "count": 106,
+            "value": "1087"
+          },
+          {
+            "count": 105,
+            "value": "967"
+          },
+          {
+            "count": 105,
+            "value": "1298"
+          },
+          {
+            "count": 104,
+            "value": "1198"
+          },
+          {
+            "count": 104,
+            "value": "1094"
+          },
+          {
+            "count": 104,
+            "value": "1156"
+          },
+          {
+            "count": 103,
+            "value": "1378"
+          },
+          {
+            "count": 102,
+            "value": "1443"
+          },
+          {
+            "count": 102,
+            "value": "1102"
+          },
+          {
+            "count": 101,
+            "value": "1302"
+          },
+          {
+            "count": 101,
+            "value": "1190"
+          },
+          {
+            "count": 101,
+            "value": "1446"
+          },
+          {
+            "count": 101,
+            "value": "1479"
+          },
+          {
+            "count": 100,
+            "value": "1020"
+          },
+          {
+            "count": 100,
+            "value": "1052"
+          },
+          {
+            "count": 99,
+            "value": "1236"
+          },
+          {
+            "count": 99,
+            "value": "1123"
+          },
+          {
+            "count": 99,
+            "value": "1180"
+          }
+        ],
+        "unique_non_null": 3275
+      },
+      "source_sample_type": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 86962,
+            "value": "Whole Retina"
+          },
+          {
+            "count": 11518,
+            "value": "Retinal Organoid"
+          },
+          {
+            "count": 11005,
+            "value": "Periphery"
+          },
+          {
+            "count": 9070,
+            "value": "Macula"
+          }
+        ],
+        "unique_non_null": 4
+      },
+      "source_total_mrnas": {
+        "dtype": "int64",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 53,
+            "value": "1753"
+          },
+          {
+            "count": 52,
+            "value": "2350"
+          },
+          {
+            "count": 51,
+            "value": "2034"
+          },
+          {
+            "count": 50,
+            "value": "2339"
+          },
+          {
+            "count": 49,
+            "value": "2159"
+          },
+          {
+            "count": 48,
+            "value": "2275"
+          },
+          {
+            "count": 47,
+            "value": "2622"
+          },
+          {
+            "count": 47,
+            "value": "2563"
+          },
+          {
+            "count": 47,
+            "value": "1950"
+          },
+          {
+            "count": 47,
+            "value": "1663"
+          },
+          {
+            "count": 47,
+            "value": "2353"
+          },
+          {
+            "count": 47,
+            "value": "2647"
+          },
+          {
+            "count": 46,
+            "value": "2035"
+          },
+          {
+            "count": 46,
+            "value": "2588"
+          },
+          {
+            "count": 46,
+            "value": "1899"
+          },
+          {
+            "count": 45,
+            "value": "2600"
+          },
+          {
+            "count": 45,
+            "value": "2782"
+          },
+          {
+            "count": 45,
+            "value": "2022"
+          },
+          {
+            "count": 45,
+            "value": "1877"
+          },
+          {
+            "count": 45,
+            "value": "2281"
+          }
+        ],
+        "unique_non_null": 8898
+      },
+      "technology": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 118555,
+            "value": "10x Genomics V2"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "timepoint": {
+        "dtype": "Float64",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 11618,
+        "missing_fraction": 0.09799671038758383,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 12693,
+            "value": "20.0"
+          },
+          {
+            "count": 9912,
+            "value": "13.0"
+          },
+          {
+            "count": 8974,
+            "value": "9.0"
+          },
+          {
+            "count": 8231,
+            "value": "19.0"
+          },
+          {
+            "count": 8058,
+            "value": "11.0"
+          },
+          {
+            "count": 7480,
+            "value": "15.0"
+          },
+          {
+            "count": 7382,
+            "value": "8.0"
+          },
+          {
+            "count": 7185,
+            "value": "24.0"
+          },
+          {
+            "count": 6034,
+            "value": "17.0"
+          },
+          {
+            "count": 5919,
+            "value": "42.0"
+          },
+          {
+            "count": 5467,
+            "value": "12.0"
+          },
+          {
+            "count": 5424,
+            "value": "59.0"
+          },
+          {
+            "count": 3565,
+            "value": "18.0"
+          },
+          {
+            "count": 3196,
+            "value": "16.0"
+          },
+          {
+            "count": 2958,
+            "value": "14.0"
+          },
+          {
+            "count": 2230,
+            "value": "22.0"
+          },
+          {
+            "count": 2054,
+            "value": "27.0"
+          },
+          {
+            "count": 175,
+            "value": "30.0"
+          }
+        ],
+        "unique_non_null": 18
+      },
+      "timepoint_unit": {
+        "dtype": "string",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 11618,
+        "missing_fraction": 0.09799671038758383,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 88013,
+            "value": "gestational_week"
+          },
+          {
+            "count": 11542,
+            "value": "day"
+          },
+          {
+            "count": 7382,
+            "value": "postnatal_day"
+          }
+        ],
+        "unique_non_null": 3
+      },
+      "tissue_type": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 118555,
+            "value": "retina"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "umap1_coord": {
+        "dtype": "float64",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 2,
+            "value": "1.41221526139253"
+          },
+          {
+            "count": 2,
+            "value": "1.63675654625249"
+          },
+          {
+            "count": 2,
+            "value": "0.464958947904523"
+          },
+          {
+            "count": 2,
+            "value": "1.38517441918298"
+          },
+          {
+            "count": 2,
+            "value": "1.35074581620757"
+          },
+          {
+            "count": 2,
+            "value": "0.694953909647591"
+          },
+          {
+            "count": 2,
+            "value": "0.75577019679541"
+          },
+          {
+            "count": 2,
+            "value": "1.47783828438648"
+          },
+          {
+            "count": 2,
+            "value": "1.31802828088506"
+          },
+          {
+            "count": 2,
+            "value": "0.200071719313882"
+          },
+          {
+            "count": 2,
+            "value": "1.27684286805636"
+          },
+          {
+            "count": 2,
+            "value": "0.216041103820919"
+          },
+          {
+            "count": 2,
+            "value": "0.17984985695926"
+          },
+          {
+            "count": 2,
+            "value": "1.42719094546149"
+          },
+          {
+            "count": 2,
+            "value": "1.6328698269585"
+          },
+          {
+            "count": 2,
+            "value": "1.46909419799703"
+          },
+          {
+            "count": 2,
+            "value": "1.58871619443991"
+          },
+          {
+            "count": 2,
+            "value": "0.0629911430128876"
+          },
+          {
+            "count": 2,
+            "value": "0.171201562108329"
+          },
+          {
+            "count": 2,
+            "value": "1.29101621095227"
+          }
+        ],
+        "unique_non_null": 118426
+      },
+      "umap2_coord": {
+        "dtype": "float64",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 2,
+            "value": "0.300130059643413"
+          },
+          {
+            "count": 2,
+            "value": "0.924524088637512"
+          },
+          {
+            "count": 2,
+            "value": "0.465446957549328"
+          },
+          {
+            "count": 2,
+            "value": "0.0763418773152109"
+          },
+          {
+            "count": 2,
+            "value": "0.321502415180223"
+          },
+          {
+            "count": 2,
+            "value": "1.31458299347066"
+          },
+          {
+            "count": 2,
+            "value": "0.127621385684785"
+          },
+          {
+            "count": 2,
+            "value": "1.43260416210753"
+          },
+          {
+            "count": 2,
+            "value": "1.92782699431418"
+          },
+          {
+            "count": 2,
+            "value": "1.86468728986539"
+          },
+          {
+            "count": 2,
+            "value": "1.63057247132222"
+          },
+          {
+            "count": 2,
+            "value": "0.271969784384487"
+          },
+          {
+            "count": 2,
+            "value": "0.125830093861782"
+          },
+          {
+            "count": 2,
+            "value": "1.46511770522069"
+          },
+          {
+            "count": 2,
+            "value": "0.308584881449267"
+          },
+          {
+            "count": 2,
+            "value": "1.30258453130782"
+          },
+          {
+            "count": 2,
+            "value": "1.69085046572792"
+          },
+          {
+            "count": 2,
+            "value": "1.36634257859283"
+          },
+          {
+            "count": 2,
+            "value": "1.43777126015112"
+          },
+          {
+            "count": 2,
+            "value": "0.687680168664728"
+          }
+        ],
+        "unique_non_null": 118448
+      },
+      "umap3_coord": {
+        "dtype": "float64",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 118555,
+        "top_values": [
+          {
+            "count": 3,
+            "value": "1.52234887218643"
+          },
+          {
+            "count": 2,
+            "value": "0.814867906154134"
+          },
+          {
+            "count": 2,
+            "value": "1.55271986296737"
+          },
+          {
+            "count": 2,
+            "value": "1.45383409860461"
+          },
+          {
+            "count": 2,
+            "value": "0.726589736677715"
+          },
+          {
+            "count": 2,
+            "value": "0.845478997481369"
+          },
+          {
+            "count": 2,
+            "value": "0.23783039625667"
+          },
+          {
+            "count": 2,
+            "value": "1.65157603440936"
+          },
+          {
+            "count": 2,
+            "value": "0.637833131736741"
+          },
+          {
+            "count": 2,
+            "value": "1.60864615620288"
+          },
+          {
+            "count": 2,
+            "value": "0.827000058688482"
+          },
+          {
+            "count": 2,
+            "value": "0.580011847115511"
+          },
+          {
+            "count": 2,
+            "value": "0.826477731202776"
+          },
+          {
+            "count": 2,
+            "value": "1.51984113326463"
+          },
+          {
+            "count": 2,
+            "value": "1.64093695663419"
+          },
+          {
+            "count": 2,
+            "value": "1.48952609548516"
+          },
+          {
+            "count": 2,
+            "value": "1.68551374305188"
+          },
+          {
+            "count": 2,
+            "value": "0.794417482005515"
+          },
+          {
+            "count": 2,
+            "value": "1.41683645708579"
+          },
+          {
+            "count": 2,
+            "value": "1.54366870650587"
+          }
+        ],
+        "unique_non_null": 118342
+      }
+    },
+    "index_name": "cell_id",
+    "index_sha256_ordered": "1ea7d49918df4604d348e86713934d0ed284ab6242f24614c6218a6264cb127b",
+    "index_summary": {
+      "dtype": "string",
+      "empty_string": 0,
+      "has_control_character": 0,
+      "missing": 0,
+      "missing_fraction": 0.0,
+      "rows": 118555,
+      "top_values": [
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGTCAGTCTCCATC.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.AACTCCCGTTTAGGAA.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.AGATCTGTCTTGCATT.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.AGCAGCCTCCGCTGTT.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.AGGGAGTTCGTAGATC.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.ATTATCCTCGCCCTTA.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.CATGCCTTCCAAACAC.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.CCAATCCCAGGCGATA.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.CGCGGTATCCCTAATT.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.CGTCACTTCACTTCAT.1"
+        },
+        {
+          "count": 1,
+          "value": "X24_Day.CGTTCTGTCCAAACTG.1"
+        },
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGGTTAGTACGCGA.1"
+        },
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGGTTAGCCGTCGT.1"
+        },
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGGTTAGATCGGGT.1"
+        },
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGCGCTCGAGGTAG.1"
+        },
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGCGCGTCTCATCC.1"
+        },
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGCGCCATTGCGGC.1"
+        },
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGCGCCATGTAGTC.1"
+        },
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGCGCCAATGGATA.1"
+        },
+        {
+          "count": 1,
+          "value": "Hpnd8_rep2.TTTGCGCAGTAGGTGC.1"
+        }
+      ],
+      "unique_non_null": 118555
+    },
+    "index_unique": true,
+    "shape": [
+      118555,
+      30
+    ]
+  },
+  "current_var_inventory": {
+    "columns": {
+      "feature_id": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 1,
+            "value": "ENSG00000268674"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000243485"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000237613"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000186092"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000238009"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000239945"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000239906"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000241599"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000279928"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000279457"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000228463"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000236743"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000236601"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000237094"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000274847"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000277400"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000278704"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000274792"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000275249"
+          },
+          {
+            "count": 1,
+            "value": "ENSG00000276760"
+          }
+        ],
+        "unique_non_null": 33694
+      },
+      "feature_namespace": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 33694,
+            "value": "Ensembl gene"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "feature_type": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 33694,
+            "value": "Gene Expression"
+          }
+        ],
+        "unique_non_null": 1
+      },
+      "gene_symbol": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 2,
+            "value": "TIMM10B"
+          },
+          {
+            "count": 2,
+            "value": "CFAP99"
+          },
+          {
+            "count": 2,
+            "value": "LINC00864"
+          },
+          {
+            "count": 2,
+            "value": "SERPINA3"
+          },
+          {
+            "count": 2,
+            "value": "ECSCR"
+          },
+          {
+            "count": 2,
+            "value": "TBC1D26"
+          },
+          {
+            "count": 2,
+            "value": "RAET1E-AS1"
+          },
+          {
+            "count": 2,
+            "value": "MATR3"
+          },
+          {
+            "count": 2,
+            "value": "PRICKLE2-AS1"
+          },
+          {
+            "count": 2,
+            "value": "C1QTNF9B-AS1"
+          },
+          {
+            "count": 2,
+            "value": "CCDC7"
+          },
+          {
+            "count": 2,
+            "value": "ATRIP"
+          },
+          {
+            "count": 2,
+            "value": "PRICKLE4"
+          },
+          {
+            "count": 2,
+            "value": "CAPS"
+          },
+          {
+            "count": 2,
+            "value": "PABPC1L2B-AS1"
+          },
+          {
+            "count": 2,
+            "value": "FAM231C"
+          },
+          {
+            "count": 2,
+            "value": "PGM5-AS1"
+          },
+          {
+            "count": 2,
+            "value": "C11orf71"
+          },
+          {
+            "count": 2,
+            "value": "IGHV2-70"
+          },
+          {
+            "count": 2,
+            "value": "RABL6"
+          }
+        ],
+        "unique_non_null": 33660
+      },
+      "organism": {
+        "dtype": "object",
+        "empty_string": 0,
+        "has_control_character": 0,
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "rows": 33694,
+        "top_values": [
+          {
+            "count": 33694,
+            "value": "Homo sapiens"
+          }
+        ],
+        "unique_non_null": 1
+      }
+    },
+    "identifier_audit": {
+      "duplicate_count": 0,
+      "patterns": {
+        "actual_tab": {
+          "count": 0,
+          "examples": []
+        },
+        "carriage_return_or_newline": {
+          "count": 0,
+          "examples": []
+        },
+        "ensembl_gene": {
+          "count": 33694,
+          "examples": [
+            "ENSG00000243485",
+            "ENSG00000237613",
+            "ENSG00000186092",
+            "ENSG00000238009",
+            "ENSG00000239945",
+            "ENSG00000239906",
+            "ENSG00000241599",
+            "ENSG00000279928",
+            "ENSG00000279457",
+            "ENSG00000228463",
+            "ENSG00000236743",
+            "ENSG00000236601",
+            "ENSG00000237094",
+            "ENSG00000278566",
+            "ENSG00000230021",
+            "ENSG00000235146",
+            "ENSG00000273547",
+            "ENSG00000229905",
+            "ENSG00000237491",
+            "ENSG00000177757"
+          ]
+        },
+        "flybase_gene": {
+          "count": 0,
+          "examples": []
+        },
+        "leading_or_trailing_whitespace": {
+          "count": 0,
+          "examples": []
+        },
+        "literal_backslash_t": {
+          "count": 0,
+          "examples": []
+        },
+        "literal_slash_t": {
+          "count": 0,
+          "examples": []
+        }
+      },
+      "rows": 33694,
+      "tab_split_structure": {
+        "first_field_blank": 0,
+        "first_field_examples": [
+          "ENSG00000243485",
+          "ENSG00000237613",
+          "ENSG00000186092",
+          "ENSG00000238009",
+          "ENSG00000239945",
+          "ENSG00000239906",
+          "ENSG00000241599",
+          "ENSG00000279928",
+          "ENSG00000279457",
+          "ENSG00000228463",
+          "ENSG00000236743",
+          "ENSG00000236601",
+          "ENSG00000237094",
+          "ENSG00000278566",
+          "ENSG00000230021",
+          "ENSG00000235146",
+          "ENSG00000273547",
+          "ENSG00000229905",
+          "ENSG00000237491",
+          "ENSG00000177757"
+        ],
+        "first_field_unique": true,
+        "parts": 1
+      },
+      "unique": true
+    },
+    "index_name": "feature_id_index",
+    "index_sha256_ordered": "7eb86babb45d8bfedc121c1d964603857d4b54d062de98bd2f84739a284ce304",
+    "index_summary": {
+      "dtype": "string",
+      "empty_string": 0,
+      "has_control_character": 0,
+      "missing": 0,
+      "missing_fraction": 0.0,
+      "rows": 33694,
+      "top_values": [
+        {
+          "count": 1,
+          "value": "ENSG00000268674"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000243485"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000237613"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000186092"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000238009"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000239945"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000239906"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000241599"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000279928"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000279457"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000228463"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000236743"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000236601"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000237094"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000274847"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000277400"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000278704"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000274792"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000275249"
+        },
+        {
+          "count": 1,
+          "value": "ENSG00000276760"
+        }
+      ],
+      "unique_non_null": 33694
+    },
+    "index_unique": true,
+    "shape": [
+      33694,
+      5
+    ]
+  },
+  "dataset": "GSE138002",
+  "dataset_metadata_proposal": {
+    "genome_build": "GRCh38",
+    "organoiddb_id": "ODD001099",
+    "source_accession": "GSE138002",
+    "x_semantics": "raw_counts"
+  },
+  "derived_obs_proposal": {
+    "cell_type": "Mapped broad CL label where exact table exists; otherwise preserve source label with ontology state unknown.",
+    "is_baseline": "Earliest observed point within each numeric trajectory; adult_primary_retina is not_applicable as a trajectory baseline.",
+    "is_control": "True for every unperturbed row.",
+    "obs_uuid": "pert_gym.obs_identity.add_obs_identity with canonical dataset/prefix.",
+    "original_obs_index": "Exact current ordered OBS index before revision.",
+    "perturbation": "none",
+    "perturbation_type": "none",
+    "timepoint": "day/postnatal_day * 1440; gestational_week * 10080; adult without numeric age remains unknown.",
+    "timepoint_state": "present for numeric day/week/postnatal rows; unknown for Adult rows.",
+    "trajectory_id": "organoid, fetal_primary_retina, postnatal_primary_retina, or adult_primary_retina from source context/unit."
+  },
+  "format": "pert-gym.first10-cohort-a-correction-plan/v1",
+  "instance": "laminlabs/pertdata",
+  "live_audited_at": "2026-07-28T11:50:42.320190+00:00",
+  "live_evidence_file": "artifacts/first10_audit/cohort_a/GSE138002.audit.json",
+  "obs_column_decisions": {
+    "age": {
+      "action": "map_preserve",
+      "reason": "Inference-relevant mixed developmental age label.",
+      "target": "age"
+    },
+    "assay": {
+      "action": "keep",
+      "reason": "Inference-relevant assay constant.",
+      "target": "assay"
+    },
+    "cell_id": {
+      "action": "keep",
+      "reason": "Unique current cell identity.",
+      "target": "cell_id"
+    },
+    "cell_type": {
+      "action": "map_preserve",
+      "reason": "Preserve author label and map only unambiguous broad terms.",
+      "target": "source_cell_type"
+    },
+    "dataset": {
+      "action": "keep",
+      "reason": "Stable logical dataset key.",
+      "target": "dataset"
+    },
+    "disease": {
+      "action": "state_normalize",
+      "reason": "All-null applicable field stays unknown; do not infer healthy from absence.",
+      "target": "disease"
+    },
+    "donor_id": {
+      "action": "state_normalize",
+      "reason": "All-null applicable field stays unknown.",
+      "target": "donor_id"
+    },
+    "ethnicity": {
+      "action": "state_normalize",
+      "reason": "All-null applicable field stays unknown.",
+      "target": "ethnicity"
+    },
+    "is_control": {
+      "action": "replace",
+      "reason": "All rows are unperturbed developmental observations, not missing controls.",
+      "target": "is_control"
+    },
+    "is_low_quality": {
+      "action": "state_normalize",
+      "reason": "No source-backed QC verdict; state is unknown.",
+      "target": "is_low_quality"
+    },
+    "is_organoid": {
+      "action": "keep",
+      "reason": "Critical context separating organoid and primary retina.",
+      "target": "is_organoid"
+    },
+    "modality": {
+      "action": "keep",
+      "reason": "Inference-relevant modality constant.",
+      "target": "modality"
+    },
+    "organism": {
+      "action": "keep",
+      "reason": "Inference-relevant organism constant.",
+      "target": "organism"
+    },
+    "organoiddb_id": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Dataset-wide provenance.",
+      "target": "organoiddb_id"
+    },
+    "sample": {
+      "action": "keep",
+      "reason": "Sample/replicate grouping key.",
+      "target": "sample"
+    },
+    "sex": {
+      "action": "state_normalize",
+      "reason": "All-null applicable field stays unknown.",
+      "target": "sex"
+    },
+    "source_accession": {
+      "action": "move_to_dataset_metadata",
+      "reason": "Dataset-wide provenance.",
+      "target": "source_accession"
+    },
+    "source_age_label": {
+      "action": "preserve",
+      "reason": "Exact source age label and unit parser input.",
+      "target": "source_age_label"
+    },
+    "source_barcode": {
+      "action": "preserve",
+      "reason": "Exact source identity.",
+      "target": "source_barcode"
+    },
+    "source_cell_type": {
+      "action": "preserve",
+      "reason": "Exact author annotation.",
+      "target": "source_cell_type"
+    },
+    "source_num_genes_expressed": {
+      "action": "map_keep",
+      "reason": "Per-cell source QC metric.",
+      "target": "n_genes"
+    },
+    "source_sample_type": {
+      "action": "map_preserve",
+      "reason": "Separates whole retina, macula, periphery and organoid.",
+      "target": "source_sample_type"
+    },
+    "source_total_mrnas": {
+      "action": "map_keep",
+      "reason": "Per-cell source UMI/count metric.",
+      "target": "n_counts"
+    },
+    "technology": {
+      "action": "keep",
+      "reason": "Inference-relevant technology constant.",
+      "target": "technology"
+    },
+    "timepoint": {
+      "action": "rename_preserve",
+      "reason": "Current values use three different units and are not canonical minutes.",
+      "target": "timepoint_original_value"
+    },
+    "timepoint_unit": {
+      "action": "rename_preserve",
+      "reason": "Preserve gestational_week/day/postnatal_day.",
+      "target": "timepoint_original_unit"
+    },
+    "tissue_type": {
+      "action": "keep",
+      "reason": "Inference-relevant retina context.",
+      "target": "tissue_type"
+    },
+    "umap1_coord": {
+      "action": "type_auxiliary",
+      "reason": "Embedding coordinate, not biological OBS metadata.",
+      "target": "obsm_source_umap"
+    },
+    "umap2_coord": {
+      "action": "type_auxiliary",
+      "reason": "Embedding coordinate, not biological OBS metadata.",
+      "target": "obsm_source_umap"
+    },
+    "umap3_coord": {
+      "action": "type_auxiliary",
+      "reason": "Embedding coordinate, not biological OBS metadata.",
+      "target": "obsm_source_umap"
+    }
+  },
+  "proposed_post_fix_obs_schema": [
+    "obs_uuid",
+    "original_obs_index",
+    "dataset",
+    "sample",
+    "cell_id",
+    "organism",
+    "tissue_type",
+    "is_organoid",
+    "source_sample_type",
+    "assay",
+    "technology",
+    "modality",
+    "age",
+    "source_age_label",
+    "trajectory_id",
+    "timepoint",
+    "timepoint_state",
+    "timepoint_original_value",
+    "timepoint_original_unit",
+    "cell_type",
+    "cell_type_ontology_term",
+    "cell_type_ontology_state",
+    "source_cell_type",
+    "perturbation",
+    "perturbation_type",
+    "is_control",
+    "is_baseline",
+    "n_counts",
+    "n_genes",
+    "is_low_quality",
+    "is_low_quality_state",
+    "donor_id",
+    "donor_id_state",
+    "sex",
+    "sex_state",
+    "ethnicity",
+    "ethnicity_state",
+    "disease",
+    "disease_state",
+    "source_barcode"
+  ],
+  "raw_provenance": {
+    "confidence": "high",
+    "manifests": [
+      {
+        "artifact": {
+          "created_at": "2026-07-18 12:46:27.733291+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259085837115\",\"object_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"role\":\"manifest\",\"source_identity\":\"GSE138002;ODD001099\"}",
+          "hash": "0CYHcV1TvcALBfPJePErlw",
+          "is_latest": true,
+          "key": "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/manifest.json",
+          "n_observations": null,
+          "otype": null,
+          "size": 21641,
+          "suffix": ".json",
+          "uid": "wwrD0MSexJnIymQr0000"
+        },
+        "payload": {
+          "actual_artifact_inventory": [
+            {
+              "filename": "obs.parquet",
+              "generation": "1784259070906873",
+              "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/obs.parquet#1784259070906873",
+              "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/obs.parquet",
+              "producer_generation_readback": {
+                "generation": "1784259070906873",
+                "sha256": "46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1",
+                "size_bytes": 7169552
+              },
+              "role": "obs",
+              "sha256": "46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1",
+              "size_bytes": 7169552,
+              "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/obs.parquet"
+            },
+            {
+              "filename": "X.h5ad",
+              "generation": "1784259076336212",
+              "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/X.h5ad#1784259076336212",
+              "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/X.h5ad",
+              "producer_generation_readback": {
+                "generation": "1784259076336212",
+                "sha256": "02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a",
+                "size_bytes": 416010806
+              },
+              "role": "X",
+              "sha256": "02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a",
+              "size_bytes": 416010806,
+              "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/X.h5ad"
+            },
+            {
+              "filename": "var.parquet",
+              "generation": "1784259082417171",
+              "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/var.parquet#1784259082417171",
+              "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/var.parquet",
+              "producer_generation_readback": {
+                "generation": "1784259082417171",
+                "sha256": "30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779",
+                "size_bytes": 841345
+              },
+              "role": "var",
+              "sha256": "30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779",
+              "size_bytes": 841345,
+              "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/var.parquet"
+            }
+          ],
+          "artifact_count": 3,
+          "bounded_wave": {
+            "assignment_count": 1,
+            "id": "publication-wave-10-of-13",
+            "number": 10,
+            "outcome_task_id": "t_e569bf35",
+            "singular": true
+          },
+          "bounded_wave_assignment": {
+            "accepted_evidence": null,
+            "existing_builder": null,
+            "outcome_task_id": "t_e569bf35",
+            "record_id": "temporal_v4_094_organoiddb_odd001099_gse138002",
+            "status": "triage",
+            "wave": 10
+          },
+          "bounded_wave_duplicate_check": {
+            "assignment_count": 1,
+            "duplicated_in_other_wave": false
+          },
+          "build_identity": {
+            "billing_project": "jkobject-1549353370965",
+            "collection_writes": 0,
+            "host": "pert-gym-worker-eu",
+            "lamin_writes": 0,
+            "operation": "single-pass gzip MatrixMarket stream directly to transposed CSR arrays; no dense or full decompressed matrix",
+            "row_filtering": "none; all 118,555 rows of the source Final matrix retained",
+            "script_sha256": "f1eb5ef85b0e4dbfdc10b5a33af6eb5dea837316034b109b3288943beb3848a5",
+            "zone": "europe-west1-b"
+          },
+          "catalogue_row_ids": [
+            94
+          ],
+          "component": "Human retina development organoid-related scRNA-seq",
+          "dataset": {
+            "X": {
+              "count_sum": 411695251,
+              "dtype": "int32",
+              "format": "csr",
+              "maximum_count": 1858,
+              "nnz": 178087120,
+              "shape": [
+                118555,
+                33694
+              ]
+            },
+            "links": {
+              "X_to_var": "identical ordered feature index",
+              "obs_to_X": "identical ordered cell index"
+            },
+            "objects": {
+              "X": {
+                "filename": "X.h5ad",
+                "generation": "1784259076336212",
+                "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/X.h5ad#1784259076336212",
+                "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/X.h5ad",
+                "producer_generation_readback": {
+                  "generation": "1784259076336212",
+                  "sha256": "02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a",
+                  "size_bytes": 416010806
+                },
+                "role": "X",
+                "sha256": "02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a",
+                "size_bytes": 416010806,
+                "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/X.h5ad"
+              },
+              "obs": {
+                "filename": "obs.parquet",
+                "generation": "1784259070906873",
+                "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/obs.parquet#1784259070906873",
+                "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/obs.parquet",
+                "producer_generation_readback": {
+                  "generation": "1784259070906873",
+                  "sha256": "46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1",
+                  "size_bytes": 7169552
+                },
+                "role": "obs",
+                "sha256": "46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1",
+                "size_bytes": 7169552,
+                "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/obs.parquet"
+              },
+              "var": {
+                "filename": "var.parquet",
+                "generation": "1784259082417171",
+                "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/var.parquet#1784259082417171",
+                "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/var.parquet",
+                "producer_generation_readback": {
+                  "generation": "1784259082417171",
+                  "sha256": "30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779",
+                  "size_bytes": 841345
+                },
+                "role": "var",
+                "sha256": "30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779",
+                "size_bytes": 841345,
+                "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002/var.parquet"
+              }
+            },
+            "obs": {
+              "columns": [
+                "cell_id",
+                "source_barcode",
+                "sample",
+                "source_age_label",
+                "source_num_genes_expressed",
+                "source_total_mrnas",
+                "source_sample_type",
+                "umap1_coord",
+                "umap2_coord",
+                "umap3_coord",
+                "source_cell_type",
+                "dataset",
+                "source_accession",
+                "organoiddb_id",
+                "timepoint",
+                "timepoint_unit",
+                "age",
+                "cell_type",
+                "tissue_type",
+                "organism",
+                "assay",
+                "modality",
+                "technology",
+                "is_organoid",
+                "donor_id",
+                "sex",
+                "disease",
+                "ethnicity",
+                "is_control",
+                "is_low_quality"
+              ],
+              "dtypes": {
+                "age": "string",
+                "assay": "object",
+                "cell_id": "object",
+                "cell_type": "string",
+                "dataset": "object",
+                "disease": "object",
+                "donor_id": "object",
+                "ethnicity": "object",
+                "is_control": "object",
+                "is_low_quality": "object",
+                "is_organoid": "bool",
+                "modality": "object",
+                "organism": "object",
+                "organoiddb_id": "object",
+                "sample": "object",
+                "sex": "object",
+                "source_accession": "object",
+                "source_age_label": "object",
+                "source_barcode": "object",
+                "source_cell_type": "object",
+                "source_num_genes_expressed": "int64",
+                "source_sample_type": "object",
+                "source_total_mrnas": "int64",
+                "technology": "object",
+                "timepoint": "Float64",
+                "timepoint_unit": "string",
+                "tissue_type": "object",
+                "umap1_coord": "float64",
+                "umap2_coord": "float64",
+                "umap3_coord": "float64"
+              },
+              "index_name": "cell_id",
+              "index_sha256": "eb37eee30793da97c679fa781156f3a7962ab850476cf77bdd30b76852c83110",
+              "null_counts": {
+                "age": 0,
+                "assay": 0,
+                "cell_id": 0,
+                "cell_type": 0,
+                "dataset": 0,
+                "disease": 118555,
+                "donor_id": 118555,
+                "ethnicity": 118555,
+                "is_control": 118555,
+                "is_low_quality": 118555,
+                "is_organoid": 0,
+                "modality": 0,
+                "organism": 0,
+                "organoiddb_id": 0,
+                "sample": 0,
+                "sex": 118555,
+                "source_accession": 0,
+                "source_age_label": 0,
+                "source_barcode": 0,
+                "source_cell_type": 0,
+                "source_num_genes_expressed": 0,
+                "source_sample_type": 0,
+                "source_total_mrnas": 0,
+                "technology": 0,
+                "timepoint": 11618,
+                "timepoint_unit": 11618,
+                "tissue_type": 0,
+                "umap1_coord": 0,
+                "umap2_coord": 0,
+                "umap3_coord": 0
+              },
+              "rows": 118555
+            },
+            "prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/datasets/GSE138002",
+            "quality_disposition": "included_exactly_once",
+            "shape": [
+              118555,
+              33694
+            ],
+            "var": {
+              "columns": [
+                "feature_id",
+                "gene_symbol",
+                "feature_type",
+                "organism",
+                "feature_namespace"
+              ],
+              "dtypes": {
+                "feature_id": "object",
+                "feature_namespace": "object",
+                "feature_type": "object",
+                "gene_symbol": "object",
+                "organism": "object"
+              },
+              "index_name": "feature_id_index",
+              "index_sha256": "9682c0cd068db48c2678becac6c3bd38aa378216aeb471fb1138096e9552500c",
+              "null_counts": {
+                "feature_id": 0,
+                "feature_namespace": 0,
+                "feature_type": 0,
+                "gene_symbol": 0,
+                "organism": 0
+              },
+              "rows": 33694
+            }
+          },
+          "dataset_count": 1,
+          "execution": {
+            "completed_at_epoch": 1784259085.6758893,
+            "payload_bytes_written": 424021703,
+            "product_credit": 0,
+            "started_at_epoch": 1784258585.9125743
+          },
+          "ledger": {
+            "accepted_delta_at_build": 0,
+            "artifact_accounting": {
+              "ledger_object_count": 1,
+              "manifest_object_count": 1,
+              "payload_object_count": 3,
+              "triplet_count": 1
+            },
+            "catalogue_row_ids": [
+              94
+            ],
+            "credit_state": "materialized_pending_independent_test_review_and_administrative_acceptance",
+            "credits": {
+              "materialized_component_records": 1,
+              "materialized_observations": 118555,
+              "materialized_triplets": 1
+            },
+            "dataset_accounting": {
+              "excluded_datasets": 0,
+              "included_datasets": 1,
+              "materialized_triplets": 1,
+              "source_datasets": 1
+            },
+            "debits": {
+              "dropped_observations": 0,
+              "exclusions": 0,
+              "product_credit": 0
+            },
+            "deduplication_key": "record_id:temporal_v4_094_organoiddb_odd001099_gse138002",
+            "deduplication_scope_count": 1,
+            "observation_accounting": {
+              "catalogue_source_n_obs": null,
+              "excluded_n_obs": 0,
+              "materialized_n_obs": 118555,
+              "resolved_source_n_obs": 118555
+            },
+            "quality_missingness_is_not_exclusion": true,
+            "record_accounting": {
+              "excluded_component_records": 0,
+              "included_component_records": 1,
+              "materialized_component_records": 1,
+              "source_component_records": 1
+            },
+            "record_id": "temporal_v4_094_organoiddb_odd001099_gse138002",
+            "schema_version": "pert-gym.proposed-publication-ledger/v2",
+            "submission_id": "pert-gym-ledger:materialized-build:t_768f4a0f:temporal_v4_094_organoiddb_odd001099_gse138002",
+            "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+            "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001099_gse138002"
+          },
+          "ledger_object": {
+            "generation": "1784259085496354",
+            "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/ledger.json#1784259085496354",
+            "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/ledger.json",
+            "producer_generation_readback": {
+              "generation": "1784259085496354",
+              "sha256": "f58043f29f103427ec2907c3baa53a6e87a49212a31062a73560a53e608fb273",
+              "size_bytes": 1606
+            },
+            "sha256": "f58043f29f103427ec2907c3baa53a6e87a49212a31062a73560a53e608fb273",
+            "size_bytes": 1606,
+            "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/ledger.json"
+          },
+          "matrix_conversion": {
+            "canonical_shape_cells_by_features": [
+              118555,
+              33694
+            ],
+            "conversion": "single-pass gzip MatrixMarket stream directly to transposed CSR arrays; no dense or full decompressed matrix",
+            "count_sum": 411695251,
+            "maximum_count": 1858,
+            "nnz": 178087120,
+            "source_coordinate_order": "column-major, row-sorted",
+            "source_shape_features_by_cells": [
+              33694,
+              118555
+            ]
+          },
+          "matrix_nnz": 178087120,
+          "missingness": {
+            "affected_observations": 118555,
+            "dependency_created": false,
+            "disease_missing_count": 118555,
+            "donor_id_missing_count": 118555,
+            "ethnicity_missing_count": 118555,
+            "excluded_component_records": 0,
+            "excluded_observations": 0,
+            "is_control_missing_count": 118555,
+            "is_low_quality_missing_count": 118555,
+            "non_excluding": true,
+            "numeric_timepoint_missing_count": 11618,
+            "numeric_timepoint_missing_reason": "adult source label has no numeric age; rows retained",
+            "obs_null_counts": {
+              "age": 0,
+              "assay": 0,
+              "cell_id": 0,
+              "cell_type": 0,
+              "dataset": 0,
+              "disease": 118555,
+              "donor_id": 118555,
+              "ethnicity": 118555,
+              "is_control": 118555,
+              "is_low_quality": 118555,
+              "is_organoid": 0,
+              "modality": 0,
+              "organism": 0,
+              "organoiddb_id": 0,
+              "sample": 0,
+              "sex": 118555,
+              "source_accession": 0,
+              "source_age_label": 0,
+              "source_barcode": 0,
+              "source_cell_type": 0,
+              "source_num_genes_expressed": 0,
+              "source_sample_type": 0,
+              "source_total_mrnas": 0,
+              "technology": 0,
+              "timepoint": 11618,
+              "timepoint_unit": 11618,
+              "tissue_type": 0,
+              "umap1_coord": 0,
+              "umap2_coord": 0,
+              "umap3_coord": 0
+            },
+            "quality_state": "source-final matrix and source-provided per-cell gene/UMI totals retained; no independent source low-quality flag supplied and no rows filtered",
+            "semantic_placeholder_counts": {},
+            "sex_missing_count": 118555,
+            "source_age_available": true,
+            "source_age_state": "source age labels preserved for all observations; numeric timepoint/unit parsed where explicit"
+          },
+          "observation_count": 118555,
+          "provenance": {
+            "all_source_cells_retained": true,
+            "pubmed_ids": [
+              "32386599",
+              "35259089"
+            ],
+            "series_title": "scRNA-seq of the developing human retina",
+            "source_overall_design": "10x Genomics V2 single-cell RNA-sequencing",
+            "source_processed_payload": "GEO deposited Final matrix, Final barcode annotation and genes table"
+          },
+          "raw_count_sum": 411695251,
+          "record_id": "temporal_v4_094_organoiddb_odd001099_gse138002",
+          "revision": "temporal-v4-094-wave10-800d1e2996495aad",
+          "revision_fingerprint_sha256": "800d1e2996495aad6788e87cf0848de95faff4b91b0051fa4bcc27efb014becc",
+          "revision_prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad",
+          "sample_count": 24,
+          "sample_counts": {
+            "24_Day": 24,
+            "30_Day": 175,
+            "42_Day": 5919,
+            "59_Day": 5424,
+            "Adult": 11618,
+            "Hgw11": 8058,
+            "Hgw12": 5467,
+            "Hgw13": 9912,
+            "Hgw14": 2958,
+            "Hgw15": 7480,
+            "Hgw16": 3196,
+            "Hgw17": 6034,
+            "Hgw18": 3565,
+            "Hgw19_rep1": 4332,
+            "Hgw19_rep2": 3899,
+            "Hgw20_rep1": 5060,
+            "Hgw20_rep2": 7633,
+            "Hgw22": 2230,
+            "Hgw24_rep1": 2693,
+            "Hgw24_rep2": 4468,
+            "Hgw27": 2054,
+            "Hgw9": 8974,
+            "Hpnd8_rep1": 4010,
+            "Hpnd8_rep2": 3372
+          },
+          "sample_type_counts": {
+            "Macula": 9070,
+            "Periphery": 11005,
+            "Retinal Organoid": 11518,
+            "Whole Retina": 86962
+          },
+          "schema_version": "pert-gym.frozen-streamed-matrixmarket-component/v1",
+          "source_identity": {
+            "accession": "GSE138002",
+            "controlling_publication_manifest_sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+            "controlling_record": {
+              "catalogue_origins": [
+                "temporal_pretraining_datasets_v4"
+              ],
+              "catalogue_row_ids": [
+                94
+              ],
+              "classification": "executable",
+              "collection_membership": {
+                "artifact_keys_sample": [],
+                "authoritative_coverage_note": "metadata match only; no live Lamin assertion",
+                "canonical_20260621_member_count": 0,
+                "categories": {}
+              },
+              "completion_state": "source_executable_not_completion",
+              "component": "Human retina development organoid-related scRNA-seq",
+              "denominator_basis": "temporal_pretraining_datasets_v4 retained row + upstream immutable accession/collection identity",
+              "downloadable": "yes",
+              "evidence_paths": [
+                "data/temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv"
+              ],
+              "exact_remaining_work": "Resolve exact payload manifest and execute EU-worker backed conversion/publication with readback; catalogue/source probe alone is never completion.",
+              "exclusion_reason": "",
+              "existing_lamin_coverage": "no matched member in unified_collection_manifest_20260621",
+              "expected_denominator_verbatim": "catalogue logical row; cells=unknown",
+              "logical_dataset": "organoiddb Odd001099 GSE138002",
+              "modality": "scRNA-seq",
+              "modality_contract": "expression_like_obs_X_var",
+              "pilot_or_probe_is_complete": false,
+              "record_id": "temporal_v4_094_organoiddb_odd001099_gse138002",
+              "source_bytes": null,
+              "source_integrity_identity": [
+                "upstream_immutable_identity:GSE138002;ODD001099"
+              ],
+              "source_n_obs": null,
+              "source_n_vars": null,
+              "source_object_identity": "GSE138002;ODD001099",
+              "source_uri": "http://www.inbirg.com/organoid_db/detail/Odd001099",
+              "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001099_gse138002",
+              "target_shared_var_identity": "sha256(canonical ordered var identifiers + organism + feature namespace); compute on EU worker before publication",
+              "target_zarr_or_block_plan": "EU-worker backed probe then adaptive sparse row blocks; never Mac payload"
+            },
+            "files": {
+              "barcodes": {
+                "filename": "GSE138002_Final_barcodes.csv.gz",
+                "sha256": "bce0b8a5aece7e5abdcdd13871dc9933addf56c1e001d76b636ebf812e8bceef",
+                "size_bytes": 5239639
+              },
+              "genes": {
+                "filename": "GSE138002_genes.csv.gz",
+                "sha256": "cfc6ae38da82b53b31f8c362972f210404848bf42fda50993093fbc66f094237",
+                "size_bytes": 354855
+              },
+              "matrix": {
+                "filename": "GSE138002_Final_matrix.mtx.gz",
+                "sha256": "e4467d5b9d06d48ea820010449a51490b302d8050cb4433cb0b7d806550f982a",
+                "size_bytes": 564980184
+              },
+              "series": {
+                "filename": "GSE138002_series_matrix.txt.gz",
+                "sha256": "192982dde01ec70f47687b0fe01d92231164773f00c31cbfc2ab0225209248e6",
+                "size_bytes": 2376
+              }
+            },
+            "geo_series_matrix_uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/matrix/GSE138002_series_matrix.txt.gz",
+            "geo_supplement_base_uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/suppl/",
+            "organoiddb_id": "ODD001099",
+            "source_uri": "http://www.inbirg.com/organoid_db/detail/Odd001099"
+          },
+          "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001099_gse138002",
+          "task_id": "t_768f4a0f",
+          "timepoint_unit_counts": {
+            "<NA>": 11618,
+            "day": 11542,
+            "gestational_week": 88013,
+            "postnatal_day": 7382
+          },
+          "triplet_count": 1,
+          "variable_count": 33694
+        },
+        "payload_evidence": {
+          "downloaded_bytes": 21641,
+          "downloaded_sha256": "e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac",
+          "path_exists": true,
+          "remote_stat": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/manifest.json:\n  Creation Time:               2026-07-17T03:31:25Z\n  Update Time:                 2026-07-17T03:31:25Z\n  Storage Class Update Time:   2026-07-17T03:31:25Z\n  Storage Class:               STANDARD\n  Content-Length:              21641\n  Content-Type:                application/json\n  Hash (CRC32C):               uBzY/w==\n  Hash (MD5):                  0CYHcV1TvcALBfPJePErlw==\n  ETag:                        CLvG/ofj2JUDEAE=\n  Generation:                  1784259085837115\n  Metageneration:              1\n  ACL:                         []\nTOTAL: 1 objects, 21641 bytes (21.13kiB)\n",
+          "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/manifest.json"
+        }
+      }
+    ],
+    "related_lamin_artifacts": [
+      {
+        "created_at": "2026-07-18 12:46:24.806144+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259076336212\",\"object_sha256\":\"02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a\",\"role\":\"X\",\"source_identity\":\"GSE138002;ODD001099\"}",
+        "hash": "kz2RwTzkiAv3f-OFnKYKoQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE138002/X.h5ad",
+        "n_observations": null,
+        "otype": "AnnData",
+        "size": 416010806,
+        "suffix": ".h5ad",
+        "uid": "GPge5BVaaXcCGgsU0000"
+      },
+      {
+        "created_at": "2026-07-18 12:46:23.331586+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259070906873\",\"object_sha256\":\"46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1\",\"role\":\"obs\",\"source_identity\":\"GSE138002;ODD001099\"}",
+        "hash": "Z4ldVTqTA2urrS9KOpa8EQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE138002/obs.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 7169552,
+        "suffix": ".parquet",
+        "uid": "MfCWePqr8F4TThDo0000"
+      },
+      {
+        "created_at": "2026-07-18 12:46:26.274136+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259082417171\",\"object_sha256\":\"30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779\",\"role\":\"var\",\"source_identity\":\"GSE138002;ODD001099\"}",
+        "hash": "JCkkGacA4SiPEMqy5gVxHQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE138002/var.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 841345,
+        "suffix": ".parquet",
+        "uid": "jib8jqqYfSI3vzIW0000"
+      },
+      {
+        "created_at": "2026-07-18 12:46:27.733291+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259085837115\",\"object_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"role\":\"manifest\",\"source_identity\":\"GSE138002;ODD001099\"}",
+        "hash": "0CYHcV1TvcALBfPJePErlw",
+        "is_latest": true,
+        "key": "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/manifest.json",
+        "n_observations": null,
+        "otype": null,
+        "size": 21641,
+        "suffix": ".json",
+        "uid": "wwrD0MSexJnIymQr0000"
+      }
+    ]
+  },
+  "read_only": true,
+  "remediation_steps": [
+    "Revise OBS only and publish the source UMAP as typed obsm_source_umap; preserve exact X/var.",
+    "Split temporal trajectories/units, derive minute-valued timepoint for numeric rows, and keep Adult age unknown.",
+    "Apply exact broad CL mappings only; preserve three composite/unmatched labels with ontology state unknown.",
+    "Add global OBS identity, no-perturbation semantics, QC aliases and explicit field state/source columns.",
+    "Re-link revised obs to exact X GPge5BVaaXcCGgsU0000 and verify X->var jib8jqqYfSI3vzIW0000."
+  ],
+  "residual_risks": [
+    "Donor, sex, ethnicity, disease and per-cell quality verdicts are not source-backed in the current payload and remain unknown.",
+    "Adult rows have no numeric age; a numeric temporal coordinate cannot be derived honestly.",
+    "Three composite/precursor author labels have no exact one-term CL mapping in the bounded OLS check."
+  ],
+  "scientific_identity": {
+    "assay": "10x Genomics Chromium v2 3' single-cell RNA-seq",
+    "modality": "scRNA-seq",
+    "organism": "Homo sapiens",
+    "organism_ontology_term": "NCBITaxon:9606",
+    "organoiddb_id": "ODD001099",
+    "source_accession": "GSE138002",
+    "title": "Single-cell analysis of developing human retina and retinal organoids"
+  },
+  "source_evidence": [
+    {
+      "bytes": 2623,
+      "sha256": "3831efe73e940746c47084840571efc2d352ed905b388e0a6cfd07407916ce56",
+      "supports": "organoid days 24/30/42/59 plus gestational, postnatal and adult primary retina; hg38; finalized 118555-cell matrix",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/soft/GSE138002_family.soft.gz"
+    },
+    {
+      "doi": "10.1016/j.devcel.2020.04.009",
+      "supports": "controlling developmental-retina publication",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32386599/"
+    },
+    {
+      "supports": "Cell Ontology mappings for eight unambiguous broad author labels; composite precursor labels remain unknown.",
+      "url": "https://www.ebi.ac.uk/ols4/ontologies/cl"
+    }
+  ],
+  "task_id": "t_2122b5f4",
+  "temporal_verdict": {
+    "action": "Create explicit trajectory/source-context fields and canonical minute values for day/week rows; preserve adult age as unknown rather than inventing a number.",
+    "evidence": "Live OBS contains retinal-organoid days, primary gestational weeks, postnatal days and adult rows; 11618 adults have no numeric age.",
+    "verdict": "temporal_mixed_trajectories_and_units"
+  },
+  "triplet_validation": {
+    "X_var_link": {
+      "key": "data/cleaned/GSE138002/var.parquet",
+      "latest_exact_key_candidate_count": 1,
+      "raw_key": "data/cleaned/GSE138002/var.parquet",
+      "raw_uid": null,
+      "resolved": true,
+      "uid": "jib8jqqYfSI3vzIW0000"
+    },
+    "X_var_link_is_exact": true,
+    "obs_X_link": {
+      "key": "data/cleaned/GSE138002/X.h5ad",
+      "latest_exact_key_candidate_count": 1,
+      "raw_key": "data/cleaned/GSE138002/X.h5ad",
+      "raw_uid": null,
+      "resolved": true,
+      "uid": "GPge5BVaaXcCGgsU0000"
+    },
+    "obs_X_link_is_exact": true,
+    "obs_index_equal_X_obs_index": true,
+    "obs_rows_equal_X_rows": true,
+    "same_prefix_var": true,
+    "same_prefix_var_latest_candidates": [
+      {
+        "created_at": "2026-07-18 12:46:26.274136+00:00",
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001099_gse138002\",\"manifest_generation\":\"1784259085837115\",\"manifest_sha256\":\"e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac\",\"object_generation\":\"1784259082417171\",\"object_sha256\":\"30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779\",\"role\":\"var\",\"source_identity\":\"GSE138002;ODD001099\"}",
+        "hash": "JCkkGacA4SiPEMqy5gVxHQ",
+        "is_latest": true,
+        "key": "data/cleaned/GSE138002/var.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 841345,
+        "suffix": ".parquet",
+        "uid": "jib8jqqYfSI3vzIW0000"
+      }
+    ],
+    "var_index_equal_X_var_index": true,
+    "var_rows_equal_X_columns": true
+  },
+  "validators": [
+    "Every current OBS column has exactly one keep/drop/map/derive decision.",
+    "OBS row count/order and X obs index hash are unchanged by OBS-only revisions.",
+    "VAR row count/order equals X var axis; identifiers are unique and control-character-free.",
+    "obs->X and X->var resolve to exact intended keys/UIDs and every payload exists by fresh readback.",
+    "The X artifact links to one exact same-prefix var.parquet.",
+    "Missing applicable values use unknown; genuinely inapplicable values use not_applicable.",
+    "Global obs identity validates and is unique."
+  ],
+  "var_plan": {
+    "evidence": "33694 unique ENSG identifiers; zero tabs, control characters, whitespace defects or duplicates; exact X ordered-axis parity.",
+    "steps": [
+      "Retain current ordered var and source gene_symbol/feature metadata.",
+      "Assert index == feature_id, Ensembl namespace, Homo sapiens and exact X n_vars/order.",
+      "Do not rewrite X or var for OBS/UMAP remediation."
+    ],
+    "verdict": "valid_source_ensembl_human_axis"
+  }
+}
