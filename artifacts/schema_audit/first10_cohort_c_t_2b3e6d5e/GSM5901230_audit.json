@@ -1,0 +1,909 @@
+{
+  "current_artifacts": {
+    "obs": {
+      "created_at": "2026-07-18 07:13:02.460876+00:00",
+      "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257595511069\",\"object_sha256\":\"f35de6ba53b5ead8e65ee8ca7cd1419f61dbd8b476b2ab2c6ee4017dc96b0be6\",\"role\":\"obs\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+      "hash": "j7h38e6PqY1FPQlSZfd9DQ",
+      "is_latest": true,
+      "key": "data/cleaned/GSM5901230/obs.parquet",
+      "n_observations": null,
+      "path": "gs://scperturb/data/cleaned/GSM5901230/obs.parquet",
+      "size": 223506,
+      "uid": "770vKgYITsWgwsQ50000",
+      "version": "0000"
+    },
+    "var": {
+      "created_at": "2026-07-18 07:13:05.428432+00:00",
+      "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257597041087\",\"object_sha256\":\"1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134\",\"role\":\"var\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+      "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+      "is_latest": true,
+      "key": "data/cleaned/GSM5901230/var.parquet",
+      "n_observations": null,
+      "path": "gs://scperturb/data/cleaned/GSM5901230/var.parquet",
+      "size": 498556,
+      "uid": "NCuDtw4vtWZpliBU0000",
+      "version": "0000"
+    },
+    "x": {
+      "created_at": "2026-07-18 07:13:03.965976+00:00",
+      "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257596242241\",\"object_sha256\":\"ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047\",\"role\":\"X\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+      "hash": "NJbcmYRJByidha4aC-gltA",
+      "is_latest": true,
+      "key": "data/cleaned/GSM5901230/X.h5ad",
+      "n_observations": null,
+      "path": "gs://scperturb/data/cleaned/GSM5901230/X.h5ad",
+      "size": 41497959,
+      "uid": "vn537Bt2uFhZncXo0000",
+      "version": "0000"
+    }
+  },
+  "current_object_generation_recheck": {
+    "obs": {
+      "etag": "CPW6neDp8pUDEAE=",
+      "generation": "1785154234703221",
+      "size": 223506,
+      "uri": "gs://scperturb/data/cleaned/GSM5901230/obs.parquet"
+    },
+    "var": {
+      "etag": "CJqHn+Dp8pUDEAE=",
+      "generation": "1785154234729370",
+      "size": 498556,
+      "uri": "gs://scperturb/data/cleaned/GSM5901230/var.parquet"
+    },
+    "x": {
+      "etag": "CL34n+Dp8pUDEAE=",
+      "generation": "1785154234743869",
+      "size": 41497959,
+      "uri": "gs://scperturb/data/cleaned/GSM5901230/X.h5ad"
+    }
+  },
+  "current_object_metadata": {
+    "obs": {
+      "bucket": "scperturb",
+      "crc32c": null,
+      "etag": "CPW6neDp8pUDEAE=",
+      "generation": "1785154234703221",
+      "md5Hash": null,
+      "name": "data/cleaned/GSM5901230/obs.parquet",
+      "size": 223506,
+      "timeCreated": null,
+      "updated": null
+    },
+    "var": {
+      "bucket": "scperturb",
+      "crc32c": null,
+      "etag": "CJqHn+Dp8pUDEAE=",
+      "generation": "1785154234729370",
+      "md5Hash": null,
+      "name": "data/cleaned/GSM5901230/var.parquet",
+      "size": 498556,
+      "timeCreated": null,
+      "updated": null
+    },
+    "x": {
+      "bucket": "scperturb",
+      "crc32c": null,
+      "etag": "CL34n+Dp8pUDEAE=",
+      "generation": "1785154234743869",
+      "md5Hash": null,
+      "name": "data/cleaned/GSM5901230/X.h5ad",
+      "size": 41497959,
+      "timeCreated": null,
+      "updated": null
+    }
+  },
+  "current_payload_sha256": {
+    "obs": "f35de6ba53b5ead8e65ee8ca7cd1419f61dbd8b476b2ab2c6ee4017dc96b0be6",
+    "var": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+    "x": "ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047"
+  },
+  "dataset": "GSM5901230",
+  "evidence_binding": {
+    "generation_recheck_sha256": "808bb75d71a6d9ea99ce313507727caaef0fd418e4050b8bddd90c893f2d39d0",
+    "generation_rechecked_at": "2026-07-28T11:10:30.728024+00:00",
+    "live_audit_sha256": "0fa2b9fd5db6aa45a18c7c9e9e90f3dc2e4dca0ba931b9eef24d9f48bb2389c5",
+    "source_evidence_sha256": "590f48e160a5be1dd3e925e9104f676d6ae3cf8ed278d6d62a0da667959d098d",
+    "var_all_rows_evidence_sha256": "69b0d19e943b9e945e355a8fdcae042e3473274b135837d275e63f08bc4c4f23"
+  },
+  "feature_link_targets": {
+    "X.var": "NCuDtw4vtWZpliBU0000",
+    "obs.X": "vn537Bt2uFhZncXo0000"
+  },
+  "feature_links": {
+    "obs_to_x": true,
+    "x_to_var": true
+  },
+  "format": "pert-gym.first10-cohort-c-dataset-audit/v1",
+  "layout_audit": {
+    "canonical_prefix": "data/cleaned/GSM5901230",
+    "chunk_verdict": "appropriate: one 4.4k-6.4k-cell CSR member of 41-60 MB; rechunking would add overhead without a failed invariant",
+    "chunking": "not_chunked",
+    "same_prefix_var": true,
+    "var_members_for_dataset": 1,
+    "var_verdict": "exactly one same-prefix VAR for this unchunked child; identical sibling hashes prove family axis parity but do not justify violating same-prefix contract"
+  },
+  "obs_audit": {
+    "column_decisions": [
+      {
+        "action": "keep",
+        "column": "cell_id",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 4807,
+        "reason": "unique source-backed cell identity",
+        "rows": 4807,
+        "target": "cell_id",
+        "top_values": [
+          {
+            "count": 1,
+            "value": "GSM5901230:TTTGTTGTCTGGAGAG-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:AAACCCACAAGACGGT-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:AAACGAAAGAAGAGCA-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:AAACGAAAGGTAAGAG-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:AAACGAAAGTTTGCTG-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:AAACGAACAATCGCGC-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:AAACGAAGTTCAATCG-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:TTTGGAGTCCTTACCG-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:TTTGGAGTCCTACTGC-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:TTTGGAGGTCGCCACA-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:TTTGGAGGTATACGGG-1"
+          },
+          {
+            "count": 1,
+            "value": "GSM5901230:TTTGGAGCACGCGCAT-1"
+          }
+        ]
+      },
+      {
+        "action": "keep",
+        "column": "barcode",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 4807,
+        "reason": "unique source 10x barcode; useful for replay",
+        "rows": 4807,
+        "target": "barcode",
+        "top_values": [
+          {
+            "count": 1,
+            "value": "TTTGTTGTCTGGAGAG-1"
+          },
+          {
+            "count": 1,
+            "value": "AAACCCACAAGACGGT-1"
+          },
+          {
+            "count": 1,
+            "value": "AAACGAAAGAAGAGCA-1"
+          },
+          {
+            "count": 1,
+            "value": "AAACGAAAGGTAAGAG-1"
+          },
+          {
+            "count": 1,
+            "value": "AAACGAAAGTTTGCTG-1"
+          },
+          {
+            "count": 1,
+            "value": "AAACGAACAATCGCGC-1"
+          },
+          {
+            "count": 1,
+            "value": "AAACGAAGTTCAATCG-1"
+          },
+          {
+            "count": 1,
+            "value": "TTTGGAGTCCTTACCG-1"
+          },
+          {
+            "count": 1,
+            "value": "TTTGGAGTCCTACTGC-1"
+          },
+          {
+            "count": 1,
+            "value": "TTTGGAGGTCGCCACA-1"
+          },
+          {
+            "count": 1,
+            "value": "TTTGGAGGTATACGGG-1"
+          },
+          {
+            "count": 1,
+            "value": "TTTGGAGCACGCGCAT-1"
+          }
+        ]
+      },
+      {
+        "action": "move_to_dataset_metadata",
+        "column": "source_accession",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "exact but dataset-wide provenance",
+        "rows": 4807,
+        "target": "source_accession",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "GSE196799"
+          }
+        ]
+      },
+      {
+        "action": "move_to_dataset_metadata",
+        "column": "sample_accession",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "exact but dataset-wide provenance",
+        "rows": 4807,
+        "target": "sample_accession",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "GSM5901230"
+          }
+        ]
+      },
+      {
+        "action": "move_to_dataset_metadata",
+        "column": "sample_title",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "descriptive source constant",
+        "rows": 4807,
+        "target": "sample_title",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "day_6_3D_suspension_culture"
+          }
+        ]
+      },
+      {
+        "action": "map",
+        "column": "source_name",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "scientific source material; not a current cell-type annotation",
+        "rows": 4807,
+        "target": "source_material",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "hiPSCs"
+          }
+        ]
+      },
+      {
+        "action": "map",
+        "column": "experiment",
+        "control_character_rows": 0,
+        "dtype": "int64",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "source-backed experimental stratum",
+        "rows": 4807,
+        "target": "source_experiment,batch",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "action": "move_to_dataset_metadata",
+        "column": "timepoint",
+        "control_character_rows": 0,
+        "dtype": "float64",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "single constant snapshot in this GSM child; preserve family time-course relation separately",
+        "rows": 4807,
+        "target": "timepoint_days,timepoint_minutes",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "6.0"
+          }
+        ]
+      },
+      {
+        "action": "move_to_dataset_metadata",
+        "column": "timepoint_unit",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "paired with child-level constant timepoint",
+        "rows": 4807,
+        "target": "timepoint unit/day",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "day"
+          }
+        ]
+      },
+      {
+        "action": "keep",
+        "column": "culture_method",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "inference-relevant experimental conditioning field",
+        "rows": 4807,
+        "target": "culture_method",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "3D suspension culture"
+          }
+        ]
+      },
+      {
+        "action": "keep",
+        "column": "ascorbic_acid_from_day_12",
+        "control_character_rows": 0,
+        "dtype": "bool",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "inference-relevant family condition; false for this child",
+        "rows": 4807,
+        "target": "ascorbic_acid_from_day_12",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "False"
+          }
+        ]
+      },
+      {
+        "action": "move_to_dataset_metadata",
+        "column": "biosample",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "exact sample-level provenance",
+        "rows": 4807,
+        "target": "biosample",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "SAMN25978134"
+          }
+        ]
+      },
+      {
+        "action": "move_to_dataset_metadata",
+        "column": "sra_experiment",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "exact sample-level provenance",
+        "rows": 4807,
+        "target": "sra_experiment",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "SRX14194757"
+          }
+        ]
+      },
+      {
+        "action": "keep_and_map",
+        "column": "organism",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "scientific conditioning field; GEO taxid 9606",
+        "rows": 4807,
+        "target": "organism,organism_ontology_id",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "Homo sapiens"
+          }
+        ]
+      },
+      {
+        "action": "map",
+        "column": "assay",
+        "control_character_rows": 0,
+        "dtype": "object",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "source protocol specifies 10x 3' v3.1",
+        "rows": 4807,
+        "target": "assay,assay_ontology_id,technology,technology_ontology_id",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "10x Genomics 3' scRNA-seq"
+          }
+        ]
+      },
+      {
+        "action": "map",
+        "column": "n_genes_by_counts",
+        "control_character_rows": 0,
+        "dtype": "int32",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 2560,
+        "reason": "cell-level QC covariate",
+        "rows": 4807,
+        "target": "n_genes",
+        "top_values": [
+          {
+            "count": 12,
+            "value": "2993"
+          },
+          {
+            "count": 8,
+            "value": "3134"
+          },
+          {
+            "count": 8,
+            "value": "2855"
+          },
+          {
+            "count": 8,
+            "value": "2794"
+          },
+          {
+            "count": 7,
+            "value": "2883"
+          },
+          {
+            "count": 7,
+            "value": "3157"
+          },
+          {
+            "count": 7,
+            "value": "3057"
+          },
+          {
+            "count": 7,
+            "value": "3170"
+          },
+          {
+            "count": 7,
+            "value": "3217"
+          },
+          {
+            "count": 7,
+            "value": "2978"
+          },
+          {
+            "count": 7,
+            "value": "2858"
+          },
+          {
+            "count": 7,
+            "value": "3151"
+          }
+        ]
+      },
+      {
+        "action": "map",
+        "column": "total_counts",
+        "control_character_rows": 0,
+        "dtype": "int64",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 4093,
+        "reason": "cell-level QC covariate",
+        "rows": 4807,
+        "target": "n_counts",
+        "top_values": [
+          {
+            "count": 4,
+            "value": "8092"
+          },
+          {
+            "count": 4,
+            "value": "9810"
+          },
+          {
+            "count": 4,
+            "value": "5980"
+          },
+          {
+            "count": 4,
+            "value": "7916"
+          },
+          {
+            "count": 4,
+            "value": "7765"
+          },
+          {
+            "count": 4,
+            "value": "7929"
+          },
+          {
+            "count": 4,
+            "value": "7365"
+          },
+          {
+            "count": 4,
+            "value": "6862"
+          },
+          {
+            "count": 4,
+            "value": "15077"
+          },
+          {
+            "count": 4,
+            "value": "7437"
+          },
+          {
+            "count": 3,
+            "value": "7953"
+          },
+          {
+            "count": 3,
+            "value": "8415"
+          }
+        ]
+      },
+      {
+        "action": "map",
+        "column": "pct_counts_mt",
+        "control_character_rows": 0,
+        "dtype": "float32",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 4794,
+        "reason": "cell-level QC covariate",
+        "rows": 4807,
+        "target": "pct_mito",
+        "top_values": [
+          {
+            "count": 2,
+            "value": "7.6923075"
+          },
+          {
+            "count": 2,
+            "value": "6.304241"
+          },
+          {
+            "count": 2,
+            "value": "7.0945945"
+          },
+          {
+            "count": 2,
+            "value": "7.0652175"
+          },
+          {
+            "count": 2,
+            "value": "7.7922077"
+          },
+          {
+            "count": 2,
+            "value": "6.4930162"
+          },
+          {
+            "count": 2,
+            "value": "6.3085938"
+          },
+          {
+            "count": 2,
+            "value": "6.304348"
+          },
+          {
+            "count": 2,
+            "value": "6.58078"
+          },
+          {
+            "count": 2,
+            "value": "5.263158"
+          },
+          {
+            "count": 2,
+            "value": "8.5561495"
+          },
+          {
+            "count": 2,
+            "value": "5.0"
+          }
+        ]
+      },
+      {
+        "action": "move_to_dataset_metadata",
+        "column": "source_cell_call_flag_missing",
+        "control_character_rows": 0,
+        "dtype": "bool",
+        "non_null": 4807,
+        "null": 0,
+        "nunique_non_null": 1,
+        "reason": "ingestion/source-quality flag, not a biological cell variable",
+        "rows": 4807,
+        "target": "source_cell_call_flag_missing",
+        "top_values": [
+          {
+            "count": 4807,
+            "value": "True"
+          }
+        ]
+      }
+    ],
+    "dataset_metadata_proposal": {
+      "biosample": "SAMN25978134",
+      "cell_qc": {
+        "mitochondrial_fraction_strictly_less_than": 0.1,
+        "n_genes_strictly_greater_than": 2000
+      },
+      "child_temporal_status": "non_temporal_single_snapshot",
+      "dataset_id": "GSM5901230",
+      "doublet_filter_applied": false,
+      "family_observed_days": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        18
+      ],
+      "family_temporal_status": "temporal_time_course",
+      "sample_accession": "GSM5901230",
+      "sample_title": "day_6_3D_suspension_culture",
+      "source_accession": "GSE196799",
+      "source_cell_call_flag_missing": true,
+      "source_relation": "GEO series child sample",
+      "source_relation_confidence": "exact",
+      "sra_experiment": "SRX14194757",
+      "temporal_family": "GSE196799",
+      "timepoint_days": 6,
+      "timepoint_minutes": 8640,
+      "x_semantics": "raw_counts_after_deterministic_cell_qc"
+    },
+    "derived_fields": {
+      "age": "unknown",
+      "cell_line": "unknown; no exact line identifier in bounded source",
+      "cell_type": "unknown; applicable but no cell-level labels in bounded source/current OBS",
+      "dataset": "GSM child accession",
+      "disease": "unknown",
+      "donor_id": "unknown",
+      "ethnicity": "unknown",
+      "is_bulk": false,
+      "is_control": "true in the perturbation-control sense; not a claim of developmental baseline equivalence",
+      "is_pseudobulk": false,
+      "modality": "scRNA-seq (EFO:0008913) from GEO library strategy/source",
+      "obs_uuid": "pert-gym.obs.v1 UUID5 from dataset, canonical prefix, original index",
+      "original_obs_index": "exact predecessor OBS index",
+      "perturbation": "none",
+      "perturbation_type": "none",
+      "sample": "GSM child accession",
+      "sequencer": "Illumina NovaSeq 6000 from GEO instrument model",
+      "sex": "unknown",
+      "tissue_type": "not_applicable for in-vitro 3D suspension culture"
+    },
+    "index_sha256": "0183ccf12a871b94c22676fd6768c1e9f7b33277c85952b86ac3e7c55b281df2",
+    "index_unique": true,
+    "missing_required_identity": [
+      "obs_uuid",
+      "original_obs_index"
+    ],
+    "rows": 4807
+  },
+  "remediation": {
+    "executable": "remediate_local.py",
+    "publication_owner": "downstream single writer t_d6fc80f0",
+    "steps": [
+      "freeze exact predecessor UIDs, keys, GCS generations and SHA-256 from this packet",
+      "materialize revised OBS with exhaustive keep/drop/map/derive decisions and deterministic identity",
+      "materialize metadata-enriched VAR without changing feature order",
+      "retain X exact bytes and restore obs->X->var links",
+      "publish append-only revisions, then successor Collection with no unrelated drift",
+      "run bounded EU readback and zero-write replay before review"
+    ],
+    "validators": [
+      "source/current hashes and artifact UIDs unchanged before write",
+      "OBS row count/order/index conserved; obs_uuid present, valid and unique",
+      "all current OBS columns have an explicit decision",
+      "VAR exactly 20,631 unique ENSG IDs, no controls, exact X feature order",
+      "X shape/CSR integer sum/nnz/hash unchanged",
+      "obs->X and X->var exact UID links resolve",
+      "one same-prefix VAR; no chunks introduced",
+      "child temporal status non_temporal_single_snapshot and GSE196799 family relation retained",
+      "unknown and not_applicable states remain distinct"
+    ]
+  },
+  "residual_unknowns": [
+    "cell-level differentiated cell_type labels are absent from bounded GEO/current OBS evidence",
+    "exact cell-line/donor/sex/age/ethnicity/disease metadata are absent from bounded evidence",
+    "GEO text contains a processing inconsistency: alignment says GRCh38/Ensembl 99 while a separate Genome_build line says hg19; the deposited ordered ENSG feature axis is accepted, but the writer must preserve this provenance note rather than relabel the build"
+  ],
+  "source_provenance": {
+    "confidence": "exact",
+    "geo_family": {
+      "accepted_manifest": {
+        "generation": "1784257733140715",
+        "sha256": "3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3",
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/manifest.json"
+      },
+      "accession": "GSE196799",
+      "bioproject": "PRJNA807328",
+      "geo_soft_bytes": 3302,
+      "geo_soft_sha256": "41417f84952eebc075efffe2266fefb227341bf1cb0bec558654d49a81278610",
+      "geo_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE196799&targ=self&form=text&view=full",
+      "observed_family_days_from_manifest": [
+        0,
+        3,
+        6,
+        9,
+        12,
+        18
+      ],
+      "organism": "Homo sapiens",
+      "organism_ontology_id": "NCBITaxon:9606",
+      "organoiddb_id": "Odd001155",
+      "pubmed_id": "37714147",
+      "raw_archive": {
+        "bytes": 1804912640,
+        "sha256": "bc62029352aed4a799c22558a9e9e97c7746bd104d6331ddaa1b221cf15c18c2",
+        "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE196nnn/GSE196799/suppl/GSE196799_RAW.tar"
+      },
+      "temporal_relation": "family_time_course",
+      "title": "Single-cell characterization of neovascularization using hiPSC-derived endothelial cells in a 3D microenvironment"
+    },
+    "geo_sample": {
+      "biosample": "SAMN25978134",
+      "culture_method": "3D suspension culture",
+      "day": 6,
+      "experiment": 1,
+      "geo_soft_bytes": 6442,
+      "geo_soft_sha256": "113cdfcd5613ccc5fd0ad04133be88467c1cb9c7e92025d880ddb4646af81350",
+      "geo_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM5901230&targ=self&form=text&view=full",
+      "nested_archive_filename": "GSM5901230_MUC13082.tar.gz",
+      "nested_archive_sha256": "409550eaa8c1417fbbc95436db42e6f7f574190b4fb3afb7fa61ceff2b38e7ce",
+      "sample_title": "day_6_3D_suspension_culture",
+      "sra_experiment": "SRX14194757"
+    },
+    "ontology_evidence": {
+      "assay": {
+        "evidence": "GEO extract protocol says Chromium Single Cell 3' library and gel bead kit v3.1; OLS4 exact label lookup",
+        "id": "EFO:0022980",
+        "label": "10x 3' v3.1",
+        "lookup_bytes": 1299,
+        "lookup_sha256": "73538a83f1bcb45721522ad0efb3912c3bea5da3d521bfc2fd371ad22fb63295",
+        "lookup_url": "https://www.ebi.ac.uk/ols4/api/search?q=10x+3%27+v3.1&rows=10&exact=true"
+      },
+      "modality": {
+        "evidence": "GEO library strategy/source and EFO OLS4 exact label lookup",
+        "id": "EFO:0008913",
+        "label": "single-cell RNA sequencing",
+        "lookup_bytes": 6334,
+        "lookup_sha256": "37e3806a0c21eb75ee1a392e40c5b7a963f41ca74784f17bb827fb2a52eaa4ac",
+        "lookup_url": "https://www.ebi.ac.uk/ols4/api/search?q=single-cell+RNA+sequencing&rows=10&exact=true"
+      },
+      "organism": {
+        "evidence": "GEO Sample_organism_ch1 and Sample_taxid_ch1",
+        "id": "NCBITaxon:9606",
+        "label": "Homo sapiens"
+      },
+      "source_material": {
+        "evidence": "GEO Sample_source_name_ch1=hiPSCs; EFO OLS4 exact label lookup",
+        "id": "EFO:0004905",
+        "label": "induced pluripotent stem cell",
+        "lookup_bytes": 5520,
+        "lookup_sha256": "2550d722fb70f0c5e25ffe3cc121f153d80ef0f9ddf574d6aa0e1a7ae684551b",
+        "lookup_url": "https://www.ebi.ac.uk/ols4/api/search?q=induced+pluripotent+stem+cell&rows=10&exact=true",
+        "scope": "source material only; must not be asserted as the differentiated cells' current cell_type"
+      }
+    },
+    "relation": "GSM child of GSE196799; nested raw archive member converted under the accepted family manifest"
+  },
+  "task_id": "t_2b3e6d5e",
+  "var_audit": {
+    "control_character_rows": 0,
+    "decision": "revise metadata columns only; retain feature order and X axis",
+    "duplicate_gene_symbol_rows": 30,
+    "duplicate_symbol_policy": "retain; feature identity is the unique ordered Ensembl ID, not display symbol",
+    "feature_id_exact_ensg_count": 20631,
+    "feature_id_unique": true,
+    "gene_symbol_non_null": 20631,
+    "gene_symbol_unique": 20616,
+    "index_equals_feature_id": true,
+    "index_unique": true,
+    "namespace": "Ensembl human stable gene ID",
+    "payload_sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+    "proposed_columns": [
+      "feature_id",
+      "ensembl_id",
+      "gene_id",
+      "gene_symbol",
+      "feature_type",
+      "organism",
+      "organism_ontology_id",
+      "author_gene_id",
+      "author_gene_symbol"
+    ],
+    "rows": 20631,
+    "sibling_vars_byte_identical": true,
+    "species": "Homo sapiens",
+    "species_ontology_id": "NCBITaxon:9606"
+  },
+  "verdict": "correction_plan_ready_no_mutation",
+  "writes": 0,
+  "x_audit": {
+    "all_values_integer": true,
+    "axis_parity": {
+      "obs_index_equals_x_obs_names": true,
+      "var_index_equals_x_var_names": true
+    },
+    "decision": "retain exact X bytes",
+    "dtype": "int32",
+    "encoding": "csr_matrix",
+    "maximum_stored_value": 2358.0,
+    "minimum_stored_value": 1.0,
+    "nnz": 17517151,
+    "payload_sha256": "ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047",
+    "semantics": "deposited raw integer UMI counts after deterministic cell QC",
+    "shape": [
+      4807,
+      20631
+    ],
+    "sum": 58069115
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "datasets": {
+    "GSM5901230": {
+      "duplicate_gene_symbol_rows": 30,
+      "feature_id_control_character_rows": 0,
+      "feature_id_exact_ensg_count": 20631,
+      "feature_id_unique": true,
+      "gene_symbol_non_null": 20631,
+      "gene_symbol_unique": 20616,
+      "index_equals_feature_id": true,
+      "index_unique": true,
+      "payload_sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "rows": 20631
+    },
+    "GSM5901231": {
+      "duplicate_gene_symbol_rows": 30,
+      "feature_id_control_character_rows": 0,
+      "feature_id_exact_ensg_count": 20631,
+      "feature_id_unique": true,
+      "gene_symbol_non_null": 20631,
+      "gene_symbol_unique": 20616,
+      "index_equals_feature_id": true,
+      "index_unique": true,
+      "payload_sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "rows": 20631
+    },
+    "GSM5901232": {
+      "duplicate_gene_symbol_rows": 30,
+      "feature_id_control_character_rows": 0,
+      "feature_id_exact_ensg_count": 20631,
+      "feature_id_unique": true,
+      "gene_symbol_non_null": 20631,
+      "gene_symbol_unique": 20616,
+      "index_equals_feature_id": true,
+      "index_unique": true,
+      "payload_sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "rows": 20631
+    }
+  },
+  "format": "pert-gym.first10-cohort-c-var-all-rows/v1",
+  "generated_at": "2026-07-28T11:10:30.728017+00:00",
+  "task_id": "t_2b3e6d5e"
+}

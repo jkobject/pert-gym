@@ -1,0 +1,61 @@
+{
+  "checked_at": "2026-07-28T11:10:30.728024+00:00",
+  "format": "pert-gym.first10-cohort-c-generation-recheck/v1",
+  "objects": {
+    "GSM5901230/obs": {
+      "etag": "CPW6neDp8pUDEAE=",
+      "generation": "1785154234703221",
+      "size": 223506,
+      "uri": "gs://scperturb/data/cleaned/GSM5901230/obs.parquet"
+    },
+    "GSM5901230/var": {
+      "etag": "CJqHn+Dp8pUDEAE=",
+      "generation": "1785154234729370",
+      "size": 498556,
+      "uri": "gs://scperturb/data/cleaned/GSM5901230/var.parquet"
+    },
+    "GSM5901230/x": {
+      "etag": "CL34n+Dp8pUDEAE=",
+      "generation": "1785154234743869",
+      "size": 41497959,
+      "uri": "gs://scperturb/data/cleaned/GSM5901230/X.h5ad"
+    },
+    "GSM5901231/obs": {
+      "etag": "CIeBreDp8pUDEAE=",
+      "generation": "1785154234957959",
+      "size": 292660,
+      "uri": "gs://scperturb/data/cleaned/GSM5901231/obs.parquet"
+    },
+    "GSM5901231/var": {
+      "etag": "CMbNruDp8pUDEAE=",
+      "generation": "1785154234984134",
+      "size": 498556,
+      "uri": "gs://scperturb/data/cleaned/GSM5901231/var.parquet"
+    },
+    "GSM5901231/x": {
+      "etag": "CKfdruDp8pUDEAE=",
+      "generation": "1785154234986151",
+      "size": 60292017,
+      "uri": "gs://scperturb/data/cleaned/GSM5901231/X.h5ad"
+    },
+    "GSM5901232/obs": {
+      "etag": "CKqTseDp8pUDEAE=",
+      "generation": "1785154235025834",
+      "size": 208895,
+      "uri": "gs://scperturb/data/cleaned/GSM5901232/obs.parquet"
+    },
+    "GSM5901232/var": {
+      "etag": "CMHHr+Dp8pUDEAE=",
+      "generation": "1785154234999745",
+      "size": 498556,
+      "uri": "gs://scperturb/data/cleaned/GSM5901232/var.parquet"
+    },
+    "GSM5901232/x": {
+      "etag": "CKuYreDp8pUDEAE=",
+      "generation": "1785154234960939",
+      "size": 41513267,
+      "uri": "gs://scperturb/data/cleaned/GSM5901232/X.h5ad"
+    }
+  },
+  "task_id": "t_2b3e6d5e"
+}

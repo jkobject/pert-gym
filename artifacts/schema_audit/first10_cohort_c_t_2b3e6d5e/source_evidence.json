@@ -1,0 +1,101 @@
+{
+  "format": "pert-gym.first10-cohort-c-source-evidence/v1",
+  "task_id": "t_2b3e6d5e",
+  "family": {
+    "accession": "GSE196799",
+    "organoiddb_id": "Odd001155",
+    "title": "Single-cell characterization of neovascularization using hiPSC-derived endothelial cells in a 3D microenvironment",
+    "geo_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE196799&targ=self&form=text&view=full",
+    "geo_soft_bytes": 3302,
+    "geo_soft_sha256": "41417f84952eebc075efffe2266fefb227341bf1cb0bec558654d49a81278610",
+    "pubmed_id": "37714147",
+    "bioproject": "PRJNA807328",
+    "organism": "Homo sapiens",
+    "organism_ontology_id": "NCBITaxon:9606",
+    "temporal_relation": "family_time_course",
+    "observed_family_days_from_manifest": [0, 3, 6, 9, 12, 18],
+    "raw_archive": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE196nnn/GSE196799/suppl/GSE196799_RAW.tar",
+      "bytes": 1804912640,
+      "sha256": "bc62029352aed4a799c22558a9e9e97c7746bd104d6331ddaa1b221cf15c18c2"
+    },
+    "accepted_manifest": {
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/manifest.json",
+      "generation": "1784257733140715",
+      "sha256": "3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3"
+    }
+  },
+  "ontology_evidence": {
+    "organism": {
+      "label": "Homo sapiens",
+      "id": "NCBITaxon:9606",
+      "evidence": "GEO Sample_organism_ch1 and Sample_taxid_ch1"
+    },
+    "assay": {
+      "label": "10x 3' v3.1",
+      "id": "EFO:0022980",
+      "evidence": "GEO extract protocol says Chromium Single Cell 3' library and gel bead kit v3.1; OLS4 exact label lookup",
+      "lookup_url": "https://www.ebi.ac.uk/ols4/api/search?q=10x+3%27+v3.1&rows=10&exact=true",
+      "lookup_bytes": 1299,
+      "lookup_sha256": "73538a83f1bcb45721522ad0efb3912c3bea5da3d521bfc2fd371ad22fb63295"
+    },
+    "modality": {
+      "label": "single-cell RNA sequencing",
+      "id": "EFO:0008913",
+      "evidence": "GEO library strategy/source and EFO OLS4 exact label lookup",
+      "lookup_url": "https://www.ebi.ac.uk/ols4/api/search?q=single-cell+RNA+sequencing&rows=10&exact=true",
+      "lookup_bytes": 6334,
+      "lookup_sha256": "37e3806a0c21eb75ee1a392e40c5b7a963f41ca74784f17bb827fb2a52eaa4ac"
+    },
+    "source_material": {
+      "label": "induced pluripotent stem cell",
+      "id": "EFO:0004905",
+      "scope": "source material only; must not be asserted as the differentiated cells' current cell_type",
+      "evidence": "GEO Sample_source_name_ch1=hiPSCs; EFO OLS4 exact label lookup",
+      "lookup_url": "https://www.ebi.ac.uk/ols4/api/search?q=induced+pluripotent+stem+cell&rows=10&exact=true",
+      "lookup_bytes": 5520,
+      "lookup_sha256": "2550d722fb70f0c5e25ffe3cc121f153d80ef0f9ddf574d6aa0e1a7ae684551b"
+    }
+  },
+  "datasets": {
+    "GSM5901230": {
+      "sample_title": "day_6_3D_suspension_culture",
+      "day": 6,
+      "experiment": 1,
+      "culture_method": "3D suspension culture",
+      "biosample": "SAMN25978134",
+      "sra_experiment": "SRX14194757",
+      "nested_archive_filename": "GSM5901230_MUC13082.tar.gz",
+      "nested_archive_sha256": "409550eaa8c1417fbbc95436db42e6f7f574190b4fb3afb7fa61ceff2b38e7ce",
+      "geo_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM5901230&targ=self&form=text&view=full",
+      "geo_soft_bytes": 6442,
+      "geo_soft_sha256": "113cdfcd5613ccc5fd0ad04133be88467c1cb9c7e92025d880ddb4646af81350"
+    },
+    "GSM5901231": {
+      "sample_title": "day_9_1_3D_suspension_culture_",
+      "day": 9,
+      "experiment": 1,
+      "culture_method": "3D suspension culture",
+      "biosample": "SAMN25978133",
+      "sra_experiment": "SRX14194758",
+      "nested_archive_filename": "GSM5901231_MUC13083.tar.gz",
+      "nested_archive_sha256": "65b0f288a3efbb9214cd226792a4d69dada26414a2e76fa95f0036df96f2d991",
+      "geo_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM5901231&targ=self&form=text&view=full",
+      "geo_soft_bytes": 6445,
+      "geo_soft_sha256": "9676cb9ca1e522403fe6eec29111ffac39aa7b9a1272add4a49a541054d11d36"
+    },
+    "GSM5901232": {
+      "sample_title": "day_18_reaggregated_3D_suspension_culture",
+      "day": 18,
+      "experiment": 1,
+      "culture_method": "3D suspension culture",
+      "biosample": "SAMN25978132",
+      "sra_experiment": "SRX14194759",
+      "nested_archive_filename": "GSM5901232_MUC13087.tar.gz",
+      "nested_archive_sha256": "452c891b23e562f8ad701e254de45f385abf615402b5caadf663c8b324f9eca7",
+      "geo_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM5901232&targ=self&form=text&view=full",
+      "geo_soft_bytes": 6457,
+      "geo_soft_sha256": "b0f8e643e591b4187d900a2a43a478aadd749022e5d8fbf14a2fd1fccbc2e9c3"
+    }
+  }
+}

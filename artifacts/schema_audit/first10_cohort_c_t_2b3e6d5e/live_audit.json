@@ -1,0 +1,2602 @@
+{
+  "capacity": {
+    "available_memory_bytes": 32893911040,
+    "free_disk_bytes": 276778233856
+  },
+  "datasets": {
+    "GSM5901230": {
+      "artifacts": {
+        "obs": {
+          "created_at": "2026-07-18 07:13:02.460876+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257595511069\",\"object_sha256\":\"f35de6ba53b5ead8e65ee8ca7cd1419f61dbd8b476b2ab2c6ee4017dc96b0be6\",\"role\":\"obs\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "j7h38e6PqY1FPQlSZfd9DQ",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901230/obs.parquet",
+          "n_observations": null,
+          "path": "gs://scperturb/data/cleaned/GSM5901230/obs.parquet",
+          "size": 223506,
+          "uid": "770vKgYITsWgwsQ50000",
+          "version": "0000"
+        },
+        "var": {
+          "created_at": "2026-07-18 07:13:05.428432+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257597041087\",\"object_sha256\":\"1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134\",\"role\":\"var\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901230/var.parquet",
+          "n_observations": null,
+          "path": "gs://scperturb/data/cleaned/GSM5901230/var.parquet",
+          "size": 498556,
+          "uid": "NCuDtw4vtWZpliBU0000",
+          "version": "0000"
+        },
+        "x": {
+          "created_at": "2026-07-18 07:13:03.965976+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257596242241\",\"object_sha256\":\"ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047\",\"role\":\"X\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "NJbcmYRJByidha4aC-gltA",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901230/X.h5ad",
+          "n_observations": null,
+          "path": "gs://scperturb/data/cleaned/GSM5901230/X.h5ad",
+          "size": 41497959,
+          "uid": "vn537Bt2uFhZncXo0000",
+          "version": "0000"
+        }
+      },
+      "axis_parity": {
+        "obs_index_equals_x_obs_names": true,
+        "var_index_equals_x_var_names": true
+      },
+      "expected": {
+        "expected_nnz": 17517151,
+        "expected_shape": [
+          4807,
+          20631
+        ],
+        "expected_sum": 58069115,
+        "timepoint_days": 6.0,
+        "uids": {
+          "obs": "770vKgYITsWgwsQ50000",
+          "var": "NCuDtw4vtWZpliBU0000",
+          "x": "vn537Bt2uFhZncXo0000"
+        }
+      },
+      "histories": {
+        "obs": [
+          {
+            "created_at": "2026-07-18 07:13:02.460876+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257595511069\",\"object_sha256\":\"f35de6ba53b5ead8e65ee8ca7cd1419f61dbd8b476b2ab2c6ee4017dc96b0be6\",\"role\":\"obs\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+            "hash": "j7h38e6PqY1FPQlSZfd9DQ",
+            "is_latest": true,
+            "key": "data/cleaned/GSM5901230/obs.parquet",
+            "n_observations": null,
+            "path": "gs://scperturb/data/cleaned/GSM5901230/obs.parquet",
+            "size": 223506,
+            "uid": "770vKgYITsWgwsQ50000",
+            "version": "0000"
+          }
+        ],
+        "var": [
+          {
+            "created_at": "2026-07-18 07:13:05.428432+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257597041087\",\"object_sha256\":\"1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134\",\"role\":\"var\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+            "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+            "is_latest": true,
+            "key": "data/cleaned/GSM5901230/var.parquet",
+            "n_observations": null,
+            "path": "gs://scperturb/data/cleaned/GSM5901230/var.parquet",
+            "size": 498556,
+            "uid": "NCuDtw4vtWZpliBU0000",
+            "version": "0000"
+          }
+        ],
+        "x": [
+          {
+            "created_at": "2026-07-18 07:13:03.965976+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257596242241\",\"object_sha256\":\"ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047\",\"role\":\"X\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+            "hash": "NJbcmYRJByidha4aC-gltA",
+            "is_latest": true,
+            "key": "data/cleaned/GSM5901230/X.h5ad",
+            "n_observations": null,
+            "path": "gs://scperturb/data/cleaned/GSM5901230/X.h5ad",
+            "size": 41497959,
+            "uid": "vn537Bt2uFhZncXo0000",
+            "version": "0000"
+          }
+        ]
+      },
+      "links": {
+        "obs_to_x": true,
+        "x_to_var": true
+      },
+      "object_metadata": {
+        "obs": {
+          "bucket": "scperturb",
+          "crc32c": null,
+          "etag": "CPW6neDp8pUDEAE=",
+          "generation": "1785154234703221",
+          "md5Hash": null,
+          "name": "data/cleaned/GSM5901230/obs.parquet",
+          "size": 223506,
+          "timeCreated": null,
+          "updated": null
+        },
+        "var": {
+          "bucket": "scperturb",
+          "crc32c": null,
+          "etag": "CJqHn+Dp8pUDEAE=",
+          "generation": "1785154234729370",
+          "md5Hash": null,
+          "name": "data/cleaned/GSM5901230/var.parquet",
+          "size": 498556,
+          "timeCreated": null,
+          "updated": null
+        },
+        "x": {
+          "bucket": "scperturb",
+          "crc32c": null,
+          "etag": "CL34n+Dp8pUDEAE=",
+          "generation": "1785154234743869",
+          "md5Hash": null,
+          "name": "data/cleaned/GSM5901230/X.h5ad",
+          "size": 41497959,
+          "timeCreated": null,
+          "updated": null
+        }
+      },
+      "obs": {
+        "column_order": [
+          "cell_id",
+          "barcode",
+          "source_accession",
+          "sample_accession",
+          "sample_title",
+          "source_name",
+          "experiment",
+          "timepoint",
+          "timepoint_unit",
+          "culture_method",
+          "ascorbic_acid_from_day_12",
+          "biosample",
+          "sra_experiment",
+          "organism",
+          "assay",
+          "n_genes_by_counts",
+          "total_counts",
+          "pct_counts_mt",
+          "source_cell_call_flag_missing"
+        ],
+        "columns": {
+          "ascorbic_acid_from_day_12": {
+            "control_character_rows": 0,
+            "dtype": "bool",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "False"
+              }
+            ]
+          },
+          "assay": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "10x Genomics 3' scRNA-seq"
+              }
+            ]
+          },
+          "barcode": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 4807,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 1,
+                "value": "TTTGTTGTCTGGAGAG-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCACAAGACGGT-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAAAGAAGAGCA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAAAGGTAAGAG-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAAAGTTTGCTG-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAACAATCGCGC-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAAGTTCAATCG-1"
+              },
+              {
+                "count": 1,
+                "value": "TTTGGAGTCCTTACCG-1"
+              },
+              {
+                "count": 1,
+                "value": "TTTGGAGTCCTACTGC-1"
+              },
+              {
+                "count": 1,
+                "value": "TTTGGAGGTCGCCACA-1"
+              },
+              {
+                "count": 1,
+                "value": "TTTGGAGGTATACGGG-1"
+              },
+              {
+                "count": 1,
+                "value": "TTTGGAGCACGCGCAT-1"
+              }
+            ]
+          },
+          "biosample": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "SAMN25978134"
+              }
+            ]
+          },
+          "cell_id": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 4807,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 1,
+                "value": "GSM5901230:TTTGTTGTCTGGAGAG-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:AAACCCACAAGACGGT-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:AAACGAAAGAAGAGCA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:AAACGAAAGGTAAGAG-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:AAACGAAAGTTTGCTG-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:AAACGAACAATCGCGC-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:AAACGAAGTTCAATCG-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:TTTGGAGTCCTTACCG-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:TTTGGAGTCCTACTGC-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:TTTGGAGGTCGCCACA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:TTTGGAGGTATACGGG-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901230:TTTGGAGCACGCGCAT-1"
+              }
+            ]
+          },
+          "culture_method": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "3D suspension culture"
+              }
+            ]
+          },
+          "experiment": {
+            "control_character_rows": 0,
+            "dtype": "int64",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "1"
+              }
+            ]
+          },
+          "n_genes_by_counts": {
+            "control_character_rows": 0,
+            "dtype": "int32",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 2560,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 12,
+                "value": "2993"
+              },
+              {
+                "count": 8,
+                "value": "3134"
+              },
+              {
+                "count": 8,
+                "value": "2855"
+              },
+              {
+                "count": 8,
+                "value": "2794"
+              },
+              {
+                "count": 7,
+                "value": "2883"
+              },
+              {
+                "count": 7,
+                "value": "3157"
+              },
+              {
+                "count": 7,
+                "value": "3057"
+              },
+              {
+                "count": 7,
+                "value": "3170"
+              },
+              {
+                "count": 7,
+                "value": "3217"
+              },
+              {
+                "count": 7,
+                "value": "2978"
+              },
+              {
+                "count": 7,
+                "value": "2858"
+              },
+              {
+                "count": 7,
+                "value": "3151"
+              }
+            ]
+          },
+          "organism": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "Homo sapiens"
+              }
+            ]
+          },
+          "pct_counts_mt": {
+            "control_character_rows": 0,
+            "dtype": "float32",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 4794,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 2,
+                "value": "7.6923075"
+              },
+              {
+                "count": 2,
+                "value": "6.304241"
+              },
+              {
+                "count": 2,
+                "value": "7.0945945"
+              },
+              {
+                "count": 2,
+                "value": "7.0652175"
+              },
+              {
+                "count": 2,
+                "value": "7.7922077"
+              },
+              {
+                "count": 2,
+                "value": "6.4930162"
+              },
+              {
+                "count": 2,
+                "value": "6.3085938"
+              },
+              {
+                "count": 2,
+                "value": "6.304348"
+              },
+              {
+                "count": 2,
+                "value": "6.58078"
+              },
+              {
+                "count": 2,
+                "value": "5.263158"
+              },
+              {
+                "count": 2,
+                "value": "8.5561495"
+              },
+              {
+                "count": 2,
+                "value": "5.0"
+              }
+            ]
+          },
+          "sample_accession": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "GSM5901230"
+              }
+            ]
+          },
+          "sample_title": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "day_6_3D_suspension_culture"
+              }
+            ]
+          },
+          "source_accession": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "GSE196799"
+              }
+            ]
+          },
+          "source_cell_call_flag_missing": {
+            "control_character_rows": 0,
+            "dtype": "bool",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "True"
+              }
+            ]
+          },
+          "source_name": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "hiPSCs"
+              }
+            ]
+          },
+          "sra_experiment": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "SRX14194757"
+              }
+            ]
+          },
+          "timepoint": {
+            "control_character_rows": 0,
+            "dtype": "float64",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "6.0"
+              }
+            ]
+          },
+          "timepoint_unit": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4807,
+                "value": "day"
+              }
+            ]
+          },
+          "total_counts": {
+            "control_character_rows": 0,
+            "dtype": "int64",
+            "non_null": 4807,
+            "null": 0,
+            "nunique_non_null": 4093,
+            "rows": 4807,
+            "top_values": [
+              {
+                "count": 4,
+                "value": "8092"
+              },
+              {
+                "count": 4,
+                "value": "9810"
+              },
+              {
+                "count": 4,
+                "value": "5980"
+              },
+              {
+                "count": 4,
+                "value": "7916"
+              },
+              {
+                "count": 4,
+                "value": "7765"
+              },
+              {
+                "count": 4,
+                "value": "7929"
+              },
+              {
+                "count": 4,
+                "value": "7365"
+              },
+              {
+                "count": 4,
+                "value": "6862"
+              },
+              {
+                "count": 4,
+                "value": "15077"
+              },
+              {
+                "count": 4,
+                "value": "7437"
+              },
+              {
+                "count": 3,
+                "value": "7953"
+              },
+              {
+                "count": 3,
+                "value": "8415"
+              }
+            ]
+          }
+        },
+        "index_control_character_rows": 0,
+        "index_name": "cell_id",
+        "index_sample": [
+          "GSM5901230:AAACCCACAAGACGGT-1",
+          "GSM5901230:AAACGAAAGAAGAGCA-1",
+          "GSM5901230:AAACGAAAGGTAAGAG-1",
+          "GSM5901230:AAACGAAAGTTTGCTG-1",
+          "GSM5901230:AAACGAACAATCGCGC-1",
+          "GSM5901230:AAACGAAGTTCAATCG-1",
+          "GSM5901230:AAACGAATCACCATAG-1",
+          "GSM5901230:AAACGAATCACCCTGT-1",
+          "GSM5901230:AAACGAATCATCAGTG-1",
+          "GSM5901230:AAACGAATCTCCTGCA-1",
+          "GSM5901230:AAACGAATCTTCACGC-1",
+          "GSM5901230:AAACGCTAGGATATGT-1"
+        ],
+        "index_sha256": "0183ccf12a871b94c22676fd6768c1e9f7b33277c85952b86ac3e7c55b281df2",
+        "index_unique": true,
+        "rows": 4807
+      },
+      "payload_sha256": {
+        "obs": "f35de6ba53b5ead8e65ee8ca7cd1419f61dbd8b476b2ab2c6ee4017dc96b0be6",
+        "var": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "x": "ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047"
+      },
+      "var": {
+        "column_order": [
+          "feature_id",
+          "gene_symbol",
+          "feature_type"
+        ],
+        "columns": {
+          "feature_id": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 20631,
+            "null": 0,
+            "nunique_non_null": 20631,
+            "rows": 20631,
+            "top_values": [
+              {
+                "count": 1,
+                "value": "ENSG00000268674"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000186092"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000284733"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000284662"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000187634"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000188976"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000187961"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000274847"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000277400"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000278704"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000274792"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000275249"
+              }
+            ]
+          },
+          "feature_type": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 20631,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 20631,
+            "top_values": [
+              {
+                "count": 20631,
+                "value": "Gene Expression"
+              }
+            ]
+          },
+          "gene_symbol": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 20631,
+            "null": 0,
+            "nunique_non_null": 20616,
+            "rows": 20631,
+            "top_values": [
+              {
+                "count": 2,
+                "value": "ATXN7"
+              },
+              {
+                "count": 2,
+                "value": "AHRR"
+              },
+              {
+                "count": 2,
+                "value": "ABCF2"
+              },
+              {
+                "count": 2,
+                "value": "PINX1"
+              },
+              {
+                "count": 2,
+                "value": "HSPA14"
+              },
+              {
+                "count": 2,
+                "value": "ECE2"
+              },
+              {
+                "count": 2,
+                "value": "MATR3"
+              },
+              {
+                "count": 2,
+                "value": "GGT1"
+              },
+              {
+                "count": 2,
+                "value": "DIABLO"
+              },
+              {
+                "count": 2,
+                "value": "SOD2"
+              },
+              {
+                "count": 2,
+                "value": "PDE11A"
+              },
+              {
+                "count": 2,
+                "value": "POLR2J3"
+              }
+            ]
+          }
+        },
+        "index_control_character_rows": 0,
+        "index_name": "feature_id",
+        "index_sample": [
+          "ENSG00000186092",
+          "ENSG00000284733",
+          "ENSG00000284662",
+          "ENSG00000187634",
+          "ENSG00000188976",
+          "ENSG00000187961",
+          "ENSG00000187583",
+          "ENSG00000187642",
+          "ENSG00000188290",
+          "ENSG00000187608",
+          "ENSG00000188157",
+          "ENSG00000237330"
+        ],
+        "index_sha256": "017942e14d8a0ca0c852323629797acb47445cea7b498eb9bee661abddc97cac",
+        "index_unique": true,
+        "rows": 20631
+      },
+      "x": {
+        "obs_names_sha256": "0183ccf12a871b94c22676fd6768c1e9f7b33277c85952b86ac3e7c55b281df2",
+        "obs_names_unique": true,
+        "shape": [
+          4807,
+          20631
+        ],
+        "storage": {
+          "all_values_integer": true,
+          "data_dtype": "int32",
+          "encoding_type": "csr_matrix",
+          "indices_dtype": "int32",
+          "indptr_dtype": "int32",
+          "kind": "sparse_group",
+          "maximum": 2358.0,
+          "minimum": 1.0,
+          "shape_attr": [
+            4807,
+            20631
+          ],
+          "stored_nnz": 17517151,
+          "sum": 58069115
+        },
+        "var_names_sha256": "017942e14d8a0ca0c852323629797acb47445cea7b498eb9bee661abddc97cac",
+        "var_names_unique": true
+      }
+    },
+    "GSM5901231": {
+      "artifacts": {
+        "obs": {
+          "created_at": "2026-07-18 07:13:06.884697+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257610443164\",\"object_sha256\":\"471a5f6bdbc6430a46b882f7fd38642d3d8680575f69bbdd059e44c785679352\",\"role\":\"obs\",\"sample_id\":\"GSM5901231\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "bViAo4Hii_M-eDkmNYL-mw",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901231/obs.parquet",
+          "n_observations": null,
+          "path": "gs://scperturb/data/cleaned/GSM5901231/obs.parquet",
+          "size": 292660,
+          "uid": "HAjNzeHiAFVj18Bl0000",
+          "version": "0000"
+        },
+        "var": {
+          "created_at": "2026-07-18 07:13:09.814088+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257612370365\",\"object_sha256\":\"1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134\",\"role\":\"var\",\"sample_id\":\"GSM5901231\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901231/var.parquet",
+          "n_observations": null,
+          "path": "gs://scperturb/data/cleaned/GSM5901231/var.parquet",
+          "size": 498556,
+          "uid": "2L5w9PF2KfG568jw0000",
+          "version": "0000"
+        },
+        "x": {
+          "created_at": "2026-07-18 07:13:08.354677+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257611385867\",\"object_sha256\":\"45c310d2d01c2670078ea9deffbe60ee2b46e4b72fbe520b8e6fdb0ac170a212\",\"role\":\"X\",\"sample_id\":\"GSM5901231\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "EjV7qoYehJmuVKTf_aVjYw",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901231/X.h5ad",
+          "n_observations": null,
+          "path": "gs://scperturb/data/cleaned/GSM5901231/X.h5ad",
+          "size": 60292017,
+          "uid": "DMOKXzr7fGa2BzFx0000",
+          "version": "0000"
+        }
+      },
+      "axis_parity": {
+        "obs_index_equals_x_obs_names": true,
+        "var_index_equals_x_var_names": true
+      },
+      "expected": {
+        "expected_nnz": 26039746,
+        "expected_shape": [
+          6430,
+          20631
+        ],
+        "expected_sum": 97683665,
+        "timepoint_days": 9.0,
+        "uids": {
+          "obs": "HAjNzeHiAFVj18Bl0000",
+          "var": "2L5w9PF2KfG568jw0000",
+          "x": "DMOKXzr7fGa2BzFx0000"
+        }
+      },
+      "histories": {
+        "obs": [
+          {
+            "created_at": "2026-07-18 07:13:06.884697+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257610443164\",\"object_sha256\":\"471a5f6bdbc6430a46b882f7fd38642d3d8680575f69bbdd059e44c785679352\",\"role\":\"obs\",\"sample_id\":\"GSM5901231\",\"source_identity\":\"GSE196799;ODD001155\"}",
+            "hash": "bViAo4Hii_M-eDkmNYL-mw",
+            "is_latest": true,
+            "key": "data/cleaned/GSM5901231/obs.parquet",
+            "n_observations": null,
+            "path": "gs://scperturb/data/cleaned/GSM5901231/obs.parquet",
+            "size": 292660,
+            "uid": "HAjNzeHiAFVj18Bl0000",
+            "version": "0000"
+          }
+        ],
+        "var": [
+          {
+            "created_at": "2026-07-18 07:13:09.814088+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257612370365\",\"object_sha256\":\"1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134\",\"role\":\"var\",\"sample_id\":\"GSM5901231\",\"source_identity\":\"GSE196799;ODD001155\"}",
+            "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+            "is_latest": true,
+            "key": "data/cleaned/GSM5901231/var.parquet",
+            "n_observations": null,
+            "path": "gs://scperturb/data/cleaned/GSM5901231/var.parquet",
+            "size": 498556,
+            "uid": "2L5w9PF2KfG568jw0000",
+            "version": "0000"
+          }
+        ],
+        "x": [
+          {
+            "created_at": "2026-07-18 07:13:08.354677+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257611385867\",\"object_sha256\":\"45c310d2d01c2670078ea9deffbe60ee2b46e4b72fbe520b8e6fdb0ac170a212\",\"role\":\"X\",\"sample_id\":\"GSM5901231\",\"source_identity\":\"GSE196799;ODD001155\"}",
+            "hash": "EjV7qoYehJmuVKTf_aVjYw",
+            "is_latest": true,
+            "key": "data/cleaned/GSM5901231/X.h5ad",
+            "n_observations": null,
+            "path": "gs://scperturb/data/cleaned/GSM5901231/X.h5ad",
+            "size": 60292017,
+            "uid": "DMOKXzr7fGa2BzFx0000",
+            "version": "0000"
+          }
+        ]
+      },
+      "links": {
+        "obs_to_x": true,
+        "x_to_var": true
+      },
+      "object_metadata": {
+        "obs": {
+          "bucket": "scperturb",
+          "crc32c": null,
+          "etag": "CIeBreDp8pUDEAE=",
+          "generation": "1785154234957959",
+          "md5Hash": null,
+          "name": "data/cleaned/GSM5901231/obs.parquet",
+          "size": 292660,
+          "timeCreated": null,
+          "updated": null
+        },
+        "var": {
+          "bucket": "scperturb",
+          "crc32c": null,
+          "etag": "CMbNruDp8pUDEAE=",
+          "generation": "1785154234984134",
+          "md5Hash": null,
+          "name": "data/cleaned/GSM5901231/var.parquet",
+          "size": 498556,
+          "timeCreated": null,
+          "updated": null
+        },
+        "x": {
+          "bucket": "scperturb",
+          "crc32c": null,
+          "etag": "CKfdruDp8pUDEAE=",
+          "generation": "1785154234986151",
+          "md5Hash": null,
+          "name": "data/cleaned/GSM5901231/X.h5ad",
+          "size": 60292017,
+          "timeCreated": null,
+          "updated": null
+        }
+      },
+      "obs": {
+        "column_order": [
+          "cell_id",
+          "barcode",
+          "source_accession",
+          "sample_accession",
+          "sample_title",
+          "source_name",
+          "experiment",
+          "timepoint",
+          "timepoint_unit",
+          "culture_method",
+          "ascorbic_acid_from_day_12",
+          "biosample",
+          "sra_experiment",
+          "organism",
+          "assay",
+          "n_genes_by_counts",
+          "total_counts",
+          "pct_counts_mt",
+          "source_cell_call_flag_missing"
+        ],
+        "columns": {
+          "ascorbic_acid_from_day_12": {
+            "control_character_rows": 0,
+            "dtype": "bool",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "False"
+              }
+            ]
+          },
+          "assay": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "10x Genomics 3' scRNA-seq"
+              }
+            ]
+          },
+          "barcode": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 6430,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 1,
+                "value": "TTTGTTGTCTGGTGGC-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCAAGCGCCGTT-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCAAGTACTCGT-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCACAACTGCCG-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCACAAGAATGT-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCACAGACTCTA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCACAGCTGAGA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCACAGGTCCCA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCACATTGCTGA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCATCCTAGCCT-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCATCGCGTAGC-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAAAGACTCCGC-1"
+              }
+            ]
+          },
+          "biosample": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "SAMN25978133"
+              }
+            ]
+          },
+          "cell_id": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 6430,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 1,
+                "value": "GSM5901231:TTTGTTGTCTGGTGGC-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCAAGCGCCGTT-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCAAGTACTCGT-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCACAACTGCCG-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCACAAGAATGT-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCACAGACTCTA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCACAGCTGAGA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCACAGGTCCCA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCACATTGCTGA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCATCCTAGCCT-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACCCATCGCGTAGC-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901231:AAACGAAAGACTCCGC-1"
+              }
+            ]
+          },
+          "culture_method": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "3D suspension culture"
+              }
+            ]
+          },
+          "experiment": {
+            "control_character_rows": 0,
+            "dtype": "int64",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "1"
+              }
+            ]
+          },
+          "n_genes_by_counts": {
+            "control_character_rows": 0,
+            "dtype": "int32",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 3168,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 9,
+                "value": "3361"
+              },
+              {
+                "count": 9,
+                "value": "3820"
+              },
+              {
+                "count": 8,
+                "value": "3108"
+              },
+              {
+                "count": 8,
+                "value": "3220"
+              },
+              {
+                "count": 8,
+                "value": "2990"
+              },
+              {
+                "count": 8,
+                "value": "3552"
+              },
+              {
+                "count": 8,
+                "value": "3357"
+              },
+              {
+                "count": 8,
+                "value": "3551"
+              },
+              {
+                "count": 8,
+                "value": "3359"
+              },
+              {
+                "count": 8,
+                "value": "3289"
+              },
+              {
+                "count": 7,
+                "value": "3433"
+              },
+              {
+                "count": 7,
+                "value": "3669"
+              }
+            ]
+          },
+          "organism": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "Homo sapiens"
+              }
+            ]
+          },
+          "pct_counts_mt": {
+            "control_character_rows": 0,
+            "dtype": "float32",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 6420,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 3,
+                "value": "6.3492064"
+              },
+              {
+                "count": 2,
+                "value": "6.32806"
+              },
+              {
+                "count": 2,
+                "value": "4.6192784"
+              },
+              {
+                "count": 2,
+                "value": "7.142857"
+              },
+              {
+                "count": 2,
+                "value": "5.1764708"
+              },
+              {
+                "count": 2,
+                "value": "6.451613"
+              },
+              {
+                "count": 2,
+                "value": "5.263158"
+              },
+              {
+                "count": 2,
+                "value": "5.2469134"
+              },
+              {
+                "count": 2,
+                "value": "4.9718823"
+              },
+              {
+                "count": 1,
+                "value": "6.35729"
+              },
+              {
+                "count": 1,
+                "value": "6.206669"
+              },
+              {
+                "count": 1,
+                "value": "3.8221154"
+              }
+            ]
+          },
+          "sample_accession": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "GSM5901231"
+              }
+            ]
+          },
+          "sample_title": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "day_9_1_3D_suspension_culture_"
+              }
+            ]
+          },
+          "source_accession": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "GSE196799"
+              }
+            ]
+          },
+          "source_cell_call_flag_missing": {
+            "control_character_rows": 0,
+            "dtype": "bool",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "True"
+              }
+            ]
+          },
+          "source_name": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "hiPSCs"
+              }
+            ]
+          },
+          "sra_experiment": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "SRX14194758"
+              }
+            ]
+          },
+          "timepoint": {
+            "control_character_rows": 0,
+            "dtype": "float64",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "9.0"
+              }
+            ]
+          },
+          "timepoint_unit": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 6430,
+                "value": "day"
+              }
+            ]
+          },
+          "total_counts": {
+            "control_character_rows": 0,
+            "dtype": "int64",
+            "non_null": 6430,
+            "null": 0,
+            "nunique_non_null": 5489,
+            "rows": 6430,
+            "top_values": [
+              {
+                "count": 5,
+                "value": "8967"
+              },
+              {
+                "count": 4,
+                "value": "11127"
+              },
+              {
+                "count": 4,
+                "value": "9896"
+              },
+              {
+                "count": 4,
+                "value": "10975"
+              },
+              {
+                "count": 4,
+                "value": "10843"
+              },
+              {
+                "count": 4,
+                "value": "9330"
+              },
+              {
+                "count": 4,
+                "value": "10731"
+              },
+              {
+                "count": 3,
+                "value": "11732"
+              },
+              {
+                "count": 3,
+                "value": "10444"
+              },
+              {
+                "count": 3,
+                "value": "8654"
+              },
+              {
+                "count": 3,
+                "value": "6907"
+              },
+              {
+                "count": 3,
+                "value": "9247"
+              }
+            ]
+          }
+        },
+        "index_control_character_rows": 0,
+        "index_name": "cell_id",
+        "index_sample": [
+          "GSM5901231:AAACCCAAGCGCCGTT-1",
+          "GSM5901231:AAACCCAAGTACTCGT-1",
+          "GSM5901231:AAACCCACAACTGCCG-1",
+          "GSM5901231:AAACCCACAAGAATGT-1",
+          "GSM5901231:AAACCCACAGACTCTA-1",
+          "GSM5901231:AAACCCACAGCTGAGA-1",
+          "GSM5901231:AAACCCACAGGTCCCA-1",
+          "GSM5901231:AAACCCACATTGCTGA-1",
+          "GSM5901231:AAACCCATCCTAGCCT-1",
+          "GSM5901231:AAACCCATCGCGTAGC-1",
+          "GSM5901231:AAACGAAAGACTCCGC-1",
+          "GSM5901231:AAACGAAAGCATGCGA-1"
+        ],
+        "index_sha256": "cb4fa0cbd90407a4d00c3f479140ce55dac9867634ac385677dc27aca998c0ee",
+        "index_unique": true,
+        "rows": 6430
+      },
+      "payload_sha256": {
+        "obs": "471a5f6bdbc6430a46b882f7fd38642d3d8680575f69bbdd059e44c785679352",
+        "var": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "x": "45c310d2d01c2670078ea9deffbe60ee2b46e4b72fbe520b8e6fdb0ac170a212"
+      },
+      "var": {
+        "column_order": [
+          "feature_id",
+          "gene_symbol",
+          "feature_type"
+        ],
+        "columns": {
+          "feature_id": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 20631,
+            "null": 0,
+            "nunique_non_null": 20631,
+            "rows": 20631,
+            "top_values": [
+              {
+                "count": 1,
+                "value": "ENSG00000268674"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000186092"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000284733"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000284662"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000187634"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000188976"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000187961"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000274847"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000277400"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000278704"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000274792"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000275249"
+              }
+            ]
+          },
+          "feature_type": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 20631,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 20631,
+            "top_values": [
+              {
+                "count": 20631,
+                "value": "Gene Expression"
+              }
+            ]
+          },
+          "gene_symbol": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 20631,
+            "null": 0,
+            "nunique_non_null": 20616,
+            "rows": 20631,
+            "top_values": [
+              {
+                "count": 2,
+                "value": "ATXN7"
+              },
+              {
+                "count": 2,
+                "value": "AHRR"
+              },
+              {
+                "count": 2,
+                "value": "ABCF2"
+              },
+              {
+                "count": 2,
+                "value": "PINX1"
+              },
+              {
+                "count": 2,
+                "value": "HSPA14"
+              },
+              {
+                "count": 2,
+                "value": "ECE2"
+              },
+              {
+                "count": 2,
+                "value": "MATR3"
+              },
+              {
+                "count": 2,
+                "value": "GGT1"
+              },
+              {
+                "count": 2,
+                "value": "DIABLO"
+              },
+              {
+                "count": 2,
+                "value": "SOD2"
+              },
+              {
+                "count": 2,
+                "value": "PDE11A"
+              },
+              {
+                "count": 2,
+                "value": "POLR2J3"
+              }
+            ]
+          }
+        },
+        "index_control_character_rows": 0,
+        "index_name": "feature_id",
+        "index_sample": [
+          "ENSG00000186092",
+          "ENSG00000284733",
+          "ENSG00000284662",
+          "ENSG00000187634",
+          "ENSG00000188976",
+          "ENSG00000187961",
+          "ENSG00000187583",
+          "ENSG00000187642",
+          "ENSG00000188290",
+          "ENSG00000187608",
+          "ENSG00000188157",
+          "ENSG00000237330"
+        ],
+        "index_sha256": "017942e14d8a0ca0c852323629797acb47445cea7b498eb9bee661abddc97cac",
+        "index_unique": true,
+        "rows": 20631
+      },
+      "x": {
+        "obs_names_sha256": "cb4fa0cbd90407a4d00c3f479140ce55dac9867634ac385677dc27aca998c0ee",
+        "obs_names_unique": true,
+        "shape": [
+          6430,
+          20631
+        ],
+        "storage": {
+          "all_values_integer": true,
+          "data_dtype": "int32",
+          "encoding_type": "csr_matrix",
+          "indices_dtype": "int32",
+          "indptr_dtype": "int32",
+          "kind": "sparse_group",
+          "maximum": 3816.0,
+          "minimum": 1.0,
+          "shape_attr": [
+            6430,
+            20631
+          ],
+          "stored_nnz": 26039746,
+          "sum": 97683665
+        },
+        "var_names_sha256": "017942e14d8a0ca0c852323629797acb47445cea7b498eb9bee661abddc97cac",
+        "var_names_unique": true
+      }
+    },
+    "GSM5901232": {
+      "artifacts": {
+        "obs": {
+          "created_at": "2026-07-18 07:13:11.273567+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257622836809\",\"object_sha256\":\"e35f168b08062df9d4344b340f00a6729a59719168f46b0d22004b66b5c601e1\",\"role\":\"obs\",\"sample_id\":\"GSM5901232\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "JDQmgXg2zEidMh94Pvg2qA",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901232/obs.parquet",
+          "n_observations": null,
+          "path": "gs://scperturb/data/cleaned/GSM5901232/obs.parquet",
+          "size": 208895,
+          "uid": "GbF6GoN62lv1gHph0000",
+          "version": "0000"
+        },
+        "var": {
+          "created_at": "2026-07-18 07:13:14.192194+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257624315133\",\"object_sha256\":\"1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134\",\"role\":\"var\",\"sample_id\":\"GSM5901232\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901232/var.parquet",
+          "n_observations": null,
+          "path": "gs://scperturb/data/cleaned/GSM5901232/var.parquet",
+          "size": 498556,
+          "uid": "v6fulA6ihI0nfyDF0000",
+          "version": "0000"
+        },
+        "x": {
+          "created_at": "2026-07-18 07:13:12.731137+00:00",
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257623519188\",\"object_sha256\":\"eba53c3e02ab36573dd0fddbbe55d3f957c1f40d47195ef2f48c4dc20a4d81c0\",\"role\":\"X\",\"sample_id\":\"GSM5901232\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "tulfYvUdK2iR7i8Osukl0A",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901232/X.h5ad",
+          "n_observations": null,
+          "path": "gs://scperturb/data/cleaned/GSM5901232/X.h5ad",
+          "size": 41513267,
+          "uid": "ZX3O7cVwL7bFPZYv0000",
+          "version": "0000"
+        }
+      },
+      "axis_parity": {
+        "obs_index_equals_x_obs_names": true,
+        "var_index_equals_x_var_names": true
+      },
+      "expected": {
+        "expected_nnz": 17949355,
+        "expected_shape": [
+          4396,
+          20631
+        ],
+        "expected_sum": 56570353,
+        "timepoint_days": 18.0,
+        "uids": {
+          "obs": "GbF6GoN62lv1gHph0000",
+          "var": "v6fulA6ihI0nfyDF0000",
+          "x": "ZX3O7cVwL7bFPZYv0000"
+        }
+      },
+      "histories": {
+        "obs": [
+          {
+            "created_at": "2026-07-18 07:13:11.273567+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257622836809\",\"object_sha256\":\"e35f168b08062df9d4344b340f00a6729a59719168f46b0d22004b66b5c601e1\",\"role\":\"obs\",\"sample_id\":\"GSM5901232\",\"source_identity\":\"GSE196799;ODD001155\"}",
+            "hash": "JDQmgXg2zEidMh94Pvg2qA",
+            "is_latest": true,
+            "key": "data/cleaned/GSM5901232/obs.parquet",
+            "n_observations": null,
+            "path": "gs://scperturb/data/cleaned/GSM5901232/obs.parquet",
+            "size": 208895,
+            "uid": "GbF6GoN62lv1gHph0000",
+            "version": "0000"
+          }
+        ],
+        "var": [
+          {
+            "created_at": "2026-07-18 07:13:14.192194+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257624315133\",\"object_sha256\":\"1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134\",\"role\":\"var\",\"sample_id\":\"GSM5901232\",\"source_identity\":\"GSE196799;ODD001155\"}",
+            "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+            "is_latest": true,
+            "key": "data/cleaned/GSM5901232/var.parquet",
+            "n_observations": null,
+            "path": "gs://scperturb/data/cleaned/GSM5901232/var.parquet",
+            "size": 498556,
+            "uid": "v6fulA6ihI0nfyDF0000",
+            "version": "0000"
+          }
+        ],
+        "x": [
+          {
+            "created_at": "2026-07-18 07:13:12.731137+00:00",
+            "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257623519188\",\"object_sha256\":\"eba53c3e02ab36573dd0fddbbe55d3f957c1f40d47195ef2f48c4dc20a4d81c0\",\"role\":\"X\",\"sample_id\":\"GSM5901232\",\"source_identity\":\"GSE196799;ODD001155\"}",
+            "hash": "tulfYvUdK2iR7i8Osukl0A",
+            "is_latest": true,
+            "key": "data/cleaned/GSM5901232/X.h5ad",
+            "n_observations": null,
+            "path": "gs://scperturb/data/cleaned/GSM5901232/X.h5ad",
+            "size": 41513267,
+            "uid": "ZX3O7cVwL7bFPZYv0000",
+            "version": "0000"
+          }
+        ]
+      },
+      "links": {
+        "obs_to_x": true,
+        "x_to_var": true
+      },
+      "object_metadata": {
+        "obs": {
+          "bucket": "scperturb",
+          "crc32c": null,
+          "etag": "CKqTseDp8pUDEAE=",
+          "generation": "1785154235025834",
+          "md5Hash": null,
+          "name": "data/cleaned/GSM5901232/obs.parquet",
+          "size": 208895,
+          "timeCreated": null,
+          "updated": null
+        },
+        "var": {
+          "bucket": "scperturb",
+          "crc32c": null,
+          "etag": "CMHHr+Dp8pUDEAE=",
+          "generation": "1785154234999745",
+          "md5Hash": null,
+          "name": "data/cleaned/GSM5901232/var.parquet",
+          "size": 498556,
+          "timeCreated": null,
+          "updated": null
+        },
+        "x": {
+          "bucket": "scperturb",
+          "crc32c": null,
+          "etag": "CKuYreDp8pUDEAE=",
+          "generation": "1785154234960939",
+          "md5Hash": null,
+          "name": "data/cleaned/GSM5901232/X.h5ad",
+          "size": 41513267,
+          "timeCreated": null,
+          "updated": null
+        }
+      },
+      "obs": {
+        "column_order": [
+          "cell_id",
+          "barcode",
+          "source_accession",
+          "sample_accession",
+          "sample_title",
+          "source_name",
+          "experiment",
+          "timepoint",
+          "timepoint_unit",
+          "culture_method",
+          "ascorbic_acid_from_day_12",
+          "biosample",
+          "sra_experiment",
+          "organism",
+          "assay",
+          "n_genes_by_counts",
+          "total_counts",
+          "pct_counts_mt",
+          "source_cell_call_flag_missing"
+        ],
+        "columns": {
+          "ascorbic_acid_from_day_12": {
+            "control_character_rows": 0,
+            "dtype": "bool",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "False"
+              }
+            ]
+          },
+          "assay": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "10x Genomics 3' scRNA-seq"
+              }
+            ]
+          },
+          "barcode": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 4396,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 1,
+                "value": "TTTGTTGGTGTCACAT-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCAAGGCAGGGA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCAAGGCTCCCA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCACATCAGCTA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCAGTTATGTGC-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACCCATCTCGCAGG-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAAAGCGGATCA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAAAGTAACGTA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAACACATTGTG-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAACATGAGATA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAAGTACCGGAA-1"
+              },
+              {
+                "count": 1,
+                "value": "AAACGAATCTGCTGAA-1"
+              }
+            ]
+          },
+          "biosample": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "SAMN25978132"
+              }
+            ]
+          },
+          "cell_id": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 4396,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 1,
+                "value": "GSM5901232:TTTGTTGGTGTCACAT-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACCCAAGGCAGGGA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACCCAAGGCTCCCA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACCCACATCAGCTA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACCCAGTTATGTGC-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACCCATCTCGCAGG-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACGAAAGCGGATCA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACGAAAGTAACGTA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACGAACACATTGTG-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACGAACATGAGATA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACGAAGTACCGGAA-1"
+              },
+              {
+                "count": 1,
+                "value": "GSM5901232:AAACGAATCTGCTGAA-1"
+              }
+            ]
+          },
+          "culture_method": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "3D suspension culture"
+              }
+            ]
+          },
+          "experiment": {
+            "control_character_rows": 0,
+            "dtype": "int64",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "1"
+              }
+            ]
+          },
+          "n_genes_by_counts": {
+            "control_character_rows": 0,
+            "dtype": "int32",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 2662,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 7,
+                "value": "4400"
+              },
+              {
+                "count": 7,
+                "value": "3857"
+              },
+              {
+                "count": 6,
+                "value": "2032"
+              },
+              {
+                "count": 6,
+                "value": "4053"
+              },
+              {
+                "count": 6,
+                "value": "4404"
+              },
+              {
+                "count": 6,
+                "value": "4173"
+              },
+              {
+                "count": 6,
+                "value": "4478"
+              },
+              {
+                "count": 6,
+                "value": "4389"
+              },
+              {
+                "count": 6,
+                "value": "4183"
+              },
+              {
+                "count": 5,
+                "value": "4257"
+              },
+              {
+                "count": 5,
+                "value": "4336"
+              },
+              {
+                "count": 5,
+                "value": "4393"
+              }
+            ]
+          },
+          "organism": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "Homo sapiens"
+              }
+            ]
+          },
+          "pct_counts_mt": {
+            "control_character_rows": 0,
+            "dtype": "float32",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 4387,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 2,
+                "value": "5.263158"
+              },
+              {
+                "count": 2,
+                "value": "5.363322"
+              },
+              {
+                "count": 2,
+                "value": "5.7017546"
+              },
+              {
+                "count": 2,
+                "value": "5.0898204"
+              },
+              {
+                "count": 2,
+                "value": "5.882353"
+              },
+              {
+                "count": 2,
+                "value": "6.6666665"
+              },
+              {
+                "count": 2,
+                "value": "6.8702292"
+              },
+              {
+                "count": 2,
+                "value": "5.940594"
+              },
+              {
+                "count": 2,
+                "value": "4.8197117"
+              },
+              {
+                "count": 1,
+                "value": "4.84215"
+              },
+              {
+                "count": 1,
+                "value": "3.6124177"
+              },
+              {
+                "count": 1,
+                "value": "4.9017963"
+              }
+            ]
+          },
+          "sample_accession": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "GSM5901232"
+              }
+            ]
+          },
+          "sample_title": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "day_18_reaggregated_3D_suspension_culture"
+              }
+            ]
+          },
+          "source_accession": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "GSE196799"
+              }
+            ]
+          },
+          "source_cell_call_flag_missing": {
+            "control_character_rows": 0,
+            "dtype": "bool",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "True"
+              }
+            ]
+          },
+          "source_name": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "hiPSCs"
+              }
+            ]
+          },
+          "sra_experiment": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "SRX14194759"
+              }
+            ]
+          },
+          "timepoint": {
+            "control_character_rows": 0,
+            "dtype": "float64",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "18.0"
+              }
+            ]
+          },
+          "timepoint_unit": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 4396,
+                "value": "day"
+              }
+            ]
+          },
+          "total_counts": {
+            "control_character_rows": 0,
+            "dtype": "int64",
+            "non_null": 4396,
+            "null": 0,
+            "nunique_non_null": 3936,
+            "rows": 4396,
+            "top_values": [
+              {
+                "count": 3,
+                "value": "14112"
+              },
+              {
+                "count": 3,
+                "value": "14495"
+              },
+              {
+                "count": 3,
+                "value": "14344"
+              },
+              {
+                "count": 3,
+                "value": "10883"
+              },
+              {
+                "count": 3,
+                "value": "5567"
+              },
+              {
+                "count": 3,
+                "value": "10173"
+              },
+              {
+                "count": 3,
+                "value": "9663"
+              },
+              {
+                "count": 3,
+                "value": "9955"
+              },
+              {
+                "count": 3,
+                "value": "7512"
+              },
+              {
+                "count": 3,
+                "value": "11131"
+              },
+              {
+                "count": 3,
+                "value": "11604"
+              },
+              {
+                "count": 3,
+                "value": "3950"
+              }
+            ]
+          }
+        },
+        "index_control_character_rows": 0,
+        "index_name": "cell_id",
+        "index_sample": [
+          "GSM5901232:AAACCCAAGGCAGGGA-1",
+          "GSM5901232:AAACCCAAGGCTCCCA-1",
+          "GSM5901232:AAACCCACATCAGCTA-1",
+          "GSM5901232:AAACCCAGTTATGTGC-1",
+          "GSM5901232:AAACCCATCTCGCAGG-1",
+          "GSM5901232:AAACGAAAGCGGATCA-1",
+          "GSM5901232:AAACGAAAGTAACGTA-1",
+          "GSM5901232:AAACGAACACATTGTG-1",
+          "GSM5901232:AAACGAACATGAGATA-1",
+          "GSM5901232:AAACGAAGTACCGGAA-1",
+          "GSM5901232:AAACGAATCTGCTGAA-1",
+          "GSM5901232:AAACGCTAGGCTATCT-1"
+        ],
+        "index_sha256": "c51eb6ad44d45d5777f6a0fbc1ddd75cd4eaffd80b86f3e7e26a51d99b64a47f",
+        "index_unique": true,
+        "rows": 4396
+      },
+      "payload_sha256": {
+        "obs": "e35f168b08062df9d4344b340f00a6729a59719168f46b0d22004b66b5c601e1",
+        "var": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "x": "eba53c3e02ab36573dd0fddbbe55d3f957c1f40d47195ef2f48c4dc20a4d81c0"
+      },
+      "var": {
+        "column_order": [
+          "feature_id",
+          "gene_symbol",
+          "feature_type"
+        ],
+        "columns": {
+          "feature_id": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 20631,
+            "null": 0,
+            "nunique_non_null": 20631,
+            "rows": 20631,
+            "top_values": [
+              {
+                "count": 1,
+                "value": "ENSG00000268674"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000186092"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000284733"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000284662"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000187634"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000188976"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000187961"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000274847"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000277400"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000278704"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000274792"
+              },
+              {
+                "count": 1,
+                "value": "ENSG00000275249"
+              }
+            ]
+          },
+          "feature_type": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 20631,
+            "null": 0,
+            "nunique_non_null": 1,
+            "rows": 20631,
+            "top_values": [
+              {
+                "count": 20631,
+                "value": "Gene Expression"
+              }
+            ]
+          },
+          "gene_symbol": {
+            "control_character_rows": 0,
+            "dtype": "object",
+            "non_null": 20631,
+            "null": 0,
+            "nunique_non_null": 20616,
+            "rows": 20631,
+            "top_values": [
+              {
+                "count": 2,
+                "value": "ATXN7"
+              },
+              {
+                "count": 2,
+                "value": "AHRR"
+              },
+              {
+                "count": 2,
+                "value": "ABCF2"
+              },
+              {
+                "count": 2,
+                "value": "PINX1"
+              },
+              {
+                "count": 2,
+                "value": "HSPA14"
+              },
+              {
+                "count": 2,
+                "value": "ECE2"
+              },
+              {
+                "count": 2,
+                "value": "MATR3"
+              },
+              {
+                "count": 2,
+                "value": "GGT1"
+              },
+              {
+                "count": 2,
+                "value": "DIABLO"
+              },
+              {
+                "count": 2,
+                "value": "SOD2"
+              },
+              {
+                "count": 2,
+                "value": "PDE11A"
+              },
+              {
+                "count": 2,
+                "value": "POLR2J3"
+              }
+            ]
+          }
+        },
+        "index_control_character_rows": 0,
+        "index_name": "feature_id",
+        "index_sample": [
+          "ENSG00000186092",
+          "ENSG00000284733",
+          "ENSG00000284662",
+          "ENSG00000187634",
+          "ENSG00000188976",
+          "ENSG00000187961",
+          "ENSG00000187583",
+          "ENSG00000187642",
+          "ENSG00000188290",
+          "ENSG00000187608",
+          "ENSG00000188157",
+          "ENSG00000237330"
+        ],
+        "index_sha256": "017942e14d8a0ca0c852323629797acb47445cea7b498eb9bee661abddc97cac",
+        "index_unique": true,
+        "rows": 20631
+      },
+      "x": {
+        "obs_names_sha256": "c51eb6ad44d45d5777f6a0fbc1ddd75cd4eaffd80b86f3e7e26a51d99b64a47f",
+        "obs_names_unique": true,
+        "shape": [
+          4396,
+          20631
+        ],
+        "storage": {
+          "all_values_integer": true,
+          "data_dtype": "int32",
+          "encoding_type": "csr_matrix",
+          "indices_dtype": "int32",
+          "indptr_dtype": "int32",
+          "kind": "sparse_group",
+          "maximum": 1722.0,
+          "minimum": 1.0,
+          "shape_attr": [
+            4396,
+            20631
+          ],
+          "stored_nnz": 17949355,
+          "sum": 56570353
+        },
+        "var_names_sha256": "017942e14d8a0ca0c852323629797acb47445cea7b498eb9bee661abddc97cac",
+        "var_names_unique": true
+      }
+    }
+  },
+  "family_checks": {
+    "all_var_payloads_byte_identical": true,
+    "dataset_count": 3,
+    "var_payload_sha256_by_dataset": {
+      "GSM5901230": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "GSM5901231": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "GSM5901232": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134"
+    }
+  },
+  "format": "pert-gym.first10-cohort-c-live-audit/v1",
+  "host": "pert-gym-worker-eu",
+  "pid": 1153,
+  "task_id": "t_2b3e6d5e",
+  "writes": 0
+}
