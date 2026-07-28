@@ -1,0 +1,454 @@
+{
+  "actual_artifact_inventory": [
+    {
+      "filename": "obs.parquet",
+      "generation": "1784258189734754",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/obs.parquet#1784258189734754",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784258189734754",
+        "sha256": "04ae33b20789a7bd9941c138c27f0fc9314f4c7566624350736470cdbea2abb8",
+        "size_bytes": 385831
+      },
+      "role": "obs",
+      "sha256": "04ae33b20789a7bd9941c138c27f0fc9314f4c7566624350736470cdbea2abb8",
+      "size_bytes": 385831,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/obs.parquet"
+    },
+    {
+      "filename": "X.h5ad",
+      "generation": "1784258192290571",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/X.h5ad#1784258192290571",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784258192290571",
+        "sha256": "38f2a172cf0288abf1f82dca5703e0e0aec3ab18edef2e33e746a8b81c163f50",
+        "size_bytes": 155611588
+      },
+      "role": "X",
+      "sha256": "38f2a172cf0288abf1f82dca5703e0e0aec3ab18edef2e33e746a8b81c163f50",
+      "size_bytes": 155611588,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/X.h5ad"
+    },
+    {
+      "filename": "var.parquet",
+      "generation": "1784258194984856",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/var.parquet#1784258194984856",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784258194984856",
+        "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+        "size_bytes": 841985
+      },
+      "role": "var",
+      "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+      "size_bytes": 841985,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/var.parquet"
+    }
+  ],
+  "artifact_count": 3,
+  "bounded_wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-10-of-13",
+    "number": 10,
+    "outcome_task_id": "t_473b4a62",
+    "singular": true
+  },
+  "bounded_wave_assignment": {
+    "accepted_evidence": null,
+    "existing_builder": null,
+    "outcome_task_id": "t_473b4a62",
+    "record_id": "temporal_v4_092_organoiddb_odd001154_gse194214",
+    "status": "triage",
+    "wave": 10
+  },
+  "catalogue_row_ids": [
+    92
+  ],
+  "component": "Human paraxial mesoderm organoid/development scRNA-seq Odd001154",
+  "control_inputs": {
+    "catalogue": {
+      "sha256": "4d31f341b60163ba1bcf6293746b9f8fe483cbccf6cd975367ed62a30467fdea"
+    },
+    "graph": {
+      "sha256": "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98"
+    },
+    "publication_manifest": {
+      "sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4"
+    }
+  },
+  "controlling_record": {
+    "catalogue_origins": [
+      "temporal_pretraining_datasets_v4"
+    ],
+    "catalogue_row_ids": [
+      92
+    ],
+    "classification": "executable",
+    "collection_membership": {
+      "artifact_keys_sample": [],
+      "authoritative_coverage_note": "metadata match only; no live Lamin assertion",
+      "canonical_20260621_member_count": 0,
+      "categories": {}
+    },
+    "completion_state": "source_executable_not_completion",
+    "component": "Human paraxial mesoderm organoid/development scRNA-seq Odd001154",
+    "denominator_basis": "temporal_pretraining_datasets_v4 retained row + upstream immutable accession/collection identity",
+    "downloadable": "yes",
+    "evidence_paths": [
+      "data/temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv"
+    ],
+    "exact_remaining_work": "Resolve exact payload manifest and execute EU-worker backed conversion/publication with readback; catalogue/source probe alone is never completion.",
+    "exclusion_reason": "",
+    "existing_lamin_coverage": "no matched member in unified_collection_manifest_20260621",
+    "expected_denominator_verbatim": "catalogue logical row; cells=unknown",
+    "logical_dataset": "organoiddb Odd001154 GSE194214",
+    "modality": "scRNA-seq",
+    "modality_contract": "expression_like_obs_X_var",
+    "pilot_or_probe_is_complete": false,
+    "record_id": "temporal_v4_092_organoiddb_odd001154_gse194214",
+    "source_bytes": null,
+    "source_integrity_identity": [
+      "upstream_immutable_identity:GSE194214;ODD001154"
+    ],
+    "source_n_obs": null,
+    "source_n_vars": null,
+    "source_object_identity": "GSE194214;ODD001154",
+    "source_uri": "http://www.inbirg.com/organoid_db/detail/Odd001154",
+    "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001154_gse194214",
+    "target_shared_var_identity": "sha256(canonical ordered var identifiers + organism + feature namespace); compute on EU worker before publication",
+    "target_zarr_or_block_plan": "EU-worker backed probe then adaptive sparse row blocks; never Mac payload"
+  },
+  "dataset": {
+    "consumer_readback_reached_built_data": true,
+    "links": {
+      "X_to_var": "identical ordered Ensembl feature_id",
+      "obs_to_X": "identical ordered cell_id"
+    },
+    "matrix_build_inventory": {
+      "finite_value_sum": 310355119,
+      "max_count": 2436,
+      "nnz_stored": 69489485,
+      "shape": [
+        18716,
+        33694
+      ]
+    },
+    "objects": {
+      "X": {
+        "filename": "X.h5ad",
+        "generation": "1784258192290571",
+        "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/X.h5ad#1784258192290571",
+        "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/X.h5ad",
+        "producer_generation_readback": {
+          "generation": "1784258192290571",
+          "sha256": "38f2a172cf0288abf1f82dca5703e0e0aec3ab18edef2e33e746a8b81c163f50",
+          "size_bytes": 155611588
+        },
+        "role": "X",
+        "sha256": "38f2a172cf0288abf1f82dca5703e0e0aec3ab18edef2e33e746a8b81c163f50",
+        "size_bytes": 155611588,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/X.h5ad"
+      },
+      "obs": {
+        "filename": "obs.parquet",
+        "generation": "1784258189734754",
+        "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/obs.parquet#1784258189734754",
+        "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/obs.parquet",
+        "producer_generation_readback": {
+          "generation": "1784258189734754",
+          "sha256": "04ae33b20789a7bd9941c138c27f0fc9314f4c7566624350736470cdbea2abb8",
+          "size_bytes": 385831
+        },
+        "role": "obs",
+        "sha256": "04ae33b20789a7bd9941c138c27f0fc9314f4c7566624350736470cdbea2abb8",
+        "size_bytes": 385831,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/obs.parquet"
+      },
+      "var": {
+        "filename": "var.parquet",
+        "generation": "1784258194984856",
+        "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/var.parquet#1784258194984856",
+        "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/var.parquet",
+        "producer_generation_readback": {
+          "generation": "1784258194984856",
+          "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+          "size_bytes": 841985
+        },
+        "role": "var",
+        "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00",
+        "size_bytes": 841985,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214/var.parquet"
+      }
+    },
+    "prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/datasets/GSE194214",
+    "quality_disposition": "included_exactly_once",
+    "readback": {
+      "control_observations": 2930,
+      "matrix": {
+        "data_dtype": "uint32",
+        "data_sha256": "f8f2e1845c5138d41ad4e7632fd6f712cbf2791459428d801efdcc8417316d06",
+        "finite_value_sum": 310355119,
+        "format": "csr",
+        "indices_sha256": "353b7231baab48c5917c99d657622cd040ec5fc52603025c1de57dd6381d284d",
+        "indptr_sha256": "ae4f77e21753f563eab78a5539f436e7ff7954b7977b8d2382805e3f05d86bb8",
+        "max_count": 2436,
+        "nnz_stored": 69489485,
+        "shape": [
+          18716,
+          33694
+        ]
+      },
+      "obs_columns": [
+        "source_accession",
+        "organoiddb_id",
+        "sample_accession",
+        "sample_title",
+        "source_file",
+        "source_cell_barcode",
+        "source_name",
+        "source_cell_type",
+        "genotype",
+        "development_stage",
+        "timepoint",
+        "timepoint_unit",
+        "organism",
+        "assay",
+        "tissue",
+        "is_control",
+        "trajectory_id",
+        "source_matrix_semantics"
+      ],
+      "obs_index_sha256": "36263fe07eea5a9e0d9c2cdfed388fdedc2e70c6e2eec0ab989930ffe350c4d7",
+      "sample_count": 4,
+      "shape": [
+        18716,
+        33694
+      ],
+      "timepoint_counts": {
+        "1": 2930,
+        "2": 4977,
+        "3": 5968,
+        "5": 4841
+      },
+      "timepoints_days": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "var_columns": [
+        "feature_id",
+        "gene_symbol",
+        "feature_type",
+        "feature_namespace",
+        "organism",
+        "genome_build"
+      ],
+      "var_index_sha256": "9682c0cd068db48c2678becac6c3bd38aa378216aeb471fb1138096e9552500c"
+    }
+  },
+  "dataset_count": 1,
+  "immutability": {
+    "generation_pinned": true,
+    "manifest_written_last": true,
+    "overwrite_refused": true
+  },
+  "ledger": {
+    "accepted_delta_at_build": 0,
+    "catalogue_row_ids": [
+      92
+    ],
+    "debits": {
+      "dropped_observations": 0,
+      "exclusions": 0,
+      "product_credit": 0
+    },
+    "input_accounting": {
+      "accounted_inputs": 6,
+      "controls": 3,
+      "expected_inputs": 6,
+      "geo_tar_members": 12,
+      "upstream_source_objects": 3
+    },
+    "note": "Build submission only; independent test/review is required before accepted publication credit.",
+    "observation_accounting": {
+      "catalogue_source_n_obs_verbatim": 0,
+      "excluded_n_obs": 0,
+      "materialized_n_obs": 18716,
+      "resolved_source_n_obs": 18716
+    },
+    "output_accounting": {
+      "accounted_outputs": 5,
+      "expected_outputs": 5,
+      "ledger_objects": 1,
+      "manifest_objects": 1,
+      "triplet_artifacts": 3
+    },
+    "record_id": "temporal_v4_092_organoiddb_odd001154_gse194214",
+    "sample_accounting": {
+      "geo_samples": 4,
+      "materialized_samples": 4,
+      "matrix_members": 4
+    },
+    "schema_version": "pert-gym.proposed-publication-ledger/v2",
+    "submission_id": "pert-gym-ledger:materialized-build:t_3570e689:temporal_v4_092_organoiddb_odd001154_gse194214",
+    "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+    "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001154_gse194214",
+    "wave": {
+      "assignment_count": 1,
+      "id": "publication-wave-10-of-13",
+      "number": 10,
+      "outcome_task_id": "t_473b4a62",
+      "singular": true
+    }
+  },
+  "ledger_object": {
+    "generation": "1784258200748582",
+    "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/ledger.json#1784258200748582",
+    "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/ledger.json",
+    "sha256": "7d7abf385e11806ae0dc34e8e5d237a9c8a3689168c4bd0f79188091913aae6e",
+    "size_bytes": 1444,
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/ledger.json"
+  },
+  "missingness": {
+    "absent_source_fields": [
+      "donor_age",
+      "donor_sex",
+      "donor_ethnicity",
+      "disease",
+      "cell_type_annotation",
+      "source_low_quality_flag",
+      "cell_level_qc_metrics"
+    ],
+    "affected_observations": 18716,
+    "age_state": "donor age is absent; organoid developmental day 1/2/3/5 is retained and is not donor age; no observation excluded",
+    "catalogue_cells_field": 0,
+    "catalogue_cells_field_state": "missing/unknown denominator in frozen catalogue; resolved from all four GEO 10x matrices",
+    "dependency_created": false,
+    "excluded_observations": 0,
+    "excluded_records": 0,
+    "metadata_state": "GEO sample accession/title, developmental stage, genotype, source name/type, source file, and cell barcode are retained; absent donor and cell annotations remain explicit missingness",
+    "non_excluding": true,
+    "quality_state": "GEO supplies raw UMI matrices but no accepted cell-level low-quality flag or exclusion threshold; all 18,716 cells are retained"
+  },
+  "observation_count": 18716,
+  "provenance": {
+    "builder_script": "/tmp/t_3570e689-build/input/build_component.py",
+    "builder_script_sha256": "0d118ba0e2536ce27ffc15e648a26ec056a906417f383bb5a9e72d99aa48b6f5",
+    "command": "uv run python build_component.py --input /tmp/t_3570e689-build/input --output /tmp/t_3570e689-build/output",
+    "finished_unix": 1784258200.7967002,
+    "host": "pert-gym-worker-eu",
+    "started_unix": 1784258131.8039467
+  },
+  "record_id": "temporal_v4_092_organoiddb_odd001154_gse194214",
+  "revision": "temporal-v4-092-wave10-44ee24e4151fda51",
+  "revision_prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51",
+  "sample_count": 4,
+  "schema_version": "pert-gym.materialized-component/v2",
+  "source_identity": {
+    "accession": "GSE194214",
+    "organoiddb_id": "ODD001154",
+    "raw_tar_member_count": 12,
+    "raw_tar_member_inventory": [
+      {
+        "compressed_sha256": "5b739f3ed4904471996184c2498184250ffccc8191b6a97b57beafbc9773a811",
+        "compressed_size_bytes": 16009,
+        "name": "GSM5830919_somitoid_d1_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "a2448e412d816b3fbf3d6185e498ba9caa92d0dab9ceca953f64f527c7361aa2",
+        "compressed_size_bytes": 318733,
+        "name": "GSM5830919_somitoid_d1_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "3fb702af47856ecee00b31db98258c47cab746e85d1319780046ad1e74470606",
+        "compressed_size_bytes": 39640497,
+        "name": "GSM5830919_somitoid_d1_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "bc9d741c7dcb0b9f9764459443972b8a4cc58d69f569efef1bb3409418604df8",
+        "compressed_size_bytes": 26433,
+        "name": "GSM5830920_somitoid_d2_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "9ba97255cfb400d2dcefbb4e6df492e49b5ab0ddc571111be210d94161c2a798",
+        "compressed_size_bytes": 318733,
+        "name": "GSM5830920_somitoid_d2_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "ecadb23638962e9cb17d007e2edcbd44df9c28fe65e0eb2d103314e66910cf13",
+        "compressed_size_bytes": 75228261,
+        "name": "GSM5830920_somitoid_d2_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "f4fee25938141ef203099b4421fec9ccf59a2dfe79362419f432f4ab1a8492df",
+        "compressed_size_bytes": 31333,
+        "name": "GSM5830921_somitoid_d3_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "0fd1bce36c9cc2756370f5045e0aebbb5854332f358c89694339f6926e04196a",
+        "compressed_size_bytes": 318733,
+        "name": "GSM5830921_somitoid_d3_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "a83d852e4cc907278324296032208074aa7a865cb9ed36956d4eb884c17cf8df",
+        "compressed_size_bytes": 82798995,
+        "name": "GSM5830921_somitoid_d3_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "3a5be3024586ff73ffe30d36f67a0c10d003d49af0f64d339699338398cf5f91",
+        "compressed_size_bytes": 25748,
+        "name": "GSM5830922_somitoid_d5_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "599a7cd537f2031849e49fe8d647569738f414542a7a720ac55864dd1dc1b51b",
+        "compressed_size_bytes": 318733,
+        "name": "GSM5830922_somitoid_d5_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "e2803e534ba51769f550165d463c1a5e87f3e1ee8fe8dd1471ead1309c5c4663",
+        "compressed_size_bytes": 59820510,
+        "name": "GSM5830922_somitoid_d5_matrix.mtx.gz"
+      }
+    ],
+    "source_object_identity": "GSE194214;ODD001154",
+    "upstream_objects": {
+      "geo_filelist": {
+        "http_headers": {
+          "Content-Length": "990",
+          "ETag": null,
+          "Last-Modified": "Fri, 28 Jan 2022 21:13:25 GMT"
+        },
+        "sha256": "725f9c5430249a24c7ee50708d18f77ba1aa32d38ad3c0c962ec587a4e634651",
+        "size_bytes": 990,
+        "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE194nnn/GSE194214/suppl/filelist.txt"
+      },
+      "geo_raw_tar": {
+        "http_headers": {
+          "Content-Length": "258877440",
+          "ETag": null,
+          "Last-Modified": "Fri, 28 Jan 2022 21:13:25 GMT"
+        },
+        "sha256": "cf7d31034b5449eba5bc7a4226f66283d72051ba30c6fb8d996521fca2dad5f8",
+        "size_bytes": 258877440,
+        "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE194nnn/GSE194214/suppl/GSE194214_RAW.tar"
+      },
+      "geo_soft": {
+        "http_headers": {
+          "Content-Length": "3283",
+          "ETag": null,
+          "Last-Modified": "Sun, 26 Apr 2026 04:42:12 GMT"
+        },
+        "sha256": "a6e292220854d96f86f8cf99bce958890cba2ca8a7dcd3ffb1109509688bc511",
+        "size_bytes": 3283,
+        "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE194nnn/GSE194214/soft/GSE194214_family.soft.gz"
+      }
+    },
+    "verified": true
+  },
+  "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001154_gse194214",
+  "task_id": "t_3570e689",
+  "triplet_count": 1,
+  "variable_count": 33694
+}

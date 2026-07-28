@@ -1,0 +1,1369 @@
+{
+  "actual_artifact_inventory": [
+    {
+      "generation": "1784257568154602",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/obs.parquet#1784257568154602",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257568154602",
+        "sha256": "4bdc94dadd736669799b8985748d266a2c9afae5c310ce4f8035bb53a86d4c45",
+        "size_bytes": 290697
+      },
+      "sha256": "4bdc94dadd736669799b8985748d266a2c9afae5c310ce4f8035bb53a86d4c45",
+      "size_bytes": 290697,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/obs.parquet"
+    },
+    {
+      "generation": "1784257569446253",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/X.h5ad#1784257569446253",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257569446253",
+        "sha256": "56094260959aeb030a9dd77ec45c46e5bf4c83dfca811162c77e2aac48d3eccb",
+        "size_bytes": 64870241
+      },
+      "sha256": "56094260959aeb030a9dd77ec45c46e5bf4c83dfca811162c77e2aac48d3eccb",
+      "size_bytes": 64870241,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/X.h5ad"
+    },
+    {
+      "generation": "1784257570482760",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/var.parquet#1784257570482760",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257570482760",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/var.parquet"
+    },
+    {
+      "generation": "1784257583183504",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/obs.parquet#1784257583183504",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257583183504",
+        "sha256": "64ef20abdce0d7590bdca207c6daaec15b7332418d6c5628a8ae012d1a39f4c2",
+        "size_bytes": 213224
+      },
+      "sha256": "64ef20abdce0d7590bdca207c6daaec15b7332418d6c5628a8ae012d1a39f4c2",
+      "size_bytes": 213224,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/obs.parquet"
+    },
+    {
+      "generation": "1784257583868620",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/X.h5ad#1784257583868620",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257583868620",
+        "sha256": "5f5fd76bb55b6568940377ae084237fb11dc87b76244961b53c62891d61899c1",
+        "size_bytes": 43596564
+      },
+      "sha256": "5f5fd76bb55b6568940377ae084237fb11dc87b76244961b53c62891d61899c1",
+      "size_bytes": 43596564,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/X.h5ad"
+    },
+    {
+      "generation": "1784257584621417",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/var.parquet#1784257584621417",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257584621417",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/var.parquet"
+    },
+    {
+      "generation": "1784257595511069",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/obs.parquet#1784257595511069",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257595511069",
+        "sha256": "f35de6ba53b5ead8e65ee8ca7cd1419f61dbd8b476b2ab2c6ee4017dc96b0be6",
+        "size_bytes": 223506
+      },
+      "sha256": "f35de6ba53b5ead8e65ee8ca7cd1419f61dbd8b476b2ab2c6ee4017dc96b0be6",
+      "size_bytes": 223506,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/obs.parquet"
+    },
+    {
+      "generation": "1784257596242241",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/X.h5ad#1784257596242241",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257596242241",
+        "sha256": "ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047",
+        "size_bytes": 41497959
+      },
+      "sha256": "ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047",
+      "size_bytes": 41497959,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/X.h5ad"
+    },
+    {
+      "generation": "1784257597041087",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/var.parquet#1784257597041087",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257597041087",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/var.parquet"
+    },
+    {
+      "generation": "1784257610443164",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/obs.parquet#1784257610443164",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257610443164",
+        "sha256": "471a5f6bdbc6430a46b882f7fd38642d3d8680575f69bbdd059e44c785679352",
+        "size_bytes": 292660
+      },
+      "sha256": "471a5f6bdbc6430a46b882f7fd38642d3d8680575f69bbdd059e44c785679352",
+      "size_bytes": 292660,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/obs.parquet"
+    },
+    {
+      "generation": "1784257611385867",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/X.h5ad#1784257611385867",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257611385867",
+        "sha256": "45c310d2d01c2670078ea9deffbe60ee2b46e4b72fbe520b8e6fdb0ac170a212",
+        "size_bytes": 60292017
+      },
+      "sha256": "45c310d2d01c2670078ea9deffbe60ee2b46e4b72fbe520b8e6fdb0ac170a212",
+      "size_bytes": 60292017,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/X.h5ad"
+    },
+    {
+      "generation": "1784257612370365",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/var.parquet#1784257612370365",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257612370365",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/var.parquet"
+    },
+    {
+      "generation": "1784257622836809",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/obs.parquet#1784257622836809",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257622836809",
+        "sha256": "e35f168b08062df9d4344b340f00a6729a59719168f46b0d22004b66b5c601e1",
+        "size_bytes": 208895
+      },
+      "sha256": "e35f168b08062df9d4344b340f00a6729a59719168f46b0d22004b66b5c601e1",
+      "size_bytes": 208895,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/obs.parquet"
+    },
+    {
+      "generation": "1784257623519188",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/X.h5ad#1784257623519188",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257623519188",
+        "sha256": "eba53c3e02ab36573dd0fddbbe55d3f957c1f40d47195ef2f48c4dc20a4d81c0",
+        "size_bytes": 41513267
+      },
+      "sha256": "eba53c3e02ab36573dd0fddbbe55d3f957c1f40d47195ef2f48c4dc20a4d81c0",
+      "size_bytes": 41513267,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/X.h5ad"
+    },
+    {
+      "generation": "1784257624315133",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/var.parquet#1784257624315133",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257624315133",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/var.parquet"
+    },
+    {
+      "generation": "1784257638736789",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/obs.parquet#1784257638736789",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257638736789",
+        "sha256": "e2d426c35e765e23ee1ba7883a39ac64e2be27cb55270b13e58806bba4cf0a5d",
+        "size_bytes": 171966
+      },
+      "sha256": "e2d426c35e765e23ee1ba7883a39ac64e2be27cb55270b13e58806bba4cf0a5d",
+      "size_bytes": 171966,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/obs.parquet"
+    },
+    {
+      "generation": "1784257639404749",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/X.h5ad#1784257639404749",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257639404749",
+        "sha256": "101235e1035d23bae9b2cc2a0374d7170b3cb9a5141cfd1a57bb17850671fda3",
+        "size_bytes": 34789829
+      },
+      "sha256": "101235e1035d23bae9b2cc2a0374d7170b3cb9a5141cfd1a57bb17850671fda3",
+      "size_bytes": 34789829,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/X.h5ad"
+    },
+    {
+      "generation": "1784257640109075",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/var.parquet#1784257640109075",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257640109075",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/var.parquet"
+    },
+    {
+      "generation": "1784257655778014",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/obs.parquet#1784257655778014",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257655778014",
+        "sha256": "9ee1e5779383a99fa82b6f7c76af7f5aeec551af17b92ebbb32d0d89f4ce2b5d",
+        "size_bytes": 198729
+      },
+      "sha256": "9ee1e5779383a99fa82b6f7c76af7f5aeec551af17b92ebbb32d0d89f4ce2b5d",
+      "size_bytes": 198729,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/obs.parquet"
+    },
+    {
+      "generation": "1784257656684808",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/X.h5ad#1784257656684808",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257656684808",
+        "sha256": "95c0ebf5b8780e112191bc6fdc109dcc18c3b07c428c00fa43490677169ca676",
+        "size_bytes": 49728810
+      },
+      "sha256": "95c0ebf5b8780e112191bc6fdc109dcc18c3b07c428c00fa43490677169ca676",
+      "size_bytes": 49728810,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/X.h5ad"
+    },
+    {
+      "generation": "1784257657607310",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/var.parquet#1784257657607310",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257657607310",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/var.parquet"
+    },
+    {
+      "generation": "1784257683531678",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/obs.parquet#1784257683531678",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257683531678",
+        "sha256": "2d1c3ff4240442a07fde8980b5485ac7d1d28cb1fbc31398244d4e1da3054e81",
+        "size_bytes": 572304
+      },
+      "sha256": "2d1c3ff4240442a07fde8980b5485ac7d1d28cb1fbc31398244d4e1da3054e81",
+      "size_bytes": 572304,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/obs.parquet"
+    },
+    {
+      "generation": "1784257685138420",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/X.h5ad#1784257685138420",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257685138420",
+        "sha256": "574e3d09749cbeff3f5216bd6e261a76c02c48f68200dcfceb2d6345e0ec6036",
+        "size_bytes": 117197393
+      },
+      "sha256": "574e3d09749cbeff3f5216bd6e261a76c02c48f68200dcfceb2d6345e0ec6036",
+      "size_bytes": 117197393,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/X.h5ad"
+    },
+    {
+      "generation": "1784257686799237",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/var.parquet#1784257686799237",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257686799237",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/var.parquet"
+    },
+    {
+      "generation": "1784257704334649",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/obs.parquet#1784257704334649",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257704334649",
+        "sha256": "6c3532a8aba446bea7fd4aba0a12ef19084e4e7b14f92f196b326480b12b01b8",
+        "size_bytes": 296034
+      },
+      "sha256": "6c3532a8aba446bea7fd4aba0a12ef19084e4e7b14f92f196b326480b12b01b8",
+      "size_bytes": 296034,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/obs.parquet"
+    },
+    {
+      "generation": "1784257705417118",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/X.h5ad#1784257705417118",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257705417118",
+        "sha256": "b67e1c3645a5852b40ddb48ebb03b256345d44b533e3d6de0e8b04d0a2786fb8",
+        "size_bytes": 69988640
+      },
+      "sha256": "b67e1c3645a5852b40ddb48ebb03b256345d44b533e3d6de0e8b04d0a2786fb8",
+      "size_bytes": 69988640,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/X.h5ad"
+    },
+    {
+      "generation": "1784257706704176",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/var.parquet#1784257706704176",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257706704176",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/var.parquet"
+    },
+    {
+      "generation": "1784257728428679",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/obs.parquet#1784257728428679",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257728428679",
+        "sha256": "40b5479e273f61887cdae2ee3c2108e4415d9823fa3f697bd4354233b843224c",
+        "size_bytes": 391106
+      },
+      "sha256": "40b5479e273f61887cdae2ee3c2108e4415d9823fa3f697bd4354233b843224c",
+      "size_bytes": 391106,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/obs.parquet"
+    },
+    {
+      "generation": "1784257729747873",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/X.h5ad#1784257729747873",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257729747873",
+        "sha256": "d369d52e798be9e7f84464122772ffd17a0cded3cbc16cf0a7133da49f45f388",
+        "size_bytes": 91435846
+      },
+      "sha256": "d369d52e798be9e7f84464122772ffd17a0cded3cbc16cf0a7133da49f45f388",
+      "size_bytes": 91435846,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/X.h5ad"
+    },
+    {
+      "generation": "1784257731196279",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/var.parquet#1784257731196279",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257731196279",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/var.parquet"
+    }
+  ],
+  "artifact_count": 30,
+  "bounded_wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-09-of-13",
+    "number": 9,
+    "outcome_task_id": "t_99ac1cdb",
+    "singular": true
+  },
+  "bounded_wave_assignment": {
+    "accepted_evidence": null,
+    "existing_builder": null,
+    "outcome_task_id": "t_99ac1cdb",
+    "record_id": "temporal_v4_089_organoiddb_odd001155_gse196799",
+    "status": "triage",
+    "wave": 9
+  },
+  "bounded_wave_duplicate_check": {
+    "assignment_count": 1,
+    "duplicated_in_other_wave": false
+  },
+  "build_identity": {
+    "billing_project": "jkobject-1549353370965",
+    "command": "uv run python build_component.py --input /tmp/pert-gym-t_53a7328b-run/input --source /tmp/pert-gym-t_53a7328b-source/GSE196799_RAW.tar --output /tmp/pert-gym-t_53a7328b-run/output",
+    "host": "pert-gym-worker-eu",
+    "operation": "checksum-verify deposited raw 10x matrices; apply documented deterministic cell QC; preserve integer counts and all features; write ten immutable sample triplets; generation-read all payloads",
+    "script_sha256": "b58bb31fa518288e48ce8ea2c8c108ee461288d1a775d7b42d765bc2f7b44fcc",
+    "upstream_analysis_commit": "15348b528c1086ae7b2cd633e710a45fc949b2b8",
+    "zone": "europe-west1-b"
+  },
+  "canonical_artifact_count": 30,
+  "catalogue_row_ids": [
+    89
+  ],
+  "component": "Human blood vessel organoid/development scRNA-seq Odd001155",
+  "dataset_count": 1,
+  "deterministic_readback": {
+    "consumer_readback_reached_built_data": true,
+    "procedure": "Read ledger, manifest and all 30 payload objects at exact GCS generations; verify hashes; reopen all ten Parquet/H5AD triplets; assert logical scope, ordered axes, per-sample source/time identity, shared exact var, singleton wave assignment, missingness and balanced ledger."
+  },
+  "execution": {
+    "collection_writes": 0,
+    "completed_at_epoch": 1784257732.98191,
+    "lamin_writes": 0,
+    "payload_bytes_written": 622755247,
+    "product_credit": 0,
+    "started_at_epoch": 1784257545.932731
+  },
+  "ledger": {
+    "accepted_delta_at_build": 0,
+    "accepted_ledger_precondition": "2/153",
+    "artifact_accounting": {
+      "canonical_triplet_object_count": 30,
+      "ledger_object_count": 1,
+      "manifest_object_count": 1,
+      "payload_object_count": 30,
+      "triplet_count": 10
+    },
+    "catalogue_row_ids": [
+      89
+    ],
+    "credit_state": "materialized_pending_independent_test_review_and_administrative_acceptance",
+    "credits": {
+      "materialized_component_records": 1,
+      "materialized_observations": 63035,
+      "materialized_triplets": 10
+    },
+    "dataset_accounting": {
+      "excluded_samples": 0,
+      "included_samples": 10,
+      "materialized_triplets": 10,
+      "source_samples": 10
+    },
+    "debits": {
+      "excluded_components": 0,
+      "excluded_observations": 0,
+      "excluded_samples": 0,
+      "product_credit": 0
+    },
+    "deduplication_key": "record_id:temporal_v4_089_organoiddb_odd001155_gse196799",
+    "deduplication_scope_count": 1,
+    "observation_accounting": {
+      "catalogue_source_n_obs_verbatim": null,
+      "cell_definition": "authors' published strict n_genes>2000 and mitochondrial_fraction<0.1 applied to deposited raw matrices",
+      "excluded_n_obs": 0,
+      "materialized_n_obs": 63035,
+      "noncell_barcode_candidates": 67885765,
+      "raw_barcode_candidates": 67948800
+    },
+    "proposed_postcondition_after_independent_acceptance": "3/153",
+    "quality_missingness_is_not_exclusion": true,
+    "record_accounting": {
+      "excluded_component_records": 0,
+      "included_component_records": 1,
+      "materialized_component_records": 1,
+      "source_component_records": 1
+    },
+    "record_id": "temporal_v4_089_organoiddb_odd001155_gse196799",
+    "schema_version": "pert-gym.proposed-publication-ledger/v2",
+    "submission_id": "pert-gym-ledger:materialized-build:t_53a7328b:temporal_v4_089_organoiddb_odd001155_gse196799",
+    "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+    "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001155_gse196799"
+  },
+  "ledger_object": {
+    "generation": "1784257732885782",
+    "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/ledger.json#1784257732885782",
+    "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/ledger.json",
+    "sha256": "a720ce4b9ce2b3b18b701022a9987a33d4cf691d7807a4426d0321f16d74f1aa",
+    "size_bytes": 1981,
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/ledger.json"
+  },
+  "matrix_nnz": 269120820,
+  "missingness": {
+    "absent_or_unlinked_source_fields": [
+      "age",
+      "donor_id",
+      "donor-to-sample sex",
+      "donor-to-sample ethnicity",
+      "disease",
+      "source cell-type annotation",
+      "source cell-call flag"
+    ],
+    "age_state": "absent; represented as missingness; no retained cell excluded",
+    "dependency_created": false,
+    "excluded_component_records": 0,
+    "excluded_observations": 0,
+    "metadata_state": "sample accession, day, experiment, culture method, ascorbic-acid condition, organism, assay and count-derived QC retained; absent/unlinked fields remain explicit missingness",
+    "non_excluding": true,
+    "quality_state": "deposited source cell-call flag absent; canonical cells deterministically called from raw droplets using the authors' published strict n_genes>2000 and mitochondrial_fraction<0.1 thresholds; no additional missing quality field used for exclusion",
+    "raw_barcode_disposition": "raw 10x barcode universe contains droplets/non-cell candidates; candidates failing the published deterministic cell definition are accounted as noncell_barcode_candidates, not excluded biological observations"
+  },
+  "objects": {
+    "GSM5901228/X": {
+      "generation": "1784257569446253",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/X.h5ad#1784257569446253",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257569446253",
+        "sha256": "56094260959aeb030a9dd77ec45c46e5bf4c83dfca811162c77e2aac48d3eccb",
+        "size_bytes": 64870241
+      },
+      "sha256": "56094260959aeb030a9dd77ec45c46e5bf4c83dfca811162c77e2aac48d3eccb",
+      "size_bytes": 64870241,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/X.h5ad"
+    },
+    "GSM5901228/obs": {
+      "generation": "1784257568154602",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/obs.parquet#1784257568154602",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257568154602",
+        "sha256": "4bdc94dadd736669799b8985748d266a2c9afae5c310ce4f8035bb53a86d4c45",
+        "size_bytes": 290697
+      },
+      "sha256": "4bdc94dadd736669799b8985748d266a2c9afae5c310ce4f8035bb53a86d4c45",
+      "size_bytes": 290697,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/obs.parquet"
+    },
+    "GSM5901228/var": {
+      "generation": "1784257570482760",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/var.parquet#1784257570482760",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257570482760",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901228/var.parquet"
+    },
+    "GSM5901229/X": {
+      "generation": "1784257583868620",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/X.h5ad#1784257583868620",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257583868620",
+        "sha256": "5f5fd76bb55b6568940377ae084237fb11dc87b76244961b53c62891d61899c1",
+        "size_bytes": 43596564
+      },
+      "sha256": "5f5fd76bb55b6568940377ae084237fb11dc87b76244961b53c62891d61899c1",
+      "size_bytes": 43596564,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/X.h5ad"
+    },
+    "GSM5901229/obs": {
+      "generation": "1784257583183504",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/obs.parquet#1784257583183504",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257583183504",
+        "sha256": "64ef20abdce0d7590bdca207c6daaec15b7332418d6c5628a8ae012d1a39f4c2",
+        "size_bytes": 213224
+      },
+      "sha256": "64ef20abdce0d7590bdca207c6daaec15b7332418d6c5628a8ae012d1a39f4c2",
+      "size_bytes": 213224,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/obs.parquet"
+    },
+    "GSM5901229/var": {
+      "generation": "1784257584621417",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/var.parquet#1784257584621417",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257584621417",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901229/var.parquet"
+    },
+    "GSM5901230/X": {
+      "generation": "1784257596242241",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/X.h5ad#1784257596242241",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257596242241",
+        "sha256": "ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047",
+        "size_bytes": 41497959
+      },
+      "sha256": "ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047",
+      "size_bytes": 41497959,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/X.h5ad"
+    },
+    "GSM5901230/obs": {
+      "generation": "1784257595511069",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/obs.parquet#1784257595511069",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257595511069",
+        "sha256": "f35de6ba53b5ead8e65ee8ca7cd1419f61dbd8b476b2ab2c6ee4017dc96b0be6",
+        "size_bytes": 223506
+      },
+      "sha256": "f35de6ba53b5ead8e65ee8ca7cd1419f61dbd8b476b2ab2c6ee4017dc96b0be6",
+      "size_bytes": 223506,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/obs.parquet"
+    },
+    "GSM5901230/var": {
+      "generation": "1784257597041087",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/var.parquet#1784257597041087",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257597041087",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901230/var.parquet"
+    },
+    "GSM5901231/X": {
+      "generation": "1784257611385867",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/X.h5ad#1784257611385867",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257611385867",
+        "sha256": "45c310d2d01c2670078ea9deffbe60ee2b46e4b72fbe520b8e6fdb0ac170a212",
+        "size_bytes": 60292017
+      },
+      "sha256": "45c310d2d01c2670078ea9deffbe60ee2b46e4b72fbe520b8e6fdb0ac170a212",
+      "size_bytes": 60292017,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/X.h5ad"
+    },
+    "GSM5901231/obs": {
+      "generation": "1784257610443164",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/obs.parquet#1784257610443164",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257610443164",
+        "sha256": "471a5f6bdbc6430a46b882f7fd38642d3d8680575f69bbdd059e44c785679352",
+        "size_bytes": 292660
+      },
+      "sha256": "471a5f6bdbc6430a46b882f7fd38642d3d8680575f69bbdd059e44c785679352",
+      "size_bytes": 292660,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/obs.parquet"
+    },
+    "GSM5901231/var": {
+      "generation": "1784257612370365",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/var.parquet#1784257612370365",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257612370365",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901231/var.parquet"
+    },
+    "GSM5901232/X": {
+      "generation": "1784257623519188",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/X.h5ad#1784257623519188",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257623519188",
+        "sha256": "eba53c3e02ab36573dd0fddbbe55d3f957c1f40d47195ef2f48c4dc20a4d81c0",
+        "size_bytes": 41513267
+      },
+      "sha256": "eba53c3e02ab36573dd0fddbbe55d3f957c1f40d47195ef2f48c4dc20a4d81c0",
+      "size_bytes": 41513267,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/X.h5ad"
+    },
+    "GSM5901232/obs": {
+      "generation": "1784257622836809",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/obs.parquet#1784257622836809",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257622836809",
+        "sha256": "e35f168b08062df9d4344b340f00a6729a59719168f46b0d22004b66b5c601e1",
+        "size_bytes": 208895
+      },
+      "sha256": "e35f168b08062df9d4344b340f00a6729a59719168f46b0d22004b66b5c601e1",
+      "size_bytes": 208895,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/obs.parquet"
+    },
+    "GSM5901232/var": {
+      "generation": "1784257624315133",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/var.parquet#1784257624315133",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257624315133",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901232/var.parquet"
+    },
+    "GSM5901233/X": {
+      "generation": "1784257639404749",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/X.h5ad#1784257639404749",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257639404749",
+        "sha256": "101235e1035d23bae9b2cc2a0374d7170b3cb9a5141cfd1a57bb17850671fda3",
+        "size_bytes": 34789829
+      },
+      "sha256": "101235e1035d23bae9b2cc2a0374d7170b3cb9a5141cfd1a57bb17850671fda3",
+      "size_bytes": 34789829,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/X.h5ad"
+    },
+    "GSM5901233/obs": {
+      "generation": "1784257638736789",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/obs.parquet#1784257638736789",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257638736789",
+        "sha256": "e2d426c35e765e23ee1ba7883a39ac64e2be27cb55270b13e58806bba4cf0a5d",
+        "size_bytes": 171966
+      },
+      "sha256": "e2d426c35e765e23ee1ba7883a39ac64e2be27cb55270b13e58806bba4cf0a5d",
+      "size_bytes": 171966,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/obs.parquet"
+    },
+    "GSM5901233/var": {
+      "generation": "1784257640109075",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/var.parquet#1784257640109075",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257640109075",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901233/var.parquet"
+    },
+    "GSM5901234/X": {
+      "generation": "1784257656684808",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/X.h5ad#1784257656684808",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257656684808",
+        "sha256": "95c0ebf5b8780e112191bc6fdc109dcc18c3b07c428c00fa43490677169ca676",
+        "size_bytes": 49728810
+      },
+      "sha256": "95c0ebf5b8780e112191bc6fdc109dcc18c3b07c428c00fa43490677169ca676",
+      "size_bytes": 49728810,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/X.h5ad"
+    },
+    "GSM5901234/obs": {
+      "generation": "1784257655778014",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/obs.parquet#1784257655778014",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257655778014",
+        "sha256": "9ee1e5779383a99fa82b6f7c76af7f5aeec551af17b92ebbb32d0d89f4ce2b5d",
+        "size_bytes": 198729
+      },
+      "sha256": "9ee1e5779383a99fa82b6f7c76af7f5aeec551af17b92ebbb32d0d89f4ce2b5d",
+      "size_bytes": 198729,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/obs.parquet"
+    },
+    "GSM5901234/var": {
+      "generation": "1784257657607310",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/var.parquet#1784257657607310",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257657607310",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901234/var.parquet"
+    },
+    "GSM5901235/X": {
+      "generation": "1784257685138420",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/X.h5ad#1784257685138420",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257685138420",
+        "sha256": "574e3d09749cbeff3f5216bd6e261a76c02c48f68200dcfceb2d6345e0ec6036",
+        "size_bytes": 117197393
+      },
+      "sha256": "574e3d09749cbeff3f5216bd6e261a76c02c48f68200dcfceb2d6345e0ec6036",
+      "size_bytes": 117197393,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/X.h5ad"
+    },
+    "GSM5901235/obs": {
+      "generation": "1784257683531678",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/obs.parquet#1784257683531678",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257683531678",
+        "sha256": "2d1c3ff4240442a07fde8980b5485ac7d1d28cb1fbc31398244d4e1da3054e81",
+        "size_bytes": 572304
+      },
+      "sha256": "2d1c3ff4240442a07fde8980b5485ac7d1d28cb1fbc31398244d4e1da3054e81",
+      "size_bytes": 572304,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/obs.parquet"
+    },
+    "GSM5901235/var": {
+      "generation": "1784257686799237",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/var.parquet#1784257686799237",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257686799237",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901235/var.parquet"
+    },
+    "GSM5901236/X": {
+      "generation": "1784257705417118",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/X.h5ad#1784257705417118",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257705417118",
+        "sha256": "b67e1c3645a5852b40ddb48ebb03b256345d44b533e3d6de0e8b04d0a2786fb8",
+        "size_bytes": 69988640
+      },
+      "sha256": "b67e1c3645a5852b40ddb48ebb03b256345d44b533e3d6de0e8b04d0a2786fb8",
+      "size_bytes": 69988640,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/X.h5ad"
+    },
+    "GSM5901236/obs": {
+      "generation": "1784257704334649",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/obs.parquet#1784257704334649",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257704334649",
+        "sha256": "6c3532a8aba446bea7fd4aba0a12ef19084e4e7b14f92f196b326480b12b01b8",
+        "size_bytes": 296034
+      },
+      "sha256": "6c3532a8aba446bea7fd4aba0a12ef19084e4e7b14f92f196b326480b12b01b8",
+      "size_bytes": 296034,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/obs.parquet"
+    },
+    "GSM5901236/var": {
+      "generation": "1784257706704176",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/var.parquet#1784257706704176",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257706704176",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901236/var.parquet"
+    },
+    "GSM5901237/X": {
+      "generation": "1784257729747873",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/X.h5ad#1784257729747873",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784257729747873",
+        "sha256": "d369d52e798be9e7f84464122772ffd17a0cded3cbc16cf0a7133da49f45f388",
+        "size_bytes": 91435846
+      },
+      "sha256": "d369d52e798be9e7f84464122772ffd17a0cded3cbc16cf0a7133da49f45f388",
+      "size_bytes": 91435846,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/X.h5ad"
+    },
+    "GSM5901237/obs": {
+      "generation": "1784257728428679",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/obs.parquet#1784257728428679",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257728428679",
+        "sha256": "40b5479e273f61887cdae2ee3c2108e4415d9823fa3f697bd4354233b843224c",
+        "size_bytes": 391106
+      },
+      "sha256": "40b5479e273f61887cdae2ee3c2108e4415d9823fa3f697bd4354233b843224c",
+      "size_bytes": 391106,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/obs.parquet"
+    },
+    "GSM5901237/var": {
+      "generation": "1784257731196279",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/var.parquet#1784257731196279",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784257731196279",
+        "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+        "size_bytes": 498556
+      },
+      "sha256": "1d74fc35a8ed61c7f487b5b3b955fd91e9208e6e42e7943ebf0e8442ec83c134",
+      "size_bytes": 498556,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/samples/GSM5901237/var.parquet"
+    }
+  },
+  "observation_count": 63035,
+  "raw_count_sum": 1068064435,
+  "readback": {
+    "GSM5901228": {
+      "count_sum": 143381924,
+      "culture_method": [
+        "3D suspension culture"
+      ],
+      "nnz": 28475158,
+      "obs_index_sha256": "f5ec446fd577e73b50c4d12d75e438f2c7a32cfd7d3f7e0f9fcb055f85d3eb2e",
+      "shape": [
+        6416,
+        20631
+      ],
+      "timepoint_days": [
+        0.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901229": {
+      "count_sum": 89433833,
+      "culture_method": [
+        "3D suspension culture"
+      ],
+      "nnz": 18795976,
+      "obs_index_sha256": "d3091d8f1e25429994ac1a4eeea394dadb2598d89db4ad17a769a79bd4fb74f0",
+      "shape": [
+        4549,
+        20631
+      ],
+      "timepoint_days": [
+        3.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901230": {
+      "count_sum": 58069115,
+      "culture_method": [
+        "3D suspension culture"
+      ],
+      "nnz": 17517151,
+      "obs_index_sha256": "4e825600f271ec43bee398bae4741fdc1a5e8b75d94d6a516b106598e22f7693",
+      "shape": [
+        4807,
+        20631
+      ],
+      "timepoint_days": [
+        6.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901231": {
+      "count_sum": 97683665,
+      "culture_method": [
+        "3D suspension culture"
+      ],
+      "nnz": 26039746,
+      "obs_index_sha256": "08959baa6dd2b136e308496cc3c49dfe4bb64f44e00f2e32f831650e1521e1dc",
+      "shape": [
+        6430,
+        20631
+      ],
+      "timepoint_days": [
+        9.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901232": {
+      "count_sum": 56570353,
+      "culture_method": [
+        "3D suspension culture"
+      ],
+      "nnz": 17949355,
+      "obs_index_sha256": "327cbca23ada6c0e9ca97650519398b28b01c7975df6cd93cab7178f8897ccd4",
+      "shape": [
+        4396,
+        20631
+      ],
+      "timepoint_days": [
+        18.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901233": {
+      "count_sum": 60524082,
+      "culture_method": [
+        "3D suspension culture"
+      ],
+      "nnz": 14465470,
+      "obs_index_sha256": "72e68b9d14fed2770b681148b763345a55f35467d3de09ade022ff1ea43eed70",
+      "shape": [
+        3570,
+        20631
+      ],
+      "timepoint_days": [
+        9.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901234": {
+      "count_sum": 102155282,
+      "culture_method": [
+        "3D suspension culture"
+      ],
+      "nnz": 22054447,
+      "obs_index_sha256": "a12c9fed0a19fcc6f3c3c48ef482363a19058ece7bdbb8c2e146c512ecb058d9",
+      "shape": [
+        4126,
+        20631
+      ],
+      "timepoint_days": [
+        12.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901235": {
+      "count_sum": 164596347,
+      "culture_method": [
+        "3D Matrigel"
+      ],
+      "nnz": 51893254,
+      "obs_index_sha256": "2fea066280c38bc19234108f72b6fae9964213b1508c22749360db1ccfe4e1e5",
+      "shape": [
+        13530,
+        20631
+      ],
+      "timepoint_days": [
+        12.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901236": {
+      "count_sum": 126304790,
+      "culture_method": [
+        "3D Matrigel"
+      ],
+      "nnz": 31077632,
+      "obs_index_sha256": "29369f49e0e49910f1daadc71e055c9c51cf86f278ca649ebdd06a4ae932c0b4",
+      "shape": [
+        6468,
+        20631
+      ],
+      "timepoint_days": [
+        18.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901237": {
+      "count_sum": 169345044,
+      "culture_method": [
+        "3D Matrigel"
+      ],
+      "nnz": 40852631,
+      "obs_index_sha256": "83072d96e2ea36dffc677fe0ed10766aa1bc4a634806e2b1756c8f8823b8e3c6",
+      "shape": [
+        8743,
+        20631
+      ],
+      "timepoint_days": [
+        18.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    }
+  },
+  "record_id": "temporal_v4_089_organoiddb_odd001155_gse196799",
+  "revision": "temporal-v4-089-wave09-e1265bc274817bb7",
+  "revision_fingerprint_sha256": "e1265bc274817bb77d35349fee69d7353097b6f73ae295bc5c0eb3881a9d6bc9",
+  "revision_prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7",
+  "sample_conversion_stats": {
+    "GSM5901228": {
+      "deposited_matrix_nnz_before_qc": 43000917,
+      "maximum_mitochondrial_fraction_observed": 0.09997442364692688,
+      "minimum_detected_genes_observed": 2001,
+      "noncell_barcode_candidates": 6788464,
+      "obs_index_sha256": "f5ec446fd577e73b50c4d12d75e438f2c7a32cfd7d3f7e0f9fcb055f85d3eb2e",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 6416,
+      "retained_count_sum": 143381924,
+      "retained_nnz": 28475158,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901229": {
+      "deposited_matrix_nnz_before_qc": 34313209,
+      "maximum_mitochondrial_fraction_observed": 0.09997408092021942,
+      "minimum_detected_genes_observed": 2018,
+      "noncell_barcode_candidates": 6790331,
+      "obs_index_sha256": "d3091d8f1e25429994ac1a4eeea394dadb2598d89db4ad17a769a79bd4fb74f0",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 4549,
+      "retained_count_sum": 89433833,
+      "retained_nnz": 18795976,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901230": {
+      "deposited_matrix_nnz_before_qc": 28533583,
+      "maximum_mitochondrial_fraction_observed": 0.09995641559362411,
+      "minimum_detected_genes_observed": 2001,
+      "noncell_barcode_candidates": 6790073,
+      "obs_index_sha256": "4e825600f271ec43bee398bae4741fdc1a5e8b75d94d6a516b106598e22f7693",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 4807,
+      "retained_count_sum": 58069115,
+      "retained_nnz": 17517151,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901231": {
+      "deposited_matrix_nnz_before_qc": 39628838,
+      "maximum_mitochondrial_fraction_observed": 0.0999085009098053,
+      "minimum_detected_genes_observed": 2007,
+      "noncell_barcode_candidates": 6788450,
+      "obs_index_sha256": "08959baa6dd2b136e308496cc3c49dfe4bb64f44e00f2e32f831650e1521e1dc",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 6430,
+      "retained_count_sum": 97683665,
+      "retained_nnz": 26039746,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901232": {
+      "deposited_matrix_nnz_before_qc": 29427361,
+      "maximum_mitochondrial_fraction_observed": 0.09982850402593613,
+      "minimum_detected_genes_observed": 2001,
+      "noncell_barcode_candidates": 6790484,
+      "obs_index_sha256": "327cbca23ada6c0e9ca97650519398b28b01c7975df6cd93cab7178f8897ccd4",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 4396,
+      "retained_count_sum": 56570353,
+      "retained_nnz": 17949355,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901233": {
+      "deposited_matrix_nnz_before_qc": 64581319,
+      "maximum_mitochondrial_fraction_observed": 0.09989777207374573,
+      "minimum_detected_genes_observed": 2001,
+      "noncell_barcode_candidates": 6791310,
+      "obs_index_sha256": "72e68b9d14fed2770b681148b763345a55f35467d3de09ade022ff1ea43eed70",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 3570,
+      "retained_count_sum": 60524082,
+      "retained_nnz": 14465470,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901234": {
+      "deposited_matrix_nnz_before_qc": 59837575,
+      "maximum_mitochondrial_fraction_observed": 0.0999971479177475,
+      "minimum_detected_genes_observed": 2033,
+      "noncell_barcode_candidates": 6790754,
+      "obs_index_sha256": "a12c9fed0a19fcc6f3c3c48ef482363a19058ece7bdbb8c2e146c512ecb058d9",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 4126,
+      "retained_count_sum": 102155282,
+      "retained_nnz": 22054447,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901235": {
+      "deposited_matrix_nnz_before_qc": 68194335,
+      "maximum_mitochondrial_fraction_observed": 0.09998845309019089,
+      "minimum_detected_genes_observed": 2001,
+      "noncell_barcode_candidates": 6781350,
+      "obs_index_sha256": "2fea066280c38bc19234108f72b6fae9964213b1508c22749360db1ccfe4e1e5",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 13530,
+      "retained_count_sum": 164596347,
+      "retained_nnz": 51893254,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901236": {
+      "deposited_matrix_nnz_before_qc": 59189421,
+      "maximum_mitochondrial_fraction_observed": 0.09999385476112366,
+      "minimum_detected_genes_observed": 2007,
+      "noncell_barcode_candidates": 6788412,
+      "obs_index_sha256": "29369f49e0e49910f1daadc71e055c9c51cf86f278ca649ebdd06a4ae932c0b4",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 6468,
+      "retained_count_sum": 126304790,
+      "retained_nnz": 31077632,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "GSM5901237": {
+      "deposited_matrix_nnz_before_qc": 70809395,
+      "maximum_mitochondrial_fraction_observed": 0.09998992085456848,
+      "minimum_detected_genes_observed": 2017,
+      "noncell_barcode_candidates": 6786137,
+      "obs_index_sha256": "83072d96e2ea36dffc677fe0ed10766aa1bc4a634806e2b1756c8f8823b8e3c6",
+      "raw_barcode_candidates": 6794880,
+      "retained_cells": 8743,
+      "retained_count_sum": 169345044,
+      "retained_nnz": 40852631,
+      "source_matrix_shape_features_by_barcodes": [
+        20631,
+        6794880
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    }
+  },
+  "sample_count": 10,
+  "schema_version": "pert-gym.odd001155-gse196799-materialized-component/v1",
+  "semantic_contract": {
+    "canonical_X": "deposited raw integer UMI counts after published deterministic cell QC",
+    "cell_qc": {
+      "mitochondrial_fraction_strictly_less_than": 0.1,
+      "n_genes_strictly_greater_than": 2000
+    },
+    "doublet_filter_applied": false,
+    "feature_policy": "all 20,631 deposited features retained in original order",
+    "hvg_selection_applied": false,
+    "normalization_applied": false
+  },
+  "shared_var_identity_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7",
+  "source_identity": {
+    "accession": "GSE196799",
+    "controlling_publication_manifest_sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+    "controlling_record": {
+      "catalogue_origins": [
+        "temporal_pretraining_datasets_v4"
+      ],
+      "catalogue_row_ids": [
+        89
+      ],
+      "classification": "executable",
+      "collection_membership": {
+        "artifact_keys_sample": [],
+        "authoritative_coverage_note": "metadata match only; no live Lamin assertion",
+        "canonical_20260621_member_count": 0,
+        "categories": {}
+      },
+      "completion_state": "source_executable_not_completion",
+      "component": "Human blood vessel organoid/development scRNA-seq Odd001155",
+      "denominator_basis": "temporal_pretraining_datasets_v4 retained row + upstream immutable accession/collection identity",
+      "downloadable": "yes",
+      "evidence_paths": [
+        "data/temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv"
+      ],
+      "exact_remaining_work": "Resolve exact payload manifest and execute EU-worker backed conversion/publication with readback; catalogue/source probe alone is never completion.",
+      "exclusion_reason": "",
+      "existing_lamin_coverage": "no matched member in unified_collection_manifest_20260621",
+      "expected_denominator_verbatim": "catalogue logical row; cells=unknown",
+      "logical_dataset": "organoiddb Odd001155 GSE196799",
+      "modality": "scRNA-seq",
+      "modality_contract": "expression_like_obs_X_var",
+      "pilot_or_probe_is_complete": false,
+      "record_id": "temporal_v4_089_organoiddb_odd001155_gse196799",
+      "source_bytes": null,
+      "source_integrity_identity": [
+        "upstream_immutable_identity:GSE196799;ODD001155"
+      ],
+      "source_n_obs": null,
+      "source_n_vars": null,
+      "source_object_identity": "GSE196799;ODD001155",
+      "source_uri": "http://www.inbirg.com/organoid_db/detail/Odd001155",
+      "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001155_gse196799",
+      "target_shared_var_identity": "sha256(canonical ordered var identifiers + organism + feature namespace); compute on EU worker before publication",
+      "target_zarr_or_block_plan": "EU-worker backed probe then adaptive sparse row blocks; never Mac payload"
+    },
+    "nested_archives": {
+      "GSM5901228": {
+        "filename": "GSM5901228_MUC13080.tar.gz",
+        "library_id": "MUC13080",
+        "sha256": "6a2c674b8a3b5e4bdc24ac24d600d3d2a657e9345031b150f14020d1d3de1a57"
+      },
+      "GSM5901229": {
+        "filename": "GSM5901229_MUC13081.tar.gz",
+        "library_id": "MUC13081",
+        "sha256": "5ad50590ac2d13b6eb15aeb8653a228cb3825283e089425f97022ad72af36207"
+      },
+      "GSM5901230": {
+        "filename": "GSM5901230_MUC13082.tar.gz",
+        "library_id": "MUC13082",
+        "sha256": "409550eaa8c1417fbbc95436db42e6f7f574190b4fb3afb7fa61ceff2b38e7ce"
+      },
+      "GSM5901231": {
+        "filename": "GSM5901231_MUC13083.tar.gz",
+        "library_id": "MUC13083",
+        "sha256": "65b0f288a3efbb9214cd226792a4d69dada26414a2e76fa95f0036df96f2d991"
+      },
+      "GSM5901232": {
+        "filename": "GSM5901232_MUC13087.tar.gz",
+        "library_id": "MUC13087",
+        "sha256": "452c891b23e562f8ad701e254de45f385abf615402b5caadf663c8b324f9eca7"
+      },
+      "GSM5901233": {
+        "filename": "GSM5901233_MUC18112.tar.gz",
+        "library_id": "MUC18112",
+        "sha256": "2c728a12c5211825a375f1c91f0edefa8e6faf2c2396ab7bec7538cfbcdeca52"
+      },
+      "GSM5901234": {
+        "filename": "GSM5901234_MUC18113.tar.gz",
+        "library_id": "MUC18113",
+        "sha256": "69f6612325abb56446561631579778b8742f8859da4c88d3a896ed0febcbe3a5"
+      },
+      "GSM5901235": {
+        "filename": "GSM5901235_MUC18114.tar.gz",
+        "library_id": "MUC18114",
+        "sha256": "e5c6c6bcceacba17901c884a20b1b7e7a932706586f21e43bf28fb115d67a794"
+      },
+      "GSM5901236": {
+        "filename": "GSM5901236_MUC18115.tar.gz",
+        "library_id": "MUC18115",
+        "sha256": "042ada3f1b589499ce9290b34fda1928e2a90c20be6fc9e6f0e79d20731432b2"
+      },
+      "GSM5901237": {
+        "filename": "GSM5901237_MUC18116.tar.gz",
+        "library_id": "MUC18116",
+        "sha256": "03749db6c10a4a7e91b6a08f73ae429973fbffc7014594ea1c16a4ef67c66396"
+      }
+    },
+    "organoiddb_id": "Odd001155",
+    "outer_archive_sha256": "bc62029352aed4a799c22558a9e9e97c7746bd104d6331ddaa1b221cf15c18c2",
+    "outer_archive_size_bytes": 1804912640,
+    "outer_archive_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE196nnn/GSE196799/suppl/GSE196799_RAW.tar",
+    "sample_contract_sha256": "a36a82e157f9e29c658bcd3e36ecd307fd3df3232b881baacff1ce23691cf868",
+    "source_uri": "http://www.inbirg.com/organoid_db/detail/Odd001155",
+    "upstream_analysis_contract_sha256": "6938880438393c51afec6160b91d018eefe3ee46e059d26f4397bfcbfc8e4618"
+  },
+  "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001155_gse196799",
+  "task_id": "t_53a7328b",
+  "triplet_count": 10,
+  "variable_count_per_triplet": 20631
+}

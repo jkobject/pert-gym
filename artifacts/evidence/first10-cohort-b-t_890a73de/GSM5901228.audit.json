@@ -1,0 +1,1006 @@
+{
+  "audit_mode": "read_only",
+  "chunk_verdict": {
+    "allowed_member_name": "GSM5901228",
+    "current_prefix": "data/cleaned/GSM5901228",
+    "family_member_count": 10,
+    "proposed_prefix": "data/cleaned/GSE196799/samples/GSM5901228",
+    "shared_var_evidence": "all ten accepted members have identical ordered var_index_sha256 4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7; these two current var payloads also have identical Lamin hash 5IxJsE91crLE_PZZ7Ccq1w",
+    "shared_var_target": "data/cleaned/GSE196799/var.parquet",
+    "status": "sample_member_not_logical_dataset_or_arbitrary_chunk"
+  },
+  "cloud_mutations": 0,
+  "current_identity": {
+    "artifacts": {
+      "X": {
+        "created_at": "2026-07-18 07:12:55.114024+00:00",
+        "feature_links": {
+          "var": "data/cleaned/GSM5901228/var.parquet"
+        },
+        "hash": "zcgCpkj6y1IEGf8zB4DV5A",
+        "key": "data/cleaned/GSM5901228/X.h5ad",
+        "n_observations": null,
+        "otype": "AnnData",
+        "size": 64870241,
+        "storage_id": 13,
+        "suffix": ".h5ad",
+        "uid": "TJY0nyj5ETU43Syh0000",
+        "updated_at": "2026-07-18 07:12:55.114024+00:00"
+      },
+      "obs": {
+        "created_at": "2026-07-18 07:12:53.649268+00:00",
+        "feature_links": {
+          "X": "data/cleaned/GSM5901228/X.h5ad"
+        },
+        "hash": "O62CzxNMS4Jg1rpHGzXCWA",
+        "key": "data/cleaned/GSM5901228/obs.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 290697,
+        "storage_id": 13,
+        "suffix": ".parquet",
+        "uid": "40smDMSQhHxjFpkb0000",
+        "updated_at": "2026-07-18 07:12:53.649268+00:00"
+      },
+      "var": {
+        "created_at": "2026-07-18 07:12:56.584270+00:00",
+        "feature_links": {},
+        "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+        "key": "data/cleaned/GSM5901228/var.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 498556,
+        "storage_id": 13,
+        "suffix": ".parquet",
+        "uid": "yKlix5aS2jtSWqXT0000",
+        "updated_at": "2026-07-18 07:12:56.584270+00:00"
+      }
+    },
+    "bounded_key_candidates": [
+      {
+        "created_at": "2026-07-18 07:12:53.649268+00:00",
+        "hash": "O62CzxNMS4Jg1rpHGzXCWA",
+        "key": "data/cleaned/GSM5901228/obs.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 290697,
+        "storage_id": 13,
+        "suffix": ".parquet",
+        "uid": "40smDMSQhHxjFpkb0000",
+        "updated_at": "2026-07-18 07:12:53.649268+00:00"
+      },
+      {
+        "created_at": "2026-07-18 07:12:56.584270+00:00",
+        "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+        "key": "data/cleaned/GSM5901228/var.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 498556,
+        "storage_id": 13,
+        "suffix": ".parquet",
+        "uid": "yKlix5aS2jtSWqXT0000",
+        "updated_at": "2026-07-18 07:12:56.584270+00:00"
+      },
+      {
+        "created_at": "2026-07-18 07:12:55.114024+00:00",
+        "hash": "zcgCpkj6y1IEGf8zB4DV5A",
+        "key": "data/cleaned/GSM5901228/X.h5ad",
+        "n_observations": null,
+        "otype": "AnnData",
+        "size": 64870241,
+        "storage_id": 13,
+        "suffix": ".h5ad",
+        "uid": "TJY0nyj5ETU43Syh0000",
+        "updated_at": "2026-07-18 07:12:55.114024+00:00"
+      }
+    ],
+    "branch": {
+      "name": "jkobject",
+      "uid": "GCjqQtGwPzkY"
+    },
+    "instance": "laminlabs/pertdata"
+  },
+  "dataset_id": "GSM5901228",
+  "evidence_files": [
+    "live_lamin_readback.json",
+    "source_snapshots/GSE196799_manifest.json",
+    "source_snapshots/GSE196799_family.soft",
+    "source_snapshots/fetch_receipt.json",
+    "source_snapshots/geo_soft_fetch_receipt.json"
+  ],
+  "link_audit": {
+    "X_n_observations": null,
+    "X_var_link_exact": true,
+    "obs_X_link_exact": true,
+    "obs_rows": 6416,
+    "obs_rows_equal_X_n_observations": null,
+    "same_prefix_var": true,
+    "var_rows": 20631,
+    "verdict": "PASS_exact_obs_to_X_to_same_prefix_var"
+  },
+  "logical_family": "GSE196799",
+  "obs_audit": {
+    "column_audit": {
+      "ascorbic_acid_from_day_12": {
+        "dtype": "bool",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": "False",
+        "numeric_min": "False",
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "False": 6416
+        },
+        "values_if_at_most_20": [
+          false
+        ]
+      },
+      "assay": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "10x Genomics 3' scRNA-seq": 6416
+        },
+        "values_if_at_most_20": [
+          "10x Genomics 3' scRNA-seq"
+        ]
+      },
+      "barcode": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 6416,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "biosample": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "SAMN25978136": 6416
+        },
+        "values_if_at_most_20": [
+          "SAMN25978136"
+        ]
+      },
+      "cell_id": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 6416,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "culture_method": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "3D suspension culture": 6416
+        },
+        "values_if_at_most_20": [
+          "3D suspension culture"
+        ]
+      },
+      "experiment": {
+        "dtype": "int64",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": "1",
+        "numeric_min": "1",
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "1": 6416
+        },
+        "values_if_at_most_20": [
+          1
+        ]
+      },
+      "n_genes_by_counts": {
+        "dtype": "int32",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": "7786",
+        "numeric_min": "2001",
+        "unique_non_null": 2780,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "organism": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "Homo sapiens": 6416
+        },
+        "values_if_at_most_20": [
+          "Homo sapiens"
+        ]
+      },
+      "pct_counts_mt": {
+        "dtype": "float32",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": "9.997442",
+        "numeric_min": "0.03250975",
+        "unique_non_null": 6408,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "sample_accession": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "GSM5901228": 6416
+        },
+        "values_if_at_most_20": [
+          "GSM5901228"
+        ]
+      },
+      "sample_title": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "day_0_3D_suspension_culture": 6416
+        },
+        "values_if_at_most_20": [
+          "day_0_3D_suspension_culture"
+        ]
+      },
+      "source_accession": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "GSE196799": 6416
+        },
+        "values_if_at_most_20": [
+          "GSE196799"
+        ]
+      },
+      "source_cell_call_flag_missing": {
+        "dtype": "bool",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": "True",
+        "numeric_min": "True",
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "True": 6416
+        },
+        "values_if_at_most_20": [
+          true
+        ]
+      },
+      "source_name": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "hiPSCs": 6416
+        },
+        "values_if_at_most_20": [
+          "hiPSCs"
+        ]
+      },
+      "sra_experiment": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "SRX14194755": 6416
+        },
+        "values_if_at_most_20": [
+          "SRX14194755"
+        ]
+      },
+      "timepoint": {
+        "dtype": "float64",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": 0.0,
+        "numeric_min": 0.0,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "0.0": 6416
+        },
+        "values_if_at_most_20": [
+          0.0
+        ]
+      },
+      "timepoint_unit": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "day": 6416
+        },
+        "values_if_at_most_20": [
+          "day"
+        ]
+      },
+      "total_counts": {
+        "dtype": "int64",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": "85040",
+        "numeric_min": "4570",
+        "unique_non_null": 5564,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      }
+    },
+    "columns": [
+      "cell_id",
+      "barcode",
+      "source_accession",
+      "sample_accession",
+      "sample_title",
+      "source_name",
+      "experiment",
+      "timepoint",
+      "timepoint_unit",
+      "culture_method",
+      "ascorbic_acid_from_day_12",
+      "biosample",
+      "sra_experiment",
+      "organism",
+      "assay",
+      "n_genes_by_counts",
+      "total_counts",
+      "pct_counts_mt",
+      "source_cell_call_flag_missing"
+    ],
+    "index_control_character_count": 0,
+    "index_dtype": "object",
+    "index_missing": 0,
+    "index_name": "cell_id",
+    "index_sha256": "af4d8ee1d85ced70d28a43bdec1829b9e0fe810c88bb0256525a0ea3b411b855",
+    "index_unique": true,
+    "shape": [
+      6416,
+      19
+    ]
+  },
+  "obs_decisions": [
+    {
+      "action": "derive",
+      "from": "current exact row index plus family/member canonical prefix",
+      "target": "obs_uuid, original_obs_index"
+    },
+    {
+      "action": "map",
+      "target": "dataset",
+      "value": "GSE196799"
+    },
+    {
+      "action": "map",
+      "target": "sample",
+      "value": "GSM5901228"
+    },
+    {
+      "action": "retain",
+      "reason": "unique exact source-derived member cell identity",
+      "target": "cell_id"
+    },
+    {
+      "action": "map",
+      "from": "n_genes_by_counts, total_counts, pct_counts_mt",
+      "target": "n_genes, n_counts, pct_mito"
+    },
+    {
+      "action": "derive",
+      "reason": "all retained rows passed published n_genes>2000 and mitochondrial_fraction<0.1 gates",
+      "target": "is_low_quality",
+      "value": false
+    },
+    {
+      "action": "derive",
+      "reason": "developmental differentiation sample without a perturbation intervention",
+      "target": "perturbation, perturbation_type, is_control",
+      "value": [
+        "none",
+        "none",
+        true
+      ]
+    },
+    {
+      "action": "move_to_member_metadata",
+      "reason": "constant in this member but variable/conditioning across GSE196799",
+      "target": "timepoint, timepoint_unit, experiment, culture_method, ascorbic_acid_from_day_12"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "reason": "constant provenance facts",
+      "target": "source_cell_call_flag_missing, source_name, biosample, sra_experiment, sample_title"
+    },
+    {
+      "action": "retain",
+      "reason": "family/sample identity and useful conditioning",
+      "target": "source_accession, sample_accession, barcode, organism, assay"
+    },
+    {
+      "action": "derive",
+      "target": "modality, is_bulk, is_pseudobulk",
+      "value": [
+        "scRNA-seq",
+        false,
+        false
+      ]
+    },
+    {
+      "action": "set_unknown",
+      "reason": "absent or unlinked in source",
+      "target": "donor_id, age, sex, ethnicity, disease, cell_type"
+    }
+  ],
+  "obs_field_decisions": [
+    {
+      "action": "retain",
+      "cardinality": 6416,
+      "dtype": "object",
+      "field": "cell_id",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "cell_id"
+    },
+    {
+      "action": "retain_source_provenance",
+      "cardinality": 6416,
+      "dtype": "object",
+      "field": "barcode",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "barcode"
+    },
+    {
+      "action": "map_and_retain",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "source_accession",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "dataset=GSE196799; source_accession"
+    },
+    {
+      "action": "map_and_retain",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "sample_accession",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "sample; sample_accession"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "sample_title",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "sample_title"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "source_name",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "source_name"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "int64",
+      "field": "experiment",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "experiment"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "float64",
+      "field": "timepoint",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "source_timepoint_days"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "timepoint_unit",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "source_timepoint_unit"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "culture_method",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "culture_method"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "bool",
+      "field": "ascorbic_acid_from_day_12",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "ascorbic_acid_from_day_12"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "biosample",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "biosample"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "sra_experiment",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "sra_experiment"
+    },
+    {
+      "action": "retain_conditioning",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "organism",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "source_literal_requires_registry_resolution",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "organism"
+    },
+    {
+      "action": "normalize_and_retain_source",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "assay",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "source_literal_requires_registry_resolution",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "assay; source_assay"
+    },
+    {
+      "action": "map",
+      "cardinality": 2780,
+      "dtype": "int32",
+      "field": "n_genes_by_counts",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "n_genes"
+    },
+    {
+      "action": "map",
+      "cardinality": 5564,
+      "dtype": "int64",
+      "field": "total_counts",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "n_counts"
+    },
+    {
+      "action": "map",
+      "cardinality": 6408,
+      "dtype": "float32",
+      "field": "pct_counts_mt",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "pct_mito"
+    },
+    {
+      "action": "move_to_member_metadata",
+      "cardinality": 1,
+      "dtype": "bool",
+      "field": "source_cell_call_flag_missing",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "source_cell_call_flag_missing"
+    }
+  ],
+  "post_fix_obs_schema": [
+    "obs_uuid",
+    "original_obs_index",
+    "dataset",
+    "sample",
+    "cell_id",
+    "barcode",
+    "source_accession",
+    "sample_accession",
+    "organism",
+    "assay",
+    "modality",
+    "n_genes",
+    "n_counts",
+    "pct_mito",
+    "is_low_quality",
+    "perturbation",
+    "perturbation_type",
+    "is_control",
+    "donor_id",
+    "age",
+    "sex",
+    "ethnicity",
+    "disease",
+    "cell_type"
+  ],
+  "post_fix_var_schema": [
+    "ensembl_id",
+    "gene_symbol",
+    "feature_type",
+    "feature_namespace",
+    "organism",
+    "genome_build",
+    "author_gene_id",
+    "author_gene_symbol"
+  ],
+  "remediation_plan": {
+    "rollback": "restore the previous OBS feature link and, for GSE196799, previous per-member X->VAR links using the exact current UIDs recorded here",
+    "steps": [
+      "Resolve current exact data/cleaned/GSM5901228/obs.parquet, X.h5ad and var.parquet by UID from this packet.",
+      "Load OBS only and fail closed if index hash, row count, columns or source values drift.",
+      "Apply obs_decisions in order; preserve source columns named as provenance and encode unsupported applicable fields as unknown.",
+      "Call add_obs_identity with the packet's logical dataset and canonical prefix; validate identity and row order.",
+      "Register revised OBS with revises=<current OBS>; do not revise or materialize X.",
+      "Create/reuse the exact-hash GSE196799 shared VAR and process all ten siblings atomically before relinking X; do not leave a mixed family policy.",
+      "Set revised OBS X link and X VAR link exactly as specified; preserve old artifacts for rollback.",
+      "Run every listed validator and publish immutable generation/UID/hash evidence for independent review."
+    ],
+    "writer_scope": "single downstream writer; append-only revisions; no X rewrite"
+  },
+  "schema_version": "pert-gym.first10-scientific-audit.v1",
+  "scientific_verdict": "REMODEL_AS_GSE196799_SAMPLE_MEMBER_AND_REMEDIATE_OBS_VAR_LINKS",
+  "source_evidence": {
+    "acceptance_manifest": {
+      "local_snapshot": "source_snapshots/GSE196799_manifest.json",
+      "sha256": "3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3"
+    },
+    "citations": {
+      "bioproject_url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA807328",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/37714147/",
+      "series_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE196799",
+      "soft_sha256": "73a06f660059b778772dcdc63466c6d6259b937de1cd9d1a3dea06b74207ffc5",
+      "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE196nnn/GSE196799/soft/GSE196799_family.soft.gz"
+    },
+    "confidence": "verified_exact_source_and_generation_bound_acceptance_manifest",
+    "family_accession": "GSE196799",
+    "source_identity": {
+      "accession": "GSE196799",
+      "controlling_publication_manifest_sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+      "controlling_record": {
+        "catalogue_origins": [
+          "temporal_pretraining_datasets_v4"
+        ],
+        "catalogue_row_ids": [
+          89
+        ],
+        "classification": "executable",
+        "collection_membership": {
+          "artifact_keys_sample": [],
+          "authoritative_coverage_note": "metadata match only; no live Lamin assertion",
+          "canonical_20260621_member_count": 0,
+          "categories": {}
+        },
+        "completion_state": "source_executable_not_completion",
+        "component": "Human blood vessel organoid/development scRNA-seq Odd001155",
+        "denominator_basis": "temporal_pretraining_datasets_v4 retained row + upstream immutable accession/collection identity",
+        "downloadable": "yes",
+        "evidence_paths": [
+          "data/temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv"
+        ],
+        "exact_remaining_work": "Resolve exact payload manifest and execute EU-worker backed conversion/publication with readback; catalogue/source probe alone is never completion.",
+        "exclusion_reason": "",
+        "existing_lamin_coverage": "no matched member in unified_collection_manifest_20260621",
+        "expected_denominator_verbatim": "catalogue logical row; cells=unknown",
+        "logical_dataset": "organoiddb Odd001155 GSE196799",
+        "modality": "scRNA-seq",
+        "modality_contract": "expression_like_obs_X_var",
+        "pilot_or_probe_is_complete": false,
+        "record_id": "temporal_v4_089_organoiddb_odd001155_gse196799",
+        "source_bytes": null,
+        "source_integrity_identity": [
+          "upstream_immutable_identity:GSE196799;ODD001155"
+        ],
+        "source_n_obs": null,
+        "source_n_vars": null,
+        "source_object_identity": "GSE196799;ODD001155",
+        "source_uri": "http://www.inbirg.com/organoid_db/detail/Odd001155",
+        "target_logical_key": "pert-gym/logical/temporal/organoiddb_odd001155_gse196799",
+        "target_shared_var_identity": "sha256(canonical ordered var identifiers + organism + feature namespace); compute on EU worker before publication",
+        "target_zarr_or_block_plan": "EU-worker backed probe then adaptive sparse row blocks; never Mac payload"
+      },
+      "nested_archives": {
+        "GSM5901228": {
+          "filename": "GSM5901228_MUC13080.tar.gz",
+          "library_id": "MUC13080",
+          "sha256": "6a2c674b8a3b5e4bdc24ac24d600d3d2a657e9345031b150f14020d1d3de1a57"
+        },
+        "GSM5901229": {
+          "filename": "GSM5901229_MUC13081.tar.gz",
+          "library_id": "MUC13081",
+          "sha256": "5ad50590ac2d13b6eb15aeb8653a228cb3825283e089425f97022ad72af36207"
+        },
+        "GSM5901230": {
+          "filename": "GSM5901230_MUC13082.tar.gz",
+          "library_id": "MUC13082",
+          "sha256": "409550eaa8c1417fbbc95436db42e6f7f574190b4fb3afb7fa61ceff2b38e7ce"
+        },
+        "GSM5901231": {
+          "filename": "GSM5901231_MUC13083.tar.gz",
+          "library_id": "MUC13083",
+          "sha256": "65b0f288a3efbb9214cd226792a4d69dada26414a2e76fa95f0036df96f2d991"
+        },
+        "GSM5901232": {
+          "filename": "GSM5901232_MUC13087.tar.gz",
+          "library_id": "MUC13087",
+          "sha256": "452c891b23e562f8ad701e254de45f385abf615402b5caadf663c8b324f9eca7"
+        },
+        "GSM5901233": {
+          "filename": "GSM5901233_MUC18112.tar.gz",
+          "library_id": "MUC18112",
+          "sha256": "2c728a12c5211825a375f1c91f0edefa8e6faf2c2396ab7bec7538cfbcdeca52"
+        },
+        "GSM5901234": {
+          "filename": "GSM5901234_MUC18113.tar.gz",
+          "library_id": "MUC18113",
+          "sha256": "69f6612325abb56446561631579778b8742f8859da4c88d3a896ed0febcbe3a5"
+        },
+        "GSM5901235": {
+          "filename": "GSM5901235_MUC18114.tar.gz",
+          "library_id": "MUC18114",
+          "sha256": "e5c6c6bcceacba17901c884a20b1b7e7a932706586f21e43bf28fb115d67a794"
+        },
+        "GSM5901236": {
+          "filename": "GSM5901236_MUC18115.tar.gz",
+          "library_id": "MUC18115",
+          "sha256": "042ada3f1b589499ce9290b34fda1928e2a90c20be6fc9e6f0e79d20731432b2"
+        },
+        "GSM5901237": {
+          "filename": "GSM5901237_MUC18116.tar.gz",
+          "library_id": "MUC18116",
+          "sha256": "03749db6c10a4a7e91b6a08f73ae429973fbffc7014594ea1c16a4ef67c66396"
+        }
+      },
+      "organoiddb_id": "Odd001155",
+      "outer_archive_sha256": "bc62029352aed4a799c22558a9e9e97c7746bd104d6331ddaa1b221cf15c18c2",
+      "outer_archive_size_bytes": 1804912640,
+      "outer_archive_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE196nnn/GSE196799/suppl/GSE196799_RAW.tar",
+      "sample_contract_sha256": "a36a82e157f9e29c658bcd3e36ecd307fd3df3232b881baacff1ce23691cf868",
+      "source_uri": "http://www.inbirg.com/organoid_db/detail/Odd001155",
+      "upstream_analysis_contract_sha256": "6938880438393c51afec6160b91d018eefe3ee46e059d26f4397bfcbfc8e4618"
+    }
+  },
+  "task_id": "t_890a73de",
+  "temporal_verdict": {
+    "decision": "remove constant cell-level timepoint from this member; store it in member metadata and project/broadcast it only when loading the GSE196799 family",
+    "family_status": "temporal_multi_snapshot",
+    "family_timepoints_days": [
+      0,
+      3,
+      6,
+      9,
+      12,
+      18
+    ],
+    "member_source_timepoint_days": 0,
+    "member_status": "non_temporal_single_snapshot"
+  },
+  "validators": [
+    "resolve exact current active UIDs and fail on 0 or >1",
+    "assert source OBS row index/order SHA-256 equals packet obs_audit.index_sha256 before transformation",
+    "assert revised OBS row count/order and existing X UID/hash are unchanged",
+    "validate obs_uuid/original_obs_index with pert_gym.obs_identity.validate_obs_identity",
+    "assert post-fix columns, dtypes, missingness states and low-cardinality values match this packet",
+    "assert immutable-manifest X shape equals revised OBS rows by linked VAR rows",
+    "assert exact revised obs -> existing X -> accepted VAR link chain",
+    "repeat a fresh bounded readback from laminlabs/pertdata/jkobject and emit a zero-drift receipt"
+  ],
+  "var_audit": {
+    "column_audit": {
+      "feature_id": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 20631,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "feature_type": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "Gene Expression": 20631
+        },
+        "values_if_at_most_20": [
+          "Gene Expression"
+        ]
+      },
+      "gene_symbol": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 20616,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      }
+    },
+    "column_control_character_counts": {
+      "feature_id": 0,
+      "feature_type": 0,
+      "gene_symbol": 0
+    },
+    "columns": [
+      "feature_id",
+      "gene_symbol",
+      "feature_type"
+    ],
+    "index_control_character_count": 0,
+    "index_dtype": "object",
+    "index_duplicate_count": 0,
+    "index_empty_string_count": 0,
+    "index_ensembl_count": 20631,
+    "index_ensembl_fraction": 1.0,
+    "index_missing": 0,
+    "index_name": "feature_id",
+    "index_sha256": "017942e14d8a0ca0c852323629797acb47445cea7b498eb9bee661abddc97cac",
+    "index_unique": true,
+    "shape": [
+      20631,
+      3
+    ]
+  },
+  "var_decisions": [
+    {
+      "action": "map",
+      "from": "feature_id",
+      "target": "ensembl_id"
+    },
+    {
+      "action": "retain",
+      "from": "feature_id, gene_symbol",
+      "target": "author_gene_id, author_gene_symbol"
+    },
+    {
+      "action": "derive",
+      "reason": "GEO taxid 9606 and all 20,631 feature IDs are ENSG",
+      "target": "organism, feature_namespace",
+      "value": [
+        "Homo sapiens",
+        "Ensembl gene ID"
+      ]
+    },
+    {
+      "action": "keep_unknown",
+      "reason": "not established by accepted source evidence",
+      "target": "genome_build"
+    },
+    {
+      "action": "share",
+      "reason": "identical ordered family var; avoid ten duplicate logical vars",
+      "target": "data/cleaned/GSE196799/var.parquet"
+    }
+  ],
+  "var_verdict": {
+    "control_characters": 0,
+    "dimension_matches_X": true,
+    "index_unique": true,
+    "namespace": "Ensembl gene ID",
+    "species": "Homo sapiens"
+  },
+  "x_audit": {
+    "column_parity": true,
+    "manifest_readback": {
+      "count_sum": 143381924,
+      "culture_method": [
+        "3D suspension culture"
+      ],
+      "nnz": 28475158,
+      "obs_index_sha256": "f5ec446fd577e73b50c4d12d75e438f2c7a32cfd7d3f7e0f9fcb055f85d3eb2e",
+      "shape": [
+        6416,
+        20631
+      ],
+      "timepoint_days": [
+        0.0
+      ],
+      "var_index_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7"
+    },
+    "registry_n_observations": null,
+    "registry_n_observations_state": "unpopulated; dimensional parity comes from immutable manifest readback",
+    "row_parity": true,
+    "x_semantics": "raw_counts"
+  }
+}

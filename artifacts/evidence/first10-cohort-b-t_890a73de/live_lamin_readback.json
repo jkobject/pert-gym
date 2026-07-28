@@ -1,0 +1,2068 @@
+{
+  "branch": {
+    "name": "jkobject",
+    "uid": "GCjqQtGwPzkY"
+  },
+  "datasets": {
+    "GSE194214": {
+      "artifacts": {
+        "X": {
+          "feature_links": {
+            "var": "data/cleaned/GSE194214/var.parquet"
+          },
+          "metadata": {
+            "created_at": "2026-07-17 20:05:07.475964+00:00",
+            "hash": "M1zaZQKPlogEaSdoxnLn6A",
+            "key": "data/cleaned/GSE194214/X.h5ad",
+            "n_observations": null,
+            "otype": "AnnData",
+            "size": 155611588,
+            "storage_id": 13,
+            "suffix": ".h5ad",
+            "uid": "FIfScz6bImLLe9cD0000",
+            "updated_at": "2026-07-17 20:05:07.475964+00:00"
+          }
+        },
+        "obs": {
+          "feature_links": {
+            "X": "data/cleaned/GSE194214/X.h5ad"
+          },
+          "metadata": {
+            "created_at": "2026-07-17 20:05:06.023837+00:00",
+            "hash": "umB11qIN2248gS5ipEe0sw",
+            "key": "data/cleaned/GSE194214/obs.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 385831,
+            "storage_id": 13,
+            "suffix": ".parquet",
+            "uid": "GtDvEO1BsANR8VKR0000",
+            "updated_at": "2026-07-17 20:05:06.023837+00:00"
+          }
+        },
+        "var": {
+          "feature_links": {},
+          "metadata": {
+            "created_at": "2026-07-17 20:05:08.926502+00:00",
+            "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+            "key": "data/cleaned/GSE194214/var.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 841985,
+            "storage_id": 13,
+            "suffix": ".parquet",
+            "uid": "KFzdzY1k7TreexTs0000",
+            "updated_at": "2026-07-17 20:05:08.926502+00:00"
+          }
+        }
+      },
+      "bounded_key_candidates": [
+        {
+          "created_at": "2026-06-22 08:57:31.104422+00:00",
+          "hash": "wjECHbGxMT9OqE3YhhxEzA",
+          "key": "temporal_pretraining/organoid/odd001154_gse194214_paraxial_mesoderm_somitoids/obs.parquet",
+          "n_observations": 18716,
+          "otype": "DataFrame",
+          "size": 214127,
+          "storage_id": 1,
+          "suffix": ".parquet",
+          "uid": "ECLctORaKjRoaemK0000",
+          "updated_at": "2026-06-22 08:57:31.104422+00:00"
+        },
+        {
+          "created_at": "2026-06-22 08:57:36.249643+00:00",
+          "hash": "ttpF6YLuxLRAmrF7sGobOF",
+          "key": "temporal_pretraining/organoid/odd001154_gse194214_paraxial_mesoderm_somitoids/X.h5ad",
+          "n_observations": 18716,
+          "otype": "AnnData",
+          "size": 559302376,
+          "storage_id": 1,
+          "suffix": ".h5ad",
+          "uid": "EmOxtmLMI8dNDXYo0000",
+          "updated_at": "2026-06-22 08:57:36.249643+00:00"
+        },
+        {
+          "created_at": "2026-06-22 08:57:56.487952+00:00",
+          "hash": "P8olUB1ARmnaiYCvAOTLag",
+          "key": "temporal_pretraining/organoid/odd001154_gse194214_paraxial_mesoderm_somitoids/var.parquet",
+          "n_observations": 33694,
+          "otype": "DataFrame",
+          "size": 872731,
+          "storage_id": 1,
+          "suffix": ".parquet",
+          "uid": "kb18lHVpqOa5uSUO0000",
+          "updated_at": "2026-06-22 08:57:56.487952+00:00"
+        },
+        {
+          "created_at": "2026-07-17 20:05:10.373088+00:00",
+          "hash": "DdvNDzLSqZEp8be9-dZsGw",
+          "key": "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/manifest.json",
+          "n_observations": null,
+          "otype": null,
+          "size": 19899,
+          "storage_id": 13,
+          "suffix": ".json",
+          "uid": "KN6gg1CKo7syd6Qa0000",
+          "updated_at": "2026-07-17 20:05:10.373088+00:00"
+        },
+        {
+          "created_at": "2026-07-17 20:05:06.023837+00:00",
+          "hash": "umB11qIN2248gS5ipEe0sw",
+          "key": "data/cleaned/GSE194214/obs.parquet",
+          "n_observations": null,
+          "otype": "DataFrame",
+          "size": 385831,
+          "storage_id": 13,
+          "suffix": ".parquet",
+          "uid": "GtDvEO1BsANR8VKR0000",
+          "updated_at": "2026-07-17 20:05:06.023837+00:00"
+        },
+        {
+          "created_at": "2026-07-17 20:05:08.926502+00:00",
+          "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+          "key": "data/cleaned/GSE194214/var.parquet",
+          "n_observations": null,
+          "otype": "DataFrame",
+          "size": 841985,
+          "storage_id": 13,
+          "suffix": ".parquet",
+          "uid": "KFzdzY1k7TreexTs0000",
+          "updated_at": "2026-07-17 20:05:08.926502+00:00"
+        },
+        {
+          "created_at": "2026-07-17 20:05:07.475964+00:00",
+          "hash": "M1zaZQKPlogEaSdoxnLn6A",
+          "key": "data/cleaned/GSE194214/X.h5ad",
+          "n_observations": null,
+          "otype": "AnnData",
+          "size": 155611588,
+          "storage_id": 13,
+          "suffix": ".h5ad",
+          "uid": "FIfScz6bImLLe9cD0000",
+          "updated_at": "2026-07-17 20:05:07.475964+00:00"
+        }
+      ],
+      "obs": {
+        "column_audit": {
+          "assay": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "10x Genomics scRNA-seq": 18716
+            },
+            "values_if_at_most_20": [
+              "10x Genomics scRNA-seq"
+            ]
+          },
+          "development_stage": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 4,
+            "value_counts_if_at_most_20": {
+              "Day 1": 2930,
+              "Day 2": 4977,
+              "Day 3": 5968,
+              "Day 5": 4841
+            },
+            "values_if_at_most_20": [
+              "Day 1",
+              "Day 2",
+              "Day 3",
+              "Day 5"
+            ]
+          },
+          "genotype": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "wild type": 18716
+            },
+            "values_if_at_most_20": [
+              "wild type"
+            ]
+          },
+          "is_control": {
+            "dtype": "bool",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "True",
+            "numeric_min": "False",
+            "unique_non_null": 2,
+            "value_counts_if_at_most_20": {
+              "False": 15786,
+              "True": 2930
+            },
+            "values_if_at_most_20": [
+              true,
+              false
+            ]
+          },
+          "organism": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Homo sapiens": 18716
+            },
+            "values_if_at_most_20": [
+              "Homo sapiens"
+            ]
+          },
+          "organoiddb_id": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "ODD001154": 18716
+            },
+            "values_if_at_most_20": [
+              "ODD001154"
+            ]
+          },
+          "sample_accession": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 4,
+            "value_counts_if_at_most_20": {
+              "GSM5830919": 2930,
+              "GSM5830920": 4977,
+              "GSM5830921": 5968,
+              "GSM5830922": 4841
+            },
+            "values_if_at_most_20": [
+              "GSM5830919",
+              "GSM5830920",
+              "GSM5830921",
+              "GSM5830922"
+            ]
+          },
+          "sample_title": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 4,
+            "value_counts_if_at_most_20": {
+              "Somitoid Day 1": 2930,
+              "Somitoid Day 2": 4977,
+              "Somitoid Day 3": 5968,
+              "Somitoid Day 5": 4841
+            },
+            "values_if_at_most_20": [
+              "Somitoid Day 1",
+              "Somitoid Day 2",
+              "Somitoid Day 3",
+              "Somitoid Day 5"
+            ]
+          },
+          "source_accession": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GSE194214": 18716
+            },
+            "values_if_at_most_20": [
+              "GSE194214"
+            ]
+          },
+          "source_cell_barcode": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 18645,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "source_cell_type": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Human iPSC in vitro cultures": 18716
+            },
+            "values_if_at_most_20": [
+              "Human iPSC in vitro cultures"
+            ]
+          },
+          "source_file": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 4,
+            "value_counts_if_at_most_20": {
+              "GSM5830919_somitoid_d1_matrix.mtx.gz": 2930,
+              "GSM5830920_somitoid_d2_matrix.mtx.gz": 4977,
+              "GSM5830921_somitoid_d3_matrix.mtx.gz": 5968,
+              "GSM5830922_somitoid_d5_matrix.mtx.gz": 4841
+            },
+            "values_if_at_most_20": [
+              "GSM5830919_somitoid_d1_matrix.mtx.gz",
+              "GSM5830920_somitoid_d2_matrix.mtx.gz",
+              "GSM5830921_somitoid_d3_matrix.mtx.gz",
+              "GSM5830922_somitoid_d5_matrix.mtx.gz"
+            ]
+          },
+          "source_matrix_semantics": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "raw UMI count matrix": 18716
+            },
+            "values_if_at_most_20": [
+              "raw UMI count matrix"
+            ]
+          },
+          "source_name": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "NCRM1 human IPSC": 18716
+            },
+            "values_if_at_most_20": [
+              "NCRM1 human IPSC"
+            ]
+          },
+          "timepoint": {
+            "dtype": "int64",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "5",
+            "numeric_min": "1",
+            "unique_non_null": 4,
+            "value_counts_if_at_most_20": {
+              "1": 2930,
+              "2": 4977,
+              "3": 5968,
+              "5": 4841
+            },
+            "values_if_at_most_20": [
+              1,
+              2,
+              3,
+              5
+            ]
+          },
+          "timepoint_unit": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "day": 18716
+            },
+            "values_if_at_most_20": [
+              "day"
+            ]
+          },
+          "tissue": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "paraxial mesoderm organoid (somitoid)": 18716
+            },
+            "values_if_at_most_20": [
+              "paraxial mesoderm organoid (somitoid)"
+            ]
+          },
+          "trajectory_id": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GSE194214:somitoid": 18716
+            },
+            "values_if_at_most_20": [
+              "GSE194214:somitoid"
+            ]
+          }
+        },
+        "columns": [
+          "source_accession",
+          "organoiddb_id",
+          "sample_accession",
+          "sample_title",
+          "source_file",
+          "source_cell_barcode",
+          "source_name",
+          "source_cell_type",
+          "genotype",
+          "development_stage",
+          "timepoint",
+          "timepoint_unit",
+          "organism",
+          "assay",
+          "tissue",
+          "is_control",
+          "trajectory_id",
+          "source_matrix_semantics"
+        ],
+        "index_control_character_count": 0,
+        "index_dtype": "object",
+        "index_missing": 0,
+        "index_name": "cell_id",
+        "index_sha256": "c69cea6c3b45847617516b6c63270e82da2b6c122c0cee130f2762d6ab04e52a",
+        "index_unique": true,
+        "shape": [
+          18716,
+          18
+        ]
+      },
+      "parity": {
+        "X_n_observations": null,
+        "X_var_link_exact": true,
+        "obs_X_link_exact": true,
+        "obs_rows": 18716,
+        "obs_rows_equal_X_n_observations": null,
+        "same_prefix_var": true,
+        "var_rows": 33694
+      },
+      "var": {
+        "column_audit": {
+          "feature_id": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 33694,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "feature_namespace": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Ensembl gene ID": 33694
+            },
+            "values_if_at_most_20": [
+              "Ensembl gene ID"
+            ]
+          },
+          "feature_type": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Gene Expression": 33694
+            },
+            "values_if_at_most_20": [
+              "Gene Expression"
+            ]
+          },
+          "gene_symbol": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 33660,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "genome_build": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GRCh38": 33694
+            },
+            "values_if_at_most_20": [
+              "GRCh38"
+            ]
+          },
+          "organism": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Homo sapiens": 33694
+            },
+            "values_if_at_most_20": [
+              "Homo sapiens"
+            ]
+          }
+        },
+        "column_control_character_counts": {
+          "feature_id": 0,
+          "feature_namespace": 0,
+          "feature_type": 0,
+          "gene_symbol": 0,
+          "genome_build": 0,
+          "organism": 0
+        },
+        "columns": [
+          "feature_id",
+          "gene_symbol",
+          "feature_type",
+          "feature_namespace",
+          "organism",
+          "genome_build"
+        ],
+        "index_control_character_count": 0,
+        "index_dtype": "object",
+        "index_duplicate_count": 0,
+        "index_empty_string_count": 0,
+        "index_ensembl_count": 33694,
+        "index_ensembl_fraction": 1.0,
+        "index_missing": 0,
+        "index_name": "feature_id",
+        "index_sha256": "8283e63a421fe6d2593647b46ae24e84748ace66d2a6a7ff704808b2d8bfb41e",
+        "index_unique": true,
+        "shape": [
+          33694,
+          6
+        ]
+      }
+    },
+    "GSE269572": {
+      "artifacts": {
+        "X": {
+          "feature_links": {
+            "var": "data/cleaned/GSE269572/var.parquet"
+          },
+          "metadata": {
+            "created_at": "2026-07-19 11:23:22.126336+00:00",
+            "hash": "c-cNCyZ219jz4lWWu5ZP3A",
+            "key": "data/cleaned/GSE269572/X.h5ad",
+            "n_observations": null,
+            "otype": "AnnData",
+            "size": 346165303,
+            "storage_id": 13,
+            "suffix": ".h5ad",
+            "uid": "vNprtc3z84zMcEUj0000",
+            "updated_at": "2026-07-19 11:23:22.126336+00:00"
+          }
+        },
+        "obs": {
+          "feature_links": {
+            "X": "data/cleaned/GSE269572/X.h5ad"
+          },
+          "metadata": {
+            "created_at": "2026-07-19 11:23:20.838415+00:00",
+            "hash": "NhNCQ6H9qJwU7skveO2I3Q",
+            "key": "data/cleaned/GSE269572/obs.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 815115,
+            "storage_id": 13,
+            "suffix": ".parquet",
+            "uid": "wTvFyR9fchIwao8l0000",
+            "updated_at": "2026-07-19 11:23:20.838415+00:00"
+          }
+        },
+        "var": {
+          "feature_links": {},
+          "metadata": {
+            "created_at": "2026-07-19 11:23:23.267329+00:00",
+            "hash": "8eISYwzNTFHZQeO7HcVwRw",
+            "key": "data/cleaned/GSE269572/var.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 899557,
+            "storage_id": 13,
+            "suffix": ".parquet",
+            "uid": "umZYkLN9bq9nfl5m0000",
+            "updated_at": "2026-07-19 11:23:23.267329+00:00"
+          }
+        }
+      },
+      "bounded_key_candidates": [
+        {
+          "created_at": "2026-07-19 11:23:20.838415+00:00",
+          "hash": "NhNCQ6H9qJwU7skveO2I3Q",
+          "key": "data/cleaned/GSE269572/obs.parquet",
+          "n_observations": null,
+          "otype": "DataFrame",
+          "size": 815115,
+          "storage_id": 13,
+          "suffix": ".parquet",
+          "uid": "wTvFyR9fchIwao8l0000",
+          "updated_at": "2026-07-19 11:23:20.838415+00:00"
+        },
+        {
+          "created_at": "2026-07-19 11:23:23.267329+00:00",
+          "hash": "8eISYwzNTFHZQeO7HcVwRw",
+          "key": "data/cleaned/GSE269572/var.parquet",
+          "n_observations": null,
+          "otype": "DataFrame",
+          "size": 899557,
+          "storage_id": 13,
+          "suffix": ".parquet",
+          "uid": "umZYkLN9bq9nfl5m0000",
+          "updated_at": "2026-07-19 11:23:23.267329+00:00"
+        },
+        {
+          "created_at": "2026-07-19 11:23:22.126336+00:00",
+          "hash": "c-cNCyZ219jz4lWWu5ZP3A",
+          "key": "data/cleaned/GSE269572/X.h5ad",
+          "n_observations": null,
+          "otype": "AnnData",
+          "size": 346165303,
+          "storage_id": 13,
+          "suffix": ".h5ad",
+          "uid": "vNprtc3z84zMcEUj0000",
+          "updated_at": "2026-07-19 11:23:22.126336+00:00"
+        }
+      ],
+      "obs": {
+        "column_audit": {
+          "assay": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "10x Chromium Single Cell 3' v2 or v3": 59373
+            },
+            "values_if_at_most_20": [
+              "10x Chromium Single Cell 3' v2 or v3"
+            ]
+          },
+          "condition": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 3,
+            "value_counts_if_at_most_20": {
+              "2D culture": 25778,
+              "with PD173074": 14840,
+              "without PD173074": 18755
+            },
+            "values_if_at_most_20": [
+              "2D culture",
+              "with PD173074",
+              "without PD173074"
+            ]
+          },
+          "development_stage": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "day 42.5": 59373
+            },
+            "values_if_at_most_20": [
+              "day 42.5"
+            ]
+          },
+          "donor_age": {
+            "dtype": "object",
+            "missing": 59373,
+            "missing_fraction": 1.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 0,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "donor_ethnicity": {
+            "dtype": "object",
+            "missing": 59373,
+            "missing_fraction": 1.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 0,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "donor_sex": {
+            "dtype": "object",
+            "missing": 59373,
+            "missing_fraction": 1.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 0,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "is_control": {
+            "dtype": "object",
+            "missing": 59373,
+            "missing_fraction": 1.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 0,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "organism": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Homo sapiens": 59373
+            },
+            "values_if_at_most_20": [
+              "Homo sapiens"
+            ]
+          },
+          "sample_accession": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 11,
+            "value_counts_if_at_most_20": {
+              "GSM8322368": 8604,
+              "GSM8322369": 8594,
+              "GSM8322370": 8580,
+              "GSM8322371": 4969,
+              "GSM8322372": 4945,
+              "GSM8322373": 4926,
+              "GSM8322374": 3773,
+              "GSM8322375": 3793,
+              "GSM8322376": 3592,
+              "GSM8322377": 3798,
+              "GSM8322378": 3799
+            },
+            "values_if_at_most_20": [
+              "GSM8322368",
+              "GSM8322369",
+              "GSM8322370",
+              "GSM8322371",
+              "GSM8322372",
+              "GSM8322373",
+              "GSM8322374",
+              "GSM8322375",
+              "GSM8322376",
+              "GSM8322377",
+              "GSM8322378"
+            ]
+          },
+          "sample_title": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 11,
+            "value_counts_if_at_most_20": {
+              "SCPD, scRNAseq [SCPD-1]": 4969,
+              "SCPD, scRNAseq [SCPD-2]": 4945,
+              "SCPD, scRNAseq [SCPD-3]": 4926,
+              "SCWOPD, scRNAseq [SCWOPD-1]": 3773,
+              "SCWOPD, scRNAseq [SCWOPD-2]": 3793,
+              "SCWOPD, scRNAseq [SCWOPD-3]": 3592,
+              "SCWOPD, scRNAseq [SCWOPD-4]": 3798,
+              "SCWOPD, scRNAseq [SCWOPD-5]": 3799,
+              "SC_2D, scRNAseq [SC_2D-1]": 8604,
+              "SC_2D, scRNAseq [SC_2D-2]": 8594,
+              "SC_2D, scRNAseq [SC_2D-3]": 8580
+            },
+            "values_if_at_most_20": [
+              "SC_2D, scRNAseq [SC_2D-1]",
+              "SC_2D, scRNAseq [SC_2D-2]",
+              "SC_2D, scRNAseq [SC_2D-3]",
+              "SCPD, scRNAseq [SCPD-1]",
+              "SCPD, scRNAseq [SCPD-2]",
+              "SCPD, scRNAseq [SCPD-3]",
+              "SCWOPD, scRNAseq [SCWOPD-1]",
+              "SCWOPD, scRNAseq [SCWOPD-2]",
+              "SCWOPD, scRNAseq [SCWOPD-3]",
+              "SCWOPD, scRNAseq [SCWOPD-4]",
+              "SCWOPD, scRNAseq [SCWOPD-5]"
+            ]
+          },
+          "source_accession": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GSE269572": 59373
+            },
+            "values_if_at_most_20": [
+              "GSE269572"
+            ]
+          },
+          "source_cell_barcode": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 17432,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "source_cell_line": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "H9": 59373
+            },
+            "values_if_at_most_20": [
+              "H9"
+            ]
+          },
+          "source_file": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 11,
+            "value_counts_if_at_most_20": {
+              "GSM8322368_SC_2D-1_matrix.mtx.gz": 8604,
+              "GSM8322369_SC_2D-2_matrix.mtx.gz": 8594,
+              "GSM8322370_SC-2D-3_matrix.mtx.gz": 8580,
+              "GSM8322371_SCPD-1_matrix.mtx.gz": 4969,
+              "GSM8322372_SCPD-2_matrix.mtx.gz": 4945,
+              "GSM8322373_SCPD-3_matrix.mtx.gz": 4926,
+              "GSM8322374_SCWOPD-1_matrix.mtx.gz": 3773,
+              "GSM8322375_SCWOPD-2_matrix.mtx.gz": 3793,
+              "GSM8322376_SCWOPD-3_matrix.mtx.gz": 3592,
+              "GSM8322377_SCWOPD-4_matrix.mtx.gz": 3798,
+              "GSM8322378_SCWOPD-5_matrix.mtx.gz": 3799
+            },
+            "values_if_at_most_20": [
+              "GSM8322368_SC_2D-1_matrix.mtx.gz",
+              "GSM8322369_SC_2D-2_matrix.mtx.gz",
+              "GSM8322370_SC-2D-3_matrix.mtx.gz",
+              "GSM8322371_SCPD-1_matrix.mtx.gz",
+              "GSM8322372_SCPD-2_matrix.mtx.gz",
+              "GSM8322373_SCPD-3_matrix.mtx.gz",
+              "GSM8322374_SCWOPD-1_matrix.mtx.gz",
+              "GSM8322375_SCWOPD-2_matrix.mtx.gz",
+              "GSM8322376_SCWOPD-3_matrix.mtx.gz",
+              "GSM8322377_SCWOPD-4_matrix.mtx.gz",
+              "GSM8322378_SCWOPD-5_matrix.mtx.gz"
+            ]
+          },
+          "source_matrix_semantics": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "author-processed Cell Ranger v7 count matrix": 59373
+            },
+            "values_if_at_most_20": [
+              "author-processed Cell Ranger v7 count matrix"
+            ]
+          },
+          "source_name": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "H9": 59373
+            },
+            "values_if_at_most_20": [
+              "H9"
+            ]
+          },
+          "timepoint": {
+            "dtype": "float64",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": 42.5,
+            "numeric_min": 42.5,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "42.5": 59373
+            },
+            "values_if_at_most_20": [
+              42.5
+            ]
+          },
+          "timepoint_unit": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "day in vitro": 59373
+            },
+            "values_if_at_most_20": [
+              "day in vitro"
+            ]
+          },
+          "tissue": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "H9-derived cardioid or matched 2D culture": 59373
+            },
+            "values_if_at_most_20": [
+              "H9-derived cardioid or matched 2D culture"
+            ]
+          },
+          "trajectory_id": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GSE269572:H9:day42.5": 59373
+            },
+            "values_if_at_most_20": [
+              "GSE269572:H9:day42.5"
+            ]
+          },
+          "treatment": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 3,
+            "value_counts_if_at_most_20": {
+              "2D culture": 25778,
+              "with PD173074": 14840,
+              "without PD173074": 18755
+            },
+            "values_if_at_most_20": [
+              "2D culture",
+              "with PD173074",
+              "without PD173074"
+            ]
+          }
+        },
+        "columns": [
+          "source_accession",
+          "sample_accession",
+          "sample_title",
+          "source_file",
+          "source_cell_barcode",
+          "source_name",
+          "source_cell_line",
+          "treatment",
+          "condition",
+          "timepoint",
+          "timepoint_unit",
+          "development_stage",
+          "donor_age",
+          "donor_sex",
+          "donor_ethnicity",
+          "organism",
+          "assay",
+          "tissue",
+          "is_control",
+          "trajectory_id",
+          "source_matrix_semantics"
+        ],
+        "index_control_character_count": 0,
+        "index_dtype": "object",
+        "index_missing": 0,
+        "index_name": "cell_id",
+        "index_sha256": "5a33730449e0bbf2d680ade9db1d9b8b5f4e9e6721173445c78fb8006943be4a",
+        "index_unique": true,
+        "shape": [
+          59373,
+          21
+        ]
+      },
+      "parity": {
+        "X_n_observations": null,
+        "X_var_link_exact": true,
+        "obs_X_link_exact": true,
+        "obs_rows": 59373,
+        "obs_rows_equal_X_n_observations": null,
+        "same_prefix_var": true,
+        "var_rows": 36601
+      },
+      "var": {
+        "column_audit": {
+          "feature_id": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 36601,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "feature_namespace": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Ensembl gene ID": 36601
+            },
+            "values_if_at_most_20": [
+              "Ensembl gene ID"
+            ]
+          },
+          "feature_type": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Gene Expression": 36601
+            },
+            "values_if_at_most_20": [
+              "Gene Expression"
+            ]
+          },
+          "gene_symbol": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 36591,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "genome_build": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GRCh38": 36601
+            },
+            "values_if_at_most_20": [
+              "GRCh38"
+            ]
+          },
+          "organism": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Homo sapiens": 36601
+            },
+            "values_if_at_most_20": [
+              "Homo sapiens"
+            ]
+          }
+        },
+        "column_control_character_counts": {
+          "feature_id": 0,
+          "feature_namespace": 0,
+          "feature_type": 0,
+          "gene_symbol": 0,
+          "genome_build": 0,
+          "organism": 0
+        },
+        "columns": [
+          "feature_id",
+          "gene_symbol",
+          "feature_type",
+          "feature_namespace",
+          "organism",
+          "genome_build"
+        ],
+        "index_control_character_count": 0,
+        "index_dtype": "object",
+        "index_duplicate_count": 0,
+        "index_empty_string_count": 0,
+        "index_ensembl_count": 36601,
+        "index_ensembl_fraction": 1.0,
+        "index_missing": 0,
+        "index_name": "feature_id",
+        "index_sha256": "3a5b3f31ab21773f83f8c2c52b9f543bc56dcbd1b9ff68db3afc99616b492193",
+        "index_unique": true,
+        "shape": [
+          36601,
+          6
+        ]
+      }
+    },
+    "GSM5901228": {
+      "artifacts": {
+        "X": {
+          "feature_links": {
+            "var": "data/cleaned/GSM5901228/var.parquet"
+          },
+          "metadata": {
+            "created_at": "2026-07-18 07:12:55.114024+00:00",
+            "hash": "zcgCpkj6y1IEGf8zB4DV5A",
+            "key": "data/cleaned/GSM5901228/X.h5ad",
+            "n_observations": null,
+            "otype": "AnnData",
+            "size": 64870241,
+            "storage_id": 13,
+            "suffix": ".h5ad",
+            "uid": "TJY0nyj5ETU43Syh0000",
+            "updated_at": "2026-07-18 07:12:55.114024+00:00"
+          }
+        },
+        "obs": {
+          "feature_links": {
+            "X": "data/cleaned/GSM5901228/X.h5ad"
+          },
+          "metadata": {
+            "created_at": "2026-07-18 07:12:53.649268+00:00",
+            "hash": "O62CzxNMS4Jg1rpHGzXCWA",
+            "key": "data/cleaned/GSM5901228/obs.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 290697,
+            "storage_id": 13,
+            "suffix": ".parquet",
+            "uid": "40smDMSQhHxjFpkb0000",
+            "updated_at": "2026-07-18 07:12:53.649268+00:00"
+          }
+        },
+        "var": {
+          "feature_links": {},
+          "metadata": {
+            "created_at": "2026-07-18 07:12:56.584270+00:00",
+            "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+            "key": "data/cleaned/GSM5901228/var.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 498556,
+            "storage_id": 13,
+            "suffix": ".parquet",
+            "uid": "yKlix5aS2jtSWqXT0000",
+            "updated_at": "2026-07-18 07:12:56.584270+00:00"
+          }
+        }
+      },
+      "bounded_key_candidates": [
+        {
+          "created_at": "2026-07-18 07:12:53.649268+00:00",
+          "hash": "O62CzxNMS4Jg1rpHGzXCWA",
+          "key": "data/cleaned/GSM5901228/obs.parquet",
+          "n_observations": null,
+          "otype": "DataFrame",
+          "size": 290697,
+          "storage_id": 13,
+          "suffix": ".parquet",
+          "uid": "40smDMSQhHxjFpkb0000",
+          "updated_at": "2026-07-18 07:12:53.649268+00:00"
+        },
+        {
+          "created_at": "2026-07-18 07:12:56.584270+00:00",
+          "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+          "key": "data/cleaned/GSM5901228/var.parquet",
+          "n_observations": null,
+          "otype": "DataFrame",
+          "size": 498556,
+          "storage_id": 13,
+          "suffix": ".parquet",
+          "uid": "yKlix5aS2jtSWqXT0000",
+          "updated_at": "2026-07-18 07:12:56.584270+00:00"
+        },
+        {
+          "created_at": "2026-07-18 07:12:55.114024+00:00",
+          "hash": "zcgCpkj6y1IEGf8zB4DV5A",
+          "key": "data/cleaned/GSM5901228/X.h5ad",
+          "n_observations": null,
+          "otype": "AnnData",
+          "size": 64870241,
+          "storage_id": 13,
+          "suffix": ".h5ad",
+          "uid": "TJY0nyj5ETU43Syh0000",
+          "updated_at": "2026-07-18 07:12:55.114024+00:00"
+        }
+      ],
+      "obs": {
+        "column_audit": {
+          "ascorbic_acid_from_day_12": {
+            "dtype": "bool",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "False",
+            "numeric_min": "False",
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "False": 6416
+            },
+            "values_if_at_most_20": [
+              false
+            ]
+          },
+          "assay": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "10x Genomics 3' scRNA-seq": 6416
+            },
+            "values_if_at_most_20": [
+              "10x Genomics 3' scRNA-seq"
+            ]
+          },
+          "barcode": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 6416,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "biosample": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "SAMN25978136": 6416
+            },
+            "values_if_at_most_20": [
+              "SAMN25978136"
+            ]
+          },
+          "cell_id": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 6416,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "culture_method": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "3D suspension culture": 6416
+            },
+            "values_if_at_most_20": [
+              "3D suspension culture"
+            ]
+          },
+          "experiment": {
+            "dtype": "int64",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "1",
+            "numeric_min": "1",
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "1": 6416
+            },
+            "values_if_at_most_20": [
+              1
+            ]
+          },
+          "n_genes_by_counts": {
+            "dtype": "int32",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "7786",
+            "numeric_min": "2001",
+            "unique_non_null": 2780,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "organism": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Homo sapiens": 6416
+            },
+            "values_if_at_most_20": [
+              "Homo sapiens"
+            ]
+          },
+          "pct_counts_mt": {
+            "dtype": "float32",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "9.997442",
+            "numeric_min": "0.03250975",
+            "unique_non_null": 6408,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "sample_accession": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GSM5901228": 6416
+            },
+            "values_if_at_most_20": [
+              "GSM5901228"
+            ]
+          },
+          "sample_title": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "day_0_3D_suspension_culture": 6416
+            },
+            "values_if_at_most_20": [
+              "day_0_3D_suspension_culture"
+            ]
+          },
+          "source_accession": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GSE196799": 6416
+            },
+            "values_if_at_most_20": [
+              "GSE196799"
+            ]
+          },
+          "source_cell_call_flag_missing": {
+            "dtype": "bool",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "True",
+            "numeric_min": "True",
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "True": 6416
+            },
+            "values_if_at_most_20": [
+              true
+            ]
+          },
+          "source_name": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "hiPSCs": 6416
+            },
+            "values_if_at_most_20": [
+              "hiPSCs"
+            ]
+          },
+          "sra_experiment": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "SRX14194755": 6416
+            },
+            "values_if_at_most_20": [
+              "SRX14194755"
+            ]
+          },
+          "timepoint": {
+            "dtype": "float64",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": 0.0,
+            "numeric_min": 0.0,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "0.0": 6416
+            },
+            "values_if_at_most_20": [
+              0.0
+            ]
+          },
+          "timepoint_unit": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "day": 6416
+            },
+            "values_if_at_most_20": [
+              "day"
+            ]
+          },
+          "total_counts": {
+            "dtype": "int64",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "85040",
+            "numeric_min": "4570",
+            "unique_non_null": 5564,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          }
+        },
+        "columns": [
+          "cell_id",
+          "barcode",
+          "source_accession",
+          "sample_accession",
+          "sample_title",
+          "source_name",
+          "experiment",
+          "timepoint",
+          "timepoint_unit",
+          "culture_method",
+          "ascorbic_acid_from_day_12",
+          "biosample",
+          "sra_experiment",
+          "organism",
+          "assay",
+          "n_genes_by_counts",
+          "total_counts",
+          "pct_counts_mt",
+          "source_cell_call_flag_missing"
+        ],
+        "index_control_character_count": 0,
+        "index_dtype": "object",
+        "index_missing": 0,
+        "index_name": "cell_id",
+        "index_sha256": "af4d8ee1d85ced70d28a43bdec1829b9e0fe810c88bb0256525a0ea3b411b855",
+        "index_unique": true,
+        "shape": [
+          6416,
+          19
+        ]
+      },
+      "parity": {
+        "X_n_observations": null,
+        "X_var_link_exact": true,
+        "obs_X_link_exact": true,
+        "obs_rows": 6416,
+        "obs_rows_equal_X_n_observations": null,
+        "same_prefix_var": true,
+        "var_rows": 20631
+      },
+      "var": {
+        "column_audit": {
+          "feature_id": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 20631,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "feature_type": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Gene Expression": 20631
+            },
+            "values_if_at_most_20": [
+              "Gene Expression"
+            ]
+          },
+          "gene_symbol": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 20616,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          }
+        },
+        "column_control_character_counts": {
+          "feature_id": 0,
+          "feature_type": 0,
+          "gene_symbol": 0
+        },
+        "columns": [
+          "feature_id",
+          "gene_symbol",
+          "feature_type"
+        ],
+        "index_control_character_count": 0,
+        "index_dtype": "object",
+        "index_duplicate_count": 0,
+        "index_empty_string_count": 0,
+        "index_ensembl_count": 20631,
+        "index_ensembl_fraction": 1.0,
+        "index_missing": 0,
+        "index_name": "feature_id",
+        "index_sha256": "017942e14d8a0ca0c852323629797acb47445cea7b498eb9bee661abddc97cac",
+        "index_unique": true,
+        "shape": [
+          20631,
+          3
+        ]
+      }
+    },
+    "GSM5901229": {
+      "artifacts": {
+        "X": {
+          "feature_links": {
+            "var": "data/cleaned/GSM5901229/var.parquet"
+          },
+          "metadata": {
+            "created_at": "2026-07-18 07:12:59.508701+00:00",
+            "hash": "13xJro1exozRWa6Kt7nqZQ",
+            "key": "data/cleaned/GSM5901229/X.h5ad",
+            "n_observations": null,
+            "otype": "AnnData",
+            "size": 43596564,
+            "storage_id": 13,
+            "suffix": ".h5ad",
+            "uid": "p9vhfRYo6FhgRKGr0000",
+            "updated_at": "2026-07-18 07:12:59.508701+00:00"
+          }
+        },
+        "obs": {
+          "feature_links": {
+            "X": "data/cleaned/GSM5901229/X.h5ad"
+          },
+          "metadata": {
+            "created_at": "2026-07-18 07:12:58.049214+00:00",
+            "hash": "15qs9xV1pmJxz10oJke7lg",
+            "key": "data/cleaned/GSM5901229/obs.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 213224,
+            "storage_id": 13,
+            "suffix": ".parquet",
+            "uid": "kr1PNg0UG6pR6glr0000",
+            "updated_at": "2026-07-18 07:12:58.049214+00:00"
+          }
+        },
+        "var": {
+          "feature_links": {},
+          "metadata": {
+            "created_at": "2026-07-18 07:13:00.971521+00:00",
+            "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+            "key": "data/cleaned/GSM5901229/var.parquet",
+            "n_observations": null,
+            "otype": "DataFrame",
+            "size": 498556,
+            "storage_id": 13,
+            "suffix": ".parquet",
+            "uid": "KnkXC8qiG2tWZdLT0000",
+            "updated_at": "2026-07-18 07:13:00.971521+00:00"
+          }
+        }
+      },
+      "bounded_key_candidates": [
+        {
+          "created_at": "2026-07-18 07:12:58.049214+00:00",
+          "hash": "15qs9xV1pmJxz10oJke7lg",
+          "key": "data/cleaned/GSM5901229/obs.parquet",
+          "n_observations": null,
+          "otype": "DataFrame",
+          "size": 213224,
+          "storage_id": 13,
+          "suffix": ".parquet",
+          "uid": "kr1PNg0UG6pR6glr0000",
+          "updated_at": "2026-07-18 07:12:58.049214+00:00"
+        },
+        {
+          "created_at": "2026-07-18 07:13:00.971521+00:00",
+          "hash": "5IxJsE91crLE_PZZ7Ccq1w",
+          "key": "data/cleaned/GSM5901229/var.parquet",
+          "n_observations": null,
+          "otype": "DataFrame",
+          "size": 498556,
+          "storage_id": 13,
+          "suffix": ".parquet",
+          "uid": "KnkXC8qiG2tWZdLT0000",
+          "updated_at": "2026-07-18 07:13:00.971521+00:00"
+        },
+        {
+          "created_at": "2026-07-18 07:12:59.508701+00:00",
+          "hash": "13xJro1exozRWa6Kt7nqZQ",
+          "key": "data/cleaned/GSM5901229/X.h5ad",
+          "n_observations": null,
+          "otype": "AnnData",
+          "size": 43596564,
+          "storage_id": 13,
+          "suffix": ".h5ad",
+          "uid": "p9vhfRYo6FhgRKGr0000",
+          "updated_at": "2026-07-18 07:12:59.508701+00:00"
+        }
+      ],
+      "obs": {
+        "column_audit": {
+          "ascorbic_acid_from_day_12": {
+            "dtype": "bool",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "False",
+            "numeric_min": "False",
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "False": 4549
+            },
+            "values_if_at_most_20": [
+              false
+            ]
+          },
+          "assay": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "10x Genomics 3' scRNA-seq": 4549
+            },
+            "values_if_at_most_20": [
+              "10x Genomics 3' scRNA-seq"
+            ]
+          },
+          "barcode": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 4549,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "biosample": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "SAMN25978135": 4549
+            },
+            "values_if_at_most_20": [
+              "SAMN25978135"
+            ]
+          },
+          "cell_id": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 4549,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "culture_method": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "3D suspension culture": 4549
+            },
+            "values_if_at_most_20": [
+              "3D suspension culture"
+            ]
+          },
+          "experiment": {
+            "dtype": "int64",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "1",
+            "numeric_min": "1",
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "1": 4549
+            },
+            "values_if_at_most_20": [
+              1
+            ]
+          },
+          "n_genes_by_counts": {
+            "dtype": "int32",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "7398",
+            "numeric_min": "2018",
+            "unique_non_null": 2234,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "organism": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Homo sapiens": 4549
+            },
+            "values_if_at_most_20": [
+              "Homo sapiens"
+            ]
+          },
+          "pct_counts_mt": {
+            "dtype": "float32",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "9.997408",
+            "numeric_min": "0.027326137",
+            "unique_non_null": 4542,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "sample_accession": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GSM5901229": 4549
+            },
+            "values_if_at_most_20": [
+              "GSM5901229"
+            ]
+          },
+          "sample_title": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "day_3_3D_suspension_culture": 4549
+            },
+            "values_if_at_most_20": [
+              "day_3_3D_suspension_culture"
+            ]
+          },
+          "source_accession": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "GSE196799": 4549
+            },
+            "values_if_at_most_20": [
+              "GSE196799"
+            ]
+          },
+          "source_cell_call_flag_missing": {
+            "dtype": "bool",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "True",
+            "numeric_min": "True",
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "True": 4549
+            },
+            "values_if_at_most_20": [
+              true
+            ]
+          },
+          "source_name": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "hiPSCs": 4549
+            },
+            "values_if_at_most_20": [
+              "hiPSCs"
+            ]
+          },
+          "sra_experiment": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "SRX14194756": 4549
+            },
+            "values_if_at_most_20": [
+              "SRX14194756"
+            ]
+          },
+          "timepoint": {
+            "dtype": "float64",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": 3.0,
+            "numeric_min": 3.0,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "3.0": 4549
+            },
+            "values_if_at_most_20": [
+              3.0
+            ]
+          },
+          "timepoint_unit": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "day": 4549
+            },
+            "values_if_at_most_20": [
+              "day"
+            ]
+          },
+          "total_counts": {
+            "dtype": "int64",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": "69702",
+            "numeric_min": "4291",
+            "unique_non_null": 4026,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          }
+        },
+        "columns": [
+          "cell_id",
+          "barcode",
+          "source_accession",
+          "sample_accession",
+          "sample_title",
+          "source_name",
+          "experiment",
+          "timepoint",
+          "timepoint_unit",
+          "culture_method",
+          "ascorbic_acid_from_day_12",
+          "biosample",
+          "sra_experiment",
+          "organism",
+          "assay",
+          "n_genes_by_counts",
+          "total_counts",
+          "pct_counts_mt",
+          "source_cell_call_flag_missing"
+        ],
+        "index_control_character_count": 0,
+        "index_dtype": "object",
+        "index_missing": 0,
+        "index_name": "cell_id",
+        "index_sha256": "3878bca54d425604ad519c1a3d158ade9185f4575a49ca47b6fd0e047f5abecb",
+        "index_unique": true,
+        "shape": [
+          4549,
+          19
+        ]
+      },
+      "parity": {
+        "X_n_observations": null,
+        "X_var_link_exact": true,
+        "obs_X_link_exact": true,
+        "obs_rows": 4549,
+        "obs_rows_equal_X_n_observations": null,
+        "same_prefix_var": true,
+        "var_rows": 20631
+      },
+      "var": {
+        "column_audit": {
+          "feature_id": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 20631,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          },
+          "feature_type": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 1,
+            "value_counts_if_at_most_20": {
+              "Gene Expression": 20631
+            },
+            "values_if_at_most_20": [
+              "Gene Expression"
+            ]
+          },
+          "gene_symbol": {
+            "dtype": "object",
+            "missing": 0,
+            "missing_fraction": 0.0,
+            "numeric_max": null,
+            "numeric_min": null,
+            "unique_non_null": 20616,
+            "value_counts_if_at_most_20": {},
+            "values_if_at_most_20": []
+          }
+        },
+        "column_control_character_counts": {
+          "feature_id": 0,
+          "feature_type": 0,
+          "gene_symbol": 0
+        },
+        "columns": [
+          "feature_id",
+          "gene_symbol",
+          "feature_type"
+        ],
+        "index_control_character_count": 0,
+        "index_dtype": "object",
+        "index_duplicate_count": 0,
+        "index_empty_string_count": 0,
+        "index_ensembl_count": 20631,
+        "index_ensembl_fraction": 1.0,
+        "index_missing": 0,
+        "index_name": "feature_id",
+        "index_sha256": "017942e14d8a0ca0c852323629797acb47445cea7b498eb9bee661abddc97cac",
+        "index_unique": true,
+        "shape": [
+          20631,
+          3
+        ]
+      }
+    }
+  },
+  "generated_at": "2026-07-28T10:48:35.385925+00:00",
+  "instance": "laminlabs/pertdata",
+  "read_boundary": {
+    "X_policy": "registry metadata and feature links only; no X payload load",
+    "datasets": [
+      "GSE194214",
+      "GSE269572",
+      "GSM5901228",
+      "GSM5901229"
+    ],
+    "payloads_loaded": "exactly four obs.parquet and four var.parquet dataframes",
+    "writes": "none"
+  }
+}

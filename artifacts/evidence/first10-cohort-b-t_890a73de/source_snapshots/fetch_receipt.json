@@ -1,0 +1,37 @@
+{
+  "GSE194214_README.md": {
+    "generation_uri": "gs://scperturb/data/cleaned/GSE194214/README.md#1785160719981098",
+    "sha256": "1a6a9709a63dbf5053fe0036508c7a48f9ec733d3bf64a8bfa1fbeeedfde31f2",
+    "size_bytes": 1719
+  },
+  "GSE194214_manifest.json": {
+    "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001154_gse194214/revisions/temporal-v4-092-wave10-44ee24e4151fda51/manifest.json#1784258200963912",
+    "sha256": "f1e5d44fd0dc621728c1c6b37bf150650f6dd5cd7d58530b7f52b0f93eaddd1f",
+    "size_bytes": 19899
+  },
+  "GSE196799_manifest.json": {
+    "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/manifest.json#1784257733140715",
+    "sha256": "3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3",
+    "size_bytes": 80599
+  },
+  "GSE269572_README.md": {
+    "generation_uri": "gs://scperturb/data/cleaned/GSE269572/README.md#1785160719980715",
+    "sha256": "7f45fe08fcac135b766985e93a7250f4185038ac9f65f41358ca88e3e7a51071",
+    "size_bytes": 1879
+  },
+  "GSE269572_manifest.json": {
+    "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/manifest.json#1784261666127952",
+    "sha256": "ab3286741d1b41fcdc11003e61e42ad3f598f11cf6c9d65b8ee48161b2866f8c",
+    "size_bytes": 27071
+  },
+  "GSM5901228_README.md": {
+    "generation_uri": "gs://scperturb/data/cleaned/GSM5901228/README.md#1785160719979639",
+    "sha256": "0e2d3bf2cd3813823e9c9bb889aef139b09538286c93506a42c801eb317ddc68",
+    "size_bytes": 1722
+  },
+  "GSM5901229_README.md": {
+    "generation_uri": "gs://scperturb/data/cleaned/GSM5901229/README.md#1785160720001357",
+    "sha256": "b8df0a04225e4a50e7932b523667a0ac68fdd7b5caf5efb772dde30bf7614fb2",
+    "size_bytes": 1722
+  }
+}

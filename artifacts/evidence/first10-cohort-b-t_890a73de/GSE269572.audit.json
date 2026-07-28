@@ -1,0 +1,1250 @@
+{
+  "audit_mode": "read_only",
+  "chunk_verdict": {
+    "physical_members": 1,
+    "shared_var": "one same-prefix var already linked",
+    "status": "unchunked_appropriate"
+  },
+  "cloud_mutations": 0,
+  "current_identity": {
+    "artifacts": {
+      "X": {
+        "created_at": "2026-07-19 11:23:22.126336+00:00",
+        "feature_links": {
+          "var": "data/cleaned/GSE269572/var.parquet"
+        },
+        "hash": "c-cNCyZ219jz4lWWu5ZP3A",
+        "key": "data/cleaned/GSE269572/X.h5ad",
+        "n_observations": null,
+        "otype": "AnnData",
+        "size": 346165303,
+        "storage_id": 13,
+        "suffix": ".h5ad",
+        "uid": "vNprtc3z84zMcEUj0000",
+        "updated_at": "2026-07-19 11:23:22.126336+00:00"
+      },
+      "obs": {
+        "created_at": "2026-07-19 11:23:20.838415+00:00",
+        "feature_links": {
+          "X": "data/cleaned/GSE269572/X.h5ad"
+        },
+        "hash": "NhNCQ6H9qJwU7skveO2I3Q",
+        "key": "data/cleaned/GSE269572/obs.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 815115,
+        "storage_id": 13,
+        "suffix": ".parquet",
+        "uid": "wTvFyR9fchIwao8l0000",
+        "updated_at": "2026-07-19 11:23:20.838415+00:00"
+      },
+      "var": {
+        "created_at": "2026-07-19 11:23:23.267329+00:00",
+        "feature_links": {},
+        "hash": "8eISYwzNTFHZQeO7HcVwRw",
+        "key": "data/cleaned/GSE269572/var.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 899557,
+        "storage_id": 13,
+        "suffix": ".parquet",
+        "uid": "umZYkLN9bq9nfl5m0000",
+        "updated_at": "2026-07-19 11:23:23.267329+00:00"
+      }
+    },
+    "bounded_key_candidates": [
+      {
+        "created_at": "2026-07-19 11:23:20.838415+00:00",
+        "hash": "NhNCQ6H9qJwU7skveO2I3Q",
+        "key": "data/cleaned/GSE269572/obs.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 815115,
+        "storage_id": 13,
+        "suffix": ".parquet",
+        "uid": "wTvFyR9fchIwao8l0000",
+        "updated_at": "2026-07-19 11:23:20.838415+00:00"
+      },
+      {
+        "created_at": "2026-07-19 11:23:23.267329+00:00",
+        "hash": "8eISYwzNTFHZQeO7HcVwRw",
+        "key": "data/cleaned/GSE269572/var.parquet",
+        "n_observations": null,
+        "otype": "DataFrame",
+        "size": 899557,
+        "storage_id": 13,
+        "suffix": ".parquet",
+        "uid": "umZYkLN9bq9nfl5m0000",
+        "updated_at": "2026-07-19 11:23:23.267329+00:00"
+      },
+      {
+        "created_at": "2026-07-19 11:23:22.126336+00:00",
+        "hash": "c-cNCyZ219jz4lWWu5ZP3A",
+        "key": "data/cleaned/GSE269572/X.h5ad",
+        "n_observations": null,
+        "otype": "AnnData",
+        "size": 346165303,
+        "storage_id": 13,
+        "suffix": ".h5ad",
+        "uid": "vNprtc3z84zMcEUj0000",
+        "updated_at": "2026-07-19 11:23:22.126336+00:00"
+      }
+    ],
+    "branch": {
+      "name": "jkobject",
+      "uid": "GCjqQtGwPzkY"
+    },
+    "instance": "laminlabs/pertdata"
+  },
+  "dataset_id": "GSE269572",
+  "evidence_files": [
+    "live_lamin_readback.json",
+    "source_snapshots/GSE269572_manifest.json",
+    "source_snapshots/GSE269572_family.soft",
+    "source_snapshots/fetch_receipt.json",
+    "source_snapshots/geo_soft_fetch_receipt.json"
+  ],
+  "historical_source_resolution": "Earlier no-supplement probe is superseded: GEO became public 2026-04-14 and the accepted manifest verifies the 561,725,440-byte RAW tar with SHA-256 6acd23bcb9c6d6b8a0f60f447c92edbd85243ef52732fb019f548846020c661a.",
+  "link_audit": {
+    "X_n_observations": null,
+    "X_var_link_exact": true,
+    "obs_X_link_exact": true,
+    "obs_rows": 59373,
+    "obs_rows_equal_X_n_observations": null,
+    "same_prefix_var": true,
+    "var_rows": 36601,
+    "verdict": "PASS_exact_obs_to_X_to_same_prefix_var"
+  },
+  "obs_audit": {
+    "column_audit": {
+      "assay": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "10x Chromium Single Cell 3' v2 or v3": 59373
+        },
+        "values_if_at_most_20": [
+          "10x Chromium Single Cell 3' v2 or v3"
+        ]
+      },
+      "condition": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 3,
+        "value_counts_if_at_most_20": {
+          "2D culture": 25778,
+          "with PD173074": 14840,
+          "without PD173074": 18755
+        },
+        "values_if_at_most_20": [
+          "2D culture",
+          "with PD173074",
+          "without PD173074"
+        ]
+      },
+      "development_stage": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "day 42.5": 59373
+        },
+        "values_if_at_most_20": [
+          "day 42.5"
+        ]
+      },
+      "donor_age": {
+        "dtype": "object",
+        "missing": 59373,
+        "missing_fraction": 1.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 0,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "donor_ethnicity": {
+        "dtype": "object",
+        "missing": 59373,
+        "missing_fraction": 1.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 0,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "donor_sex": {
+        "dtype": "object",
+        "missing": 59373,
+        "missing_fraction": 1.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 0,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "is_control": {
+        "dtype": "object",
+        "missing": 59373,
+        "missing_fraction": 1.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 0,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "organism": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "Homo sapiens": 59373
+        },
+        "values_if_at_most_20": [
+          "Homo sapiens"
+        ]
+      },
+      "sample_accession": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 11,
+        "value_counts_if_at_most_20": {
+          "GSM8322368": 8604,
+          "GSM8322369": 8594,
+          "GSM8322370": 8580,
+          "GSM8322371": 4969,
+          "GSM8322372": 4945,
+          "GSM8322373": 4926,
+          "GSM8322374": 3773,
+          "GSM8322375": 3793,
+          "GSM8322376": 3592,
+          "GSM8322377": 3798,
+          "GSM8322378": 3799
+        },
+        "values_if_at_most_20": [
+          "GSM8322368",
+          "GSM8322369",
+          "GSM8322370",
+          "GSM8322371",
+          "GSM8322372",
+          "GSM8322373",
+          "GSM8322374",
+          "GSM8322375",
+          "GSM8322376",
+          "GSM8322377",
+          "GSM8322378"
+        ]
+      },
+      "sample_title": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 11,
+        "value_counts_if_at_most_20": {
+          "SCPD, scRNAseq [SCPD-1]": 4969,
+          "SCPD, scRNAseq [SCPD-2]": 4945,
+          "SCPD, scRNAseq [SCPD-3]": 4926,
+          "SCWOPD, scRNAseq [SCWOPD-1]": 3773,
+          "SCWOPD, scRNAseq [SCWOPD-2]": 3793,
+          "SCWOPD, scRNAseq [SCWOPD-3]": 3592,
+          "SCWOPD, scRNAseq [SCWOPD-4]": 3798,
+          "SCWOPD, scRNAseq [SCWOPD-5]": 3799,
+          "SC_2D, scRNAseq [SC_2D-1]": 8604,
+          "SC_2D, scRNAseq [SC_2D-2]": 8594,
+          "SC_2D, scRNAseq [SC_2D-3]": 8580
+        },
+        "values_if_at_most_20": [
+          "SC_2D, scRNAseq [SC_2D-1]",
+          "SC_2D, scRNAseq [SC_2D-2]",
+          "SC_2D, scRNAseq [SC_2D-3]",
+          "SCPD, scRNAseq [SCPD-1]",
+          "SCPD, scRNAseq [SCPD-2]",
+          "SCPD, scRNAseq [SCPD-3]",
+          "SCWOPD, scRNAseq [SCWOPD-1]",
+          "SCWOPD, scRNAseq [SCWOPD-2]",
+          "SCWOPD, scRNAseq [SCWOPD-3]",
+          "SCWOPD, scRNAseq [SCWOPD-4]",
+          "SCWOPD, scRNAseq [SCWOPD-5]"
+        ]
+      },
+      "source_accession": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "GSE269572": 59373
+        },
+        "values_if_at_most_20": [
+          "GSE269572"
+        ]
+      },
+      "source_cell_barcode": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 17432,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "source_cell_line": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "H9": 59373
+        },
+        "values_if_at_most_20": [
+          "H9"
+        ]
+      },
+      "source_file": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 11,
+        "value_counts_if_at_most_20": {
+          "GSM8322368_SC_2D-1_matrix.mtx.gz": 8604,
+          "GSM8322369_SC_2D-2_matrix.mtx.gz": 8594,
+          "GSM8322370_SC-2D-3_matrix.mtx.gz": 8580,
+          "GSM8322371_SCPD-1_matrix.mtx.gz": 4969,
+          "GSM8322372_SCPD-2_matrix.mtx.gz": 4945,
+          "GSM8322373_SCPD-3_matrix.mtx.gz": 4926,
+          "GSM8322374_SCWOPD-1_matrix.mtx.gz": 3773,
+          "GSM8322375_SCWOPD-2_matrix.mtx.gz": 3793,
+          "GSM8322376_SCWOPD-3_matrix.mtx.gz": 3592,
+          "GSM8322377_SCWOPD-4_matrix.mtx.gz": 3798,
+          "GSM8322378_SCWOPD-5_matrix.mtx.gz": 3799
+        },
+        "values_if_at_most_20": [
+          "GSM8322368_SC_2D-1_matrix.mtx.gz",
+          "GSM8322369_SC_2D-2_matrix.mtx.gz",
+          "GSM8322370_SC-2D-3_matrix.mtx.gz",
+          "GSM8322371_SCPD-1_matrix.mtx.gz",
+          "GSM8322372_SCPD-2_matrix.mtx.gz",
+          "GSM8322373_SCPD-3_matrix.mtx.gz",
+          "GSM8322374_SCWOPD-1_matrix.mtx.gz",
+          "GSM8322375_SCWOPD-2_matrix.mtx.gz",
+          "GSM8322376_SCWOPD-3_matrix.mtx.gz",
+          "GSM8322377_SCWOPD-4_matrix.mtx.gz",
+          "GSM8322378_SCWOPD-5_matrix.mtx.gz"
+        ]
+      },
+      "source_matrix_semantics": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "author-processed Cell Ranger v7 count matrix": 59373
+        },
+        "values_if_at_most_20": [
+          "author-processed Cell Ranger v7 count matrix"
+        ]
+      },
+      "source_name": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "H9": 59373
+        },
+        "values_if_at_most_20": [
+          "H9"
+        ]
+      },
+      "timepoint": {
+        "dtype": "float64",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": 42.5,
+        "numeric_min": 42.5,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "42.5": 59373
+        },
+        "values_if_at_most_20": [
+          42.5
+        ]
+      },
+      "timepoint_unit": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "day in vitro": 59373
+        },
+        "values_if_at_most_20": [
+          "day in vitro"
+        ]
+      },
+      "tissue": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "H9-derived cardioid or matched 2D culture": 59373
+        },
+        "values_if_at_most_20": [
+          "H9-derived cardioid or matched 2D culture"
+        ]
+      },
+      "trajectory_id": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "GSE269572:H9:day42.5": 59373
+        },
+        "values_if_at_most_20": [
+          "GSE269572:H9:day42.5"
+        ]
+      },
+      "treatment": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 3,
+        "value_counts_if_at_most_20": {
+          "2D culture": 25778,
+          "with PD173074": 14840,
+          "without PD173074": 18755
+        },
+        "values_if_at_most_20": [
+          "2D culture",
+          "with PD173074",
+          "without PD173074"
+        ]
+      }
+    },
+    "columns": [
+      "source_accession",
+      "sample_accession",
+      "sample_title",
+      "source_file",
+      "source_cell_barcode",
+      "source_name",
+      "source_cell_line",
+      "treatment",
+      "condition",
+      "timepoint",
+      "timepoint_unit",
+      "development_stage",
+      "donor_age",
+      "donor_sex",
+      "donor_ethnicity",
+      "organism",
+      "assay",
+      "tissue",
+      "is_control",
+      "trajectory_id",
+      "source_matrix_semantics"
+    ],
+    "index_control_character_count": 0,
+    "index_dtype": "object",
+    "index_missing": 0,
+    "index_name": "cell_id",
+    "index_sha256": "5a33730449e0bbf2d680ade9db1d9b8b5f4e9e6721173445c78fb8006943be4a",
+    "index_unique": true,
+    "shape": [
+      59373,
+      21
+    ]
+  },
+  "obs_decisions": [
+    {
+      "action": "derive",
+      "from": "current exact row index plus canonical dataset/prefix",
+      "target": "obs_uuid, original_obs_index"
+    },
+    {
+      "action": "map",
+      "target": "dataset",
+      "value": "GSE269572"
+    },
+    {
+      "action": "map",
+      "from": "sample_accession",
+      "target": "sample"
+    },
+    {
+      "action": "derive",
+      "from": "sample_accession + source_cell_barcode",
+      "target": "cell_id"
+    },
+    {
+      "action": "map",
+      "from": "source_cell_line",
+      "target": "cell_line",
+      "value": "H9"
+    },
+    {
+      "action": "derive",
+      "rule": "with PD173074 -> (PD173074, drug); without PD173074 and 2D culture -> (none, none)",
+      "target": "perturbation, perturbation_type"
+    },
+    {
+      "action": "retain",
+      "reason": "three-arm culture/treatment design is required for inference",
+      "target": "condition"
+    },
+    {
+      "action": "keep_unknown",
+      "reason": "source defines three arms but no unique binary control; do not infer 2D or without-PD as globally canonical control",
+      "target": "is_control"
+    },
+    {
+      "action": "move_to_dataset_metadata",
+      "reason": "constant single snapshot",
+      "target": "timepoint, timepoint_unit, development_stage, trajectory_id",
+      "value": "day 42.5 in vitro"
+    },
+    {
+      "action": "move_to_dataset_metadata",
+      "reason": "constant descriptive/source facts",
+      "target": "source_matrix_semantics, source_name"
+    },
+    {
+      "action": "set_unknown",
+      "reason": "all absent in source",
+      "target": "donor_id, age, sex, ethnicity, disease, cell_type"
+    },
+    {
+      "action": "retain",
+      "reason": "scientifically useful conditioning",
+      "target": "organism, tissue_type, assay"
+    },
+    {
+      "action": "derive",
+      "target": "modality, is_bulk, is_pseudobulk",
+      "value": [
+        "scRNA-seq",
+        false,
+        false
+      ]
+    }
+  ],
+  "obs_field_decisions": [
+    {
+      "action": "map_and_retain",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "source_accession",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "dataset; source_accession"
+    },
+    {
+      "action": "map_and_retain",
+      "cardinality": 11,
+      "dtype": "object",
+      "field": "sample_accession",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "sample; sample_accession"
+    },
+    {
+      "action": "retain_source_provenance",
+      "cardinality": 11,
+      "dtype": "object",
+      "field": "sample_title",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "sample_title"
+    },
+    {
+      "action": "retain_source_provenance",
+      "cardinality": 11,
+      "dtype": "object",
+      "field": "source_file",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "source_file"
+    },
+    {
+      "action": "derive_and_retain",
+      "cardinality": 17432,
+      "dtype": "object",
+      "field": "source_cell_barcode",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "cell_id; source_cell_barcode"
+    },
+    {
+      "action": "move_to_dataset_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "source_name",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "source_name"
+    },
+    {
+      "action": "map_conditioning",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "source_cell_line",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "source_literal_requires_registry_resolution",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "cell_line"
+    },
+    {
+      "action": "map_and_retain",
+      "cardinality": 3,
+      "dtype": "object",
+      "field": "treatment",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "perturbation; source_treatment"
+    },
+    {
+      "action": "retain_conditioning",
+      "cardinality": 3,
+      "dtype": "object",
+      "field": "condition",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "condition"
+    },
+    {
+      "action": "move_to_dataset_metadata",
+      "cardinality": 1,
+      "dtype": "float64",
+      "field": "timepoint",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "source snapshot day 42.5"
+    },
+    {
+      "action": "move_to_dataset_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "timepoint_unit",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "day in vitro"
+    },
+    {
+      "action": "move_to_dataset_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "development_stage",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "day 42.5"
+    },
+    {
+      "action": "replace_null_with_unknown",
+      "cardinality": 0,
+      "dtype": "object",
+      "field": "donor_age",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 59373,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "age"
+    },
+    {
+      "action": "replace_null_with_unknown",
+      "cardinality": 0,
+      "dtype": "object",
+      "field": "donor_sex",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 59373,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "sex"
+    },
+    {
+      "action": "replace_null_with_unknown",
+      "cardinality": 0,
+      "dtype": "object",
+      "field": "donor_ethnicity",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 59373,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "ethnicity"
+    },
+    {
+      "action": "retain_conditioning",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "organism",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "source_literal_requires_registry_resolution",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "organism"
+    },
+    {
+      "action": "normalize_and_retain_source",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "assay",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "source_literal_requires_registry_resolution",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "assay; source_assay"
+    },
+    {
+      "action": "map_conditioning",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "tissue",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 0,
+      "ontology_status": "source_literal_requires_registry_resolution",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "tissue_type"
+    },
+    {
+      "action": "retain_unknown",
+      "cardinality": 0,
+      "dtype": "object",
+      "field": "is_control",
+      "inference_utility": "conditioning_or_identity",
+      "missing": 59373,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "is_control"
+    },
+    {
+      "action": "move_to_dataset_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "trajectory_id",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "trajectory_id"
+    },
+    {
+      "action": "move_to_dataset_metadata",
+      "cardinality": 1,
+      "dtype": "object",
+      "field": "source_matrix_semantics",
+      "inference_utility": "metadata_or_missingness_only",
+      "missing": 0,
+      "ontology_status": "not_applicable",
+      "source": "current payload cross-checked against GEO SOFT and immutable acceptance manifest",
+      "target": "x_semantics=raw_counts"
+    }
+  ],
+  "post_fix_obs_schema": [
+    "obs_uuid",
+    "original_obs_index",
+    "dataset",
+    "sample",
+    "cell_id",
+    "source_accession",
+    "sample_accession",
+    "source_cell_barcode",
+    "source_file",
+    "sample_title",
+    "cell_line",
+    "condition",
+    "perturbation",
+    "perturbation_type",
+    "organism",
+    "tissue_type",
+    "assay",
+    "modality",
+    "is_control",
+    "donor_id",
+    "age",
+    "sex",
+    "ethnicity",
+    "disease",
+    "cell_type"
+  ],
+  "post_fix_var_schema": [
+    "ensembl_id",
+    "gene_symbol",
+    "feature_type",
+    "feature_namespace",
+    "organism",
+    "genome_build",
+    "author_gene_id",
+    "author_gene_symbol"
+  ],
+  "remediation_plan": {
+    "rollback": "restore the previous OBS feature link and, for GSE196799, previous per-member X->VAR links using the exact current UIDs recorded here",
+    "steps": [
+      "Resolve current exact data/cleaned/GSE269572/obs.parquet, X.h5ad and var.parquet by UID from this packet.",
+      "Load OBS only and fail closed if index hash, row count, columns or source values drift.",
+      "Apply obs_decisions in order; preserve source columns named as provenance and encode unsupported applicable fields as unknown.",
+      "Call add_obs_identity with the packet's logical dataset and canonical prefix; validate identity and row order.",
+      "Register revised OBS with revises=<current OBS>; do not revise or materialize X.",
+      "Set revised OBS X link and X VAR link exactly as specified; preserve old artifacts for rollback.",
+      "Run every listed validator and publish immutable generation/UID/hash evidence for independent review."
+    ],
+    "writer_scope": "single downstream writer; append-only revisions; no X rewrite"
+  },
+  "schema_version": "pert-gym.first10-scientific-audit.v1",
+  "scientific_verdict": "REMEDIATE_OBS_ONLY; X/VAR/links/source pass",
+  "source_evidence": {
+    "acceptance_manifest": {
+      "local_snapshot": "source_snapshots/GSE269572_manifest.json",
+      "sha256": "ab3286741d1b41fcdc11003e61e42ad3f598f11cf6c9d65b8ee48161b2866f8c"
+    },
+    "citations": {
+      "bioproject_url": "https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1122543",
+      "pubmed_url": null,
+      "series_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE269572",
+      "soft_sha256": "6fab2319b8794e12accc125a3a63d45659c9bc72abd5c9bd7f6bebc7b05d7580",
+      "soft_url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/soft/GSE269572_family.soft.gz"
+    },
+    "confidence": "verified_exact_source_and_generation_bound_acceptance_manifest",
+    "family_accession": "GSE269572",
+    "source_identity": {
+      "accession": "GSE269572",
+      "raw_tar_member_count": 33,
+      "raw_tar_member_inventory": [
+        {
+          "compressed_sha256": "4ff05369e768587bcbefcf92a43ed3cb5d70cbe80d25cc7bf49b45998525de4b",
+          "compressed_size_bytes": 44123,
+          "name": "GSM8322368_SC_2D-1_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "11cbe96cf26adba2c6fb8ca6405f170aa3319ac219978d9af65505dd05bc74a8",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322368_SC_2D-1_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "5cecd0643bd95665eb713a55a31c22ae4e9a4608ae7fa0171fd04800b6f761ae",
+          "compressed_size_bytes": 76618329,
+          "name": "GSM8322368_SC_2D-1_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "9f53145902b7499f1ff0ee4a54971797f46aa5e520d1401b63020e063b04f1d4",
+          "compressed_size_bytes": 44002,
+          "name": "GSM8322369_SC_2D-2_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "021629d515c54209d5a83b5fb59a284e38d8d54e2148e7e521609f2a16273ab1",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322369_SC_2D-2_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "6d4f69dd2b38394f0efabc39392d1ab28c0b1675733542f2b174af8a718d2e91",
+          "compressed_size_bytes": 75258221,
+          "name": "GSM8322369_SC_2D-2_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "c85d9d514e5a40e59f8698007b9403c59c5b61a291caa4dedab24cbe0baf47dc",
+          "compressed_size_bytes": 43977,
+          "name": "GSM8322370_SC-2D-3_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "d085c9299ea9ecd9c97c32e9623bba04745145671fd94aa2fe8e47d97bad4ae1",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322370_SC-2D-3_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "83ae698235d6b6dbeb8cfb6a1b8dc850368cb9c6d2540dcd70376fa01d857332",
+          "compressed_size_bytes": 74079671,
+          "name": "GSM8322370_SC-2D-3_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "b148fed640a99c61fdc75e2978b6e8d43593e64bc059d830c4679de5533749e7",
+          "compressed_size_bytes": 26351,
+          "name": "GSM8322371_SCPD-1_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "0bbc00e62e9a918ebd866bd83ded6dd4a7eb3dcb5eeb2c794eaceded17f7dba4",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322371_SCPD-1_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "6edeb34214cc462b269a9230d45f77bfbd678587b6bf74003f909d1b41609788",
+          "compressed_size_bytes": 52304656,
+          "name": "GSM8322371_SCPD-1_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "e5eeba51390268ccde2d0ea022825cd676f0f8dc6929392af384d8dfcf778226",
+          "compressed_size_bytes": 26229,
+          "name": "GSM8322372_SCPD-2_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "7eb0e922a7d5a05aef7ce13910e0ffa553d77f8ab75e4d26d2e930a7379d6288",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322372_SCPD-2_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "f8680b934aea252c3b2eb6ee87d0264f9a982518954c768f7ab414a8950c5907",
+          "compressed_size_bytes": 51522047,
+          "name": "GSM8322372_SCPD-2_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "fa76bd34e926685df3eac3f9dda1aa3358ffdcf7a0ddc79507b1d5087eaf661b",
+          "compressed_size_bytes": 26116,
+          "name": "GSM8322373_SCPD-3_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "97b1ad00a6e84d32f2a87feb63e34d3a0a10f52336ab756e88eb57a102135f67",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322373_SCPD-3_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "e5f5e038ee3db06f3200a25fc5d349326a96bb8f226efb67fda4aeaaa6202731",
+          "compressed_size_bytes": 50921017,
+          "name": "GSM8322373_SCPD-3_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "ed2b6db8a3e3cc759e48193c166b157a1b00da891cc000d9f408805176caf010",
+          "compressed_size_bytes": 20413,
+          "name": "GSM8322374_SCWOPD-1_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "ea1f37cf7f31d165467418dd4b0afd704c18d7f46fa523aff2e0096c4ca68334",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322374_SCWOPD-1_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "9691a1ede1c8e748e9a4d9fa3a237fb8d2c2c1beb31ba80c6d84e0c9029889f3",
+          "compressed_size_bytes": 37387690,
+          "name": "GSM8322374_SCWOPD-1_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "be769b27cf8c5555783e0850faa3e5560cc0210335aee9d75fc17a0d3bc81282",
+          "compressed_size_bytes": 20489,
+          "name": "GSM8322375_SCWOPD-2_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "b49aac31f82575407d4516a033ad76099841d9e8b84e91ee69ade17c217d39ac",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322375_SCWOPD-2_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "72ff0b4d97f8d00efd3970ab53e26309970d79deda9415c61569ba63455d14c0",
+          "compressed_size_bytes": 38144562,
+          "name": "GSM8322375_SCWOPD-2_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "14038082b461c37438d369a944a4e5c4afaccb16d82c12c49f1321f1c88cc411",
+          "compressed_size_bytes": 19442,
+          "name": "GSM8322376_SCWOPD-3_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "254eb4ef29b9788c09f4f2b41a0c2142e69e45472a8492c202d2fe1bb713cae2",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322376_SCWOPD-3_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "c94d891137b01f61bfb5a4f2a1d32a6ae167b5773dc328348718657b0815af4e",
+          "compressed_size_bytes": 24296681,
+          "name": "GSM8322376_SCWOPD-3_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "e3f5d36fecf20372bcef9aaa45599c9261ccf1434570b0a51a271f77d019951e",
+          "compressed_size_bytes": 20503,
+          "name": "GSM8322377_SCWOPD-4_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "71f4eb454bbaed8bcffafcb435c9089f01b80e2a7477509c01de9e5daf5d8615",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322377_SCWOPD-4_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "1877675a46be3768bcdbdca80d0f51d2ee7ec119a34e4cb3dc007729c9c74996",
+          "compressed_size_bytes": 38825931,
+          "name": "GSM8322377_SCWOPD-4_matrix.mtx.gz"
+        },
+        {
+          "compressed_sha256": "b4757dd532aedc77af32bb4996b9b1e7091729fa16eb2df8b7b4195a9c2c852d",
+          "compressed_size_bytes": 20518,
+          "name": "GSM8322378_SCWOPD-5_barcodes.tsv.gz"
+        },
+        {
+          "compressed_sha256": "b4146442f3de86cf08a853a8862b16d015805cf66c6de251def5321733229f54",
+          "compressed_size_bytes": 333437,
+          "name": "GSM8322378_SCWOPD-5_features.tsv.gz"
+        },
+        {
+          "compressed_sha256": "37432016c0b12e2995fc9b8fd8c4d9f4f0933b4bd4622161fdea7c12e5b74e61",
+          "compressed_size_bytes": 38354059,
+          "name": "GSM8322378_SCWOPD-5_matrix.mtx.gz"
+        }
+      ],
+      "series_metadata": {
+        "overall_design": "There are three groups in this study: 2D cultured tissue, stable chambered cardioids with PD173074 treatment, and stable chambered cardioids without PD173074 treatment. All samples were collected for single-cell sequencing on day 42.5.",
+        "title": "Generation of Stable Chambered Cardioids from human Pluripotent Stem Cells [scRNA-seq]"
+      },
+      "source_object_identity": "GSE269572",
+      "upstream_objects": {
+        "geo_filelist": {
+          "http_headers": {
+            "Content-Length": "2432",
+            "ETag": null,
+            "Last-Modified": "Wed, 15 Apr 2026 04:52:43 GMT"
+          },
+          "sha256": "48d766c4ad8986929c6fe721a5f42ee839a71754f3256f404348dff99f70eff6",
+          "size_bytes": 2432,
+          "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/suppl/filelist.txt"
+        },
+        "geo_raw_tar": {
+          "http_headers": {
+            "Content-Length": "561725440",
+            "ETag": null,
+            "Last-Modified": "Wed, 15 Apr 2026 04:52:43 GMT"
+          },
+          "sha256": "6acd23bcb9c6d6b8a0f60f447c92edbd85243ef52732fb019f548846020c661a",
+          "size_bytes": 561725440,
+          "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/suppl/GSE269572_RAW.tar"
+        },
+        "geo_soft": {
+          "http_headers": {
+            "Content-Length": "2932",
+            "ETag": null,
+            "Last-Modified": "Thu, 16 Jul 2026 04:30:25 GMT"
+          },
+          "sha256": "6fab2319b8794e12accc125a3a63d45659c9bc72abd5c9bd7f6bebc7b05d7580",
+          "size_bytes": 2932,
+          "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/soft/GSE269572_family.soft.gz"
+        }
+      },
+      "verified": true
+    }
+  },
+  "task_id": "t_890a73de",
+  "temporal_verdict": {
+    "decision": "remove cell-level timepoint/development_stage/trajectory_id; retain day 42.5 as dataset metadata only",
+    "source_timepoint_days_in_vitro": 42.5,
+    "status": "non_temporal_single_snapshot"
+  },
+  "validators": [
+    "resolve exact current active UIDs and fail on 0 or >1",
+    "assert source OBS row index/order SHA-256 equals packet obs_audit.index_sha256 before transformation",
+    "assert revised OBS row count/order and existing X UID/hash are unchanged",
+    "validate obs_uuid/original_obs_index with pert_gym.obs_identity.validate_obs_identity",
+    "assert post-fix columns, dtypes, missingness states and low-cardinality values match this packet",
+    "assert immutable-manifest X shape equals revised OBS rows by linked VAR rows",
+    "assert exact revised obs -> existing X -> accepted VAR link chain",
+    "repeat a fresh bounded readback from laminlabs/pertdata/jkobject and emit a zero-drift receipt"
+  ],
+  "var_audit": {
+    "column_audit": {
+      "feature_id": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 36601,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "feature_namespace": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "Ensembl gene ID": 36601
+        },
+        "values_if_at_most_20": [
+          "Ensembl gene ID"
+        ]
+      },
+      "feature_type": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "Gene Expression": 36601
+        },
+        "values_if_at_most_20": [
+          "Gene Expression"
+        ]
+      },
+      "gene_symbol": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 36591,
+        "value_counts_if_at_most_20": {},
+        "values_if_at_most_20": []
+      },
+      "genome_build": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "GRCh38": 36601
+        },
+        "values_if_at_most_20": [
+          "GRCh38"
+        ]
+      },
+      "organism": {
+        "dtype": "object",
+        "missing": 0,
+        "missing_fraction": 0.0,
+        "numeric_max": null,
+        "numeric_min": null,
+        "unique_non_null": 1,
+        "value_counts_if_at_most_20": {
+          "Homo sapiens": 36601
+        },
+        "values_if_at_most_20": [
+          "Homo sapiens"
+        ]
+      }
+    },
+    "column_control_character_counts": {
+      "feature_id": 0,
+      "feature_namespace": 0,
+      "feature_type": 0,
+      "gene_symbol": 0,
+      "genome_build": 0,
+      "organism": 0
+    },
+    "columns": [
+      "feature_id",
+      "gene_symbol",
+      "feature_type",
+      "feature_namespace",
+      "organism",
+      "genome_build"
+    ],
+    "index_control_character_count": 0,
+    "index_dtype": "object",
+    "index_duplicate_count": 0,
+    "index_empty_string_count": 0,
+    "index_ensembl_count": 36601,
+    "index_ensembl_fraction": 1.0,
+    "index_missing": 0,
+    "index_name": "feature_id",
+    "index_sha256": "3a5b3f31ab21773f83f8c2c52b9f543bc56dcbd1b9ff68db3afc99616b492193",
+    "index_unique": true,
+    "shape": [
+      36601,
+      6
+    ]
+  },
+  "var_decisions": [
+    {
+      "action": "map",
+      "from": "feature_id",
+      "target": "ensembl_id"
+    },
+    {
+      "action": "retain",
+      "from": "feature_id, gene_symbol",
+      "target": "author_gene_id, author_gene_symbol"
+    },
+    {
+      "action": "retain",
+      "reason": "source-backed human/Ensembl/GRCh38 values are complete",
+      "target": "organism, feature_namespace, genome_build"
+    }
+  ],
+  "var_verdict": {
+    "control_characters": 0,
+    "dimension_matches_X": true,
+    "index_unique": true,
+    "namespace": "Ensembl gene ID",
+    "species": "Homo sapiens"
+  },
+  "x_audit": {
+    "column_parity": true,
+    "manifest_readback": {
+      "data_dtype": "uint32",
+      "data_sha256": "150d21b493efbd02d2df3975e10cd1e666ca6cceaf531450c6cdde92bd3e2b11",
+      "finite_value_sum": 353596498,
+      "format": "csr",
+      "indices_sha256": "3bcb95c426e376ef3aa926cf35b4c6a9d702de20566880358d1aaf75ffb6efe6",
+      "indptr_sha256": "9c3021fe2df078d86fa56497c09a662e09ee904292ba925389c150f0147b16a6",
+      "max_count": 1742,
+      "nnz_stored": 150379884,
+      "shape": [
+        59373,
+        36601
+      ]
+    },
+    "registry_n_observations": null,
+    "registry_n_observations_state": "unpopulated; dimensional parity comes from immutable manifest readback",
+    "row_parity": true,
+    "x_semantics": "raw_counts"
+  }
+}

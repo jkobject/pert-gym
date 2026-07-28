@@ -1,0 +1,600 @@
+{
+  "actual_artifact_inventory": [
+    {
+      "filename": "obs.parquet",
+      "generation": "1784261650385753",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/obs.parquet#1784261650385753",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/obs.parquet",
+      "producer_generation_readback": {
+        "generation": "1784261650385753",
+        "sha256": "08000d645cd956dd4347b573309c93649e90ce20c8b0e3fec9356abfc75f6429",
+        "size_bytes": 815115
+      },
+      "role": "obs",
+      "sha256": "08000d645cd956dd4347b573309c93649e90ce20c8b0e3fec9356abfc75f6429",
+      "size_bytes": 815115,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/obs.parquet"
+    },
+    {
+      "filename": "X.h5ad",
+      "generation": "1784261654541813",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/X.h5ad#1784261654541813",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/X.h5ad",
+      "producer_generation_readback": {
+        "generation": "1784261654541813",
+        "sha256": "539679ae0cfe3b9dbe520ddcbe66a02412cdd584f51d72b219365ebc905a0dab",
+        "size_bytes": 346165303
+      },
+      "role": "X",
+      "sha256": "539679ae0cfe3b9dbe520ddcbe66a02412cdd584f51d72b219365ebc905a0dab",
+      "size_bytes": 346165303,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/X.h5ad"
+    },
+    {
+      "filename": "var.parquet",
+      "generation": "1784261658863295",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/var.parquet#1784261658863295",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/var.parquet",
+      "producer_generation_readback": {
+        "generation": "1784261658863295",
+        "sha256": "8ecf8caa5f2c6016c9502c11535aef629654178edb1b16dbbba871fab3507f1f",
+        "size_bytes": 899557
+      },
+      "role": "var",
+      "sha256": "8ecf8caa5f2c6016c9502c11535aef629654178edb1b16dbbba871fab3507f1f",
+      "size_bytes": 899557,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/var.parquet"
+    }
+  ],
+  "artifact_count": 3,
+  "bounded_wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-11-of-13",
+    "number": 11,
+    "outcome_task_id": "t_9a70b828",
+    "singular": true
+  },
+  "bounded_wave_assignment": {
+    "accepted_evidence": null,
+    "existing_builder": null,
+    "outcome_task_id": "t_9a70b828",
+    "record_id": "temporal_v4_109_stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+    "status": "triage",
+    "wave": 11
+  },
+  "catalogue_row_ids": [
+    109
+  ],
+  "component": "Stable chambered cardioids from human pluripotent stem cells scRNA-seq",
+  "control_inputs": {
+    "catalogue": {
+      "sha256": "4d31f341b60163ba1bcf6293746b9f8fe483cbccf6cd975367ed62a30467fdea"
+    },
+    "graph": {
+      "sha256": "59c18752f65257270b980353811da5bf554d5ac2b6c11c550a63849664ce9c98"
+    },
+    "publication_manifest": {
+      "sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4"
+    }
+  },
+  "controlling_record": {
+    "catalogue_origins": [
+      "temporal_pretraining_datasets_v4"
+    ],
+    "catalogue_row_ids": [
+      109
+    ],
+    "classification": "executable",
+    "collection_membership": {
+      "artifact_keys_sample": [],
+      "authoritative_coverage_note": "metadata match only; no live Lamin assertion",
+      "canonical_20260621_member_count": 0,
+      "categories": {}
+    },
+    "completion_state": "source_executable_not_completion",
+    "component": "Stable chambered cardioids from human pluripotent stem cells scRNA-seq",
+    "denominator_basis": "temporal_pretraining_datasets_v4 retained row + upstream immutable accession/collection identity",
+    "downloadable": "yes",
+    "evidence_paths": [
+      "data/temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv"
+    ],
+    "exact_remaining_work": "Resolve exact payload manifest and execute EU-worker backed conversion/publication with readback; catalogue/source probe alone is never completion.",
+    "exclusion_reason": "",
+    "existing_lamin_coverage": "no matched member in unified_collection_manifest_20260621",
+    "expected_denominator_verbatim": "catalogue logical row; cells=unknown",
+    "logical_dataset": "stable chambered cardioids from human pluripotent stem cells scrna seq",
+    "modality": "scRNA-seq/organoid",
+    "modality_contract": "expression_like_obs_X_var",
+    "pilot_or_probe_is_complete": false,
+    "record_id": "temporal_v4_109_stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+    "source_bytes": null,
+    "source_integrity_identity": [
+      "upstream_immutable_identity:GSE269572"
+    ],
+    "source_n_obs": null,
+    "source_n_vars": null,
+    "source_object_identity": "GSE269572",
+    "source_uri": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE269572",
+    "target_logical_key": "pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+    "target_shared_var_identity": "sha256(canonical ordered var identifiers + organism + feature namespace); compute on EU worker before publication",
+    "target_zarr_or_block_plan": "EU-worker backed probe then adaptive sparse row blocks; never Mac payload"
+  },
+  "dataset": {
+    "consumer_readback_reached_built_data": true,
+    "links": {
+      "X_to_var": "identical ordered Ensembl feature_id",
+      "obs_to_X": "identical ordered cell_id"
+    },
+    "matrix_build_inventory": {
+      "finite_value_sum": 353596498,
+      "max_count": 1742,
+      "nnz_stored": 150379884,
+      "shape": [
+        59373,
+        36601
+      ]
+    },
+    "objects": {
+      "X": {
+        "filename": "X.h5ad",
+        "generation": "1784261654541813",
+        "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/X.h5ad#1784261654541813",
+        "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/X.h5ad",
+        "producer_generation_readback": {
+          "generation": "1784261654541813",
+          "sha256": "539679ae0cfe3b9dbe520ddcbe66a02412cdd584f51d72b219365ebc905a0dab",
+          "size_bytes": 346165303
+        },
+        "role": "X",
+        "sha256": "539679ae0cfe3b9dbe520ddcbe66a02412cdd584f51d72b219365ebc905a0dab",
+        "size_bytes": 346165303,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/X.h5ad"
+      },
+      "obs": {
+        "filename": "obs.parquet",
+        "generation": "1784261650385753",
+        "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/obs.parquet#1784261650385753",
+        "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/obs.parquet",
+        "producer_generation_readback": {
+          "generation": "1784261650385753",
+          "sha256": "08000d645cd956dd4347b573309c93649e90ce20c8b0e3fec9356abfc75f6429",
+          "size_bytes": 815115
+        },
+        "role": "obs",
+        "sha256": "08000d645cd956dd4347b573309c93649e90ce20c8b0e3fec9356abfc75f6429",
+        "size_bytes": 815115,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/obs.parquet"
+      },
+      "var": {
+        "filename": "var.parquet",
+        "generation": "1784261658863295",
+        "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/var.parquet#1784261658863295",
+        "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/var.parquet",
+        "producer_generation_readback": {
+          "generation": "1784261658863295",
+          "sha256": "8ecf8caa5f2c6016c9502c11535aef629654178edb1b16dbbba871fab3507f1f",
+          "size_bytes": 899557
+        },
+        "role": "var",
+        "sha256": "8ecf8caa5f2c6016c9502c11535aef629654178edb1b16dbbba871fab3507f1f",
+        "size_bytes": 899557,
+        "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572/var.parquet"
+      }
+    },
+    "prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/datasets/GSE269572",
+    "quality_disposition": "included_exactly_once",
+    "readback": {
+      "matrix": {
+        "data_dtype": "uint32",
+        "data_sha256": "150d21b493efbd02d2df3975e10cd1e666ca6cceaf531450c6cdde92bd3e2b11",
+        "finite_value_sum": 353596498,
+        "format": "csr",
+        "indices_sha256": "3bcb95c426e376ef3aa926cf35b4c6a9d702de20566880358d1aaf75ffb6efe6",
+        "indptr_sha256": "9c3021fe2df078d86fa56497c09a662e09ee904292ba925389c150f0147b16a6",
+        "max_count": 1742,
+        "nnz_stored": 150379884,
+        "shape": [
+          59373,
+          36601
+        ]
+      },
+      "missing_control_identity": 59373,
+      "missing_donor_age": 59373,
+      "obs_columns": [
+        "source_accession",
+        "sample_accession",
+        "sample_title",
+        "source_file",
+        "source_cell_barcode",
+        "source_name",
+        "source_cell_line",
+        "treatment",
+        "condition",
+        "timepoint",
+        "timepoint_unit",
+        "development_stage",
+        "donor_age",
+        "donor_sex",
+        "donor_ethnicity",
+        "organism",
+        "assay",
+        "tissue",
+        "is_control",
+        "trajectory_id",
+        "source_matrix_semantics"
+      ],
+      "obs_index_sha256": "536695b038b90787fb0c097e62beedcfed80187f8300b3aec8e045398c162f0e",
+      "sample_count": 11,
+      "sample_counts": {
+        "GSM8322368": 8604,
+        "GSM8322369": 8594,
+        "GSM8322370": 8580,
+        "GSM8322371": 4969,
+        "GSM8322372": 4945,
+        "GSM8322373": 4926,
+        "GSM8322374": 3773,
+        "GSM8322375": 3793,
+        "GSM8322376": 3592,
+        "GSM8322377": 3798,
+        "GSM8322378": 3799
+      },
+      "shape": [
+        59373,
+        36601
+      ],
+      "timepoint_counts": {
+        "42.5": 59373
+      },
+      "treatment_counts": {
+        "2D culture": 25778,
+        "with PD173074": 14840,
+        "without PD173074": 18755
+      },
+      "var_columns": [
+        "feature_id",
+        "gene_symbol",
+        "feature_type",
+        "feature_namespace",
+        "organism",
+        "genome_build"
+      ],
+      "var_index_sha256": "0cc93e6a3a32e02834d8942635ae769d1a5a839fd4d78e802bc98db8b08bd460"
+    }
+  },
+  "dataset_count": 1,
+  "duplicate_probe": {
+    "access_mode": "read_only_metadata",
+    "branch": "jkobject",
+    "candidate_count": 0,
+    "complete_publication_detected": false,
+    "exact_logical_hits": [],
+    "instance": "laminlabs/pertdata",
+    "queries": [
+      {
+        "count": 0,
+        "label": "exact_logical_prefix"
+      },
+      {
+        "count": 0,
+        "label": "accession_key"
+      },
+      {
+        "count": 0,
+        "label": "accession_description"
+      }
+    ]
+  },
+  "immutability": {
+    "generation_pinned": true,
+    "manifest_written_last": true,
+    "overwrite_refused": true
+  },
+  "ledger": {
+    "accepted_delta_at_build": 0,
+    "catalogue_row_ids": [
+      109
+    ],
+    "debits": {
+      "dropped_observations": 0,
+      "exclusions": 0,
+      "product_credit": 0
+    },
+    "input_accounting": {
+      "accounted_inputs": 6,
+      "controls": 3,
+      "expected_inputs": 6,
+      "geo_tar_members": 33,
+      "upstream_source_objects": 3
+    },
+    "note": "Build submission only; independent test/review is required before accepted publication credit.",
+    "observation_accounting": {
+      "catalogue_source_n_obs_verbatim": null,
+      "excluded_n_obs": 0,
+      "materialized_n_obs": 59373,
+      "resolved_source_n_obs": 59373
+    },
+    "output_accounting": {
+      "accounted_outputs": 5,
+      "expected_outputs": 5,
+      "ledger_objects": 1,
+      "manifest_objects": 1,
+      "triplet_artifacts": 3
+    },
+    "record_id": "temporal_v4_109_stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+    "sample_accounting": {
+      "geo_samples": 11,
+      "materialized_samples": 11,
+      "matrix_members": 11
+    },
+    "schema_version": "pert-gym.proposed-publication-ledger/v2",
+    "submission_id": "pert-gym-ledger:materialized-build:t_c9182b7d:temporal_v4_109_stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+    "submission_status": "submitted_materialized_build_entry_zero_product_credit",
+    "target_logical_key": "pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+    "wave": {
+      "assignment_count": 1,
+      "id": "publication-wave-11-of-13",
+      "number": 11,
+      "outcome_task_id": "t_9a70b828",
+      "singular": true
+    }
+  },
+  "ledger_object": {
+    "generation": "1784261665935265",
+    "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/ledger.json#1784261665935265",
+    "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/ledger.json",
+    "sha256": "8e98732386e824225b09a4ef4a40a8c5562bfd27547498f675c791ea12914777",
+    "size_bytes": 1571,
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/ledger.json"
+  },
+  "missingness": {
+    "absent_source_fields": [
+      "donor_age",
+      "donor_sex",
+      "donor_ethnicity",
+      "disease",
+      "cell_type_annotation",
+      "cell_level_qc_metrics",
+      "source_low_quality_flag",
+      "control_identity",
+      "replicate_donor_identity"
+    ],
+    "affected_observations": 59373,
+    "age_state": "donor age is absent for every observation; day 42.5 is retained as cardioid/culture developmental time and is not donor age",
+    "catalogue_cells_field": null,
+    "catalogue_cells_field_state": "missing/unknown denominator in frozen catalogue; resolved from all eleven GEO matrices",
+    "control_state": "the three-arm design has 2D, cardioids with PD173074, and cardioids without PD173074; no binary control is silently inferred",
+    "dependency_created": false,
+    "excluded_observations": 0,
+    "excluded_records": 0,
+    "metadata_state": "GEO sample accession/title, H9 cell line, exact treatment group, day 42.5, source file, and barcode are retained; donor, cell annotation, and unambiguous control identity remain explicit missingness",
+    "non_excluding": true,
+    "quality_state": "GEO supplies Cell Ranger v7 processed count matrices without cell-level QC fields or accepted low-quality flags; all 59,373 author-supplied cells are retained"
+  },
+  "observation_count": 59373,
+  "provenance": {
+    "builder_script": "/tmp/t_c9182b7d-build/input/build_component.py",
+    "builder_script_sha256": "00ded4694a2caadb45e86d4cb4d2479d99bac14863d005995f1adb064b500452",
+    "command": "uv run python build_component.py --input /tmp/t_c9182b7d-build/input --output /tmp/t_c9182b7d-build/output",
+    "finished_unix": 1784261665.969045,
+    "host": "pert-gym-worker-eu",
+    "started_unix": 1784261566.8619905
+  },
+  "record_id": "temporal_v4_109_stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+  "revision": "temporal-v4-109-wave11-44e9698e81722058",
+  "revision_prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058",
+  "sample_count": 11,
+  "schema_version": "pert-gym.materialized-component/v2",
+  "source_identity": {
+    "accession": "GSE269572",
+    "raw_tar_member_count": 33,
+    "raw_tar_member_inventory": [
+      {
+        "compressed_sha256": "4ff05369e768587bcbefcf92a43ed3cb5d70cbe80d25cc7bf49b45998525de4b",
+        "compressed_size_bytes": 44123,
+        "name": "GSM8322368_SC_2D-1_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "11cbe96cf26adba2c6fb8ca6405f170aa3319ac219978d9af65505dd05bc74a8",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322368_SC_2D-1_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "5cecd0643bd95665eb713a55a31c22ae4e9a4608ae7fa0171fd04800b6f761ae",
+        "compressed_size_bytes": 76618329,
+        "name": "GSM8322368_SC_2D-1_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "9f53145902b7499f1ff0ee4a54971797f46aa5e520d1401b63020e063b04f1d4",
+        "compressed_size_bytes": 44002,
+        "name": "GSM8322369_SC_2D-2_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "021629d515c54209d5a83b5fb59a284e38d8d54e2148e7e521609f2a16273ab1",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322369_SC_2D-2_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "6d4f69dd2b38394f0efabc39392d1ab28c0b1675733542f2b174af8a718d2e91",
+        "compressed_size_bytes": 75258221,
+        "name": "GSM8322369_SC_2D-2_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "c85d9d514e5a40e59f8698007b9403c59c5b61a291caa4dedab24cbe0baf47dc",
+        "compressed_size_bytes": 43977,
+        "name": "GSM8322370_SC-2D-3_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "d085c9299ea9ecd9c97c32e9623bba04745145671fd94aa2fe8e47d97bad4ae1",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322370_SC-2D-3_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "83ae698235d6b6dbeb8cfb6a1b8dc850368cb9c6d2540dcd70376fa01d857332",
+        "compressed_size_bytes": 74079671,
+        "name": "GSM8322370_SC-2D-3_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "b148fed640a99c61fdc75e2978b6e8d43593e64bc059d830c4679de5533749e7",
+        "compressed_size_bytes": 26351,
+        "name": "GSM8322371_SCPD-1_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "0bbc00e62e9a918ebd866bd83ded6dd4a7eb3dcb5eeb2c794eaceded17f7dba4",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322371_SCPD-1_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "6edeb34214cc462b269a9230d45f77bfbd678587b6bf74003f909d1b41609788",
+        "compressed_size_bytes": 52304656,
+        "name": "GSM8322371_SCPD-1_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "e5eeba51390268ccde2d0ea022825cd676f0f8dc6929392af384d8dfcf778226",
+        "compressed_size_bytes": 26229,
+        "name": "GSM8322372_SCPD-2_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "7eb0e922a7d5a05aef7ce13910e0ffa553d77f8ab75e4d26d2e930a7379d6288",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322372_SCPD-2_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "f8680b934aea252c3b2eb6ee87d0264f9a982518954c768f7ab414a8950c5907",
+        "compressed_size_bytes": 51522047,
+        "name": "GSM8322372_SCPD-2_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "fa76bd34e926685df3eac3f9dda1aa3358ffdcf7a0ddc79507b1d5087eaf661b",
+        "compressed_size_bytes": 26116,
+        "name": "GSM8322373_SCPD-3_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "97b1ad00a6e84d32f2a87feb63e34d3a0a10f52336ab756e88eb57a102135f67",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322373_SCPD-3_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "e5f5e038ee3db06f3200a25fc5d349326a96bb8f226efb67fda4aeaaa6202731",
+        "compressed_size_bytes": 50921017,
+        "name": "GSM8322373_SCPD-3_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "ed2b6db8a3e3cc759e48193c166b157a1b00da891cc000d9f408805176caf010",
+        "compressed_size_bytes": 20413,
+        "name": "GSM8322374_SCWOPD-1_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "ea1f37cf7f31d165467418dd4b0afd704c18d7f46fa523aff2e0096c4ca68334",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322374_SCWOPD-1_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "9691a1ede1c8e748e9a4d9fa3a237fb8d2c2c1beb31ba80c6d84e0c9029889f3",
+        "compressed_size_bytes": 37387690,
+        "name": "GSM8322374_SCWOPD-1_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "be769b27cf8c5555783e0850faa3e5560cc0210335aee9d75fc17a0d3bc81282",
+        "compressed_size_bytes": 20489,
+        "name": "GSM8322375_SCWOPD-2_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "b49aac31f82575407d4516a033ad76099841d9e8b84e91ee69ade17c217d39ac",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322375_SCWOPD-2_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "72ff0b4d97f8d00efd3970ab53e26309970d79deda9415c61569ba63455d14c0",
+        "compressed_size_bytes": 38144562,
+        "name": "GSM8322375_SCWOPD-2_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "14038082b461c37438d369a944a4e5c4afaccb16d82c12c49f1321f1c88cc411",
+        "compressed_size_bytes": 19442,
+        "name": "GSM8322376_SCWOPD-3_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "254eb4ef29b9788c09f4f2b41a0c2142e69e45472a8492c202d2fe1bb713cae2",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322376_SCWOPD-3_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "c94d891137b01f61bfb5a4f2a1d32a6ae167b5773dc328348718657b0815af4e",
+        "compressed_size_bytes": 24296681,
+        "name": "GSM8322376_SCWOPD-3_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "e3f5d36fecf20372bcef9aaa45599c9261ccf1434570b0a51a271f77d019951e",
+        "compressed_size_bytes": 20503,
+        "name": "GSM8322377_SCWOPD-4_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "71f4eb454bbaed8bcffafcb435c9089f01b80e2a7477509c01de9e5daf5d8615",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322377_SCWOPD-4_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "1877675a46be3768bcdbdca80d0f51d2ee7ec119a34e4cb3dc007729c9c74996",
+        "compressed_size_bytes": 38825931,
+        "name": "GSM8322377_SCWOPD-4_matrix.mtx.gz"
+      },
+      {
+        "compressed_sha256": "b4757dd532aedc77af32bb4996b9b1e7091729fa16eb2df8b7b4195a9c2c852d",
+        "compressed_size_bytes": 20518,
+        "name": "GSM8322378_SCWOPD-5_barcodes.tsv.gz"
+      },
+      {
+        "compressed_sha256": "b4146442f3de86cf08a853a8862b16d015805cf66c6de251def5321733229f54",
+        "compressed_size_bytes": 333437,
+        "name": "GSM8322378_SCWOPD-5_features.tsv.gz"
+      },
+      {
+        "compressed_sha256": "37432016c0b12e2995fc9b8fd8c4d9f4f0933b4bd4622161fdea7c12e5b74e61",
+        "compressed_size_bytes": 38354059,
+        "name": "GSM8322378_SCWOPD-5_matrix.mtx.gz"
+      }
+    ],
+    "series_metadata": {
+      "overall_design": "There are three groups in this study: 2D cultured tissue, stable chambered cardioids with PD173074 treatment, and stable chambered cardioids without PD173074 treatment. All samples were collected for single-cell sequencing on day 42.5.",
+      "title": "Generation of Stable Chambered Cardioids from human Pluripotent Stem Cells [scRNA-seq]"
+    },
+    "source_object_identity": "GSE269572",
+    "upstream_objects": {
+      "geo_filelist": {
+        "http_headers": {
+          "Content-Length": "2432",
+          "ETag": null,
+          "Last-Modified": "Wed, 15 Apr 2026 04:52:43 GMT"
+        },
+        "sha256": "48d766c4ad8986929c6fe721a5f42ee839a71754f3256f404348dff99f70eff6",
+        "size_bytes": 2432,
+        "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/suppl/filelist.txt"
+      },
+      "geo_raw_tar": {
+        "http_headers": {
+          "Content-Length": "561725440",
+          "ETag": null,
+          "Last-Modified": "Wed, 15 Apr 2026 04:52:43 GMT"
+        },
+        "sha256": "6acd23bcb9c6d6b8a0f60f447c92edbd85243ef52732fb019f548846020c661a",
+        "size_bytes": 561725440,
+        "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/suppl/GSE269572_RAW.tar"
+      },
+      "geo_soft": {
+        "http_headers": {
+          "Content-Length": "2932",
+          "ETag": null,
+          "Last-Modified": "Thu, 16 Jul 2026 04:30:25 GMT"
+        },
+        "sha256": "6fab2319b8794e12accc125a3a63d45659c9bc72abd5c9bd7f6bebc7b05d7580",
+        "size_bytes": 2932,
+        "uri": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/soft/GSE269572_family.soft.gz"
+      }
+    },
+    "verified": true
+  },
+  "target_logical_key": "pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+  "task_id": "t_c9182b7d",
+  "triplet_count": 1,
+  "variable_count": 36601
+}

@@ -1,0 +1,68 @@
+{
+  "GSE194214_family.soft.gz": {
+    "expected_sha256": "a6e292220854d96f86f8cf99bce958890cba2ca8a7dcd3ffb1109509688bc511",
+    "headers": {
+      "Accept-Ranges": "bytes",
+      "Access-Control-Allow-Headers": "RANGE, Cache-control, If-None-Match, Content-Type",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Expose-Headers": "Content-Length, Content-Range, Content-Type",
+      "Cache-Control": "public, max-age=86400",
+      "Connection": "close",
+      "Content-Length": "3283",
+      "Content-Type": "application/x-gzip",
+      "Date": "Tue, 28 Jul 2026 10:47:07 GMT",
+      "Expires": "Tue, 04 Aug 2026 10:47:07 GMT",
+      "Last-Modified": "Sun, 26 Jul 2026 04:45:39 GMT",
+      "Server": "Apache",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
+    },
+    "sha256": "a6e292220854d96f86f8cf99bce958890cba2ca8a7dcd3ffb1109509688bc511",
+    "size_bytes": 3283,
+    "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE194nnn/GSE194214/soft/GSE194214_family.soft.gz"
+  },
+  "GSE196799_family.soft.gz": {
+    "expected_sha256": null,
+    "headers": {
+      "Accept-Ranges": "bytes",
+      "Access-Control-Allow-Headers": "RANGE, Cache-control, If-None-Match, Content-Type",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Expose-Headers": "Content-Length, Content-Range, Content-Type",
+      "Cache-Control": "public, max-age=86400",
+      "Connection": "close",
+      "Content-Length": "4991",
+      "Content-Type": "application/x-gzip",
+      "Date": "Tue, 28 Jul 2026 10:47:08 GMT",
+      "Expires": "Tue, 04 Aug 2026 10:47:08 GMT",
+      "Last-Modified": "Thu, 04 Jun 2026 04:47:37 GMT",
+      "Server": "Apache",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
+    },
+    "sha256": "73a06f660059b778772dcdc63466c6d6259b937de1cd9d1a3dea06b74207ffc5",
+    "size_bytes": 4991,
+    "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE196nnn/GSE196799/soft/GSE196799_family.soft.gz"
+  },
+  "GSE269572_family.soft.gz": {
+    "expected_sha256": "6fab2319b8794e12accc125a3a63d45659c9bc72abd5c9bd7f6bebc7b05d7580",
+    "headers": {
+      "Accept-Ranges": "bytes",
+      "Access-Control-Allow-Headers": "RANGE, Cache-control, If-None-Match, Content-Type",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Expose-Headers": "Content-Length, Content-Range, Content-Type",
+      "Cache-Control": "public, max-age=86400",
+      "Connection": "close",
+      "Content-Length": "2932",
+      "Content-Type": "application/x-gzip",
+      "Date": "Tue, 28 Jul 2026 10:47:08 GMT",
+      "Expires": "Tue, 04 Aug 2026 10:47:08 GMT",
+      "Last-Modified": "Thu, 16 Jul 2026 04:30:25 GMT",
+      "Server": "Apache",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
+    },
+    "sha256": "6fab2319b8794e12accc125a3a63d45659c9bc72abd5c9bd7f6bebc7b05d7580",
+    "size_bytes": 2932,
+    "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/soft/GSE269572_family.soft.gz"
+  }
+}
