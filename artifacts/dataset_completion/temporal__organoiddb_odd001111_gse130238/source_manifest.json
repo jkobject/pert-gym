@@ -108,17 +108,23 @@
     "obs": {
       "uid": "hMei5vxivF2GH5DV0000",
       "key": "data/cleaned/GSE130238/obs.parquet",
-      "sha256": "a5865a22ad2a698f895179bc5521802eb2120db585e9292da6141a9d69faf092"
+      "generation": 1785154234178631,
+      "size": 322412,
+      "sha256": "a586dfe96c6f1e3258b6affec7f21db7b9930391349aa8fe818b21d8e8ac29e5"
     },
     "X": {
       "uid": "lVUodgrG2F2izaVd0000",
       "key": "data/cleaned/GSE130238/X.h5ad",
-      "sha256": "40ec513843e44ee9fc005ba86a880ee42834c7830f70c7c55233e7c74affc8f1"
+      "generation": 1785154234123823,
+      "size": 69866889,
+      "sha256": "40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386"
     },
     "var": {
       "uid": "y0V1sLQ45pbtf6oS0000",
       "key": "data/cleaned/GSE130238/var.parquet",
-      "sha256": "704a5637f60b07969e4e65793f5eb37f227f3f915bbf37d142356496f12bfa51"
+      "generation": 1785154234178830,
+      "size": 841985,
+      "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00"
     }
   },
   "expected": {
