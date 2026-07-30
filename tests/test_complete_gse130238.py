@@ -289,8 +289,11 @@ def test_distributed_lease_heartbeat_renews_and_surfaces_failure() -> None:
         with module.DistributedLeaseHeartbeat(
             failing, interval_seconds=0.01
         ) as heartbeat:
-            time.sleep(0.03)
-            heartbeat.assert_healthy()
+            deadline = time.monotonic() + 1.0
+            while time.monotonic() < deadline:
+                time.sleep(0.01)
+                heartbeat.assert_healthy()
+            pytest.fail("heartbeat failure was not surfaced before the deadline")
 
 
 def test_materialize_artifact_streams_remote_path_not_lamin_cache(
@@ -316,3 +319,44 @@ def test_materialize_artifact_streams_remote_path_not_lamin_cache(
 
     assert result == destination
     assert destination.read_bytes() == b"fresh remote payload"
+
+
+def test_materialize_artifact_pins_gcs_generation_and_size(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    module = load_module()
+    commands: list[list[str]] = []
+
+    def fake_run(command: list[str], *, check: bool) -> None:
+        assert check
+        commands.append(command)
+        Path(command[-1]).write_bytes(b"frozen bytes")
+
+    monkeypatch.setattr(module.subprocess, "run", fake_run)
+    artifact = SimpleNamespace(path="gs://scperturb/data/payload.parquet")
+    destination = tmp_path / "payload.parquet"
+
+    module.materialize_artifact(
+        artifact,
+        destination,
+        {"generation": 123456, "size": len(b"frozen bytes")},
+    )
+
+    assert commands == [
+        [
+            "gcloud",
+            "storage",
+            "cp",
+            "--billing-project",
+            module.BILLING_PROJECT,
+            "gs://scperturb/data/payload.parquet#123456",
+            str(destination),
+        ]
+    ]
+
+    with pytest.raises(AssertionError, match="generation-pinned artifact size drift"):
+        module.materialize_artifact(
+            artifact,
+            tmp_path / "wrong-size.parquet",
+            {"generation": 123456, "size": 1},
+        )

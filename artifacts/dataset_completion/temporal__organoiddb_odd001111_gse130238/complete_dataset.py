@@ -104,17 +104,26 @@ def canonical(value: Any) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), default=str)
 
 
-def materialize_artifact(artifact: Any, destination: Path) -> Path:
+def materialize_artifact(
+    artifact: Any,
+    destination: Path,
+    expected: dict[str, Any] | None = None,
+) -> Path:
     """Materialize fresh remote bytes, bypassing any pre-existing Lamin cache."""
     destination.parent.mkdir(parents=True, exist_ok=True)
     source_path = artifact.path
     uri = str(source_path)
     if uri.startswith("gs://"):
+        generation = None if expected is None else expected.get("generation")
+        source_uri = f"{uri}#{generation}" if generation is not None else uri
         command = ["gcloud", "storage", "cp"]
         if uri.startswith("gs://scperturb/"):
             command.extend(["--billing-project", BILLING_PROJECT])
-        command.extend([uri, str(destination)])
+        command.extend([source_uri, str(destination)])
         subprocess.run(command, check=True)
+        if expected is not None and expected.get("size") is not None:
+            if destination.stat().st_size != int(expected["size"]):
+                raise AssertionError("generation-pinned artifact size drift")
         return destination
     if "://" in uri and not uri.startswith("file://"):
         if hasattr(source_path, "open"):
@@ -461,7 +470,11 @@ def bounded_main_duplicate_probe(ln: Any) -> dict[str, Any]:
 def inspect_x(
     x_artifact: Any, manifest: dict[str, Any], scratch: Path
 ) -> dict[str, Any]:
-    path = materialize_artifact(x_artifact, scratch / "X.h5ad")
+    path = materialize_artifact(
+        x_artifact,
+        scratch / "X.h5ad",
+        manifest["accepted_artifacts"]["X"],
+    )
     artifact_sha256 = sha256_file(path)
     if artifact_sha256 != manifest["accepted_artifacts"]["X"]["sha256"]:
         raise AssertionError("accepted X payload checksum drift")
@@ -1007,8 +1020,16 @@ def prepare(ln: Any, manifest: dict[str, Any]) -> dict[str, Any]:
             raise AssertionError(f"frozen {name} key identity drift")
         if getattr(artifact, "hash", None) in (None, ""):
             raise AssertionError(f"frozen {name} registry hash missing")
-    baseline_path = materialize_artifact(baseline_obs, scratch / "baseline_obs.parquet")
-    var_path = materialize_artifact(var_artifact, scratch / "var.parquet")
+    baseline_path = materialize_artifact(
+        baseline_obs,
+        scratch / "baseline_obs.parquet",
+        manifest["accepted_artifacts"]["obs"],
+    )
+    var_path = materialize_artifact(
+        var_artifact,
+        scratch / "var.parquet",
+        manifest["accepted_artifacts"]["var"],
+    )
     if sha256_file(baseline_path) != manifest["accepted_artifacts"]["obs"]["sha256"]:
         raise AssertionError("accepted OBS payload checksum drift")
     if sha256_file(var_path) != manifest["accepted_artifacts"]["var"]["sha256"]:
