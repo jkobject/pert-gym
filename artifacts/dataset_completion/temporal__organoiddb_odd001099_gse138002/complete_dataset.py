@@ -391,7 +391,11 @@ def verify_var(var: pd.DataFrame, x_receipt: dict[str, Any]) -> dict[str, Any]:
         ),
         "species": bool(var["organism"].astype(str).eq("Homo sapiens").all()),
         "namespace": bool(
-            var["feature_namespace"].astype(str).str.casefold().eq("ensembl").all()
+            var["feature_namespace"]
+            .astype(str)
+            .str.casefold()
+            .isin({"ensembl", "ensembl gene"})
+            .all()
         ),
         "x_shape": x_receipt["shape"][1] == len(var),
     }
