@@ -692,6 +692,61 @@ def curate_obs(
         "rows": len(curated),
         "canonical_fields": len(CANONICAL_FIELDS),
         "obs_uuid_unique": bool(curated["obs_uuid"].is_unique),
+        "scientific_modality": {
+            "value": "observational single-cell RNA expression atlas of human retinal development",
+            "perturbation": "none",
+            "evidence": [
+                "GSE138002 GEO series design and extraction protocol",
+                "PMID:32386599 / DOI:10.1016/j.devcel.2020.04.009",
+                "GSE138002_Final_barcodes.csv.gz",
+            ],
+        },
+        "experimental_unit": {
+            "observation_level": "cell",
+            "sample_level": "source sample/developmental context",
+            "dataset_level": "human retina and retinal-organoid atlas",
+        },
+        "experimental_axes": {
+            "biological_age": {
+                "interpretation": "chronological developmental age within separate retinal-organoid, fetal-primary, and postnatal-primary trajectories; not batch or pseudotime",
+                "canonical_unit": "minute",
+                "raw_value_frequencies": {
+                    str(key): int(value)
+                    for key, value in baseline["source_age_label"]
+                    .astype("string")
+                    .value_counts(dropna=False)
+                    .sort_index()
+                    .items()
+                },
+                "raw_unit_frequencies": {
+                    str(key): int(value)
+                    for key, value in unit.value_counts(dropna=False)
+                    .sort_index()
+                    .items()
+                },
+                "numeric_cardinality_by_trajectory": {
+                    str(name): int(
+                        timepoint.loc[trajectory.eq(name)].nunique(dropna=True)
+                    )
+                    for name in trajectory.drop_duplicates().sort_values()
+                },
+                "adult_numeric_age": "unknown",
+            },
+            "cell_type": {
+                "raw_cardinality": int(source_type.nunique(dropna=True)),
+                "level": "cell",
+            },
+            "source_sample": {
+                "cardinality": int(baseline["sample"].nunique(dropna=True)),
+                "level": "cell-to-sample join",
+            },
+        },
+        "outcomes_endpoints": {
+            "scalar_response_endpoint": "not_applicable",
+            "survival_or_viability": "not_applicable",
+            "expression_matrix": "raw_counts",
+            "source_umap": "descriptive embedding, not pseudotime or outcome",
+        },
         "numeric_timepoint_rows": int(timepoint.notna().sum()),
         "adult_unknown_timepoint_rows": int(timepoint.isna().sum()),
         "cell_type_ontology_mapped_rows": int(mapped_term.notna().sum()),

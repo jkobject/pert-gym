@@ -66,6 +66,16 @@ def test_curate_obs_preserves_order_and_materializes_contract() -> None:
     assert curated["obs_uuid"].is_unique
     assert umap.shape == (4, 4)
     assert receipt["OBS_COMPLETED"] is True
+    assert receipt["scientific_modality"]["perturbation"] == "none"
+    age_axis = receipt["experimental_axes"]["biological_age"]
+    assert age_axis["numeric_cardinality_by_trajectory"] == {
+        "adult_primary_retina": 0,
+        "fetal_primary_retina": 1,
+        "retinal_organoid": 2,
+    }
+    assert receipt["outcomes_endpoints"]["scalar_response_endpoint"] == (
+        "not_applicable"
+    )
     for field in module.CANONICAL_FIELDS:
         assert field in curated
         assert f"{field}_state" in curated
