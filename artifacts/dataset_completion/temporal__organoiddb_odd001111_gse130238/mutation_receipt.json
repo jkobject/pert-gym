@@ -1,0 +1,471 @@
+{
+  "branch": "jkobject",
+  "canonical_sha256": "6b09714b9b816d123a564b3a37a07f3ebadc52600d3c25850a5900ae631c859c",
+  "collection": {
+    "duplicate_keys": 0,
+    "predecessor_hash": "c5eIDLYNirtHuEw0kjhRzg",
+    "predecessor_key": "pert-gym/additions/20260730-odd001155-gse196799-e2e",
+    "predecessor_member_count": 1018,
+    "predecessor_membership_sha256": "0f39bcfc78daa93b481f8364b9b378f14be153ee40c33ab2e19ca78c58c864b4",
+    "predecessor_uid": "FlK1x1wByjbMTRCM0000",
+    "successor_hash": "zPWFZ2AJpCM5K6GVpT9KsA",
+    "successor_key": "pert-gym/additions/20260730-gse130238-e2e",
+    "successor_member_count": 1018,
+    "successor_membership_sha256": "ad25387d5defe49babb570821b60733d38f69a7f176274409eeacfe7ae7bd924",
+    "successor_uid": "whLgwg8opPvW9qdN0000",
+    "target_obs_uid": "hMei5vxivF2GH5DV0001"
+  },
+  "completed_at_epoch": 1785438805,
+  "dataset_id": "temporal/organoiddb_odd001111_gse130238",
+  "format": "pert-gym.dataset-completion/v1",
+  "gates": {
+    "OBS": "PASS",
+    "VAR": "PASS",
+    "canonical_storage": "PASS",
+    "chunks": "PASS",
+    "cleaning": "PASS",
+    "collection": "PASS",
+    "lamin_jkobject": "PASS"
+  },
+  "helper_sha256": "3b6817abd406778c1be1531bcb424f2007e929df8cbc13038fe8885efa27e540",
+  "host": {
+    "available_memory_bytes": 32908726272,
+    "free_disk_bytes": 268736512000,
+    "hostname": "pert-gym-worker-eu",
+    "project": "jkobject-1549353370965",
+    "zone": "europe-west1-b"
+  },
+  "instance": "laminlabs/pertdata",
+  "lifecycle_lease_readback": {
+    "lease-until": "20260730t201124z",
+    "owner": "jkobject",
+    "project": "pert-gym",
+    "purpose": "gse130238-mutate",
+    "task": "t-9b5c70a6"
+  },
+  "member_after": {
+    "X": {
+      "created_at": "2026-07-18 11:03:38.493589+00:00",
+      "hash": "r-S8FfGVzoK2RdOe6ZX5bg",
+      "key": "data/cleaned/GSE130238/X.h5ad",
+      "size": 69866889,
+      "uid": "lVUodgrG2F2izaVd0000"
+    },
+    "expected_obs_frame_sha256": "c75b8e2971b7f9582361a47eb085b9faaf134f60ab42c2c8ed88d8c5c63aef23",
+    "obs": {
+      "created_at": "2026-07-30 19:13:00.255430+00:00",
+      "hash": "0-eESH_7RDv2sRBFWlXsDQ",
+      "key": "data/cleaned/GSE130238/obs.parquet",
+      "size": 1497809,
+      "uid": "hMei5vxivF2GH5DV0001"
+    },
+    "obs_history_count": 2,
+    "obs_receipt": {
+      "OBS_COMPLETED": true,
+      "canonical_fields": 42,
+      "cell_type_evidence": {
+        "reason": "aggregate publication classes have no barcode-level join and analyze 15,990 rather than 16,086 GEO matrix cells",
+        "state": "unknown"
+      },
+      "experimental_axes": {
+        "biological_time": {
+          "granularity": "sample projected to cell by exact GSM membership",
+          "normalization_convention": "mean Gregorian month = 365.25/12 days = 43,830 minutes",
+          "normalized_unit": "minute",
+          "row_frequencies": {
+            "1": 4832,
+            "10": 3208,
+            "3": 3158,
+            "6": 4888
+          },
+          "source_unit": "month",
+          "source_values": [
+            1,
+            3,
+            6,
+            10
+          ],
+          "verdict": "longitudinal_or_multitimepoint"
+        },
+        "perturbation": {
+          "levels": [
+            "none"
+          ],
+          "verdict": "not_applicable"
+        }
+      },
+      "obs_uuid_unique": true,
+      "outcomes_endpoints": {
+        "expression": "raw_counts",
+        "scalar_response": "not_applicable"
+      },
+      "residual_unknown_fields": [
+        "donor_id",
+        "cell_type",
+        "disease",
+        "sex",
+        "ethnicity",
+        "media",
+        "n_counts",
+        "n_genes",
+        "pct_mito",
+        "pct_ribo",
+        "is_low_quality"
+      ],
+      "rows": 16086,
+      "sample_join": {
+        "coverage": 16086,
+        "frequencies": {
+          "GSM3734294": 4832,
+          "GSM3734295": 3158,
+          "GSM3734296": 4888,
+          "GSM3734297": 3208
+        },
+        "unmatched": 0
+      },
+      "scientific_modality": "single-cell raw UMI expression profiling of unperturbed human cortical organoid maturation",
+      "status": "PASS"
+    },
+    "var": {
+      "created_at": "2026-07-18 11:03:39.956464+00:00",
+      "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+      "key": "data/cleaned/GSE130238/var.parquet",
+      "size": 841985,
+      "uid": "y0V1sLQ45pbtf6oS0000"
+    },
+    "var_receipt": {
+      "VAR_ENSEMBL_SPECIES_COMPLETED": true,
+      "biological_features_total": 33694,
+      "checks": {
+        "index_matches_feature_id": true,
+        "namespace": true,
+        "ordered_axis_matches_x": true,
+        "rows": true,
+        "species": true,
+        "stable_syntax": true,
+        "stable_unique": true,
+        "x_shape": true
+      },
+      "correct_species_features": 33694,
+      "provenance": [
+        "GSE130238 per-sample genes.tsv.gz files",
+        "GRCh38 GEO processing record",
+        "exact X ordered feature axis"
+      ],
+      "stable_ensembl_id_features": 33694,
+      "status": "PASS"
+    },
+    "x_receipt": {
+      "artifact_sha256": "40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386",
+      "checks": {
+        "dtype": true,
+        "encoding": true,
+        "nnz": true,
+        "obs_axis": true,
+        "raw_count_sum": true,
+        "shape": true,
+        "var_axis": true
+      },
+      "dtype": "uint32",
+      "encoding": "csr_matrix",
+      "nnz": 29387863,
+      "obs_axis_sha256_ordered": "ef29dab9266c41eee78de1343c07d9f9f78a383157e2ea1c7484cdbee9cd304c",
+      "path_materialized": true,
+      "raw_count_sum": 86379368,
+      "shape": [
+        16086,
+        33694
+      ],
+      "uid": "lVUodgrG2F2izaVd0000",
+      "var_axis_sha256_ordered": "7eb86babb45d8bfedc121c1d964603857d4b54d062de98bd2f84739a284ce304"
+    }
+  },
+  "member_before": {
+    "X": {
+      "created_at": "2026-07-18 11:03:38.493589+00:00",
+      "hash": "r-S8FfGVzoK2RdOe6ZX5bg",
+      "key": "data/cleaned/GSE130238/X.h5ad",
+      "size": 69866889,
+      "uid": "lVUodgrG2F2izaVd0000"
+    },
+    "expected_obs_frame_sha256": "c75b8e2971b7f9582361a47eb085b9faaf134f60ab42c2c8ed88d8c5c63aef23",
+    "obs": {
+      "created_at": "2026-07-18 11:03:37.000379+00:00",
+      "hash": "mh5igcwpyGAjU5hzN2ZkcQ",
+      "key": "data/cleaned/GSE130238/obs.parquet",
+      "size": 322412,
+      "uid": "hMei5vxivF2GH5DV0000"
+    },
+    "obs_history_count": 1,
+    "obs_receipt": {
+      "OBS_COMPLETED": true,
+      "canonical_fields": 42,
+      "cell_type_evidence": {
+        "reason": "aggregate publication classes have no barcode-level join and analyze 15,990 rather than 16,086 GEO matrix cells",
+        "state": "unknown"
+      },
+      "experimental_axes": {
+        "biological_time": {
+          "granularity": "sample projected to cell by exact GSM membership",
+          "normalization_convention": "mean Gregorian month = 365.25/12 days = 43,830 minutes",
+          "normalized_unit": "minute",
+          "row_frequencies": {
+            "1": 4832,
+            "10": 3208,
+            "3": 3158,
+            "6": 4888
+          },
+          "source_unit": "month",
+          "source_values": [
+            1,
+            3,
+            6,
+            10
+          ],
+          "verdict": "longitudinal_or_multitimepoint"
+        },
+        "perturbation": {
+          "levels": [
+            "none"
+          ],
+          "verdict": "not_applicable"
+        }
+      },
+      "obs_uuid_unique": true,
+      "outcomes_endpoints": {
+        "expression": "raw_counts",
+        "scalar_response": "not_applicable"
+      },
+      "residual_unknown_fields": [
+        "donor_id",
+        "cell_type",
+        "disease",
+        "sex",
+        "ethnicity",
+        "media",
+        "n_counts",
+        "n_genes",
+        "pct_mito",
+        "pct_ribo",
+        "is_low_quality"
+      ],
+      "rows": 16086,
+      "sample_join": {
+        "coverage": 16086,
+        "frequencies": {
+          "GSM3734294": 4832,
+          "GSM3734295": 3158,
+          "GSM3734296": 4888,
+          "GSM3734297": 3208
+        },
+        "unmatched": 0
+      },
+      "scientific_modality": "single-cell raw UMI expression profiling of unperturbed human cortical organoid maturation",
+      "status": "PASS"
+    },
+    "var": {
+      "created_at": "2026-07-18 11:03:39.956464+00:00",
+      "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+      "key": "data/cleaned/GSE130238/var.parquet",
+      "size": 841985,
+      "uid": "y0V1sLQ45pbtf6oS0000"
+    },
+    "var_receipt": {
+      "VAR_ENSEMBL_SPECIES_COMPLETED": true,
+      "biological_features_total": 33694,
+      "checks": {
+        "index_matches_feature_id": true,
+        "namespace": true,
+        "ordered_axis_matches_x": true,
+        "rows": true,
+        "species": true,
+        "stable_syntax": true,
+        "stable_unique": true,
+        "x_shape": true
+      },
+      "correct_species_features": 33694,
+      "provenance": [
+        "GSE130238 per-sample genes.tsv.gz files",
+        "GRCh38 GEO processing record",
+        "exact X ordered feature axis"
+      ],
+      "stable_ensembl_id_features": 33694,
+      "status": "PASS"
+    },
+    "x_receipt": {
+      "artifact_sha256": "40ec633b49cad4510a204047e04ce19c6285c5c8579b2dce6e89f574915a0386",
+      "checks": {
+        "dtype": true,
+        "encoding": true,
+        "nnz": true,
+        "obs_axis": true,
+        "raw_count_sum": true,
+        "shape": true,
+        "var_axis": true
+      },
+      "dtype": "uint32",
+      "encoding": "csr_matrix",
+      "nnz": 29387863,
+      "obs_axis_sha256_ordered": "ef29dab9266c41eee78de1343c07d9f9f78a383157e2ea1c7484cdbee9cd304c",
+      "path_materialized": true,
+      "raw_count_sum": 86379368,
+      "shape": [
+        16086,
+        33694
+      ],
+      "uid": "lVUodgrG2F2izaVd0000",
+      "var_axis_sha256_ordered": "7eb86babb45d8bfedc121c1d964603857d4b54d062de98bd2f84739a284ce304"
+    }
+  },
+  "mode": "mutate",
+  "negative_main_duplicate_probe": {
+    "branch": "main",
+    "candidate_count": 0,
+    "candidates": [],
+    "query_limit_per_term_and_field": 25,
+    "scientific_equivalent_found": false,
+    "terms": [
+      "GSE130238",
+      "ODD001111",
+      "31474560",
+      "10.1016/j.stem.2019.08.002",
+      "Complex Oscillatory Waves Emerging from Cortical Organoids Model Early Human Brain Network Development"
+    ]
+  },
+  "registry_counts": {
+    "after": {
+      "artifacts": 28576,
+      "collections": 44
+    },
+    "before": {
+      "artifacts": 28575,
+      "collections": 43
+    }
+  },
+  "replay_noop": false,
+  "source_manifest_sha256": "cad7212b04c622c870dd9b7837547df3b704f9c9ec4bf43439bfa5a301f6367e",
+  "source_receipts": {
+    "GSM3734294_1M_cortical_organoids_barcodes.tsv.gz": {
+      "sha256": "b28e23ef7853f92897e70ca0b1f51e716e8489df2356dc81b4196d3cab618873",
+      "size": 20150,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734294/suppl/GSM3734294_1M_cortical_organoids_barcodes.tsv.gz"
+    },
+    "GSM3734294_1M_cortical_organoids_genes.tsv.gz": {
+      "sha256": "7d2bdc8f2e8dc1722aa0c31fb2496fae63d0f0dbaa0c86eefe77c56623d814c9",
+      "size": 264505,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734294/suppl/GSM3734294_1M_cortical_organoids_genes.tsv.gz"
+    },
+    "GSM3734294_1M_cortical_organoids_matrix.mtx.gz": {
+      "sha256": "3c4b1428c30ec440faaf25df7183f800a683f85c291573c5f912d9185bc0ffb4",
+      "size": 35543236,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734294/suppl/GSM3734294_1M_cortical_organoids_matrix.mtx.gz"
+    },
+    "GSM3734295_3M_cortical_organoids_barcodes.tsv.gz": {
+      "sha256": "2fa9fbdab98beb9619d3372a80e476ab89c5299eb764520a93099c2c1e8fae50",
+      "size": 13739,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734295/suppl/GSM3734295_3M_cortical_organoids_barcodes.tsv.gz"
+    },
+    "GSM3734295_3M_cortical_organoids_genes.tsv.gz": {
+      "sha256": "136f490b2f78687dc4b69ece70e17647a28f0065012a4f041bd9171f813dc70b",
+      "size": 264505,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734295/suppl/GSM3734295_3M_cortical_organoids_genes.tsv.gz"
+    },
+    "GSM3734295_3M_cortical_organoids_matrix.mtx.gz": {
+      "sha256": "e5cfe5a1984842f8c21b70fc53d5730854a199c73edf937f330c2f7fc04f230e",
+      "size": 21109975,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734295/suppl/GSM3734295_3M_cortical_organoids_matrix.mtx.gz"
+    },
+    "GSM3734296_6M_cortical_organoids_barcodes.tsv.gz": {
+      "sha256": "7467b20c3c8b89e1cd139b03fbc1615cba5df382a050052f19763b2aa467be1b",
+      "size": 20226,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734296/suppl/GSM3734296_6M_cortical_organoids_barcodes.tsv.gz"
+    },
+    "GSM3734296_6M_cortical_organoids_genes.tsv.gz": {
+      "sha256": "9e6adbfd5a6febd1bb17a7b5ab29fe600fd309ee8388183a82784f1bde74c56d",
+      "size": 264505,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734296/suppl/GSM3734296_6M_cortical_organoids_genes.tsv.gz"
+    },
+    "GSM3734296_6M_cortical_organoids_matrix.mtx.gz": {
+      "sha256": "65dd3e7bd2c8518df8abacd4e5c93ba46b7ab45f67306c485f6afc5d292bdf3e",
+      "size": 21834840,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734296/suppl/GSM3734296_6M_cortical_organoids_matrix.mtx.gz"
+    },
+    "GSM3734297_10M_cortical_organoids_barcodes.tsv.gz": {
+      "sha256": "6ebb037451964c85bfc3f02e02b8aa5dff6dbc50df0e34d1f977469eaca7bce2",
+      "size": 13910,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734297/suppl/GSM3734297_10M_cortical_organoids_barcodes.tsv.gz"
+    },
+    "GSM3734297_10M_cortical_organoids_genes.tsv.gz": {
+      "sha256": "07665ae61f826602424f759bf58dad779a2d1a007069144130a5b886774a7d35",
+      "size": 264505,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734297/suppl/GSM3734297_10M_cortical_organoids_genes.tsv.gz"
+    },
+    "GSM3734297_10M_cortical_organoids_matrix.mtx.gz": {
+      "sha256": "841d2d6f6838e080fea0dc00cd7ba67293da100f3335f2144568783dbdaff004",
+      "size": 12799113,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734297/suppl/GSM3734297_10M_cortical_organoids_matrix.mtx.gz"
+    },
+    "geo_family_soft": {
+      "sha256": "a0cbbbe97e15b8667b89ccea0aadaa62433642cb5ddb789999a8efd3590b1ea6",
+      "size": 2972,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE130nnn/GSE130238/soft/GSE130238_family.soft.gz"
+    },
+    "organoiddb": {
+      "required_tokens_present": true,
+      "sha256": "e50b69c92a1a3a5efb526af6482a24e02e8626c870a2ae1c6ba7c6b0130f7630",
+      "size": 15109,
+      "url": "http://www.inbirg.com/organoid_db/detail/Odd001111"
+    },
+    "pmc_bioc_xml": {
+      "required_tokens_present": true,
+      "sha256": "32f407c06a23c6d6c07a785bdc6b51c05a2941ad1c3df9d4fac611e889505cd9",
+      "size": 164648,
+      "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6778040/unicode"
+    },
+    "pubmed_xml": {
+      "required_tokens_present": true,
+      "sha256": "1e4fa2ea7f4938ac78d3a3c334a69f0e27bda8f497dade071ef0a7b4809025d9",
+      "size": 36649,
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=31474560&retmode=xml"
+    }
+  },
+  "status": "PASS",
+  "task_id": "t_9b5c70a6",
+  "write_revalidation": {
+    "artifact_identities": {
+      "X": {
+        "created_at": "2026-07-18 11:03:38.493589+00:00",
+        "hash": "r-S8FfGVzoK2RdOe6ZX5bg",
+        "key": "data/cleaned/GSE130238/X.h5ad",
+        "size": 69866889,
+        "uid": "lVUodgrG2F2izaVd0000"
+      },
+      "obs": {
+        "created_at": "2026-07-18 11:03:37.000379+00:00",
+        "hash": "mh5igcwpyGAjU5hzN2ZkcQ",
+        "key": "data/cleaned/GSE130238/obs.parquet",
+        "size": 322412,
+        "uid": "hMei5vxivF2GH5DV0000"
+      },
+      "var": {
+        "created_at": "2026-07-18 11:03:39.956464+00:00",
+        "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+        "key": "data/cleaned/GSE130238/var.parquet",
+        "size": 841985,
+        "uid": "y0V1sLQ45pbtf6oS0000"
+      }
+    },
+    "latest_obs_uid": "hMei5vxivF2GH5DV0000",
+    "obs_history_count": 1,
+    "predecessor_collection_uid": "FlK1x1wByjbMTRCM0000",
+    "predecessor_membership_sha256": "0f39bcfc78daa93b481f8364b9b378f14be153ee40c33ab2e19ca78c58c864b4",
+    "status": "PASS"
+  },
+  "writes": {
+    "collection_writes": 1,
+    "deletions": 0,
+    "obs_revisions": 1,
+    "var_revisions": 0,
+    "x_revisions": 0
+  }
+}
