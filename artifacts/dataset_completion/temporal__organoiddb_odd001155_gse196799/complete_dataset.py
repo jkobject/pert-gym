@@ -684,7 +684,7 @@ def inspect_x(
         "nnz": nnz == expected["nnz"],
         "obs_axis": obs == list(map(str, obs_index)),
         "var_axis": var == list(map(str, var_index)),
-        "dtype": dtype == "uint32",
+        "dtype": dtype == "int32",
         "encoding": encoding == "csr_matrix",
     }
     if not all(checks.values()):
