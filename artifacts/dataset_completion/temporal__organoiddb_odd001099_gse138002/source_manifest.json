@@ -1,0 +1,63 @@
+{
+  "format": "pert-gym.dataset-completion-source-manifest/v1",
+  "task_id": "t_9b0cc7c2",
+  "dataset_id": "temporal/organoiddb_odd001099_gse138002",
+  "logical_key": "pert-gym/logical/temporal/organoiddb_odd001099_gse138002",
+  "source_identity": {
+    "geo_accession": "GSE138002",
+    "organoiddb_id": "ODD001099",
+    "pubmed_id": "32386599",
+    "doi": "10.1016/j.devcel.2020.04.009",
+    "organism": "Homo sapiens",
+    "organism_ontology_term": "NCBITaxon:9606",
+    "genome_build": "GRCh38"
+  },
+  "authorities": {
+    "geo_family_soft": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/soft/GSE138002_family.soft.gz",
+      "size": 2623,
+      "sha256": "3831efe73e940746c47084840571efc2d352ed905b388e0a6cfd07407916ce56"
+    },
+    "pubmed_xml": {
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=32386599&retmode=xml",
+      "required_tokens": ["GSE138002", "10.1016/j.devcel.2020.04.009", "Single-Cell Analysis of Human Retina"]
+    },
+    "organoiddb": {
+      "url": "http://www.inbirg.com/organoid_db/detail/Odd001099",
+      "required_tokens": ["Odd001099", "GSE138002"]
+    }
+  },
+  "supplementary_files": {
+    "GSE138002_Final_barcodes.csv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/suppl/GSE138002_Final_barcodes.csv.gz",
+      "size": 5239639,
+      "sha256": "bce0b8a5aece7e5abdcdd13871dc9933addf56c1e001d76b636ebf812e8bceef"
+    },
+    "GSE138002_Final_matrix.mtx.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/suppl/GSE138002_Final_matrix.mtx.gz",
+      "size": 564980184,
+      "sha256": "e4467d5b9d06d48ea820010449a51490b302d8050cb4433cb0b7d806550f982a"
+    },
+    "GSE138002_genes.csv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/suppl/GSE138002_genes.csv.gz",
+      "size": 354855,
+      "sha256": "cfc6ae38da82b53b31f8c362972f210404848bf42fda50993093fbc66f094237"
+    }
+  },
+  "frozen_lamin_inputs": {
+    "obs": {"key": "data/cleaned/GSE138002/obs.parquet", "uid": "MfCWePqr8F4TThDo0000", "sha256": "46c0decb344eccaad354dc6808448e5e7fb514898142b364210629b7e8129ab1"},
+    "X": {"key": "data/cleaned/GSE138002/X.h5ad", "uid": "GPge5BVaaXcCGgsU0000", "sha256": "02d668cf431cca14d33bf763b3f57b37db93453d882a75c26e3f528a5169ea1a"},
+    "var": {"key": "data/cleaned/GSE138002/var.parquet", "uid": "jib8jqqYfSI3vzIW0000", "sha256": "30205af5795365917c69b90f4f74823c076aec7ad79eaf2faed3e9a2ac722779"},
+    "manifest": {"key": "pert-gym/staging/pert-gym/logical/temporal/organoiddb_odd001099_gse138002/revisions/temporal-v4-094-wave10-800d1e2996495aad/manifest.json", "uid": "wwrD0MSexJnIymQr0000", "generation": "1784259085837115", "sha256": "e903b159865417866506bd686ec479fbb53ee1cc020c9ecc34c95629da79fdac"}
+  },
+  "expected": {
+    "n_obs": 118555,
+    "n_vars": 33694,
+    "nnz": 178087120,
+    "count_sum": 411695251,
+    "x_dtype": "int32",
+    "x_semantics": "raw_counts",
+    "obs_index_sha256_ordered": "1ea7d49918df4604d348e86713934d0ed284ab6242f24614c6218a6264cb127b",
+    "var_index_sha256_ordered": "7eb86babb45d8bfedc121c1d964603857d4b54d062de98bd2f84739a284ce304"
+  }
+}
