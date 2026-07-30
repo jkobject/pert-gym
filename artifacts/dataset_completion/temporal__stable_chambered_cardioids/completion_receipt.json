@@ -1,0 +1,267 @@
+{
+  "accepted_component_receipt": {
+    "accepted_obs_uid": "wTvFyR9fchIwao8l0000",
+    "accepted_var_uid": "umZYkLN9bq9nfl5m0000",
+    "accepted_x_uid": "vNprtc3z84zMcEUj0000",
+    "manifest_sha256": "ab3286741d1b41fcdc11003e61e42ad3f598f11cf6c9d65b8ee48161b2866f8c",
+    "manifest_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/manifest.json#1784261666127952",
+    "registration_review": "t_09b97a78"
+  },
+  "branch": "jkobject",
+  "canonical_sha256": "eb339c32128b59f53838f4132c6eb515dad55df2f719020bd1ec8ce39c1ec0c5",
+  "chunks": {
+    "X": {
+      "checks": {
+        "count_sum": true,
+        "dtype": true,
+        "encoding": true,
+        "max_count": true,
+        "nnz": true,
+        "obs_axis": true,
+        "shape": true,
+        "var_axis": true
+      },
+      "count_sum": 353596498,
+      "dtype": "uint32",
+      "identity": {
+        "branch_id": 2,
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq\",\"manifest_generation\":\"1784261666127952\",\"manifest_sha256\":\"ab3286741d1b41fcdc11003e61e42ad3f598f11cf6c9d65b8ee48161b2866f8c\",\"missing_metadata\":{\"cell_level_qc_metrics\":\"unknown\",\"cell_type_annotation\":\"unknown\",\"control_identity\":\"unknown\",\"disease\":\"unknown\",\"donor_age\":\"unknown\",\"donor_ethnicity\":\"unknown\",\"donor_sex\":\"unknown\",\"replicate_donor_identity\":\"unknown\",\"source_low_quality_flag\":\"unknown\"},\"n_obs\":59373,\"n_vars\":36601,\"object_generation\":\"1784261654541813\",\"object_sha256\":\"539679ae0cfe3b9dbe520ddcbe66a02412cdd584f51d72b219365ebc905a0dab\",\"record_id\":\"temporal_v4_109_stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq\",\"revision\":\"temporal-v4-109-wave11-44e9698e81722058\",\"role\":\"X\",\"source_accession\":\"GSE269572\",\"source_uri\":\"https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE269572\"}",
+        "hash": "c-cNCyZ219jz4lWWu5ZP3A",
+        "is_latest": true,
+        "key": "data/cleaned/GSE269572/X.h5ad",
+        "size": 346165303,
+        "uid": "vNprtc3z84zMcEUj0000"
+      },
+      "max_count": 1742,
+      "nnz": 150379884,
+      "shape": [
+        59373,
+        36601
+      ],
+      "status": "PASS"
+    },
+    "physical_members": 1,
+    "status": "PASS",
+    "verdict": "unchunked_appropriate"
+  },
+  "collection": {
+    "duplicate_keys": 0,
+    "predecessor_key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+    "predecessor_member_count": 1018,
+    "predecessor_membership_sha256": "b89142e32475174b41f26ed93fd3cecb27f0c57c54c8e019e4960bc12b94a89a",
+    "predecessor_uid": "GvFuzrWQeKB6Pd8t0000",
+    "status": "PASS",
+    "successor_key": "pert-gym/additions/20260730-gse269572-e2e",
+    "successor_member_count": 1018,
+    "successor_membership_sha256": "efc67cb380bc14ba486a07995af08744810f5372686328f0eb4731fe42d9e77d",
+    "successor_uid": "jgMqCxKblbeO5uT60000",
+    "target_obs_uid": "wTvFyR9fchIwao8l0001"
+  },
+  "completed_at": "2026-07-30T20:16:33.921330+00:00",
+  "counts": {
+    "biological_datasets": 1,
+    "logical_families": 1,
+    "matrix_nonzeros": 150379884,
+    "observations": 59373,
+    "physical_members": 1,
+    "variables": 36601
+  },
+  "dataset_id": "temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+  "dataset_metadata": {
+    "publication": "unknown",
+    "source_name": "H9",
+    "source_snapshot_day_in_vitro": 42.5,
+    "temporal_status": "non_temporal_single_snapshot",
+    "x_semantics": "raw_counts"
+  },
+  "gates": {
+    "OBS": "PASS",
+    "VAR": "PASS",
+    "canonical_storage": "PASS",
+    "chunks": "PASS",
+    "cleaning": "PASS",
+    "collection": "PASS",
+    "lamin_jkobject": "PASS"
+  },
+  "helper_sha256": "32e344f437a75a52ede6e1a3a2f3c82596feab9a2057a665fde0f8829855d19d",
+  "histories": {
+    "obs_revisions": 2,
+    "var_revisions": 2
+  },
+  "instance": "laminlabs/pertdata",
+  "links": {
+    "X": {
+      "branch_id": 2,
+      "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq\",\"manifest_generation\":\"1784261666127952\",\"manifest_sha256\":\"ab3286741d1b41fcdc11003e61e42ad3f598f11cf6c9d65b8ee48161b2866f8c\",\"missing_metadata\":{\"cell_level_qc_metrics\":\"unknown\",\"cell_type_annotation\":\"unknown\",\"control_identity\":\"unknown\",\"disease\":\"unknown\",\"donor_age\":\"unknown\",\"donor_ethnicity\":\"unknown\",\"donor_sex\":\"unknown\",\"replicate_donor_identity\":\"unknown\",\"source_low_quality_flag\":\"unknown\"},\"n_obs\":59373,\"n_vars\":36601,\"object_generation\":\"1784261654541813\",\"object_sha256\":\"539679ae0cfe3b9dbe520ddcbe66a02412cdd584f51d72b219365ebc905a0dab\",\"record_id\":\"temporal_v4_109_stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq\",\"revision\":\"temporal-v4-109-wave11-44e9698e81722058\",\"role\":\"X\",\"source_accession\":\"GSE269572\",\"source_uri\":\"https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE269572\"}",
+      "hash": "c-cNCyZ219jz4lWWu5ZP3A",
+      "is_latest": true,
+      "key": "data/cleaned/GSE269572/X.h5ad",
+      "size": 346165303,
+      "uid": "vNprtc3z84zMcEUj0000"
+    },
+    "obs": {
+      "branch_id": 2,
+      "description": "t_363b9754: source-exhaustive GSE269572 OBS; frame_sha256=73c650c783149e59d4e84e3df38a1a0c3503afd3a9552a30df178b231d420270; helper_sha256=32e344f437a75a52ede6e1a3a2f3c82596feab9a2057a665fde0f8829855d19d",
+      "hash": "YbzvRdm-Z5jjUCurGlZh0g",
+      "is_latest": true,
+      "key": "data/cleaned/GSE269572/obs.parquet",
+      "size": 4398377,
+      "uid": "wTvFyR9fchIwao8l0001"
+    },
+    "status": "PASS",
+    "var": {
+      "branch_id": 2,
+      "description": "t_363b9754: species-correct canonical GSE269572 VAR; frame_sha256=e573bdb6c312357c92f492993744cd1fb3586cd7dc270dba68fce94db5b30f86; helper_sha256=32e344f437a75a52ede6e1a3a2f3c82596feab9a2057a665fde0f8829855d19d",
+      "hash": "kawANXp9fNz9JbqWYuFahQ",
+      "is_latest": true,
+      "key": "data/cleaned/GSE269572/var.parquet",
+      "size": 2698258,
+      "uid": "umZYkLN9bq9nfl5m0001"
+    }
+  },
+  "mode": "verify",
+  "negative_main_duplicate_probe": {
+    "branch": "main",
+    "candidate_count": 0,
+    "candidates": [],
+    "query_limit_per_term_and_field": 25,
+    "scientific_equivalent_found": false,
+    "status": "PASS",
+    "terms": [
+      "GSE269572",
+      "PRJNA1122543",
+      "stable chambered cardioids",
+      "Generation of Stable Chambered Cardioids"
+    ]
+  },
+  "obs": {
+    "OBS_COMPLETED": true,
+    "canonical_field_count": 23,
+    "experimental_axes": {
+      "condition": {
+        "cardinality": 3,
+        "frequencies": {
+          "2D culture": 25778,
+          "with PD173074": 14840,
+          "without PD173074": 18755
+        },
+        "level": "cell joined to GEO sample"
+      },
+      "sample": {
+        "cardinality": 11,
+        "frequencies": {
+          "GSM8322368": 8604,
+          "GSM8322369": 8594,
+          "GSM8322370": 8580,
+          "GSM8322371": 4969,
+          "GSM8322372": 4945,
+          "GSM8322373": 4926,
+          "GSM8322374": 3773,
+          "GSM8322375": 3793,
+          "GSM8322376": 3592,
+          "GSM8322377": 3798,
+          "GSM8322378": 3799
+        }
+      }
+    },
+    "experimental_unit": {
+      "cell": "one author-supplied Cell Ranger barcode within one GEO sample",
+      "dataset": "three-arm H9-derived cardioid/2D comparison at day 42.5",
+      "sample": "one biological/culture replicate"
+    },
+    "obs_uuid_unique": true,
+    "outcomes_endpoints": {
+      "drug_toxicity_endpoint": "not present in this scRNA-seq payload",
+      "expression_matrix": "raw_counts",
+      "scalar_response_endpoint": "not_applicable"
+    },
+    "residual_unknowns": [
+      "donor_id",
+      "age",
+      "sex",
+      "ethnicity",
+      "disease",
+      "cell_type",
+      "is_control"
+    ],
+    "rows": 59373,
+    "scientific_modality": "single-cell expression with one drug/culture design axis",
+    "status": "PASS",
+    "temporal_verdict": {
+      "decision": "retain as dataset metadata only; no cell-level time or trajectory axis",
+      "source_day_in_vitro": 42.5,
+      "source_frequency": {
+        "42.5": 59373
+      },
+      "status": "non_temporal_single_snapshot"
+    }
+  },
+  "registry_counts": {
+    "after": {
+      "artifacts": 28579,
+      "collections": 46
+    },
+    "before": {
+      "artifacts": 28579,
+      "collections": 46
+    }
+  },
+  "replay_noop": true,
+  "rollback": {
+    "X_uid": "vNprtc3z84zMcEUj0000",
+    "collection_uid": "GvFuzrWQeKB6Pd8t0000",
+    "obs_uid": "wTvFyR9fchIwao8l0000",
+    "var_uid": "umZYkLN9bq9nfl5m0000"
+  },
+  "schema_version": "pert-gym.dataset-completion-receipt/v2",
+  "source_manifest_sha256": "4fca73f73e9478838540caab1f5b0f8930984573ff17c5b6b2b6456612bf2618",
+  "sources": {
+    "geo_filelist": {
+      "sha256": "48d766c4ad8986929c6fe721a5f42ee839a71754f3256f404348dff99f70eff6",
+      "size": 2432,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/suppl/filelist.txt"
+    },
+    "geo_raw_tar": {
+      "sha256": "6acd23bcb9c6d6b8a0f60f447c92edbd85243ef52732fb019f548846020c661a",
+      "size": 561725440,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/suppl/GSE269572_RAW.tar",
+      "verification": "accepted immutable source checksum plus fresh upstream Content-Length; no repeat bulk download"
+    },
+    "geo_soft": {
+      "sample_count": 11,
+      "sha256": "6fab2319b8794e12accc125a3a63d45659c9bc72abd5c9bd7f6bebc7b05d7580",
+      "size": 2932,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/soft/GSE269572_family.soft.gz"
+    },
+    "publication": {
+      "reason": "GEO supplies no PubMed or DOI relation",
+      "status": "unknown"
+    },
+    "status": "PASS"
+  },
+  "status": "PASS",
+  "task_id": "t_363b9754",
+  "var": {
+    "VAR_ENSEMBL_SPECIES_COMPLETED": true,
+    "biological_features_total": 36601,
+    "checks": {
+      "grch38": true,
+      "human": true,
+      "index_matches_feature_id": true,
+      "namespace": true,
+      "stable_syntax": true,
+      "stable_unique": true
+    },
+    "correct_species_features": 36601,
+    "ordered_feature_id_sha256": "9af0e14291a54be497a34429d138695f0fc3a04d5dea93dec06a79cb793fcd0d",
+    "stable_ensembl_id_features": 36601,
+    "status": "PASS"
+  },
+  "writes": {
+    "collection_writes": 0,
+    "deletions": 0,
+    "obs_revisions": 0,
+    "var_revisions": 0,
+    "x_revisions": 0
+  }
+}
