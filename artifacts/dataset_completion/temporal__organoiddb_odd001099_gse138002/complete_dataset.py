@@ -8,6 +8,8 @@ import json
 import os
 import platform
 import re
+import shutil
+import subprocess
 import sys
 import tempfile
 import time
@@ -31,6 +33,7 @@ from tools.pert_gym_vm_runner import (
 )
 
 TASK_ID = "t_9b0cc7c2"
+BILLING_PROJECT = "jkobject-1549353370965"
 DATASET_ID = "temporal/organoiddb_odd001099_gse138002"
 LOGICAL_KEY = "pert-gym/logical/temporal/organoiddb_odd001099_gse138002"
 PREFIX = "data/cleaned/GSE138002"
@@ -107,6 +110,21 @@ CELL_TYPE_MAP = {
 
 def canonical(value: Any) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def materialize_artifact(artifact: Any, destination: Path) -> Path:
+    """Materialize one artifact with explicit requester-pays billing."""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    uri = str(artifact.path)
+    if uri.startswith("gs://"):
+        command = ["gcloud", "storage", "cp"]
+        if uri.startswith("gs://scperturb/"):
+            command.extend(["--billing-project", BILLING_PROJECT])
+        command.extend([uri, str(destination)])
+        subprocess.run(command, check=True)
+        return destination
+    shutil.copy2(Path(uri.removeprefix("file://")), destination)
+    return destination
 
 
 def sha256_file(path: Path) -> str:
@@ -313,8 +331,10 @@ def bounded_main_duplicate_probe(ln: Any) -> dict[str, Any]:
     return result
 
 
-def inspect_x(x_artifact: Any, manifest: dict[str, Any]) -> dict[str, Any]:
-    path = Path(x_artifact.cache())
+def inspect_x(
+    x_artifact: Any, manifest: dict[str, Any], scratch: Path
+) -> dict[str, Any]:
+    path = materialize_artifact(x_artifact, scratch / "X.h5ad")
     with h5py.File(path, "r") as handle:
         shape = tuple(int(v) for v in handle["X"].attrs.get("shape", ()))
         if not shape:
@@ -348,7 +368,7 @@ def inspect_x(x_artifact: Any, manifest: dict[str, Any]) -> dict[str, Any]:
         "dtype": dtype,
         "encoding": encoding,
         "checks": checks,
-        "path_exists": bool(x_artifact.path.exists()),
+        "path_materialized": path.is_file(),
     }
 
 
@@ -769,6 +789,7 @@ def ensure_successor_collection(
 
 
 def prepare(ln: Any, manifest: dict[str, Any]) -> dict[str, Any]:
+    scratch = Path(tempfile.mkdtemp(prefix=f"{TASK_ID}-read-"))
     baseline_obs = artifact_by_uid(ln, BASELINE_OBS_UID)
     x_artifact = artifact_by_uid(ln, X_UID)
     var_artifact = artifact_by_uid(ln, VAR_UID)
@@ -778,9 +799,11 @@ def prepare(ln: Any, manifest: dict[str, Any]) -> dict[str, Any]:
         VAR_KEY,
     ):
         raise AssertionError("frozen artifact key drift")
-    baseline = baseline_obs.load()
-    var = var_artifact.load()
-    x_receipt = inspect_x(x_artifact, manifest)
+    baseline = pd.read_parquet(
+        materialize_artifact(baseline_obs, scratch / "baseline_obs.parquet")
+    )
+    var = pd.read_parquet(materialize_artifact(var_artifact, scratch / "var.parquet"))
+    x_receipt = inspect_x(x_artifact, manifest, scratch)
     var_receipt = verify_var(var, x_receipt)
     curated, umap, obs_receipt = curate_obs(baseline)
     latest_obs, obs_history = latest_artifact(ln, OBS_KEY)
@@ -794,14 +817,22 @@ def prepare(ln: Any, manifest: dict[str, Any]) -> dict[str, Any]:
             f"foreign OBS revision after frozen baseline: {latest_obs.uid}"
         )
     if obs_is_curated:
-        assert_frame_equal(latest_obs.load(), curated, check_categorical=True)
+        observed = pd.read_parquet(
+            materialize_artifact(latest_obs, scratch / "readback_obs.parquet")
+        )
+        assert_frame_equal(observed, curated, check_categorical=True)
     obsm_is_curated = bool(latest_obsm_records) and str(
         latest_obsm_records[-1].description
     ).startswith(f"{TASK_ID}: typed source UMAP")
     if latest_obsm_records and not obsm_is_curated:
         raise AssertionError("foreign typed UMAP key collision")
     if obsm_is_curated:
-        assert_frame_equal(latest_obsm_records[-1].load(), umap, check_categorical=True)
+        observed_umap = pd.read_parquet(
+            materialize_artifact(
+                latest_obsm_records[-1], scratch / "readback_umap.parquet"
+            )
+        )
+        assert_frame_equal(observed_umap, umap, check_categorical=True)
     return {
         "baseline_obs": baseline_obs,
         "x_artifact": x_artifact,
