@@ -421,11 +421,15 @@ def validate_axes(
     ):
         raise AssertionError("source or accepted X shape mismatch")
     source_obs_names = pd.Index(source.obs_names.astype(str))
-    accepted_cells = pd.Index(raw_obs["cell"].astype(str))
     source_var_names = pd.Index(source.var_names.astype(str))
-    accepted_var_ids = pd.Index(raw_var["id"].astype(str))
-    source_obs_match = source_obs_names.equals(accepted_cells)
-    source_var_match = source_var_names.equals(accepted_var_ids)
+    source_obs_match = source_obs_names.equals(raw_obs.index.astype(str))
+    source_var_match = source_var_names.equals(raw_var.index.astype(str))
+    source_cell_match = pd.Index(source.obs["cell"].astype(str)).equals(
+        pd.Index(raw_obs["cell"].astype(str))
+    )
+    source_gene_match = pd.Index(source.var["id"].astype(str)).equals(
+        pd.Index(raw_var["id"].astype(str))
+    )
     x_obs_match = pd.Index(accepted_x.obs_names.astype(str)).equals(
         raw_obs.index.astype(str)
     )
@@ -433,8 +437,10 @@ def validate_axes(
         raw_var.index.astype(str)
     )
     checks = {
-        "source_obs_order_equals_accepted_cell": source_obs_match,
-        "source_var_order_equals_accepted_var_id": source_var_match,
+        "source_obs_index_order_equals_accepted_obs_index": source_obs_match,
+        "source_var_index_order_equals_accepted_var_index": source_var_match,
+        "source_cell_order_equals_accepted_cell": source_cell_match,
+        "source_gene_id_order_equals_accepted_var_id": source_gene_match,
         "accepted_x_obs_order_equals_obs_index": x_obs_match,
         "accepted_x_var_order_equals_var_index": x_var_match,
     }

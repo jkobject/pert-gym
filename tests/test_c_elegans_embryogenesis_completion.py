@@ -4,6 +4,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import anndata as ad
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -107,6 +109,28 @@ def test_var_fails_closed_on_non_species_stable_identifiers(
     raw.loc[1, "id"] = "ENSG00000123456"
     with pytest.raises(AssertionError, match="WormBase"):
         MODULE.curate_var(raw)
+
+
+def test_axis_validation_binds_source_indices_and_named_id_columns(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(MODULE, "EXPECTED_SHAPE", (3, 3))
+    obs = raw_obs()
+    var = raw_var()
+    source = ad.AnnData(
+        X=np.eye(3),
+        obs=pd.DataFrame({"cell": obs["cell"].to_numpy()}, index=obs.index.astype(str)),
+        var=pd.DataFrame({"id": var["id"].to_numpy()}, index=var.index.astype(str)),
+    )
+    accepted_x = ad.AnnData(
+        X=np.eye(3),
+        obs=pd.DataFrame(index=obs.index.astype(str)),
+        var=pd.DataFrame(index=var.index.astype(str)),
+    )
+
+    checks = MODULE.validate_axes(obs, var, source, accepted_x)
+
+    assert all(checks.values())
 
 
 def test_source_manifest_binds_figshare_file_and_primary_publication() -> None:
