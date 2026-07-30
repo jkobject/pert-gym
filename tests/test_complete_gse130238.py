@@ -280,7 +280,9 @@ def test_distributed_lease_heartbeat_renews_and_surfaces_failure() -> None:
 
     healthy = Lease()
     with module.DistributedLeaseHeartbeat(healthy, interval_seconds=0.01) as heartbeat:
-        time.sleep(0.04)
+        deadline = time.monotonic() + 1.0
+        while healthy.renewals < 2 and time.monotonic() < deadline:
+            time.sleep(0.01)
         heartbeat.assert_healthy()
     assert healthy.renewals >= 2
 
