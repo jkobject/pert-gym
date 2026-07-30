@@ -26,12 +26,18 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 from scipy import sparse
 
+import tools.pert_gym_vm_runner as vm_runner
 from tools.lamin_context import connect_pertdata
 from tools.pert_gym_vm_runner import (
     distributed_lamin_writer_lease,
     lamin_writer_lease,
     preflight,
 )
+
+# Transferred immutable helpers execute from /tmp on the EU VM; point the
+# runner's legacy-lock discovery at the actual remote repository explicitly.
+if repo_root := os.environ.get("PERT_GYM_REPO_ROOT"):
+    vm_runner.ROOT = Path(repo_root).resolve()
 
 warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 
