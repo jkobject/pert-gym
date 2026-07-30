@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import platform
+import subprocess
 import tempfile
 import time
 import urllib.request
@@ -39,6 +40,8 @@ MANIFEST_PATH = ROOT / "source_manifest.json"
 RECEIPT_PATH = ROOT / "verification_receipt.json"
 SHARED_VAR_KEY = "data/cleaned/GSE196799/var.parquet"
 SUCCESSOR_COLLECTION_KEY = "pert-gym/additions/20260730-odd001155-gse196799-e2e"
+BILLING_PROJECT = "jkobject-1549353370965"
+PAYLOAD_CACHE = Path(tempfile.mkdtemp(prefix=f"{TASK_ID}-payloads-"))
 CANONICAL_FIELDS = (
     "dataset",
     "sample",
@@ -129,6 +132,34 @@ def artifact_identity(artifact: Any) -> dict[str, Any]:
         "is_latest": bool(artifact.is_latest),
         "description": str(artifact.description),
     }
+
+
+def cache_artifact(artifact: Any) -> Path:
+    """Materialize through requester-pays-aware gcloud on the EU worker."""
+    if platform.system() == "Darwin":
+        return Path(artifact.cache())
+    target = PAYLOAD_CACHE / f"{artifact.uid}-{Path(str(artifact.key)).name}"
+    if not target.exists():
+        subprocess.run(
+            [
+                "gcloud",
+                "storage",
+                "cp",
+                f"--billing-project={BILLING_PROJECT}",
+                str(artifact.path),
+                str(target),
+            ],
+            check=True,
+        )
+    if target.stat().st_size != int(artifact.size):
+        raise AssertionError(f"artifact size readback drift: {artifact.uid}")
+    return target
+
+
+def load_dataframe(artifact: Any) -> pd.DataFrame:
+    if platform.system() == "Darwin":
+        return artifact.load()
+    return pd.read_parquet(cache_artifact(artifact))
 
 
 def resolve_artifact(ln: Any, value: Any) -> Any:
@@ -632,7 +663,7 @@ def inspect_x(
     if not full:
         receipt["status"] = "DEFERRED_TO_EU"
         return receipt
-    path = Path(artifact.cache())
+    path = cache_artifact(artifact)
     with h5py.File(path, "r") as handle:
         shape = tuple(map(int, handle["X"].attrs["shape"]))
         obs_index_key = str(handle["obs"].attrs["_index"])
@@ -728,8 +759,8 @@ def prepare(
         }
         if {role: str(item.key) for role, item in accepted.items()} != expected_keys:
             raise AssertionError(f"{sample_id}: frozen artifact key drift")
-        baseline = accepted["obs"].load()
-        accepted_var = accepted["var"].load()
+        baseline = load_dataframe(accepted["obs"])
+        accepted_var = load_dataframe(accepted["var"])
         curated, obs_receipt = curate_obs(
             baseline, sample_id, spec, source_receipts["samples"][sample_id]
         )
@@ -744,7 +775,9 @@ def prepare(
         if str(latest_obs.uid) != str(accepted["obs"].uid) and not is_curated:
             raise AssertionError(f"{sample_id}: foreign OBS revision {latest_obs.uid}")
         if is_curated:
-            assert_frame_equal(latest_obs.load(), curated, check_categorical=True)
+            assert_frame_equal(
+                load_dataframe(latest_obs), curated, check_categorical=True
+            )
         prepared["samples"][sample_id] = {
             "accepted": accepted,
             "latest_obs": latest_obs,
@@ -757,13 +790,15 @@ def prepare(
         }
         first_var = first_var or accepted["var"]
     assert first_var is not None
-    raw_var = first_var.load()
+    raw_var = load_dataframe(first_var)
     curated_var, var_receipt = curate_var(raw_var, manifest)
     shared_var = task_artifact(
         ln, SHARED_VAR_KEY, f"{TASK_ID}: species-correct shared GSE196799 VAR"
     )
     if shared_var is not None:
-        assert_frame_equal(shared_var.load(), curated_var, check_categorical=True)
+        assert_frame_equal(
+            load_dataframe(shared_var), curated_var, check_categorical=True
+        )
     prepared.update(
         {
             "curated_var": curated_var,
