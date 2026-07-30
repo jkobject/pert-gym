@@ -546,7 +546,7 @@ def verify_var(var: pd.DataFrame, x_receipt: dict[str, Any]) -> dict[str, Any]:
             var["feature_namespace"]
             .astype(str)
             .str.casefold()
-            .isin({"ensembl", "ensembl gene"})
+            .isin({"ensembl", "ensembl gene", "ensembl gene id"})
             .all()
         ),
         "x_shape": x_receipt["shape"][1] == len(var),
