@@ -336,17 +336,23 @@ def inspect_x(
 ) -> dict[str, Any]:
     path = materialize_artifact(x_artifact, scratch / "X.h5ad")
     with h5py.File(path, "r") as handle:
+
+        def axis_values(axis: str) -> list[str]:
+            group = handle[axis]
+            index_name = group.attrs.get("_index", "_index")
+            if isinstance(index_name, bytes):
+                index_name = index_name.decode()
+            if not isinstance(index_name, str) or index_name not in group:
+                if "_index" not in group:
+                    raise KeyError(f"cannot resolve {axis} index dataset")
+                index_name = "_index"
+            return [str(value) for value in group[index_name].asstr()[...].tolist()]
+
         shape = tuple(int(v) for v in handle["X"].attrs.get("shape", ()))
         if not shape:
-            shape = (len(handle["obs/_index"]), len(handle["var/_index"]))
-        obs_values = [
-            v.decode() if isinstance(v, bytes) else str(v)
-            for v in handle["obs/_index"][:]
-        ]
-        var_values = [
-            v.decode() if isinstance(v, bytes) else str(v)
-            for v in handle["var/_index"][:]
-        ]
+            shape = (len(axis_values("obs")), len(axis_values("var")))
+        obs_values = axis_values("obs")
+        var_values = axis_values("var")
         nnz = int(len(handle["X/data"]))
         dtype = str(handle["X/data"].dtype)
         encoding = str(handle["X"].attrs.get("encoding-type", ""))
