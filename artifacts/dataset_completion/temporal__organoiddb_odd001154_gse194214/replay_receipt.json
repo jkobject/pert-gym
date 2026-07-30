@@ -1,0 +1,509 @@
+{
+  "collection": {
+    "predecessor": {
+      "key": "pert-gym/additions/20260730-gse130238-e2e",
+      "member_count": 1018,
+      "membership_sha256": "ad25387d5defe49babb570821b60733d38f69a7f176274409eeacfe7ae7bd924",
+      "uid": "whLgwg8opPvW9qdN0000"
+    },
+    "successor": {
+      "key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+      "member_count": 1018,
+      "membership_sha256": "b89142e32475174b41f26ed93fd3cecb27f0c57c54c8e019e4960bc12b94a89a",
+      "target_obs_uid": "GtDvEO1BsANR8VKR0001",
+      "uid": "GvFuzrWQeKB6Pd8t0000"
+    }
+  },
+  "dataset_id": "temporal/organoiddb_odd001154_gse194214",
+  "duplicate_probe": {
+    "legacy_parallel_triplet_uids": [
+      "ECLctORaKjRoaemK0000",
+      "EmOxtmLMI8dNDXYo0000",
+      "kb18lHVpqOa5uSUO0000"
+    ],
+    "match_count": 8,
+    "public_or_inherited_match_count": 0,
+    "queries": [
+      "GSE194214",
+      "ODD001154",
+      "Odd001154",
+      "organoiddb_odd001154",
+      "10.7554/eLife.68925",
+      "Paraxial mesoderm organoids",
+      "Somitoid"
+    ]
+  },
+  "format": "pert-gym.dataset-e2e-curation/v1",
+  "helper_commit": "415fdaa4404ce5c67cfe1264d3523d0f1a0ca55e",
+  "helper_sha256": "c16112f6cf52f202d010bea14d1492efa40049e6571dbd8f6eede32db4755f96",
+  "invariants": {
+    "OBS_COMPLETED": true,
+    "VAR_COMPLETED": true,
+    "X_rewritten": false,
+    "accepted_component_status": "include",
+    "main_branch_writes": 0,
+    "single_physical_member": true,
+    "var_rewritten": false
+  },
+  "logical_key": "pert-gym/logical/temporal/organoiddb_odd001154_gse194214",
+  "mode": "verify",
+  "prepared": {
+    "X": {
+      "created_at": "2026-07-17 20:05:07.475964+00:00",
+      "hash": "M1zaZQKPlogEaSdoxnLn6A",
+      "key": "data/cleaned/GSE194214/X.h5ad",
+      "size": 155611588,
+      "uid": "FIfScz6bImLLe9cD0000"
+    },
+    "expected_obs_sha256": "65fc8e9e6dba099340b8f9fe9d9b8b54e09d739643fa5147cd4a1ffc0aa1ebf2",
+    "field_dispositions": {
+      "age": {
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "unknown": 18716
+        },
+        "unknown_rows": 18716
+      },
+      "assay": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "batch": {
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "unknown": 18716
+        },
+        "unknown_rows": 18716
+      },
+      "cell_id": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "cell_line": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "cell_type": {
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "unknown": 18716
+        },
+        "unknown_rows": 18716
+      },
+      "condition": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "control_availability": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "dataset": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "disease": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "donor_id": {
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "unknown": 18716
+        },
+        "unknown_rows": 18716
+      },
+      "dose": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "dose_unit": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "ethnicity": {
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "unknown": 18716
+        },
+        "unknown_rows": 18716
+      },
+      "guide_id": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "guide_sequence": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "is_control": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "is_low_quality": {
+        "known_rows": 1412,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 1412,
+          "unknown": 17304
+        },
+        "unknown_rows": 17304
+      },
+      "media": {
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "unknown": 18716
+        },
+        "unknown_rows": 18716
+      },
+      "modality": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "n_counts": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "n_genes": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "organism": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "pct_mito": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "pct_ribo": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "perturbation": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "perturbation_library": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "perturbation_target": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "perturbation_technology": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "perturbation_type": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "plate_id": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "pseudotime": {
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "unknown": 18716
+        },
+        "unknown_rows": 18716
+      },
+      "replicate": {
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "unknown": 18716
+        },
+        "unknown_rows": 18716
+      },
+      "response_type": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "response_value": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      },
+      "sample": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "sequencer": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "sex": {
+        "known_rows": 0,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "unknown": 18716
+        },
+        "unknown_rows": 18716
+      },
+      "technology": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "timepoint": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "timepoint_unit": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "tissue_type": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "treatment": {
+        "known_rows": 18716,
+        "not_applicable_rows": 0,
+        "state_counts": {
+          "known": 18716
+        },
+        "unknown_rows": 0
+      },
+      "well_id": {
+        "known_rows": 0,
+        "not_applicable_rows": 18716,
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "unknown_rows": 0
+      }
+    },
+    "latest_obs": {
+      "created_at": "2026-07-30 19:32:40.726060+00:00",
+      "hash": "AodrQYcpIeJIk_gchmb6Gg",
+      "key": "data/cleaned/GSE194214/obs.parquet",
+      "size": 1376484,
+      "uid": "GtDvEO1BsANR8VKR0001"
+    },
+    "obs_curated": true,
+    "obs_history_count": 2,
+    "obs_receipt": {
+      "initial_qc_failure_rows": 1412,
+      "rows": 18716,
+      "sample_counts": {
+        "GSM5830919": 2930,
+        "GSM5830920": 4977,
+        "GSM5830921": 5968,
+        "GSM5830922": 4841
+      },
+      "source_day1_control_rows_corrected": 2930,
+      "timepoint_counts": {
+        "1": 2930,
+        "2": 4977,
+        "3": 5968,
+        "5": 4841
+      },
+      "unresolved_low_quality_rows": 17304
+    },
+    "var": {
+      "created_at": "2026-07-17 20:05:08.926502+00:00",
+      "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+      "key": "data/cleaned/GSE194214/var.parquet",
+      "size": 841985,
+      "uid": "KFzdzY1k7TreexTs0000"
+    },
+    "var_receipt": {
+      "columns": true,
+      "feature_type": "True",
+      "genome_build": "True",
+      "index_unique": true,
+      "namespace": "True",
+      "needs_revision": false,
+      "organism": "True",
+      "rewrite_reason": "none; exact source-backed Ensembl GRCh38 axis is complete",
+      "rows": 33694,
+      "stable_axis": true,
+      "stable_syntax": true,
+      "stable_unique": true
+    },
+    "x_receipt": {
+      "X_rewrite_required": false,
+      "finite_value_sum": 310355119,
+      "max_count": 2436,
+      "nnz": 69489485,
+      "obs_axis_sha256": "36263fe07eea5a9e0d9c2cdfed388fdedc2e70c6e2eec0ab989930ffe350c4d7",
+      "shape": [
+        18716,
+        33694
+      ],
+      "var_axis_sha256": "9682c0cd068db48c2678becac6c3bd38aa378216aeb471fb1138096e9552500c",
+      "x_semantics": "raw_counts"
+    }
+  },
+  "source_authorities": {
+    "elife_article_api": {
+      "sha256": "a9c047fed4e70051175a317ffe17d48ad447611fa472a1b3a8859bc1e438b42e",
+      "size": 170468,
+      "url": "https://api.elifesciences.org/articles/68925"
+    },
+    "elife_supplementary_marker_table": {
+      "sha256": "57ba36edc878e5e3bc4c52f252684ee348db98bac0809fbe248f8ca3af28fc14",
+      "size": 364463,
+      "url": "https://cdn.elifesciences.org/articles/68925/elife-68925-supp1-v2.csv"
+    },
+    "geo_family_soft": {
+      "sha256": "a6e292220854d96f86f8cf99bce958890cba2ca8a7dcd3ffb1109509688bc511",
+      "size": 3283,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE194nnn/GSE194214/soft/GSE194214_family.soft.gz"
+    }
+  },
+  "source_manifest_sha256": "020ae9b376929c9e7a59eff1de732224b29e331cfda9f70d318d8d5bdf5c95f6",
+  "status": "PASS",
+  "task_id": "t_56a7b7cf",
+  "writes": {
+    "collection_created": false,
+    "counts_after": {
+      "artifacts": 28577,
+      "collections": 45
+    },
+    "counts_before": {
+      "artifacts": 28577,
+      "collections": 45
+    },
+    "obs_created": false,
+    "zero_write_replay": true
+  }
+}

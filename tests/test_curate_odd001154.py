@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 import pytest
@@ -15,6 +17,7 @@ SPEC = importlib.util.spec_from_file_location("odd001154_curate_obs_var", HELPER
 assert SPEC is not None and SPEC.loader is not None
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
+pytestmark = pytest.mark.filterwarnings("ignore:DataFrame is highly fragmented")
 
 
 @pytest.fixture(autouse=True)
@@ -97,3 +100,18 @@ def test_all_canonical_fields_have_state_and_source_columns() -> None:
     dispositions = MODULE.field_dispositions(curated)
     assert dispositions["cell_type"]["unknown_rows"] == 2
     assert dispositions["perturbation"]["not_applicable_rows"] == 2
+
+
+def test_processing_decision_notebook_executes_from_repo_root(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    notebook_path = (
+        ROOT
+        / "notebooks/datasets/temporal_v4_092_organoiddb_odd001154_gse194214_processing_decisions.ipynb"
+    )
+    notebook = json.loads(notebook_path.read_text())
+    monkeypatch.chdir(ROOT)
+    namespace: dict[str, Any] = {}
+    for cell in notebook["cells"]:
+        if cell["cell_type"] == "code":
+            exec("".join(cell["source"]), namespace)

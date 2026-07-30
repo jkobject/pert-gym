@@ -247,6 +247,19 @@ days 1/2/3/5. `Odd001137 / GSE158999` mouse gastruloid cardiogenesis: `30,496 ×
 GSM4453981–GSM4454011 samples. All three have verified payloads and obs→X→var
 links. Status artifact: `artifacts/schema_audit/temporal_organoiddb_t25_ingestion_20260622.md`.
 
+Odd001154 / GSE194214 completion status (2026-07-30): the accepted single-member
+component remains `include` with unchanged raw-count X
+`FIfScz6bImLLe9cD0000` and Ensembl GRCh38 VAR `KFzdzY1k7TreexTs0000`.
+Append-only OBS revision `GtDvEO1BsANR8VKR0001` preserves all 18,716 rows,
+materializes canonical value/state/source provenance, corrects the provisional
+Day-1 control label, and identifies 1,412 definite source-threshold QC failures
+while leaving the other 17,304 quality states unknown because the source does
+not deposit its excluded-cluster barcode mapping. Successor Collection
+`GvFuzrWQeKB6Pd8t0000` has 1,018 members. The zero-write replay and processing
+decision record are under
+`artifacts/dataset_completion/temporal__organoiddb_odd001154_gse194214/` and
+`notebooks/datasets/temporal_v4_092_organoiddb_odd001154_gse194214_processing_decisions.ipynb`.
+
 ## Inclusion Rules
 
 Keep only entries with at least one of:
