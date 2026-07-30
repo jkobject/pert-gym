@@ -20,7 +20,7 @@
     },
     "pubmed_xml": {
       "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=32386599&retmode=xml",
-      "required_tokens": ["GSE138002", "10.1016/j.devcel.2020.04.009", "Single-Cell Analysis of Human Retina"]
+      "required_tokens": ["32386599", "10.1016/j.devcel.2020.04.009", "Single-Cell Analysis of Human Retina"]
     },
     "organoiddb": {
       "url": "http://www.inbirg.com/organoid_db/detail/Odd001099",
