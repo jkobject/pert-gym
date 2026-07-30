@@ -1,0 +1,132 @@
+{
+  "format": "pert-gym.odd001154-source-manifest/v1",
+  "task_id": "t_56a7b7cf",
+  "dataset_id": "temporal/organoiddb_odd001154_gse194214",
+  "logical_key": "pert-gym/logical/temporal/organoiddb_odd001154_gse194214",
+  "source_identity": {
+    "geo_accession": "GSE194214",
+    "organoiddb_id": "ODD001154",
+    "doi": "10.7554/eLife.68925",
+    "pmcid": "PMC9204752",
+    "title": "Paraxial mesoderm organoids model development of human somites"
+  },
+  "source_authorities": {
+    "geo_family_soft": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE194nnn/GSE194214/soft/GSE194214_family.soft.gz",
+      "size": 3283,
+      "sha256": "a6e292220854d96f86f8cf99bce958890cba2ca8a7dcd3ffb1109509688bc511",
+      "sample_titles": {
+        "GSM5830919": "Somitoid Day 1",
+        "GSM5830920": "Somitoid Day 2",
+        "GSM5830921": "Somitoid Day 3",
+        "GSM5830922": "Somitoid Day 5"
+      }
+    },
+    "elife_article_api": {
+      "url": "https://api.elifesciences.org/articles/68925",
+      "size": 170468,
+      "sha256": "a9c047fed4e70051175a317ffe17d48ad447611fa472a1b3a8859bc1e438b42e"
+    },
+    "elife_supplementary_marker_table": {
+      "url": "https://cdn.elifesciences.org/articles/68925/elife-68925-supp1-v2.csv",
+      "size": 364463,
+      "sha256": "57ba36edc878e5e3bc4c52f252684ee348db98bac0809fbe248f8ca3af28fc14",
+      "rows": 3506,
+      "cluster_labels": [
+        "Early_Somite",
+        "Early_pPSM",
+        "Late NMp",
+        "Late_Somite",
+        "NMp",
+        "PSM-to-Somite",
+        "Somite-1",
+        "Somite-2",
+        "aPSM-1",
+        "aPSM-2",
+        "aPSM-3",
+        "aPSM-4",
+        "pPSM-1",
+        "pPSM-2"
+      ],
+      "cell_mapping_state": "unknown: marker table has cluster-level genes but no cell barcodes or per-cell cluster assignments"
+    }
+  },
+  "accepted_component": {
+    "revision": "temporal-v4-092-wave10-44ee24e4151fda51",
+    "manifest_generation": "1784258200963912",
+    "manifest_size": 19899,
+    "manifest_sha256": "f1e5d44fd0dc621728c1c6b37bf150650f6dd5cd7d58530b7f52b0f93eaddd1f",
+    "shape": [18716, 33694],
+    "nnz": 69489485,
+    "finite_value_sum": 310355119,
+    "objects": {
+      "obs": {
+        "generation": "1784258189734754",
+        "size": 385831,
+        "sha256": "04ae33b20789a7bd9941c138c27f0fc9314f4c7566624350736470cdbea2abb8"
+      },
+      "X": {
+        "generation": "1784258192290571",
+        "size": 155611588,
+        "sha256": "38f2a172cf0288abf1f82dca5703e0e0aec3ab18edef2e33e746a8b81c163f50"
+      },
+      "var": {
+        "generation": "1784258194984856",
+        "size": 841985,
+        "sha256": "704a1578f4c4f6de42be18764c4ad8c4bc7550011b2ab4c8dc33bb2fbf7cff00"
+      }
+    }
+  },
+  "frozen_lamin_inputs": {
+    "obs": {
+      "uid": "GtDvEO1BsANR8VKR0000",
+      "key": "data/cleaned/GSE194214/obs.parquet",
+      "hash": "umB11qIN2248gS5ipEe0sw"
+    },
+    "X": {
+      "uid": "FIfScz6bImLLe9cD0000",
+      "key": "data/cleaned/GSE194214/X.h5ad",
+      "hash": "M1zaZQKPlogEaSdoxnLn6A"
+    },
+    "var": {
+      "uid": "KFzdzY1k7TreexTs0000",
+      "key": "data/cleaned/GSE194214/var.parquet",
+      "hash": "qsk8P6eGsDjuO-qVSHuvXQ"
+    },
+    "additions_predecessor": {
+      "uid": "Hck3g1dNOGJBOv3R0000",
+      "key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e-v2",
+      "member_count": 1018
+    }
+  },
+  "latest_main_equivalence_check": {
+    "inspection_report": "inspection_report.json",
+    "inspection_report_sha256": "6f423cd8872ec47f6f84104ad8ce80eab42a939121ff2df95ebb834ce0cb571e",
+    "bounded_queries": [
+      "GSE194214",
+      "ODD001154",
+      "Odd001154",
+      "organoiddb_odd001154",
+      "10.7554/eLife.68925",
+      "Paraxial mesoderm organoids",
+      "Somitoid"
+    ],
+    "public_or_inherited_match_count": 0,
+    "decision": "negative: no exact alias, accession, publication, or scientific-equivalence match is inherited from main/public visibility; reuse the accepted jkobject triplet"
+  },
+  "scientific_dispositions": {
+    "timepoints": [1, 2, 3, 5],
+    "timepoint_unit": "day",
+    "cell_line": "NCRM1",
+    "organism": "Homo sapiens",
+    "model": "paraxial mesoderm organoid (Somitoid)",
+    "assay": "10x Genomics Chromium 3' v3 scRNA-seq",
+    "matrix_semantics": "raw UMI counts",
+    "cell_type": "unknown: publication reports cluster labels but source authorities provide no barcode-to-cluster map",
+    "low_quality": "source QC thresholds are executable per cell; cells passing those thresholds remain unknown because seven additional clusters were excluded without a published barcode map",
+    "control": "no GEO sample is designated an untreated/control arm; Day 1 is an early developmental timepoint, not a control",
+    "donor_demographics": "unknown",
+    "replicate_batch": "unknown: source says multiple organoids were pooled but gives no cell-level replicate or batch map",
+    "perturbation": "not_applicable: sequenced samples form one developmental trajectory under the optimized Somitoid protocol"
+  }
+}
