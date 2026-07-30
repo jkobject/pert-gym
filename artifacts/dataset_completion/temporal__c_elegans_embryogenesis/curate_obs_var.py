@@ -499,6 +499,7 @@ def _artifact_identity(artifact: Any) -> dict[str, Any]:
 
 def _scientific_equivalence_gate(ln: Any, accepted: dict[str, Any]) -> dict[str, Any]:
     expected_lineage = {item["uid"] for item in EXPECTED.values()} | {
+        "Mhw9jYDtVSGL0niy0000",
         "NHLwhKq7PHtr2Nf40000",
         "3HFHNsfi4VX80xG40000",
         "DHXE2aYWf1ir671K0000",
