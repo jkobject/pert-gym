@@ -65,7 +65,7 @@ EXPECTED_NNZ = 43_994_050
 EXPECTED_MATRIX_ARRAYS = {
     "data": "04bb0298f73b227c54dc3ae40c407ad22f3dff3ee04526e7c1e77020afddd1c0",
     "indices": "6a4bc363dbc2184a50fc0edb15f1e702a3b05661bfb36fec07f0f09307f41478",
-    "indptr": "f8a94f8f2f04d328d3ec601e5f8ef642df6fb041a59de616c5a2d083c9ea2c",
+    "indptr": "f8a94f8f2f04d328d3ec601e5f8ef642df6fb041a59de616c5a2d083c9ea2c8c",
 }
 WORMBASE_GENE_RE = re.compile(r"^WBGene\d{8}$")
 UUID_NAMESPACE = uuid.UUID("5fce87f5-d398-4c68-8233-dcc6c4dd4b3e")

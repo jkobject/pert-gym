@@ -14,6 +14,7 @@ SCRIPT = (
     / "artifacts/dataset_completion/temporal__c_elegans_embryogenesis/curate_obs_var.py"
 )
 SOURCE_MANIFEST = SCRIPT.with_name("source_manifest.json")
+ACCEPTED_MANIFEST = SCRIPT.with_name("accepted_manifest.json")
 SPEC = importlib.util.spec_from_file_location("c_elegans_completion", SCRIPT)
 assert SPEC is not None and SPEC.loader is not None
 MODULE = importlib.util.module_from_spec(SPEC)
@@ -141,6 +142,16 @@ def test_source_manifest_binds_figshare_file_and_primary_publication() -> None:
     assert manifest["figshare"]["file_md5"] == "c3a37ca238921fcec7bd5e9faa6118f1"
     assert manifest["publication"]["doi"] == "10.1126/science.aax1971"
     assert manifest["var_policy"].startswith("The 20,222 unique WBGene identifiers")
+
+
+def test_sparse_array_hashes_are_frozen_from_accepted_manifest() -> None:
+    manifest = json.loads(ACCEPTED_MANIFEST.read_text())
+    matrix = manifest["datasets"][0]["X"]["matrix"]
+    assert MODULE.EXPECTED_MATRIX_ARRAYS == {
+        "data": matrix["data_sha256"],
+        "indices": matrix["indices_sha256"],
+        "indptr": matrix["indptr_sha256"],
+    }
 
 
 def test_live_run_refuses_darwin(
