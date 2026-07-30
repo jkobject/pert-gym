@@ -127,7 +127,7 @@ def test_var_gate_is_species_and_stable_id_aware() -> None:
     var = pd.DataFrame(
         {
             "feature_id": ids,
-            "feature_namespace": ["Ensembl"] * 4,
+            "feature_namespace": ["Ensembl gene ID"] * 4,
             "organism": ["Homo sapiens"] * 4,
         },
         index=pd.Index(ids),
