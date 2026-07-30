@@ -9,6 +9,7 @@ from types import SimpleNamespace
 
 import pandas as pd
 import pytest
+import zarr
 
 SCRIPT = Path(
     "artifacts/dataset_completion/temporal__perturbase_gse107185/complete_dataset.py"
@@ -248,3 +249,27 @@ def test_ordered_sha256_is_order_sensitive() -> None:
     module = load_module()
     assert module.ordered_sha256(["ab", "c"]) != module.ordered_sha256(["a", "bc"])
     assert module.ordered_sha256(["a", "b"]) != module.ordered_sha256(["b", "a"])
+
+
+def test_inspect_zarr_x_accepts_external_axis_csr_contract(tmp_path: Path) -> None:
+    module = load_module()
+    module.EXPECTED_N_OBS = 2
+    module.EXPECTED_N_VARS = 3
+    path = tmp_path / "X.zarr.zip"
+    with zarr.storage.ZipStore(str(path), mode="w") as store:
+        root = zarr.group(store=store)
+        root.attrs.update(
+            {"format": "csr_matrix", "shape": [2, 3], "nnz": 2, "dtype": "float32"}
+        )
+        root.create_dataset("data", data=[1.0, -2.0], dtype="float32")
+        root.create_dataset("indices", data=[0, 2], dtype="int32")
+        root.create_dataset("indptr", data=[0, 1, 2], dtype="int32")
+
+    receipt = module.inspect_zarr_x(
+        path, {"nnz": 2, "x_dtype": "float32", "x_sum": -1.0}
+    )
+
+    assert receipt["status"] == "PASS"
+    assert receipt["shape"] == [2, 3]
+    assert receipt["checks"]["csr_arrays"] is True
+    assert "external" in receipt["axis_contract"]

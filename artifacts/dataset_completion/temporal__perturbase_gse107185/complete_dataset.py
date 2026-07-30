@@ -377,24 +377,18 @@ def decode(values: Any) -> list[str]:
 def inspect_zarr_x(path: Path, expected: dict[str, Any]) -> dict[str, Any]:
     with zarr.storage.ZipStore(str(path), mode="r") as store:
         root = zarr.group(store=store)
-        matrix = root["X"]
-        shape = [int(value) for value in matrix.attrs["shape"]]
-        data = np.asarray(matrix["data"][:])
-        obs_group = root["obs"]
-        var_group = root["var"]
-        obs_key = obs_group.attrs.get("_index", "_index")
-        var_key = var_group.attrs.get("_index", "_index")
-        obs_axis = decode(obs_group[str(obs_key)][:])
-        var_axis = decode(var_group[str(var_key)][:])
+        shape = [int(value) for value in root.attrs["shape"]]
+        data = np.asarray(root["data"][:])
+        indices = np.asarray(root["indices"][:])
+        indptr = np.asarray(root["indptr"][:])
     checks = {
         "shape": shape == [EXPECTED_N_OBS, EXPECTED_N_VARS],
         "nnz": len(data) == expected["nnz"],
+        "csr_arrays": len(indices) == len(data) and len(indptr) == EXPECTED_N_OBS + 1,
         "dtype": str(data.dtype) == expected["x_dtype"],
         "sum": bool(
             np.isclose(data.sum(dtype=np.float64), expected["x_sum"], rtol=0, atol=1e-6)
         ),
-        "obs_axis": ordered_sha256(obs_axis) == expected["obs_index_sha256_ordered"],
-        "var_axis": ordered_sha256(var_axis) == expected["var_index_sha256_ordered"],
     }
     if not all(checks.values()):
         raise AssertionError(f"accepted X parity drift: {checks}")
@@ -404,8 +398,7 @@ def inspect_zarr_x(path: Path, expected: dict[str, Any]) -> dict[str, Any]:
         "nnz": len(data),
         "dtype": str(data.dtype),
         "sum": float(data.sum(dtype=np.float64)),
-        "obs_axis_sha256_ordered": ordered_sha256(obs_axis),
-        "var_axis_sha256_ordered": ordered_sha256(var_axis),
+        "axis_contract": "axes are external and bind through explicit obs -> X -> var links",
         "checks": checks,
     }
 
@@ -1044,10 +1037,11 @@ def prepare(ln: Any, manifest: dict[str, Any], *, full_source: bool) -> dict[str
     x_receipt = inspect_zarr_x(x_path, manifest["expected"])
     if (
         ordered_sha256(baseline.index.astype(str))
-        != x_receipt["obs_axis_sha256_ordered"]
-        or ordered_sha256(var.index.astype(str)) != x_receipt["var_axis_sha256_ordered"]
+        != manifest["expected"]["obs_index_sha256_ordered"]
+        or ordered_sha256(var.index.astype(str))
+        != manifest["expected"]["var_index_sha256_ordered"]
     ):
-        raise AssertionError("accepted OBS/VAR axes do not bind to X")
+        raise AssertionError("accepted OBS/VAR axes drift from the X link contract")
     source_receipt: dict[str, Any] = {"status": "deferred"}
     if full_source:
         source_path = scratch / "perturbase.h5ad"

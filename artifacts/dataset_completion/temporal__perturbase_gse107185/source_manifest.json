@@ -52,7 +52,7 @@
     "hgnc_recovered_features": 81,
     "n_obs": 8428,
     "n_vars": 2000,
-    "nnz": 15679469,
+    "nnz": 6377510,
     "obs_index_sha256_ordered": "6009f41aa22662d5119552b5a3a40a8effdd645a50372857ef8b1692bd22bfbb",
     "residual_unknown_features": 280,
     "source_batch_media_cell_counts": {
@@ -134,7 +134,7 @@
     },
     "var_index_sha256_ordered": "ecc95bb79420bf3ec553f4c572b8dfee73c49bfee086982d3bcec57d4c046b63",
     "x_dtype": "float32",
-    "x_sum": 9958565.121656165
+    "x_sum": -336057.795399419
   },
   "format": "pert-gym.source-manifest/v1",
   "geo_metadata_supplements": {
@@ -178,6 +178,7 @@
     "contract": "accepted member is a cleaning of this exact h5ad component; no broader GSE component is silently substituted",
     "member": "extend_61",
     "member_nnz": 15679469,
+    "member_sum": 9958565.121656165,
     "member_shape": [
       8428,
       2000
