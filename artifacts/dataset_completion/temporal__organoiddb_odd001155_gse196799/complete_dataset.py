@@ -138,6 +138,9 @@ def cache_artifact(artifact: Any) -> Path:
     """Materialize through requester-pays-aware gcloud on the EU worker."""
     if platform.system() == "Darwin":
         return Path(artifact.cache())
+    uri = str(artifact.path)
+    if not uri.startswith("gs://"):
+        return Path(artifact.cache())
     target = PAYLOAD_CACHE / f"{artifact.uid}-{Path(str(artifact.key)).name}"
     if not target.exists():
         subprocess.run(
@@ -146,7 +149,7 @@ def cache_artifact(artifact: Any) -> Path:
                 "storage",
                 "cp",
                 f"--billing-project={BILLING_PROJECT}",
-                str(artifact.path),
+                uri,
                 str(target),
             ],
             check=True,
@@ -163,7 +166,13 @@ def load_dataframe(artifact: Any) -> pd.DataFrame:
 
 
 def resolve_artifact(ln: Any, value: Any) -> Any:
-    return value if hasattr(value, "uid") else ln.Artifact.get(uid=str(value))
+    if hasattr(value, "uid"):
+        return value
+    identity = str(value)
+    try:
+        return ln.Artifact.get(uid=identity)
+    except ln.Artifact.DoesNotExist:
+        return ln.Artifact.get(key=identity)
 
 
 def load_manifest() -> dict[str, Any]:
