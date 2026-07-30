@@ -462,6 +462,9 @@ def inspect_x(
     x_artifact: Any, manifest: dict[str, Any], scratch: Path
 ) -> dict[str, Any]:
     path = materialize_artifact(x_artifact, scratch / "X.h5ad")
+    artifact_sha256 = sha256_file(path)
+    if artifact_sha256 != manifest["accepted_artifacts"]["X"]["sha256"]:
+        raise AssertionError("accepted X payload checksum drift")
     with h5py.File(path, "r") as handle:
 
         def axis_values(axis: str) -> list[str]:
@@ -509,6 +512,7 @@ def inspect_x(
         "checks": checks,
         "obs_axis_sha256_ordered": ordered_sha256(obs_values),
         "var_axis_sha256_ordered": ordered_sha256(var_values),
+        "artifact_sha256": artifact_sha256,
         "path_materialized": path.is_file(),
     }
 
@@ -1001,12 +1005,16 @@ def prepare(ln: Any, manifest: dict[str, Any]) -> dict[str, Any]:
         expected_artifact = manifest["accepted_artifacts"][name]
         if artifact_identity(artifact)["key"] != expected_artifact["key"]:
             raise AssertionError(f"frozen {name} key identity drift")
-        if str(artifact.hash) != expected_artifact["sha256"]:
-            raise AssertionError(f"frozen {name} content identity drift")
-    baseline = pd.read_parquet(
-        materialize_artifact(baseline_obs, scratch / "baseline_obs.parquet")
-    )
-    var = pd.read_parquet(materialize_artifact(var_artifact, scratch / "var.parquet"))
+        if getattr(artifact, "hash", None) in (None, ""):
+            raise AssertionError(f"frozen {name} registry hash missing")
+    baseline_path = materialize_artifact(baseline_obs, scratch / "baseline_obs.parquet")
+    var_path = materialize_artifact(var_artifact, scratch / "var.parquet")
+    if sha256_file(baseline_path) != manifest["accepted_artifacts"]["obs"]["sha256"]:
+        raise AssertionError("accepted OBS payload checksum drift")
+    if sha256_file(var_path) != manifest["accepted_artifacts"]["var"]["sha256"]:
+        raise AssertionError("accepted VAR payload checksum drift")
+    baseline = pd.read_parquet(baseline_path)
+    var = pd.read_parquet(var_path)
     x_receipt = inspect_x(x_artifact, manifest, scratch)
     var_receipt = verify_var(var, x_receipt)
     curated, obs_receipt = curate_obs(baseline)
@@ -1054,8 +1062,13 @@ def revalidate_registry_snapshot(
     ):
         artifact = artifact_by_uid(ln, uid)
         actual = artifact_identity(artifact)
-        expected = manifest["accepted_artifacts"][name]
-        if actual["key"] != expected["key"] or actual["hash"] != expected["sha256"]:
+        planned_artifact = {
+            "obs": prepared["baseline_obs"],
+            "X": prepared["x_artifact"],
+            "var": prepared["var_artifact"],
+        }[name]
+        planned = artifact_identity(planned_artifact)
+        if actual != planned:
             raise AssertionError(f"fresh frozen {name} identity drift")
         identities[name] = actual
     latest_obs, obs_history = latest_artifact(ln, OBS_KEY)
