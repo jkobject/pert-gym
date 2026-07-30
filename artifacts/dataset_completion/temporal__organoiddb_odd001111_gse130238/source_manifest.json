@@ -1,0 +1,158 @@
+{
+  "format": "pert-gym.source-manifest/v1",
+  "task_id": "t_9b5c70a6",
+  "dataset_id": "temporal/organoiddb_odd001111_gse130238",
+  "logical_key": "pert-gym/logical/temporal/organoiddb_odd001111_gse130238",
+  "source_identity": {
+    "geo_accession": "GSE130238",
+    "organoiddb_id": "ODD001111",
+    "pmid": "31474560",
+    "pmcid": "PMC6778040",
+    "doi": "10.1016/j.stem.2019.08.002"
+  },
+  "authorities": {
+    "geo_family_soft": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE130nnn/GSE130238/soft/GSE130238_family.soft.gz",
+      "size": 2972,
+      "sha256": "a0cbbbe97e15b8667b89ccea0aadaa62433642cb5ddb789999a8efd3590b1ea6"
+    },
+    "pubmed_xml": {
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=31474560&retmode=xml",
+      "required_tokens": [
+        "31474560",
+        "Complex Oscillatory Waves Emerging from Cortical Organoids",
+        "10.1016/j.stem.2019.08.002"
+      ]
+    },
+    "pmc_bioc_xml": {
+      "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6778040/unicode",
+      "required_tokens": [
+        "GSE130238",
+        "Single-cell RNA sequencing",
+        "15,990",
+        "1-, 3-, 6-, and 10-month organoids"
+      ]
+    },
+    "organoiddb": {
+      "url": "http://www.inbirg.com/organoid_db/detail/Odd001111",
+      "required_tokens": [
+        "Odd001111",
+        "GSE130238",
+        "Human"
+      ]
+    }
+  },
+  "supplementary_files": {
+    "GSM3734294_1M_cortical_organoids_barcodes.tsv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734294/suppl/GSM3734294_1M_cortical_organoids_barcodes.tsv.gz",
+      "size": 20150,
+      "sha256": "b28e23ef7853f92897e70ca0b1f51e716e8489df2356dc81b4196d3cab618873"
+    },
+    "GSM3734294_1M_cortical_organoids_genes.tsv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734294/suppl/GSM3734294_1M_cortical_organoids_genes.tsv.gz",
+      "size": 264505,
+      "sha256": "7d2bdc8f2e8dc1722aa0c31fb2496fae63d0f0dbaa0c86eefe77c56623d814c9"
+    },
+    "GSM3734294_1M_cortical_organoids_matrix.mtx.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734294/suppl/GSM3734294_1M_cortical_organoids_matrix.mtx.gz",
+      "size": 35543236,
+      "sha256": "3c4b1428c30ec440faaf25df7183f800a683f85c291573c5f912d9185bc0ffb4"
+    },
+    "GSM3734295_3M_cortical_organoids_barcodes.tsv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734295/suppl/GSM3734295_3M_cortical_organoids_barcodes.tsv.gz",
+      "size": 13739,
+      "sha256": "2fa9fbdab98beb9619d3372a80e476ab89c5299eb764520a93099c2c1e8fae50"
+    },
+    "GSM3734295_3M_cortical_organoids_genes.tsv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734295/suppl/GSM3734295_3M_cortical_organoids_genes.tsv.gz",
+      "size": 264505,
+      "sha256": "136f490b2f78687dc4b69ece70e17647a28f0065012a4f041bd9171f813dc70b"
+    },
+    "GSM3734295_3M_cortical_organoids_matrix.mtx.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734295/suppl/GSM3734295_3M_cortical_organoids_matrix.mtx.gz",
+      "size": 21109975,
+      "sha256": "e5cfe5a1984842f8c21b70fc53d5730854a199c73edf937f330c2f7fc04f230e"
+    },
+    "GSM3734296_6M_cortical_organoids_barcodes.tsv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734296/suppl/GSM3734296_6M_cortical_organoids_barcodes.tsv.gz",
+      "size": 20226,
+      "sha256": "7467b20c3c8b89e1cd139b03fbc1615cba5df382a050052f19763b2aa467be1b"
+    },
+    "GSM3734296_6M_cortical_organoids_genes.tsv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734296/suppl/GSM3734296_6M_cortical_organoids_genes.tsv.gz",
+      "size": 264505,
+      "sha256": "9e6adbfd5a6febd1bb17a7b5ab29fe600fd309ee8388183a82784f1bde74c56d"
+    },
+    "GSM3734296_6M_cortical_organoids_matrix.mtx.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734296/suppl/GSM3734296_6M_cortical_organoids_matrix.mtx.gz",
+      "size": 21834840,
+      "sha256": "65dd3e7bd2c8518df8abacd4e5c93ba46b7ab45f67306c485f6afc5d292bdf3e"
+    },
+    "GSM3734297_10M_cortical_organoids_barcodes.tsv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734297/suppl/GSM3734297_10M_cortical_organoids_barcodes.tsv.gz",
+      "size": 13910,
+      "sha256": "6ebb037451964c85bfc3f02e02b8aa5dff6dbc50df0e34d1f977469eaca7bce2"
+    },
+    "GSM3734297_10M_cortical_organoids_genes.tsv.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734297/suppl/GSM3734297_10M_cortical_organoids_genes.tsv.gz",
+      "size": 264505,
+      "sha256": "07665ae61f826602424f759bf58dad779a2d1a007069144130a5b886774a7d35"
+    },
+    "GSM3734297_10M_cortical_organoids_matrix.mtx.gz": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3734nnn/GSM3734297/suppl/GSM3734297_10M_cortical_organoids_matrix.mtx.gz",
+      "size": 12799113,
+      "sha256": "841d2d6f6838e080fea0dc00cd7ba67293da100f3335f2144568783dbdaff004"
+    }
+  },
+  "accepted_artifacts": {
+    "obs": {
+      "uid": "hMei5vxivF2GH5DV0000",
+      "key": "data/cleaned/GSE130238/obs.parquet",
+      "sha256": "a5865a22ad2a698f895179bc5521802eb2120db585e9292da6141a9d69faf092"
+    },
+    "X": {
+      "uid": "lVUodgrG2F2izaVd0000",
+      "key": "data/cleaned/GSE130238/X.h5ad",
+      "sha256": "40ec513843e44ee9fc005ba86a880ee42834c7830f70c7c55233e7c74affc8f1"
+    },
+    "var": {
+      "uid": "y0V1sLQ45pbtf6oS0000",
+      "key": "data/cleaned/GSE130238/var.parquet",
+      "sha256": "704a5637f60b07969e4e65793f5eb37f227f3f915bbf37d142356496f12bfa51"
+    }
+  },
+  "expected": {
+    "n_obs": 16086,
+    "n_vars": 33694,
+    "nnz": 29387863,
+    "raw_count_sum": 86379368,
+    "x_dtype": "uint32",
+    "obs_index_sha256_ordered": "ef29dab9266c41eee78de1343c07d9f9f78a383157e2ea1c7484cdbee9cd304c",
+    "var_index_sha256_ordered": "7eb86babb45d8bfedc121c1d964603857d4b54d062de98bd2f84739a284ce304",
+    "sample_cell_counts": {
+      "GSM3734294": 4832,
+      "GSM3734295": 3158,
+      "GSM3734296": 4888,
+      "GSM3734297": 3208
+    },
+    "source_month_cell_counts": {
+      "1": 4832,
+      "3": 3158,
+      "6": 4888,
+      "10": 3208
+    }
+  },
+  "metadata_decisions": {
+    "time": "GEO sample characteristics establish one cortical-organoid maturation series at 1, 3, 6, and 10 months. Canonical timepoint uses the named mean Gregorian month convention (365.25/12 days = 43,830 minutes) and retains raw values, units, and labels.",
+    "cell_type": "The paper reports aggregate annotated classes for 15,990 analyzed cells, but no barcode-level annotation asset was found for the 16,086-cell GEO matrix. Cell type therefore remains unknown rather than projecting aggregate labels.",
+    "donor_sex_disease_ethnicity": "No row- or sample-joinable source assertions were found; fields remain unknown.",
+    "media": "The paper describes staged culture factors, but no single row-level medium value is joinable; field remains unknown.",
+    "x_semantics": "The accepted CSR X is the unnormalized GEO UMI count matrix and is retained without rewrite."
+  },
+  "supplement_review": {
+    "paper_supplement": "NIHMS1537695-supplement-2.pdf is listed by PMC as a 3.4 MB supplementary PDF. PMC/Europe PMC did not expose it through a stable open-access machine endpoint during curation. The PMC BioC full-text authority and GEO's complete 12-member supplementary inventory were used; no unsupported barcode-level labels were inferred.",
+    "geo_supplement_members": 12,
+    "geo_raw_tar_size": 92426240,
+    "geo_raw_tar_sha256": "d64fa1e32a28c2a9a048e45710e77535f199d2f45023df822ba0429c562a596f"
+  }
+}
