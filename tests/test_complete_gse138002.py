@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+from types import SimpleNamespace
 
 import pandas as pd
 
@@ -75,3 +76,22 @@ def test_ordered_sha256_uses_length_delimited_source_order() -> None:
     module = load_module()
     assert module.ordered_sha256(["ab", "c"]) != module.ordered_sha256(["a", "bc"])
     assert module.ordered_sha256(["a", "b"]) != module.ordered_sha256(["b", "a"])
+
+
+def test_materialize_artifact_uses_lamin_cache_for_s3(
+    tmp_path: Path,
+) -> None:
+    module = load_module()
+    cached = tmp_path / "lamin-cache" / "payload.parquet"
+    cached.parent.mkdir()
+    cached.write_bytes(b"accepted payload")
+    artifact = SimpleNamespace(
+        path="s3://lamindata-eu-central-1/dataset/payload.parquet",
+        cache=lambda: cached,
+    )
+    destination = tmp_path / "readback" / "payload.parquet"
+
+    result = module.materialize_artifact(artifact, destination)
+
+    assert result == destination
+    assert destination.read_bytes() == b"accepted payload"

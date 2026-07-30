@@ -123,6 +123,15 @@ def materialize_artifact(artifact: Any, destination: Path) -> Path:
         command.extend([uri, str(destination)])
         subprocess.run(command, check=True)
         return destination
+    if uri.startswith("s3://"):
+        cached = Path(artifact.cache())
+        if not cached.is_file():
+            raise FileNotFoundError(f"Lamin S3 cache did not materialize {uri}")
+        if cached.resolve() != destination.resolve():
+            shutil.copy2(cached, destination)
+        return destination
+    if "://" in uri and not uri.startswith("file://"):
+        raise ValueError(f"unsupported artifact storage URI: {uri}")
     shutil.copy2(Path(uri.removeprefix("file://")), destination)
     return destination
 
