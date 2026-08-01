@@ -73,10 +73,11 @@ def test_curate_obs_preserves_identity_and_corrects_day1_control() -> None:
     assert curated.index.equals(source.index)
     assert curated["source_original_is_control"].tolist() == [True, False]
     assert curated["is_control"].tolist() == [False, False]
-    assert curated["is_control_state"].tolist() == ["known", "known"]
+    assert curated["is_control_state"].tolist() == ["present", "present"]
     assert curated["sample"].tolist() == ["GSM5830919", "GSM5830922"]
     assert curated["cell_id"].tolist() == source.index.tolist()
     assert curated["timepoint"].tolist() == [1.0, 5.0]
+    assert curated["is_baseline"].tolist() == [True, False]
     assert receipt["source_day1_control_rows_corrected"] == 1
 
 
@@ -85,21 +86,44 @@ def test_curate_obs_distinguishes_known_qc_failure_from_unresolved_quality() -> 
 
     assert curated["is_low_quality"].tolist()[0] is True
     assert pd.isna(curated["is_low_quality"].iloc[1])
-    assert curated["is_low_quality_state"].tolist() == ["known", "unknown"]
+    assert curated["is_low_quality_state"].tolist() == ["present", "missing"]
     assert receipt["initial_qc_failure_rows"] == 1
     assert receipt["unresolved_low_quality_rows"] == 1
 
 
 def test_all_canonical_fields_have_state_and_source_columns() -> None:
     curated, _ = MODULE.curate_obs(baseline(), qc())
+    contract = json.loads((ROOT / "config/obs_completed_contract_v1.json").read_text())
 
+    assert list(MODULE.CANONICAL_OBS_FIELDS) == contract["canonical_obs_columns"]
+    assert len(MODULE.CANONICAL_OBS_FIELDS) == 42
     for field in MODULE.CANONICAL_OBS_FIELDS:
         assert field in curated
         assert f"{field}_state" in curated
         assert f"{field}_source" in curated
     dispositions = MODULE.field_dispositions(curated)
-    assert dispositions["cell_type"]["unknown_rows"] == 2
+    assert dispositions["cell_type"]["missing_rows"] == 2
     assert dispositions["perturbation"]["not_applicable_rows"] == 2
+    assert dispositions["trajectory_id"]["present_rows"] == 2
+    assert dispositions["molecule_sequence"]["not_applicable_rows"] == 2
+
+
+def test_scientific_context_has_structured_axis_and_endpoint_disposition() -> None:
+    context = MODULE.scientific_context(
+        {"timepoint_counts": {1: 2930, 2: 4977, 3: 5968, 5: 4841}}
+    )
+
+    assert context["scientific_modality"]["perturbation_status"] == "not_applicable"
+    axis = context["experimental_axes"][0]
+    assert axis["name"] == "developmental_time"
+    assert axis["cardinality"] == 4
+    assert axis["frequencies_by_observation"] == {
+        "1": 2930,
+        "2": 4977,
+        "3": 5968,
+        "5": 4841,
+    }
+    assert context["outcomes_endpoints"]["status"] == "not_applicable"
 
 
 def test_processing_decision_notebook_executes_from_repo_root(

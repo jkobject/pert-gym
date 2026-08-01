@@ -36,8 +36,11 @@ from tools.pert_gym_vm_runner import (
 
 # Transferred immutable helpers execute from /tmp on the EU VM; point the
 # runner's legacy-lock discovery at the actual remote repository explicitly.
-if repo_root := os.environ.get("PERT_GYM_REPO_ROOT"):
-    vm_runner.ROOT = Path(repo_root).resolve()
+PROJECT_ROOT = Path(
+    os.environ.get("PERT_GYM_REPO_ROOT", Path(__file__).resolve().parents[3])
+).resolve()
+if os.environ.get("PERT_GYM_REPO_ROOT"):
+    vm_runner.ROOT = PROJECT_ROOT
 
 warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 
@@ -63,6 +66,7 @@ SUCCESSOR_KEY = "pert-gym/additions/20260730-odd001154-gse194214-e2e"
 BILLING_PROJECT = "jkobject-1549353370965"
 HERE = Path(__file__).resolve().parent
 MANIFEST_PATH = HERE / "source_manifest.json"
+OBS_CONTRACT_PATH = PROJECT_ROOT / "config/obs_completed_contract_v1.json"
 JOURNAL_PATH = Path.home() / ".cache/pert-gym/curation_journal" / f"{TASK_ID}.json"
 ALIASES = (
     "GSE194214",
@@ -78,48 +82,47 @@ CANONICAL_OBS_FIELDS = (
     "dataset",
     "sample",
     "cell_id",
-    "batch",
     "donor_id",
-    "replicate",
-    "plate_id",
-    "well_id",
+    "batch",
     "cell_type",
     "cell_line",
+    "disease",
     "tissue_type",
     "organism",
-    "disease",
-    "age",
     "sex",
+    "age",
     "ethnicity",
     "sequencer",
     "technology",
     "assay",
     "modality",
     "media",
-    "treatment",
+    "is_bulk",
+    "is_pseudobulk",
     "perturbation",
     "perturbation_type",
     "perturbation_technology",
     "perturbation_library",
-    "guide_id",
     "guide_sequence",
-    "perturbation_target",
+    "molecule_sequence",
+    "is_control",
     "dose",
     "dose_unit",
     "timepoint",
-    "timepoint_unit",
-    "condition",
-    "is_control",
-    "control_availability",
+    "trajectory_id",
+    "pseudotime",
+    "is_baseline",
+    "sensitivity",
+    "response_metric",
+    "response_value",
+    "response_source",
     "n_counts",
     "n_genes",
     "pct_mito",
     "pct_ribo",
     "is_low_quality",
-    "pseudotime",
-    "response_value",
-    "response_type",
 )
+PRIOR_TASK_OBS_UID = "GtDvEO1BsANR8VKR0001"
 
 
 def canonical(value: Any) -> str:
@@ -223,6 +226,9 @@ def membership_sha256(members: list[Any]) -> str:
 
 def verify_manifest() -> dict[str, Any]:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    contract = json.loads(OBS_CONTRACT_PATH.read_text(encoding="utf-8"))
+    if tuple(contract["canonical_obs_columns"]) != CANONICAL_OBS_FIELDS:
+        raise AssertionError("binding OBS contract field drift")
     if (
         manifest["task_id"] != TASK_ID
         or manifest["dataset_id"] != DATASET_ID
@@ -423,40 +429,40 @@ def curate_obs(
         if field in baseline and f"source_original_{field}" not in curated:
             curated[f"source_original_{field}"] = baseline[field]
     index = curated.index
-    set_field(curated, "dataset", DATASET_ID, "known", "canonical logical dataset")
+    set_field(curated, "dataset", DATASET_ID, "present", "canonical logical dataset")
     set_field(
         curated,
         "sample",
         baseline["sample_accession"].astype("string"),
-        "known",
+        "present",
         "GEO sample accession",
     )
     set_field(
         curated,
         "cell_id",
         pd.Series(index.astype(str), index=index, dtype="string"),
-        "known",
+        "present",
         "accepted unique OBS axis",
     )
     set_field(
         curated,
         "batch",
         missing(index),
-        "unknown",
+        "missing",
         "multiple organoids were pooled without a cell-level batch map",
     )
     set_field(
         curated,
         "donor_id",
         missing(index),
-        "unknown",
+        "missing",
         "NCRM1 donor identity absent from source authorities",
     )
     set_field(
         curated,
         "replicate",
         missing(index),
-        "unknown",
+        "missing",
         "multiple organoids were pooled without a cell-level replicate map",
     )
     for field in ("plate_id", "well_id"):
@@ -471,24 +477,24 @@ def curate_obs(
         curated,
         "cell_type",
         missing(index),
-        "unknown",
+        "missing",
         "publication cluster labels lack a barcode-to-cluster map",
     )
     set_field(
         curated,
         "cell_line",
         "NCRM1",
-        "known",
+        "present",
         "GEO source name and publication methods",
     )
     set_field(
         curated,
         "tissue_type",
         "paraxial mesoderm organoid (Somitoid)",
-        "known",
+        "present",
         "GEO characteristics and publication",
     )
-    set_field(curated, "organism", "Homo sapiens", "known", "GEO organism")
+    set_field(curated, "organism", "Homo sapiens", "present", "GEO organism")
     set_field(
         curated,
         "disease",
@@ -496,33 +502,37 @@ def curate_obs(
         "not_applicable",
         "normal developmental organoid model",
     )
-    set_field(curated, "age", missing(index, "Float64"), "unknown", "donor age absent")
+    set_field(curated, "age", missing(index, "Float64"), "missing", "donor age absent")
     for field in ("sex", "ethnicity"):
-        set_field(curated, field, missing(index), "unknown", f"donor {field} absent")
+        set_field(curated, field, missing(index), "missing", f"donor {field} absent")
     set_field(
-        curated, "sequencer", "Illumina NovaSeq 6000", "known", "GEO platform GPL24676"
+        curated,
+        "sequencer",
+        "Illumina NovaSeq 6000",
+        "present",
+        "GEO platform GPL24676",
     )
     set_field(
         curated,
         "technology",
         "10x Genomics Chromium Single Cell 3' v3",
-        "known",
+        "present",
         "GEO library strategy and publication methods",
     )
-    set_field(curated, "assay", "scRNA-seq", "known", "GEO experiment type")
-    set_field(curated, "modality", "scRNA-seq", "known", "GEO experiment type")
+    set_field(curated, "assay", "scRNA-seq", "present", "GEO experiment type")
+    set_field(curated, "modality", "scRNA-seq", "present", "GEO experiment type")
     set_field(
         curated,
         "media",
         missing(index),
-        "unknown",
+        "missing",
         "protocol varies by developmental day and collection boundary is not mapped per cell",
     )
     set_field(
         curated,
         "treatment",
         "optimized Somitoid differentiation protocol",
-        "known",
+        "present",
         "publication protocol used for sequenced trajectory",
     )
     for field in (
@@ -548,33 +558,35 @@ def curate_obs(
         curated,
         "timepoint",
         baseline["timepoint"].astype("Float64"),
-        "known",
+        "present",
         "GEO developmental stage Day 1/2/3/5",
     )
-    set_field(curated, "timepoint_unit", "day", "known", "GEO developmental stage")
+    set_field(curated, "timepoint_unit", "day", "present", "GEO developmental stage")
     set_field(
         curated,
         "condition",
         baseline["sample_title"].astype("string"),
-        "known",
+        "present",
         "GEO sample title",
     )
     set_field(
         curated,
         "is_control",
         False,
-        "known",
+        "present",
         "no GEO sample is designated a control; Day 1 is an early timepoint",
     )
     set_field(
         curated,
         "control_availability",
         "no_explicit_control; developmental_timecourse",
-        "known",
+        "present",
         "GEO sample design",
     )
     for field in ("n_counts", "n_genes", "pct_mito", "pct_ribo"):
-        set_field(curated, field, qc[field], "known", "exact accepted raw-count matrix")
+        set_field(
+            curated, field, qc[field], "present", "exact accepted raw-count matrix"
+        )
     low_quality = pd.Series(pd.NA, index=index, dtype="boolean")
     failures = qc["source_initial_qc_failure"].astype(bool)
     low_quality.loc[failures] = True
@@ -582,14 +594,14 @@ def curate_obs(
         curated,
         "is_low_quality",
         low_quality,
-        np.where(failures, "known", "unknown"),
+        np.where(failures, "present", "missing"),
         "publication initial QC thresholds; remaining cells unresolved because excluded cluster barcodes are unpublished",
     )
     set_field(
         curated,
         "pseudotime",
         missing(index, "Float64"),
-        "unknown",
+        "missing",
         "publication supplies chronological day but no per-cell pseudotime",
     )
     for field in ("response_value", "response_type"):
@@ -601,16 +613,50 @@ def curate_obs(
             "not_applicable",
             "no scalar response endpoint",
         )
+    set_field(curated, "is_bulk", False, "present", "GEO single-cell experiment type")
+    set_field(
+        curated,
+        "is_pseudobulk",
+        False,
+        "present",
+        "accepted OBS axis contains individual cell barcodes",
+    )
+    set_field(
+        curated,
+        "molecule_sequence",
+        missing(index),
+        "not_applicable",
+        "developmental expression atlas without a perturbation molecule",
+    )
+    set_field(
+        curated,
+        "trajectory_id",
+        baseline["trajectory_id"].astype("string"),
+        "present",
+        "GSE194214 Somitoid developmental series identity",
+    )
+    set_field(
+        curated,
+        "is_baseline",
+        baseline["timepoint"].eq(baseline["timepoint"].min()).astype("boolean"),
+        "present",
+        "derived earliest measured developmental timepoint (Day 1); not an untreated control",
+    )
+    for field in ("sensitivity", "response_metric", "response_source"):
+        dtype = "Float64" if field == "sensitivity" else "string"
+        set_field(
+            curated,
+            field,
+            missing(index, dtype),
+            "not_applicable",
+            "developmental expression atlas without a scalar response endpoint",
+        )
     curated["source_qc_complexity"] = qc["source_qc_complexity"]
     curated["source_initial_qc_failure"] = qc["source_initial_qc_failure"].astype(
         "boolean"
     )
-    curated["development_stage_state"] = "known"
+    curated["development_stage_state"] = "present"
     curated["development_stage_source"] = "GEO sample characteristics"
-    curated["trajectory_id_state"] = "known"
-    curated["trajectory_id_source"] = "accepted component source identity"
-    curated["is_bulk"] = False
-    curated["is_pseudobulk"] = False
     curated["source"] = "GEO"
     curated["x_semantics"] = "raw_counts"
     if len(curated) != len(baseline) or not curated.index.equals(baseline.index):
@@ -633,14 +679,67 @@ def curate_obs(
 def field_dispositions(frame: pd.DataFrame) -> dict[str, Any]:
     result: dict[str, Any] = {}
     for field in CANONICAL_OBS_FIELDS:
+        if (
+            field not in frame
+            or f"{field}_state" not in frame
+            or f"{field}_source" not in frame
+        ):
+            raise AssertionError(f"canonical OBS evidence absent: {field}")
         state = frame[f"{field}_state"].astype("string")
+        if not state.isin({"present", "missing", "not_applicable"}).all():
+            raise AssertionError(f"invalid canonical OBS state: {field}")
         result[field] = {
             "state_counts": state.value_counts(dropna=False).sort_index().to_dict(),
-            "known_rows": int(state.eq("known").sum()),
-            "unknown_rows": int(state.eq("unknown").sum()),
+            "present_rows": int(state.eq("present").sum()),
+            "missing_rows": int(state.eq("missing").sum()),
             "not_applicable_rows": int(state.eq("not_applicable").sum()),
+            "non_null_rows": int(frame[field].notna().sum()),
+            "total_rows": len(frame),
+            "sources": sorted(
+                frame[f"{field}_source"].dropna().astype(str).unique().tolist()
+            ),
         }
+    if tuple(result) != CANONICAL_OBS_FIELDS:
+        raise AssertionError("canonical OBS field order/coverage drift")
     return result
+
+
+def scientific_context(obs_receipt: dict[str, Any]) -> dict[str, Any]:
+    frequencies = {
+        str(key): int(value) for key, value in obs_receipt["timepoint_counts"].items()
+    }
+    return {
+        "scientific_modality": {
+            "value": "single-cell RNA-seq developmental expression atlas",
+            "assay": "10x Genomics Chromium Single Cell 3' v3",
+            "x_semantics": "raw UMI counts",
+            "perturbation_status": "not_applicable",
+            "assertion_level": "dataset",
+            "experimental_unit": "single cell from pooled NCRM1 iPSC-derived Somitoids",
+            "source": "GEO GSE194214 and eLife 68925",
+        },
+        "experimental_axes": [
+            {
+                "name": "developmental_time",
+                "raw_field": "development_stage",
+                "raw_values": ["Day 1", "Day 2", "Day 3", "Day 5"],
+                "canonical_field": "timepoint",
+                "values": [1, 2, 3, 5],
+                "unit": "day",
+                "cardinality": 4,
+                "frequencies_by_observation": frequencies,
+                "assertion_level": "observation",
+                "source": "GEO sample titles and characteristics",
+                "classification": "chronological developmental time; not pseudotime, batch, or endpoint",
+            }
+        ],
+        "outcomes_endpoints": {
+            "status": "not_applicable",
+            "items": [],
+            "assertion_level": "dataset",
+            "source": "GEO design and eLife study describe developmental expression without a scalar response endpoint",
+        },
+    }
 
 
 def duplicate_probe(ln: Any) -> dict[str, Any]:
@@ -709,10 +808,16 @@ def prepare(ln: Any, manifest: dict[str, Any], root: Path) -> dict[str, Any]:
         f"{TASK_ID}: source-exhaustive ODD001154 OBS"
     ):
         actual = latest.load()
-        assert_frame_equal(actual, expected_obs, check_categorical=True)
-        if frame_sha256(actual) != expected_hash:
-            raise AssertionError("curated OBS frame hash drift")
-        curated = True
+        if (
+            str(latest.uid) == PRIOR_TASK_OBS_UID
+            and frame_sha256(actual) != expected_hash
+        ):
+            curated = False
+        else:
+            assert_frame_equal(actual, expected_obs, check_categorical=True)
+            if frame_sha256(actual) != expected_hash:
+                raise AssertionError("curated OBS frame hash drift")
+            curated = True
     else:
         raise AssertionError(
             f"foreign OBS revision after frozen baseline: {latest.uid}"
@@ -773,11 +878,29 @@ def ensure_successor(
         raise AssertionError("successor key uniqueness/count drift")
     description = successor_description(new_obs, matches[0], predecessor, before, after)
     existing = list(ln.Collection.filter(key=SUCCESSOR_KEY).all())
+    existing.sort(key=lambda item: (str(item.created_at), str(item.uid)))
     created = False
     if existing:
-        if len(existing) != 1:
-            raise AssertionError("successor key collision")
-        successor = existing[0]
+        successor = existing[-1]
+        current = list(successor.artifacts.all())
+        if str(successor.description) != description or member_identity(
+            current
+        ) != member_identity(after):
+            current_target = [item for item in current if str(item.key) == OBS_KEY]
+            if (
+                not allow_create
+                or len(current_target) != 1
+                or str(current_target[0].uid) != PRIOR_TASK_OBS_UID
+            ):
+                raise AssertionError("successor readback drift")
+            successor = ln.Collection(
+                after,
+                key=SUCCESSOR_KEY,
+                description=description,
+                revises=successor,
+                skip_hash_lookup=True,
+            ).save()
+            created = True
     else:
         if not allow_create:
             raise AssertionError("required successor absent")
@@ -836,7 +959,7 @@ def publish(
     obs = ln.Artifact.from_dataframe(
         path,
         key=OBS_KEY,
-        revises=prepared["baseline_artifact"],
+        revises=prepared["latest_obs_artifact"],
         description=description,
     ).save()
     obs.features.set_values({"X": prepared["x_artifact"]})
@@ -966,6 +1089,13 @@ def main() -> int:
         "source_authorities": authorities,
         "duplicate_probe": duplicates,
         "prepared": strip_runtime(final),
+        **scientific_context(final["obs_receipt"]),
+        "canonical_obs_contract": {
+            "contract_id": "pert-gym/OBS_COMPLETED/v1",
+            "field_count": len(CANONICAL_OBS_FIELDS),
+            "fields": list(CANONICAL_OBS_FIELDS),
+            "row_state_vocabulary": ["present", "missing", "not_applicable"],
+        },
         "collection": collection_receipt,
         "writes": {
             "obs_created": obs_created,
