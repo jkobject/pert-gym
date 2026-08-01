@@ -8,7 +8,7 @@
     "registration_review": "t_09b97a78"
   },
   "branch": "jkobject",
-  "canonical_sha256": "eb339c32128b59f53838f4132c6eb515dad55df2f719020bd1ec8ce39c1ec0c5",
+  "canonical_sha256": "6b232b0533db4bf392c68995965e484d5dc765a151bdbfaaed7006005637093b",
   "chunks": {
     "X": {
       "checks": {
@@ -46,18 +46,17 @@
   },
   "collection": {
     "duplicate_keys": 0,
-    "predecessor_key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
-    "predecessor_member_count": 1018,
-    "predecessor_membership_sha256": "b89142e32475174b41f26ed93fd3cecb27f0c57c54c8e019e4960bc12b94a89a",
-    "predecessor_uid": "GvFuzrWQeKB6Pd8t0000",
+    "predecessor_membership_sha256": "3c329a65562b0dcdab64e68c9866cae81c2c9a93fd83a7babd1fe046576b60b1",
+    "predecessor_uid": "Gr2tdh9dUVgIoqB80000",
+    "replaced_obs_uid": "wTvFyR9fchIwao8l0001",
     "status": "PASS",
-    "successor_key": "pert-gym/additions/20260730-gse269572-e2e",
+    "successor_key": "pert-gym/additions/20260801-gse269572-strict-obs-v2",
     "successor_member_count": 1018,
-    "successor_membership_sha256": "efc67cb380bc14ba486a07995af08744810f5372686328f0eb4731fe42d9e77d",
-    "successor_uid": "jgMqCxKblbeO5uT60000",
-    "target_obs_uid": "wTvFyR9fchIwao8l0001"
+    "successor_membership_sha256": "dcc5cd6e4df739fd2840aa1fefbade989cf348728d0663eca2108185899ccec5",
+    "successor_uid": "NFBw58RkNoGgn9pO0000",
+    "target_obs_uid": "wTvFyR9fchIwao8l0002"
   },
-  "completed_at": "2026-07-30T20:16:33.921330+00:00",
+  "completed_at": "2026-08-01T20:26:17.729780+00:00",
   "counts": {
     "biological_datasets": 1,
     "logical_families": 1,
@@ -83,9 +82,9 @@
     "collection": "PASS",
     "lamin_jkobject": "PASS"
   },
-  "helper_sha256": "32e344f437a75a52ede6e1a3a2f3c82596feab9a2057a665fde0f8829855d19d",
+  "helper_sha256": "61a633fe92fba7daed1f58462ebfcb69a10d2371f50f390581ae7be6b08d38d2",
   "histories": {
-    "obs_revisions": 2,
+    "obs_revisions": 3,
     "var_revisions": 2
   },
   "instance": "laminlabs/pertdata",
@@ -101,12 +100,12 @@
     },
     "obs": {
       "branch_id": 2,
-      "description": "t_363b9754: source-exhaustive GSE269572 OBS; frame_sha256=73c650c783149e59d4e84e3df38a1a0c3503afd3a9552a30df178b231d420270; helper_sha256=32e344f437a75a52ede6e1a3a2f3c82596feab9a2057a665fde0f8829855d19d",
-      "hash": "YbzvRdm-Z5jjUCurGlZh0g",
+      "description": "t_363b9754: source-exhaustive GSE269572 OBS; frame_sha256=16cd2b1b370d4821295515e3d8bf619739c4290358c2adfd5b282811866cf369; helper_sha256=61a633fe92fba7daed1f58462ebfcb69a10d2371f50f390581ae7be6b08d38d2",
+      "hash": "BNfcwF64qGR3bIc2LqR9wA",
       "is_latest": true,
       "key": "data/cleaned/GSE269572/obs.parquet",
-      "size": 4398377,
-      "uid": "wTvFyR9fchIwao8l0001"
+      "size": 4466131,
+      "uid": "wTvFyR9fchIwao8l0002"
     },
     "status": "PASS",
     "var": {
@@ -136,7 +135,51 @@
   },
   "obs": {
     "OBS_COMPLETED": true,
-    "canonical_field_count": 23,
+    "canonical_field_count": 42,
+    "canonical_fields": [
+      "dataset",
+      "sample",
+      "cell_id",
+      "donor_id",
+      "batch",
+      "cell_type",
+      "cell_line",
+      "disease",
+      "tissue_type",
+      "organism",
+      "sex",
+      "age",
+      "ethnicity",
+      "sequencer",
+      "technology",
+      "assay",
+      "modality",
+      "media",
+      "is_bulk",
+      "is_pseudobulk",
+      "perturbation",
+      "perturbation_type",
+      "perturbation_technology",
+      "perturbation_library",
+      "guide_sequence",
+      "molecule_sequence",
+      "is_control",
+      "dose",
+      "dose_unit",
+      "timepoint",
+      "trajectory_id",
+      "pseudotime",
+      "is_baseline",
+      "sensitivity",
+      "response_metric",
+      "response_value",
+      "response_source",
+      "n_counts",
+      "n_genes",
+      "pct_mito",
+      "pct_ribo",
+      "is_low_quality"
+    ],
     "experimental_axes": {
       "condition": {
         "cardinality": 3,
@@ -169,20 +212,453 @@
       "dataset": "three-arm H9-derived cardioid/2D comparison at day 42.5",
       "sample": "one biological/culture replicate"
     },
+    "field_coverage": {
+      "age": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "donor age absent; day 42.5 is culture time, not donor age"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "assay": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "GEO extraction protocol"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "batch": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "no experimental batch assignment is supplied by GEO"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "cell_id": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "GEO sample accession plus source barcode"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "cell_line": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "GEO sample characteristic: cell line"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "cell_type": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "no immutable barcode-level cell annotation source"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "dataset": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "stable logical dataset identity"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "disease": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "disease state absent from GEO"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "donor_id": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "donor identity absent from GEO"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "dose": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "PD173074 dose absent from GEO; not applicable to untreated arms"
+        ],
+        "states": {
+          "missing": 14840,
+          "not_applicable": 44533
+        }
+      },
+      "dose_unit": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "PD173074 dose unit absent from GEO; not applicable to untreated arms"
+        ],
+        "states": {
+          "missing": 14840,
+          "not_applicable": 44533
+        }
+      },
+      "ethnicity": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "donor ethnicity absent from GEO"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "guide_sequence": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "no genetic guide perturbation"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      },
+      "is_baseline": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "single-snapshot culture comparison has no temporal baseline axis"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      },
+      "is_bulk": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "GEO series type is single-cell"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "is_control": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "three source arms do not define one globally canonical binary control"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "is_low_quality": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "no source quality flag or reviewed derivation threshold"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "is_pseudobulk": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "author payload contains individual cell barcodes"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "media": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "culture medium absent from GEO sample metadata"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "modality": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "GEO series type"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "molecule_sequence": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "PD173074 structure absent from GEO; not applicable to untreated arms"
+        ],
+        "states": {
+          "missing": 14840,
+          "not_applicable": 44533
+        }
+      },
+      "n_counts": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "not supplied in accepted source OBS"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "n_genes": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "not supplied in accepted source OBS"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "organism": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "GEO taxon 9606"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "pct_mito": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "not supplied in accepted source OBS"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "pct_ribo": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "not supplied in accepted source OBS"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "perturbation": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "source treatment; only with-PD arm is drug treated"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "perturbation_library": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "targeted culture comparison, not a perturbation-library screen"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      },
+      "perturbation_technology": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "GEO treatment arm mapped to small-molecule treatment or none"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "perturbation_type": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "source treatment mapped to drug or none"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "pseudotime": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "no source pseudotime annotation"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      },
+      "response_metric": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "expression counts are not a scalar response metric"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      },
+      "response_source": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "no scalar response endpoint"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      },
+      "response_value": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "no scalar response endpoint"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      },
+      "sample": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "GEO sample accession"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "sensitivity": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "no scalar drug-sensitivity endpoint"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      },
+      "sequencer": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "sequencer model absent from GEO"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "sex": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "donor sex absent from GEO"
+        ],
+        "states": {
+          "missing": 59373
+        }
+      },
+      "technology": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "GEO extraction protocol identifies 10x Chromium technology"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "timepoint": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "day 42.5 is a dataset-wide snapshot, not a varying biological axis"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      },
+      "tissue_type": {
+        "denominator": 59373,
+        "non_null": 59373,
+        "sources": [
+          "source culture context"
+        ],
+        "states": {
+          "present": 59373
+        }
+      },
+      "trajectory_id": {
+        "denominator": 59373,
+        "non_null": 0,
+        "sources": [
+          "single-snapshot design has no sourced trajectory axis"
+        ],
+        "states": {
+          "not_applicable": 59373
+        }
+      }
+    },
     "obs_uuid_unique": true,
     "outcomes_endpoints": {
       "drug_toxicity_endpoint": "not present in this scRNA-seq payload",
       "expression_matrix": "raw_counts",
       "scalar_response_endpoint": "not_applicable"
     },
-    "residual_unknowns": [
+    "residual_missing": [
       "donor_id",
+      "batch",
       "age",
       "sex",
       "ethnicity",
       "disease",
       "cell_type",
-      "is_control"
+      "is_control",
+      "sequencer",
+      "media",
+      "n_counts",
+      "n_genes",
+      "pct_mito",
+      "pct_ribo",
+      "is_low_quality"
     ],
     "rows": 59373,
     "scientific_modality": "single-cell expression with one drug/culture design axis",
@@ -198,19 +674,19 @@
   },
   "registry_counts": {
     "after": {
-      "artifacts": 28579,
-      "collections": 46
+      "artifacts": 28585,
+      "collections": 48
     },
     "before": {
-      "artifacts": 28579,
-      "collections": 46
+      "artifacts": 28585,
+      "collections": 48
     }
   },
   "replay_noop": true,
   "rollback": {
     "X_uid": "vNprtc3z84zMcEUj0000",
-    "collection_uid": "GvFuzrWQeKB6Pd8t0000",
-    "obs_uid": "wTvFyR9fchIwao8l0000",
+    "collection_uid": "Gr2tdh9dUVgIoqB80000",
+    "obs_uid": "wTvFyR9fchIwao8l0001",
     "var_uid": "umZYkLN9bq9nfl5m0000"
   },
   "schema_version": "pert-gym.dataset-completion-receipt/v2",
