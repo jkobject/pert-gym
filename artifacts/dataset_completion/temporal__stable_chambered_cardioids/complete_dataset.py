@@ -46,7 +46,7 @@ X_UID = "vNprtc3z84zMcEUj0000"
 BASELINE_VAR_UID = "umZYkLN9bq9nfl5m0000"
 EXPECTED_N_OBS = 59_373
 EXPECTED_N_VARS = 36_601
-SUCCESSOR_COLLECTION_KEY = "pert-gym/additions/20260730-gse269572-e2e"
+SUCCESSOR_COLLECTION_KEY = "pert-gym/additions/20260801-gse269572-strict-obs-v2"
 BILLING_PROJECT = "jkobject-1549353370965"
 HERE = Path(__file__).resolve().parent
 MANIFEST_PATH = HERE / "source_manifest.json"
@@ -56,26 +56,45 @@ OBS_FIELDS = (
     "dataset",
     "sample",
     "cell_id",
-    "source_accession",
-    "sample_accession",
-    "source_cell_barcode",
-    "source_file",
-    "sample_title",
+    "donor_id",
+    "batch",
+    "cell_type",
     "cell_line",
-    "condition",
-    "perturbation",
-    "perturbation_type",
-    "organism",
+    "disease",
     "tissue_type",
+    "organism",
+    "sex",
+    "age",
+    "ethnicity",
+    "sequencer",
+    "technology",
     "assay",
     "modality",
+    "media",
+    "is_bulk",
+    "is_pseudobulk",
+    "perturbation",
+    "perturbation_type",
+    "perturbation_technology",
+    "perturbation_library",
+    "guide_sequence",
+    "molecule_sequence",
     "is_control",
-    "donor_id",
-    "age",
-    "sex",
-    "ethnicity",
-    "disease",
-    "cell_type",
+    "dose",
+    "dose_unit",
+    "timepoint",
+    "trajectory_id",
+    "pseudotime",
+    "is_baseline",
+    "sensitivity",
+    "response_metric",
+    "response_value",
+    "response_source",
+    "n_counts",
+    "n_genes",
+    "pct_mito",
+    "pct_ribo",
+    "is_low_quality",
 )
 SOURCE_OBS_COLUMNS = (
     "source_accession",
@@ -143,6 +162,14 @@ def frame_sha256(frame: pd.DataFrame) -> str:
     )
     digest.update(pd.util.hash_pandas_object(frame, index=True).to_numpy().tobytes())
     return digest.hexdigest()
+
+
+def is_exact_curated_revision(
+    description: str, prefix: str, expected_frame_sha256: str
+) -> bool:
+    return description.startswith(prefix) and (
+        f"frame_sha256={expected_frame_sha256}" in description
+    )
 
 
 def load_manifest() -> dict[str, Any]:
@@ -323,6 +350,13 @@ def curate_obs(baseline: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, Any]]:
     perturbation.loc[treatment.eq("with PD173074")] = "PD173074"
     perturbation_type = pd.Series("none", index=index, dtype="string")
     perturbation_type.loc[treatment.eq("with PD173074")] = "drug"
+    treated = treatment.eq("with PD173074")
+    perturbation_technology = pd.Series("none", index=index, dtype="string")
+    perturbation_technology.loc[treated] = "small molecule treatment"
+    conditional_missing_state = pd.Series(
+        "not_applicable", index=index, dtype="string"
+    )
+    conditional_missing_state.loc[treated] = "missing"
 
     set_field(
         result, "dataset", DATASET_ID, "present", "stable logical dataset identity"
@@ -384,6 +418,34 @@ def curate_obs(baseline: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, Any]]:
         "present",
         "source treatment mapped to drug or none",
     )
+    set_field(
+        result,
+        "perturbation_technology",
+        perturbation_technology,
+        "present",
+        "GEO treatment arm mapped to small-molecule treatment or none",
+    )
+    set_field(
+        result,
+        "perturbation_library",
+        missing(index),
+        "not_applicable",
+        "targeted culture comparison, not a perturbation-library screen",
+    )
+    set_field(
+        result,
+        "guide_sequence",
+        missing(index),
+        "not_applicable",
+        "no genetic guide perturbation",
+    )
+    set_field(
+        result,
+        "molecule_sequence",
+        missing(index),
+        conditional_missing_state,
+        "PD173074 structure absent from GEO; not applicable to untreated arms",
+    )
     set_field(result, "organism", "Homo sapiens", "present", "GEO taxon 9606")
     set_field(
         result,
@@ -402,9 +464,38 @@ def curate_obs(baseline: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, Any]]:
     set_field(result, "modality", "scRNA-seq", "present", "GEO series type")
     set_field(
         result,
+        "sequencer",
+        missing(index),
+        "missing",
+        "sequencer model absent from GEO",
+    )
+    set_field(
+        result,
+        "technology",
+        baseline["assay"].astype("string"),
+        "present",
+        "GEO extraction protocol identifies 10x Chromium technology",
+    )
+    set_field(
+        result,
+        "media",
+        missing(index),
+        "missing",
+        "culture medium absent from GEO sample metadata",
+    )
+    set_field(result, "is_bulk", False, "present", "GEO series type is single-cell")
+    set_field(
+        result,
+        "is_pseudobulk",
+        False,
+        "present",
+        "author payload contains individual cell barcodes",
+    )
+    set_field(
+        result,
         "is_control",
         missing(index, "boolean"),
-        "unknown",
+        "missing",
         "three source arms do not define one globally canonical binary control",
     )
     for field, source in (
@@ -415,25 +506,68 @@ def curate_obs(baseline: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, Any]]:
         ("disease", "disease state absent from GEO"),
         ("cell_type", "no immutable barcode-level cell annotation source"),
     ):
-        set_field(result, field, missing(index), "unknown", source)
+        set_field(result, field, missing(index), "missing", source)
+    set_field(
+        result,
+        "batch",
+        missing(index),
+        "missing",
+        "no experimental batch assignment is supplied by GEO",
+    )
+
+    for field, source in (
+        ("dose", "PD173074 dose absent from GEO; not applicable to untreated arms"),
+        ("dose_unit", "PD173074 dose unit absent from GEO; not applicable to untreated arms"),
+    ):
+        set_field(result, field, missing(index), conditional_missing_state, source)
+    for field, dtype, source in (
+        (
+            "timepoint",
+            "Float64",
+            "day 42.5 is a dataset-wide snapshot, not a varying biological axis",
+        ),
+        (
+            "trajectory_id",
+            "string",
+            "single-snapshot design has no sourced trajectory axis",
+        ),
+        ("pseudotime", "Float64", "no source pseudotime annotation"),
+        (
+            "is_baseline",
+            "boolean",
+            "single-snapshot culture comparison has no temporal baseline axis",
+        ),
+        ("sensitivity", "Float64", "no scalar drug-sensitivity endpoint"),
+        (
+            "response_metric",
+            "string",
+            "expression counts are not a scalar response metric",
+        ),
+        ("response_value", "Float64", "no scalar response endpoint"),
+        ("response_source", "string", "no scalar response endpoint"),
+    ):
+        set_field(result, field, missing(index, dtype), "not_applicable", source)
+    for field, dtype, source in (
+        ("n_counts", "Float64", "not supplied in accepted source OBS"),
+        ("n_genes", "Float64", "not supplied in accepted source OBS"),
+        ("pct_mito", "Float64", "not supplied in accepted source OBS"),
+        ("pct_ribo", "Float64", "not supplied in accepted source OBS"),
+        (
+            "is_low_quality",
+            "boolean",
+            "no source quality flag or reviewed derivation threshold",
+        ),
+    ):
+        set_field(result, field, missing(index, dtype), "missing", source)
 
     for source_column in SOURCE_OBS_COLUMNS:
-        if source_column in {
-            "timepoint",
-            "timepoint_unit",
-            "development_stage",
-            "trajectory_id",
-            "source_name",
-            "source_matrix_semantics",
-        }:
-            continue
         result[f"source_original_{source_column}"] = baseline[source_column]
     result["source_treatment"] = treatment
     result["x_semantics"] = "raw_counts"
 
     if not result.index.equals(baseline.index) or len(result) != len(baseline):
         raise AssertionError("OBS row/order drift")
-    forbidden = {"timepoint", "timepoint_unit", "development_stage", "trajectory_id"}
+    forbidden = {"development_stage"}
     if forbidden & set(result.columns):
         raise AssertionError("single-snapshot time leaked into cell-level OBS")
     for field in OBS_FIELDS:
@@ -451,11 +585,25 @@ def curate_obs(baseline: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, Any]]:
         str(value): int(count)
         for value, count in sample.value_counts().sort_index().items()
     }
+    field_coverage = {
+        field: {
+            "non_null": int(result[field].notna().sum()),
+            "denominator": len(result),
+            "states": {
+                str(state): int(count)
+                for state, count in result[f"{field}_state"].value_counts().items()
+            },
+            "sources": sorted(set(result[f"{field}_source"].astype(str))),
+        }
+        for field in OBS_FIELDS
+    }
     return result, {
         "status": "PASS",
         "OBS_COMPLETED": True,
         "rows": len(result),
         "canonical_field_count": len(OBS_FIELDS),
+        "canonical_fields": list(OBS_FIELDS),
+        "field_coverage": field_coverage,
         "obs_uuid_unique": bool(result["obs_uuid"].is_unique),
         "scientific_modality": "single-cell expression with one drug/culture design axis",
         "experimental_unit": {
@@ -482,14 +630,22 @@ def curate_obs(baseline: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, Any]]:
             "drug_toxicity_endpoint": "not present in this scRNA-seq payload",
             "scalar_response_endpoint": "not_applicable",
         },
-        "residual_unknowns": [
+        "residual_missing": [
             "donor_id",
+            "batch",
             "age",
             "sex",
             "ethnicity",
             "disease",
             "cell_type",
             "is_control",
+            "sequencer",
+            "media",
+            "n_counts",
+            "n_genes",
+            "pct_mito",
+            "pct_ribo",
+            "is_low_quality",
         ],
     }
 
@@ -687,17 +843,27 @@ def prepare(ln: Any, manifest: dict[str, Any]) -> dict[str, Any]:
     latest_var, var_history = latest_artifact(ln, VAR_KEY)
     obs_prefix = f"{TASK_ID}: source-exhaustive GSE269572 OBS"
     var_prefix = f"{TASK_ID}: species-correct canonical GSE269572 VAR"
-    obs_is_curated = str(latest_obs.uid) != BASELINE_OBS_UID and str(
-        latest_obs.description
-    ).startswith(obs_prefix)
-    var_is_curated = str(latest_var.uid) != BASELINE_VAR_UID and str(
-        latest_var.description
-    ).startswith(var_prefix)
-    if str(latest_obs.uid) != BASELINE_OBS_UID and not obs_is_curated:
+    expected_obs_frame_sha256 = frame_sha256(curated_obs)
+    expected_var_frame_sha256 = frame_sha256(curated_var)
+    obs_description = str(latest_obs.description)
+    var_description = str(latest_var.description)
+    obs_is_curated = is_exact_curated_revision(
+        obs_description, obs_prefix, expected_obs_frame_sha256
+    )
+    var_is_curated = is_exact_curated_revision(
+        var_description, var_prefix, expected_var_frame_sha256
+    )
+    if (
+        str(latest_obs.uid) != BASELINE_OBS_UID
+        and not obs_description.startswith(obs_prefix)
+    ):
         raise AssertionError(
             f"foreign OBS revision after accepted baseline: {latest_obs.uid}"
         )
-    if str(latest_var.uid) != BASELINE_VAR_UID and not var_is_curated:
+    if (
+        str(latest_var.uid) != BASELINE_VAR_UID
+        and not var_description.startswith(var_prefix)
+    ):
         raise AssertionError(
             f"foreign VAR revision after accepted baseline: {latest_var.uid}"
         )
@@ -713,6 +879,7 @@ def prepare(ln: Any, manifest: dict[str, Any]) -> dict[str, Any]:
         assert_frame_equal(observed, curated_var, check_categorical=True)
     return {
         "accepted_obs": accepted_obs,
+        "predecessor_obs": latest_obs,
         "x_artifact": x_artifact,
         "accepted_var": accepted_var,
         "latest_obs": latest_obs,
@@ -726,8 +893,8 @@ def prepare(ln: Any, manifest: dict[str, Any]) -> dict[str, Any]:
         "x_receipt": x_receipt,
         "obs_history_count": len(obs_history),
         "var_history_count": len(var_history),
-        "expected_obs_frame_sha256": frame_sha256(curated_obs),
-        "expected_var_frame_sha256": frame_sha256(curated_var),
+        "expected_obs_frame_sha256": expected_obs_frame_sha256,
+        "expected_var_frame_sha256": expected_var_frame_sha256,
     }
 
 
@@ -740,7 +907,7 @@ def publish(ln: Any, prepared: dict[str, Any], helper_sha256: str) -> dict[str, 
         prepared["latest_obs"] = ln.Artifact.from_dataframe(
             path,
             key=OBS_KEY,
-            revises=prepared["accepted_obs"],
+            revises=prepared["predecessor_obs"],
             description=f"{TASK_ID}: source-exhaustive GSE269572 OBS; frame_sha256={prepared['expected_obs_frame_sha256']}; helper_sha256={helper_sha256}",
         ).save()
         prepared["obs_is_curated"] = True
@@ -774,30 +941,71 @@ def membership_sha256(members: list[Any]) -> str:
     return sha256_bytes(canonical(member_identity(members)).encode())
 
 
-def predecessor_collection(ln: Any, accepted_obs: Any) -> tuple[Any, list[Any]]:
+def predecessor_collection(ln: Any, replaced_obs: Any) -> tuple[Any, list[Any]]:
     candidates = [
         item
-        for item in ln.Collection.filter(artifacts=accepted_obs, is_latest=True).all()
+        for item in ln.Collection.filter(artifacts=replaced_obs, is_latest=True).all()
         if str(item.key).startswith("pert-gym/additions/")
     ]
     candidates.sort(key=lambda item: (str(item.created_at), str(item.uid)))
     if not candidates:
         raise AssertionError(
-            "no latest additions Collection contains accepted GSE269572 OBS"
+            "no latest additions Collection contains replaced GSE269572 OBS"
         )
     predecessor = candidates[-1]
     members = list(predecessor.artifacts.all())
-    if sum(str(item.uid) == BASELINE_OBS_UID for item in members) != 1:
-        raise AssertionError("predecessor exact accepted OBS membership drift")
+    replaced_uid = str(replaced_obs.uid)
+    if sum(str(item.uid) == replaced_uid for item in members) != 1:
+        raise AssertionError("predecessor exact replaced OBS membership drift")
     return predecessor, members
 
 
 def ensure_successor_collection(
     ln: Any, prepared: dict[str, Any], *, allow_create: bool
 ) -> tuple[Any, bool, dict[str, Any]]:
-    predecessor, before = predecessor_collection(ln, prepared["accepted_obs"])
+    existing = list(ln.Collection.filter(key=SUCCESSOR_COLLECTION_KEY).all())
+    if existing:
+        if len(existing) != 1:
+            raise AssertionError("successor Collection key collision")
+        successor = existing[0]
+        actual = list(successor.artifacts.all())
+        keys = [str(item.key) for item in actual]
+        description = json.loads(str(successor.description))
+        target_uid = str(prepared["latest_obs"].uid)
+        if (
+            description.get("task_id") != TASK_ID
+            or description.get("dataset_id") != DATASET_ID
+            or description.get("added_obs_uid") != target_uid
+            or sum(str(item.uid) == target_uid for item in actual) != 1
+            or len(keys) != len(set(keys))
+            or description.get("resulting_membership_sha256")
+            != membership_sha256(actual)
+        ):
+            raise AssertionError("successor Collection readback drift")
+        return (
+            successor,
+            False,
+            {
+                "status": "PASS",
+                "predecessor_uid": description["predecessor_uid"],
+                "predecessor_membership_sha256": description[
+                    "predecessor_membership_sha256"
+                ],
+                "replaced_obs_uid": description["replaced_obs_uid"],
+                "successor_uid": str(successor.uid),
+                "successor_key": str(successor.key),
+                "successor_member_count": len(actual),
+                "successor_membership_sha256": membership_sha256(actual),
+                "target_obs_uid": target_uid,
+                "duplicate_keys": len(keys) - len(set(keys)),
+            },
+        )
+
+    replaced_obs = prepared["predecessor_obs"]
+    predecessor, before = predecessor_collection(ln, replaced_obs)
+    replaced_uid = str(replaced_obs.uid)
     after = [
-        prepared["latest_obs"] if str(item.uid) == BASELINE_OBS_UID else item
+        prepared["latest_obs"] if str(item.uid) == replaced_uid else item
         for item in before
     ]
     if not prepared["obs_is_curated"]:
@@ -812,29 +1020,22 @@ def ensure_successor_collection(
             "dataset_id": DATASET_ID,
             "predecessor_uid": str(predecessor.uid),
             "predecessor_membership_sha256": membership_sha256(before),
-            "replaced_obs_uid": BASELINE_OBS_UID,
+            "replaced_obs_uid": replaced_uid,
             "added_obs_uid": str(prepared["latest_obs"].uid),
             "member_count": len(after),
             "resulting_membership_sha256": membership_sha256(after),
             "rollback": f"select immutable predecessor Collection {predecessor.uid}",
         }
     )
-    existing = list(ln.Collection.filter(key=SUCCESSOR_COLLECTION_KEY).all())
-    created = False
-    if existing:
-        if len(existing) != 1:
-            raise AssertionError("successor Collection key collision")
-        successor = existing[0]
-    else:
-        if not allow_create:
-            raise AssertionError("successor Collection absent")
-        successor = ln.Collection(
-            after,
-            key=SUCCESSOR_COLLECTION_KEY,
-            description=description,
-            skip_hash_lookup=True,
-        ).save()
-        created = True
+    if not allow_create:
+        raise AssertionError("successor Collection absent")
+    successor = ln.Collection(
+        after,
+        key=SUCCESSOR_COLLECTION_KEY,
+        description=description,
+        skip_hash_lookup=True,
+    ).save()
+    created = True
     actual = list(successor.artifacts.all())
     if str(successor.description) != description or member_identity(
         actual
@@ -849,6 +1050,7 @@ def ensure_successor_collection(
             "predecessor_key": str(predecessor.key),
             "predecessor_member_count": len(before),
             "predecessor_membership_sha256": membership_sha256(before),
+            "replaced_obs_uid": replaced_uid,
             "successor_uid": str(successor.uid),
             "successor_key": str(successor.key),
             "successor_member_count": len(actual),
@@ -892,7 +1094,7 @@ def run(mode: str) -> dict[str, Any]:
         "artifacts": ln.Artifact.filter().count(),
         "collections": ln.Collection.filter().count(),
     }
-    prepare(ln, manifest)
+    initial = prepare(ln, manifest)
     helper_sha256 = sha256_file(Path(__file__))
     writes = {
         "obs_revisions": 0,
@@ -1002,7 +1204,9 @@ def run(mode: str) -> dict[str, Any]:
         "registry_counts": {"before": before_counts, "after": after_counts},
         "replay_noop": mode == "verify" and before_counts == after_counts,
         "rollback": {
-            "obs_uid": BASELINE_OBS_UID,
+            "obs_uid": collection_receipt.get(
+                "replaced_obs_uid", str(initial["predecessor_obs"].uid)
+            ),
             "var_uid": BASELINE_VAR_UID,
             "X_uid": X_UID,
             "collection_uid": collection_receipt.get("predecessor_uid"),
