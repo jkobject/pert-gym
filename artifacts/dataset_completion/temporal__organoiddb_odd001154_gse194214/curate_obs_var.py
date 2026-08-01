@@ -36,11 +36,11 @@ from tools.pert_gym_vm_runner import (
 
 # Transferred immutable helpers execute from /tmp on the EU VM; point the
 # runner's legacy-lock discovery at the actual remote repository explicitly.
-PROJECT_ROOT = Path(
-    os.environ.get("PERT_GYM_REPO_ROOT", Path(__file__).resolve().parents[3])
-).resolve()
-if os.environ.get("PERT_GYM_REPO_ROOT"):
+if configured_repo_root := os.environ.get("PERT_GYM_REPO_ROOT"):
+    PROJECT_ROOT = Path(configured_repo_root).resolve()
     vm_runner.ROOT = PROJECT_ROOT
+else:
+    PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 warnings.filterwarnings("ignore", category=pd.errors.PerformanceWarning)
 
