@@ -106,6 +106,7 @@ def test_all_canonical_fields_have_state_and_source_columns() -> None:
     assert dispositions["perturbation"]["not_applicable_rows"] == 2
     assert dispositions["trajectory_id"]["present_rows"] == 2
     assert dispositions["molecule_sequence"]["not_applicable_rows"] == 2
+    assert MODULE.obs_contract_completed(dispositions) is False
 
 
 def test_scientific_context_has_structured_axis_and_endpoint_disposition() -> None:

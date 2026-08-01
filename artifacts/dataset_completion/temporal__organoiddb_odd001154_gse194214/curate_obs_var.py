@@ -742,6 +742,12 @@ def scientific_context(obs_receipt: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def obs_contract_completed(dispositions: dict[str, Any]) -> bool:
+    if tuple(dispositions) != CANONICAL_OBS_FIELDS:
+        raise AssertionError("canonical OBS contract coverage drift")
+    return all(item["missing_rows"] == 0 for item in dispositions.values())
+
+
 def duplicate_probe(ln: Any) -> dict[str, Any]:
     active = int(ln.setup.settings.branch.id)
     found: dict[str, Any] = {}
@@ -1109,7 +1115,9 @@ def main() -> int:
             "X_rewritten": False,
             "var_rewritten": False,
             "single_physical_member": True,
-            "OBS_COMPLETED": bool(final["obs_curated"]),
+            "OBS_SCHEMA_COMPLETED": bool(final["obs_curated"]),
+            "OBS_COMPLETED": bool(final["obs_curated"])
+            and obs_contract_completed(final["field_dispositions"]),
             "VAR_COMPLETED": bool(final["var_receipt"]["needs_revision"] is False),
             "accepted_component_status": "include",
         },
