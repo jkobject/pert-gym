@@ -30,9 +30,7 @@ def raw_obs() -> pd.DataFrame:
             "cell.type": pd.Categorical([None, "Intestine", None]),
             "plot.cell.type": pd.Categorical([None, None, "Seam_cell"]),
             "lineage": pd.Categorical(["ABa", "E", "ABp"]),
-            "time.point": pd.Categorical(
-                ["300_minutes", "300_minutes", "400_minutes"]
-            ),
+            "time.point": pd.Categorical(["300_minutes", "300_minutes", "400_minutes"]),
             "raw.embryo.time": [0, 10, 20],
             "embryo.time": [0.0, 10.0, 20.0],
             "embryo.time.bin": pd.Categorical(["< 5", "5-15", "15-25"]),
