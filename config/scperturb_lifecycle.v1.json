@@ -1,0 +1,19 @@
+{
+  "rule": [
+    {
+      "action": {
+        "storageClass": "ARCHIVE",
+        "type": "SetStorageClass"
+      },
+      "condition": {
+        "age": 0,
+        "matchesPrefix": [
+          "data/raw/"
+        ],
+        "matchesStorageClass": [
+          "STANDARD"
+        ]
+      }
+    }
+  ]
+}
