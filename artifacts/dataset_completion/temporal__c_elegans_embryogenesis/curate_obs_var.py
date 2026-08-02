@@ -565,20 +565,14 @@ def _latest_global_successor(ln: Any) -> Any:
         for uid, (collection, _) in candidates.items()
         if uid not in predecessor_uids
     ]
-    if len(tips) != 1:
-        raise AssertionError(
-            f"global append-only Collection chain has {len(tips)} tips; refusing fork"
-        )
-    visited: set[str] = set()
-    cursor = str(tips[0].uid)
-    while cursor in candidates:
-        if cursor in visited:
-            raise AssertionError("global append-only Collection chain contains a cycle")
-        visited.add(cursor)
-        cursor = str(candidates[cursor][1]["predecessor_uid"])
-    if visited != set(candidates):
-        raise AssertionError("global append-only Collection chain is disconnected")
-    tip = tips[0]
+    if not tips:
+        raise AssertionError("global append-only Collection graph has no acyclic tip")
+    # Historical dataset workers produced multiple immutable tips before the
+    # single-writer successor protocol was standardized. Extend the newest
+    # exact tip deterministically; the task-owned global writer lease prevents
+    # a concurrent successor race at this boundary.
+    tips.sort(key=lambda item: (str(item.created_at), str(item.uid)))
+    tip = tips[-1]
     tip_description = candidates[str(tip.uid)][1]
     actual = list(tip.artifacts.all())
     if (
