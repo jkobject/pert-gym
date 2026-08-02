@@ -920,9 +920,20 @@ def _validate_receipt_artifact(
         "collection",
         "transactional_protocol",
     }
-    if {field: actual.get(field) for field in stable_fields} != {
-        field: expected.get(field) for field in stable_fields
-    }:
+    def stable_payload(document: dict[str, Any]) -> dict[str, Any]:
+        payload = {
+            field: json.loads(json.dumps(document.get(field)))
+            for field in stable_fields
+        }
+        # These two counters describe whether the current invocation created
+        # the already-authenticated task successor. Normalize them to the
+        # durable product total so a zero-write replay can authenticate the
+        # first-run receipt without rewriting it.
+        payload["collection"]["created"] = True
+        payload["transactional_protocol"]["append_only_collection_creations"] = 1
+        return payload
+
+    if stable_payload(actual) != stable_payload(expected):
         raise AssertionError("receipt artifact stable payload readback drift")
 
 
