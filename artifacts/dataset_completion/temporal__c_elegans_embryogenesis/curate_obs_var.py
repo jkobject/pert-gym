@@ -40,6 +40,7 @@ SOURCE_URL = "https://ndownloader.figshare.com/files/39943585"
 SOURCE_SIZE = 365_498_906
 SOURCE_MD5 = "c3a37ca238921fcec7bd5e9faa6118f1"
 CANONICAL_PREFIX = "gs://scperturb/data/cleaned/c_elegans_embryogenesis"
+SUCCESSOR_COLLECTION_KEY = "pert-gym/additions/20260802-c-elegans-embryogenesis-e2e"
 EXPECTED = {
     "obs": {
         "uid": "5EOAVNZfpqU7u1TX0000",
@@ -503,6 +504,291 @@ def _artifact_identity(artifact: Any) -> dict[str, Any]:
     }
 
 
+def _membership_identity(artifacts: list[Any]) -> list[dict[str, str]]:
+    return sorted(
+        ({"uid": str(item.uid), "key": str(item.key)} for item in artifacts),
+        key=lambda item: (item["key"], item["uid"]),
+    )
+
+
+def _membership_sha256(artifacts: list[Any]) -> str:
+    payload = json.dumps(
+        _membership_identity(artifacts), sort_keys=True, separators=(",", ":")
+    )
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
+def _replacement_membership(
+    before: list[Any], old_obs: Any, new_obs: Any
+) -> list[Any]:
+    matches = [item for item in before if str(item.key) == str(old_obs.key)]
+    if len(matches) != 1 or str(matches[0].uid) != str(old_obs.uid):
+        raise AssertionError("predecessor Collection target OBS identity drift")
+    after = [item for item in before if str(item.key) != str(old_obs.key)]
+    after.append(new_obs)
+    keys = [str(item.key) for item in after]
+    if len(after) != len(before) or len(keys) != len(set(keys)):
+        raise AssertionError("successor Collection key uniqueness/count drift")
+    return after
+
+
+def _latest_global_successor(ln: Any) -> Any:
+    candidates: dict[str, tuple[Any, dict[str, Any]]] = {}
+    for collection in ln.Collection.filter().all():
+        try:
+            description = json.loads(str(collection.description or ""))
+        except json.JSONDecodeError:
+            continue
+        if description.get("format") == "pert-gym.append-only-dataset-e2e-successor/v1":
+            required = {
+                "predecessor_uid",
+                "predecessor_membership_sha256",
+                "resulting_membership_sha256",
+                "member_count_before",
+                "member_count_after",
+            }
+            if not required.issubset(description):
+                raise AssertionError(
+                    f"global successor contract incomplete: {collection.uid}"
+                )
+            actual = list(collection.artifacts.all())
+            if (
+                len(actual) != int(description["member_count_after"])
+                or _membership_sha256(actual)
+                != description["resulting_membership_sha256"]
+            ):
+                raise AssertionError(
+                    f"global successor membership drift: {collection.uid}"
+                )
+            predecessor = ln.Collection.get(uid=description["predecessor_uid"])
+            predecessor_members = list(predecessor.artifacts.all())
+            if (
+                len(predecessor_members) != int(description["member_count_before"])
+                or _membership_sha256(predecessor_members)
+                != description["predecessor_membership_sha256"]
+            ):
+                raise AssertionError(
+                    f"global successor predecessor drift: {collection.uid}"
+                )
+            candidates[str(collection.uid)] = (collection, description)
+    if not candidates:
+        raise AssertionError("global append-only Collection chain absent")
+    predecessor_uids = {
+        str(description["predecessor_uid"])
+        for _, description in candidates.values()
+        if str(description["predecessor_uid"]) in candidates
+    }
+    tips = [
+        collection
+        for uid, (collection, _) in candidates.items()
+        if uid not in predecessor_uids
+    ]
+    if len(tips) != 1:
+        raise AssertionError(
+            f"global append-only Collection chain has {len(tips)} tips; refusing fork"
+        )
+    visited: set[str] = set()
+    cursor = str(tips[0].uid)
+    while cursor in candidates:
+        if cursor in visited:
+            raise AssertionError("global append-only Collection chain contains a cycle")
+        visited.add(cursor)
+        cursor = str(candidates[cursor][1]["predecessor_uid"])
+    if visited != set(candidates):
+        raise AssertionError("global append-only Collection chain is disconnected")
+    return tips[0]
+
+
+def _ensure_collection_successor(
+    ln: Any, old_obs: Any, new_obs: Any
+) -> tuple[Any, dict[str, Any]]:
+    existing = list(ln.Collection.filter(key=SUCCESSOR_COLLECTION_KEY).all())
+    if len(existing) > 1:
+        raise AssertionError("successor Collection key collision")
+    if existing:
+        recorded = json.loads(str(existing[0].description))
+        if (
+            recorded.get("format")
+            != "pert-gym.append-only-dataset-e2e-successor/v1"
+            or recorded.get("task_id") != TASK_ID
+            or recorded.get("dataset_id") != DATASET_ID
+        ):
+            raise AssertionError("successor Collection provenance drift")
+        validated_tip = _latest_global_successor(ln)
+        if str(validated_tip.uid) != str(existing[0].uid):
+            raise AssertionError("recovered successor is not the validated global tip")
+        predecessor = ln.Collection.get(uid=recorded["predecessor_uid"])
+    else:
+        predecessor = _latest_global_successor(ln)
+    before = list(predecessor.artifacts.all())
+    after = _replacement_membership(before, old_obs, new_obs)
+    description = json.dumps(
+        {
+            "format": "pert-gym.append-only-dataset-e2e-successor/v1",
+            "task_id": TASK_ID,
+            "dataset_id": DATASET_ID,
+            "predecessor_uid": str(predecessor.uid),
+            "predecessor_key": str(predecessor.key),
+            "predecessor_membership_sha256": _membership_sha256(before),
+            "member_count_before": len(before),
+            "member_count_after": len(after),
+            "resulting_membership_sha256": _membership_sha256(after),
+            "replacements": [
+                {
+                    "key": str(old_obs.key),
+                    "replaced_uid": str(old_obs.uid),
+                    "added_uid": str(new_obs.uid),
+                }
+            ],
+            "membership_rule": "immutable predecessor with the exact C. elegans OBS anchor replaced by its source-curated revision; X and VAR are reached through explicit feature links",
+            "rollback": f"select immutable predecessor Collection {predecessor.uid}",
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    created = False
+    if existing:
+        successor = existing[0]
+    else:
+        successor = ln.Collection(
+            after,
+            key=SUCCESSOR_COLLECTION_KEY,
+            description=description,
+            skip_hash_lookup=True,
+        ).save()
+        created = True
+    actual = list(successor.artifacts.all())
+    if str(successor.description) != description or _membership_identity(
+        actual
+    ) != _membership_identity(after):
+        raise AssertionError("successor Collection readback drift")
+    if _membership_sha256(list(predecessor.artifacts.all())) != _membership_sha256(before):
+        raise AssertionError("immutable predecessor Collection membership drift")
+    return successor, {
+        "status": "pass_append_only_successor",
+        "created": created,
+        "predecessor": {
+            "uid": str(predecessor.uid),
+            "key": str(predecessor.key),
+            "member_count": len(before),
+            "membership_sha256": _membership_sha256(before),
+        },
+        "successor": {
+            "uid": str(successor.uid),
+            "key": str(successor.key),
+            "member_count": len(actual),
+            "membership_sha256": _membership_sha256(actual),
+        },
+        "replacements": json.loads(description)["replacements"],
+    }
+
+
+def scientific_axis_evidence(raw_obs: pd.DataFrame) -> dict[str, Any]:
+    """Classify source time/stage coordinates without conflating pseudotime."""
+    required = {
+        "time.point",
+        "raw.embryo.time",
+        "embryo.time",
+        "embryo.time.bin",
+        "raw.embryo.time.bin",
+        "timepoint",
+        "pseudotime",
+    }
+    missing = sorted(required - set(raw_obs.columns))
+    if missing:
+        raise AssertionError(f"source temporal evidence is incomplete: {missing}")
+
+    def frequency(column: str) -> dict[str, int]:
+        return {
+            str(key): int(value)
+            for key, value in raw_obs[column]
+            .value_counts(dropna=False)
+            .sort_index()
+            .items()
+        }
+
+    biological_levels = sorted(
+        float(value) for value in raw_obs["timepoint"].dropna().unique()
+    )
+    if len(biological_levels) <= 1:
+        raise AssertionError("source supports no varying biological time axis")
+    timepoint = raw_obs["timepoint"].astype(float)
+    embryo_time = raw_obs["embryo.time"].astype(float)
+    if not timepoint.equals(embryo_time):
+        raise AssertionError("canonical timepoint and source embryo.time disagree")
+    baseline = raw_obs["is_baseline"].astype(bool)
+    if not baseline.equals(timepoint.eq(biological_levels[0])):
+        raise AssertionError("baseline labels disagree with minimum developmental time")
+    if raw_obs["pseudotime"].astype(float).equals(timepoint):
+        raise AssertionError("pseudotime is indistinguishable from elapsed time")
+    for values, labels, axis in (
+        (timepoint, raw_obs["embryo.time.bin"], "developmental"),
+        (
+            raw_obs["raw.embryo.time"].astype(float),
+            raw_obs["raw.embryo.time.bin"],
+            "raw developmental",
+        ),
+    ):
+        for value, label in zip(values, labels, strict=True):
+            text = str(label).strip()
+            if text.startswith("<"):
+                valid = value < float(text.removeprefix("<").strip())
+            elif text.startswith(">"):
+                valid = value > float(text.removeprefix(">").strip())
+            else:
+                lower, upper = (float(part.strip()) for part in text.split("-", 1))
+                valid = lower <= value <= upper
+            if not valid:
+                raise AssertionError(
+                    f"{axis} time {value} disagrees with stage bin {text!r}"
+                )
+    return {
+        "scientific_modality": "single-cell RNA expression developmental atlas",
+        "perturbation_status": "observational_unperturbed",
+        "experimental_unit": {
+            "observation": "cell",
+            "sample": "source batch of pooled C. elegans embryos",
+            "dataset": "one embryogenesis atlas",
+        },
+        "experimental_axes": {
+            "biological_developmental_time": {
+                "verdict": "multitimepoint_biological_axis",
+                "canonical_field": "timepoint",
+                "unit": "minutes post-fertilization",
+                "distinct_levels": len(biological_levels),
+                "minimum": biological_levels[0],
+                "maximum": biological_levels[-1],
+                "row_frequencies": frequency("timepoint"),
+                "source": "source obs.embryo.time/timepoint; Figshare 22491340 and Packer 2019 assigned embryo-time labels",
+            },
+            "collection_label": {
+                "verdict": "source_collection_label_not_cell_age",
+                "raw_field": "time.point",
+                "row_frequencies": frequency("time.point"),
+            },
+            "developmental_stage_bin": {
+                "verdict": "derived_developmental_stage_bin",
+                "raw_fields": ["embryo.time.bin", "raw.embryo.time.bin"],
+                "row_frequencies": frequency("embryo.time.bin"),
+            },
+            "pseudotime": {
+                "verdict": "computed_trajectory_coordinate_not_elapsed_time",
+                "distinct_levels": int(raw_obs["pseudotime"].nunique(dropna=True)),
+                "present_rows": int(raw_obs["pseudotime"].notna().sum()),
+            },
+            "batch": {
+                "verdict": "technical_or_collection_grouping",
+                "row_frequencies": frequency("batch"),
+            },
+        },
+        "outcomes_endpoints": {
+            "verdict": "none",
+            "note": "expression and developmental annotations only; no perturbation-response, viability, survival, or disease endpoint",
+        },
+        "classification": "temporal_developmental_expression_atlas",
+    }
+
+
 def _scientific_equivalence_gate(ln: Any, accepted: dict[str, Any]) -> dict[str, Any]:
     expected_lineage = {item["uid"] for item in EXPECTED.values()} | {
         "Mhw9jYDtVSGL0niy0000",
@@ -567,6 +853,84 @@ def _task_revision(ln: Any, key: str) -> Any | None:
             f"multiple task revisions already exist for {key}: {records}"
         )
     return records[0] if records else None
+
+
+def _validate_task_revision(
+    ln: Any,
+    artifact: Any,
+    predecessor: Any,
+    expected_path: Path,
+) -> None:
+    if (
+        str(artifact.key) != str(predecessor.key)
+        or int(artifact.branch_id) != int(predecessor.branch_id)
+        or not bool(artifact.is_latest)
+        or not str(artifact.description).startswith(f"{TASK_ID}:")
+    ):
+        raise AssertionError("task revision catalog identity drift")
+    history = list(ln.Artifact.filter(key=str(predecessor.key)).all())
+    history_uids = {str(item.uid) for item in history}
+    if str(predecessor.uid) not in history_uids or str(artifact.uid) not in history_uids:
+        raise AssertionError("task revision lineage is incomplete")
+    task_revisions = [
+        item
+        for item in history
+        if str(item.description).startswith(f"{TASK_ID}:")
+    ]
+    if len(task_revisions) != 1 or str(task_revisions[0].uid) != str(artifact.uid):
+        raise AssertionError("task revision lineage is ambiguous")
+    actual = pd.read_parquet(artifact.cache())
+    expected = pd.read_parquet(expected_path)
+    try:
+        pd.testing.assert_frame_equal(actual, expected, check_categorical=True)
+    except AssertionError as error:
+        raise AssertionError("task revision payload readback drift") from error
+
+
+def _validate_receipt_artifact(
+    artifact: Any,
+    receipt_path: Path,
+    receipt_key: str,
+    branch_id: int,
+) -> None:
+    if (
+        str(artifact.key) != receipt_key
+        or int(artifact.branch_id) != branch_id
+        or not bool(artifact.is_latest)
+        or not str(artifact.description).startswith(f"{TASK_ID}:")
+    ):
+        raise AssertionError("receipt artifact catalog identity drift")
+    cached = Path(artifact.cache())
+    try:
+        actual = json.loads(cached.read_text())
+        expected = json.loads(receipt_path.read_text())
+    except (json.JSONDecodeError, OSError) as error:
+        raise AssertionError("receipt artifact payload is unreadable") from error
+    stable_fields = {
+        "schema_version",
+        "task_id",
+        "dataset_id",
+        "logical_key",
+        "instance",
+        "branch",
+        "source_identity",
+        "scientific_classification",
+        "counts",
+        "axis_checks",
+        "source_matrix",
+        "accepted_matrix",
+        "before",
+        "after",
+        "obs",
+        "var",
+        "x",
+        "collection",
+        "transactional_protocol",
+    }
+    if {field: actual.get(field) for field in stable_fields} != {
+        field: expected.get(field) for field in stable_fields
+    }:
+        raise AssertionError("receipt artifact stable payload readback drift")
 
 
 def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
@@ -636,6 +1000,7 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
 
         curated_obs, field_dispositions = curate_obs(raw_obs)
         curated_var, var_evidence = curate_var(raw_var)
+        axes = scientific_axis_evidence(raw_obs)
         obs_path = root / "curated_obs.parquet"
         var_path = root / "curated_var.parquet"
         curated_obs.to_parquet(obs_path)
@@ -674,6 +1039,9 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
                     ),
                     revises=accepted["obs"],
                 ).save()
+            _validate_task_revision(
+                ln, obs_artifact, accepted["obs"], obs_path
+            )
             obs_artifact.features.set_values({"X": accepted["X"]})
 
             var_artifact = _task_revision(ln, accepted["var"].key)
@@ -687,21 +1055,27 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
                     ),
                     revises=accepted["var"],
                 ).save()
+            _validate_task_revision(
+                ln, var_artifact, accepted["var"], var_path
+            )
             accepted["X"].features.set_values({"var": var_artifact})
 
-        after_obs = _artifact_identity(obs_artifact)
-        after_var = _artifact_identity(var_artifact)
         x_after = _artifact_identity(ln.Artifact.get(uid=EXPECTED["X"]["uid"]))
-        collections_preserved = x_after["collections"] == before["X"]["collections"]
-        if not collections_preserved or not x_after["collections"]:
-            raise AssertionError(
-                "accepted X Collection membership drifted or is absent"
-            )
         if (
             x_after["uid"] != before["X"]["uid"]
             or x_after["hash"] != before["X"]["hash"]
         ):
             raise AssertionError("accepted X identity drifted")
+        with ExitStack() as leases:
+            leases.enter_context(
+                lamin_writer_lease(run_id=TASK_ID, preflight_result=capacity)
+            )
+            leases.enter_context(distributed_lamin_writer_lease(lease_metadata))
+            _, collection_evidence = _ensure_collection_successor(
+                ln, accepted["obs"], obs_artifact
+            )
+        after_obs = _artifact_identity(obs_artifact)
+        after_var = _artifact_identity(var_artifact)
 
         receipt = {
             "schema_version": "pert-gym.dataset-completion-receipt/v2",
@@ -729,6 +1103,7 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
                 "figshare_file_md5": SOURCE_MD5,
                 "publication_doi": "10.1126/science.aax1971",
             },
+            "scientific_classification": axes,
             "counts": {
                 "biological_datasets": 1,
                 "logical_families": 1,
@@ -759,16 +1134,12 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
                 "nnz": EXPECTED_NNZ,
                 "rewritten": False,
             },
-            "collection": {
-                "status": "pass_structural_membership_preserved",
-                "memberships_before": before["X"]["collections"],
-                "memberships_after": x_after["collections"],
-                "note": "Collections retain the accepted X structural anchor; obs/var revisions are linked through revision lineage and x_artifact_uid features.",
-            },
+            "collection": collection_evidence,
             "transactional_protocol": {
                 "append_only_revisions": True,
                 "x_reused": True,
                 "collection_membership_mutations": 0,
+                "append_only_collection_creations": int(collection_evidence["created"]),
                 "artifact_deletions": 0,
                 "rollback_identity": {
                     "obs_uid": EXPECTED["obs"]["uid"],
@@ -793,6 +1164,12 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
                     key=receipt_key,
                     description=f"{TASK_ID}: C. elegans embryogenesis dataset-completion verification receipt",
                 ).save()
+            _validate_receipt_artifact(
+                receipt_artifact,
+                receipt_path,
+                receipt_key,
+                int(accepted["obs"].branch_id),
+            )
             receipt_artifact.features.set_values(
                 {"obs": obs_artifact, "X": accepted["X"], "var": var_artifact}
             )

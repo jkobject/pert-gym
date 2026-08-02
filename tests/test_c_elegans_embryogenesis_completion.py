@@ -30,8 +30,14 @@ def raw_obs() -> pd.DataFrame:
             "cell.type": pd.Categorical([None, "Intestine", None]),
             "plot.cell.type": pd.Categorical([None, None, "Seam_cell"]),
             "lineage": pd.Categorical(["ABa", "E", "ABp"]),
+            "time.point": pd.Categorical(
+                ["300_minutes", "300_minutes", "400_minutes"]
+            ),
+            "raw.embryo.time": [0, 10, 20],
             "embryo.time": [0.0, 10.0, 20.0],
-            "pseudotime": [0.0, 1.0, 2.0],
+            "embryo.time.bin": pd.Categorical(["< 5", "5-15", "15-25"]),
+            "raw.embryo.time.bin": pd.Categorical(["< 5", "5-15", "15-25"]),
+            "pseudotime": [0.0, 0.5, 1.0],
             "timepoint": [0.0, 10.0, 20.0],
             "trajectory_id": ["c_elegans_embryogenesis"] * 3,
             "is_baseline": [True, False, False],
@@ -152,6 +158,48 @@ def test_sparse_array_hashes_are_frozen_from_accepted_manifest() -> None:
         "indices": matrix["indices_sha256"],
         "indptr": matrix["indptr_sha256"],
     }
+
+
+def test_scientific_axis_evidence_distinguishes_time_stage_and_pseudotime() -> None:
+    evidence = MODULE.scientific_axis_evidence(raw_obs())
+
+    assert evidence["classification"] == "temporal_developmental_expression_atlas"
+    biological = evidence["experimental_axes"]["biological_developmental_time"]
+    assert biological["verdict"] == "multitimepoint_biological_axis"
+    assert biological["distinct_levels"] == 3
+    assert sum(biological["row_frequencies"].values()) == 3
+    assert (
+        evidence["experimental_axes"]["pseudotime"]["verdict"]
+        == "computed_trajectory_coordinate_not_elapsed_time"
+    )
+    assert evidence["outcomes_endpoints"]["verdict"] == "none"
+
+
+def test_scientific_axis_evidence_rejects_inconsistent_raw_stage_bin() -> None:
+    raw = raw_obs()
+    raw.loc[raw.index[1], "raw.embryo.time.bin"] = "15-25"
+
+    with pytest.raises(AssertionError, match="raw developmental time"):
+        MODULE.scientific_axis_evidence(raw)
+
+
+def test_collection_replacement_is_exact_and_key_preserving() -> None:
+    class Artifact:
+        def __init__(self, uid: str, key: str) -> None:
+            self.uid = uid
+            self.key = key
+
+    old = Artifact("old", "dataset/obs.parquet")
+    other = Artifact("x", "other/obs.parquet")
+    new = Artifact("new", "dataset/obs.parquet")
+    after = MODULE._replacement_membership([old, other], old, new)
+
+    assert [(item.uid, item.key) for item in after] == [
+        ("x", "other/obs.parquet"),
+        ("new", "dataset/obs.parquet"),
+    ]
+    with pytest.raises(AssertionError, match="identity drift"):
+        MODULE._replacement_membership([Artifact("foreign", old.key)], old, new)
 
 
 def test_live_run_refuses_darwin(
