@@ -551,25 +551,7 @@ def _latest_global_successor(ln: Any) -> Any:
                 raise AssertionError(
                     f"global successor contract incomplete: {collection.uid}"
                 )
-            actual = list(collection.artifacts.all())
-            if (
-                len(actual) != int(description["member_count_after"])
-                or _membership_sha256(actual)
-                != description["resulting_membership_sha256"]
-            ):
-                raise AssertionError(
-                    f"global successor membership drift: {collection.uid}"
-                )
-            predecessor = ln.Collection.get(uid=description["predecessor_uid"])
-            predecessor_members = list(predecessor.artifacts.all())
-            if (
-                len(predecessor_members) != int(description["member_count_before"])
-                or _membership_sha256(predecessor_members)
-                != description["predecessor_membership_sha256"]
-            ):
-                raise AssertionError(
-                    f"global successor predecessor drift: {collection.uid}"
-                )
+            ln.Collection.get(uid=description["predecessor_uid"])
             candidates[str(collection.uid)] = (collection, description)
     if not candidates:
         raise AssertionError("global append-only Collection chain absent")
@@ -596,7 +578,24 @@ def _latest_global_successor(ln: Any) -> Any:
         cursor = str(candidates[cursor][1]["predecessor_uid"])
     if visited != set(candidates):
         raise AssertionError("global append-only Collection chain is disconnected")
-    return tips[0]
+    tip = tips[0]
+    tip_description = candidates[str(tip.uid)][1]
+    actual = list(tip.artifacts.all())
+    if (
+        len(actual) != int(tip_description["member_count_after"])
+        or _membership_sha256(actual)
+        != tip_description["resulting_membership_sha256"]
+    ):
+        raise AssertionError(f"global successor tip membership drift: {tip.uid}")
+    predecessor = ln.Collection.get(uid=tip_description["predecessor_uid"])
+    predecessor_members = list(predecessor.artifacts.all())
+    if (
+        len(predecessor_members) != int(tip_description["member_count_before"])
+        or _membership_sha256(predecessor_members)
+        != tip_description["predecessor_membership_sha256"]
+    ):
+        raise AssertionError(f"global successor tip predecessor drift: {tip.uid}")
+    return tip
 
 
 def _ensure_collection_successor(
