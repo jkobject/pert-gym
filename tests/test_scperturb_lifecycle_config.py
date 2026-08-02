@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
 
-LIFECYCLE_CONFIG = Path("config/scperturb_lifecycle.v1.json")
+LIFECYCLE_CONFIG = (
+    Path(__file__).resolve().parents[1] / "config/scperturb_lifecycle.v1.json"
+)
 
 
 def test_scperturb_lifecycle_archives_only_raw_prefix() -> None:
