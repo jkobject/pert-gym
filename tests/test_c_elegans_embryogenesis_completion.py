@@ -15,6 +15,7 @@ SCRIPT = (
 )
 SOURCE_MANIFEST = SCRIPT.with_name("source_manifest.json")
 ACCEPTED_MANIFEST = SCRIPT.with_name("accepted_manifest.json")
+REPLAY_RECEIPT = SCRIPT.with_name("zero_write_replay_receipt.json")
 SPEC = importlib.util.spec_from_file_location("c_elegans_completion", SCRIPT)
 assert SPEC is not None and SPEC.loader is not None
 MODULE = importlib.util.module_from_spec(SPEC)
@@ -206,3 +207,22 @@ def test_live_run_refuses_darwin(
     monkeypatch.setattr(MODULE.platform, "system", lambda: "Darwin")
     with pytest.raises(RuntimeError, match="EU worker"):
         MODULE.run(tmp_path)
+
+
+def test_committed_zero_write_replay_receipt_binds_live_product() -> None:
+    replay = json.loads(REPLAY_RECEIPT.read_text())
+    MODULE.validate_zero_write_replay_receipt(replay)
+
+    assert replay["before"] == replay["after"]
+    assert replay["before"]["artifact_counts"] == {
+        "obs_key_revisions": 2,
+        "x_key_revisions": 1,
+        "var_key_revisions": 2,
+        "receipt_key_revisions": 1,
+    }
+    assert replay["before"]["collection_counts"] == {"successor_key_records": 1}
+    assert len(replay["producer_git_commit"]) == 40
+    assert len(replay["producer_script_sha256"]) == 64
+    assert replay["first_write_receipt_sha256"] == (
+        "f7604f5e637f2ea507973a919292923aa30f13e4c086c5cbc1482f16fef7148c"
+    )

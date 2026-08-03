@@ -41,6 +41,9 @@ SOURCE_SIZE = 365_498_906
 SOURCE_MD5 = "c3a37ca238921fcec7bd5e9faa6118f1"
 CANONICAL_PREFIX = "gs://scperturb/data/cleaned/c_elegans_embryogenesis"
 SUCCESSOR_COLLECTION_KEY = "pert-gym/additions/20260802-c-elegans-embryogenesis-e2e"
+RECEIPT_KEY = (
+    f"data/cleaned/c_elegans_embryogenesis/curation/{TASK_ID}/verification_receipt.json"
+)
 EXPECTED = {
     "obs": {
         "uid": "5EOAVNZfpqU7u1TX0000",
@@ -518,9 +521,7 @@ def _membership_sha256(artifacts: list[Any]) -> str:
     return hashlib.sha256(payload.encode()).hexdigest()
 
 
-def _replacement_membership(
-    before: list[Any], old_obs: Any, new_obs: Any
-) -> list[Any]:
+def _replacement_membership(before: list[Any], old_obs: Any, new_obs: Any) -> list[Any]:
     matches = [item for item in before if str(item.key) == str(old_obs.key)]
     if len(matches) != 1 or str(matches[0].uid) != str(old_obs.uid):
         raise AssertionError("predecessor Collection target OBS identity drift")
@@ -577,8 +578,7 @@ def _latest_global_successor(ln: Any) -> Any:
     actual = list(tip.artifacts.all())
     if (
         len(actual) != int(tip_description["member_count_after"])
-        or _membership_sha256(actual)
-        != tip_description["resulting_membership_sha256"]
+        or _membership_sha256(actual) != tip_description["resulting_membership_sha256"]
     ):
         raise AssertionError(f"global successor tip membership drift: {tip.uid}")
     predecessor = ln.Collection.get(uid=tip_description["predecessor_uid"])
@@ -601,8 +601,7 @@ def _ensure_collection_successor(
     if existing:
         recorded = json.loads(str(existing[0].description))
         if (
-            recorded.get("format")
-            != "pert-gym.append-only-dataset-e2e-successor/v1"
+            recorded.get("format") != "pert-gym.append-only-dataset-e2e-successor/v1"
             or recorded.get("task_id") != TASK_ID
             or recorded.get("dataset_id") != DATASET_ID
         ):
@@ -655,7 +654,9 @@ def _ensure_collection_successor(
         actual
     ) != _membership_identity(after):
         raise AssertionError("successor Collection readback drift")
-    if _membership_sha256(list(predecessor.artifacts.all())) != _membership_sha256(before):
+    if _membership_sha256(list(predecessor.artifacts.all())) != _membership_sha256(
+        before
+    ):
         raise AssertionError("immutable predecessor Collection membership drift")
     return successor, {
         "status": "pass_append_only_successor",
@@ -848,6 +849,111 @@ def _task_revision(ln: Any, key: str) -> Any | None:
     return records[0] if records else None
 
 
+def _set_feature_link_if_needed(artifact: Any, name: str, target: Any) -> bool:
+    """Set one feature link only when it is absent or points elsewhere."""
+    current = {
+        str(key): str(value) for key, value in artifact.features.get_values().items()
+    }
+    if current.get(name) == str(target.key):
+        return False
+    artifact.features.set_values({name: target})
+    return True
+
+
+def _replay_snapshot(ln: Any) -> dict[str, Any] | None:
+    """Read a bounded identity/count snapshot for the task-owned live product."""
+    obs = _task_revision(ln, EXPECTED["obs"]["key"])
+    var = _task_revision(ln, EXPECTED["var"]["key"])
+    receipt = _task_revision(ln, RECEIPT_KEY)
+    collections = list(ln.Collection.filter(key=SUCCESSOR_COLLECTION_KEY).all())
+    if obs is None or var is None or receipt is None or len(collections) != 1:
+        return None
+    x = ln.Artifact.get(uid=EXPECTED["X"]["uid"])
+    collection = collections[0]
+    members = list(collection.artifacts.all())
+    return {
+        "artifact_counts": {
+            "obs_key_revisions": int(
+                ln.Artifact.filter(key=EXPECTED["obs"]["key"]).count()
+            ),
+            "x_key_revisions": int(
+                ln.Artifact.filter(key=EXPECTED["X"]["key"]).count()
+            ),
+            "var_key_revisions": int(
+                ln.Artifact.filter(key=EXPECTED["var"]["key"]).count()
+            ),
+            "receipt_key_revisions": int(ln.Artifact.filter(key=RECEIPT_KEY).count()),
+        },
+        "collection_counts": {
+            "successor_key_records": len(collections),
+        },
+        "artifacts": {
+            "obs": _artifact_identity(obs),
+            "X": _artifact_identity(x),
+            "var": _artifact_identity(var),
+            "receipt": _artifact_identity(receipt),
+        },
+        "collection": {
+            "uid": str(collection.uid),
+            "key": str(collection.key),
+            "member_count": len(members),
+            "membership_sha256": _membership_sha256(members),
+        },
+    }
+
+
+def validate_zero_write_replay_receipt(document: dict[str, Any]) -> None:
+    """Fail closed unless a replay proves exact identity and no live mutations."""
+    if document.get("schema_version") != "pert-gym.zero-write-replay-receipt/v1":
+        raise AssertionError("unexpected zero-write replay schema")
+    if document.get("task_id") != TASK_ID or document.get("dataset_id") != DATASET_ID:
+        raise AssertionError("zero-write replay scope drift")
+    before = document.get("before")
+    after = document.get("after")
+    if not isinstance(before, dict) or before != after:
+        raise AssertionError(
+            "zero-write replay changed live product identity or counts"
+        )
+    writes = document.get("writes_this_replay")
+    expected_writes = {
+        "obs_revisions": 0,
+        "var_revisions": 0,
+        "receipt_artifacts": 0,
+        "collections": 0,
+        "feature_link_updates": 0,
+        "artifact_deletions": 0,
+        "collection_membership_mutations": 0,
+    }
+    if writes != expected_writes:
+        raise AssertionError(f"zero-write replay recorded live writes: {writes}")
+
+    artifacts = before.get("artifacts", {})
+    expected_uids = {
+        "obs": "5EOAVNZfpqU7u1TX0001",
+        "X": EXPECTED["X"]["uid"],
+        "var": "7sZcoxxd0LMj1DeI0001",
+        "receipt": "C7zKP03a9Q7t8D730000",
+    }
+    if {role: item.get("uid") for role, item in artifacts.items()} != expected_uids:
+        raise AssertionError("zero-write replay artifact UID drift")
+    if artifacts["obs"]["features"].get("X") != artifacts["X"]["key"]:
+        raise AssertionError("zero-write replay OBS-to-X link drift")
+    if artifacts["X"]["features"].get("var") != artifacts["var"]["key"]:
+        raise AssertionError("zero-write replay X-to-VAR link drift")
+    receipt_links = artifacts["receipt"]["features"]
+    if receipt_links != {role: artifacts[role]["key"] for role in ("obs", "X", "var")}:
+        raise AssertionError("zero-write replay receipt feature-link drift")
+    collection = before.get("collection", {})
+    if (
+        collection.get("uid") != "9MkL8bCk3WzbuPlV0000"
+        or collection.get("key") != SUCCESSOR_COLLECTION_KEY
+        or collection.get("member_count") != 1018
+        or collection.get("membership_sha256")
+        != "b390f5eeaf8964910f0e98110bb920e7e83907f63174eace11c43eac2f0bf904"
+    ):
+        raise AssertionError("zero-write replay Collection identity drift")
+
+
 def _validate_task_revision(
     ln: Any,
     artifact: Any,
@@ -863,12 +969,13 @@ def _validate_task_revision(
         raise AssertionError("task revision catalog identity drift")
     history = list(ln.Artifact.filter(key=str(predecessor.key)).all())
     history_uids = {str(item.uid) for item in history}
-    if str(predecessor.uid) not in history_uids or str(artifact.uid) not in history_uids:
+    if (
+        str(predecessor.uid) not in history_uids
+        or str(artifact.uid) not in history_uids
+    ):
         raise AssertionError("task revision lineage is incomplete")
     task_revisions = [
-        item
-        for item in history
-        if str(item.description).startswith(f"{TASK_ID}:")
+        item for item in history if str(item.description).startswith(f"{TASK_ID}:")
     ]
     if len(task_revisions) != 1 or str(task_revisions[0].uid) != str(artifact.uid):
         raise AssertionError("task revision lineage is ambiguous")
@@ -920,6 +1027,7 @@ def _validate_receipt_artifact(
         "collection",
         "transactional_protocol",
     }
+
     def stable_payload(document: dict[str, Any]) -> dict[str, Any]:
         payload = {
             field: json.loads(json.dumps(document.get(field)))
@@ -959,6 +1067,16 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
         }
         equivalence = _scientific_equivalence_gate(ln, accepted)
         before = {role: _artifact_identity(item) for role, item in accepted.items()}
+        replay_before = _replay_snapshot(ln)
+        writes_this_replay = {
+            "obs_revisions": 0,
+            "var_revisions": 0,
+            "receipt_artifacts": 0,
+            "collections": 0,
+            "feature_link_updates": 0,
+            "artifact_deletions": 0,
+            "collection_membership_mutations": 0,
+        }
 
         paths = {role: root / Path(spec["key"]).name for role, spec in EXPECTED.items()}
         for role, path in paths.items():
@@ -1043,10 +1161,11 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
                     ),
                     revises=accepted["obs"],
                 ).save()
-            _validate_task_revision(
-                ln, obs_artifact, accepted["obs"], obs_path
+                writes_this_replay["obs_revisions"] += 1
+            _validate_task_revision(ln, obs_artifact, accepted["obs"], obs_path)
+            writes_this_replay["feature_link_updates"] += int(
+                _set_feature_link_if_needed(obs_artifact, "X", accepted["X"])
             )
-            obs_artifact.features.set_values({"X": accepted["X"]})
 
             var_artifact = _task_revision(ln, accepted["var"].key)
             if var_artifact is None:
@@ -1059,10 +1178,11 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
                     ),
                     revises=accepted["var"],
                 ).save()
-            _validate_task_revision(
-                ln, var_artifact, accepted["var"], var_path
+                writes_this_replay["var_revisions"] += 1
+            _validate_task_revision(ln, var_artifact, accepted["var"], var_path)
+            writes_this_replay["feature_link_updates"] += int(
+                _set_feature_link_if_needed(accepted["X"], "var", var_artifact)
             )
-            accepted["X"].features.set_values({"var": var_artifact})
 
         x_after = _artifact_identity(ln.Artifact.get(uid=EXPECTED["X"]["uid"]))
         if (
@@ -1078,6 +1198,7 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
             _, collection_evidence = _ensure_collection_successor(
                 ln, accepted["obs"], obs_artifact
             )
+            writes_this_replay["collections"] += int(collection_evidence["created"])
         after_obs = _artifact_identity(obs_artifact)
         after_var = _artifact_identity(var_artifact)
 
@@ -1152,33 +1273,70 @@ def run(output_dir: Path, *, dry_run: bool = False) -> dict[str, Any]:
                 },
             },
         }
-        receipt_path = output_dir / "verification_receipt.json"
+        committed_receipt_path = output_dir / "verification_receipt.json"
+        receipt_path = (
+            output_dir / "verification_receipt.replay_candidate.json"
+            if replay_before is not None
+            else committed_receipt_path
+        )
         receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
 
-        receipt_key = f"data/cleaned/c_elegans_embryogenesis/curation/{TASK_ID}/verification_receipt.json"
         with ExitStack() as leases:
             leases.enter_context(
                 lamin_writer_lease(run_id=TASK_ID, preflight_result=capacity)
             )
             leases.enter_context(distributed_lamin_writer_lease(lease_metadata))
-            receipt_artifact = _task_revision(ln, receipt_key)
+            receipt_artifact = _task_revision(ln, RECEIPT_KEY)
             if receipt_artifact is None:
                 receipt_artifact = ln.Artifact(
                     receipt_path,
-                    key=receipt_key,
+                    key=RECEIPT_KEY,
                     description=f"{TASK_ID}: C. elegans embryogenesis dataset-completion verification receipt",
                 ).save()
+                writes_this_replay["receipt_artifacts"] += 1
             _validate_receipt_artifact(
                 receipt_artifact,
                 receipt_path,
-                receipt_key,
+                RECEIPT_KEY,
                 int(accepted["obs"].branch_id),
             )
-            receipt_artifact.features.set_values(
-                {"obs": obs_artifact, "X": accepted["X"], "var": var_artifact}
-            )
+            for name, target in (
+                ("obs", obs_artifact),
+                ("X", accepted["X"]),
+                ("var", var_artifact),
+            ):
+                writes_this_replay["feature_link_updates"] += int(
+                    _set_feature_link_if_needed(receipt_artifact, name, target)
+                )
         receipt["receipt_artifact"] = _artifact_identity(receipt_artifact)
-        receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
+        if replay_before is None:
+            committed_receipt_path.write_text(
+                json.dumps(receipt, indent=2, sort_keys=True) + "\n"
+            )
+        else:
+            replay_after = _replay_snapshot(ln)
+            replay_receipt = {
+                "schema_version": "pert-gym.zero-write-replay-receipt/v1",
+                "task_id": TASK_ID,
+                "dataset_id": DATASET_ID,
+                "logical_key": LOGICAL_KEY,
+                "instance": ln.setup.settings.instance.slug,
+                "branch": ln.setup.settings.branch.name,
+                "completed_at": datetime.now(timezone.utc).isoformat(),
+                "producer_git_commit": subprocess.check_output(
+                    ["git", "rev-parse", "HEAD"], text=True
+                ).strip(),
+                "producer_script_sha256": _sha256(Path(__file__)),
+                "first_write_receipt_sha256": _sha256(committed_receipt_path),
+                "before": replay_before,
+                "after": replay_after,
+                "writes_this_replay": writes_this_replay,
+            }
+            validate_zero_write_replay_receipt(replay_receipt)
+            (output_dir / "zero_write_replay_receipt.json").write_text(
+                json.dumps(replay_receipt, indent=2, sort_keys=True) + "\n"
+            )
+            receipt_path.unlink()
         return receipt
 
 
