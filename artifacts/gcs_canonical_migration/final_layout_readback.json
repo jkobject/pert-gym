@@ -1,0 +1,27 @@
+{
+  "cleaned_datasets": 125,
+  "cleaned_objects": 500,
+  "cleaned_problems": {},
+  "deleted_prefix_nonempty": {
+    "pert-gym/staging/pert-gym/curation/": false,
+    "pert-gym/staging/xatlas/": false
+  },
+  "legacy_children": [
+    "pert-gym/staging/"
+  ],
+  "other_objects": [
+    "other/README.md"
+  ],
+  "raw_dataset_prefixes": 111,
+  "requester_pays": true,
+  "root_objects": [
+    "README.md"
+  ],
+  "root_prefixes": [
+    ".lamindb/",
+    "data/",
+    "other/",
+    "pert-gym/"
+  ],
+  "soft_delete_seconds": "604800"
+}

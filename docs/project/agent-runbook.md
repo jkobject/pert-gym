@@ -60,6 +60,19 @@ Those jobs must run on `pert-gym-worker-eu` in `europe-west1-b`, or the worker m
 - GCS access via VM service account;
 - Requester Pays billing project: `jkobject-1549353370965`.
 
+The persistent worker root is a 30-GiB `pd-standard` control-plane disk. It
+contains only the checkout, environment, credentials, and bounded recovery
+state; it is not a durable payload cache. A job that cannot fit in the available
+root space must declare task-owned temporary scratch in its launch packet and
+remove it after terminal readback instead of permanently growing the boot disk.
+
+`gs://scperturb/data/raw/` is cold upstream-recovery storage governed by
+`config/scperturb_lifecycle.v1.json` and transitions from Standard to Archive.
+Do not broadly read it during ordinary validation: Archive has retrieval charges
+and a 365-day minimum duration. Keep actively queried cleaned data and immutable
+publication staging outside that prefix. The lifecycle transition is retention,
+not deletion, and does not waive any `GCS_DECOMMISSION_READY` gate.
+
 Preferred command pattern:
 
 ```bash

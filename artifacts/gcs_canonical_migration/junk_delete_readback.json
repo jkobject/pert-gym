@@ -1,0 +1,12 @@
+{
+  "client_delete_log_summary": {
+    "completed": 0,
+    "errors": 0,
+    "lines": 118458,
+    "removing": 118449
+  },
+  "prefix_readback": {
+    "checked": 13,
+    "nonempty": []
+  }
+}

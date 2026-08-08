@@ -1,0 +1,32 @@
+{
+  "reason": "User-authorized deletion of non-dataset operational residue; canonical data and unresolved scientific surfaces excluded",
+  "soft_delete_retention_seconds": 604800,
+  "objects": [
+    "Makefile"
+  ],
+  "prefixes": [
+    "pert-gym/local_archive/",
+    "pert-gym/qa-evidence/",
+    "pert-gym/qa/",
+    "pert-gym/testing/",
+    "pert-gym/transfer_lists/",
+    "pert-gym/staging/artifacts/",
+    "pert-gym/staging/executions/",
+    "pert-gym/staging/kanban/",
+    "pert-gym/staging/logs/",
+    "pert-gym/staging/qa-evidence/",
+    "pert-gym/staging/reviews/",
+    "pert-gym/staging/tmp/",
+    "pert-gym/staging/pert-gym/qa/"
+  ],
+  "explicitly_preserved": [
+    ".lamindb/",
+    "data/",
+    "other/",
+    "pert-gym/staging/logical/",
+    "pert-gym/staging/pert-gym/logical/",
+    "pert-gym/staging/vars/",
+    "pert-gym/staging/xatlas/",
+    "pert-gym/staging/pert-gym/curation/"
+  ]
+}

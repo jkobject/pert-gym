@@ -1,0 +1,8 @@
+{
+  "partial_client_delete_before_batch": {
+    "errors": 0,
+    "lines": 88547,
+    "removing": 88543
+  },
+  "process_terminated_for_server_side_batch": true
+}
