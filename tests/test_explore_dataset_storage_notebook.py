@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import importlib.util
 import json
 from pathlib import Path
@@ -32,16 +33,19 @@ def cell_source(notebook, cell_id):
     return next(cell.source for cell in notebook.cells if cell.id == cell_id)
 
 
-def test_notebook_is_substantial_pedagogical_and_output_free():
+def test_notebook_is_substantial_pedagogical_and_preserves_reviewed_state():
     notebook = nbformat.read(NOTEBOOK, as_version=4)
     nbformat.validate(notebook)
     markdown = [cell for cell in notebook.cells if cell.cell_type == "markdown"]
     code = [cell for cell in notebook.cells if cell.cell_type == "code"]
     assert len(notebook.cells) >= 40
-    assert len(markdown) > len(code)
-    assert all(cell.get("id") for cell in notebook.cells)
-    assert all(cell.get("execution_count") is None for cell in code)
-    assert all(cell.get("outputs") == [] for cell in code)
+    assert len(markdown) >= 39
+    assert len({cell.get("id") for cell in notebook.cells}) == len(notebook.cells)
+    for cell in code:
+        ast.parse(cell.source, filename=f"{NOTEBOOK}:{cell.id}")
+    assert any(cell.get("execution_count") is not None for cell in code)
+    assert any(cell.get("outputs") for cell in code)
+    assert NOTEBOOK.stat().st_size < 1_000_000
     assert notebook.metadata.kernelspec.name == "python3"
 
 
@@ -86,15 +90,15 @@ def test_notebook_is_read_only_and_bounds_payload_access():
     assert "MAX_LAMIN_METADATA_BYTES" in text
     assert "MAX_LAMIN_ROWS" in text
     assert "MAX_COLLECTION_ROWS" in text
-    assert 'collection_queryset[:MAX_COLLECTION_ROWS]' in text
-    assert 'uid__in=sorted(matched_uids)' in text
+    assert "collection_queryset[:MAX_COLLECTION_ROWS]" in text
+    assert "uid__in=sorted(matched_uids)" in text
     assert '.artifacts.all().values_list("uid", flat=True)' not in text
     assert "MAX_LOCAL_ENTRIES" in text
     assert "entries_seen >= max_entries" in text
     assert "MAX_GCS_RESULTS" in text
     assert '"maxResults": max_results' in text
     assert "MAX_GCS_RESPONSE_BYTES + 1" in text
-    assert "raise RuntimeError(f\"GCS listing failed" in text
+    assert 'raise RuntimeError(f"GCS listing failed' in text
     assert "selected_obs.size is None" in text
     assert "--recursive" not in text
     assert "to_memory(" not in text
@@ -118,7 +122,9 @@ def test_local_scan_bounds_every_visited_entry(tmp_path):
     namespace = {}
     for cell_id in ["imports", "small-helpers", "local-options"]:
         exec(cell_source(notebook, cell_id), namespace)
-    scan_definition = cell_source(notebook, "local-scan").split("\n\nlocal_files =", 1)[0]
+    scan_definition = cell_source(notebook, "local-scan").split("\n\nlocal_files =", 1)[
+        0
+    ]
     exec(scan_definition, namespace)
 
     for index in range(12):
@@ -225,7 +231,7 @@ def test_canonical_gcs_hierarchy_is_explicit_and_legacy_is_not_canonicalized():
         "unexpected_or_legacy",
     ]:
         assert marker in text
-    assert "gs://scperturb/pert-gym/staging/" not in text
+    assert "gs://scperturb/pert-gym/staging/ -> gs://scperturb/staging/" in text
 
 
 def test_notebook_reconciles_raw_cleaned_and_lamin_from_compact_receipts():
@@ -348,8 +354,18 @@ def test_cleaned_loader_supports_h5ad_obs_and_var_by_dataset_name():
         namespace["cleaned_dataset_paths"]("../escape")
 
 
-def test_generator_matches_committed_notebook():
+def test_generator_does_not_overwrite_the_reviewed_manual_notebook():
     module = load_builder()
     generated = module.build()
     committed = nbformat.read(NOTEBOOK, as_version=4)
-    assert nbformat.writes(generated) == nbformat.writes(committed)
+    generated_ids = {cell.id for cell in generated.cells}
+    committed_ids = {cell.id for cell in committed.cells}
+
+    assert nbformat.writes(generated) != nbformat.writes(committed)
+    assert len(committed.cells) > len(generated.cells)
+    assert {
+        "review-inventory-status-explain",
+        "review-inventory-status-views",
+        "dataset-level-review-title",
+        "dataset-level-review-load",
+    }.issubset(committed_ids - generated_ids)

@@ -20,9 +20,16 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "data/pert_gym_dataset_review_inventory.csv"
 REAL_DATASETS = ROOT / "artifacts/schema_audit/final_real_dataset_obs_var_20260717.tsv"
-NEWNESS = ROOT / "artifacts/orchestration/accepted_28_newness_reconciliation_20260717.json"
-BRANCH_SNAPSHOT = ROOT / "artifacts/notebook_decisions/jkobject_vs_main_dataset_inventory.json"
-PUBLICATION_LEDGER = ROOT / "artifacts/orchestration/publication_queue/accepted_component_identities_v1.progress.snapshot.json"
+NEWNESS = (
+    ROOT / "artifacts/orchestration/accepted_28_newness_reconciliation_20260717.json"
+)
+BRANCH_SNAPSHOT = (
+    ROOT / "artifacts/notebook_decisions/jkobject_vs_main_dataset_inventory.json"
+)
+PUBLICATION_LEDGER = (
+    ROOT
+    / "artifacts/orchestration/publication_queue/accepted_component_identities_v1.progress.snapshot.json"
+)
 
 EVIDENCE_LABEL = "dataset-review-inventory@2026-07-29"
 
@@ -169,7 +176,7 @@ def _focus(missing: list[str]) -> str:
     return "complete"
 
 
-def build_rows() -> list[dict[str, Any]]:
+def _build_rows_from_evidence() -> list[dict[str, Any]]:
     snapshot = json.loads(BRANCH_SNAPSHOT.read_text())
     main_values = _snapshot_main_visibility(snapshot)
     rows: list[dict[str, Any]] = []
@@ -199,12 +206,18 @@ def build_rows() -> list[dict[str, Any]]:
             # All 70 rows are drawn from the live branch curation crosswalk; main
             # baseline rows are inherited and addition rows have branch catalog evidence.
             lamin_ok = True
-            collection_ok = main_baseline or bool(categories & {"additions", "base_public"})
-            entire = all([obs_ok, var_ok, structure_ok, cleaning_ok, lamin_ok, collection_ok])
+            collection_ok = main_baseline or bool(
+                categories & {"additions", "base_public"}
+            )
+            entire = all(
+                [obs_ok, var_ok, structure_ok, cleaning_ok, lamin_ok, collection_ok]
+            )
             if main_visible:
                 branch_disposition = "main_existing_with_jkobject_review_or_revision"
             else:
-                branch_disposition = "jkobject_addition_no_main_match_in_available_evidence"
+                branch_disposition = (
+                    "jkobject_addition_no_main_match_in_available_evidence"
+                )
             row: dict[str, Any] = {
                 "dataset_id": dataset_id,
                 "review_scope": "strict_real_dataset_curation_70",
@@ -288,8 +301,60 @@ def build_rows() -> list[dict[str, Any]]:
         rows.append(row)
 
     if len(rows) != 92 or len({row["dataset_id"] for row in rows}) != 92:
-        raise RuntimeError("dataset inventory must contain exactly 92 unique dataset rows")
+        raise RuntimeError(
+            "dataset inventory must contain exactly 92 unique dataset rows"
+        )
     return sorted(rows, key=lambda row: row["dataset_id"].lower())
+
+
+BOOLEAN_COLUMNS = {
+    "main_baseline_crosswalk",
+    "main_dataset_or_similar_visible",
+    "jkobject_dataset_visible",
+    "strict_obs_validated",
+    "strict_var_validated",
+    "chunks_or_structure_validated",
+    "cleaning_validated",
+    "lamin_registered",
+    "in_versioned_collection",
+    "entirely_validated",
+    "entirely_validated_main_existing_dataset",
+    "entirely_validated_jkobject_addition",
+}
+INTEGER_COLUMNS = {"physical_member_count", "observations"}
+
+
+def _read_frozen_rows(path: Path) -> list[dict[str, Any]]:
+    """Read the committed review snapshot without needing ignored evidence files."""
+    with path.open(newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        if reader.fieldnames != COLUMNS:
+            raise RuntimeError(f"unexpected columns in frozen inventory: {path}")
+        rows: list[dict[str, Any]] = []
+        for source in reader:
+            row: dict[str, Any] = dict(source)
+            for column in BOOLEAN_COLUMNS:
+                value = row[column].strip().lower()
+                if value not in {"true", "false"}:
+                    raise RuntimeError(f"invalid boolean {column}={row[column]!r}")
+                row[column] = value == "true"
+            for column in INTEGER_COLUMNS:
+                row[column] = int(row[column]) if row[column] else ""
+            rows.append(row)
+    if len(rows) != 92 or len({row["dataset_id"] for row in rows}) != 92:
+        raise RuntimeError(
+            "frozen inventory must contain exactly 92 unique dataset rows"
+        )
+    return sorted(rows, key=lambda row: row["dataset_id"].lower())
+
+
+def build_rows(
+    *, base: Path = DEFAULT_OUTPUT, refresh_from_evidence: bool = False
+) -> list[dict[str, Any]]:
+    """Canonicalize the frozen snapshot or explicitly rebuild from local evidence."""
+    if refresh_from_evidence:
+        return _build_rows_from_evidence()
+    return _read_frozen_rows(base)
 
 
 def summary(rows: list[dict[str, Any]]) -> dict[str, int]:
@@ -319,12 +384,17 @@ def summary(rows: list[dict[str, Any]]) -> dict[str, int]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--base", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--refresh-from-evidence", action="store_true")
     args = parser.parse_args()
-    rows = build_rows()
+    rows = build_rows(
+        base=args.base,
+        refresh_from_evidence=args.refresh_from_evidence,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    with args.output.open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=COLUMNS)
+    with args.output.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=COLUMNS, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     print(json.dumps({**summary(rows), "output": str(args.output)}, sort_keys=True))

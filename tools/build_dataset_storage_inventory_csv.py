@@ -189,7 +189,9 @@ def _empty_layer_row(dataset_name: str) -> dict[str, Any]:
     }
 
 
-def build_rows(base_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _build_rows_from_evidence(
+    base_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
     snapshot = json.loads(LAMIN_SNAPSHOT.read_text())
     cleaned_receipt = json.loads(CLEANED_RECEIPT.read_text())["datasets"]
     remap_receipt = json.loads(LAMIN_REMAP_RECEIPT.read_text())
@@ -338,20 +340,46 @@ def build_rows(base_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [rows_by_name[name] for name in sorted(rows_by_name, key=str.lower)]
 
 
+def build_rows(
+    base_rows: list[dict[str, Any]], *, refresh_from_evidence: bool = False
+) -> list[dict[str, Any]]:
+    """Canonicalize the frozen snapshot or explicitly refresh local evidence."""
+    if refresh_from_evidence:
+        return _build_rows_from_evidence(base_rows)
+    expected = LAYER_COLUMNS + REVIEW_COLUMNS
+    if not base_rows or list(base_rows[0]) != expected:
+        raise RuntimeError("frozen storage inventory has unexpected columns")
+    if any(list(row) != expected for row in base_rows):
+        raise RuntimeError("frozen storage inventory rows have inconsistent columns")
+    names = [str(row["dataset_name"]) for row in base_rows]
+    if len(names) != 404 or len(set(names)) != 404:
+        raise RuntimeError("frozen storage inventory must contain 404 unique rows")
+    return sorted(base_rows, key=lambda row: str(row["dataset_name"]).lower())
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base", type=Path, default=DEFAULT_BASE)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--refresh-from-evidence", action="store_true")
     args = parser.parse_args()
     with args.base.open(newline="", encoding="utf-8") as handle:
         base_rows = list(csv.DictReader(handle))
     if not base_rows:
         raise RuntimeError(f"empty base inventory: {args.base}")
-    rows = build_rows(base_rows)
+    rows = build_rows(
+        base_rows,
+        refresh_from_evidence=args.refresh_from_evidence,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     fields = LAYER_COLUMNS + REVIEW_COLUMNS
     with args.output.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=fields,
+            extrasaction="ignore",
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
     complete = sum(_truth(row["completely_done"]) for row in rows)

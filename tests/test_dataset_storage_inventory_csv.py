@@ -2,9 +2,13 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import re
+import subprocess
 from pathlib import Path
+from typing import Any
 
 import nbformat
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "tools/build_dataset_storage_inventory_csv.py"
@@ -91,3 +95,41 @@ def test_user_notebook_exposes_complete_and_branch_scoped_catalog_views() -> Non
     assert "both_branches_jkobject_revision" in source
     assert "lamin_only_datasets" not in source
     assert "completely_done == True" in source
+
+    for cell_id in ("94a5cecf", "b1ac96df"):
+        assert cells[cell_id].cell_type == "markdown"
+
+
+def test_notebook_cleaned_loader_paths_are_bounded_without_network() -> None:
+    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    cells = {cell.get("id"): cell for cell in notebook.cells}
+    namespace: dict[str, Any] = {"re": re}
+    exec(cells["cleaned-loader"].source, namespace)
+
+    assert namespace["cleaned_dataset_paths"]("SCP1467") == {
+        "h5ad": "gs://scperturb/data/cleaned/SCP1467/X.h5ad",
+        "obs": "gs://scperturb/data/cleaned/SCP1467/obs.parquet",
+        "var": "gs://scperturb/data/cleaned/SCP1467/var.parquet",
+    }
+    with pytest.raises(ValueError, match="one safe canonical path segment"):
+        namespace["cleaned_dataset_paths"]("../SCP1467")
+
+
+def test_committed_storage_csv_is_deterministic(tmp_path: Path) -> None:
+    rebuilt = tmp_path / CSV.name
+    command = [
+        "uv",
+        "run",
+        "--no-sync",
+        "python",
+        str(SCRIPT),
+        "--base",
+        str(CSV),
+        "--output",
+        str(rebuilt),
+    ]
+    subprocess.run(command, cwd=ROOT, check=True, capture_output=True, text=True)
+    first = rebuilt.read_bytes()
+    subprocess.run(command, cwd=ROOT, check=True, capture_output=True, text=True)
+    assert rebuilt.read_bytes() == first
+    assert b"\r\n" not in first

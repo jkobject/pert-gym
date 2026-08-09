@@ -44,9 +44,7 @@ def test_dataset_review_inventory_has_unique_dataset_units_and_strict_counts() -
     }
 
     additions = {
-        row["dataset_id"]
-        for row in rows
-        if row["entirely_validated_jkobject_addition"]
+        row["dataset_id"] for row in rows if row["entirely_validated_jkobject_addition"]
     }
     assert additions == {"depmap_ccle/26q1", "geo/GSE132080", "geo/GSE197452"}
 
@@ -54,7 +52,11 @@ def test_dataset_review_inventory_has_unique_dataset_units_and_strict_counts() -
 def test_every_incomplete_dataset_names_missing_requirements() -> None:
     rows = build_rows()
     for row in rows:
-        missing = row["missing_requirements"].split(";") if row["missing_requirements"] else []
+        missing = (
+            row["missing_requirements"].split(";")
+            if row["missing_requirements"]
+            else []
+        )
         if row["entirely_validated"]:
             assert missing == []
             assert row["next_review_focus"] == "complete"
@@ -65,8 +67,7 @@ def test_every_incomplete_dataset_names_missing_requirements() -> None:
     registered_new = [
         row
         for row in rows
-        if row["review_scope"] == "genuinely_new_family_22"
-        and row["lamin_registered"]
+        if row["review_scope"] == "genuinely_new_family_22" and row["lamin_registered"]
     ]
     assert len(registered_new) == 10
     assert all(not row["strict_obs_validated"] for row in registered_new)
@@ -74,28 +75,49 @@ def test_every_incomplete_dataset_names_missing_requirements() -> None:
     assert all(not row["entirely_validated"] for row in registered_new)
 
 
-def test_committed_csv_is_deterministic() -> None:
+def test_committed_csv_is_deterministic(tmp_path: Path) -> None:
+    rebuilt = tmp_path / OUTPUT.name
     subprocess.run(
-        ["uv", "run", "python", "tools/build_dataset_review_inventory_csv.py"],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "python",
+            "tools/build_dataset_review_inventory_csv.py",
+            "--output",
+            str(rebuilt),
+        ],
         cwd=ROOT,
         check=True,
         capture_output=True,
         text=True,
     )
-    first = OUTPUT.read_bytes()
+    first = rebuilt.read_bytes()
     subprocess.run(
-        ["uv", "run", "python", "tools/build_dataset_review_inventory_csv.py"],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "python",
+            "tools/build_dataset_review_inventory_csv.py",
+            "--output",
+            str(rebuilt),
+        ],
         cwd=ROOT,
         check=True,
         capture_output=True,
         text=True,
     )
-    assert OUTPUT.read_bytes() == first
+    assert rebuilt.read_bytes() == first
+    assert b"\r\n" not in first
 
     with OUTPUT.open(newline="") as handle:
         rows = list(csv.DictReader(handle))
     assert len(rows) == 92
-    assert sum(_truth(row["entirely_validated_main_existing_dataset"]) for row in rows) == 5
+    assert (
+        sum(_truth(row["entirely_validated_main_existing_dataset"]) for row in rows)
+        == 5
+    )
     assert sum(_truth(row["entirely_validated_jkobject_addition"]) for row in rows) == 3
 
 
@@ -103,8 +125,12 @@ def test_notebook_exposes_dataset_level_summary_and_missing_requirements() -> No
     notebook = json.loads(
         (ROOT / "notebooks/explore_dataset_storage.ipynb").read_text()
     )
-    cells = {cell.get("id"): "".join(cell.get("source", [])) for cell in notebook["cells"]}
-    assert "one row per reviewed dataset identity" in cells["dataset-level-review-title"]
+    cells = {
+        cell.get("id"): "".join(cell.get("source", [])) for cell in notebook["cells"]
+    }
+    assert (
+        "one row per reviewed dataset identity" in cells["dataset-level-review-title"]
+    )
     source = cells["dataset-level-review-load"]
     assert "pert_gym_dataset_review_inventory.csv" in source
     assert "entirely_validated_main_existing" in source
