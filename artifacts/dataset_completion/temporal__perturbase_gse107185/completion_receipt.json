@@ -1,0 +1,585 @@
+{
+  "authority_receipts": {
+    "GSE107185_up-tf-endo_pheno_dict.csv.gz": {
+      "sha256": "4fcb29233751285dd0c85f8a7adedc4cee854d118ecc24de0bdc7a570bc1921a",
+      "size": 42010,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-endo_pheno_dict.csv.gz"
+    },
+    "GSE107185_up-tf-multi_pheno_dict.csv.gz": {
+      "sha256": "ed93f075b0a824f1fa52a28db3d1e4a5914f3ac80b7022f0ef615db31e7e7671",
+      "size": 19747,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-multi_pheno_dict.csv.gz"
+    },
+    "GSE107185_up-tf-neuron-hygro_pheno_dict.csv.gz": {
+      "sha256": "c62df41d4b6544a86558da0e1c184e7c6fb44cf5b014f19c6f5ca6dc2ddbbff8",
+      "size": 75962,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-neuron-hygro_pheno_dict.csv.gz"
+    },
+    "GSE107185_up-tf-neuron-nohygro_pheno_dict.csv.gz": {
+      "sha256": "421091e822511a032344e128a0060f9928c8ebc7816e0ca1ca9ea4b54d1253ff",
+      "size": 31520,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-neuron-nohygro_pheno_dict.csv.gz"
+    },
+    "GSE107185_up-tf-stem_pheno_dict.csv.gz": {
+      "sha256": "9e65a2406f631c67f0abcf61fc4c3b957132b46a812a65879e72cff51f70dedd",
+      "size": 31967,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-stem_pheno_dict.csv.gz"
+    },
+    "geo_family_soft": {
+      "sha256": "95cffac84fe8f96c992c7686ea79ca3e00b4fafa4eeed2729dd9f827e83a4a22",
+      "size": 4721,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/soft/GSE107185_family.soft.gz"
+    },
+    "pmc_bioc_xml": {
+      "required_tokens_present": true,
+      "sha256": "6430b28753bd3e1bb1c6de1513228c66a7936e2f79a8d062e44fb7a7a1517978",
+      "size": 129269,
+      "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6311450/unicode"
+    },
+    "publication_supplement_review": {
+      "files_reviewed": 6,
+      "sequence_map_entries": 62,
+      "source_table_s1_sha256": "6c86453081a5df60e44d93c557fd7355d020535d837a99586e15d549d866de10"
+    },
+    "pubmed_xml": {
+      "required_tokens_present": true,
+      "sha256": "e6c60af6411b8671cb36d6b55172336165c9a09a108d716d4c7ae05eb4755ec5",
+      "size": 32167,
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=30448000&retmode=xml"
+    }
+  },
+  "branch": "jkobject",
+  "canonical_sha256": "ae6565dbf9cbe015c2c936663e863ea2d231d011a696a6b04ac7dafec6bdd4f2",
+  "collection": {
+    "duplicate_keys": 0,
+    "predecessor_hash": "-MZf01S-e8dOwVeoaV-UxQ",
+    "predecessor_key": "pert-gym/additions/20260801-gse269572-strict-obs-v2",
+    "predecessor_member_count": 1018,
+    "predecessor_membership_sha256": "dcc5cd6e4df739fd2840aa1fefbade989cf348728d0663eca2108185899ccec5",
+    "predecessor_uid": "NFBw58RkNoGgn9pO0000",
+    "status": "PASS",
+    "successor_hash": "7b71S1I3_S04350CqwN7jQ",
+    "successor_key": "pert-gym/additions/20260801-gse107185-review-fix",
+    "successor_member_count": 1018,
+    "successor_membership_sha256": "5eb100c08dbafe5af4e3f056c9c2a848ccad09ba680889ae8a852f377b9a3db8",
+    "successor_uid": "oabDLe6umomPkBHG0000",
+    "target_obs_uid": "NMGDnN2AjT75B2lr0002"
+  },
+  "completed_at_epoch": 1785619541,
+  "dataset_id": "temporal/perturbase_gse107185",
+  "format": "pert-gym.dataset-completion/v1",
+  "gates": {
+    "OBS": "PASS",
+    "VAR": "PASS",
+    "canonical_storage": "PASS",
+    "chunks": "PASS",
+    "cleaning": "PASS",
+    "collection": "PASS",
+    "lamin_jkobject": "PASS"
+  },
+  "helper_sha256": "85aede2f9ff93e067700cc940f61c42cb1e9f879551590d8114b0f8066a8e38f",
+  "host": {
+    "available_memory_bytes": 32912162816,
+    "free_disk_bytes": 267889487872,
+    "hostname": "pert-gym-worker-eu",
+    "project": "jkobject-1549353370965",
+    "zone": "europe-west1-b"
+  },
+  "instance": "laminlabs/pertdata",
+  "lifecycle_lease_readback": {
+    "lease-until": "20260801t220804z",
+    "owner": "jkobject",
+    "project": "pert-gym",
+    "purpose": "gse107185-verify",
+    "task": "t-ab37edf6"
+  },
+  "links": {
+    "X_var_link": true,
+    "collection": {
+      "duplicate_keys": 0,
+      "predecessor_hash": "-MZf01S-e8dOwVeoaV-UxQ",
+      "predecessor_key": "pert-gym/additions/20260801-gse269572-strict-obs-v2",
+      "predecessor_member_count": 1018,
+      "predecessor_membership_sha256": "dcc5cd6e4df739fd2840aa1fefbade989cf348728d0663eca2108185899ccec5",
+      "predecessor_uid": "NFBw58RkNoGgn9pO0000",
+      "status": "PASS",
+      "successor_hash": "7b71S1I3_S04350CqwN7jQ",
+      "successor_key": "pert-gym/additions/20260801-gse107185-review-fix",
+      "successor_member_count": 1018,
+      "successor_membership_sha256": "5eb100c08dbafe5af4e3f056c9c2a848ccad09ba680889ae8a852f377b9a3db8",
+      "successor_uid": "oabDLe6umomPkBHG0000",
+      "target_obs_uid": "NMGDnN2AjT75B2lr0002"
+    },
+    "obs_X_link": true,
+    "status": "PASS"
+  },
+  "member_after": {
+    "X": {
+      "created_at": "2026-07-19 14:49:15.183555+00:00",
+      "hash": "EbYJxgruFh2x0ZQ40_OONA",
+      "key": "pert-gym/logical/temporal/perturbase_gse107185/X.zarr.zip",
+      "size": 28145156,
+      "uid": "cFEWN77vqjaCY1I50000"
+    },
+    "obs": {
+      "created_at": "2026-08-01 21:20:59.102221+00:00",
+      "hash": "dP2-NhTsvJveShKlQvIIJQ",
+      "key": "pert-gym/logical/temporal/perturbase_gse107185/obs.parquet",
+      "size": 1611643,
+      "uid": "NMGDnN2AjT75B2lr0002"
+    },
+    "obs_frame_sha256": "61fd9e3346a474fac11f4e81c4ac92a1ccb193a6b4342253491558493d509a32",
+    "obs_history_count": 3,
+    "obs_receipt": {
+      "OBS_COMPLETED": true,
+      "annotation_level": {
+        "expression": "cell",
+        "fitness": "aggregate genotype/sample only; not joined per cell",
+        "perturbation": "cell via PerturBase construct assignment"
+      },
+      "canonical_fields": 42,
+      "experimental_axes": {
+        "biological_time": {
+          "normalized_minutes": [
+            7200,
+            8640
+          ],
+          "row_frequencies": {
+            "7200": 2717,
+            "8640": 5711
+          },
+          "source_days": [
+            5,
+            6
+          ],
+          "verdict": "endpoint_duration_by_media_not_shared_trajectory"
+        },
+        "media": {
+          "endothelial": 3961,
+          "hPSC": 2717,
+          "multilineage": 1750
+        },
+        "perturbation": {
+          "constructs": 61,
+          "controls": 1403,
+          "exact_sequences": 8428,
+          "verdict": "pooled_ORF_overexpression_with_control"
+        }
+      },
+      "obs_uuid_unique": true,
+      "outcomes_endpoints": {
+        "expression": "processed PerturBase single-cell matrix",
+        "fitness": "known aggregate endpoint; cell-level value unknown because no exact join"
+      },
+      "residual_unknown_fields": [
+        "donor_id",
+        "cell_type",
+        "disease",
+        "ethnicity",
+        "dose",
+        "dose_unit",
+        "sensitivity",
+        "response_value",
+        "pct_ribo"
+      ],
+      "rows": 8428,
+      "scientific_modality": "pooled ORF-overexpression single-cell RNA-seq expression endpoint",
+      "source_columns_retained": [
+        "age",
+        "age_missingness_reason",
+        "assay",
+        "batch",
+        "cell_id",
+        "cell_line",
+        "cell_type",
+        "dataset",
+        "donor_id",
+        "donor_id_missingness_reason",
+        "ethnicity",
+        "ethnicity_missingness_reason",
+        "gene",
+        "is_bulk",
+        "is_control",
+        "is_low_quality",
+        "is_pseudobulk",
+        "leiden",
+        "media",
+        "mixscape_class",
+        "mixscape_class_global",
+        "mixscape_class_p_ko",
+        "modality",
+        "n_counts",
+        "n_genes",
+        "n_genes_by_counts",
+        "organism",
+        "pct_counts_mt",
+        "pct_mito",
+        "pertclass",
+        "perturbation",
+        "perturbation_library",
+        "perturbation_target",
+        "perturbation_technology",
+        "perturbation_type",
+        "quality_missingness_reason",
+        "sex",
+        "sex_missingness_reason",
+        "source",
+        "source_accession",
+        "source_bioproject",
+        "source_component",
+        "technology",
+        "timepoint",
+        "timepoint_missingness_reason",
+        "total_counts",
+        "total_counts_mt"
+      ],
+      "status": "PASS"
+    },
+    "source_receipt": {
+      "archive_member": "mixscape_hvg_filter.h5ad",
+      "archive_member_sha256": "e8e19bf30b6b028d9bb257907f9bb4a0747478c6b5af24405df2a8da15e18e75",
+      "logical_component": "extend_61",
+      "nnz": 6377510,
+      "obs_axis_sha256_ordered": "6009f41aa22662d5119552b5a3a40a8effdd645a50372857ef8b1692bd22bfbb",
+      "required_obs_fields_equal": [
+        "gene",
+        "batch",
+        "media"
+      ],
+      "shape": [
+        8428,
+        2000
+      ],
+      "status": "PASS",
+      "sum": -336057.79539941944,
+      "var_axis_sha256_ordered": "ecc95bb79420bf3ec553f4c572b8dfee73c49bfee086982d3bcec57d4c046b63"
+    },
+    "var": {
+      "created_at": "2026-08-01 10:18:40.744950+00:00",
+      "hash": "HK-IDyPJf7Zcwh1jbVjjdw",
+      "key": "pert-gym/logical/temporal/perturbase_gse107185/var.parquet",
+      "size": 389057,
+      "uid": "mlSaS2ZdU1OsMdV30001"
+    },
+    "var_frame_sha256": "6d0ab615afc337ef63abc65fd76b94de45e039192b5add96df71e489700c2a4e",
+    "var_history_count": 2,
+    "var_receipt": {
+      "VAR_ENSEMBL_SPECIES_COMPLETED": true,
+      "ambiguous_hgnc": {
+        "LOR": [
+          {
+            "approved_symbol": "LOXL2",
+            "ensembl_gene_id": "ENSG00000134013",
+            "match_type": "alias",
+            "status": "Approved"
+          },
+          {
+            "approved_symbol": "LORICRIN",
+            "ensembl_gene_id": "ENSG00000203782",
+            "match_type": "previous",
+            "status": "Approved"
+          }
+        ]
+      },
+      "checks": {
+        "axis_preserved": true,
+        "complete_disposition": true,
+        "hgnc_recovered": true,
+        "known_stable_syntax": true,
+        "known_stable_unique": true,
+        "residual_unknown": true,
+        "rows": true,
+        "source_exact": true,
+        "species": true
+      },
+      "hgnc_recovered": 81,
+      "residual_unknown": 280,
+      "rows": 2000,
+      "source_exact_ensembl": 1639,
+      "status": "PASS"
+    },
+    "x_receipt": {
+      "axis_contract": "axes are external and bind through explicit obs -> X -> var links",
+      "checks": {
+        "csr_arrays": true,
+        "dtype": true,
+        "nnz": true,
+        "shape": true,
+        "sum": true
+      },
+      "dtype": "float32",
+      "nnz": 6377510,
+      "shape": [
+        8428,
+        2000
+      ],
+      "status": "PASS",
+      "sum": -336057.795399419
+    }
+  },
+  "member_before": {
+    "X": {
+      "created_at": "2026-07-19 14:49:15.183555+00:00",
+      "hash": "EbYJxgruFh2x0ZQ40_OONA",
+      "key": "pert-gym/logical/temporal/perturbase_gse107185/X.zarr.zip",
+      "size": 28145156,
+      "uid": "cFEWN77vqjaCY1I50000"
+    },
+    "obs": {
+      "created_at": "2026-08-01 21:20:59.102221+00:00",
+      "hash": "dP2-NhTsvJveShKlQvIIJQ",
+      "key": "pert-gym/logical/temporal/perturbase_gse107185/obs.parquet",
+      "size": 1611643,
+      "uid": "NMGDnN2AjT75B2lr0002"
+    },
+    "obs_frame_sha256": "61fd9e3346a474fac11f4e81c4ac92a1ccb193a6b4342253491558493d509a32",
+    "obs_history_count": 3,
+    "obs_receipt": {
+      "OBS_COMPLETED": true,
+      "annotation_level": {
+        "expression": "cell",
+        "fitness": "aggregate genotype/sample only; not joined per cell",
+        "perturbation": "cell via PerturBase construct assignment"
+      },
+      "canonical_fields": 42,
+      "experimental_axes": {
+        "biological_time": {
+          "normalized_minutes": [
+            7200,
+            8640
+          ],
+          "row_frequencies": {
+            "7200": 2717,
+            "8640": 5711
+          },
+          "source_days": [
+            5,
+            6
+          ],
+          "verdict": "endpoint_duration_by_media_not_shared_trajectory"
+        },
+        "media": {
+          "endothelial": 3961,
+          "hPSC": 2717,
+          "multilineage": 1750
+        },
+        "perturbation": {
+          "constructs": 61,
+          "controls": 1403,
+          "exact_sequences": 8428,
+          "verdict": "pooled_ORF_overexpression_with_control"
+        }
+      },
+      "obs_uuid_unique": true,
+      "outcomes_endpoints": {
+        "expression": "processed PerturBase single-cell matrix",
+        "fitness": "known aggregate endpoint; cell-level value unknown because no exact join"
+      },
+      "residual_unknown_fields": [
+        "donor_id",
+        "cell_type",
+        "disease",
+        "ethnicity",
+        "dose",
+        "dose_unit",
+        "sensitivity",
+        "response_value",
+        "pct_ribo"
+      ],
+      "rows": 8428,
+      "scientific_modality": "pooled ORF-overexpression single-cell RNA-seq expression endpoint",
+      "source_columns_retained": [
+        "age",
+        "age_missingness_reason",
+        "assay",
+        "batch",
+        "cell_id",
+        "cell_line",
+        "cell_type",
+        "dataset",
+        "donor_id",
+        "donor_id_missingness_reason",
+        "ethnicity",
+        "ethnicity_missingness_reason",
+        "gene",
+        "is_bulk",
+        "is_control",
+        "is_low_quality",
+        "is_pseudobulk",
+        "leiden",
+        "media",
+        "mixscape_class",
+        "mixscape_class_global",
+        "mixscape_class_p_ko",
+        "modality",
+        "n_counts",
+        "n_genes",
+        "n_genes_by_counts",
+        "organism",
+        "pct_counts_mt",
+        "pct_mito",
+        "pertclass",
+        "perturbation",
+        "perturbation_library",
+        "perturbation_target",
+        "perturbation_technology",
+        "perturbation_type",
+        "quality_missingness_reason",
+        "sex",
+        "sex_missingness_reason",
+        "source",
+        "source_accession",
+        "source_bioproject",
+        "source_component",
+        "technology",
+        "timepoint",
+        "timepoint_missingness_reason",
+        "total_counts",
+        "total_counts_mt"
+      ],
+      "status": "PASS"
+    },
+    "source_receipt": {
+      "archive_member": "mixscape_hvg_filter.h5ad",
+      "archive_member_sha256": "e8e19bf30b6b028d9bb257907f9bb4a0747478c6b5af24405df2a8da15e18e75",
+      "logical_component": "extend_61",
+      "nnz": 6377510,
+      "obs_axis_sha256_ordered": "6009f41aa22662d5119552b5a3a40a8effdd645a50372857ef8b1692bd22bfbb",
+      "required_obs_fields_equal": [
+        "gene",
+        "batch",
+        "media"
+      ],
+      "shape": [
+        8428,
+        2000
+      ],
+      "status": "PASS",
+      "sum": -336057.79539941944,
+      "var_axis_sha256_ordered": "ecc95bb79420bf3ec553f4c572b8dfee73c49bfee086982d3bcec57d4c046b63"
+    },
+    "var": {
+      "created_at": "2026-08-01 10:18:40.744950+00:00",
+      "hash": "HK-IDyPJf7Zcwh1jbVjjdw",
+      "key": "pert-gym/logical/temporal/perturbase_gse107185/var.parquet",
+      "size": 389057,
+      "uid": "mlSaS2ZdU1OsMdV30001"
+    },
+    "var_frame_sha256": "6d0ab615afc337ef63abc65fd76b94de45e039192b5add96df71e489700c2a4e",
+    "var_history_count": 2,
+    "var_receipt": {
+      "VAR_ENSEMBL_SPECIES_COMPLETED": true,
+      "ambiguous_hgnc": {
+        "LOR": [
+          {
+            "approved_symbol": "LOXL2",
+            "ensembl_gene_id": "ENSG00000134013",
+            "match_type": "alias",
+            "status": "Approved"
+          },
+          {
+            "approved_symbol": "LORICRIN",
+            "ensembl_gene_id": "ENSG00000203782",
+            "match_type": "previous",
+            "status": "Approved"
+          }
+        ]
+      },
+      "checks": {
+        "axis_preserved": true,
+        "complete_disposition": true,
+        "hgnc_recovered": true,
+        "known_stable_syntax": true,
+        "known_stable_unique": true,
+        "residual_unknown": true,
+        "rows": true,
+        "source_exact": true,
+        "species": true
+      },
+      "hgnc_recovered": 81,
+      "residual_unknown": 280,
+      "rows": 2000,
+      "source_exact_ensembl": 1639,
+      "status": "PASS"
+    },
+    "x_receipt": {
+      "axis_contract": "axes are external and bind through explicit obs -> X -> var links",
+      "checks": {
+        "csr_arrays": true,
+        "dtype": true,
+        "nnz": true,
+        "shape": true,
+        "sum": true
+      },
+      "dtype": "float32",
+      "nnz": 6377510,
+      "shape": [
+        8428,
+        2000
+      ],
+      "status": "PASS",
+      "sum": -336057.795399419
+    }
+  },
+  "mode": "verify",
+  "negative_main_duplicate_probe": {
+    "branch_id": 1,
+    "candidate_count": 0,
+    "candidates": [],
+    "scientific_equivalent_found": false,
+    "terms": [
+      "GSE107185",
+      "PRJNA419230",
+      "PMC6311450",
+      "SEUSS",
+      "perturbase_gse107185"
+    ]
+  },
+  "registry_counts": {
+    "after": {
+      "artifacts": 28587,
+      "collections": 50
+    },
+    "before": {
+      "artifacts": 28587,
+      "collections": 50
+    }
+  },
+  "replay_noop": true,
+  "rollback": {
+    "X_uid": "cFEWN77vqjaCY1I50000",
+    "collection_uid": "NFBw58RkNoGgn9pO0000",
+    "obs_uid": "NMGDnN2AjT75B2lr0000",
+    "var_uid": "mlSaS2ZdU1OsMdV30000"
+  },
+  "scientific_contract": {
+    "annotation_level": {
+      "expression": "cell",
+      "fitness": "aggregate genotype/sample only; not joined per cell",
+      "perturbation": "cell via PerturBase construct assignment"
+    },
+    "outcomes_endpoints": {
+      "expression": "processed PerturBase single-cell matrix",
+      "fitness": "known aggregate endpoint; cell-level value unknown because no exact join"
+    },
+    "scientific_modality": "pooled ORF-overexpression single-cell RNA-seq expression endpoint",
+    "temporal_classification": "day 5/6 media-specific endpoint durations; not a shared trajectory"
+  },
+  "source_manifest_sha256": "49c92ce2eca8ca7c5bf5ea42a53cfa134a2490d3e32eec644ee42edeaeb9b186",
+  "status": "PASS",
+  "task_id": "t_ab37edf6",
+  "write_revalidation": {
+    "latest_obs_uid": "NMGDnN2AjT75B2lr0002",
+    "latest_var_uid": "mlSaS2ZdU1OsMdV30001",
+    "predecessor_collection_uid": "NFBw58RkNoGgn9pO0000",
+    "predecessor_membership_sha256": "dcc5cd6e4df739fd2840aa1fefbade989cf348728d0663eca2108185899ccec5",
+    "status": "PASS"
+  },
+  "writes": {
+    "collection_writes": 0,
+    "deletions": 0,
+    "obs_revisions": 0,
+    "var_revisions": 0,
+    "x_revisions": 0
+  }
+}

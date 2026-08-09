@@ -1,0 +1,54 @@
+{
+  "dataset_id": "temporal/c_elegans_embryogenesis",
+  "logical_key": "pert-gym/logical/temporal/c_elegans_embryogenesis",
+  "task_id": "t_a62edaa7",
+  "source_authority": "Figshare article 22491340 and the primary Science publication",
+  "figshare": {
+    "article_id": 22491340,
+    "article_doi": "10.6084/m9.figshare.22491340.v1",
+    "article_api_url": "https://api.figshare.com/v2/articles/22491340",
+    "article_api_sha256_observed_2026_07_30": "5215a219b7ef96f9942949306579b1f6d3a13a841dfc0949d7efbf52ab303b99",
+    "file_id": 39943585,
+    "file_name": "c_elegans.h5ad",
+    "file_url": "https://ndownloader.figshare.com/files/39943585",
+    "file_size_bytes": 365498906,
+    "file_md5": "c3a37ca238921fcec7bd5e9faa6118f1",
+    "license": "CC BY 4.0",
+    "version": 1
+  },
+  "publication": {
+    "title": "A lineage-resolved molecular atlas of C. elegans embryogenesis at single-cell resolution",
+    "doi": "10.1126/science.aax1971",
+    "pmid": "31488706",
+    "url": "https://doi.org/10.1126/science.aax1971"
+  },
+  "source_scope": "The Figshare record states that the file contains all 46,151 cells with at least partial lineage information from the Packer et al. atlas, assayed with 10x Genomics v2 chemistry, with assigned embryo-time labels and raw counts.",
+  "denominator_accounting": {
+    "biological_datasets": 1,
+    "logical_families": 1,
+    "physical_members": 1,
+    "observations": 46151,
+    "variables": 20222,
+    "matrix_nonzeros": 43994050
+  },
+  "accepted_structural_artifacts": {
+    "obs_uid": "5EOAVNZfpqU7u1TX0000",
+    "x_uid": "BcReMLnW6XOb8tvS0000",
+    "var_uid": "7sZcoxxd0LMj1DeI0000",
+    "manifest_uid": "Mhw9jYDtVSGL0niy0000"
+  },
+  "accepted_payload_sha256": {
+    "obs": "ac36e96828a9d30ce69e95fc5fcea2d471f5cfa1e7482d4d3ae74fe90703f957",
+    "X": "50b28ef17d02bcdf670fd2552ed0129645bd66bf8d4a7d97fc3ef6308efb360c",
+    "var": "7e31d2f5a962b14e11ce2b697121e18b8cd61156d832ff0b157fd6884bb00ade"
+  },
+  "canonical_storage_prefix": "gs://scperturb/data/cleaned/c_elegans_embryogenesis",
+  "var_policy": "The 20,222 unique WBGene identifiers are source-native stable C. elegans gene identifiers used by WormBase and Ensembl Metazoa. Preserve their order exactly; do not coerce them into human or mouse ENSG namespaces.",
+  "obs_policy": "Retain every raw source column. Materialize canonical columns with per-field state/source provenance; use unknown when applicable source evidence is absent and not_applicable only for genuinely irrelevant perturbation, donor, cell-line, disease, ethnicity, and response fields.",
+  "forbidden_inferences": [
+    "Do not infer human or mouse Ensembl identifiers.",
+    "Do not invent donor, sex, sequencer, media, or gene-count values.",
+    "Do not treat developmental pseudotime or embryo time as a perturbation.",
+    "Do not rewrite the accepted X payload without a proven integrity failure."
+  ]
+}

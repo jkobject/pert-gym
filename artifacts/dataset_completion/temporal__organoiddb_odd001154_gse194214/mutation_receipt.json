@@ -1,0 +1,802 @@
+{
+  "canonical_obs_contract": {
+    "contract_id": "pert-gym/OBS_COMPLETED/v1",
+    "field_count": 42,
+    "fields": [
+      "dataset",
+      "sample",
+      "cell_id",
+      "donor_id",
+      "batch",
+      "cell_type",
+      "cell_line",
+      "disease",
+      "tissue_type",
+      "organism",
+      "sex",
+      "age",
+      "ethnicity",
+      "sequencer",
+      "technology",
+      "assay",
+      "modality",
+      "media",
+      "is_bulk",
+      "is_pseudobulk",
+      "perturbation",
+      "perturbation_type",
+      "perturbation_technology",
+      "perturbation_library",
+      "guide_sequence",
+      "molecule_sequence",
+      "is_control",
+      "dose",
+      "dose_unit",
+      "timepoint",
+      "trajectory_id",
+      "pseudotime",
+      "is_baseline",
+      "sensitivity",
+      "response_metric",
+      "response_value",
+      "response_source",
+      "n_counts",
+      "n_genes",
+      "pct_mito",
+      "pct_ribo",
+      "is_low_quality"
+    ],
+    "row_state_vocabulary": [
+      "present",
+      "missing",
+      "not_applicable"
+    ]
+  },
+  "collection": {
+    "predecessor": {
+      "key": "pert-gym/additions/20260730-gse130238-e2e",
+      "member_count": 1018,
+      "membership_sha256": "ad25387d5defe49babb570821b60733d38f69a7f176274409eeacfe7ae7bd924",
+      "uid": "whLgwg8opPvW9qdN0000"
+    },
+    "successor": {
+      "key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+      "member_count": 1018,
+      "membership_sha256": "4f379ee3ed83a82e99ab1b26e6d8ff5cd4293010c5b258d9d9676c0eb40c7d61",
+      "target_obs_uid": "GtDvEO1BsANR8VKR0002",
+      "uid": "GvFuzrWQeKB6Pd8t0001"
+    }
+  },
+  "dataset_id": "temporal/organoiddb_odd001154_gse194214",
+  "duplicate_probe": {
+    "legacy_parallel_triplet_uids": [
+      "ECLctORaKjRoaemK0000",
+      "EmOxtmLMI8dNDXYo0000",
+      "kb18lHVpqOa5uSUO0000"
+    ],
+    "match_count": 8,
+    "public_or_inherited_match_count": 0,
+    "queries": [
+      "GSE194214",
+      "ODD001154",
+      "Odd001154",
+      "organoiddb_odd001154",
+      "10.7554/eLife.68925",
+      "Paraxial mesoderm organoids",
+      "Somitoid"
+    ]
+  },
+  "experimental_axes": [
+    {
+      "assertion_level": "observation",
+      "canonical_field": "timepoint",
+      "cardinality": 4,
+      "classification": "chronological developmental time; not pseudotime, batch, or endpoint",
+      "frequencies_by_observation": {
+        "1": 2930,
+        "2": 4977,
+        "3": 5968,
+        "5": 4841
+      },
+      "name": "developmental_time",
+      "raw_field": "development_stage",
+      "raw_values": [
+        "Day 1",
+        "Day 2",
+        "Day 3",
+        "Day 5"
+      ],
+      "source": "GEO sample titles and characteristics",
+      "unit": "day",
+      "values": [
+        1,
+        2,
+        3,
+        5
+      ]
+    }
+  ],
+  "format": "pert-gym.dataset-e2e-curation/v1",
+  "helper_commit": "33e2bcf46a926ff79068b3dbd3965ce071a4170f",
+  "helper_sha256": "1261433037d54ec0141a482f70e1e9187c6bfba31ae3d815d42d543c63c318ec",
+  "invariants": {
+    "OBS_COMPLETED": false,
+    "OBS_SCHEMA_COMPLETED": true,
+    "VAR_COMPLETED": true,
+    "X_rewritten": false,
+    "accepted_component_status": "include",
+    "main_branch_writes": 0,
+    "single_physical_member": true,
+    "var_rewritten": false
+  },
+  "logical_key": "pert-gym/logical/temporal/organoiddb_odd001154_gse194214",
+  "mode": "mutate",
+  "outcomes_endpoints": {
+    "assertion_level": "dataset",
+    "items": [],
+    "source": "GEO design and eLife study describe developmental expression without a scalar response endpoint",
+    "status": "not_applicable"
+  },
+  "prepared": {
+    "X": {
+      "created_at": "2026-07-17 20:05:07.475964+00:00",
+      "hash": "M1zaZQKPlogEaSdoxnLn6A",
+      "key": "data/cleaned/GSE194214/X.h5ad",
+      "size": 155611588,
+      "uid": "FIfScz6bImLLe9cD0000"
+    },
+    "expected_obs_sha256": "8aee01a187e2bb024c8bfb8bd72c069dd099528292ffeac03d6fbf36abdf11d7",
+    "field_dispositions": {
+      "age": {
+        "missing_rows": 18716,
+        "non_null_rows": 0,
+        "not_applicable_rows": 0,
+        "present_rows": 0,
+        "sources": [
+          "donor age absent"
+        ],
+        "state_counts": {
+          "missing": 18716
+        },
+        "total_rows": 18716
+      },
+      "assay": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO experiment type"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "batch": {
+        "missing_rows": 18716,
+        "non_null_rows": 0,
+        "not_applicable_rows": 0,
+        "present_rows": 0,
+        "sources": [
+          "multiple organoids were pooled without a cell-level batch map"
+        ],
+        "state_counts": {
+          "missing": 18716
+        },
+        "total_rows": 18716
+      },
+      "cell_id": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "accepted unique OBS axis"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "cell_line": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO source name and publication methods"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "cell_type": {
+        "missing_rows": 18716,
+        "non_null_rows": 0,
+        "not_applicable_rows": 0,
+        "present_rows": 0,
+        "sources": [
+          "publication cluster labels lack a barcode-to-cluster map"
+        ],
+        "state_counts": {
+          "missing": 18716
+        },
+        "total_rows": 18716
+      },
+      "dataset": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "canonical logical dataset"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "disease": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "normal developmental organoid model"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "donor_id": {
+        "missing_rows": 18716,
+        "non_null_rows": 0,
+        "not_applicable_rows": 0,
+        "present_rows": 0,
+        "sources": [
+          "NCRM1 donor identity absent from source authorities"
+        ],
+        "state_counts": {
+          "missing": 18716
+        },
+        "total_rows": 18716
+      },
+      "dose": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental trajectory, not a perturbation-response arm"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "dose_unit": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental trajectory, not a perturbation-response arm"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "ethnicity": {
+        "missing_rows": 18716,
+        "non_null_rows": 0,
+        "not_applicable_rows": 0,
+        "present_rows": 0,
+        "sources": [
+          "donor ethnicity absent"
+        ],
+        "state_counts": {
+          "missing": 18716
+        },
+        "total_rows": 18716
+      },
+      "guide_sequence": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental trajectory, not a perturbation-response arm"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "is_baseline": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "derived earliest measured developmental timepoint (Day 1); not an untreated control"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "is_bulk": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO single-cell experiment type"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "is_control": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "no GEO sample is designated a control; Day 1 is an early timepoint"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "is_low_quality": {
+        "missing_rows": 17304,
+        "non_null_rows": 1412,
+        "not_applicable_rows": 0,
+        "present_rows": 1412,
+        "sources": [
+          "publication initial QC thresholds; remaining cells unresolved because excluded cluster barcodes are unpublished"
+        ],
+        "state_counts": {
+          "missing": 17304,
+          "present": 1412
+        },
+        "total_rows": 18716
+      },
+      "is_pseudobulk": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "accepted OBS axis contains individual cell barcodes"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "media": {
+        "missing_rows": 18716,
+        "non_null_rows": 0,
+        "not_applicable_rows": 0,
+        "present_rows": 0,
+        "sources": [
+          "protocol varies by developmental day and collection boundary is not mapped per cell"
+        ],
+        "state_counts": {
+          "missing": 18716
+        },
+        "total_rows": 18716
+      },
+      "modality": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO experiment type"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "molecule_sequence": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental expression atlas without a perturbation molecule"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "n_counts": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "exact accepted raw-count matrix"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "n_genes": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "exact accepted raw-count matrix"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "organism": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO organism"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "pct_mito": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "exact accepted raw-count matrix"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "pct_ribo": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "exact accepted raw-count matrix"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "perturbation": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental trajectory, not a perturbation-response arm"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "perturbation_library": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental trajectory, not a perturbation-response arm"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "perturbation_technology": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental trajectory, not a perturbation-response arm"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "perturbation_type": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental trajectory, not a perturbation-response arm"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "pseudotime": {
+        "missing_rows": 18716,
+        "non_null_rows": 0,
+        "not_applicable_rows": 0,
+        "present_rows": 0,
+        "sources": [
+          "publication supplies chronological day but no per-cell pseudotime"
+        ],
+        "state_counts": {
+          "missing": 18716
+        },
+        "total_rows": 18716
+      },
+      "response_metric": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental expression atlas without a scalar response endpoint"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "response_source": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental expression atlas without a scalar response endpoint"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "response_value": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "no scalar response endpoint"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "sample": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO sample accession"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "sensitivity": {
+        "missing_rows": 0,
+        "non_null_rows": 0,
+        "not_applicable_rows": 18716,
+        "present_rows": 0,
+        "sources": [
+          "developmental expression atlas without a scalar response endpoint"
+        ],
+        "state_counts": {
+          "not_applicable": 18716
+        },
+        "total_rows": 18716
+      },
+      "sequencer": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO platform GPL24676"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "sex": {
+        "missing_rows": 18716,
+        "non_null_rows": 0,
+        "not_applicable_rows": 0,
+        "present_rows": 0,
+        "sources": [
+          "donor sex absent"
+        ],
+        "state_counts": {
+          "missing": 18716
+        },
+        "total_rows": 18716
+      },
+      "technology": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO library strategy and publication methods"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "timepoint": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO developmental stage Day 1/2/3/5"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "tissue_type": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GEO characteristics and publication"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      },
+      "trajectory_id": {
+        "missing_rows": 0,
+        "non_null_rows": 18716,
+        "not_applicable_rows": 0,
+        "present_rows": 18716,
+        "sources": [
+          "GSE194214 Somitoid developmental series identity"
+        ],
+        "state_counts": {
+          "present": 18716
+        },
+        "total_rows": 18716
+      }
+    },
+    "latest_obs": {
+      "created_at": "2026-08-01 20:28:43.353181+00:00",
+      "hash": "9qHBfkgxw9hMTny0Dkt27A",
+      "key": "data/cleaned/GSE194214/obs.parquet",
+      "size": 1390332,
+      "uid": "GtDvEO1BsANR8VKR0002"
+    },
+    "obs_curated": true,
+    "obs_history_count": 3,
+    "obs_receipt": {
+      "initial_qc_failure_rows": 1412,
+      "rows": 18716,
+      "sample_counts": {
+        "GSM5830919": 2930,
+        "GSM5830920": 4977,
+        "GSM5830921": 5968,
+        "GSM5830922": 4841
+      },
+      "source_day1_control_rows_corrected": 2930,
+      "timepoint_counts": {
+        "1": 2930,
+        "2": 4977,
+        "3": 5968,
+        "5": 4841
+      },
+      "unresolved_low_quality_rows": 17304
+    },
+    "var": {
+      "created_at": "2026-07-17 20:05:08.926502+00:00",
+      "hash": "qsk8P6eGsDjuO-qVSHuvXQ",
+      "key": "data/cleaned/GSE194214/var.parquet",
+      "size": 841985,
+      "uid": "KFzdzY1k7TreexTs0000"
+    },
+    "var_receipt": {
+      "columns": true,
+      "feature_type": "True",
+      "genome_build": "True",
+      "index_unique": true,
+      "namespace": "True",
+      "needs_revision": false,
+      "organism": "True",
+      "rewrite_reason": "none; exact source-backed Ensembl GRCh38 axis is complete",
+      "rows": 33694,
+      "stable_axis": true,
+      "stable_syntax": true,
+      "stable_unique": true
+    },
+    "x_receipt": {
+      "X_rewrite_required": false,
+      "finite_value_sum": 310355119,
+      "max_count": 2436,
+      "nnz": 69489485,
+      "obs_axis_sha256": "36263fe07eea5a9e0d9c2cdfed388fdedc2e70c6e2eec0ab989930ffe350c4d7",
+      "shape": [
+        18716,
+        33694
+      ],
+      "var_axis_sha256": "9682c0cd068db48c2678becac6c3bd38aa378216aeb471fb1138096e9552500c",
+      "x_semantics": "raw_counts"
+    }
+  },
+  "scientific_modality": {
+    "assay": "10x Genomics Chromium Single Cell 3' v3",
+    "assertion_level": "dataset",
+    "experimental_unit": "single cell from pooled NCRM1 iPSC-derived Somitoids",
+    "perturbation_status": "not_applicable",
+    "source": "GEO GSE194214 and eLife 68925",
+    "value": "single-cell RNA-seq developmental expression atlas",
+    "x_semantics": "raw UMI counts"
+  },
+  "source_authorities": {
+    "elife_article_api": {
+      "sha256": "a9c047fed4e70051175a317ffe17d48ad447611fa472a1b3a8859bc1e438b42e",
+      "size": 170468,
+      "url": "https://api.elifesciences.org/articles/68925"
+    },
+    "elife_supplementary_marker_table": {
+      "sha256": "57ba36edc878e5e3bc4c52f252684ee348db98bac0809fbe248f8ca3af28fc14",
+      "size": 364463,
+      "url": "https://cdn.elifesciences.org/articles/68925/elife-68925-supp1-v2.csv"
+    },
+    "geo_family_soft": {
+      "sha256": "a6e292220854d96f86f8cf99bce958890cba2ca8a7dcd3ffb1109509688bc511",
+      "size": 3283,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE194nnn/GSE194214/soft/GSE194214_family.soft.gz"
+    }
+  },
+  "source_manifest_sha256": "020ae9b376929c9e7a59eff1de732224b29e331cfda9f70d318d8d5bdf5c95f6",
+  "status": "PASS",
+  "task_id": "t_56a7b7cf",
+  "writes": {
+    "collection_created": true,
+    "counts_after": {
+      "artifacts": 28586,
+      "collections": 49
+    },
+    "counts_before": {
+      "artifacts": 28585,
+      "collections": 48
+    },
+    "obs_created": true,
+    "zero_write_replay": false
+  }
+}

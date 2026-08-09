@@ -1,0 +1,369 @@
+{
+  "actual_artifact_inventory": [
+    {
+      "filename": "obs.parquet",
+      "generation": "1784249041653392",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/obs.parquet#1784249041653392",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/obs.parquet",
+      "role": "obs",
+      "sha256": "ac36e96828a9d30ce69e95fc5fcea2d471f5cfa1e7482d4d3ae74fe90703f957",
+      "size_bytes": 2177270,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/obs.parquet"
+    },
+    {
+      "filename": "X.h5ad",
+      "generation": "1784249047666142",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/X.h5ad#1784249047666142",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/X.h5ad",
+      "role": "X",
+      "sha256": "50b28ef17d02bcdf670fd2552ed0129645bd66bf8d4a7d97fc3ef6308efb360c",
+      "size_bytes": 354987544,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/X.h5ad"
+    },
+    {
+      "filename": "var.parquet",
+      "generation": "1784249047860188",
+      "generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/var.parquet#1784249047860188",
+      "key": "scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/var.parquet",
+      "role": "var",
+      "sha256": "7e31d2f5a962b14e11ce2b697121e18b8cd61156d832ff0b157fd6884bb00ade",
+      "size_bytes": 850046,
+      "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/var.parquet"
+    }
+  ],
+  "artifact_count": 3,
+  "bounded_wave": {
+    "assignment_count": 1,
+    "id": "publication-wave-07-of-13",
+    "number": 7,
+    "outcome_task_id": "t_ba90e901",
+    "singular": true
+  },
+  "build_identity": {
+    "command": "uv run python materialize_component.py --input INPUT --output OUTPUT",
+    "configuration": {
+      "billing_project": "jkobject-1549353370965",
+      "requester_pays": true,
+      "source_artifact_uids": {
+        "X": "3HFHNsfi4VX80xG40000",
+        "obs": "NHLwhKq7PHtr2Nf40000",
+        "var": "DHXE2aYWf1ir671K0000"
+      }
+    },
+    "host": "pert-gym-worker-eu",
+    "script_sha256": "baad6211d0c1a6914c06904e0fffbcbe22d1e4e7d1390bb5f42364a9b1395171",
+    "zone": "europe-west1-b"
+  },
+  "build_task_id": "t_246e4f53",
+  "catalogue_row_ids": [
+    57
+  ],
+  "component": "C. elegans embryogenesis",
+  "dataset_count": 1,
+  "datasets": [
+    {
+      "X": {
+        "matrix": {
+          "data_dtype": "float32",
+          "data_sha256": "04bb0298f73b227c54dc3ae40c407ad22f3dff3ee04526e7c1e77020afddd1c0",
+          "format": "csr",
+          "indices_dtype": "int32",
+          "indices_sha256": "6a4bc363dbc2184a50fc0edb15f1e702a3b05661bfb36fec07f0f09307f41478",
+          "indptr_dtype": "int32",
+          "indptr_sha256": "f8a94f8f2f04d328d3ec601e5f8ef642df6fb041a59de616c5a2d083c9ea2c8c",
+          "nnz": 43994050,
+          "shape": [
+            46151,
+            20222
+          ]
+        }
+      },
+      "consumer_readback_reached_built_data": true,
+      "dataset_id": "figshare:22491340",
+      "obs": {
+        "absent_source_fields": [
+          "age",
+          "sex",
+          "donor_id",
+          "tissue_type",
+          "ethnicity",
+          "sequencer",
+          "technology",
+          "perturbation"
+        ],
+        "columns": [
+          "Unnamed: 0",
+          "Unnamed: 0.1",
+          "cell",
+          "n.umi",
+          "time.point",
+          "batch",
+          "Size_Factor",
+          "cell.type",
+          "cell.subtype",
+          "plot.cell.type",
+          "raw.embryo.time",
+          "embryo.time",
+          "embryo.time.bin",
+          "raw.embryo.time.bin",
+          "lineage",
+          "passed_initial_QC_or_later_whitelisted",
+          "random_precise_lineage",
+          "timepoint",
+          "trajectory_id",
+          "pseudotime",
+          "is_baseline",
+          "raw_time_label",
+          "source_article_id",
+          "source_article_title",
+          "organism",
+          "modality",
+          "assay"
+        ],
+        "null_counts": {
+          "Size_Factor": 0,
+          "Unnamed: 0": 0,
+          "Unnamed: 0.1": 0,
+          "assay": 0,
+          "batch": 0,
+          "cell": 0,
+          "cell.subtype": 22154,
+          "cell.type": 20984,
+          "embryo.time": 0,
+          "embryo.time.bin": 0,
+          "is_baseline": 0,
+          "lineage": 0,
+          "modality": 0,
+          "n.umi": 0,
+          "organism": 0,
+          "passed_initial_QC_or_later_whitelisted": 0,
+          "plot.cell.type": 14692,
+          "pseudotime": 0,
+          "random_precise_lineage": 0,
+          "raw.embryo.time": 0,
+          "raw.embryo.time.bin": 0,
+          "raw_time_label": 0,
+          "source_article_id": 0,
+          "source_article_title": 0,
+          "time.point": 0,
+          "timepoint": 0,
+          "trajectory_id": 0
+        },
+        "semantic_placeholder_counts": {},
+        "temporal": {
+          "baseline_true_count": 99,
+          "timepoint_max": 800.0,
+          "timepoint_min": 0.0,
+          "timepoint_non_null": 46151,
+          "trajectory_ids": [
+            "c_elegans_embryogenesis"
+          ]
+        }
+      },
+      "quality_disposition": "included_exactly_once",
+      "shape": [
+        46151,
+        20222
+      ],
+      "source_prefix": "temporal_pretraining/c_elegans_embryogenesis/figshare_22491340",
+      "var": {
+        "columns": [
+          "Unnamed: 0",
+          "id",
+          "gene_short_name",
+          "feature_id",
+          "feature_name",
+          "organism"
+        ],
+        "null_counts": {
+          "Unnamed: 0": 0,
+          "feature_id": 0,
+          "feature_name": 0,
+          "gene_short_name": 0,
+          "id": 0,
+          "organism": 0
+        },
+        "ordered_identity_sha256": "fc9de1172477e7a0c53a19658ac3e983d019041b9c56620891b9a135148c4565"
+      }
+    }
+  ],
+  "deterministic_readback": {
+    "billing_project": "jkobject-1549353370965",
+    "procedure": "Read manifest by its generation URI; for every actual_artifact_inventory entry stream key#generation, verify size and SHA-256, open obs/var with pandas and X with anndata backed='r', then verify axis equality, shape, full sparse-array hashes, temporal summaries, and obs null counts."
+  },
+  "ledger": {
+    "accepted_delta_at_build": 0,
+    "artifact_accounting": {
+      "payload_object_count": 3
+    },
+    "dataset_accounting": {
+      "excluded_datasets": 0,
+      "included_datasets": 1,
+      "materialized_triplets": 1,
+      "source_datasets": 1
+    },
+    "observation_accounting": {
+      "excluded_n_obs": 0,
+      "materialized_n_obs": 46151,
+      "source_n_obs_resolved_by_artifact_readback": 46151
+    },
+    "proposed_acceptance_delta_after_independent_test_and_review": 1,
+    "quality_missingness_is_not_exclusion": true,
+    "record_accounting": {
+      "excluded_component_records": 0,
+      "included_component_records": 1,
+      "materialized_component_records": 1,
+      "source_component_records": 1
+    },
+    "record_id": "temporal_v4_057_c_elegans_embryogenesis",
+    "schema_version": "pert-gym.proposed-publication-ledger-entry/v1",
+    "submission_id": "temporal_v4_057_c_elegans_embryogenesis:temporal-v4-057-wave07-f3820e8d21e6105b",
+    "target_logical_key": "pert-gym/logical/temporal/c_elegans_embryogenesis"
+  },
+  "missingness": {
+    "finding_count": 8,
+    "findings": [
+      {
+        "excluded_records": 0,
+        "field": "age",
+        "state": "age is absent from the emitted obs schema; no value was synthesized and all 46,151 observations remain included"
+      },
+      {
+        "excluded_records": 0,
+        "field": "catalogue.source_n_obs",
+        "state": "controlling row reports 0 because the publication manifest lacked an authoritative cell denominator; source artifact readback verifies 46,151 observations"
+      },
+      {
+        "excluded_records": 0,
+        "field": "catalogue.source_n_vars",
+        "state": "missing in the controlling row; source artifact readback verifies 20,222 variables"
+      },
+      {
+        "excluded_records": 0,
+        "field": "temporal_metadata",
+        "state": "timepoint, trajectory_id, pseudotime, raw_time_label, and is_baseline are present and preserved; timepoint spans 0 to 800 minutes"
+      },
+      {
+        "excluded_records": 0,
+        "field": "source_absent_fields",
+        "state": "absent without synthesis: ['age', 'sex', 'donor_id', 'tissue_type', 'ethnicity', 'sequencer', 'technology', 'perturbation']"
+      },
+      {
+        "excluded_records": 0,
+        "field": "per_record_metadata_nulls",
+        "state": "all per-column null counts are recorded and values retained unchanged"
+      },
+      {
+        "excluded_records": 0,
+        "field": "semantic_placeholders",
+        "state": "blank/na/n-a/none/null/unknown/unreported counts are recorded for every obs column and values retained unchanged"
+      },
+      {
+        "excluded_records": 0,
+        "field": "shared_var_identity",
+        "state": "computed from ordered source var identifiers, organism, and feature namespace; no equality to another dataset is required for inclusion"
+      }
+    ],
+    "non_excluding": true
+  },
+  "observation_count": 46151,
+  "record_id": "temporal_v4_057_c_elegans_embryogenesis",
+  "revision": "temporal-v4-057-wave07-f3820e8d21e6105b",
+  "revision_fingerprint_sha256": "f3820e8d21e6105bf216d03b9e4b6d4ed57bf616c03efbd72cbd1c7ddf204621",
+  "revision_prefix": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b",
+  "schema_version": "pert-gym.materialized-component-manifest/v2",
+  "source_identity": {
+    "controlling_publication_manifest_sha256": "ebaaa118c8a4d171432cfa7ce65926718372f2b42947164c6aa21b49261b6ca4",
+    "controlling_record": {
+      "catalogue_origins": [
+        "temporal_pretraining_datasets_v4"
+      ],
+      "catalogue_row_ids": [
+        57
+      ],
+      "classification": "executable",
+      "collection_membership": {
+        "artifact_keys_sample": [],
+        "authoritative_coverage_note": "metadata match only; no live Lamin assertion",
+        "canonical_20260621_member_count": 0,
+        "categories": {}
+      },
+      "completion_state": "source_executable_not_completion",
+      "component": "C. elegans embryogenesis",
+      "denominator_basis": "temporal_pretraining_datasets_v4 retained row + upstream immutable accession/collection identity",
+      "downloadable": "yes",
+      "evidence_paths": [
+        "data/temporal_pretraining_datasets/temporal_pretraining_datasets_v4.tsv"
+      ],
+      "exact_remaining_work": "Resolve exact payload manifest and execute EU-worker backed conversion/publication with readback; catalogue/source probe alone is never completion.",
+      "exclusion_reason": "",
+      "existing_lamin_coverage": "no matched member in unified_collection_manifest_20260621",
+      "expected_denominator_verbatim": "catalogue logical row; cells=0",
+      "logical_dataset": "c elegans embryogenesis",
+      "modality": "scRNA-seq",
+      "modality_contract": "expression_like_obs_X_var",
+      "pilot_or_probe_is_complete": false,
+      "record_id": "temporal_v4_057_c_elegans_embryogenesis",
+      "source_bytes": null,
+      "source_integrity_identity": [
+        "upstream_immutable_identity:figshare:22491340"
+      ],
+      "source_n_obs": 0,
+      "source_n_vars": null,
+      "source_object_identity": "figshare:22491340",
+      "source_uri": "https://figshare.com/articles/dataset/C_elegans_embryogenesis/22491340",
+      "target_logical_key": "pert-gym/logical/temporal/c_elegans_embryogenesis",
+      "target_shared_var_identity": "sha256(canonical ordered var identifiers + organism + feature namespace); compute on EU worker before publication",
+      "target_zarr_or_block_plan": "single logical sparse Zarr or <=50k-row blocks after backed EU-worker probe"
+    },
+    "legacy_triplet": {
+      "X": {
+        "key": "temporal_pretraining/c_elegans_embryogenesis/figshare_22491340/X.h5ad",
+        "lamin_hash": "meN4HUeeE3mN72A0Th6hnx",
+        "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/3HFHNsfi4VX80xG40000.h5ad",
+        "sha256": "50b28ef17d02bcdf670fd2552ed0129645bd66bf8d4a7d97fc3ef6308efb360c",
+        "size_bytes": 354987544,
+        "uid": "3HFHNsfi4VX80xG40000"
+      },
+      "obs": {
+        "key": "temporal_pretraining/c_elegans_embryogenesis/figshare_22491340/obs.parquet",
+        "lamin_hash": "AY5-RdMt60uIyLDU-SybzA",
+        "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/NHLwhKq7PHtr2Nf40000.parquet",
+        "sha256": "ac36e96828a9d30ce69e95fc5fcea2d471f5cfa1e7482d4d3ae74fe90703f957",
+        "size_bytes": 2177270,
+        "uid": "NHLwhKq7PHtr2Nf40000"
+      },
+      "var": {
+        "key": "temporal_pretraining/c_elegans_embryogenesis/figshare_22491340/var.parquet",
+        "lamin_hash": "hZEd9wPsDW-DJn0MVw-rBg",
+        "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/DHXE2aYWf1ir671K0000.parquet",
+        "sha256": "7e31d2f5a962b14e11ce2b697121e18b8cd61156d832ff0b157fd6884bb00ade",
+        "size_bytes": 850046,
+        "uid": "DHXE2aYWf1ir671K0000"
+      }
+    },
+    "original_ingestion_evidence": "artifacts/schema_audit/temporal_c_elegans_embryogenesis_20260622.json",
+    "upstream_immutable_identity": "figshare:22491340"
+  },
+  "target_logical_key": "pert-gym/logical/temporal/c_elegans_embryogenesis",
+  "triplet_count": 1,
+  "variable_count": 20222,
+  "verification": {
+    "generation_consumer_readback": true,
+    "generation_payload_hashes": true,
+    "manifest_row_unique": true,
+    "missingness_non_excluding": true,
+    "obs_null_count_readback": true,
+    "single_wave_assignment": true,
+    "source_shape_resolved_by_readback": true,
+    "source_triplet_axis_identity": true
+  },
+  "wave_assignment_evidence": {
+    "accepted_evidence": null,
+    "existing_builder": null,
+    "outcome_task_id": "t_ba90e901",
+    "record_id": "temporal_v4_057_c_elegans_embryogenesis",
+    "status": "triage",
+    "wave": 7
+  }
+}

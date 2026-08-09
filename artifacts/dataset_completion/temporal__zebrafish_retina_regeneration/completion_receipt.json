@@ -1,0 +1,369 @@
+{
+  "before": {
+    "X_logical_fingerprint": {
+      "logical_X_sha256": "75ff4f3d1836f9de8fd8516a6edad5a2debfd803312310c88b8766bea0849aad",
+      "nnz": 17704427,
+      "obs_axis_sha256": "592ad489f85719b6d47f3c17a8f3a1a105bbd526668537922f9ad8b2a8f3fe0b",
+      "shape": [
+        11690,
+        20726
+      ],
+      "var_axis_sha256": "cbc6b043a471c80eec039717810e282ff3c0dee73acb46e24370a1bbb5f7155c"
+    },
+    "X_var_link": true,
+    "artifacts": {
+      "X": {
+        "created_at": "2026-07-30 20:57:29.313272+00:00",
+        "created_on_id": 2,
+        "description": "t_bb2f5bc0: matrix-faithful recovery of accepted raw-count X from durable source Artifact 2u8UrHx5vCE0O4zZ0000 after canonical GCS payload loss",
+        "hash": "WozFlfoachsbkxe5LV4N1g",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/X.h5ad",
+        "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/XNdeESO8PIhCpCmo0001.h5ad",
+        "size": 143423416,
+        "uid": "XNdeESO8PIhCpCmo0001"
+      },
+      "obs": {
+        "created_at": "2026-07-30 20:49:57.061923+00:00",
+        "created_on_id": 2,
+        "description": "t_bb2f5bc0: source-exhaustive SCP1973/GSE226373 OBS; exact 11690-row identity, injury/time/sample/QC evidence and quantified residual unknowns",
+        "hash": "SKAWHL2UH794qU1MgQrcnw",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/obs.parquet",
+        "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/KsqvAFoGHYY3N0Es0001.parquet",
+        "size": 1329827,
+        "uid": "KsqvAFoGHYY3N0Es0001"
+      },
+      "var": {
+        "created_at": "2026-07-30 20:49:50.273003+00:00",
+        "created_on_id": 2,
+        "description": "t_bb2f5bc0: source-exhaustive Danio rerio VAR disposition against GSE226373 GRCz11_GFP_mCherry_e95",
+        "hash": "kciTch3bNQb9zkJBuG9Nnw",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/var.parquet",
+        "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/cotSkl4KjBYQRBZm0001.parquet",
+        "size": 1480351,
+        "uid": "cotSkl4KjBYQRBZm0001"
+      }
+    },
+    "histories": {
+      "X": 2,
+      "obs": 2,
+      "var": 2
+    },
+    "nnz": 17704427,
+    "obs": {
+      "canonical_fields": 42,
+      "canonical_fields_present": 42,
+      "identity_unique": true,
+      "rows": 11690,
+      "timepoint_minutes_counts": {
+        "0": 2243,
+        "2640": 1723,
+        "5760": 4899,
+        "8640": 2825
+      },
+      "unknown_or_missing_fields": [
+        "donor_id",
+        "pseudotime",
+        "is_low_quality"
+      ]
+    },
+    "obs_X_link": true,
+    "obs_axis_sha256": "592ad489f85719b6d47f3c17a8f3a1a105bbd526668537922f9ad8b2a8f3fe0b",
+    "payload_exists": {
+      "X": true,
+      "obs": true,
+      "var": true
+    },
+    "shape": [
+      11690,
+      20726
+    ],
+    "var": {
+      "human_mouse_coercions": 0,
+      "namespace": "Ensembl GRCz11",
+      "not_applicable_by_reason": {},
+      "not_applicable_features": 0,
+      "rows": 20726,
+      "species": "Danio rerio",
+      "species_correct_var_pass": true,
+      "stable_ensembl_features": 20726,
+      "unknown_features": 0
+    },
+    "var_axis_sha256": "cbc6b043a471c80eec039717810e282ff3c0dee73acb46e24370a1bbb5f7155c"
+  },
+  "branch": "jkobject",
+  "collection": {
+    "accepted_anchor_present": true,
+    "collection_mutation_in_scope": false,
+    "key": "pert-gym/additions/20260719-temporal-v4-133-zebrafish-retina-regeneration",
+    "matches": [
+      {
+        "key": "pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/obs.parquet",
+        "uid": "KsqvAFoGHYY3N0Es0000"
+      }
+    ],
+    "member_count": 1014,
+    "uid": "4KzIQvzliuWg8R0k0000"
+  },
+  "complete": true,
+  "experimental_axes": {
+    "collection_batch": {
+      "collection_day_1": 8865,
+      "collection_day_2": 2825
+    },
+    "elapsed_time_after_light_lesion_minutes": {
+      "0": 2243,
+      "2640": 1723,
+      "5760": 4899,
+      "8640": 2825
+    },
+    "injury_condition": {
+      "levels": [
+        "uninjured control",
+        "light lesion"
+      ],
+      "observation_counts": {
+        "light lesion": 9447,
+        "uninjured control": 2243
+      }
+    }
+  },
+  "experimental_unit": "cell; four accepted pooled-retina samples; four adult zebrafish/eight retinae per sample (GEO s4 whole-retina control is not in the accepted SCP1973 component)",
+  "final": {
+    "X_logical_fingerprint": {
+      "logical_X_sha256": "75ff4f3d1836f9de8fd8516a6edad5a2debfd803312310c88b8766bea0849aad",
+      "nnz": 17704427,
+      "obs_axis_sha256": "592ad489f85719b6d47f3c17a8f3a1a105bbd526668537922f9ad8b2a8f3fe0b",
+      "shape": [
+        11690,
+        20726
+      ],
+      "var_axis_sha256": "cbc6b043a471c80eec039717810e282ff3c0dee73acb46e24370a1bbb5f7155c"
+    },
+    "X_var_link": true,
+    "artifacts": {
+      "X": {
+        "created_at": "2026-07-30 20:57:29.313272+00:00",
+        "created_on_id": 2,
+        "description": "t_bb2f5bc0: matrix-faithful recovery of accepted raw-count X from durable source Artifact 2u8UrHx5vCE0O4zZ0000 after canonical GCS payload loss",
+        "hash": "WozFlfoachsbkxe5LV4N1g",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/X.h5ad",
+        "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/XNdeESO8PIhCpCmo0001.h5ad",
+        "size": 143423416,
+        "uid": "XNdeESO8PIhCpCmo0001"
+      },
+      "obs": {
+        "created_at": "2026-07-30 20:49:57.061923+00:00",
+        "created_on_id": 2,
+        "description": "t_bb2f5bc0: source-exhaustive SCP1973/GSE226373 OBS; exact 11690-row identity, injury/time/sample/QC evidence and quantified residual unknowns",
+        "hash": "SKAWHL2UH794qU1MgQrcnw",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/obs.parquet",
+        "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/KsqvAFoGHYY3N0Es0001.parquet",
+        "size": 1329827,
+        "uid": "KsqvAFoGHYY3N0Es0001"
+      },
+      "var": {
+        "created_at": "2026-07-30 20:49:50.273003+00:00",
+        "created_on_id": 2,
+        "description": "t_bb2f5bc0: source-exhaustive Danio rerio VAR disposition against GSE226373 GRCz11_GFP_mCherry_e95",
+        "hash": "kciTch3bNQb9zkJBuG9Nnw",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/var.parquet",
+        "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/cotSkl4KjBYQRBZm0001.parquet",
+        "size": 1480351,
+        "uid": "cotSkl4KjBYQRBZm0001"
+      }
+    },
+    "histories": {
+      "X": 2,
+      "obs": 2,
+      "var": 2
+    },
+    "nnz": 17704427,
+    "obs": {
+      "canonical_fields": 42,
+      "canonical_fields_present": 42,
+      "identity_unique": true,
+      "rows": 11690,
+      "timepoint_minutes_counts": {
+        "0": 2243,
+        "2640": 1723,
+        "5760": 4899,
+        "8640": 2825
+      },
+      "unknown_or_missing_fields": [
+        "donor_id",
+        "pseudotime",
+        "is_low_quality"
+      ]
+    },
+    "obs_X_link": true,
+    "obs_axis_sha256": "592ad489f85719b6d47f3c17a8f3a1a105bbd526668537922f9ad8b2a8f3fe0b",
+    "payload_exists": {
+      "X": true,
+      "obs": true,
+      "var": true
+    },
+    "shape": [
+      11690,
+      20726
+    ],
+    "var": {
+      "human_mouse_coercions": 0,
+      "namespace": "Ensembl GRCz11",
+      "not_applicable_by_reason": {},
+      "not_applicable_features": 0,
+      "rows": 20726,
+      "species": "Danio rerio",
+      "species_correct_var_pass": true,
+      "stable_ensembl_features": 20726,
+      "unknown_features": 0
+    },
+    "var_axis_sha256": "cbc6b043a471c80eec039717810e282ff3c0dee73acb46e24370a1bbb5f7155c"
+  },
+  "gates": {
+    "accepted_X_byte_exact_recovery_pass": false,
+    "accepted_X_logical_matrix_recovery_pass": true,
+    "accepted_X_reused": false,
+    "canonical_storage_lamin_pass": true,
+    "chunks_structure_pass": true,
+    "cleaning_pass": true,
+    "collection_pass": true,
+    "negative_main_equivalence_pass": true,
+    "species_correct_var_pass": true,
+    "strict_obs_pass": true
+  },
+  "generated_at": 1785445758.4045615,
+  "instance": "laminlabs/pertdata",
+  "mode": "verify",
+  "negative_main_equivalence": {
+    "basis": "bounded latest-main key/description aliases, all exact accessions/DOI, plus zebrafish/retina/Muller-glia candidate enumeration; source title, organism, injury, time axis, and cell selection must all agree for equivalence",
+    "bounded": true,
+    "exact_match_count": 0,
+    "exact_matches": [],
+    "exact_terms": [
+      "SCP1973",
+      "GSE226373",
+      "PRJNA940076",
+      "10.7554/eLife.86507",
+      "86507"
+    ],
+    "main_created_on_id": 1,
+    "negative": true,
+    "scientific_candidates_reviewed": [],
+    "scientific_equivalent_count": 0
+  },
+  "outcomes_endpoints": "cell-state/transcriptional regeneration trajectory; no separate quantitative response endpoint",
+  "residual_unknowns": {
+    "donor_id": {
+      "reason": "source pools four fish and publishes no individual cell-to-fish join",
+      "rows": 11690
+    },
+    "is_low_quality": {
+      "reason": "source publishes no reviewed threshold; no row filtered by this completion",
+      "rows": 11690
+    },
+    "pseudotime": {
+      "reason": "no source-backed per-cell pseudotime in accepted metadata",
+      "rows": 11690
+    }
+  },
+  "schema": "pert-gym.dataset-completion.scp1973/v1",
+  "scientific_modality": "single-cell RNA-seq expression after phototoxic retinal injury",
+  "source": {
+    "X_logical_recovery": {
+      "recovered": {
+        "logical_X_sha256": "75ff4f3d1836f9de8fd8516a6edad5a2debfd803312310c88b8766bea0849aad",
+        "nnz": 17704427,
+        "obs_axis_sha256": "592ad489f85719b6d47f3c17a8f3a1a105bbd526668537922f9ad8b2a8f3fe0b",
+        "shape": [
+          11690,
+          20726
+        ],
+        "var_axis_sha256": "cbc6b043a471c80eec039717810e282ff3c0dee73acb46e24370a1bbb5f7155c"
+      },
+      "recovered_file_bytes": 143423416,
+      "recovered_file_sha256": "e620d3728b3f7d6f35ec3da985514cb0472d863e8bb596e0bb31a266022ebfad",
+      "source": {
+        "logical_X_sha256": "75ff4f3d1836f9de8fd8516a6edad5a2debfd803312310c88b8766bea0849aad",
+        "nnz": 17704427,
+        "obs_axis_sha256": "592ad489f85719b6d47f3c17a8f3a1a105bbd526668537922f9ad8b2a8f3fe0b",
+        "shape": [
+          11690,
+          20726
+        ],
+        "var_axis_sha256": "cbc6b043a471c80eec039717810e282ff3c0dee73acb46e24370a1bbb5f7155c"
+      }
+    },
+    "accepted_canonical_gcs_payload_status": "missing during preflight; exact source bytes recovered from retained Lamin source Artifacts",
+    "accepted_revision": "temporal-v4-133-wave13-05a447c4c48e148a",
+    "accessions": [
+      "SCP1973",
+      "GSE226373",
+      "PRJNA940076"
+    ],
+    "doi": "10.7554/eLife.86507",
+    "durable_source_artifact_readback": {
+      "X": {
+        "accepted_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/revisions/temporal-v4-133-wave13-05a447c4c48e148a/X.h5ad#1784268886641334",
+        "bytes": 42626250,
+        "sha256": "2002963da4e63e3962e234b6e23a3fdac6f8bc7e671bdf3724750c6cae37fff3",
+        "source_artifact": {
+          "created_at": "2026-06-23 12:22:16.518696+00:00",
+          "created_on_id": 2,
+          "description": "None",
+          "hash": "4DHvQp6S83CD-vhXbmDhXA",
+          "is_latest": true,
+          "key": "temporal_pretraining/scp1973_zebrafish_retina_regeneration/X.h5ad",
+          "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/2u8UrHx5vCE0O4zZ0000.h5ad",
+          "size": 42626250,
+          "uid": "2u8UrHx5vCE0O4zZ0000"
+        }
+      },
+      "obs": {
+        "accepted_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/revisions/temporal-v4-133-wave13-05a447c4c48e148a/obs.parquet#1784268885796503",
+        "bytes": 494683,
+        "sha256": "43c6766eef0a734a41e11f1955d79cee4749b22330906c4debfe1de20a9945f6",
+        "source_artifact": {
+          "created_at": "2026-06-23 12:22:10.938080+00:00",
+          "created_on_id": 2,
+          "description": "None",
+          "hash": "RbrB9qho_JWn0Noeo8vCFQ",
+          "is_latest": true,
+          "key": "temporal_pretraining/scp1973_zebrafish_retina_regeneration/obs.parquet",
+          "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/aMnJwlABB1VMeYJH0000.parquet",
+          "size": 494683,
+          "uid": "aMnJwlABB1VMeYJH0000"
+        }
+      },
+      "var": {
+        "accepted_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/revisions/temporal-v4-133-wave13-05a447c4c48e148a/var.parquet#1784268886866298",
+        "bytes": 771548,
+        "sha256": "f511c5c774cbbb3544c90dae3f878d1f04c4822e22a8b6d257d4dfddca01ad28",
+        "source_artifact": {
+          "created_at": "2026-06-23 12:22:22.048178+00:00",
+          "created_on_id": 2,
+          "description": "None",
+          "hash": "ffXrSxC4t5_slGY7UkxXXQ",
+          "is_latest": true,
+          "key": "temporal_pretraining/scp1973_zebrafish_retina_regeneration/var.parquet",
+          "path": "s3://lamin-us-west-2/H7d9vxvceBoh/.lamindb/TR04mLvCnFyXmXbF0000.parquet",
+          "size": 771548,
+          "uid": "TR04mLvCnFyXmXbF0000"
+        }
+      }
+    },
+    "geo_feature_namespace_readback": {
+      "bytes": 39962730,
+      "sha256": "1a4748a01fa5ab0dff236214a6df173c8d079910ec11c9c8d78a24e23411c739",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE226nnn/GSE226373/suppl/GSE226373_filtered_feature_bc_matrix.h5"
+    },
+    "source_manifest_sha256": "f97e322b45a1b298184c51422b4c275b29aa55977b28378632f37136a99eb6e6"
+  },
+  "task_id": "t_bb2f5bc0",
+  "temporal_verdict": "true biological injury-response time course; source-backed baseline plus 44 hpl, 4 dpl and 6 dpl"
+}

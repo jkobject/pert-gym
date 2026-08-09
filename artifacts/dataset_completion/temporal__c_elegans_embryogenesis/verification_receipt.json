@@ -1,0 +1,1226 @@
+{
+  "accepted_matrix": {
+    "arrays": {
+      "data": {
+        "dtype": "float32",
+        "length": 43994050,
+        "sha256": "04bb0298f73b227c54dc3ae40c407ad22f3dff3ee04526e7c1e77020afddd1c0"
+      },
+      "indices": {
+        "dtype": "int32",
+        "length": 43994050,
+        "sha256": "6a4bc363dbc2184a50fc0edb15f1e702a3b05661bfb36fec07f0f09307f41478"
+      },
+      "indptr": {
+        "dtype": "int32",
+        "length": 46152,
+        "sha256": "f8a94f8f2f04d328d3ec601e5f8ef642df6fb041a59de616c5a2d083c9ea2c8c"
+      }
+    },
+    "encoding_type": "csr_matrix",
+    "nnz": 43994050,
+    "shape": [
+      46151,
+      20222
+    ]
+  },
+  "after": {
+    "X": {
+      "branch_id": 2,
+      "collections": [],
+      "created_on_id": 2,
+      "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249047666142\",\"object_sha256\":\"50b28ef17d02bcdf670fd2552ed0129645bd66bf8d4a7d97fc3ef6308efb360c\",\"role\":\"X\",\"source_identity\":\"figshare:22491340\"}",
+      "features": {
+        "var": "data/cleaned/c_elegans_embryogenesis/var.parquet"
+      },
+      "hash": "Jmsp4rekLpfadfOrHUbTvQ",
+      "is_latest": true,
+      "key": "data/cleaned/c_elegans_embryogenesis/X.h5ad",
+      "size": 354987544,
+      "uid": "BcReMLnW6XOb8tvS0000"
+    },
+    "obs": {
+      "branch_id": 2,
+      "collections": [
+        {
+          "key": "pert-gym/additions/20260802-c-elegans-embryogenesis-e2e",
+          "uid": "9MkL8bCk3WzbuPlV0000"
+        }
+      ],
+      "created_on_id": 2,
+      "description": "t_a62edaa7: C. elegans embryogenesis OBS_COMPLETED; source-exhaustive Figshare 22491340 / Packer 2019 curation",
+      "features": {
+        "X": "data/cleaned/c_elegans_embryogenesis/X.h5ad"
+      },
+      "hash": "j2wi91uGDjKSAMFpbzv3YQ",
+      "is_latest": true,
+      "key": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+      "size": 4931038,
+      "uid": "5EOAVNZfpqU7u1TX0001"
+    },
+    "var": {
+      "branch_id": 2,
+      "collections": [],
+      "created_on_id": 2,
+      "description": "t_a62edaa7: C. elegans embryogenesis species-correct VAR; 20,222 source-native WormBase/Ensembl Metazoa stable gene identifiers",
+      "features": {},
+      "hash": "6iH-3sVT-eCFucT_BSXMdw",
+      "is_latest": true,
+      "key": "data/cleaned/c_elegans_embryogenesis/var.parquet",
+      "size": 1434641,
+      "uid": "7sZcoxxd0LMj1DeI0001"
+    }
+  },
+  "axis_checks": {
+    "accepted_x_obs_order_equals_obs_index": true,
+    "accepted_x_var_order_equals_var_index": true,
+    "source_cell_order_equals_accepted_cell": true,
+    "source_gene_id_order_equals_accepted_var_id": true,
+    "source_obs_index_order_equals_accepted_obs_index": true,
+    "source_var_index_order_equals_accepted_var_index": true
+  },
+  "before": {
+    "X": {
+      "branch_id": 2,
+      "collections": [],
+      "created_on_id": 2,
+      "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249047666142\",\"object_sha256\":\"50b28ef17d02bcdf670fd2552ed0129645bd66bf8d4a7d97fc3ef6308efb360c\",\"role\":\"X\",\"source_identity\":\"figshare:22491340\"}",
+      "features": {
+        "var": "data/cleaned/c_elegans_embryogenesis/var.parquet"
+      },
+      "hash": "Jmsp4rekLpfadfOrHUbTvQ",
+      "is_latest": true,
+      "key": "data/cleaned/c_elegans_embryogenesis/X.h5ad",
+      "size": 354987544,
+      "uid": "BcReMLnW6XOb8tvS0000"
+    },
+    "obs": {
+      "branch_id": 2,
+      "collections": [
+        {
+          "key": "pert-gym/additions/20260717-c-elegans-pilot",
+          "uid": "uA0lyIvPz0wvwkho0000"
+        },
+        {
+          "key": "pert-gym/additions/20260718-odd001154-gse194214",
+          "uid": "Kx7T3b75KmqnDhmv0000"
+        },
+        {
+          "key": "pert-gym/additions/20260718-odd001155-gse196799",
+          "uid": "nhx8lM9cElyfHDNq0000"
+        },
+        {
+          "key": "pert-gym/additions/20260718-odd001111-gse130238",
+          "uid": "TwC9RNVYX56GXQrQ0000"
+        },
+        {
+          "key": "pert-gym/additions/20260718-odd001099-gse138002",
+          "uid": "M3RK4i6Alb6IY3MW0000"
+        },
+        {
+          "key": "pert-gym/additions/20260718-temporal-v4-098-multiciliated-differentiation",
+          "uid": "t5vYC6ws9hUoxiCw0000"
+        },
+        {
+          "key": "pert-gym/additions/20260719-temporal-v4-109-stable-chambered-cardioids",
+          "uid": "s4nGi0cl9DIcBwiR0000"
+        },
+        {
+          "key": "pert-gym/additions/20260719-temporal-v4-133-zebrafish-retina-regeneration",
+          "uid": "4KzIQvzliuWg8R0k0000"
+        },
+        {
+          "key": "pert-gym/additions/20260719-temporal-v4-116-perturbase-gse107185",
+          "uid": "gTFAbqEVHm9tFLzV0000"
+        },
+        {
+          "key": "pert-gym/additions/20260719-temporal-v4-059-drosophila-dorsal-ventral",
+          "uid": "WBFxVN9Alr8zFt9T0000"
+        },
+        {
+          "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e",
+          "uid": "aH1RWvlWo87xGpsb0000"
+        },
+        {
+          "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e-r2",
+          "uid": "B9N5cXbu8Cm0RZSj0000"
+        },
+        {
+          "key": "pert-gym/additions/20260721-ginkgo-vcpi-e2e",
+          "uid": "qoTeH7T78kjbmIWA0000"
+        },
+        {
+          "key": "pert-gym/additions/20260721-drug-seq-gse120222-e2e",
+          "uid": "Ltjv1RYDCnuxqqRT0000"
+        },
+        {
+          "key": "pert-gym/additions/20260723-gse197452-e2e",
+          "uid": "ZTXfvA5YDoaqrd750000"
+        },
+        {
+          "key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e",
+          "uid": "XwM4hPo8erPJKOAz0000"
+        },
+        {
+          "key": "pert-gym/additions/20260730-gse138002-e2e",
+          "uid": "v40mGQWasaHrIP7f0000"
+        },
+        {
+          "key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e-v2",
+          "uid": "Hck3g1dNOGJBOv3R0000"
+        },
+        {
+          "key": "pert-gym/additions/20260730-odd001155-gse196799-e2e",
+          "uid": "FlK1x1wByjbMTRCM0000"
+        },
+        {
+          "key": "pert-gym/additions/20260730-gse130238-e2e",
+          "uid": "whLgwg8opPvW9qdN0000"
+        },
+        {
+          "key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+          "uid": "GvFuzrWQeKB6Pd8t0000"
+        },
+        {
+          "key": "pert-gym/additions/20260730-gse269572-e2e",
+          "uid": "jgMqCxKblbeO5uT60000"
+        },
+        {
+          "key": "pert-gym/additions/20260730-gse107185-e2e",
+          "uid": "Gr2tdh9dUVgIoqB80000"
+        },
+        {
+          "key": "pert-gym/additions/20260801-gse269572-strict-obs-v2",
+          "uid": "NFBw58RkNoGgn9pO0000"
+        },
+        {
+          "key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+          "uid": "GvFuzrWQeKB6Pd8t0001"
+        },
+        {
+          "key": "pert-gym/additions/20260801-gse107185-review-fix",
+          "uid": "oabDLe6umomPkBHG0000"
+        }
+      ],
+      "created_on_id": 2,
+      "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249041653392\",\"object_sha256\":\"ac36e96828a9d30ce69e95fc5fcea2d471f5cfa1e7482d4d3ae74fe90703f957\",\"role\":\"obs\",\"source_identity\":\"figshare:22491340\"}",
+      "features": {},
+      "hash": "AY5-RdMt60uIyLDU-SybzA",
+      "is_latest": false,
+      "key": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+      "size": 2177270,
+      "uid": "5EOAVNZfpqU7u1TX0000"
+    },
+    "var": {
+      "branch_id": 2,
+      "collections": [],
+      "created_on_id": 2,
+      "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249047860188\",\"object_sha256\":\"7e31d2f5a962b14e11ce2b697121e18b8cd61156d832ff0b157fd6884bb00ade\",\"role\":\"var\",\"source_identity\":\"figshare:22491340\"}",
+      "features": {},
+      "hash": "hZEd9wPsDW-DJn0MVw-rBg",
+      "is_latest": false,
+      "key": "data/cleaned/c_elegans_embryogenesis/var.parquet",
+      "size": 850046,
+      "uid": "7sZcoxxd0LMj1DeI0000"
+    }
+  },
+  "branch": "jkobject",
+  "collection": {
+    "created": true,
+    "predecessor": {
+      "key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+      "member_count": 1018,
+      "membership_sha256": "4f379ee3ed83a82e99ab1b26e6d8ff5cd4293010c5b258d9d9676c0eb40c7d61",
+      "uid": "GvFuzrWQeKB6Pd8t0001"
+    },
+    "replacements": [
+      {
+        "added_uid": "5EOAVNZfpqU7u1TX0001",
+        "key": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+        "replaced_uid": "5EOAVNZfpqU7u1TX0000"
+      }
+    ],
+    "status": "pass_append_only_successor",
+    "successor": {
+      "key": "pert-gym/additions/20260802-c-elegans-embryogenesis-e2e",
+      "member_count": 1018,
+      "membership_sha256": "b390f5eeaf8964910f0e98110bb920e7e83907f63174eace11c43eac2f0bf904",
+      "uid": "9MkL8bCk3WzbuPlV0000"
+    }
+  },
+  "completed_at": "2026-08-02T10:58:12.159766+00:00",
+  "counts": {
+    "biological_datasets": 1,
+    "logical_families": 1,
+    "matrix_nonzeros": 43994050,
+    "observations": 46151,
+    "physical_members": 1,
+    "variables": 20222
+  },
+  "dataset_id": "temporal/c_elegans_embryogenesis",
+  "instance": "laminlabs/pertdata",
+  "logical_key": "pert-gym/logical/temporal/c_elegans_embryogenesis",
+  "obs": {
+    "canonical_field_count": 42,
+    "field_dispositions": {
+      "age": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.embryo.time": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "assay": {
+        "non_null_rows": 46151,
+        "sources": {
+          "Figshare article 22491340": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "batch": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.batch": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "cell_id": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.cell": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "cell_line": {
+        "non_null_rows": 0,
+        "sources": {
+          "whole-organism embryo atlas; no cell line": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "cell_type": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs cell.subtype > cell.type > plot.cell.type > lineage fallback": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "dataset": {
+        "non_null_rows": 46151,
+        "sources": {
+          "accepted dataset identity": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "disease": {
+        "non_null_rows": 0,
+        "sources": {
+          "developmental reference atlas; disease not applicable": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "donor_id": {
+        "non_null_rows": 0,
+        "sources": {
+          "pooled C. elegans embryos; donor concept not applicable": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "dose": {
+        "non_null_rows": 0,
+        "sources": {
+          "observational embryogenesis time series; no perturbation": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "dose_unit": {
+        "non_null_rows": 0,
+        "sources": {
+          "observational embryogenesis time series; no perturbation": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "ethnicity": {
+        "non_null_rows": 0,
+        "sources": {
+          "non-human organism": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "guide_sequence": {
+        "non_null_rows": 0,
+        "sources": {
+          "observational embryogenesis time series; no perturbation": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "is_baseline": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.is_baseline": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "is_bulk": {
+        "non_null_rows": 46151,
+        "sources": {
+          "Figshare article 22491340: scRNA-seq": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "is_control": {
+        "non_null_rows": 46151,
+        "sources": {
+          "observational time series; no perturbation/control arm": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "is_low_quality": {
+        "non_null_rows": 46151,
+        "sources": {
+          "inverse source obs.passed_initial_QC_or_later_whitelisted": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "is_pseudobulk": {
+        "non_null_rows": 46151,
+        "sources": {
+          "one source cell per observation": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "media": {
+        "non_null_rows": 0,
+        "sources": {
+          "embryo handling medium not reported in retained source": 46151
+        },
+        "states": {
+          "unknown": 46151
+        },
+        "total_rows": 46151
+      },
+      "modality": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.modality": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "molecule_sequence": {
+        "non_null_rows": 0,
+        "sources": {
+          "observational embryogenesis time series; no perturbation": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "n_counts": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.n.umi": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "n_genes": {
+        "non_null_rows": 0,
+        "sources": {
+          "per-cell detected-gene counts absent from retained source obs": 46151
+        },
+        "states": {
+          "unknown": 46151
+        },
+        "total_rows": 46151
+      },
+      "organism": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.organism": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "pct_mito": {
+        "non_null_rows": 0,
+        "sources": {
+          "per-cell mitochondrial fraction absent from retained source obs": 46151
+        },
+        "states": {
+          "unknown": 46151
+        },
+        "total_rows": 46151
+      },
+      "pct_ribo": {
+        "non_null_rows": 0,
+        "sources": {
+          "per-cell ribosomal fraction absent from retained source obs": 46151
+        },
+        "states": {
+          "unknown": 46151
+        },
+        "total_rows": 46151
+      },
+      "perturbation": {
+        "non_null_rows": 0,
+        "sources": {
+          "observational embryogenesis time series; no perturbation": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "perturbation_library": {
+        "non_null_rows": 0,
+        "sources": {
+          "observational embryogenesis time series; no perturbation": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "perturbation_technology": {
+        "non_null_rows": 0,
+        "sources": {
+          "observational embryogenesis time series; no perturbation": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "perturbation_type": {
+        "non_null_rows": 0,
+        "sources": {
+          "observational embryogenesis time series; no perturbation": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "pseudotime": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.pseudotime": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "response_metric": {
+        "non_null_rows": 0,
+        "sources": {
+          "no perturbation-response endpoint": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "response_source": {
+        "non_null_rows": 0,
+        "sources": {
+          "no perturbation-response endpoint": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "response_value": {
+        "non_null_rows": 0,
+        "sources": {
+          "no perturbation-response endpoint": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "sample": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.batch": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "sensitivity": {
+        "non_null_rows": 0,
+        "sources": {
+          "no perturbation-response endpoint": 46151
+        },
+        "states": {
+          "not_applicable": 46151
+        },
+        "total_rows": 46151
+      },
+      "sequencer": {
+        "non_null_rows": 0,
+        "sources": {
+          "sequencing instrument not reported in retained source": 46151
+        },
+        "states": {
+          "unknown": 46151
+        },
+        "total_rows": 46151
+      },
+      "sex": {
+        "non_null_rows": 0,
+        "sources": {
+          "not reported by Figshare article 22491340 or source obs": 46151
+        },
+        "states": {
+          "unknown": 46151
+        },
+        "total_rows": 46151
+      },
+      "technology": {
+        "non_null_rows": 46151,
+        "sources": {
+          "Figshare article 22491340 reports 10x Genomics v2 chemistry": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "timepoint": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.timepoint in minutes": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "tissue_type": {
+        "non_null_rows": 46151,
+        "sources": {
+          "Figshare article 22491340 and Packer 2019": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      },
+      "trajectory_id": {
+        "non_null_rows": 46151,
+        "sources": {
+          "source obs.trajectory_id": 46151
+        },
+        "states": {
+          "known": 46151
+        },
+        "total_rows": 46151
+      }
+    },
+    "obs_uuid_unique": true,
+    "retained_raw_columns": [
+      "Unnamed: 0",
+      "Unnamed: 0.1",
+      "cell",
+      "n.umi",
+      "time.point",
+      "batch",
+      "Size_Factor",
+      "cell.type",
+      "cell.subtype",
+      "plot.cell.type",
+      "raw.embryo.time",
+      "embryo.time",
+      "embryo.time.bin",
+      "raw.embryo.time.bin",
+      "lineage",
+      "passed_initial_QC_or_later_whitelisted",
+      "random_precise_lineage",
+      "timepoint",
+      "trajectory_id",
+      "pseudotime",
+      "is_baseline",
+      "raw_time_label",
+      "source_article_id",
+      "source_article_title",
+      "organism",
+      "modality",
+      "assay"
+    ],
+    "row_order_preserved": true,
+    "status": "pass"
+  },
+  "receipt_artifact": {
+    "branch_id": 2,
+    "collections": [],
+    "created_on_id": 2,
+    "description": "t_a62edaa7: C. elegans embryogenesis dataset-completion verification receipt",
+    "features": {
+      "X": "data/cleaned/c_elegans_embryogenesis/X.h5ad",
+      "obs": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+      "var": "data/cleaned/c_elegans_embryogenesis/var.parquet"
+    },
+    "hash": "00w7gmpGTCaxSKowFG_jog",
+    "is_latest": true,
+    "key": "data/cleaned/c_elegans_embryogenesis/curation/t_a62edaa7/verification_receipt.json",
+    "size": 38358,
+    "uid": "C7zKP03a9Q7t8D730000"
+  },
+  "schema_version": "pert-gym.dataset-completion-receipt/v2",
+  "scientific_classification": {
+    "classification": "temporal_developmental_expression_atlas",
+    "experimental_axes": {
+      "batch": {
+        "row_frequencies": {
+          "Murray_b01": 5811,
+          "Murray_b02": 1277,
+          "Murray_r17": 5383,
+          "Waterston_300_minutes": 11735,
+          "Waterston_400_minutes": 15981,
+          "Waterston_500_minutes_batch_1": 4000,
+          "Waterston_500_minutes_batch_2": 1964
+        },
+        "verdict": "technical_or_collection_grouping"
+      },
+      "biological_developmental_time": {
+        "canonical_field": "timepoint",
+        "distinct_levels": 99,
+        "maximum": 800.0,
+        "minimum": 0.0,
+        "row_frequencies": {
+          "0.0": 99,
+          "100.0": 45,
+          "110.0": 7,
+          "120.0": 165,
+          "125.0": 21,
+          "130.0": 334,
+          "140.0": 35,
+          "145.0": 13,
+          "150.0": 95,
+          "155.0": 68,
+          "160.0": 369,
+          "165.0": 94,
+          "170.0": 971,
+          "175.0": 215,
+          "180.0": 386,
+          "185.0": 310,
+          "190.0": 1073,
+          "195.0": 487,
+          "200.0": 1286,
+          "205.0": 330,
+          "210.0": 465,
+          "215.0": 350,
+          "220.0": 644,
+          "225.0": 477,
+          "230.0": 1926,
+          "235.0": 13,
+          "240.0": 29,
+          "245.0": 787,
+          "250.0": 17,
+          "255.0": 4,
+          "260.0": 2893,
+          "265.0": 849,
+          "270.0": 2217,
+          "275.0": 751,
+          "280.0": 1256,
+          "285.0": 781,
+          "290.0": 1344,
+          "295.0": 849,
+          "300.0": 3618,
+          "305.0": 17,
+          "310.0": 679,
+          "315.0": 15,
+          "320.0": 1757,
+          "325.0": 480,
+          "330.0": 907,
+          "335.0": 444,
+          "340.0": 942,
+          "345.0": 577,
+          "350.0": 2443,
+          "355.0": 567,
+          "360.0": 1323,
+          "365.0": 335,
+          "370.0": 537,
+          "375.0": 427,
+          "380.0": 1091,
+          "385.0": 533,
+          "390.0": 1061,
+          "395.0": 214,
+          "400.0": 347,
+          "405.0": 309,
+          "410.0": 629,
+          "415.0": 397,
+          "420.0": 714,
+          "425.0": 240,
+          "430.0": 181,
+          "435.0": 213,
+          "440.0": 272,
+          "445.0": 2,
+          "450.0": 1368,
+          "455.0": 22,
+          "460.0": 21,
+          "465.0": 4,
+          "470.0": 342,
+          "475.0": 1,
+          "480.0": 28,
+          "485.0": 5,
+          "490.0": 744,
+          "495.0": 1,
+          "500.0": 207,
+          "510.0": 3,
+          "520.0": 1,
+          "530.0": 5,
+          "550.0": 16,
+          "585.0": 6,
+          "590.0": 1,
+          "595.0": 1,
+          "620.0": 9,
+          "630.0": 4,
+          "635.0": 2,
+          "640.0": 8,
+          "670.0": 1,
+          "695.0": 1,
+          "70.0": 2,
+          "700.0": 11,
+          "725.0": 4,
+          "750.0": 2,
+          "775.0": 1,
+          "800.0": 1,
+          "85.0": 3
+        },
+        "source": "source obs.embryo.time/timepoint; Figshare 22491340 and Packer 2019 assigned embryo-time labels",
+        "unit": "minutes post-fertilization",
+        "verdict": "multitimepoint_biological_axis"
+      },
+      "collection_label": {
+        "raw_field": "time.point",
+        "row_frequencies": {
+          "300_minutes": 11735,
+          "400_minutes": 15981,
+          "500_minutes": 5964,
+          "mixed": 12471
+        },
+        "verdict": "source_collection_label_not_cell_age"
+      },
+      "developmental_stage_bin": {
+        "raw_fields": [
+          "embryo.time.bin",
+          "raw.embryo.time.bin"
+        ],
+        "row_frequencies": {
+          "100-130": 238,
+          "130-170": 1008,
+          "170-210": 5058,
+          "210-270": 8454,
+          "270-330": 13764,
+          "330-390": 10126,
+          "390-450": 4579,
+          "450-510": 2743,
+          "510-580": 25,
+          "580-650": 31,
+          "< 100": 104,
+          "> 650": 21
+        },
+        "verdict": "derived_developmental_stage_bin"
+      },
+      "pseudotime": {
+        "distinct_levels": 99,
+        "present_rows": 46151,
+        "verdict": "computed_trajectory_coordinate_not_elapsed_time"
+      }
+    },
+    "experimental_unit": {
+      "dataset": "one embryogenesis atlas",
+      "observation": "cell",
+      "sample": "source batch of pooled C. elegans embryos"
+    },
+    "outcomes_endpoints": {
+      "note": "expression and developmental annotations only; no perturbation-response, viability, survival, or disease endpoint",
+      "verdict": "none"
+    },
+    "perturbation_status": "observational_unperturbed",
+    "scientific_modality": "single-cell RNA expression developmental atlas"
+  },
+  "scientific_equivalence_gate": {
+    "decision": "revise the accepted obs/var lineage; reuse accepted X; create no duplicate family",
+    "search_terms": [
+      "c_elegans_embryogenesis",
+      "22491340",
+      "39943585",
+      "c_elegans.h5ad",
+      "aax1971"
+    ],
+    "status": "pass",
+    "unexpected_non_lineage_candidates": [],
+    "visible_candidates": [
+      {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "Temporal pretraining C. elegans embryogenesis X; source https://ndownloader.figshare.com/files/39943585",
+        "features": {
+          "var": "temporal_pretraining/c_elegans_embryogenesis/figshare_22491340/var.parquet"
+        },
+        "hash": "meN4HUeeE3mN72A0Th6hnx",
+        "is_latest": true,
+        "key": "temporal_pretraining/c_elegans_embryogenesis/figshare_22491340/X.h5ad",
+        "size": 354987544,
+        "uid": "3HFHNsfi4VX80xG40000"
+      },
+      {
+        "branch_id": 2,
+        "collections": [
+          {
+            "key": "pert-gym/additions/20260717-c-elegans-pilot",
+            "uid": "uA0lyIvPz0wvwkho0000"
+          },
+          {
+            "key": "pert-gym/additions/20260718-odd001154-gse194214",
+            "uid": "Kx7T3b75KmqnDhmv0000"
+          },
+          {
+            "key": "pert-gym/additions/20260718-odd001155-gse196799",
+            "uid": "nhx8lM9cElyfHDNq0000"
+          },
+          {
+            "key": "pert-gym/additions/20260718-odd001111-gse130238",
+            "uid": "TwC9RNVYX56GXQrQ0000"
+          },
+          {
+            "key": "pert-gym/additions/20260718-odd001099-gse138002",
+            "uid": "M3RK4i6Alb6IY3MW0000"
+          },
+          {
+            "key": "pert-gym/additions/20260718-temporal-v4-098-multiciliated-differentiation",
+            "uid": "t5vYC6ws9hUoxiCw0000"
+          },
+          {
+            "key": "pert-gym/additions/20260719-temporal-v4-109-stable-chambered-cardioids",
+            "uid": "s4nGi0cl9DIcBwiR0000"
+          },
+          {
+            "key": "pert-gym/additions/20260719-temporal-v4-133-zebrafish-retina-regeneration",
+            "uid": "4KzIQvzliuWg8R0k0000"
+          },
+          {
+            "key": "pert-gym/additions/20260719-temporal-v4-116-perturbase-gse107185",
+            "uid": "gTFAbqEVHm9tFLzV0000"
+          },
+          {
+            "key": "pert-gym/additions/20260719-temporal-v4-059-drosophila-dorsal-ventral",
+            "uid": "WBFxVN9Alr8zFt9T0000"
+          },
+          {
+            "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e",
+            "uid": "aH1RWvlWo87xGpsb0000"
+          },
+          {
+            "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e-r2",
+            "uid": "B9N5cXbu8Cm0RZSj0000"
+          },
+          {
+            "key": "pert-gym/additions/20260721-ginkgo-vcpi-e2e",
+            "uid": "qoTeH7T78kjbmIWA0000"
+          },
+          {
+            "key": "pert-gym/additions/20260721-drug-seq-gse120222-e2e",
+            "uid": "Ltjv1RYDCnuxqqRT0000"
+          },
+          {
+            "key": "pert-gym/additions/20260723-gse197452-e2e",
+            "uid": "ZTXfvA5YDoaqrd750000"
+          },
+          {
+            "key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e",
+            "uid": "XwM4hPo8erPJKOAz0000"
+          },
+          {
+            "key": "pert-gym/additions/20260730-gse138002-e2e",
+            "uid": "v40mGQWasaHrIP7f0000"
+          },
+          {
+            "key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e-v2",
+            "uid": "Hck3g1dNOGJBOv3R0000"
+          },
+          {
+            "key": "pert-gym/additions/20260730-odd001155-gse196799-e2e",
+            "uid": "FlK1x1wByjbMTRCM0000"
+          },
+          {
+            "key": "pert-gym/additions/20260730-gse130238-e2e",
+            "uid": "whLgwg8opPvW9qdN0000"
+          },
+          {
+            "key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+            "uid": "GvFuzrWQeKB6Pd8t0000"
+          },
+          {
+            "key": "pert-gym/additions/20260730-gse269572-e2e",
+            "uid": "jgMqCxKblbeO5uT60000"
+          },
+          {
+            "key": "pert-gym/additions/20260730-gse107185-e2e",
+            "uid": "Gr2tdh9dUVgIoqB80000"
+          },
+          {
+            "key": "pert-gym/additions/20260801-gse269572-strict-obs-v2",
+            "uid": "NFBw58RkNoGgn9pO0000"
+          },
+          {
+            "key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+            "uid": "GvFuzrWQeKB6Pd8t0001"
+          },
+          {
+            "key": "pert-gym/additions/20260801-gse107185-review-fix",
+            "uid": "oabDLe6umomPkBHG0000"
+          }
+        ],
+        "created_on_id": 2,
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249041653392\",\"object_sha256\":\"ac36e96828a9d30ce69e95fc5fcea2d471f5cfa1e7482d4d3ae74fe90703f957\",\"role\":\"obs\",\"source_identity\":\"figshare:22491340\"}",
+        "features": {},
+        "hash": "AY5-RdMt60uIyLDU-SybzA",
+        "is_latest": false,
+        "key": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+        "size": 2177270,
+        "uid": "5EOAVNZfpqU7u1TX0000"
+      },
+      {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "t_a62edaa7: C. elegans embryogenesis OBS_COMPLETED; source-exhaustive Figshare 22491340 / Packer 2019 curation",
+        "features": {
+          "X": "data/cleaned/c_elegans_embryogenesis/X.h5ad"
+        },
+        "hash": "j2wi91uGDjKSAMFpbzv3YQ",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+        "size": 4931038,
+        "uid": "5EOAVNZfpqU7u1TX0001"
+      },
+      {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249047860188\",\"object_sha256\":\"7e31d2f5a962b14e11ce2b697121e18b8cd61156d832ff0b157fd6884bb00ade\",\"role\":\"var\",\"source_identity\":\"figshare:22491340\"}",
+        "features": {},
+        "hash": "hZEd9wPsDW-DJn0MVw-rBg",
+        "is_latest": false,
+        "key": "data/cleaned/c_elegans_embryogenesis/var.parquet",
+        "size": 850046,
+        "uid": "7sZcoxxd0LMj1DeI0000"
+      },
+      {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "t_a62edaa7: C. elegans embryogenesis species-correct VAR; 20,222 source-native WormBase/Ensembl Metazoa stable gene identifiers",
+        "features": {},
+        "hash": "6iH-3sVT-eCFucT_BSXMdw",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/var.parquet",
+        "size": 1434641,
+        "uid": "7sZcoxxd0LMj1DeI0001"
+      },
+      {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249047666142\",\"object_sha256\":\"50b28ef17d02bcdf670fd2552ed0129645bd66bf8d4a7d97fc3ef6308efb360c\",\"role\":\"X\",\"source_identity\":\"figshare:22491340\"}",
+        "features": {
+          "var": "data/cleaned/c_elegans_embryogenesis/var.parquet"
+        },
+        "hash": "Jmsp4rekLpfadfOrHUbTvQ",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/X.h5ad",
+        "size": 354987544,
+        "uid": "BcReMLnW6XOb8tvS0000"
+      },
+      {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "Temporal pretraining C. elegans embryogenesis var; Figshare article 22491340, file 39943585",
+        "features": {},
+        "hash": "hZEd9wPsDW-DJn0MVw-rBg",
+        "is_latest": true,
+        "key": "temporal_pretraining/c_elegans_embryogenesis/figshare_22491340/var.parquet",
+        "size": 850046,
+        "uid": "DHXE2aYWf1ir671K0000"
+      },
+      {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249054804492\",\"object_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"role\":\"manifest\",\"source_identity\":\"figshare:22491340\"}",
+        "features": {},
+        "hash": "e1nohuIRx6B9U5fTPsaSvA",
+        "is_latest": true,
+        "key": "pert-gym/staging/pert-gym/logical/temporal/c_elegans_embryogenesis/revisions/temporal-v4-057-wave07-f3820e8d21e6105b/manifest.json",
+        "size": 14716,
+        "uid": "Mhw9jYDtVSGL0niy0000"
+      },
+      {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "Temporal pretraining C. elegans embryogenesis obs; Figshare article 22491340, file 39943585",
+        "features": {
+          "X": "temporal_pretraining/c_elegans_embryogenesis/figshare_22491340/X.h5ad"
+        },
+        "hash": "AY5-RdMt60uIyLDU-SybzA",
+        "is_latest": true,
+        "key": "temporal_pretraining/c_elegans_embryogenesis/figshare_22491340/obs.parquet",
+        "size": 2177270,
+        "uid": "NHLwhKq7PHtr2Nf40000"
+      }
+    ]
+  },
+  "source_identity": {
+    "figshare_article_id": 22491340,
+    "figshare_file_id": 39943585,
+    "figshare_file_md5": "c3a37ca238921fcec7bd5e9faa6118f1",
+    "figshare_file_size": 365498906,
+    "publication_doi": "10.1126/science.aax1971"
+  },
+  "source_matrix": {
+    "arrays": {
+      "data": {
+        "dtype": "float32",
+        "length": 43994050,
+        "sha256": "04bb0298f73b227c54dc3ae40c407ad22f3dff3ee04526e7c1e77020afddd1c0"
+      },
+      "indices": {
+        "dtype": "int32",
+        "length": 43994050,
+        "sha256": "6a4bc363dbc2184a50fc0edb15f1e702a3b05661bfb36fec07f0f09307f41478"
+      },
+      "indptr": {
+        "dtype": "int32",
+        "length": 46152,
+        "sha256": "f8a94f8f2f04d328d3ec601e5f8ef642df6fb041a59de616c5a2d083c9ea2c8c"
+      }
+    },
+    "encoding_type": "csr_matrix",
+    "nnz": 43994050,
+    "shape": [
+      46151,
+      20222
+    ]
+  },
+  "task_id": "t_a62edaa7",
+  "transactional_protocol": {
+    "append_only_collection_creations": 1,
+    "append_only_revisions": true,
+    "artifact_deletions": 0,
+    "collection_membership_mutations": 0,
+    "rollback_identity": {
+      "obs_uid": "5EOAVNZfpqU7u1TX0000",
+      "var_uid": "7sZcoxxd0LMj1DeI0000",
+      "x_uid": "BcReMLnW6XOb8tvS0000"
+    },
+    "x_reused": true
+  },
+  "var": {
+    "biological_features_total": 20222,
+    "correct_species_features": 20222,
+    "ordered_stable_feature_id_sha256": "d24121ea3f86e1b83f69b71f217d63c2d98088ad3e92c842cc6d016a706501b2",
+    "provenance": [
+      "source var.id",
+      "source var.organism",
+      "Figshare article 22491340",
+      "Packer et al. 2019 DOI 10.1126/science.aax1971"
+    ],
+    "stable_ensembl_id_features": 20222,
+    "stable_identifier_namespace": "WormBase Gene IDs as used by Ensembl Metazoa for C. elegans",
+    "status": "pass"
+  },
+  "writer_lease": {
+    "dataset_id": "temporal/c_elegans_embryogenesis",
+    "distributed_lease_id": "834466acf16f473fa2981cf92d37a020",
+    "global_distributed_lock": true,
+    "global_local_lock": true,
+    "host": "pert-gym-worker-eu",
+    "project": "jkobject-1549353370965",
+    "run_id": "t_a62edaa7",
+    "zone": "europe-west1-b"
+  },
+  "x": {
+    "nnz": 43994050,
+    "rewritten": false,
+    "sha256": "50b28ef17d02bcdf670fd2552ed0129645bd66bf8d4a7d97fc3ef6308efb360c",
+    "shape": [
+      46151,
+      20222
+    ],
+    "status": "pass_reused_accepted_payload",
+    "uid": "BcReMLnW6XOb8tvS0000"
+  }
+}
