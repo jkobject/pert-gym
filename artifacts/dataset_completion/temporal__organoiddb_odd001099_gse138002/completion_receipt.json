@@ -1,0 +1,433 @@
+{
+  "branch": "jkobject",
+  "canonical_sha256": "028b7f649334eef1425b045dedf16e81a7bf9de4eb90462f69ffe91192c139f5",
+  "collection": {
+    "duplicate_keys": 0,
+    "predecessor_key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e",
+    "predecessor_member_count": 1018,
+    "predecessor_membership_sha256": "48da7f3d2b02a825fb11a96e254dbe1f37e7c37ae216a8c293af53dc3f2ef88e",
+    "predecessor_uid": "XwM4hPo8erPJKOAz0000",
+    "successor_key": "pert-gym/additions/20260730-gse138002-e2e",
+    "successor_member_count": 1018,
+    "successor_membership_sha256": "e36785f56070cdb0345209ac1bca2fc3b8e7db3f9deb90386b0f468fae1dcc2e",
+    "successor_uid": "v40mGQWasaHrIP7f0000",
+    "target_obs_uid": "MfCWePqr8F4TThDo0001"
+  },
+  "completed_at_epoch": 1785434621,
+  "dataset_id": "temporal/organoiddb_odd001099_gse138002",
+  "format": "pert-gym.dataset-completion/v1",
+  "gates": {
+    "OBS": "PASS",
+    "VAR": "PASS",
+    "canonical_storage": "PASS",
+    "chunks": "PASS",
+    "cleaning": "PASS",
+    "collection": "PASS",
+    "lamin_jkobject": "PASS"
+  },
+  "helper_sha256": "d608cbf9bcd1d0c39427fc5a0520d0ec43ff1dbe93cbc5f032e6e73b0223c916",
+  "host": {
+    "available_memory_bytes": 32865505280,
+    "free_disk_bytes": 268735332352,
+    "hostname": "pert-gym-worker-eu",
+    "project": "jkobject-1549353370965",
+    "zone": "europe-west1-b"
+  },
+  "instance": "laminlabs/pertdata",
+  "member_after": {
+    "X": {
+      "created_at": "2026-07-18 12:46:24.806144+00:00",
+      "hash": "kz2RwTzkiAv3f-OFnKYKoQ",
+      "key": "data/cleaned/GSE138002/X.h5ad",
+      "size": 416010806,
+      "uid": "GPge5BVaaXcCGgsU0000"
+    },
+    "expected_obs_frame_sha256": "5f6d2d6562a601b6a7d94263973d52779b6dc9c94f617666b8311f77919749b8",
+    "expected_obsm_frame_sha256": "1f6a7ee931a7c5fc6a41a20d492a362d1a8e0789d05b3ca82b9c45f8b163f394",
+    "obs": {
+      "created_at": "2026-07-30 17:40:14.763953+00:00",
+      "hash": "5jRRsM3PTwOpmKcVLqifVw",
+      "key": "data/cleaned/GSE138002/obs.parquet",
+      "size": 19241530,
+      "uid": "MfCWePqr8F4TThDo0001"
+    },
+    "obs_history_count": 2,
+    "obs_receipt": {
+      "OBS_COMPLETED": true,
+      "adult_unknown_timepoint_rows": 11618,
+      "canonical_fields": 42,
+      "cell_type_ontology_mapped_rows": 110065,
+      "cell_type_ontology_unknown_rows": 8490,
+      "experimental_axes": {
+        "biological_age": {
+          "adult_numeric_age": "unknown",
+          "canonical_unit": "minute",
+          "interpretation": "chronological developmental age within separate retinal-organoid, fetal-primary, and postnatal-primary trajectories; not batch or pseudotime",
+          "numeric_cardinality_by_trajectory": {
+            "adult_primary_retina": 1,
+            "fetal_primary_retina": 14,
+            "postnatal_primary_retina": 1,
+            "retinal_organoid": 3
+          },
+          "raw_unit_frequencies": {
+            "<NA>": 11618,
+            "day": 11542,
+            "gestational_week": 88013,
+            "postnatal_day": 7382
+          },
+          "raw_value_frequencies": {
+            "24_Day": 24,
+            "30_Day": 175,
+            "42_Day": 5919,
+            "59_Day": 5424,
+            "Adult": 11618,
+            "Hgw11": 8058,
+            "Hgw12": 5467,
+            "Hgw13": 9912,
+            "Hgw14": 2958,
+            "Hgw15": 7480,
+            "Hgw16": 3196,
+            "Hgw17": 6034,
+            "Hgw18": 3565,
+            "Hgw19": 8231,
+            "Hgw20": 12693,
+            "Hgw22": 2230,
+            "Hgw24": 7161,
+            "Hgw27": 2054,
+            "Hgw9": 8974,
+            "Hpnd8": 7382
+          }
+        },
+        "cell_type": {
+          "level": "cell",
+          "raw_cardinality": 11
+        },
+        "source_sample": {
+          "cardinality": 24,
+          "level": "cell-to-sample join"
+        }
+      },
+      "experimental_unit": {
+        "dataset_level": "human retina and retinal-organoid atlas",
+        "observation_level": "cell",
+        "sample_level": "source sample/developmental context"
+      },
+      "numeric_timepoint_rows": 106937,
+      "obs_uuid_unique": true,
+      "outcomes_endpoints": {
+        "expression_matrix": "raw_counts",
+        "scalar_response_endpoint": "not_applicable",
+        "source_umap": "descriptive embedding, not pseudotime or outcome",
+        "survival_or_viability": "not_applicable"
+      },
+      "residual_unknown_fields": [
+        "donor_id",
+        "disease",
+        "sex",
+        "ethnicity",
+        "media",
+        "pct_mito",
+        "pct_ribo",
+        "is_low_quality"
+      ],
+      "rows": 118555,
+      "scientific_modality": {
+        "evidence": [
+          "GSE138002 GEO series design and extraction protocol",
+          "PMID:32386599 / DOI:10.1016/j.devcel.2020.04.009",
+          "GSE138002_Final_barcodes.csv.gz"
+        ],
+        "perturbation": "none",
+        "value": "observational single-cell RNA expression atlas of human retinal development"
+      },
+      "status": "PASS"
+    },
+    "obsm": {
+      "created_at": "2026-07-30 17:40:22.431732+00:00",
+      "hash": "P1g53uAQ7G_sg-9Ap5udrA",
+      "key": "data/cleaned/GSE138002/obsm_source_umap.parquet",
+      "size": 8869597,
+      "uid": "PH3bGIXtq4wNKGam0000"
+    },
+    "var": {
+      "created_at": "2026-07-18 12:46:26.274136+00:00",
+      "hash": "JCkkGacA4SiPEMqy5gVxHQ",
+      "key": "data/cleaned/GSE138002/var.parquet",
+      "size": 841345,
+      "uid": "jib8jqqYfSI3vzIW0000"
+    },
+    "var_receipt": {
+      "VAR_ENSEMBL_SPECIES_COMPLETED": true,
+      "biological_features_total": 33694,
+      "checks": {
+        "index_matches_feature_id": true,
+        "namespace": true,
+        "rows": true,
+        "species": true,
+        "stable_syntax": true,
+        "stable_unique": true,
+        "x_shape": true
+      },
+      "correct_species_features": 33694,
+      "provenance": [
+        "GSE138002_genes.csv.gz",
+        "GRCh38 GEO processing record",
+        "exact X ordered feature axis"
+      ],
+      "stable_ensembl_id_features": 33694,
+      "status": "PASS"
+    },
+    "x_receipt": {
+      "checks": {
+        "dtype": true,
+        "encoding": true,
+        "nnz": true,
+        "obs_axis": true,
+        "shape": true,
+        "var_axis": true
+      },
+      "dtype": "int32",
+      "encoding": "csr_matrix",
+      "nnz": 178087120,
+      "path_materialized": true,
+      "shape": [
+        118555,
+        33694
+      ],
+      "uid": "GPge5BVaaXcCGgsU0000"
+    }
+  },
+  "member_before": {
+    "X": {
+      "created_at": "2026-07-18 12:46:24.806144+00:00",
+      "hash": "kz2RwTzkiAv3f-OFnKYKoQ",
+      "key": "data/cleaned/GSE138002/X.h5ad",
+      "size": 416010806,
+      "uid": "GPge5BVaaXcCGgsU0000"
+    },
+    "expected_obs_frame_sha256": "5f6d2d6562a601b6a7d94263973d52779b6dc9c94f617666b8311f77919749b8",
+    "expected_obsm_frame_sha256": "1f6a7ee931a7c5fc6a41a20d492a362d1a8e0789d05b3ca82b9c45f8b163f394",
+    "obs": {
+      "created_at": "2026-07-30 17:40:14.763953+00:00",
+      "hash": "5jRRsM3PTwOpmKcVLqifVw",
+      "key": "data/cleaned/GSE138002/obs.parquet",
+      "size": 19241530,
+      "uid": "MfCWePqr8F4TThDo0001"
+    },
+    "obs_history_count": 2,
+    "obs_receipt": {
+      "OBS_COMPLETED": true,
+      "adult_unknown_timepoint_rows": 11618,
+      "canonical_fields": 42,
+      "cell_type_ontology_mapped_rows": 110065,
+      "cell_type_ontology_unknown_rows": 8490,
+      "experimental_axes": {
+        "biological_age": {
+          "adult_numeric_age": "unknown",
+          "canonical_unit": "minute",
+          "interpretation": "chronological developmental age within separate retinal-organoid, fetal-primary, and postnatal-primary trajectories; not batch or pseudotime",
+          "numeric_cardinality_by_trajectory": {
+            "adult_primary_retina": 1,
+            "fetal_primary_retina": 14,
+            "postnatal_primary_retina": 1,
+            "retinal_organoid": 3
+          },
+          "raw_unit_frequencies": {
+            "<NA>": 11618,
+            "day": 11542,
+            "gestational_week": 88013,
+            "postnatal_day": 7382
+          },
+          "raw_value_frequencies": {
+            "24_Day": 24,
+            "30_Day": 175,
+            "42_Day": 5919,
+            "59_Day": 5424,
+            "Adult": 11618,
+            "Hgw11": 8058,
+            "Hgw12": 5467,
+            "Hgw13": 9912,
+            "Hgw14": 2958,
+            "Hgw15": 7480,
+            "Hgw16": 3196,
+            "Hgw17": 6034,
+            "Hgw18": 3565,
+            "Hgw19": 8231,
+            "Hgw20": 12693,
+            "Hgw22": 2230,
+            "Hgw24": 7161,
+            "Hgw27": 2054,
+            "Hgw9": 8974,
+            "Hpnd8": 7382
+          }
+        },
+        "cell_type": {
+          "level": "cell",
+          "raw_cardinality": 11
+        },
+        "source_sample": {
+          "cardinality": 24,
+          "level": "cell-to-sample join"
+        }
+      },
+      "experimental_unit": {
+        "dataset_level": "human retina and retinal-organoid atlas",
+        "observation_level": "cell",
+        "sample_level": "source sample/developmental context"
+      },
+      "numeric_timepoint_rows": 106937,
+      "obs_uuid_unique": true,
+      "outcomes_endpoints": {
+        "expression_matrix": "raw_counts",
+        "scalar_response_endpoint": "not_applicable",
+        "source_umap": "descriptive embedding, not pseudotime or outcome",
+        "survival_or_viability": "not_applicable"
+      },
+      "residual_unknown_fields": [
+        "donor_id",
+        "disease",
+        "sex",
+        "ethnicity",
+        "media",
+        "pct_mito",
+        "pct_ribo",
+        "is_low_quality"
+      ],
+      "rows": 118555,
+      "scientific_modality": {
+        "evidence": [
+          "GSE138002 GEO series design and extraction protocol",
+          "PMID:32386599 / DOI:10.1016/j.devcel.2020.04.009",
+          "GSE138002_Final_barcodes.csv.gz"
+        ],
+        "perturbation": "none",
+        "value": "observational single-cell RNA expression atlas of human retinal development"
+      },
+      "status": "PASS"
+    },
+    "obsm": {
+      "created_at": "2026-07-30 17:40:22.431732+00:00",
+      "hash": "P1g53uAQ7G_sg-9Ap5udrA",
+      "key": "data/cleaned/GSE138002/obsm_source_umap.parquet",
+      "size": 8869597,
+      "uid": "PH3bGIXtq4wNKGam0000"
+    },
+    "var": {
+      "created_at": "2026-07-18 12:46:26.274136+00:00",
+      "hash": "JCkkGacA4SiPEMqy5gVxHQ",
+      "key": "data/cleaned/GSE138002/var.parquet",
+      "size": 841345,
+      "uid": "jib8jqqYfSI3vzIW0000"
+    },
+    "var_receipt": {
+      "VAR_ENSEMBL_SPECIES_COMPLETED": true,
+      "biological_features_total": 33694,
+      "checks": {
+        "index_matches_feature_id": true,
+        "namespace": true,
+        "rows": true,
+        "species": true,
+        "stable_syntax": true,
+        "stable_unique": true,
+        "x_shape": true
+      },
+      "correct_species_features": 33694,
+      "provenance": [
+        "GSE138002_genes.csv.gz",
+        "GRCh38 GEO processing record",
+        "exact X ordered feature axis"
+      ],
+      "stable_ensembl_id_features": 33694,
+      "status": "PASS"
+    },
+    "x_receipt": {
+      "checks": {
+        "dtype": true,
+        "encoding": true,
+        "nnz": true,
+        "obs_axis": true,
+        "shape": true,
+        "var_axis": true
+      },
+      "dtype": "int32",
+      "encoding": "csr_matrix",
+      "nnz": 178087120,
+      "path_materialized": true,
+      "shape": [
+        118555,
+        33694
+      ],
+      "uid": "GPge5BVaaXcCGgsU0000"
+    }
+  },
+  "mode": "verify",
+  "negative_main_duplicate_probe": {
+    "branch": "main",
+    "candidate_count": 0,
+    "candidates": [],
+    "query_limit_per_term_and_field": 25,
+    "scientific_equivalent_found": false,
+    "terms": [
+      "GSE138002",
+      "ODD001099",
+      "developing human retina"
+    ]
+  },
+  "registry_counts": {
+    "after": {
+      "artifacts": 28556,
+      "collections": 41
+    },
+    "before": {
+      "artifacts": 28556,
+      "collections": 41
+    }
+  },
+  "replay_noop": true,
+  "source_manifest_sha256": "dafbf2632a7cc8b546eb337801938c6178f590142939e66573a5a33edba094ad",
+  "source_receipts": {
+    "GSE138002_Final_barcodes.csv.gz": {
+      "sha256": "bce0b8a5aece7e5abdcdd13871dc9933addf56c1e001d76b636ebf812e8bceef",
+      "size": 5239639,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/suppl/GSE138002_Final_barcodes.csv.gz"
+    },
+    "GSE138002_Final_matrix.mtx.gz": {
+      "sha256": "e4467d5b9d06d48ea820010449a51490b302d8050cb4433cb0b7d806550f982a",
+      "size": 564980184,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/suppl/GSE138002_Final_matrix.mtx.gz",
+      "verification": "immutable accepted checksum plus fresh upstream byte readback"
+    },
+    "GSE138002_genes.csv.gz": {
+      "sha256": "cfc6ae38da82b53b31f8c362972f210404848bf42fda50993093fbc66f094237",
+      "size": 354855,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/suppl/GSE138002_genes.csv.gz"
+    },
+    "geo_family_soft": {
+      "sha256": "3831efe73e940746c47084840571efc2d352ed905b388e0a6cfd07407916ce56",
+      "size": 2623,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE138nnn/GSE138002/soft/GSE138002_family.soft.gz"
+    },
+    "organoiddb": {
+      "required_tokens_present": true,
+      "sha256": "7f49d445549d365153d89a3290bed2dd94003f1388a1c424d82f2d7949a16ca2",
+      "size": 15058,
+      "url": "http://www.inbirg.com/organoid_db/detail/Odd001099"
+    },
+    "pubmed_xml": {
+      "required_tokens_present": true,
+      "sha256": "441b76950e9465cf6d53312d41652015e2132a96775c49c358a20f4545c068da",
+      "size": 60611,
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=32386599&retmode=xml"
+    }
+  },
+  "status": "PASS",
+  "task_id": "t_9b0cc7c2",
+  "writes": {
+    "collection_writes": 0,
+    "deletions": 0,
+    "obs_revisions": 0,
+    "typed_obsm_artifacts": 0,
+    "var_revisions": 0,
+    "x_revisions": 0
+  }
+}

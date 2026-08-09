@@ -1,0 +1,79 @@
+{
+  "format": "pert-gym.dataset-completion-source-manifest/v1",
+  "task_id": "t_363b9754",
+  "dataset_id": "temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+  "logical_key": "pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+  "source_identity": {
+    "geo_accession": "GSE269572",
+    "bioproject": "PRJNA1122543",
+    "publication": "unknown: GEO supplies no PubMed or DOI relation as of the accepted source snapshot",
+    "organism": "Homo sapiens",
+    "organism_ontology_term": "NCBITaxon:9606",
+    "genome_build": "GRCh38",
+    "snapshot_day_in_vitro": 42.5
+  },
+  "authorities": {
+    "geo_soft": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/soft/GSE269572_family.soft.gz",
+      "size": 2932,
+      "sha256": "6fab2319b8794e12accc125a3a63d45659c9bc72abd5c9bd7f6bebc7b05d7580"
+    },
+    "geo_raw_tar": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/suppl/GSE269572_RAW.tar",
+      "size": 561725440,
+      "sha256": "6acd23bcb9c6d6b8a0f60f447c92edbd85243ef52732fb019f548846020c661a",
+      "member_count": 33,
+      "verification": "accepted immutable source checksum plus fresh upstream Content-Length; no repeat bulk download"
+    },
+    "geo_filelist": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE269nnn/GSE269572/suppl/filelist.txt",
+      "size": 2432,
+      "sha256": "48d766c4ad8986929c6fe721a5f42ee839a71754f3256f404348dff99f70eff6"
+    }
+  },
+  "accepted_component_receipt": {
+    "manifest_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq/revisions/temporal-v4-109-wave11-44e9698e81722058/manifest.json#1784261666127952",
+    "manifest_sha256": "ab3286741d1b41fcdc11003e61e42ad3f598f11cf6c9d65b8ee48161b2866f8c",
+    "registration_review": "t_09b97a78",
+    "accepted_obs_uid": "wTvFyR9fchIwao8l0000",
+    "accepted_x_uid": "vNprtc3z84zMcEUj0000",
+    "accepted_var_uid": "umZYkLN9bq9nfl5m0000"
+  },
+  "expected": {
+    "n_obs": 59373,
+    "n_vars": 36601,
+    "samples": 11,
+    "nnz": 150379884,
+    "count_sum": 353596498,
+    "max_count": 1742,
+    "x_dtype": "uint32",
+    "x_semantics": "raw_counts",
+    "obs_index_sha256_newline": "5a33730449e0bbf2d680ade9db1d9b8b5f4e9e6721173445c78fb8006943be4a",
+    "var_index_sha256_newline": "3a5b3f31ab21773f83f8c2c52b9f543bc56dcbd1b9ff68db3afc99616b492193",
+    "condition_counts": {
+      "2D culture": 25778,
+      "with PD173074": 14840,
+      "without PD173074": 18755
+    },
+    "sample_counts": {
+      "GSM8322368": 8604,
+      "GSM8322369": 8594,
+      "GSM8322370": 8580,
+      "GSM8322371": 4969,
+      "GSM8322372": 4945,
+      "GSM8322373": 4926,
+      "GSM8322374": 3773,
+      "GSM8322375": 3793,
+      "GSM8322376": 3592,
+      "GSM8322377": 3798,
+      "GSM8322378": 3799
+    }
+  },
+  "audit_evidence": {
+    "commit": "591d8e9",
+    "packet": "artifacts/evidence/first10-cohort-b-t_890a73de/GSE269572.audit.json",
+    "scientific_verdict": "REMEDIATE_OBS_ONLY; X/VAR/links/source pass",
+    "temporal_verdict": "non_temporal_single_snapshot",
+    "chunk_verdict": "unchunked_appropriate"
+  }
+}

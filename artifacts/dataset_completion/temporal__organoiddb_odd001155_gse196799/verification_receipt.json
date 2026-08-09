@@ -1,0 +1,526 @@
+{
+  "accepted_component_receipt": {
+    "accepted_raw_tar_member_count": 10,
+    "accepted_raw_tar_sha256": "bc62029352aed4a799c22558a9e9e97c7746bd104d6331ddaa1b221cf15c18c2",
+    "accepted_raw_tar_size_bytes": 1804912640,
+    "canonical_receipt_commit": "dce243d1711140f09c69dd5ef2badf20bd2185b6",
+    "collection_key": "pert-gym/additions/20260725-odd001155",
+    "collection_uid": "nhxZNVkd2fe67Y9k0000",
+    "hash": "3f73fdc9e405279e00c0",
+    "key": "pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/manifest.json",
+    "registration_commit": "165335f676a3a05d5c29a839f56da1ee0ce63abf",
+    "uid": "1C8MIh68dNfnIlju0000"
+  },
+  "branch": "jkobject",
+  "canonical_sha256": "9bb6fd27047e83e6edb430488c328f685b6ab182f732a10e41d07bdc86b17197",
+  "chunks": {
+    "members": {
+      "GSM5901228": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257569446253\",\"object_sha256\":\"56094260959aeb030a9dd77ec45c46e5bf4c83dfca811162c77e2aac48d3eccb\",\"role\":\"X\",\"sample_id\":\"GSM5901228\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "zcgCpkj6y1IEGf8zB4DV5A",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901228/X.h5ad",
+          "size": 64870241,
+          "uid": "TJY0nyj5ETU43Syh0000"
+        },
+        "nnz": 28475158,
+        "shape": [
+          6416,
+          20631
+        ],
+        "status": "PASS"
+      },
+      "GSM5901229": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257583868620\",\"object_sha256\":\"5f5fd76bb55b6568940377ae084237fb11dc87b76244961b53c62891d61899c1\",\"role\":\"X\",\"sample_id\":\"GSM5901229\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "13xJro1exozRWa6Kt7nqZQ",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901229/X.h5ad",
+          "size": 43596564,
+          "uid": "p9vhfRYo6FhgRKGr0000"
+        },
+        "nnz": 18795976,
+        "shape": [
+          4549,
+          20631
+        ],
+        "status": "PASS"
+      },
+      "GSM5901230": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257596242241\",\"object_sha256\":\"ae9c968e0c7ceb09a2ac80c1b3518ba4626dc13106aece29214a330e5f049047\",\"role\":\"X\",\"sample_id\":\"GSM5901230\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "NJbcmYRJByidha4aC-gltA",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901230/X.h5ad",
+          "size": 41497959,
+          "uid": "vn537Bt2uFhZncXo0000"
+        },
+        "nnz": 17517151,
+        "shape": [
+          4807,
+          20631
+        ],
+        "status": "PASS"
+      },
+      "GSM5901231": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257611385867\",\"object_sha256\":\"45c310d2d01c2670078ea9deffbe60ee2b46e4b72fbe520b8e6fdb0ac170a212\",\"role\":\"X\",\"sample_id\":\"GSM5901231\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "EjV7qoYehJmuVKTf_aVjYw",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901231/X.h5ad",
+          "size": 60292017,
+          "uid": "DMOKXzr7fGa2BzFx0000"
+        },
+        "nnz": 26039746,
+        "shape": [
+          6430,
+          20631
+        ],
+        "status": "PASS"
+      },
+      "GSM5901232": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257623519188\",\"object_sha256\":\"eba53c3e02ab36573dd0fddbbe55d3f957c1f40d47195ef2f48c4dc20a4d81c0\",\"role\":\"X\",\"sample_id\":\"GSM5901232\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "tulfYvUdK2iR7i8Osukl0A",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901232/X.h5ad",
+          "size": 41513267,
+          "uid": "ZX3O7cVwL7bFPZYv0000"
+        },
+        "nnz": 17949355,
+        "shape": [
+          4396,
+          20631
+        ],
+        "status": "PASS"
+      },
+      "GSM5901233": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257639404749\",\"object_sha256\":\"101235e1035d23bae9b2cc2a0374d7170b3cb9a5141cfd1a57bb17850671fda3\",\"role\":\"X\",\"sample_id\":\"GSM5901233\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "3OB2vVyrMvtwyS5aCp5tXg",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901233/X.h5ad",
+          "size": 34789829,
+          "uid": "v7sjq36wpSPfmFhY0000"
+        },
+        "nnz": 14465470,
+        "shape": [
+          3570,
+          20631
+        ],
+        "status": "PASS"
+      },
+      "GSM5901234": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257656684808\",\"object_sha256\":\"95c0ebf5b8780e112191bc6fdc109dcc18c3b07c428c00fa43490677169ca676\",\"role\":\"X\",\"sample_id\":\"GSM5901234\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "igEMTzmAC3RB2W_qRtzCog",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901234/X.h5ad",
+          "size": 49728810,
+          "uid": "6f2xYJX2ERs96Yj20000"
+        },
+        "nnz": 22054447,
+        "shape": [
+          4126,
+          20631
+        ],
+        "status": "PASS"
+      },
+      "GSM5901235": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257685138420\",\"object_sha256\":\"574e3d09749cbeff3f5216bd6e261a76c02c48f68200dcfceb2d6345e0ec6036\",\"role\":\"X\",\"sample_id\":\"GSM5901235\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "q8RL6PCf1rKm8p5Vzfn-RA",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901235/X.h5ad",
+          "size": 117197393,
+          "uid": "Wt7cTbp5A5gcwPZB0000"
+        },
+        "nnz": 51893254,
+        "shape": [
+          13530,
+          20631
+        ],
+        "status": "PASS"
+      },
+      "GSM5901236": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257705417118\",\"object_sha256\":\"b67e1c3645a5852b40ddb48ebb03b256345d44b533e3d6de0e8b04d0a2786fb8\",\"role\":\"X\",\"sample_id\":\"GSM5901236\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "JeZQfEG0PI6VzqWXvCWV9Q",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901236/X.h5ad",
+          "size": 69988640,
+          "uid": "dbqMC7w04uBYQHAz0000"
+        },
+        "nnz": 31077632,
+        "shape": [
+          6468,
+          20631
+        ],
+        "status": "PASS"
+      },
+      "GSM5901237": {
+        "checks": {
+          "dtype": true,
+          "encoding": true,
+          "nnz": true,
+          "obs_axis": true,
+          "shape": true,
+          "var_axis": true
+        },
+        "full_payload_readback": true,
+        "identity": {
+          "branch_id": 2,
+          "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/organoiddb_odd001155_gse196799\",\"manifest_generation\":\"1784257733140715\",\"manifest_sha256\":\"3f73fdc9e405279ebbd5e5a4d67ee8b6d32cd0a031b73d5297184f95b6bb7eb3\",\"object_generation\":\"1784257729747873\",\"object_sha256\":\"d369d52e798be9e7f84464122772ffd17a0cded3cbc16cf0a7133da49f45f388\",\"role\":\"X\",\"sample_id\":\"GSM5901237\",\"source_identity\":\"GSE196799;ODD001155\"}",
+          "hash": "bJ95rM0GfDiQwY2U0V8IYQ",
+          "is_latest": true,
+          "key": "data/cleaned/GSM5901237/X.h5ad",
+          "size": 91435846,
+          "uid": "N77zqJ64oeHAG3mN0000"
+        },
+        "nnz": 40852631,
+        "shape": [
+          8743,
+          20631
+        ],
+        "status": "PASS"
+      }
+    },
+    "status": "PASS"
+  },
+  "collection": {
+    "predecessor_key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e-v2",
+    "predecessor_member_count": 1018,
+    "predecessor_membership_sha256": "c951048e22177ce3f1a98fded3392732d4f207295e88562f9d20ee28a6e254d9",
+    "predecessor_uid": "Hck3g1dNOGJBOv3R0000",
+    "replaced_member_count": 10,
+    "status": "PASS",
+    "successor_key": "pert-gym/additions/20260730-odd001155-gse196799-e2e",
+    "successor_member_count": 1018,
+    "successor_membership_sha256": "0f39bcfc78daa93b481f8364b9b378f14be153ee40c33ab2e19ca78c58c864b4",
+    "successor_uid": "FlK1x1wByjbMTRCM0000"
+  },
+  "completed_at": "2026-08-01T20:15:48.451659+00:00",
+  "counts": {
+    "biological_datasets": 1,
+    "logical_families": 1,
+    "matrix_nonzeros": 269120820,
+    "observations": 63035,
+    "physical_members": 10,
+    "variables": 20631
+  },
+  "dataset_id": "temporal/organoiddb_odd001155_gse196799",
+  "gates": {
+    "OBS": "PASS",
+    "VAR": "PASS",
+    "canonical_storage": "PASS",
+    "chunks": "PASS",
+    "cleaning": "PASS",
+    "collection": "PASS",
+    "lamin_jkobject": "PASS"
+  },
+  "helper_sha256": "2b25372579db8a5595bcb97fa170d68645265b48403cee55bfd0fcfee64414b4",
+  "instance": "laminlabs/pertdata",
+  "links": {
+    "rows": [
+      {
+        "obs_uid": "40smDMSQhHxjFpkb0001",
+        "sample": "GSM5901228",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "TJY0nyj5ETU43Syh0000"
+      },
+      {
+        "obs_uid": "kr1PNg0UG6pR6glr0001",
+        "sample": "GSM5901229",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "p9vhfRYo6FhgRKGr0000"
+      },
+      {
+        "obs_uid": "770vKgYITsWgwsQ50001",
+        "sample": "GSM5901230",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "vn537Bt2uFhZncXo0000"
+      },
+      {
+        "obs_uid": "HAjNzeHiAFVj18Bl0001",
+        "sample": "GSM5901231",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "DMOKXzr7fGa2BzFx0000"
+      },
+      {
+        "obs_uid": "GbF6GoN62lv1gHph0001",
+        "sample": "GSM5901232",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "ZX3O7cVwL7bFPZYv0000"
+      },
+      {
+        "obs_uid": "KD08xBRa6BJF0gOf0001",
+        "sample": "GSM5901233",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "v7sjq36wpSPfmFhY0000"
+      },
+      {
+        "obs_uid": "djfVrXwAEiqYau6U0001",
+        "sample": "GSM5901234",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "6f2xYJX2ERs96Yj20000"
+      },
+      {
+        "obs_uid": "lIuEgUFimpz5Ea1a0001",
+        "sample": "GSM5901235",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "Wt7cTbp5A5gcwPZB0000"
+      },
+      {
+        "obs_uid": "E35nXCL72npoBi9A0001",
+        "sample": "GSM5901236",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "dbqMC7w04uBYQHAz0000"
+      },
+      {
+        "obs_uid": "hAZ4vvxKL4PU7Oew0001",
+        "sample": "GSM5901237",
+        "var_uid": "aRXhFJO6FCQvP5mr0000",
+        "x_uid": "N77zqJ64oeHAG3mN0000"
+      }
+    ],
+    "shared_var": {
+      "branch_id": 2,
+      "description": "t_a2ff6038: species-correct shared GSE196799 VAR; frame_sha256=b549df7acc658f7de2360c68b71a75948ce2613832dbda6baa97d8cd104738b0; helper_sha256=0da498bf0c46f898699f5176f5a967fad0e52916c3abc1b79a5e167610e681d5",
+      "hash": "qTC7IZzqtJvQzEwG-mngyA",
+      "is_latest": true,
+      "key": "data/cleaned/GSE196799/var.parquet",
+      "size": 1330681,
+      "uid": "aRXhFJO6FCQvP5mr0000"
+    },
+    "status": "PASS"
+  },
+  "mode": "verify",
+  "negative_main_duplicate_probe": {
+    "candidate_count": 0,
+    "candidates": [],
+    "status": "PASS",
+    "terms": [
+      "GSE196799",
+      "ODD001155",
+      "37714147",
+      "10.1016/j.stemcr.2023.08.008"
+    ]
+  },
+  "obs": {
+    "OBS_COMPLETED": true,
+    "canonical_field_count": 42,
+    "cell_type_disposition": "explicit unknown for every row: author notebook has cluster maps but no immutable barcode-level annotation payload",
+    "frequencies": {
+      "ascorbic_acid_treatment": {
+        "False": 54292,
+        "True": 8743
+      },
+      "culture_method": {
+        "3D Matrigel": 28741,
+        "3D suspension culture": 34294
+      },
+      "day": {
+        "0": 6416,
+        "12": 17656,
+        "18": 19607,
+        "3": 4549,
+        "6": 4807,
+        "9": 10000
+      },
+      "sample": {
+        "GSM5901228": 6416,
+        "GSM5901229": 4549,
+        "GSM5901230": 4807,
+        "GSM5901231": 6430,
+        "GSM5901232": 4396,
+        "GSM5901233": 3570,
+        "GSM5901234": 4126,
+        "GSM5901235": 13530,
+        "GSM5901236": 6468,
+        "GSM5901237": 8743
+      }
+    },
+    "members": 10,
+    "rows": 63035,
+    "status": "PASS",
+    "unknown_null_rows": {
+      "age": 63035,
+      "cell_type": 63035,
+      "disease": 63035,
+      "donor_id": 63035,
+      "media": 63035,
+      "pct_ribo": 63035,
+      "pseudotime": 63035
+    }
+  },
+  "registry_counts": {
+    "after": {
+      "artifacts": 28584,
+      "collections": 47
+    },
+    "before": {
+      "artifacts": 28584,
+      "collections": 47
+    }
+  },
+  "replay_noop": true,
+  "rollback": {
+    "collection_uid": "nhxZNVkd2fe67Y9k0000",
+    "obs_uids": [
+      "40smDMSQhHxjFpkb0000",
+      "770vKgYITsWgwsQ50000",
+      "E35nXCL72npoBi9A0000",
+      "GbF6GoN62lv1gHph0000",
+      "HAjNzeHiAFVj18Bl0000",
+      "KD08xBRa6BJF0gOf0000",
+      "djfVrXwAEiqYau6U0000",
+      "hAZ4vvxKL4PU7Oew0000",
+      "kr1PNg0UG6pR6glr0000",
+      "lIuEgUFimpz5Ea1a0000"
+    ],
+    "var_uids": [
+      "2L5w9PF2KfG568jw0000",
+      "KnkXC8qiG2tWZdLT0000",
+      "NCuDtw4vtWZpliBU0000",
+      "TZ98CBBsCjxMU0Mk0000",
+      "W5boLWWmvNxhqKG10000",
+      "ZlvcYTWyRuBwXqO40000",
+      "fDFC89UBwcsQzxUo0000",
+      "rdPmoXg6lH2V46Ni0000",
+      "v6fulA6ihI0nfyDF0000",
+      "yKlix5aS2jtSWqXT0000"
+    ]
+  },
+  "schema_version": "pert-gym.dataset-completion-receipt/v2",
+  "source_manifest_sha256": "c9c032b296d2b5a9a1344719bf750cfce6ff1841526a94d9e891d86c47d2d187",
+  "sources": {
+    "analysis_notebook": {
+      "git_commit": "15348b528c1086ae7b2cd633e710a45fc949b2b8",
+      "sha256": "85c23bd36dc4f437ba1f0b67f12880a76cd0de5428a4421d459f32a3054f8410",
+      "size_bytes": 34722783,
+      "status": "PASS",
+      "url": "https://raw.githubusercontent.com/MeierLabMiBioEng/scRNA_3D_EC_differentiation/15348b528c1086ae7b2cd633e710a45fc949b2b8/Main_Analysis/Dataset_preprocessing.ipynb"
+    },
+    "geo_soft": {
+      "sample_count": 10,
+      "sha256": "73a06f660059b778772dcdc63466c6d6259b937de1cd9d1a3dea06b74207ffc5",
+      "size_bytes": 4991
+    },
+    "publication_fulltext": {
+      "doi": "10.1016/j.stemcr.2023.08.008",
+      "pmcid": "PMC10656300",
+      "pmid": "37714147",
+      "sha256": "af63921bcae9d8072d3683ff71ccc97a36c602c8794ccd0fcf5e7d2ef73ec683",
+      "size_bytes": 128714
+    },
+    "status": "PASS"
+  },
+  "status": "PASS",
+  "task_id": "t_a2ff6038",
+  "var": {
+    "VAR_ENSEMBL_SPECIES_COMPLETED": true,
+    "biological_features_total": 20631,
+    "correct_species_features": 20631,
+    "ordered_feature_id_sha256": "3ea7535b5ca19badca07dcf123d402b1007af88260f2b3ee9c96fc63ad5e7322",
+    "stable_ensembl_id_features": 20631,
+    "status": "PASS"
+  },
+  "writes": {
+    "collection_writes": 0,
+    "deletions": 0,
+    "obs_revisions": 0,
+    "shared_var_artifacts": 0,
+    "x_revisions": 0
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "format": "pert-gym.dataset-completion-source-manifest/v1",
+  "task_id": "t_b626108c",
+  "logical_dataset": "temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation",
+  "collection_uuid": "c26ca66a-63ea-4059-a24e-0e0be0a2a173",
+  "publication": {
+    "title": "An alternative cell cycle coordinates multiciliated cell differentiation",
+    "doi": "10.1038/s41586-024-07476-z",
+    "pmcid": "PMC11996048",
+    "geo_accession": "GSE228110"
+  },
+  "authoritative_sources": [
+    {
+      "role": "cellxgene_collection_metadata_and_current_payload_identity",
+      "url": "https://api.cellxgene.cziscience.com/curation/v1/collections/c26ca66a-63ea-4059-a24e-0e0be0a2a173",
+      "retrieved_at": "2026-07-30",
+      "sha256": "c04c202398afb5fa51142a40e3a63628c7a1794a0e6249745826c46b278c372b"
+    },
+    {
+      "role": "peer_reviewed_methods_and_data_availability",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=11996048&retmode=xml",
+      "retrieved_at": "2026-07-30",
+      "sha256": "78e7f7233a88aaf103e935f6159be24a69f77560b2894040392dfa6d1e8fb635"
+    },
+    {
+      "role": "geo_scrna_sample_metadata",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE228nnn/GSE228110/matrix/GSE228110-GPL24247_series_matrix.txt.gz",
+      "retrieved_at": "2026-07-30",
+      "uncompressed_sha256": "805a56ab42202e289418b359b5293d3e76e252c7590b7ba13cff9fa8fd9d9ffe"
+    },
+    {
+      "role": "author_analysis_code",
+      "url": "https://github.com/lb15/multiciliation_cycle",
+      "git_commit": "e9981ecbc7e05c5494a4d9248acb01ec71cfbf81",
+      "file_sha256": {
+        "README.md": "173764641a40d1b0255364816e5158f708c8a24b7cc1efe1474c109e254e4c5f",
+        "mcc_timecourse/mcc_timecourse_analysis.R": "86bf6f3bacb8850b1ec768502a2d3ddc375e47bd49ee790cb4ba9dd1b9ff9b4f",
+        "E2f7/E2f7_analysis.R": "2a91978a8c971f33c25c033de0de66058e1fca224ec6fb63f6d984bfead7bfff",
+        "Ribo/Ribo_int_v1_analysis.R": "0f1ff0be2f6324656c488ae2aafe35ebd25bc8d62197507eeb13efb8c0f1aca3"
+      }
+    },
+    {
+      "role": "ribociclib_structure",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/ribociclib/property/CanonicalSMILES,InChIKey/JSON",
+      "retrieved_at": "2026-07-30",
+      "cid": 44631912,
+      "canonical_smiles": "CN(C)C(=O)C1=CC2=CN=C(N=C2N1C3CCCC3)NC4=NC=C(C=C4)N5CCNCC5",
+      "inchikey": "RHXHGRAEPCAFML-UHFFFAOYSA-N"
+    },
+    {
+      "role": "dmso_structure",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/dimethyl%20sulfoxide/property/CanonicalSMILES,InChIKey/JSON",
+      "retrieved_at": "2026-07-30",
+      "cid": 679,
+      "canonical_smiles": "CS(=O)C",
+      "inchikey": "IAZDPXIOMUYVGZ-UHFFFAOYSA-N"
+    }
+  ],
+  "curation_decisions": {
+    "biological_system": "primary adult mouse tracheal epithelial cells differentiated in air-liquid interface culture",
+    "time_course": "collection at 1, 3, 9, and 36 days after air-liquid interface initiation",
+    "ribociclib_experiment": "10 micromolar ribociclib or DMSO vehicle from day 1 through day 3, collected at day 3; three biological replicates per condition",
+    "e2f7_experiment": "E2f7 homozygous knockout and wild-type littermate-control adult mice, collected at day 7; two biological replicates per genotype",
+    "sequencing": "10x Chromium Single Cell 3-prime v3; published scRNA-seq GEO samples on GPL24247 use Illumina NovaSeq 6000",
+    "source_inconsistency": "GEO matrix characteristics label ALID09 and ALID36 as time 6 and 9 days, while sample titles, paper methods, figures, CELLxGENE donor labels, and author code consistently establish days 9 and 36; canonical values follow the convergent four-source evidence and retain the GEO inconsistency in the receipt",
+    "unknown_policy": "unknown means applicable but absent after source-exhaustive review; not_applicable means the concept does not apply; no value is inferred from local missingness"
+  },
+  "members": [
+    {"dataset_id":"10a44ac3-09a6-42d1-9052-179e20bb2261","dataset_version_id":"b078f9bb-a778-4686-9562-364f9773eb74","experiment":"timecourse_multiciliated_subset","n_obs":9615,"n_vars":30146,"source_h5ad_size":679269823,"baseline_obs":{"uid":"eurtAsF6cVQlgJ6f0000","hash":"pnhoNB7Kw3oyueMl1G3Qow"},"x":{"uid":"szbZrA3ZXMzrNsXC0000","hash":"lzXbOyYd-5k_WXuWogfLqQ"},"var":{"uid":"zLGvL1SD1eQpQ3AP0000","hash":"FlzAxjI472YFd4InIUp_SA"}},
+    {"dataset_id":"2ae39b65-06f8-4dd8-891f-efc68f39a1c6","dataset_version_id":"ba760f68-aeb6-4afc-bc6c-a3b812d95f2b","experiment":"timecourse_full","n_obs":27111,"n_vars":30146,"source_h5ad_size":1768550329,"baseline_obs":{"uid":"qTV29wsR0nGjfs2j0000","hash":"Kw4HBly1915Iu3ewACfV6Q"},"x":{"uid":"06xpZUHFd9k3e1Fd0000","hash":"eDnr8Ce5c3Q5KguL0JHvmA"},"var":{"uid":"Zjze4n7yQyzZDUcz0000","hash":"FlzAxjI472YFd4InIUp_SA"}},
+    {"dataset_id":"5584e9bf-1ff4-4a7d-84b8-d8e427713da5","dataset_version_id":"abbc22e5-d9e8-4c9d-9b15-1de668d68395","experiment":"e2f7_multiciliated_subset","n_obs":15139,"n_vars":30146,"source_h5ad_size":348351276,"baseline_obs":{"uid":"IISlPbS94fOuY9f30000","hash":"wDkfi0rKpZ4LFeEnTBNpLA"},"x":{"uid":"qcwJUmigC6KHTgLy0000","hash":"T3gP6XCLJicVSsURFrmmZQ"},"var":{"uid":"c3g8wTPDh8uLi7If0000","hash":"dbqVOe0D37EB6BNxDkeYaw"}},
+    {"dataset_id":"567460ab-1af8-4df7-bf61-4aad9da2f94c","dataset_version_id":"778911f1-15f8-4e95-8aa9-5e8249c80236","experiment":"timecourse_proliferating_stem_subset","n_obs":6674,"n_vars":30146,"source_h5ad_size":401590232,"baseline_obs":{"uid":"Ka0maQW2uDV8RUYd0000","hash":"GqHiQcedlZmq19EL5gJSOg"},"x":{"uid":"412oy8YDvAjW3aaK0000","hash":"R-ILOKWPD0oQg6A0AsTD1Q"},"var":{"uid":"P7Aq4zOIr3H69lIh0000","hash":"FlzAxjI472YFd4InIUp_SA"}},
+    {"dataset_id":"659f6e10-86fd-4b76-bc5e-34f9a09f1580","dataset_version_id":"43fab65c-c1b8-468b-8137-484b6eb7b4bd","experiment":"e2f7_full","n_obs":41958,"n_vars":30146,"source_h5ad_size":857452931,"baseline_obs":{"uid":"MMvKTmm4JUjVmykr0000","hash":"UcJix7WeIXICBHM4nrohUA"},"x":{"uid":"K0Zi9Nem7Z1s4EVA0000","hash":"CBXADPd34OX0lx02wvzQ7Q"},"var":{"uid":"q9j19DUT1gAHapG50000","hash":"lCZ7jf_nUNAPDYue9J7-DQ"}},
+    {"dataset_id":"732a691e-4504-4226-aecf-5d627e062efc","dataset_version_id":"9ba89a98-495d-4d52-a1c7-ea3582e81644","experiment":"e2f7_proliferating_stem_subset","n_obs":3941,"n_vars":30146,"source_h5ad_size":70197049,"baseline_obs":{"uid":"sW76sHkMV3oZdAf80000","hash":"YlEEns5tvaLXewC5nzhIig"},"x":{"uid":"b0qetCMT1ps5eJKV0000","hash":"i24jlqiJoPu4hRewNEn_ag"},"var":{"uid":"8rp3fBnjrRuBmtCf0000","hash":"f8DQmU5vySOb1NOYRLdUHQ"}},
+    {"dataset_id":"93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4","dataset_version_id":"88a39203-1c3d-4388-90d3-18f335695b9c","experiment":"ribociclib_full","n_obs":32932,"n_vars":30146,"source_h5ad_size":2392854347,"baseline_obs":{"uid":"fAZscF97pt8KdU4u0000","hash":"cnu8cSdolPJ_rG_WQZs0wA"},"x":{"uid":"ePTKRSFzjazYyRx10000","hash":"BaQYuNMDVmLH7wyDiYPWzw"},"var":{"uid":"2ljzs0Uwc7r7lJ4U0000","hash":"NLkDCyyiKcvM84Ec7Q6nJQ"}},
+    {"dataset_id":"ae9e6a8c-83d6-4870-a7aa-e604f1c01752","dataset_version_id":"b588800f-1e97-4439-ad99-9ec986c1af61","experiment":"ribociclib_multiciliated_subset","n_obs":13905,"n_vars":30146,"source_h5ad_size":1058434640,"baseline_obs":{"uid":"fC44ToMHjtwA7S5v0000","hash":"PA0dTA7vXPkQkuZfZMLHMA"},"x":{"uid":"dKK4lXxsdaeOJn7v0000","hash":"LEH9aXn2B5wuj-cyeJgmzQ"},"var":{"uid":"2TfwCP4XDksQF0RA0000","hash":"NLkDCyyiKcvM84Ec7Q6nJQ"}}
+  ],
+  "frozen_collection_predecessor": {
+    "uid": "ZTXfvA5YDoaqrd750000",
+    "key": "pert-gym/additions/20260723-gse197452-e2e",
+    "member_count": 1018,
+    "membership_sha256": "cce92ed21f91600d4f81686323a60e4c6bb6f3f99d43291106ed27767ece499f"
+  },
+  "main_duplicate_gate": {
+    "checked_at": "2026-07-30",
+    "branch": "main",
+    "exact_key_matches": 0,
+    "scientific_equivalence_matches": 0,
+    "terms": ["GSE228110", "c26ca66a-63ea-4059-a24e-0e0be0a2a173", "10.1038/s41586-024-07476-z", "alternative cell cycle", "multiciliated cell differentiation"]
+  }
+}

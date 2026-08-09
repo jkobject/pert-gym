@@ -1,0 +1,154 @@
+{
+  "schema": "pert-gym.dataset-source-manifest.scp1973/v1",
+  "task_id": "t_bb2f5bc0",
+  "record_id": "temporal_v4_133_scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene",
+  "logical_dataset": "temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene",
+  "canonical_prefix": "pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene",
+  "source_accessions": [
+    "SCP1973",
+    "GSE226373",
+    "PRJNA940076"
+  ],
+  "publication": {
+    "title": "Single-cell RNA sequencing unravels the transcriptional network underlying zebrafish retina regeneration",
+    "doi": "10.7554/eLife.86507",
+    "pmid": "37988404",
+    "pmcid": "PMC10662954",
+    "article_url": "https://elifesciences.org/articles/86507",
+    "xml": {
+      "url": "https://cdn.elifesciences.org/articles/86507/elife-86507-v1.xml",
+      "bytes": 276665,
+      "sha256": "02584a13dcc7a591b365538f7697afaaadf94b4ba1c5855f7a8f089ad44ec83a"
+    },
+    "analysis_code": {
+      "url": "https://github.com/fbnrst/celotto_2023",
+      "commit": "5acb2aa7236048906983892af903430311797c8e"
+    }
+  },
+  "geo": {
+    "series_url": "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE226373",
+    "family_soft": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE226nnn/GSE226373/soft/GSE226373_family.soft.gz",
+      "bytes": 4665,
+      "sha256": "a8a96098003cb33aa81895eec3933f1c52ef397f54efcca43196e6253c552d2d"
+    },
+    "feature_barcode_h5": {
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE226nnn/GSE226373/suppl/GSE226373_filtered_feature_bc_matrix.h5",
+      "bytes": 39962730,
+      "sha256": "1a4748a01fa5ab0dff236214a6df173c8d079910ec11c9c8d78a24e23411c739",
+      "matrix_shape_features_by_cells": [27691, 24604],
+      "assembly": "GRCz11_GFP_mCherry_e95",
+      "feature_namespace": "Ensembl Danio rerio stable gene IDs"
+    },
+    "samples": {
+      "GSM7074106": {
+        "sample": "s1__Uninjured_Ch__",
+        "raw_time_label": "uninjured",
+        "timepoint_minutes": 0,
+        "is_baseline": true,
+        "collection_batch": "collection_day_1"
+      },
+      "GSM7074107": {
+        "sample": "s2__44_hpl_",
+        "raw_time_label": "44 hpl",
+        "timepoint_minutes": 2640,
+        "is_baseline": false,
+        "collection_batch": "collection_day_1"
+      },
+      "GSM7074108": {
+        "sample": "s3__4_dpl_",
+        "raw_time_label": "4 dpl",
+        "timepoint_minutes": 5760,
+        "is_baseline": false,
+        "collection_batch": "collection_day_1"
+      },
+      "GSM7074109": {
+        "sample": "s4_Uninjured__whole_retina_ctrl_",
+        "raw_time_label": "uninjured",
+        "timepoint_minutes": 0,
+        "is_baseline": true,
+        "collection_batch": "collection_day_2"
+      },
+      "GSM7074110": {
+        "sample": "s5__6_dpl_",
+        "raw_time_label": "6 dpl",
+        "timepoint_minutes": 8640,
+        "is_baseline": false,
+        "collection_batch": "collection_day_2"
+      }
+    }
+  },
+  "scientific_interpretation": {
+    "scientific_modality": "single-cell RNA-seq expression after phototoxic retinal injury",
+    "experimental_unit": "one sequenced cell from a FACS-enriched pooled-retina sample",
+    "biological_unit": "each sample pools eight retinae from four adult zebrafish (two male and two female)",
+    "organism": "Danio rerio",
+    "organism_ontology_term": "NCBITaxon:7955",
+    "tissue": "retina",
+    "age": "6-12 months",
+    "sex": "pooled male and female",
+    "strain": "Tg(pcna:EGFP);Tg(gfap:nls-mCherry)",
+    "injury": "30 minutes bright light at >=100000 lux after three days dark adaptation",
+    "experimental_axes": {
+      "injury_condition": [
+        "uninjured control",
+        "light lesion"
+      ],
+      "elapsed_time_after_light_lesion_minutes": [
+        0,
+        2640,
+        5760,
+        8640
+      ],
+      "raw_labels": [
+        "uninjured",
+        "44 hpl",
+        "4 dpl",
+        "6 dpl"
+      ],
+      "collection_batch": [
+        "collection_day_1",
+        "collection_day_2"
+      ]
+    },
+    "outcomes_endpoints": "cell-state and transcriptional progression from Muller glia through retinal progenitors to regenerated neuronal progeny; no separate quantitative response endpoint",
+    "temporal_verdict": "true biological injury-response time course; four levels including source-backed uninjured baseline",
+    "pseudotime_verdict": "paper analyzes trajectories, but no source-backed per-cell pseudotime is present in the accepted metadata"
+  },
+  "accepted_component": {
+    "revision": "temporal-v4-133-wave13-05a447c4c48e148a",
+    "manifest_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene/revisions/temporal-v4-133-wave13-05a447c4c48e148a/manifest.json#1784268888022637",
+    "manifest_sha256": "c7bf8bc19baa8ab87e66c3c442c17128f411220ffa268dc8c7742e2ecd885072",
+    "n_obs": 11690,
+    "n_vars": 20726,
+    "nnz": 17704427,
+    "control_count": 2243,
+    "obs_axis_sha256": "eaa292360207ba5ed04afe500600f62a90c3c3e40600b83a443f9f442c2f6f26",
+    "var_axis_sha256": "fb824369630685697baa71676cc7211d9a75e746ead6e1bce0c59ddd6da4d660",
+    "registered_uids": {
+      "obs": "KsqvAFoGHYY3N0Es0000",
+      "X": "XNdeESO8PIhCpCmo0000",
+      "var": "cotSkl4KjBYQRBZm0000"
+    },
+    "durable_source_uids": {
+      "obs": "aMnJwlABB1VMeYJH0000",
+      "X": "2u8UrHx5vCE0O4zZ0000",
+      "var": "TR04mLvCnFyXmXbF0000"
+    },
+    "canonical_payload_preflight": "The three accepted GCS payload objects were absent on 2026-07-30 while the immutable manifest remained. The retained Lamin source artifacts have exact byte parity with the accepted SHA-256 and are the recovery source.",
+    "collection_uid": "4KzIQvzliuWg8R0k0000",
+    "collection_unique_obs_members": 1014
+  },
+  "source_exhaustiveness": {
+    "sources_reviewed": [
+      "SCP1973 accepted raw metadata and count matrix",
+      "GSE226373 family SOFT and five GSM records",
+      "GSE226373 GRCz11 feature-barcode H5",
+      "eLife article XML including methods and data availability",
+      "analysis repository at the pinned commit"
+    ],
+    "unavailable_without_authenticated_session": [
+      "direct anonymous SCP1973 metadata download returned HTTP 401; accepted immutable component binds the authenticated source bytes"
+    ]
+  }
+}

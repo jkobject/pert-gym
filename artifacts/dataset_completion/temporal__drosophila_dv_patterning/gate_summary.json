@@ -1,0 +1,39 @@
+{
+  "gates": {
+    "canonical_lamin_pass": true,
+    "cleaning_pass": true,
+    "collection_readback_pass": true,
+    "negative_main_equivalence": true,
+    "scientific_contract_pass": true,
+    "species_correct_var_pass": true,
+    "strict_obs_pass": true,
+    "structure_pass": true
+  },
+  "immutable_live_receipt": {
+    "gcs_generation_uri": "gs://scperturb/pert-gym/staging/task-evidence/t_851469bf/retry-v2/latest_receipt.json#1786220209678163",
+    "local_sha256": "335f96678f2d75f24a89fe6e712624c535c9ebe564f13318511796539f46ecd2"
+  },
+  "missing_card_inputs": [
+    "artifacts/orchestration/accepted_28_newness_reconciliation_20260717.json",
+    "artifacts/orchestration/publication_queue/accepted_component_identities_v1.progress.snapshot.json"
+  ],
+  "residual_unknown_obs_fields": [
+    "donor_id",
+    "sequencer",
+    "n_counts",
+    "n_genes",
+    "pct_mito",
+    "pct_ribo",
+    "is_low_quality"
+  ],
+  "schema": "pert-gym.dataset-completion.gates/v1",
+  "task_id": "t_851469bf",
+  "upstream_read_only_audit": {
+    "git_commit": "1c3981e",
+    "paths": [
+      "artifacts/first10_audit/cohort_a/E-MTAB-9304.audit.json",
+      "artifacts/first10_audit/cohort_a/E-MTAB-9304.report.json",
+      "artifacts/first10_audit/cohort_a/E-MTAB-9304.report.md"
+    ]
+  }
+}

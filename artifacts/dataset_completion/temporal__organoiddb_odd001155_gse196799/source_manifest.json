@@ -1,0 +1,256 @@
+{
+  "accepted_component_receipt": {
+    "accepted_raw_tar_member_count": 10,
+    "accepted_raw_tar_sha256": "bc62029352aed4a799c22558a9e9e97c7746bd104d6331ddaa1b221cf15c18c2",
+    "accepted_raw_tar_size_bytes": 1804912640,
+    "canonical_receipt_commit": "dce243d1711140f09c69dd5ef2badf20bd2185b6",
+    "collection_key": "pert-gym/additions/20260725-odd001155",
+    "collection_uid": "nhxZNVkd2fe67Y9k0000",
+    "hash": "3f73fdc9e405279e00c0",
+    "key": "pert-gym/logical/temporal/organoiddb_odd001155_gse196799/revisions/temporal-v4-089-wave09-e1265bc274817bb7/manifest.json",
+    "registration_commit": "165335f676a3a05d5c29a839f56da1ee0ce63abf",
+    "uid": "1C8MIh68dNfnIlju0000"
+  },
+  "dataset_id": "temporal/organoiddb_odd001155_gse196799",
+  "samples": {
+    "GSM5901228": {
+      "accepted_uids": {
+        "X": "TJY0nyj5ETU43Syh0000",
+        "obs": "40smDMSQhHxjFpkb0000",
+        "var": "yKlix5aS2jtSWqXT0000"
+      },
+      "expected": {
+        "n_obs": 6416,
+        "n_vars": 20631,
+        "nnz": 28475158,
+        "obs_index_sha256_ordered": "40711592cf56a4c466a1b97dd734c377e06b055400476aa267b1ee38bfd1178a",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901228",
+      "source": {
+        "ascorbic_acid_treatment": false,
+        "culture_method": "3D suspension culture",
+        "day": 0,
+        "sample_name": "GSM5901228"
+      }
+    },
+    "GSM5901229": {
+      "accepted_uids": {
+        "X": "p9vhfRYo6FhgRKGr0000",
+        "obs": "kr1PNg0UG6pR6glr0000",
+        "var": "KnkXC8qiG2tWZdLT0000"
+      },
+      "expected": {
+        "n_obs": 4549,
+        "n_vars": 20631,
+        "nnz": 18795976,
+        "obs_index_sha256_ordered": "086c4a0f611c7f00a0dc14106a30c4824a52da56d8fb187928d82011cb0bf3dd",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901229",
+      "source": {
+        "ascorbic_acid_treatment": false,
+        "culture_method": "3D suspension culture",
+        "day": 3,
+        "sample_name": "GSM5901229"
+      }
+    },
+    "GSM5901230": {
+      "accepted_uids": {
+        "X": "vn537Bt2uFhZncXo0000",
+        "obs": "770vKgYITsWgwsQ50000",
+        "var": "NCuDtw4vtWZpliBU0000"
+      },
+      "expected": {
+        "n_obs": 4807,
+        "n_vars": 20631,
+        "nnz": 17517151,
+        "obs_index_sha256_ordered": "3f581a0f94fc9d47d186046a446f269d44ed4303ef4dfe420a90744d98a8d153",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901230",
+      "source": {
+        "ascorbic_acid_treatment": false,
+        "culture_method": "3D suspension culture",
+        "day": 6,
+        "sample_name": "GSM5901230"
+      }
+    },
+    "GSM5901231": {
+      "accepted_uids": {
+        "X": "DMOKXzr7fGa2BzFx0000",
+        "obs": "HAjNzeHiAFVj18Bl0000",
+        "var": "2L5w9PF2KfG568jw0000"
+      },
+      "expected": {
+        "n_obs": 6430,
+        "n_vars": 20631,
+        "nnz": 26039746,
+        "obs_index_sha256_ordered": "3f869bcd424e84d64645bf8a35532ef626219621976808e706277e9ff9f64b52",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901231",
+      "source": {
+        "ascorbic_acid_treatment": false,
+        "culture_method": "3D suspension culture",
+        "day": 9,
+        "sample_name": "GSM5901231"
+      }
+    },
+    "GSM5901232": {
+      "accepted_uids": {
+        "X": "ZX3O7cVwL7bFPZYv0000",
+        "obs": "GbF6GoN62lv1gHph0000",
+        "var": "v6fulA6ihI0nfyDF0000"
+      },
+      "expected": {
+        "n_obs": 4396,
+        "n_vars": 20631,
+        "nnz": 17949355,
+        "obs_index_sha256_ordered": "8728e941a196290c9db4aed0b8ef26c504c5710ec5b12a076b46626643150053",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901232",
+      "source": {
+        "ascorbic_acid_treatment": false,
+        "culture_method": "3D suspension culture",
+        "day": 18,
+        "sample_name": "GSM5901232"
+      }
+    },
+    "GSM5901233": {
+      "accepted_uids": {
+        "X": "v7sjq36wpSPfmFhY0000",
+        "obs": "KD08xBRa6BJF0gOf0000",
+        "var": "TZ98CBBsCjxMU0Mk0000"
+      },
+      "expected": {
+        "n_obs": 3570,
+        "n_vars": 20631,
+        "nnz": 14465470,
+        "obs_index_sha256_ordered": "15a0c8af9923cc2ead9ffc9d05d18fec9f9f7368f92a438201602361e2e2d4e9",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901233",
+      "source": {
+        "ascorbic_acid_treatment": false,
+        "culture_method": "3D suspension culture",
+        "day": 9,
+        "sample_name": "GSM5901233"
+      }
+    },
+    "GSM5901234": {
+      "accepted_uids": {
+        "X": "6f2xYJX2ERs96Yj20000",
+        "obs": "djfVrXwAEiqYau6U0000",
+        "var": "rdPmoXg6lH2V46Ni0000"
+      },
+      "expected": {
+        "n_obs": 4126,
+        "n_vars": 20631,
+        "nnz": 22054447,
+        "obs_index_sha256_ordered": "a0c63c91e6be30bd26967248033a447cc4764920d449a12aec8f4256b3643238",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901234",
+      "source": {
+        "ascorbic_acid_treatment": false,
+        "culture_method": "3D suspension culture",
+        "day": 12,
+        "sample_name": "GSM5901234"
+      }
+    },
+    "GSM5901235": {
+      "accepted_uids": {
+        "X": "Wt7cTbp5A5gcwPZB0000",
+        "obs": "lIuEgUFimpz5Ea1a0000",
+        "var": "fDFC89UBwcsQzxUo0000"
+      },
+      "expected": {
+        "n_obs": 13530,
+        "n_vars": 20631,
+        "nnz": 51893254,
+        "obs_index_sha256_ordered": "9fd3d192b6479d28596682f7239f4707256991753f458c87d9c56a0c5475f839",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901235",
+      "source": {
+        "ascorbic_acid_treatment": false,
+        "culture_method": "3D Matrigel",
+        "day": 12,
+        "sample_name": "GSM5901235"
+      }
+    },
+    "GSM5901236": {
+      "accepted_uids": {
+        "X": "dbqMC7w04uBYQHAz0000",
+        "obs": "E35nXCL72npoBi9A0000",
+        "var": "ZlvcYTWyRuBwXqO40000"
+      },
+      "expected": {
+        "n_obs": 6468,
+        "n_vars": 20631,
+        "nnz": 31077632,
+        "obs_index_sha256_ordered": "4ac90d131a7ddf7183d5dbf81dd4da3c70e57ca84f6638e19136571034f8bd97",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901236",
+      "source": {
+        "ascorbic_acid_treatment": false,
+        "culture_method": "3D Matrigel",
+        "day": 18,
+        "sample_name": "GSM5901236"
+      }
+    },
+    "GSM5901237": {
+      "accepted_uids": {
+        "X": "N77zqJ64oeHAG3mN0000",
+        "obs": "hAZ4vvxKL4PU7Oew0000",
+        "var": "W5boLWWmvNxhqKG10000"
+      },
+      "expected": {
+        "n_obs": 8743,
+        "n_vars": 20631,
+        "nnz": 40852631,
+        "obs_index_sha256_ordered": "9ad2c8482d4b515205642710d44f8e7df532e934634ac60c77fdeedaf8c5404f",
+        "var_index_sha256_ordered": "7eae14a09edc3867709d516d3c96e925e6bbf070af1e08425946eb5972f55037"
+      },
+      "prefix": "data/cleaned/GSM5901237",
+      "source": {
+        "ascorbic_acid_treatment": true,
+        "culture_method": "3D Matrigel",
+        "day": 18,
+        "sample_name": "GSM5901237"
+      }
+    }
+  },
+  "schema_version": "pert-gym.source-manifest/v1",
+  "shared_var": {
+    "accepted_payload_hash": "VIQncsf8vcr5civAd1X_",
+    "n_vars": 20631,
+    "ordered_feature_id_sha256": "4f796e2e5212467c2b54b9a5ff30fbb1ba020686b7edac3df76b996c2a687dd7",
+    "target_key": "data/cleaned/GSE196799/var.parquet"
+  },
+  "sources": {
+    "analysis_notebook": {
+      "git_commit": "15348b528c1086ae7b2cd633e710a45fc949b2b8",
+      "sha256": "85c23bd36dc4f437ba1f0b67f12880a76cd0de5428a4421d459f32a3054f8410",
+      "size_bytes": 34722783,
+      "url": "https://raw.githubusercontent.com/MeierLabMiBioEng/scRNA_3D_EC_differentiation/15348b528c1086ae7b2cd633e710a45fc949b2b8/Main_Analysis/Dataset_preprocessing.ipynb"
+    },
+    "geo_soft": {
+      "decompressed_sha256": "175c85af650b2aba25599290ea0d39f1385a957acfa79a07e2ac25a7910084f5",
+      "sha256": "73a06f660059b778772dcdc63466c6d6259b937de1cd9d1a3dea06b74207ffc5",
+      "size_bytes": 4991,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE196nnn/GSE196799/soft/GSE196799_family.soft.gz"
+    },
+    "publication": {
+      "doi": "10.1016/j.stemcr.2023.08.008",
+      "fulltext_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10656300/fullTextXML",
+      "pmcid": "PMC10656300",
+      "pmid": "37714147"
+    },
+    "source_annotation_disposition": "Notebook defines cluster-to-cell-type maps, but no immutable barcode-level processed annotation payload is distributed; canonical cell_type remains explicit unknown."
+  },
+  "task_id": "t_a2ff6038"
+}

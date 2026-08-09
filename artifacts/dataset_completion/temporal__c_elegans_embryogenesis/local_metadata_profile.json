@@ -1,0 +1,720 @@
+{
+  "obs": {
+    "columns": {
+      "Size_Factor": {
+        "dtype": "float64",
+        "examples": [
+          "1.02319485110107",
+          "1.45820959454465",
+          "2.65905115905774",
+          "0.62961008322354",
+          "0.835504507248786",
+          "4.71736767240768",
+          "0.871284940692197",
+          "0.913970370063285",
+          "0.816672700173306",
+          "1.2090020142458",
+          "1.04955938100674",
+          "0.83173814583369",
+          "1.01566212827088",
+          "1.18765929956026",
+          "1.93026022523668",
+          "2.27739320232802",
+          "3.68224601015881",
+          "2.05141151742226",
+          "0.703681857720427",
+          "0.854964041226781"
+        ],
+        "non_null": 46151,
+        "unique": 6077
+      },
+      "Unnamed: 0": {
+        "dtype": "int64",
+        "examples": [
+          "0",
+          "1",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "10",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "22",
+          "23",
+          "24",
+          "25"
+        ],
+        "non_null": 46151,
+        "unique": 46151
+      },
+      "Unnamed: 0.1": {
+        "dtype": "object",
+        "examples": [
+          "AAACCTGAGACAATAC-300.1.1",
+          "AAACCTGAGGGCTCTC-300.1.1",
+          "AAACCTGAGTTGAGTA-300.1.1",
+          "AAACCTGCAAGACGTG-300.1.1",
+          "AAACCTGCAAGGTTCT-300.1.1",
+          "AAACCTGCACGTTGGC-300.1.1",
+          "AAACCTGCATCACCCT-300.1.1",
+          "AAACCTGGTGTGAATA-300.1.1",
+          "AAACCTGGTTTACTCT-300.1.1",
+          "AAACCTGTCACCCTCA-300.1.1",
+          "AAACCTGTCATCTGCC-300.1.1",
+          "AAACCTGTCCAGATCA-300.1.1",
+          "AAACCTGTCGGCCGAT-300.1.1",
+          "AAACGGGAGAGGTTAT-300.1.1",
+          "AAACGGGAGAGGTTGC-300.1.1",
+          "AAACGGGAGCGTTGCC-300.1.1",
+          "AAACGGGCAGTCGTGC-300.1.1",
+          "AAACGGGGTTGTGGCC-300.1.1",
+          "AAACGGGTCGGATGGA-300.1.1",
+          "AAACGGGTCGTTACGA-300.1.1"
+        ],
+        "non_null": 46151,
+        "unique": 46151
+      },
+      "assay": {
+        "dtype": "object",
+        "examples": [
+          "single-cell RNA-seq embryogenesis"
+        ],
+        "non_null": 46151,
+        "unique": 1
+      },
+      "batch": {
+        "dtype": "category",
+        "examples": [
+          "Waterston_300_minutes",
+          "Waterston_400_minutes",
+          "Waterston_500_minutes_batch_1",
+          "Waterston_500_minutes_batch_2",
+          "Murray_r17",
+          "Murray_b01",
+          "Murray_b02"
+        ],
+        "non_null": 46151,
+        "unique": 7
+      },
+      "cell": {
+        "dtype": "object",
+        "examples": [
+          "AAACCTGAGACAATAC-300.1.1",
+          "AAACCTGAGGGCTCTC-300.1.1",
+          "AAACCTGAGTTGAGTA-300.1.1",
+          "AAACCTGCAAGACGTG-300.1.1",
+          "AAACCTGCAAGGTTCT-300.1.1",
+          "AAACCTGCACGTTGGC-300.1.1",
+          "AAACCTGCATCACCCT-300.1.1",
+          "AAACCTGGTGTGAATA-300.1.1",
+          "AAACCTGGTTTACTCT-300.1.1",
+          "AAACCTGTCACCCTCA-300.1.1",
+          "AAACCTGTCATCTGCC-300.1.1",
+          "AAACCTGTCCAGATCA-300.1.1",
+          "AAACCTGTCGGCCGAT-300.1.1",
+          "AAACGGGAGAGGTTAT-300.1.1",
+          "AAACGGGAGAGGTTGC-300.1.1",
+          "AAACGGGAGCGTTGCC-300.1.1",
+          "AAACGGGCAGTCGTGC-300.1.1",
+          "AAACGGGGTTGTGGCC-300.1.1",
+          "AAACGGGTCGGATGGA-300.1.1",
+          "AAACGGGTCGTTACGA-300.1.1"
+        ],
+        "non_null": 46151,
+        "unique": 46151
+      },
+      "cell.subtype": {
+        "dtype": "category",
+        "examples": [
+          "BWM_head_row_1",
+          "BWM_anterior",
+          "AFD",
+          "I2_grandparent",
+          "hyp4_hyp5_hyp6",
+          "OLQ_parent",
+          "AIN_parent",
+          "Neuroblast_AWC_SAAVx",
+          "Parent_of_AMsh_URB",
+          "Parents_of_U_F_B_DVA",
+          "pm3_pm4_pm5",
+          "RIM_parent",
+          "Neuroblast_PVC_LUA",
+          "hyp7_AB_lineage",
+          "BWM_posterior",
+          "Neuroblast_AIZ_FLP",
+          "RID_parent",
+          "DVC_parent",
+          "P_cell",
+          "M4_parent"
+        ],
+        "non_null": 23997,
+        "unique": 170
+      },
+      "cell.type": {
+        "dtype": "category",
+        "examples": [
+          "Body_wall_muscle",
+          "Ciliated_amphid_neuron",
+          "Pharyngeal_neuron",
+          "Hypodermis",
+          "Ciliated_non_amphid_neuron",
+          "Seam_cell",
+          "Pharyngeal_muscle",
+          "Intestine",
+          "GLR",
+          "Excretory_cell",
+          "Pharyngeal_intestinal_valve",
+          "Pharyngeal_gland",
+          "Pharyngeal_marginal_cell",
+          "Z1_Z4",
+          "ABarpaaa_lineage",
+          "Parent_of_exc_gland_AVK",
+          "Parent_of_hyp1V_and_ant_arc_V",
+          "G2_and_W_blasts",
+          "Parent_of_exc_duct_pore_DB_1_3",
+          "Excretory_duct_and_pore"
+        ],
+        "non_null": 25167,
+        "unique": 35
+      },
+      "embryo.time": {
+        "dtype": "float64",
+        "examples": [
+          "380.0",
+          "220.0",
+          "280.0",
+          "350.0",
+          "270.0",
+          "330.0",
+          "190.0",
+          "230.0",
+          "290.0",
+          "225.0",
+          "320.0",
+          "245.0",
+          "215.0",
+          "285.0",
+          "265.0",
+          "300.0",
+          "200.0",
+          "310.0",
+          "325.0",
+          "360.0"
+        ],
+        "non_null": 46151,
+        "unique": 99
+      },
+      "embryo.time.bin": {
+        "dtype": "category",
+        "examples": [
+          "330-390",
+          "210-270",
+          "270-330",
+          "170-210",
+          "390-450",
+          "130-170",
+          "< 100",
+          "450-510",
+          "100-130",
+          "510-580",
+          "> 650",
+          "580-650"
+        ],
+        "non_null": 46151,
+        "unique": 12
+      },
+      "is_baseline": {
+        "dtype": "bool",
+        "examples": [
+          "False",
+          "True"
+        ],
+        "non_null": 46151,
+        "unique": 2
+      },
+      "lineage": {
+        "dtype": "category",
+        "examples": [
+          "MSxpappp",
+          "MSxapaap",
+          "Dxap",
+          "ABalpppapav/ABpraaaapav",
+          "ABalpappaa/ABarapapaa",
+          "ABpxaapppa",
+          "ABalapxpapa/ABpxpaaappa",
+          "ABalppppa/ABpraaapa",
+          "ABaraaaapa",
+          "ABpxppapaa",
+          "ABalpaapa/ABaraaapa",
+          "ABalaaaala/ABalaapaaa",
+          "ABpxpaaaaa",
+          "ABpxppppaa",
+          "ABpxaapaap",
+          "ABpxppppap",
+          "ABarppxpa",
+          "MSxapaaa",
+          "ABpxppaapa",
+          "MSxapppp"
+        ],
+        "non_null": 46151,
+        "unique": 495
+      },
+      "modality": {
+        "dtype": "object",
+        "examples": [
+          "scRNA-seq"
+        ],
+        "non_null": 46151,
+        "unique": 1
+      },
+      "n.umi": {
+        "dtype": "int64",
+        "examples": [
+          "1630",
+          "2319",
+          "4251",
+          "1003",
+          "1319",
+          "7503",
+          "1400",
+          "1458",
+          "1291",
+          "1926",
+          "1669",
+          "1333",
+          "1633",
+          "1894",
+          "3072",
+          "3613",
+          "5866",
+          "3268",
+          "1139",
+          "1362"
+        ],
+        "non_null": 46151,
+        "unique": 6067
+      },
+      "organism": {
+        "dtype": "object",
+        "examples": [
+          "Caenorhabditis elegans"
+        ],
+        "non_null": 46151,
+        "unique": 1
+      },
+      "passed_initial_QC_or_later_whitelisted": {
+        "dtype": "bool",
+        "examples": [
+          "True"
+        ],
+        "non_null": 46151,
+        "unique": 1
+      },
+      "plot.cell.type": {
+        "dtype": "category",
+        "examples": [
+          "BWM_head_row_1",
+          "BWM_anterior",
+          "AFD",
+          "I2_grandparent",
+          "hyp4_hyp5_hyp6",
+          "OLQ_parent",
+          "Ciliated_amphid_neuron",
+          "AIN_parent",
+          "Neuroblast_AWC_SAAVx",
+          "Parent_of_AMsh_URB",
+          "Parents_of_U_F_B_DVA",
+          "Seam_cell",
+          "pm3_pm4_pm5",
+          "RIM_parent",
+          "Neuroblast_PVC_LUA",
+          "hyp7_AB_lineage",
+          "Intestine",
+          "BWM_posterior",
+          "Neuroblast_AIZ_FLP",
+          "RID_parent"
+        ],
+        "non_null": 31459,
+        "unique": 201
+      },
+      "pseudotime": {
+        "dtype": "float64",
+        "examples": [
+          "57.0",
+          "25.0",
+          "37.0",
+          "51.0",
+          "35.0",
+          "47.0",
+          "19.0",
+          "27.0",
+          "39.0",
+          "26.0",
+          "45.0",
+          "30.0",
+          "24.0",
+          "38.0",
+          "34.0",
+          "41.0",
+          "21.0",
+          "43.0",
+          "46.0",
+          "53.0"
+        ],
+        "non_null": 46151,
+        "unique": 99
+      },
+      "random_precise_lineage": {
+        "dtype": "category",
+        "examples": [
+          "MSppappp",
+          "MSaapaap",
+          "Dpap",
+          "ABalpppapav",
+          "ABalpappaa",
+          "ABplaapppa",
+          "ABplpaaappa",
+          "ABalppppa",
+          "ABaraaaapa",
+          "ABplppapaa",
+          "ABalpaapa",
+          "ABalaapaaa",
+          "ABplpaaaaa",
+          "ABprppppaa",
+          "ABpraapaap",
+          "ABprppppap",
+          "ABarppppa",
+          "MSpapaaa",
+          "ABprppaapa",
+          "MSpapppp"
+        ],
+        "non_null": 46151,
+        "unique": 1016
+      },
+      "raw.embryo.time": {
+        "dtype": "int64",
+        "examples": [
+          "360",
+          "260",
+          "350",
+          "340",
+          "380",
+          "190",
+          "290",
+          "230",
+          "300",
+          "280",
+          "320",
+          "220",
+          "200",
+          "210",
+          "330",
+          "390",
+          "270",
+          "170",
+          "180",
+          "160"
+        ],
+        "non_null": 46151,
+        "unique": 45
+      },
+      "raw.embryo.time.bin": {
+        "dtype": "category",
+        "examples": [
+          "330-390",
+          "210-270",
+          "170-210",
+          "270-330",
+          "390-450",
+          "130-170",
+          "450-510",
+          "100-130",
+          "510-580",
+          "580-650",
+          "> 650",
+          "< 100"
+        ],
+        "non_null": 46151,
+        "unique": 12
+      },
+      "raw_time_label": {
+        "dtype": "string",
+        "examples": [
+          "380.0",
+          "220.0",
+          "280.0",
+          "350.0",
+          "270.0",
+          "330.0",
+          "190.0",
+          "230.0",
+          "290.0",
+          "225.0",
+          "320.0",
+          "245.0",
+          "215.0",
+          "285.0",
+          "265.0",
+          "300.0",
+          "200.0",
+          "310.0",
+          "325.0",
+          "360.0"
+        ],
+        "non_null": 46151,
+        "unique": 99
+      },
+      "source_article_id": {
+        "dtype": "object",
+        "examples": [
+          "22491340"
+        ],
+        "non_null": 46151,
+        "unique": 1
+      },
+      "source_article_title": {
+        "dtype": "object",
+        "examples": [
+          "C. elegans embryogenesis"
+        ],
+        "non_null": 46151,
+        "unique": 1
+      },
+      "time.point": {
+        "dtype": "category",
+        "examples": [
+          "300_minutes",
+          "400_minutes",
+          "500_minutes",
+          "mixed"
+        ],
+        "non_null": 46151,
+        "unique": 4
+      },
+      "timepoint": {
+        "dtype": "float64",
+        "examples": [
+          "380.0",
+          "220.0",
+          "280.0",
+          "350.0",
+          "270.0",
+          "330.0",
+          "190.0",
+          "230.0",
+          "290.0",
+          "225.0",
+          "320.0",
+          "245.0",
+          "215.0",
+          "285.0",
+          "265.0",
+          "300.0",
+          "200.0",
+          "310.0",
+          "325.0",
+          "360.0"
+        ],
+        "non_null": 46151,
+        "unique": 99
+      },
+      "trajectory_id": {
+        "dtype": "object",
+        "examples": [
+          "c_elegans_embryogenesis"
+        ],
+        "non_null": 46151,
+        "unique": 1
+      }
+    },
+    "index_head": [
+      "0",
+      "1",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "10",
+      "12",
+      "13"
+    ],
+    "index_name": "None",
+    "index_unique": true,
+    "rows": 46151,
+    "sha256": "ac36e96828a9d30ce69e95fc5fcea2d471f5cfa1e7482d4d3ae74fe90703f957",
+    "size": 2177270
+  },
+  "var": {
+    "columns": {
+      "Unnamed: 0": {
+        "dtype": "object",
+        "examples": [
+          "WBGene00010957",
+          "WBGene00010958",
+          "WBGene00010959",
+          "WBGene00010960",
+          "WBGene00010961",
+          "WBGene00000829",
+          "WBGene00010962",
+          "WBGene00010963",
+          "WBGene00010964",
+          "WBGene00010965",
+          "WBGene00010966",
+          "WBGene00010967",
+          "WBGene00021406",
+          "WBGene00021407",
+          "WBGene00021408",
+          "WBGene00021405",
+          "WBGene00021409",
+          "WBGene00021404",
+          "WBGene00001492",
+          "WBGene00021403"
+        ],
+        "non_null": 20222,
+        "unique": 20222
+      },
+      "feature_id": {
+        "dtype": "object",
+        "examples": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19"
+        ],
+        "non_null": 20222,
+        "unique": 20222
+      },
+      "feature_name": {
+        "dtype": "object",
+        "examples": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19"
+        ],
+        "non_null": 20222,
+        "unique": 20222
+      },
+      "gene_short_name": {
+        "dtype": "object",
+        "examples": [
+          "nduo-6",
+          "ndfl-4",
+          "nduo-1",
+          "atp-6",
+          "nduo-2",
+          "ctb-1",
+          "ctc-3",
+          "nduo-4",
+          "ctc-1",
+          "ctc-2",
+          "nduo-3",
+          "nduo-5",
+          "frm-5.2",
+          "Y38C1AB.5",
+          "trpl-4",
+          "Y38C1AB.3",
+          "Y38C1AB.7",
+          "trpl-3",
+          "frm-5.1",
+          "Y38C1AB.1"
+        ],
+        "non_null": 20222,
+        "unique": 20222
+      },
+      "id": {
+        "dtype": "object",
+        "examples": [
+          "WBGene00010957",
+          "WBGene00010958",
+          "WBGene00010959",
+          "WBGene00010960",
+          "WBGene00010961",
+          "WBGene00000829",
+          "WBGene00010962",
+          "WBGene00010963",
+          "WBGene00010964",
+          "WBGene00010965",
+          "WBGene00010966",
+          "WBGene00010967",
+          "WBGene00021406",
+          "WBGene00021407",
+          "WBGene00021408",
+          "WBGene00021405",
+          "WBGene00021409",
+          "WBGene00021404",
+          "WBGene00001492",
+          "WBGene00021403"
+        ],
+        "non_null": 20222,
+        "unique": 20222
+      },
+      "organism": {
+        "dtype": "object",
+        "examples": [
+          "Caenorhabditis elegans"
+        ],
+        "non_null": 20222,
+        "unique": 1
+      }
+    },
+    "index_head": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "index_name": "None",
+    "index_unique": true,
+    "rows": 20222,
+    "sha256": "7e31d2f5a962b14e11ce2b697121e18b8cd61156d832ff0b157fd6884bb00ade",
+    "size": 850046
+  }
+}

@@ -1,0 +1,798 @@
+{
+  "ambiguous_symbols": {
+    "LOR": [
+      {
+        "approved_symbol": "LOXL2",
+        "ensembl_gene_id": "ENSG00000134013",
+        "match_type": "alias",
+        "status": "Approved"
+      },
+      {
+        "approved_symbol": "LORICRIN",
+        "ensembl_gene_id": "ENSG00000203782",
+        "match_type": "previous",
+        "status": "Approved"
+      }
+    ]
+  },
+  "format": "pert-gym.hgnc-symbol-mapping/v1",
+  "input_unresolved_symbols": 361,
+  "mappings": {
+    "ABHD11-AS1": {
+      "approved_symbol": "BICDL3P",
+      "ensembl_gene_id": "ENSG00000225969",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "AC006262.5": {
+      "approved_symbol": "IGFL2-AS1",
+      "ensembl_gene_id": "ENSG00000268621",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "AC078883.3": {
+      "approved_symbol": "ITGA6-AS1",
+      "ensembl_gene_id": "ENSG00000232788",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "AC092620.3": {
+      "approved_symbol": "LINC02631",
+      "ensembl_gene_id": "ENSG00000237772",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "BMPR1B-AS1": {
+      "approved_symbol": "BMPR1B-DT",
+      "ensembl_gene_id": "ENSG00000249599",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C11orf85": {
+      "approved_symbol": "MAJIN",
+      "ensembl_gene_id": "ENSG00000168070",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C14orf105": {
+      "approved_symbol": "CCDC198",
+      "ensembl_gene_id": "ENSG00000100557",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C1orf143": {
+      "approved_symbol": "LINC02869",
+      "ensembl_gene_id": "ENSG00000228208",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C1orf61": {
+      "approved_symbol": "MIR9-1HG",
+      "ensembl_gene_id": "ENSG00000125462",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C21orf59": {
+      "approved_symbol": "CFAP298",
+      "ensembl_gene_id": "ENSG00000159079",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C2orf91": {
+      "approved_symbol": "LINC02898",
+      "ensembl_gene_id": "ENSG00000205086",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C4orf26": {
+      "approved_symbol": "ODAPH",
+      "ensembl_gene_id": "ENSG00000174792",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C5orf66-AS1": {
+      "approved_symbol": "EPIST",
+      "ensembl_gene_id": "ENSG00000249082",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C8orf4": {
+      "approved_symbol": "TCIM",
+      "ensembl_gene_id": "ENSG00000176907",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C9orf135": {
+      "approved_symbol": "CFAP95",
+      "ensembl_gene_id": "ENSG00000204711",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "C9orf3": {
+      "approved_symbol": "AOPEP",
+      "ensembl_gene_id": "ENSG00000148120",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "CTD-2171N6.1": {
+      "approved_symbol": "LINC01929",
+      "ensembl_gene_id": "ENSG00000267013",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "CTGF": {
+      "approved_symbol": "CCN2",
+      "ensembl_gene_id": "ENSG00000118523",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "CXorf36": {
+      "approved_symbol": "DIPK2B",
+      "ensembl_gene_id": "ENSG00000147113",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "CYR61": {
+      "approved_symbol": "CCN1",
+      "ensembl_gene_id": "ENSG00000142871",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM101A": {
+      "approved_symbol": "RFLNA",
+      "ensembl_gene_id": "ENSG00000178882",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM129B": {
+      "approved_symbol": "NIBAN2",
+      "ensembl_gene_id": "ENSG00000136830",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM159B": {
+      "approved_symbol": "SHISAL2B",
+      "ensembl_gene_id": "ENSG00000145642",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM198B": {
+      "approved_symbol": "GASK1B",
+      "ensembl_gene_id": "ENSG00000164125",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM212A": {
+      "approved_symbol": "INKA1",
+      "ensembl_gene_id": "ENSG00000185614",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM46A": {
+      "approved_symbol": "TENT5A",
+      "ensembl_gene_id": "ENSG00000112773",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM65B": {
+      "approved_symbol": "RIPOR2",
+      "ensembl_gene_id": "ENSG00000111913",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM71F1": {
+      "approved_symbol": "GARIN1B",
+      "ensembl_gene_id": "ENSG00000135248",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM84A": {
+      "approved_symbol": "LRATD1",
+      "ensembl_gene_id": "ENSG00000162981",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FAM84B": {
+      "approved_symbol": "LRATD2",
+      "ensembl_gene_id": "ENSG00000168672",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "FYB": {
+      "approved_symbol": "FYB1",
+      "ensembl_gene_id": "ENSG00000082074",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "GS1-600G8.5": {
+      "approved_symbol": "LINC02154",
+      "ensembl_gene_id": "ENSG00000235385",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "GUCY1A3": {
+      "approved_symbol": "GUCY1A1",
+      "ensembl_gene_id": "ENSG00000164116",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "H1F0": {
+      "approved_symbol": "H1-0",
+      "ensembl_gene_id": "ENSG00000189060",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "H2AFY2": {
+      "approved_symbol": "MACROH2A2",
+      "ensembl_gene_id": "ENSG00000099284",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "HIST1H1A": {
+      "approved_symbol": "H1-1",
+      "ensembl_gene_id": "ENSG00000124610",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "HIST1H1C": {
+      "approved_symbol": "H1-2",
+      "ensembl_gene_id": "ENSG00000187837",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "HIST1H1D": {
+      "approved_symbol": "H1-3",
+      "ensembl_gene_id": "ENSG00000124575",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "HIST1H2AC": {
+      "approved_symbol": "H2AC6",
+      "ensembl_gene_id": "ENSG00000180573",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "HIST1H2BG": {
+      "approved_symbol": "H2BC8",
+      "ensembl_gene_id": "ENSG00000273802",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "HIST1H4C": {
+      "approved_symbol": "H4C3",
+      "ensembl_gene_id": "ENSG00000197061",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "HIST2H3D": {
+      "approved_symbol": "H3C13",
+      "ensembl_gene_id": "ENSG00000183598",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "HIST2H4B": {
+      "approved_symbol": "H4C15",
+      "ensembl_gene_id": "ENSG00000270276",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "HP09025": {
+      "approved_symbol": "LINC02078",
+      "ensembl_gene_id": "ENSG00000267719",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "KIAA0101": {
+      "approved_symbol": "PCLAF",
+      "ensembl_gene_id": "ENSG00000166803",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "KIAA1024L": {
+      "approved_symbol": "MINAR2",
+      "ensembl_gene_id": "ENSG00000186367",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "KIAA1211L": {
+      "approved_symbol": "CRACDL",
+      "ensembl_gene_id": "ENSG00000196872",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "KIAA1456": {
+      "approved_symbol": "TRMT9B",
+      "ensembl_gene_id": "ENSG00000250305",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "LECT1": {
+      "approved_symbol": "CNMD",
+      "ensembl_gene_id": "ENSG00000136110",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "LINC00152": {
+      "approved_symbol": "CYTOR",
+      "ensembl_gene_id": "ENSG00000222041",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "LINC00202-1": {
+      "approved_symbol": "FAM238C",
+      "ensembl_gene_id": "ENSG00000283709",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "LINC00643": {
+      "approved_symbol": "SERTAD4BP",
+      "ensembl_gene_id": "ENSG00000186369",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "LINC01024": {
+      "approved_symbol": "MALINC1",
+      "ensembl_gene_id": "ENSG00000245146",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "LINC01212": {
+      "approved_symbol": "SAMMSON",
+      "ensembl_gene_id": "ENSG00000240405",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "LINC01468": {
+      "approved_symbol": "LNCAROD",
+      "ensembl_gene_id": "ENSG00000231131",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "LRRC6": {
+      "approved_symbol": "DNAAF11",
+      "ensembl_gene_id": "ENSG00000129295",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "MRVI1-AS1": {
+      "approved_symbol": "IRAG1-AS1",
+      "ensembl_gene_id": "ENSG00000177112",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "MYLPF": {
+      "approved_symbol": "MYL11",
+      "ensembl_gene_id": "ENSG00000180209",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "NOVA1-AS1": {
+      "approved_symbol": "NOVA1-DT",
+      "ensembl_gene_id": "ENSG00000257842",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "PIH1D3": {
+      "approved_symbol": "DNAAF6",
+      "ensembl_gene_id": "ENSG00000080572",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "PLA2G16": {
+      "approved_symbol": "PLAAT3",
+      "ensembl_gene_id": "ENSG00000176485",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "PRKCDBP": {
+      "approved_symbol": "CAVIN3",
+      "ensembl_gene_id": "ENSG00000170955",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "PTRF": {
+      "approved_symbol": "CAVIN1",
+      "ensembl_gene_id": "ENSG00000177469",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "RP11-1100L3.8": {
+      "approved_symbol": "NR4A1AS",
+      "ensembl_gene_id": "ENSG00000259884",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-19E11.1": {
+      "approved_symbol": "LINC01956",
+      "ensembl_gene_id": "ENSG00000258910",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-20G13.3": {
+      "approved_symbol": "LINC02244",
+      "ensembl_gene_id": "ENSG00000259590",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-297P16.3": {
+      "approved_symbol": "TACR3-AS1",
+      "ensembl_gene_id": "ENSG00000251577",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-301G19.1": {
+      "approved_symbol": "ERVH-3",
+      "ensembl_gene_id": "ENSG00000227706",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-301L8.2": {
+      "approved_symbol": "SORBS2-AS1",
+      "ensembl_gene_id": "ENSG00000233110",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-357H14.17": {
+      "approved_symbol": "LINC03057",
+      "ensembl_gene_id": "ENSG00000272763",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-392P7.6": {
+      "approved_symbol": "GPRC5D-AS1",
+      "ensembl_gene_id": "ENSG00000247498",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-54H7.4": {
+      "approved_symbol": "LINC00370",
+      "ensembl_gene_id": "ENSG00000223617",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-567G11.1": {
+      "approved_symbol": "LINC02041",
+      "ensembl_gene_id": "ENSG00000228952",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "RP11-890B15.2": {
+      "approved_symbol": "LINC02551",
+      "ensembl_gene_id": "ENSG00000254842",
+      "match_type": "alias",
+      "status": "Approved"
+    },
+    "SDPR": {
+      "approved_symbol": "CAVIN2",
+      "ensembl_gene_id": "ENSG00000168497",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "SEPP1": {
+      "approved_symbol": "SELENOP",
+      "ensembl_gene_id": "ENSG00000250722",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "SEPT11": {
+      "approved_symbol": "SEPTIN11",
+      "ensembl_gene_id": "ENSG00000138758",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "SLC9A3R2": {
+      "approved_symbol": "NHERF2",
+      "ensembl_gene_id": "ENSG00000065054",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "SQRDL": {
+      "approved_symbol": "SQOR",
+      "ensembl_gene_id": "ENSG00000137767",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "SSFA2": {
+      "approved_symbol": "ITPRID2",
+      "ensembl_gene_id": "ENSG00000138434",
+      "match_type": "previous",
+      "status": "Approved"
+    },
+    "T": {
+      "approved_symbol": "TBXT",
+      "ensembl_gene_id": "ENSG00000164458",
+      "match_type": "previous",
+      "status": "Approved"
+    }
+  },
+  "residual_unknown_symbols": [
+    "AC004540.4",
+    "AC005944.2",
+    "AC006129.2",
+    "AC007391.2",
+    "AC007563.5",
+    "AC008074.1",
+    "AC008753.6",
+    "AC009014.3",
+    "AC009133.15",
+    "AC009480.3",
+    "AC009502.4",
+    "AC010504.2",
+    "AC012363.4",
+    "AC015849.19",
+    "AC017104.2",
+    "AC018647.3",
+    "AC020571.3",
+    "AC021188.4",
+    "AC022182.1",
+    "AC027601.1",
+    "AC068490.2",
+    "AC068492.1",
+    "AC079305.10",
+    "AC079610.2",
+    "AC083949.1",
+    "AC090505.4",
+    "AC090587.5",
+    "AC092684.1",
+    "AC105402.4",
+    "AC112721.1",
+    "AC131056.3",
+    "AC147651.4",
+    "AE000661.50",
+    "AF003625.3",
+    "AF127577.12",
+    "AF230666.2",
+    "AL022578.1",
+    "AL591893.1",
+    "AP000769.1",
+    "AP000769.7",
+    "AP001055.6",
+    "AP001627.1",
+    "CH507-513H4.4",
+    "CTA-392E5.1",
+    "CTA-992D9.11",
+    "CTC-242N15.1",
+    "CTC-340A15.2",
+    "CTC-425F1.4",
+    "CTC-435M10.3",
+    "CTC-523E23.4",
+    "CTC-524C5.5",
+    "CTD-2005H7.1",
+    "CTD-2008P7.1",
+    "CTD-2035E11.4",
+    "CTD-2116N17.1",
+    "CTD-2210P24.3",
+    "CTD-2245F17.3",
+    "CTD-2263F21.1",
+    "CTD-2358C21.5",
+    "CTD-2369P2.4",
+    "CTD-2377D24.6",
+    "CTD-2521M24.6",
+    "CTD-2541M15.3",
+    "CTD-3020H12.4",
+    "CTD-3037G24.5",
+    "CTD-3128G10.6",
+    "ECSCR.1",
+    "KB-1107E3.1",
+    "KB-1608C10.2",
+    "KB-208E9.1",
+    "LA16c-349E10.1",
+    "RP1-102K2.8",
+    "RP1-170O19.17",
+    "RP1-224A6.3",
+    "RP1-253P7.4",
+    "RP1-269M15.3",
+    "RP1-45N11.1",
+    "RP1-69M21.2",
+    "RP1-90G24.6",
+    "RP11-1022B3.1",
+    "RP11-1035H13.3",
+    "RP11-108M9.3",
+    "RP11-1109F11.3",
+    "RP11-110I1.6",
+    "RP11-1136G4.2",
+    "RP11-1144P22.1",
+    "RP11-1149O23.4",
+    "RP11-119D9.1",
+    "RP11-120I21.2",
+    "RP11-120J1.1",
+    "RP11-120K9.2",
+    "RP11-123K19.1",
+    "RP11-125O18.1",
+    "RP11-1263C18.1",
+    "RP11-128A17.2",
+    "RP11-1399P15.1",
+    "RP11-13J8.1",
+    "RP11-13K12.1",
+    "RP11-148B6.1",
+    "RP11-148K1.12",
+    "RP11-148L24.1",
+    "RP11-149I23.3",
+    "RP11-14N7.2",
+    "RP11-152L20.3",
+    "RP11-152P23.2",
+    "RP11-153K11.3",
+    "RP11-154H12.3",
+    "RP11-159F24.5",
+    "RP11-15E18.1",
+    "RP11-160N1.10",
+    "RP11-172E9.2",
+    "RP11-184M15.1",
+    "RP11-189B4.7",
+    "RP11-1L9.1",
+    "RP11-203J24.8",
+    "RP11-214K3.24",
+    "RP11-21L1.1",
+    "RP11-227D13.1",
+    "RP11-227G15.10",
+    "RP11-235C23.5",
+    "RP11-247C2.2",
+    "RP11-248M19.1",
+    "RP11-251M1.1",
+    "RP11-254F7.3",
+    "RP11-256I23.1",
+    "RP11-263K19.6",
+    "RP11-265D19.6",
+    "RP11-266J6.2",
+    "RP11-266O8.1",
+    "RP11-267L5.1",
+    "RP11-276H1.3",
+    "RP11-277P12.10",
+    "RP11-27K13.3",
+    "RP11-281P23.2",
+    "RP11-285E23.2",
+    "RP11-286E11.2",
+    "RP11-297M9.1",
+    "RP11-2C24.7",
+    "RP11-2E11.6",
+    "RP11-307C19.1",
+    "RP11-307E17.8",
+    "RP11-309N24.1",
+    "RP11-316I3.1",
+    "RP11-324O2.3",
+    "RP11-325D8.1",
+    "RP11-326C3.15",
+    "RP11-328P23.4",
+    "RP11-32K4.1",
+    "RP11-342D14.1",
+    "RP11-348N5.7",
+    "RP11-353N14.4",
+    "RP11-354E11.2",
+    "RP11-356O9.1",
+    "RP11-358B23.5",
+    "RP11-359M6.1",
+    "RP11-35J1.2",
+    "RP11-362F19.1",
+    "RP11-366H4.1",
+    "RP11-366H4.3",
+    "RP11-36B6.1",
+    "RP11-370I10.11",
+    "RP11-373I8.1",
+    "RP11-373N22.3",
+    "RP11-383B4.4",
+    "RP11-388P9.2",
+    "RP11-394O4.5",
+    "RP11-395D3.1",
+    "RP11-397A16.3",
+    "RP11-399E6.4",
+    "RP11-3D4.4",
+    "RP11-400N9.1",
+    "RP11-401P9.4",
+    "RP11-403P17.4",
+    "RP11-404O13.1",
+    "RP11-404O13.5",
+    "RP11-407G23.7",
+    "RP11-408N14.1",
+    "RP11-415J8.3",
+    "RP11-415J8.5",
+    "RP11-418J17.3",
+    "RP11-431J24.2",
+    "RP11-432I5.6",
+    "RP11-434E6.4",
+    "RP11-436K8.1",
+    "RP11-43F13.4",
+    "RP11-440I14.2",
+    "RP11-445F12.1",
+    "RP11-446H18.5",
+    "RP11-452L6.1",
+    "RP11-455F5.3",
+    "RP11-455O6.9",
+    "RP11-456K23.1",
+    "RP11-457M11.7",
+    "RP11-459J23.1",
+    "RP11-466A19.3",
+    "RP11-466F5.8",
+    "RP11-474D1.3",
+    "RP11-480C22.1",
+    "RP11-486F17.1",
+    "RP11-494O16.4",
+    "RP11-495P10.3",
+    "RP11-500G10.5",
+    "RP11-500G22.4",
+    "RP11-511B23.1",
+    "RP11-516C1.1",
+    "RP11-521C20.5",
+    "RP11-524F11.2",
+    "RP11-529E15.1",
+    "RP11-532F6.5",
+    "RP11-53B2.3",
+    "RP11-54O7.3",
+    "RP11-553A10.1",
+    "RP11-554I8.2",
+    "RP11-561B11.6",
+    "RP11-566K11.5",
+    "RP11-568A7.4",
+    "RP11-573J24.1",
+    "RP11-575I8.1",
+    "RP11-598D14.1",
+    "RP11-599B13.3",
+    "RP11-59C5.3",
+    "RP11-605B16.1",
+    "RP11-60A8.1",
+    "RP11-63A1.1",
+    "RP11-642C5.1",
+    "RP11-65J3.14",
+    "RP11-693J15.5",
+    "RP11-6N17.2",
+    "RP11-703G6.1",
+    "RP11-713D19.1",
+    "RP11-714M23.2",
+    "RP11-728K20.3",
+    "RP11-744I24.2",
+    "RP11-755F10.1",
+    "RP11-756H6.1",
+    "RP11-764E7.1",
+    "RP11-769O8.1",
+    "RP11-76I14.1",
+    "RP11-775H9.2",
+    "RP11-78F17.1",
+    "RP11-796E10.1",
+    "RP11-804A23.2",
+    "RP11-810M2.2",
+    "RP11-834C11.4",
+    "RP11-85G21.3",
+    "RP11-85O21.2",
+    "RP11-864G5.3",
+    "RP11-865I6.2",
+    "RP11-888D10.3",
+    "RP11-89K21.1",
+    "RP11-89N17.4",
+    "RP11-90L20.2",
+    "RP11-932O9.7",
+    "RP11-94C24.13",
+    "RP11-96B5.3",
+    "RP11-96L14.8",
+    "RP11-977P2.1",
+    "RP11-98D18.16",
+    "RP13-192B19.2",
+    "RP13-554M15.8",
+    "RP13-614K11.2",
+    "RP3-323A16.1",
+    "RP3-467D16.3",
+    "RP4-604K5.3",
+    "RP4-607I7.1",
+    "RP4-621F18.2",
+    "RP4-665J23.1",
+    "RP4-769N13.7",
+    "RP4-778K6.3",
+    "RP4-797C5.2",
+    "RP4-799D16.1",
+    "RP4-816N1.7",
+    "RP5-1021I20.5",
+    "RP5-827E24.1",
+    "RP5-892K4.1",
+    "RP5-968P14.2",
+    "XXbac-B33L19.4",
+    "XXbac-BPG181M17.6",
+    "XXbac-BPGBPG55C20.3"
+  ],
+  "source": {
+    "last_modified": "2026-07-28T12:37:15Z",
+    "retrieved_date": "2026-07-30",
+    "sha256": "84ddffcbdb7761b065c8c45e4fc7f626c3bf055b3ab054dbf039ac738a935170",
+    "size": 16924714,
+    "url": "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/hgnc_complete_set.txt"
+  },
+  "task_id": "t_ab37edf6",
+  "unique_mappings": 81
+}

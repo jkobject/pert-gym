@@ -1,0 +1,381 @@
+{
+  "before": {
+    "X_encoding": "_CSRDataset",
+    "X_var_link": true,
+    "artifacts": {
+      "X": {
+        "created_at": "2026-07-30 16:48:26.718133+00:00",
+        "created_on_id": 2,
+        "description": "t_851469bf: accepted 119362x16936 CSR X reused with measured malformed tab-pair var axis corrected to authoritative field 1",
+        "hash": "n-3cWX9xIVdwfkVqVFH2Uz",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/X.h5ad",
+        "size": 189077527,
+        "uid": "At3j5L0or4eqfgAD0001"
+      },
+      "obs": {
+        "created_at": "2026-07-30 16:48:33.617028+00:00",
+        "created_on_id": 2,
+        "description": "t_851469bf: source-exhaustive E-MTAB-9304 OBS; exact 119362-row GXA design join; genotype controls/maternal mutants and residual unknowns explicit",
+        "hash": "jrfD5utNnL_eCH7gAqkyzg",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/obs.parquet",
+        "size": 7355526,
+        "uid": "rt5eRz8opcJXtybp0001"
+      },
+      "var": {
+        "created_at": "2026-07-30 16:48:19.222021+00:00",
+        "created_on_id": 2,
+        "description": "t_851469bf: source-exact Drosophila VAR; 16936 authoritative GXA row pairs parsed; FlyBase namespace with non-gene N/A boundary",
+        "hash": "gyZ7cqp1-Ki2isqwKCssFA",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/var.parquet",
+        "size": 441653,
+        "uid": "cvoiSPVFrjufRvVu0001"
+      }
+    },
+    "histories": {
+      "X": 2,
+      "obs": 2,
+      "var": 2
+    },
+    "obs": {
+      "canonical_fields": 42,
+      "columns": 135,
+      "identity_unique": true,
+      "residual_unknown_fields": [
+        "donor_id",
+        "sequencer",
+        "n_counts",
+        "n_genes",
+        "pct_mito",
+        "pct_ribo",
+        "is_low_quality"
+      ],
+      "rows": 119362,
+      "source_cell_type_known": 16786
+    },
+    "obs_X_link": true,
+    "obs_axis_sha256": "bb19d2c50dca193ab9a64bcc169232926252d1b54927008444a907f137cee033",
+    "payload_exists": {
+      "X": true,
+      "obs": true,
+      "var": true
+    },
+    "shape": [
+      119362,
+      16936
+    ],
+    "var": {
+      "flybase_source_exact": 14138,
+      "human_mouse_coercions": 0,
+      "namespace": "FlyBase",
+      "non_gene_not_applicable": 2798,
+      "rows": 16936,
+      "species": "Drosophila melanogaster",
+      "species_correct_var_pass": true
+    },
+    "var_axis_sha256": "9fe8fa61b4344cc301a6d8249e8416919699d2abe3f0b4426cf32281eea45d0e"
+  },
+  "branch": "jkobject",
+  "collection": {
+    "collection_created": false,
+    "predecessor": {
+      "key": "pert-gym/additions/20260723-gse197452-e2e",
+      "member_count": 1018,
+      "membership_sha256": "885fa24614564385a5b740968d4f3e3a20f42ac4fa0bf13d37229e0ca57bc247",
+      "target_obs_uid": "rt5eRz8opcJXtybp0000",
+      "uid": "ZTXfvA5YDoaqrd750000"
+    },
+    "registry_counts_after_replay": {
+      "artifacts": 28590,
+      "collections": 52
+    },
+    "registry_counts_before_replay": {
+      "artifacts": 28590,
+      "collections": 52
+    },
+    "replacement_count": 1,
+    "replay_noop": true,
+    "successor": {
+      "key": "pert-gym/additions/20260801-e-mtab-9304-curated-e2e",
+      "member_count": 1018,
+      "membership_sha256": "7ba4d32da2e35807bcf8325e526d73de9a6170b189808ec71df464ae59b5b285",
+      "target_obs_uid": "rt5eRz8opcJXtybp0001",
+      "uid": "nNM0dHevOHkv2kjt0000"
+    },
+    "unrelated_membership_drift": 0
+  },
+  "complete": true,
+  "final": {
+    "X_encoding": "_CSRDataset",
+    "X_var_link": true,
+    "artifacts": {
+      "X": {
+        "created_at": "2026-07-30 16:48:26.718133+00:00",
+        "created_on_id": 2,
+        "description": "t_851469bf: accepted 119362x16936 CSR X reused with measured malformed tab-pair var axis corrected to authoritative field 1",
+        "hash": "n-3cWX9xIVdwfkVqVFH2Uz",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/X.h5ad",
+        "size": 189077527,
+        "uid": "At3j5L0or4eqfgAD0001"
+      },
+      "obs": {
+        "created_at": "2026-07-30 16:48:33.617028+00:00",
+        "created_on_id": 2,
+        "description": "t_851469bf: source-exhaustive E-MTAB-9304 OBS; exact 119362-row GXA design join; genotype controls/maternal mutants and residual unknowns explicit",
+        "hash": "jrfD5utNnL_eCH7gAqkyzg",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/obs.parquet",
+        "size": 7355526,
+        "uid": "rt5eRz8opcJXtybp0001"
+      },
+      "var": {
+        "created_at": "2026-07-30 16:48:19.222021+00:00",
+        "created_on_id": 2,
+        "description": "t_851469bf: source-exact Drosophila VAR; 16936 authoritative GXA row pairs parsed; FlyBase namespace with non-gene N/A boundary",
+        "hash": "gyZ7cqp1-Ki2isqwKCssFA",
+        "is_latest": true,
+        "key": "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq/var.parquet",
+        "size": 441653,
+        "uid": "cvoiSPVFrjufRvVu0001"
+      }
+    },
+    "histories": {
+      "X": 2,
+      "obs": 2,
+      "var": 2
+    },
+    "obs": {
+      "canonical_fields": 42,
+      "columns": 135,
+      "identity_unique": true,
+      "residual_unknown_fields": [
+        "donor_id",
+        "sequencer",
+        "n_counts",
+        "n_genes",
+        "pct_mito",
+        "pct_ribo",
+        "is_low_quality"
+      ],
+      "rows": 119362,
+      "source_cell_type_known": 16786
+    },
+    "obs_X_link": true,
+    "obs_axis_sha256": "bb19d2c50dca193ab9a64bcc169232926252d1b54927008444a907f137cee033",
+    "payload_exists": {
+      "X": true,
+      "obs": true,
+      "var": true
+    },
+    "shape": [
+      119362,
+      16936
+    ],
+    "var": {
+      "flybase_source_exact": 14138,
+      "human_mouse_coercions": 0,
+      "namespace": "FlyBase",
+      "non_gene_not_applicable": 2798,
+      "rows": 16936,
+      "species": "Drosophila melanogaster",
+      "species_correct_var_pass": true
+    },
+    "var_axis_sha256": "9fe8fa61b4344cc301a6d8249e8416919699d2abe3f0b4426cf32281eea45d0e"
+  },
+  "gates": {
+    "canonical_lamin_pass": true,
+    "cleaning_pass": true,
+    "collection_readback_pass": true,
+    "negative_main_equivalence": true,
+    "scientific_contract_pass": true,
+    "species_correct_var_pass": true,
+    "strict_obs_pass": true,
+    "structure_pass": true
+  },
+  "generated_at": 1786220206.7563422,
+  "instance": "laminlabs/pertdata",
+  "missing_required_card_inputs": [
+    "artifacts/orchestration/accepted_28_newness_reconciliation_20260717.json",
+    "artifacts/orchestration/publication_queue/accepted_component_identities_v1.progress.snapshot.json"
+  ],
+  "mode": "verify",
+  "negative_main_equivalence": {
+    "bounded": true,
+    "drosophila_candidates_reviewed": [],
+    "exact_accession_matches": [],
+    "exact_match_count": 0,
+    "main_created_on_id": 1,
+    "negative": true,
+    "scientific_equivalence_basis": "bounded main key/description E-MTAB-9304 query plus Drosophila candidate enumeration; accepted inventory independently_checked_genuinely_new",
+    "scientific_equivalent_count": 0
+  },
+  "schema": "pert-gym.dataset-completion.e-mtab-9304/v2",
+  "scientific_contract": {
+    "biological_sample_unit": "pooled_stage_5_embryos_by_genotype",
+    "experimental_axes": {
+      "collection_age": {
+        "cardinality": 1,
+        "frequencies": {
+          "2.5 to 3.5 hour": 119362
+        },
+        "level": "dataset",
+        "role": "single_collection_window_not_longitudinal_time",
+        "source": "GXA Sample Characteristic[age]"
+      },
+      "developmental_stage": {
+        "cardinality": 1,
+        "frequencies": {
+          "stage 5 embryo": 119362
+        },
+        "level": "dataset",
+        "role": "single_stage_context_not_trajectory",
+        "source": "GXA Sample Characteristic[developmental stage]"
+      },
+      "maternal_genotype": {
+        "cardinality": 5,
+        "frequencies": {
+          "Toll10B": 28986,
+          "Tollrm9/rm10": 16598,
+          "gd7": 18632,
+          "w[*]; P{EGFP-PCNA}attP2": 45900,
+          "wild type genotype": 9246
+        },
+        "level": "cell_with_sample_level_assignment",
+        "role": "perturbation",
+        "source": "GXA Sample Characteristic[genotype]"
+      }
+    },
+    "experimental_unit": "cell",
+    "outcomes_endpoints": {
+      "expression": {
+        "level": "cell",
+        "semantics": "source raw single-cell RNA counts",
+        "shape": [
+          119362,
+          16936
+        ]
+      },
+      "inferred_cell_type": {
+        "cardinality": 9,
+        "frequencies": {
+          "amnioserosa": 1140,
+          "ectoderm anlage": 6582,
+          "embryonic neuroblast": 1398,
+          "embryonic terminal segment": 648,
+          "embryonic/larval hemocyte": 475,
+          "mesoderm anlage": 2685,
+          "primordial germ cell": 333,
+          "stage 5 embryo": 3412,
+          "tracheal precursor cell": 113,
+          "unknown": 102576
+        },
+        "known_rows": 16786,
+        "level": "cell",
+        "semantics": "source-published inferred annotation, not an experimental axis"
+      },
+      "response_endpoint": null
+    },
+    "scientific_modality": "single_cell_rna_expression",
+    "source_evidence": {
+      "experiment_design": "https://www.ebi.ac.uk/gxa/sc/experiment/E-MTAB-9304/download?fileType=experiment-design&accessKey=",
+      "sdrf": "https://www.ebi.ac.uk/biostudies/files/E-MTAB-9304/E-MTAB-9304.sdrf.txt",
+      "study": "https://www.ebi.ac.uk/biostudies/api/v1/studies/E-MTAB-9304"
+    },
+    "temporal_verdict": "single_stage_single_window_non_temporal"
+  },
+  "source": {
+    "accession": "E-MTAB-9304",
+    "checksums": {
+      "experiment_design_tsv": "2bc4db0fd6e7460841deb5a942dc6180edd1fbd8b75acf87e337f44ecad7db5c",
+      "experiment_metadata_zip": "c146f2c8b1069f563823cec9cf5a81e29076ac0172d5bde4d8f2c89a3eb7e529",
+      "raw_matrixmarket_zip": "2af62d951afc40b85b4297a48de8c0d008fad586386c9c789c09f86851af9d2a"
+    },
+    "design_evidence": {
+      "design_columns": [
+        "Assay",
+        "Sample Characteristic[organism]",
+        "Sample Characteristic Ontology Term[organism]",
+        "Sample Characteristic[strain]",
+        "Sample Characteristic Ontology Term[strain]",
+        "Sample Characteristic[age]",
+        "Sample Characteristic Ontology Term[age]",
+        "Sample Characteristic[developmental stage]",
+        "Sample Characteristic Ontology Term[developmental stage]",
+        "Sample Characteristic[sex]",
+        "Sample Characteristic Ontology Term[sex]",
+        "Sample Characteristic[organism part]",
+        "Sample Characteristic Ontology Term[organism part]",
+        "Sample Characteristic[genotype]",
+        "Sample Characteristic Ontology Term[genotype]",
+        "Factor Value[strain]",
+        "Factor Value Ontology Term[strain]",
+        "Factor Value[inferred cell type - ontology labels]",
+        "Factor Value Ontology Term[inferred cell type - ontology labels]",
+        "Factor Value[inferred cell type - authors labels]",
+        "Factor Value Ontology Term[inferred cell type - authors labels]"
+      ],
+      "design_rows": 119362,
+      "developmental_time_label_source": "Sample Characteristic[age]",
+      "missing_design_rows_for_kept_cells": 0,
+      "obs_design_columns": [
+        "design_sample_characteristic_strain",
+        "design_ontology_term_strain",
+        "design_sample_characteristic_age",
+        "design_ontology_term_age",
+        "design_sample_characteristic_developmental_stage",
+        "design_ontology_term_developmental_stage",
+        "design_sample_characteristic_organism_part",
+        "design_ontology_term_organism_part",
+        "design_sample_characteristic_genotype",
+        "design_ontology_term_genotype",
+        "design_factor_value_strain",
+        "design_factor_value_ontology_term_strain",
+        "design_factor_value_inferred_cell_type_ontology_labels",
+        "design_factor_value_ontology_term_inferred_cell_type_ontology_labels",
+        "design_factor_value_inferred_cell_type_authors_labels",
+        "design_factor_value_ontology_term_inferred_cell_type_authors_labels",
+        "developmental_time_label",
+        "developmental_time_label_source"
+      ],
+      "selected_design_columns": [
+        "Assay",
+        "Sample Characteristic[strain]",
+        "Sample Characteristic Ontology Term[strain]",
+        "Sample Characteristic[age]",
+        "Sample Characteristic Ontology Term[age]",
+        "Sample Characteristic[developmental stage]",
+        "Sample Characteristic Ontology Term[developmental stage]",
+        "Sample Characteristic[organism part]",
+        "Sample Characteristic Ontology Term[organism part]",
+        "Sample Characteristic[genotype]",
+        "Sample Characteristic Ontology Term[genotype]",
+        "Factor Value[strain]",
+        "Factor Value Ontology Term[strain]",
+        "Factor Value[inferred cell type - ontology labels]",
+        "Factor Value Ontology Term[inferred cell type - ontology labels]",
+        "Factor Value[inferred cell type - authors labels]",
+        "Factor Value Ontology Term[inferred cell type - authors labels]"
+      ],
+      "value_distributions_top20": {
+        "design_sample_characteristic_age": {
+          "2.5 to 3.5 hour": 119362
+        },
+        "design_sample_characteristic_developmental_stage": {
+          "stage 5 embryo": 119362
+        },
+        "developmental_time_label": {
+          "2.5 to 3.5 hour": 119362
+        }
+      }
+    },
+    "urls": [
+      "https://www.ebi.ac.uk/biostudies/api/v1/studies/E-MTAB-9304",
+      "https://www.ebi.ac.uk/gxa/sc/experiment/E-MTAB-9304/download?fileType=experiment-design&accessKey=",
+      "https://www.ebi.ac.uk/biostudies/files/E-MTAB-9304/E-MTAB-9304.sdrf.txt"
+    ]
+  },
+  "task_id": "t_851469bf"
+}

@@ -1,0 +1,265 @@
+{
+  "accepted_artifacts": {
+    "X": {
+      "generation": 1784263849356688,
+      "key": "pert-gym/logical/temporal/perturbase_gse107185/X.zarr.zip",
+      "sha256": "55fe5a48ee66883082563f396dcec657cea45581efe9a9f4e35141fbe3d1de71",
+      "size": 28145156,
+      "uid": "cFEWN77vqjaCY1I50000"
+    },
+    "obs": {
+      "generation": 1784263845892077,
+      "key": "pert-gym/logical/temporal/perturbase_gse107185/obs.parquet",
+      "sha256": "39d2b65f2510bf7286e888303c0a3f11fec2821f12291547b598aa21cfc56127",
+      "size": 571107,
+      "uid": "NMGDnN2AjT75B2lr0000"
+    },
+    "var": {
+      "generation": 1784263852678841,
+      "key": "pert-gym/logical/temporal/perturbase_gse107185/var.parquet",
+      "sha256": "410de9f0b91176ed91cd8c5613288955816b319f44a289200c544730e4925157",
+      "size": 170744,
+      "uid": "mlSaS2ZdU1OsMdV30000"
+    }
+  },
+  "authorities": {
+    "geo_family_soft": {
+      "sha256": "95cffac84fe8f96c992c7686ea79ca3e00b4fafa4eeed2729dd9f827e83a4a22",
+      "size": 4721,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/soft/GSE107185_family.soft.gz"
+    },
+    "pmc_bioc_xml": {
+      "required_tokens": [
+        "GSE107185",
+        "H1 hESC (male)",
+        "harvested 5 days after transduction",
+        "harvested 6 days after transduction",
+        "TF-Hygro"
+      ],
+      "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC6311450/unicode"
+    },
+    "pubmed_xml": {
+      "required_tokens": [
+        "30448000",
+        "Mapping Cellular Reprogramming",
+        "10.1016/j.cels.2018.10.008"
+      ],
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=30448000&retmode=xml"
+    }
+  },
+  "dataset_id": "temporal/perturbase_gse107185",
+  "expected": {
+    "hgnc_recovered_features": 81,
+    "n_obs": 8428,
+    "n_vars": 2000,
+    "nnz": 6377510,
+    "obs_index_sha256_ordered": "6009f41aa22662d5119552b5a3a40a8effdd645a50372857ef8b1692bd22bfbb",
+    "residual_unknown_features": 280,
+    "source_batch_media_cell_counts": {
+      "sample1|endothelial": 964,
+      "sample1|multilineage": 351,
+      "sample2|endothelial": 2997,
+      "sample2|hPSC": 1424,
+      "sample2|multilineage": 1399,
+      "sample3|hPSC": 1293
+    },
+    "source_exact_ensembl_features": 1639,
+    "source_gene_levels": [
+      "ASCL1",
+      "ASCL3",
+      "ASCL4",
+      "ASCL5",
+      "ATF7",
+      "CDX2",
+      "CRX",
+      "CTRL",
+      "ERG",
+      "ESRRG",
+      "ETV2",
+      "FLI1",
+      "FOXA1",
+      "FOXA2",
+      "FOXA3",
+      "FOXP1",
+      "GATA1",
+      "GATA2",
+      "GATA4",
+      "GATA6",
+      "GLI1",
+      "HAND2",
+      "HNF1A",
+      "HNF1B",
+      "HOXA1",
+      "HOXA10",
+      "HOXA11",
+      "HOXB6",
+      "KLF4",
+      "LHX3",
+      "LMX1A",
+      "MEF2C",
+      "MESP1",
+      "MITF",
+      "MYC",
+      "MYCL",
+      "MYCN",
+      "MYOD1",
+      "MYOG",
+      "NEUROD1",
+      "NEUROG1",
+      "NEUROG3",
+      "NRL",
+      "ONECUT1",
+      "OTX2",
+      "PAX7",
+      "POU1F1",
+      "POU5F1",
+      "RUNX1",
+      "SIX1",
+      "SIX2",
+      "SNAI2",
+      "SOX10",
+      "SOX2",
+      "SOX3",
+      "SPI1",
+      "SPIB",
+      "SPIC",
+      "SRY",
+      "TBX5",
+      "TFAP2C"
+    ],
+    "source_media_cell_counts": {
+      "endothelial": 3961,
+      "hPSC": 2717,
+      "multilineage": 1750
+    },
+    "var_index_sha256_ordered": "ecc95bb79420bf3ec553f4c572b8dfee73c49bfee086982d3bcec57d4c046b63",
+    "x_dtype": "float32",
+    "x_sum": -336057.795399419
+  },
+  "format": "pert-gym.source-manifest/v1",
+  "geo_metadata_supplements": {
+    "GSE107185_up-tf-endo_pheno_dict.csv.gz": {
+      "sha256": "4fcb29233751285dd0c85f8a7adedc4cee854d118ecc24de0bdc7a570bc1921a",
+      "size": 42010,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-endo_pheno_dict.csv.gz"
+    },
+    "GSE107185_up-tf-multi_pheno_dict.csv.gz": {
+      "sha256": "ed93f075b0a824f1fa52a28db3d1e4a5914f3ac80b7022f0ef615db31e7e7671",
+      "size": 19747,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-multi_pheno_dict.csv.gz"
+    },
+    "GSE107185_up-tf-neuron-hygro_pheno_dict.csv.gz": {
+      "sha256": "c62df41d4b6544a86558da0e1c184e7c6fb44cf5b014f19c6f5ca6dc2ddbbff8",
+      "size": 75962,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-neuron-hygro_pheno_dict.csv.gz"
+    },
+    "GSE107185_up-tf-neuron-nohygro_pheno_dict.csv.gz": {
+      "sha256": "421091e822511a032344e128a0060f9928c8ebc7816e0ca1ca9ea4b54d1253ff",
+      "size": 31520,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-neuron-nohygro_pheno_dict.csv.gz"
+    },
+    "GSE107185_up-tf-stem_pheno_dict.csv.gz": {
+      "sha256": "9e65a2406f631c67f0abcf61fc4c3b957132b46a812a65879e72cff51f70dedd",
+      "size": 31967,
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107185/suppl/GSE107185_up-tf-stem_pheno_dict.csv.gz"
+    }
+  },
+  "logical_key": "pert-gym/logical/temporal/perturbase_gse107185",
+  "metadata_decisions": {
+    "cell_type": "Media labels are not cell-type labels. No immutable barcode-level cell-type annotation exists for the 8,428-cell component; canonical cell_type is unknown and legacy media-derived values are retained.",
+    "component_scope": "Only PerturBase member extend_61 is in this logical member. Other GSE107185 screens are reviewed as source context but not silently merged.",
+    "fitness": "Paper reports genotype/sample aggregate fitness log2 fold-change, but the component has no cell-level join/value. Scalar response fields remain unknown.",
+    "perturbation_sequences": "Table S1 provides exact ORF insert sequences for every perturbation, including mCherry control; molecule_sequence is source-exact. No CRISPR guide exists.",
+    "time": "Paper methods establish harvest at 5 days for hPSC medium and 6 days for endothelial or multilineage medium. These endpoint durations project by exact media and are not a shared trajectory.",
+    "var": "Preserve the 2,000 source gene-symbol X axis. Use 1,639 source-exact Ensembl IDs plus 81 unique HGNC recoveries; 280 unresolved/ambiguous symbols remain unknown. X is not rewritten.",
+    "x_semantics": "Accepted values are exact processed PerturBase values; no reversible raw-count transform is declared."
+  },
+  "perturbase_source": {
+    "archive_member": {
+      "name": "mixscape_hvg_filter.h5ad",
+      "sha256": "e8e19bf30b6b028d9bb257907f9bb4a0747478c6b5af24405df2a8da15e18e75",
+      "size": 215672608
+    },
+    "contract": "accepted member is a cleaning of the sole exact h5ad member in the retained extend_61 source archive; no broader GSE component is silently substituted",
+    "member": "extend_61",
+    "member_nnz": 6377510,
+    "member_sum": -336057.79539941944,
+    "member_shape": [
+      8428,
+      2000
+    ],
+    "retained_generation_uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/temporal/perturbase_gse107185/revisions/perturbase-gse107185-20260717T045017Z-8821ce13/source/extend_61.filter.tar.gz#1784263842756819",
+    "sha256": "e5d2fa6f7a3c3faced2649e53a5226a41e4b93b6278b375e5f09346739e0bbfa",
+    "size": 65772471,
+    "upstream_url": "http://www.perturbase.cn/static/extend_61/extend_61.filter.tar.gz",
+    "upstream_status_at_review": "Verification uses the generation-pinned immutable archive copied during the accepted build; the retained member identity is independently bound above."
+  },
+  "publication_supplements": {
+    "NIHMS1510584-supplement-1.docx": {
+      "reviewed": true,
+      "sha256": "37690dbf86160fada13e186c1620a138decacf3c8d1c8aab4cafe9b7d8fe039a",
+      "size": 15785,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/6311450/bin/NIHMS1510584-supplement-1.docx"
+    },
+    "NIHMS1510584-supplement-2.pdf": {
+      "reviewed": true,
+      "sha256": "b28b35330cb82df08ffcd35adc12cdd49e62434f8c7932b4c1c64688797291e1",
+      "size": 1423779,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/6311450/bin/NIHMS1510584-supplement-2.pdf"
+    },
+    "NIHMS1510584-supplement-3.xlsx": {
+      "reviewed": true,
+      "sha256": "6c86453081a5df60e44d93c557fd7355d020535d837a99586e15d549d866de10",
+      "size": 96044,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/6311450/bin/NIHMS1510584-supplement-3.xlsx"
+    },
+    "NIHMS1510584-supplement-4.xlsx": {
+      "reviewed": true,
+      "sha256": "cc9b3720d8c78c0607bd39b1698216652e3ae77d5a12719e6381e5a7b5db1c58",
+      "size": 11826,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/6311450/bin/NIHMS1510584-supplement-4.xlsx"
+    },
+    "NIHMS1510584-supplement-5.xlsx": {
+      "reviewed": true,
+      "sha256": "1aeb6cd7289c0e243ff8b29fafaac22ced315cc8c19e1377c5344869a05b8fd8",
+      "size": 28436,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/6311450/bin/NIHMS1510584-supplement-5.xlsx"
+    },
+    "NIHMS1510584-supplement-6.xlsx": {
+      "reviewed": true,
+      "sha256": "ccaff761408a42026f0ae8a4aac262482363cb45f3563361e6a23169dc508e42",
+      "size": 59483,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/6311450/bin/NIHMS1510584-supplement-6.xlsx"
+    }
+  },
+  "scientific_contract": {
+    "annotation_level": {
+      "expression": "cell",
+      "fitness": "aggregate genotype/sample only; not joined per cell",
+      "perturbation": "cell via PerturBase construct assignment"
+    },
+    "outcomes_endpoints": {
+      "expression": "processed PerturBase single-cell matrix",
+      "fitness": "known aggregate endpoint; cell-level value unknown because no exact join"
+    },
+    "scientific_modality": "pooled ORF-overexpression single-cell RNA-seq expression endpoint",
+    "temporal_classification": "day 5/6 media-specific endpoint durations; not a shared trajectory"
+  },
+  "source_identity": {
+    "bioproject": "PRJNA419230",
+    "doi": "10.1016/j.cels.2018.10.008",
+    "geo_accession": "GSE107185",
+    "perturbase_repository_id": "11",
+    "pmcid": "PMC6311450",
+    "pmid": "30448000",
+    "source_component": "extend_61"
+  },
+  "supplement_review": {
+    "geo_pheno_dicts_reviewed": 5,
+    "other_tables": "Table S3 has aggregate differential-expression summaries; Table S4 gene modules; Table S5 qRT-PCR primers. None supplies a barcode-level scalar fitness or cell-type join.",
+    "publication_files_reviewed": 6,
+    "table_s1": "62 constructs (61 TFs plus mCherry); extend_61 uses 60 TFs plus control and excludes HNF4A.",
+    "table_s2": "full 61-TF screens use pluripotent, endothelial, and multilineage media; PerturBase batch labels are retained without unsupported GSM projection."
+  },
+  "task_id": "t_ab37edf6"
+}

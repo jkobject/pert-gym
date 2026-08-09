@@ -1,0 +1,181 @@
+{
+  "after": {
+    "artifact_counts": {
+      "obs_key_revisions": 2,
+      "receipt_key_revisions": 1,
+      "var_key_revisions": 2,
+      "x_key_revisions": 1
+    },
+    "artifacts": {
+      "X": {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249047666142\",\"object_sha256\":\"50b28ef17d02bcdf670fd2552ed0129645bd66bf8d4a7d97fc3ef6308efb360c\",\"role\":\"X\",\"source_identity\":\"figshare:22491340\"}",
+        "features": {
+          "var": "data/cleaned/c_elegans_embryogenesis/var.parquet"
+        },
+        "hash": "Jmsp4rekLpfadfOrHUbTvQ",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/X.h5ad",
+        "size": 354987544,
+        "uid": "BcReMLnW6XOb8tvS0000"
+      },
+      "obs": {
+        "branch_id": 2,
+        "collections": [
+          {
+            "key": "pert-gym/additions/20260802-c-elegans-embryogenesis-e2e",
+            "uid": "9MkL8bCk3WzbuPlV0000"
+          }
+        ],
+        "created_on_id": 2,
+        "description": "t_a62edaa7: C. elegans embryogenesis OBS_COMPLETED; source-exhaustive Figshare 22491340 / Packer 2019 curation",
+        "features": {
+          "X": "data/cleaned/c_elegans_embryogenesis/X.h5ad"
+        },
+        "hash": "j2wi91uGDjKSAMFpbzv3YQ",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+        "size": 4931038,
+        "uid": "5EOAVNZfpqU7u1TX0001"
+      },
+      "receipt": {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "t_a62edaa7: C. elegans embryogenesis dataset-completion verification receipt",
+        "features": {
+          "X": "data/cleaned/c_elegans_embryogenesis/X.h5ad",
+          "obs": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+          "var": "data/cleaned/c_elegans_embryogenesis/var.parquet"
+        },
+        "hash": "00w7gmpGTCaxSKowFG_jog",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/curation/t_a62edaa7/verification_receipt.json",
+        "size": 38358,
+        "uid": "C7zKP03a9Q7t8D730000"
+      },
+      "var": {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "t_a62edaa7: C. elegans embryogenesis species-correct VAR; 20,222 source-native WormBase/Ensembl Metazoa stable gene identifiers",
+        "features": {},
+        "hash": "6iH-3sVT-eCFucT_BSXMdw",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/var.parquet",
+        "size": 1434641,
+        "uid": "7sZcoxxd0LMj1DeI0001"
+      }
+    },
+    "collection": {
+      "key": "pert-gym/additions/20260802-c-elegans-embryogenesis-e2e",
+      "member_count": 1018,
+      "membership_sha256": "b390f5eeaf8964910f0e98110bb920e7e83907f63174eace11c43eac2f0bf904",
+      "uid": "9MkL8bCk3WzbuPlV0000"
+    },
+    "collection_counts": {
+      "successor_key_records": 1
+    }
+  },
+  "before": {
+    "artifact_counts": {
+      "obs_key_revisions": 2,
+      "receipt_key_revisions": 1,
+      "var_key_revisions": 2,
+      "x_key_revisions": 1
+    },
+    "artifacts": {
+      "X": {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "{\"format\":\"pert-gym.staged-no-rewrite-registration/v1\",\"logical_key\":\"pert-gym/logical/temporal/c_elegans_embryogenesis\",\"manifest_generation\":\"1784249054804492\",\"manifest_sha256\":\"5193db318a032dc9e282545ce0046be64605a1a825462e2ab305b778239a7e4b\",\"object_generation\":\"1784249047666142\",\"object_sha256\":\"50b28ef17d02bcdf670fd2552ed0129645bd66bf8d4a7d97fc3ef6308efb360c\",\"role\":\"X\",\"source_identity\":\"figshare:22491340\"}",
+        "features": {
+          "var": "data/cleaned/c_elegans_embryogenesis/var.parquet"
+        },
+        "hash": "Jmsp4rekLpfadfOrHUbTvQ",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/X.h5ad",
+        "size": 354987544,
+        "uid": "BcReMLnW6XOb8tvS0000"
+      },
+      "obs": {
+        "branch_id": 2,
+        "collections": [
+          {
+            "key": "pert-gym/additions/20260802-c-elegans-embryogenesis-e2e",
+            "uid": "9MkL8bCk3WzbuPlV0000"
+          }
+        ],
+        "created_on_id": 2,
+        "description": "t_a62edaa7: C. elegans embryogenesis OBS_COMPLETED; source-exhaustive Figshare 22491340 / Packer 2019 curation",
+        "features": {
+          "X": "data/cleaned/c_elegans_embryogenesis/X.h5ad"
+        },
+        "hash": "j2wi91uGDjKSAMFpbzv3YQ",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+        "size": 4931038,
+        "uid": "5EOAVNZfpqU7u1TX0001"
+      },
+      "receipt": {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "t_a62edaa7: C. elegans embryogenesis dataset-completion verification receipt",
+        "features": {
+          "X": "data/cleaned/c_elegans_embryogenesis/X.h5ad",
+          "obs": "data/cleaned/c_elegans_embryogenesis/obs.parquet",
+          "var": "data/cleaned/c_elegans_embryogenesis/var.parquet"
+        },
+        "hash": "00w7gmpGTCaxSKowFG_jog",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/curation/t_a62edaa7/verification_receipt.json",
+        "size": 38358,
+        "uid": "C7zKP03a9Q7t8D730000"
+      },
+      "var": {
+        "branch_id": 2,
+        "collections": [],
+        "created_on_id": 2,
+        "description": "t_a62edaa7: C. elegans embryogenesis species-correct VAR; 20,222 source-native WormBase/Ensembl Metazoa stable gene identifiers",
+        "features": {},
+        "hash": "6iH-3sVT-eCFucT_BSXMdw",
+        "is_latest": true,
+        "key": "data/cleaned/c_elegans_embryogenesis/var.parquet",
+        "size": 1434641,
+        "uid": "7sZcoxxd0LMj1DeI0001"
+      }
+    },
+    "collection": {
+      "key": "pert-gym/additions/20260802-c-elegans-embryogenesis-e2e",
+      "member_count": 1018,
+      "membership_sha256": "b390f5eeaf8964910f0e98110bb920e7e83907f63174eace11c43eac2f0bf904",
+      "uid": "9MkL8bCk3WzbuPlV0000"
+    },
+    "collection_counts": {
+      "successor_key_records": 1
+    }
+  },
+  "branch": "jkobject",
+  "completed_at": "2026-08-08T14:32:12.154066+00:00",
+  "dataset_id": "temporal/c_elegans_embryogenesis",
+  "first_write_receipt_sha256": "f7604f5e637f2ea507973a919292923aa30f13e4c086c5cbc1482f16fef7148c",
+  "instance": "laminlabs/pertdata",
+  "logical_key": "pert-gym/logical/temporal/c_elegans_embryogenesis",
+  "producer_git_commit": "4a47e06bf0c7e3be38f2df9ac8ddf842831bc639",
+  "producer_script_sha256": "86c1eb76cc25e322c7b5c86a7afb485396230d4c4ef599648029649fb86425d9",
+  "schema_version": "pert-gym.zero-write-replay-receipt/v1",
+  "task_id": "t_a62edaa7",
+  "writes_this_replay": {
+    "artifact_deletions": 0,
+    "collection_membership_mutations": 0,
+    "collections": 0,
+    "feature_link_updates": 0,
+    "obs_revisions": 0,
+    "receipt_artifacts": 0,
+    "var_revisions": 0
+  }
+}

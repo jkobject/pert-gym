@@ -1,0 +1,2412 @@
+{
+  "canonical_sha256": "16be245ca71b5bfe78022113c671bde95a1a241dc3d7a602099ed195b4ca9263",
+  "collections": {
+    "predecessor": {
+      "key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e",
+      "member_count": 1018,
+      "membership_sha256": "48da7f3d2b02a825fb11a96e254dbe1f37e7c37ae216a8c293af53dc3f2ef88e",
+      "uid": "XwM4hPo8erPJKOAz0000"
+    },
+    "replacements": [
+      {
+        "added_uid": "eurtAsF6cVQlgJ6f0002",
+        "key": "data/cleaned/cellxgene-10a44ac3-09a6-42d1-9052-179e20bb2261/obs.parquet",
+        "replaced_uid": "eurtAsF6cVQlgJ6f0001"
+      },
+      {
+        "added_uid": "qTV29wsR0nGjfs2j0002",
+        "key": "data/cleaned/cellxgene-2ae39b65-06f8-4dd8-891f-efc68f39a1c6/obs.parquet",
+        "replaced_uid": "qTV29wsR0nGjfs2j0001"
+      },
+      {
+        "added_uid": "IISlPbS94fOuY9f30002",
+        "key": "data/cleaned/cellxgene-5584e9bf-1ff4-4a7d-84b8-d8e427713da5/obs.parquet",
+        "replaced_uid": "IISlPbS94fOuY9f30001"
+      },
+      {
+        "added_uid": "Ka0maQW2uDV8RUYd0002",
+        "key": "data/cleaned/cellxgene-567460ab-1af8-4df7-bf61-4aad9da2f94c/obs.parquet",
+        "replaced_uid": "Ka0maQW2uDV8RUYd0001"
+      },
+      {
+        "added_uid": "MMvKTmm4JUjVmykr0002",
+        "key": "data/cleaned/cellxgene-659f6e10-86fd-4b76-bc5e-34f9a09f1580/obs.parquet",
+        "replaced_uid": "MMvKTmm4JUjVmykr0001"
+      },
+      {
+        "added_uid": "sW76sHkMV3oZdAf80002",
+        "key": "data/cleaned/cellxgene-732a691e-4504-4226-aecf-5d627e062efc/obs.parquet",
+        "replaced_uid": "sW76sHkMV3oZdAf80001"
+      },
+      {
+        "added_uid": "fAZscF97pt8KdU4u0002",
+        "key": "data/cleaned/cellxgene-93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4/obs.parquet",
+        "replaced_uid": "fAZscF97pt8KdU4u0001"
+      },
+      {
+        "added_uid": "fC44ToMHjtwA7S5v0002",
+        "key": "data/cleaned/cellxgene-ae9e6a8c-83d6-4870-a7aa-e604f1c01752/obs.parquet",
+        "replaced_uid": "fC44ToMHjtwA7S5v0001"
+      }
+    ],
+    "status": "PASS",
+    "successor": {
+      "key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e-v2",
+      "member_count": 1018,
+      "membership_sha256": "c951048e22177ce3f1a98fded3392732d4f207295e88562f9d20ee28a6e254d9",
+      "uid": "Hck3g1dNOGJBOv3R0000"
+    }
+  },
+  "completed_at": 1785435221,
+  "duplicate_gate_main": {
+    "branch": "main",
+    "exact_key_matches": 0,
+    "scientific_equivalence_matches": 0,
+    "status": "PASS",
+    "terms": [
+      "GSE228110",
+      "c26ca66a-63ea-4059-a24e-0e0be0a2a173",
+      "10.1038/s41586-024-07476-z",
+      "alternative cell cycle",
+      "multiciliated cell differentiation"
+    ]
+  },
+  "experimental_axes": {
+    "e2f7_full": {
+      "biological_time": {
+        "canonical_timepoint_exposed": false,
+        "level": "sample projected to cell",
+        "row_frequencies": {
+          "10080": 41958
+        },
+        "source_levels_minutes": [
+          10080
+        ],
+        "verdict": "single_timepoint_non_temporal"
+      },
+      "dose": {
+        "row_frequencies": {
+          "<missing>": 41958
+        },
+        "unit_frequencies": {
+          "<missing>": 41958
+        },
+        "verdict": "not_applicable"
+      },
+      "perturbation": {
+        "level": "mouse/sample",
+        "row_frequencies": {
+          "E2f7 homozygous knockout": 19931,
+          "E2f7 wild-type control": 22027
+        },
+        "verdict": "inherited_genotype_contrast"
+      },
+      "pseudotime": {
+        "level": "cell",
+        "present_rows": 8598,
+        "verdict": "computed_trajectory_coordinate"
+      }
+    },
+    "e2f7_multiciliated_subset": {
+      "biological_time": {
+        "canonical_timepoint_exposed": false,
+        "level": "sample projected to cell",
+        "row_frequencies": {
+          "10080": 15139
+        },
+        "source_levels_minutes": [
+          10080
+        ],
+        "verdict": "single_timepoint_non_temporal"
+      },
+      "dose": {
+        "row_frequencies": {
+          "<missing>": 15139
+        },
+        "unit_frequencies": {
+          "<missing>": 15139
+        },
+        "verdict": "not_applicable"
+      },
+      "perturbation": {
+        "level": "mouse/sample",
+        "row_frequencies": {
+          "E2f7 homozygous knockout": 7486,
+          "E2f7 wild-type control": 7653
+        },
+        "verdict": "inherited_genotype_contrast"
+      },
+      "pseudotime": {
+        "level": "cell",
+        "present_rows": 8598,
+        "verdict": "computed_trajectory_coordinate"
+      }
+    },
+    "e2f7_proliferating_stem_subset": {
+      "biological_time": {
+        "canonical_timepoint_exposed": false,
+        "level": "sample projected to cell",
+        "row_frequencies": {
+          "10080": 3941
+        },
+        "source_levels_minutes": [
+          10080
+        ],
+        "verdict": "single_timepoint_non_temporal"
+      },
+      "dose": {
+        "row_frequencies": {
+          "<missing>": 3941
+        },
+        "unit_frequencies": {
+          "<missing>": 3941
+        },
+        "verdict": "not_applicable"
+      },
+      "perturbation": {
+        "level": "mouse/sample",
+        "row_frequencies": {
+          "E2f7 homozygous knockout": 1932,
+          "E2f7 wild-type control": 2009
+        },
+        "verdict": "inherited_genotype_contrast"
+      },
+      "pseudotime": {
+        "level": "cell",
+        "present_rows": 0,
+        "verdict": "not_available_for_member"
+      }
+    },
+    "ribociclib_full": {
+      "biological_time": {
+        "canonical_timepoint_exposed": false,
+        "level": "sample projected to cell",
+        "row_frequencies": {
+          "4320": 32932
+        },
+        "source_levels_minutes": [
+          4320
+        ],
+        "verdict": "single_timepoint_non_temporal"
+      },
+      "dose": {
+        "row_frequencies": {
+          "10.0": 14789,
+          "<missing>": 18143
+        },
+        "unit_frequencies": {
+          "<missing>": 18143,
+          "micromolar": 14789
+        },
+        "verdict": "treatment_dose_with_vehicle_concentration_unknown"
+      },
+      "perturbation": {
+        "level": "culture sample",
+        "row_frequencies": {
+          "DMSO vehicle control": 18143,
+          "ribociclib": 14789
+        },
+        "verdict": "pharmacological_treatment_contrast"
+      },
+      "pseudotime": {
+        "level": "cell",
+        "present_rows": 28980,
+        "verdict": "computed_trajectory_coordinate"
+      }
+    },
+    "ribociclib_multiciliated_subset": {
+      "biological_time": {
+        "canonical_timepoint_exposed": false,
+        "level": "sample projected to cell",
+        "row_frequencies": {
+          "4320": 13905
+        },
+        "source_levels_minutes": [
+          4320
+        ],
+        "verdict": "single_timepoint_non_temporal"
+      },
+      "dose": {
+        "row_frequencies": {
+          "10.0": 5645,
+          "<missing>": 8260
+        },
+        "unit_frequencies": {
+          "<missing>": 8260,
+          "micromolar": 5645
+        },
+        "verdict": "treatment_dose_with_vehicle_concentration_unknown"
+      },
+      "perturbation": {
+        "level": "culture sample",
+        "row_frequencies": {
+          "DMSO vehicle control": 8260,
+          "ribociclib": 5645
+        },
+        "verdict": "pharmacological_treatment_contrast"
+      },
+      "pseudotime": {
+        "level": "cell",
+        "present_rows": 13905,
+        "verdict": "computed_trajectory_coordinate"
+      }
+    },
+    "timecourse_full": {
+      "biological_time": {
+        "canonical_timepoint_exposed": true,
+        "level": "sample projected to cell",
+        "row_frequencies": {
+          "12960": 6299,
+          "1440": 9136,
+          "4320": 6746,
+          "51840": 4930
+        },
+        "source_levels_minutes": [
+          1440,
+          4320,
+          12960,
+          51840
+        ],
+        "verdict": "multitimepoint_biological_axis"
+      },
+      "dose": {
+        "row_frequencies": {
+          "<missing>": 27111
+        },
+        "unit_frequencies": {
+          "<missing>": 27111
+        },
+        "verdict": "not_applicable"
+      },
+      "perturbation": {
+        "level": "not_applicable",
+        "row_frequencies": {
+          "<missing>": 27111
+        },
+        "verdict": "not_applicable"
+      },
+      "pseudotime": {
+        "level": "cell",
+        "present_rows": 0,
+        "verdict": "not_available_for_member"
+      }
+    },
+    "timecourse_multiciliated_subset": {
+      "biological_time": {
+        "canonical_timepoint_exposed": true,
+        "level": "sample projected to cell",
+        "row_frequencies": {
+          "12960": 2636,
+          "1440": 2497,
+          "4320": 2644,
+          "51840": 1838
+        },
+        "source_levels_minutes": [
+          1440,
+          4320,
+          12960,
+          51840
+        ],
+        "verdict": "multitimepoint_biological_axis"
+      },
+      "dose": {
+        "row_frequencies": {
+          "<missing>": 9615
+        },
+        "unit_frequencies": {
+          "<missing>": 9615
+        },
+        "verdict": "not_applicable"
+      },
+      "perturbation": {
+        "level": "not_applicable",
+        "row_frequencies": {
+          "<missing>": 9615
+        },
+        "verdict": "not_applicable"
+      },
+      "pseudotime": {
+        "level": "cell",
+        "present_rows": 4593,
+        "verdict": "computed_trajectory_coordinate"
+      }
+    },
+    "timecourse_proliferating_stem_subset": {
+      "biological_time": {
+        "canonical_timepoint_exposed": true,
+        "level": "sample projected to cell",
+        "row_frequencies": {
+          "12960": 1412,
+          "1440": 2226,
+          "4320": 1535,
+          "51840": 1501
+        },
+        "source_levels_minutes": [
+          1440,
+          4320,
+          12960,
+          51840
+        ],
+        "verdict": "multitimepoint_biological_axis"
+      },
+      "dose": {
+        "row_frequencies": {
+          "<missing>": 6674
+        },
+        "unit_frequencies": {
+          "<missing>": 6674
+        },
+        "verdict": "not_applicable"
+      },
+      "perturbation": {
+        "level": "not_applicable",
+        "row_frequencies": {
+          "<missing>": 6674
+        },
+        "verdict": "not_applicable"
+      },
+      "pseudotime": {
+        "level": "cell",
+        "present_rows": 2589,
+        "verdict": "computed_trajectory_coordinate"
+      }
+    }
+  },
+  "format": "pert-gym.real-dataset-e2e-curation/v3",
+  "helper_sha256": "508db6701fef69949e83ece513ed4653b6a6711fda3a243fd64b989ee6dddeec",
+  "host": {
+    "available_memory_bytes": 32775757824,
+    "free_disk_bytes": 268659437568,
+    "hostname": "pert-gym-worker-eu"
+  },
+  "logical_dataset": "temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation",
+  "members": [
+    {
+      "artifact_prefix": "data/cleaned/cellxgene-10a44ac3-09a6-42d1-9052-179e20bb2261",
+      "dataset_id": "10a44ac3-09a6-42d1-9052-179e20bb2261",
+      "experiment": "timecourse_multiciliated_subset",
+      "feature_link_x_key": "data/cleaned/cellxgene-10a44ac3-09a6-42d1-9052-179e20bb2261/X.h5ad",
+      "logical_prefix": "pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/cellxgene-10a44ac3-09a6-42d1-9052-179e20bb2261",
+      "obs": {
+        "created_at": "2026-07-30 18:08:41.885243+00:00",
+        "hash": "iYjjHYKplmQwMCXORcvkFQ",
+        "key": "data/cleaned/cellxgene-10a44ac3-09a6-42d1-9052-179e20bb2261/obs.parquet",
+        "size": 1557865,
+        "uid": "eurtAsF6cVQlgJ6f0002"
+      },
+      "obs_curation": {
+        "experimental_axes": {
+          "biological_time": {
+            "canonical_timepoint_exposed": true,
+            "level": "sample projected to cell",
+            "row_frequencies": {
+              "12960": 2636,
+              "1440": 2497,
+              "4320": 2644,
+              "51840": 1838
+            },
+            "source_levels_minutes": [
+              1440,
+              4320,
+              12960,
+              51840
+            ],
+            "verdict": "multitimepoint_biological_axis"
+          },
+          "dose": {
+            "row_frequencies": {
+              "<missing>": 9615
+            },
+            "unit_frequencies": {
+              "<missing>": 9615
+            },
+            "verdict": "not_applicable"
+          },
+          "perturbation": {
+            "level": "not_applicable",
+            "row_frequencies": {
+              "<missing>": 9615
+            },
+            "verdict": "not_applicable"
+          },
+          "pseudotime": {
+            "level": "cell",
+            "present_rows": 4593,
+            "verdict": "computed_trajectory_coordinate"
+          }
+        },
+        "experimental_unit": {
+          "intervention_level": "not_applicable",
+          "observation": "single CELLxGENE cell",
+          "sample_assignment": "source orig.ident projected to cells"
+        },
+        "field_states": {
+          "age": {
+            "present": 9615
+          },
+          "assay": {
+            "present": 9615
+          },
+          "batch": {
+            "present": 9615
+          },
+          "cell_id": {
+            "present": 9615
+          },
+          "cell_line": {
+            "not_applicable": 9615
+          },
+          "cell_type": {
+            "present": 9615
+          },
+          "dataset": {
+            "present": 9615
+          },
+          "disease": {
+            "present": 9615
+          },
+          "donor_id": {
+            "present": 9615
+          },
+          "dose": {
+            "not_applicable": 9615
+          },
+          "dose_unit": {
+            "not_applicable": 9615
+          },
+          "ethnicity": {
+            "not_applicable": 9615
+          },
+          "guide_sequence": {
+            "not_applicable": 9615
+          },
+          "is_baseline": {
+            "present": 9615
+          },
+          "is_bulk": {
+            "present": 9615
+          },
+          "is_control": {
+            "present": 9615
+          },
+          "is_low_quality": {
+            "present": 9615
+          },
+          "is_pseudobulk": {
+            "present": 9615
+          },
+          "media": {
+            "present": 9615
+          },
+          "modality": {
+            "present": 9615
+          },
+          "molecule_sequence": {
+            "not_applicable": 9615
+          },
+          "n_counts": {
+            "present": 9615
+          },
+          "n_genes": {
+            "present": 9615
+          },
+          "organism": {
+            "present": 9615
+          },
+          "pct_mito": {
+            "present": 9615
+          },
+          "pct_ribo": {
+            "missing": 9615
+          },
+          "perturbation": {
+            "not_applicable": 9615
+          },
+          "perturbation_library": {
+            "not_applicable": 9615
+          },
+          "perturbation_technology": {
+            "not_applicable": 9615
+          },
+          "perturbation_type": {
+            "not_applicable": 9615
+          },
+          "pseudotime": {
+            "not_applicable": 5022,
+            "present": 4593
+          },
+          "response_metric": {
+            "not_applicable": 9615
+          },
+          "response_source": {
+            "not_applicable": 9615
+          },
+          "response_value": {
+            "not_applicable": 9615
+          },
+          "sample": {
+            "present": 9615
+          },
+          "sensitivity": {
+            "not_applicable": 9615
+          },
+          "sequencer": {
+            "present": 9615
+          },
+          "sex": {
+            "missing": 9615
+          },
+          "technology": {
+            "present": 9615
+          },
+          "timepoint": {
+            "present": 9615
+          },
+          "tissue_type": {
+            "present": 9615
+          },
+          "trajectory_id": {
+            "not_applicable": 5022,
+            "present": 4593
+          }
+        },
+        "frame_sha256": "697feeb150764deed8d064d8ce9cf8758e9feb578bf8b2c1be7981e073e3d6b8",
+        "obs_uuid_sha256": "0435475fe7466b78f72bd5d7cc38cb2df7da3f9bc3683ab19ab6865a0559b4d7",
+        "original_obs_index_sha256": "3bab78a7a159b851e1a59891f56a76e2b3b7b5aafa4a0be376b219d14ab8f283",
+        "outcomes_endpoints": {
+          "expression": {
+            "level": "cell",
+            "semantics": "accepted source X expression matrix"
+          },
+          "scalar_response_or_viability": {
+            "level": "none",
+            "verdict": "not_applicable"
+          }
+        },
+        "residual_unknowns": {
+          "pct_ribo": 9615,
+          "sex": 9615
+        },
+        "row_order_preserved": true,
+        "rows": 9615,
+        "scientific_modality": "single-cell RNA expression during unperturbed air-liquid-interface differentiation"
+      },
+      "obs_history_count": 3,
+      "var": {
+        "created_at": "2026-07-18 14:07:17.553021+00:00",
+        "hash": "FlzAxjI472YFd4InIUp_SA",
+        "key": "data/cleaned/cellxgene-10a44ac3-09a6-42d1-9052-179e20bb2261/var.parquet",
+        "size": 533732,
+        "uid": "zLGvL1SD1eQpQ3AP0000"
+      },
+      "var_validation": {
+        "biological_features_total": 30146,
+        "correct_species_features": 30146,
+        "namespace": "Ensembl mouse gene (ENSMUSG)",
+        "revision_needed": false,
+        "species": "Mus musculus",
+        "stable_ensembl_id_features": 30146,
+        "stable_id_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409",
+        "status": "PASS"
+      },
+      "x": {
+        "created_at": "2026-07-18 14:07:16.052469+00:00",
+        "hash": "lzXbOyYd-5k_WXuWogfLqQ",
+        "key": "data/cleaned/cellxgene-10a44ac3-09a6-42d1-9052-179e20bb2261/X.h5ad",
+        "size": 679269823,
+        "uid": "szbZrA3ZXMzrNsXC0000"
+      },
+      "x_validation": {
+        "artifact_hash": "lzXbOyYd-5k_WXuWogfLqQ",
+        "artifact_size": 679269823,
+        "obs_axis_sha256": "3bab78a7a159b851e1a59891f56a76e2b3b7b5aafa4a0be376b219d14ab8f283",
+        "revision_needed": false,
+        "shape": [
+          9615,
+          30146
+        ],
+        "status": "PASS",
+        "var_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409"
+      }
+    },
+    {
+      "artifact_prefix": "data/cleaned/cellxgene-2ae39b65-06f8-4dd8-891f-efc68f39a1c6",
+      "dataset_id": "2ae39b65-06f8-4dd8-891f-efc68f39a1c6",
+      "experiment": "timecourse_full",
+      "feature_link_x_key": "data/cleaned/cellxgene-2ae39b65-06f8-4dd8-891f-efc68f39a1c6/X.h5ad",
+      "logical_prefix": "pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/cellxgene-2ae39b65-06f8-4dd8-891f-efc68f39a1c6",
+      "obs": {
+        "created_at": "2026-07-30 18:08:47.812721+00:00",
+        "hash": "QNVOkhQYVEDSG8ED55pi6g",
+        "key": "data/cleaned/cellxgene-2ae39b65-06f8-4dd8-891f-efc68f39a1c6/obs.parquet",
+        "size": 4025497,
+        "uid": "qTV29wsR0nGjfs2j0002"
+      },
+      "obs_curation": {
+        "experimental_axes": {
+          "biological_time": {
+            "canonical_timepoint_exposed": true,
+            "level": "sample projected to cell",
+            "row_frequencies": {
+              "12960": 6299,
+              "1440": 9136,
+              "4320": 6746,
+              "51840": 4930
+            },
+            "source_levels_minutes": [
+              1440,
+              4320,
+              12960,
+              51840
+            ],
+            "verdict": "multitimepoint_biological_axis"
+          },
+          "dose": {
+            "row_frequencies": {
+              "<missing>": 27111
+            },
+            "unit_frequencies": {
+              "<missing>": 27111
+            },
+            "verdict": "not_applicable"
+          },
+          "perturbation": {
+            "level": "not_applicable",
+            "row_frequencies": {
+              "<missing>": 27111
+            },
+            "verdict": "not_applicable"
+          },
+          "pseudotime": {
+            "level": "cell",
+            "present_rows": 0,
+            "verdict": "not_available_for_member"
+          }
+        },
+        "experimental_unit": {
+          "intervention_level": "not_applicable",
+          "observation": "single CELLxGENE cell",
+          "sample_assignment": "source orig.ident projected to cells"
+        },
+        "field_states": {
+          "age": {
+            "present": 27111
+          },
+          "assay": {
+            "present": 27111
+          },
+          "batch": {
+            "present": 27111
+          },
+          "cell_id": {
+            "present": 27111
+          },
+          "cell_line": {
+            "not_applicable": 27111
+          },
+          "cell_type": {
+            "present": 27111
+          },
+          "dataset": {
+            "present": 27111
+          },
+          "disease": {
+            "present": 27111
+          },
+          "donor_id": {
+            "present": 27111
+          },
+          "dose": {
+            "not_applicable": 27111
+          },
+          "dose_unit": {
+            "not_applicable": 27111
+          },
+          "ethnicity": {
+            "not_applicable": 27111
+          },
+          "guide_sequence": {
+            "not_applicable": 27111
+          },
+          "is_baseline": {
+            "present": 27111
+          },
+          "is_bulk": {
+            "present": 27111
+          },
+          "is_control": {
+            "present": 27111
+          },
+          "is_low_quality": {
+            "present": 27111
+          },
+          "is_pseudobulk": {
+            "present": 27111
+          },
+          "media": {
+            "present": 27111
+          },
+          "modality": {
+            "present": 27111
+          },
+          "molecule_sequence": {
+            "not_applicable": 27111
+          },
+          "n_counts": {
+            "present": 27111
+          },
+          "n_genes": {
+            "present": 27111
+          },
+          "organism": {
+            "present": 27111
+          },
+          "pct_mito": {
+            "present": 27111
+          },
+          "pct_ribo": {
+            "missing": 27111
+          },
+          "perturbation": {
+            "not_applicable": 27111
+          },
+          "perturbation_library": {
+            "not_applicable": 27111
+          },
+          "perturbation_technology": {
+            "not_applicable": 27111
+          },
+          "perturbation_type": {
+            "not_applicable": 27111
+          },
+          "pseudotime": {
+            "not_applicable": 27111
+          },
+          "response_metric": {
+            "not_applicable": 27111
+          },
+          "response_source": {
+            "not_applicable": 27111
+          },
+          "response_value": {
+            "not_applicable": 27111
+          },
+          "sample": {
+            "present": 27111
+          },
+          "sensitivity": {
+            "not_applicable": 27111
+          },
+          "sequencer": {
+            "present": 27111
+          },
+          "sex": {
+            "missing": 27111
+          },
+          "technology": {
+            "present": 27111
+          },
+          "timepoint": {
+            "present": 27111
+          },
+          "tissue_type": {
+            "present": 27111
+          },
+          "trajectory_id": {
+            "not_applicable": 27111
+          }
+        },
+        "frame_sha256": "5711731333f3eea247d1b2ede80f8cdb503dc211d9d5e66895d1c8ca2e699991",
+        "obs_uuid_sha256": "183002fa3a92d6ed0ce33ce8ed2acddad48c4f7423fe4d970aeb916ff05433f2",
+        "original_obs_index_sha256": "051a314de51e3145f2203019ed0b9916de16477e5fcab53d3030eb93bdffdb32",
+        "outcomes_endpoints": {
+          "expression": {
+            "level": "cell",
+            "semantics": "accepted source X expression matrix"
+          },
+          "scalar_response_or_viability": {
+            "level": "none",
+            "verdict": "not_applicable"
+          }
+        },
+        "residual_unknowns": {
+          "pct_ribo": 27111,
+          "sex": 27111
+        },
+        "row_order_preserved": true,
+        "rows": 27111,
+        "scientific_modality": "single-cell RNA expression during unperturbed air-liquid-interface differentiation"
+      },
+      "obs_history_count": 3,
+      "var": {
+        "created_at": "2026-07-18 14:07:22.025477+00:00",
+        "hash": "FlzAxjI472YFd4InIUp_SA",
+        "key": "data/cleaned/cellxgene-2ae39b65-06f8-4dd8-891f-efc68f39a1c6/var.parquet",
+        "size": 533732,
+        "uid": "Zjze4n7yQyzZDUcz0000"
+      },
+      "var_validation": {
+        "biological_features_total": 30146,
+        "correct_species_features": 30146,
+        "namespace": "Ensembl mouse gene (ENSMUSG)",
+        "revision_needed": false,
+        "species": "Mus musculus",
+        "stable_ensembl_id_features": 30146,
+        "stable_id_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409",
+        "status": "PASS"
+      },
+      "x": {
+        "created_at": "2026-07-18 14:07:20.549880+00:00",
+        "hash": "eDnr8Ce5c3Q5KguL0JHvmA",
+        "key": "data/cleaned/cellxgene-2ae39b65-06f8-4dd8-891f-efc68f39a1c6/X.h5ad",
+        "size": 1768550329,
+        "uid": "06xpZUHFd9k3e1Fd0000"
+      },
+      "x_validation": {
+        "artifact_hash": "eDnr8Ce5c3Q5KguL0JHvmA",
+        "artifact_size": 1768550329,
+        "obs_axis_sha256": "051a314de51e3145f2203019ed0b9916de16477e5fcab53d3030eb93bdffdb32",
+        "revision_needed": false,
+        "shape": [
+          27111,
+          30146
+        ],
+        "status": "PASS",
+        "var_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409"
+      }
+    },
+    {
+      "artifact_prefix": "data/cleaned/cellxgene-5584e9bf-1ff4-4a7d-84b8-d8e427713da5",
+      "dataset_id": "5584e9bf-1ff4-4a7d-84b8-d8e427713da5",
+      "experiment": "e2f7_multiciliated_subset",
+      "feature_link_x_key": "data/cleaned/cellxgene-5584e9bf-1ff4-4a7d-84b8-d8e427713da5/X.h5ad",
+      "logical_prefix": "pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/cellxgene-5584e9bf-1ff4-4a7d-84b8-d8e427713da5",
+      "obs": {
+        "created_at": "2026-07-30 18:08:53.502083+00:00",
+        "hash": "G3FD6XM4M9OlOpdcsgSNYg",
+        "key": "data/cleaned/cellxgene-5584e9bf-1ff4-4a7d-84b8-d8e427713da5/obs.parquet",
+        "size": 2250260,
+        "uid": "IISlPbS94fOuY9f30002"
+      },
+      "obs_curation": {
+        "experimental_axes": {
+          "biological_time": {
+            "canonical_timepoint_exposed": false,
+            "level": "sample projected to cell",
+            "row_frequencies": {
+              "10080": 15139
+            },
+            "source_levels_minutes": [
+              10080
+            ],
+            "verdict": "single_timepoint_non_temporal"
+          },
+          "dose": {
+            "row_frequencies": {
+              "<missing>": 15139
+            },
+            "unit_frequencies": {
+              "<missing>": 15139
+            },
+            "verdict": "not_applicable"
+          },
+          "perturbation": {
+            "level": "mouse/sample",
+            "row_frequencies": {
+              "E2f7 homozygous knockout": 7486,
+              "E2f7 wild-type control": 7653
+            },
+            "verdict": "inherited_genotype_contrast"
+          },
+          "pseudotime": {
+            "level": "cell",
+            "present_rows": 8598,
+            "verdict": "computed_trajectory_coordinate"
+          }
+        },
+        "experimental_unit": {
+          "intervention_level": "mouse genotype/sample",
+          "observation": "single CELLxGENE cell",
+          "sample_assignment": "source orig.ident projected to cells"
+        },
+        "field_states": {
+          "age": {
+            "present": 15139
+          },
+          "assay": {
+            "present": 15139
+          },
+          "batch": {
+            "present": 15139
+          },
+          "cell_id": {
+            "present": 15139
+          },
+          "cell_line": {
+            "not_applicable": 15139
+          },
+          "cell_type": {
+            "present": 15139
+          },
+          "dataset": {
+            "present": 15139
+          },
+          "disease": {
+            "present": 15139
+          },
+          "donor_id": {
+            "present": 15139
+          },
+          "dose": {
+            "not_applicable": 15139
+          },
+          "dose_unit": {
+            "not_applicable": 15139
+          },
+          "ethnicity": {
+            "not_applicable": 15139
+          },
+          "guide_sequence": {
+            "not_applicable": 15139
+          },
+          "is_baseline": {
+            "present": 15139
+          },
+          "is_bulk": {
+            "present": 15139
+          },
+          "is_control": {
+            "present": 15139
+          },
+          "is_low_quality": {
+            "present": 15139
+          },
+          "is_pseudobulk": {
+            "present": 15139
+          },
+          "media": {
+            "present": 15139
+          },
+          "modality": {
+            "present": 15139
+          },
+          "molecule_sequence": {
+            "not_applicable": 15139
+          },
+          "n_counts": {
+            "present": 15139
+          },
+          "n_genes": {
+            "present": 15139
+          },
+          "organism": {
+            "present": 15139
+          },
+          "pct_mito": {
+            "present": 15139
+          },
+          "pct_ribo": {
+            "missing": 15139
+          },
+          "perturbation": {
+            "present": 15139
+          },
+          "perturbation_library": {
+            "not_applicable": 15139
+          },
+          "perturbation_technology": {
+            "present": 15139
+          },
+          "perturbation_type": {
+            "present": 15139
+          },
+          "pseudotime": {
+            "not_applicable": 6541,
+            "present": 8598
+          },
+          "response_metric": {
+            "not_applicable": 15139
+          },
+          "response_source": {
+            "not_applicable": 15139
+          },
+          "response_value": {
+            "not_applicable": 15139
+          },
+          "sample": {
+            "present": 15139
+          },
+          "sensitivity": {
+            "not_applicable": 15139
+          },
+          "sequencer": {
+            "present": 15139
+          },
+          "sex": {
+            "missing": 15139
+          },
+          "technology": {
+            "present": 15139
+          },
+          "timepoint": {
+            "not_applicable": 15139
+          },
+          "tissue_type": {
+            "present": 15139
+          },
+          "trajectory_id": {
+            "not_applicable": 6541,
+            "present": 8598
+          }
+        },
+        "frame_sha256": "4c8e9846cfdb1e458144d39488c7fd5e7f91ff023117e94c9863328ccc8b084b",
+        "obs_uuid_sha256": "5497dc5e792c0ba91f0cfde7815daf118d3cae8cec84c8da815ae078cf458100",
+        "original_obs_index_sha256": "dfa9af5e54c6c99f2b87d821223ec67afcaebfaad2f57c174cf260d3d5be0a76",
+        "outcomes_endpoints": {
+          "expression": {
+            "level": "cell",
+            "semantics": "accepted source X expression matrix"
+          },
+          "scalar_response_or_viability": {
+            "level": "none",
+            "verdict": "not_applicable"
+          }
+        },
+        "residual_unknowns": {
+          "pct_ribo": 15139,
+          "sex": 15139
+        },
+        "row_order_preserved": true,
+        "rows": 15139,
+        "scientific_modality": "single-cell RNA expression after inherited E2f7 knockout contrast"
+      },
+      "obs_history_count": 3,
+      "var": {
+        "created_at": "2026-07-18 14:07:26.619028+00:00",
+        "hash": "dbqVOe0D37EB6BNxDkeYaw",
+        "key": "data/cleaned/cellxgene-5584e9bf-1ff4-4a7d-84b8-d8e427713da5/var.parquet",
+        "size": 1139043,
+        "uid": "c3g8wTPDh8uLi7If0000"
+      },
+      "var_validation": {
+        "biological_features_total": 30146,
+        "correct_species_features": 30146,
+        "namespace": "Ensembl mouse gene (ENSMUSG)",
+        "revision_needed": false,
+        "species": "Mus musculus",
+        "stable_ensembl_id_features": 30146,
+        "stable_id_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409",
+        "status": "PASS"
+      },
+      "x": {
+        "created_at": "2026-07-18 14:07:25.100776+00:00",
+        "hash": "T3gP6XCLJicVSsURFrmmZQ",
+        "key": "data/cleaned/cellxgene-5584e9bf-1ff4-4a7d-84b8-d8e427713da5/X.h5ad",
+        "size": 348351276,
+        "uid": "qcwJUmigC6KHTgLy0000"
+      },
+      "x_validation": {
+        "artifact_hash": "T3gP6XCLJicVSsURFrmmZQ",
+        "artifact_size": 348351276,
+        "obs_axis_sha256": "dfa9af5e54c6c99f2b87d821223ec67afcaebfaad2f57c174cf260d3d5be0a76",
+        "revision_needed": false,
+        "shape": [
+          15139,
+          30146
+        ],
+        "status": "PASS",
+        "var_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409"
+      }
+    },
+    {
+      "artifact_prefix": "data/cleaned/cellxgene-567460ab-1af8-4df7-bf61-4aad9da2f94c",
+      "dataset_id": "567460ab-1af8-4df7-bf61-4aad9da2f94c",
+      "experiment": "timecourse_proliferating_stem_subset",
+      "feature_link_x_key": "data/cleaned/cellxgene-567460ab-1af8-4df7-bf61-4aad9da2f94c/X.h5ad",
+      "logical_prefix": "pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/cellxgene-567460ab-1af8-4df7-bf61-4aad9da2f94c",
+      "obs": {
+        "created_at": "2026-07-30 18:08:58.807210+00:00",
+        "hash": "rNnlqoV7gE8EmWFDWBfl0g",
+        "key": "data/cleaned/cellxgene-567460ab-1af8-4df7-bf61-4aad9da2f94c/obs.parquet",
+        "size": 1145611,
+        "uid": "Ka0maQW2uDV8RUYd0002"
+      },
+      "obs_curation": {
+        "experimental_axes": {
+          "biological_time": {
+            "canonical_timepoint_exposed": true,
+            "level": "sample projected to cell",
+            "row_frequencies": {
+              "12960": 1412,
+              "1440": 2226,
+              "4320": 1535,
+              "51840": 1501
+            },
+            "source_levels_minutes": [
+              1440,
+              4320,
+              12960,
+              51840
+            ],
+            "verdict": "multitimepoint_biological_axis"
+          },
+          "dose": {
+            "row_frequencies": {
+              "<missing>": 6674
+            },
+            "unit_frequencies": {
+              "<missing>": 6674
+            },
+            "verdict": "not_applicable"
+          },
+          "perturbation": {
+            "level": "not_applicable",
+            "row_frequencies": {
+              "<missing>": 6674
+            },
+            "verdict": "not_applicable"
+          },
+          "pseudotime": {
+            "level": "cell",
+            "present_rows": 2589,
+            "verdict": "computed_trajectory_coordinate"
+          }
+        },
+        "experimental_unit": {
+          "intervention_level": "not_applicable",
+          "observation": "single CELLxGENE cell",
+          "sample_assignment": "source orig.ident projected to cells"
+        },
+        "field_states": {
+          "age": {
+            "present": 6674
+          },
+          "assay": {
+            "present": 6674
+          },
+          "batch": {
+            "present": 6674
+          },
+          "cell_id": {
+            "present": 6674
+          },
+          "cell_line": {
+            "not_applicable": 6674
+          },
+          "cell_type": {
+            "present": 6674
+          },
+          "dataset": {
+            "present": 6674
+          },
+          "disease": {
+            "present": 6674
+          },
+          "donor_id": {
+            "present": 6674
+          },
+          "dose": {
+            "not_applicable": 6674
+          },
+          "dose_unit": {
+            "not_applicable": 6674
+          },
+          "ethnicity": {
+            "not_applicable": 6674
+          },
+          "guide_sequence": {
+            "not_applicable": 6674
+          },
+          "is_baseline": {
+            "present": 6674
+          },
+          "is_bulk": {
+            "present": 6674
+          },
+          "is_control": {
+            "present": 6674
+          },
+          "is_low_quality": {
+            "present": 6674
+          },
+          "is_pseudobulk": {
+            "present": 6674
+          },
+          "media": {
+            "present": 6674
+          },
+          "modality": {
+            "present": 6674
+          },
+          "molecule_sequence": {
+            "not_applicable": 6674
+          },
+          "n_counts": {
+            "present": 6674
+          },
+          "n_genes": {
+            "present": 6674
+          },
+          "organism": {
+            "present": 6674
+          },
+          "pct_mito": {
+            "present": 6674
+          },
+          "pct_ribo": {
+            "missing": 6674
+          },
+          "perturbation": {
+            "not_applicable": 6674
+          },
+          "perturbation_library": {
+            "not_applicable": 6674
+          },
+          "perturbation_technology": {
+            "not_applicable": 6674
+          },
+          "perturbation_type": {
+            "not_applicable": 6674
+          },
+          "pseudotime": {
+            "not_applicable": 4085,
+            "present": 2589
+          },
+          "response_metric": {
+            "not_applicable": 6674
+          },
+          "response_source": {
+            "not_applicable": 6674
+          },
+          "response_value": {
+            "not_applicable": 6674
+          },
+          "sample": {
+            "present": 6674
+          },
+          "sensitivity": {
+            "not_applicable": 6674
+          },
+          "sequencer": {
+            "present": 6674
+          },
+          "sex": {
+            "missing": 6674
+          },
+          "technology": {
+            "present": 6674
+          },
+          "timepoint": {
+            "present": 6674
+          },
+          "tissue_type": {
+            "present": 6674
+          },
+          "trajectory_id": {
+            "not_applicable": 4085,
+            "present": 2589
+          }
+        },
+        "frame_sha256": "c01a7bb739645400fbc6f57b5283dedce513df06d21d7f17915e478c7e52bd46",
+        "obs_uuid_sha256": "54266b89f7e54ca1f632a4441fa0dfecbd93f07d7f5922c8e3d702d730f63e09",
+        "original_obs_index_sha256": "5d379dfb0f1a0e82459ac7b81abf6eb094c5f4ce634ef1fb973e29b9e4aa1d1f",
+        "outcomes_endpoints": {
+          "expression": {
+            "level": "cell",
+            "semantics": "accepted source X expression matrix"
+          },
+          "scalar_response_or_viability": {
+            "level": "none",
+            "verdict": "not_applicable"
+          }
+        },
+        "residual_unknowns": {
+          "pct_ribo": 6674,
+          "sex": 6674
+        },
+        "row_order_preserved": true,
+        "rows": 6674,
+        "scientific_modality": "single-cell RNA expression during unperturbed air-liquid-interface differentiation"
+      },
+      "obs_history_count": 3,
+      "var": {
+        "created_at": "2026-07-18 14:07:31.081653+00:00",
+        "hash": "FlzAxjI472YFd4InIUp_SA",
+        "key": "data/cleaned/cellxgene-567460ab-1af8-4df7-bf61-4aad9da2f94c/var.parquet",
+        "size": 533732,
+        "uid": "P7Aq4zOIr3H69lIh0000"
+      },
+      "var_validation": {
+        "biological_features_total": 30146,
+        "correct_species_features": 30146,
+        "namespace": "Ensembl mouse gene (ENSMUSG)",
+        "revision_needed": false,
+        "species": "Mus musculus",
+        "stable_ensembl_id_features": 30146,
+        "stable_id_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409",
+        "status": "PASS"
+      },
+      "x": {
+        "created_at": "2026-07-18 14:07:29.560220+00:00",
+        "hash": "R-ILOKWPD0oQg6A0AsTD1Q",
+        "key": "data/cleaned/cellxgene-567460ab-1af8-4df7-bf61-4aad9da2f94c/X.h5ad",
+        "size": 401590232,
+        "uid": "412oy8YDvAjW3aaK0000"
+      },
+      "x_validation": {
+        "artifact_hash": "R-ILOKWPD0oQg6A0AsTD1Q",
+        "artifact_size": 401590232,
+        "obs_axis_sha256": "5d379dfb0f1a0e82459ac7b81abf6eb094c5f4ce634ef1fb973e29b9e4aa1d1f",
+        "revision_needed": false,
+        "shape": [
+          6674,
+          30146
+        ],
+        "status": "PASS",
+        "var_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409"
+      }
+    },
+    {
+      "artifact_prefix": "data/cleaned/cellxgene-659f6e10-86fd-4b76-bc5e-34f9a09f1580",
+      "dataset_id": "659f6e10-86fd-4b76-bc5e-34f9a09f1580",
+      "experiment": "e2f7_full",
+      "feature_link_x_key": "data/cleaned/cellxgene-659f6e10-86fd-4b76-bc5e-34f9a09f1580/X.h5ad",
+      "logical_prefix": "pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/cellxgene-659f6e10-86fd-4b76-bc5e-34f9a09f1580",
+      "obs": {
+        "created_at": "2026-07-30 18:09:04.812858+00:00",
+        "hash": "IPLCZvDe_UnsoZkXre_kDQ",
+        "key": "data/cleaned/cellxgene-659f6e10-86fd-4b76-bc5e-34f9a09f1580/obs.parquet",
+        "size": 5707662,
+        "uid": "MMvKTmm4JUjVmykr0002"
+      },
+      "obs_curation": {
+        "experimental_axes": {
+          "biological_time": {
+            "canonical_timepoint_exposed": false,
+            "level": "sample projected to cell",
+            "row_frequencies": {
+              "10080": 41958
+            },
+            "source_levels_minutes": [
+              10080
+            ],
+            "verdict": "single_timepoint_non_temporal"
+          },
+          "dose": {
+            "row_frequencies": {
+              "<missing>": 41958
+            },
+            "unit_frequencies": {
+              "<missing>": 41958
+            },
+            "verdict": "not_applicable"
+          },
+          "perturbation": {
+            "level": "mouse/sample",
+            "row_frequencies": {
+              "E2f7 homozygous knockout": 19931,
+              "E2f7 wild-type control": 22027
+            },
+            "verdict": "inherited_genotype_contrast"
+          },
+          "pseudotime": {
+            "level": "cell",
+            "present_rows": 8598,
+            "verdict": "computed_trajectory_coordinate"
+          }
+        },
+        "experimental_unit": {
+          "intervention_level": "mouse genotype/sample",
+          "observation": "single CELLxGENE cell",
+          "sample_assignment": "source orig.ident projected to cells"
+        },
+        "field_states": {
+          "age": {
+            "present": 41958
+          },
+          "assay": {
+            "present": 41958
+          },
+          "batch": {
+            "present": 41958
+          },
+          "cell_id": {
+            "present": 41958
+          },
+          "cell_line": {
+            "not_applicable": 41958
+          },
+          "cell_type": {
+            "present": 41958
+          },
+          "dataset": {
+            "present": 41958
+          },
+          "disease": {
+            "present": 41958
+          },
+          "donor_id": {
+            "present": 41958
+          },
+          "dose": {
+            "not_applicable": 41958
+          },
+          "dose_unit": {
+            "not_applicable": 41958
+          },
+          "ethnicity": {
+            "not_applicable": 41958
+          },
+          "guide_sequence": {
+            "not_applicable": 41958
+          },
+          "is_baseline": {
+            "present": 41958
+          },
+          "is_bulk": {
+            "present": 41958
+          },
+          "is_control": {
+            "present": 41958
+          },
+          "is_low_quality": {
+            "present": 41958
+          },
+          "is_pseudobulk": {
+            "present": 41958
+          },
+          "media": {
+            "present": 41958
+          },
+          "modality": {
+            "present": 41958
+          },
+          "molecule_sequence": {
+            "not_applicable": 41958
+          },
+          "n_counts": {
+            "present": 41958
+          },
+          "n_genes": {
+            "present": 41958
+          },
+          "organism": {
+            "present": 41958
+          },
+          "pct_mito": {
+            "present": 41958
+          },
+          "pct_ribo": {
+            "missing": 41958
+          },
+          "perturbation": {
+            "present": 41958
+          },
+          "perturbation_library": {
+            "not_applicable": 41958
+          },
+          "perturbation_technology": {
+            "present": 41958
+          },
+          "perturbation_type": {
+            "present": 41958
+          },
+          "pseudotime": {
+            "not_applicable": 33360,
+            "present": 8598
+          },
+          "response_metric": {
+            "not_applicable": 41958
+          },
+          "response_source": {
+            "not_applicable": 41958
+          },
+          "response_value": {
+            "not_applicable": 41958
+          },
+          "sample": {
+            "present": 41958
+          },
+          "sensitivity": {
+            "not_applicable": 41958
+          },
+          "sequencer": {
+            "present": 41958
+          },
+          "sex": {
+            "missing": 41958
+          },
+          "technology": {
+            "present": 41958
+          },
+          "timepoint": {
+            "not_applicable": 41958
+          },
+          "tissue_type": {
+            "present": 41958
+          },
+          "trajectory_id": {
+            "not_applicable": 33360,
+            "present": 8598
+          }
+        },
+        "frame_sha256": "cace3222da045f86925a7b8b7113e9d3a9f06c80407893df582938c6ef2a675a",
+        "obs_uuid_sha256": "fd81dbeaadbe8224a65ae08011f7c4a803edb03322e3d499f1f620826e812aa2",
+        "original_obs_index_sha256": "b9110f5855092975f96e45b61b8f12ab4a3fffb352a0f939d0d01004f5284f87",
+        "outcomes_endpoints": {
+          "expression": {
+            "level": "cell",
+            "semantics": "accepted source X expression matrix"
+          },
+          "scalar_response_or_viability": {
+            "level": "none",
+            "verdict": "not_applicable"
+          }
+        },
+        "residual_unknowns": {
+          "pct_ribo": 41958,
+          "sex": 41958
+        },
+        "row_order_preserved": true,
+        "rows": 41958,
+        "scientific_modality": "single-cell RNA expression after inherited E2f7 knockout contrast"
+      },
+      "obs_history_count": 3,
+      "var": {
+        "created_at": "2026-07-18 14:07:35.516090+00:00",
+        "hash": "lCZ7jf_nUNAPDYue9J7-DQ",
+        "key": "data/cleaned/cellxgene-659f6e10-86fd-4b76-bc5e-34f9a09f1580/var.parquet",
+        "size": 533607,
+        "uid": "q9j19DUT1gAHapG50000"
+      },
+      "var_validation": {
+        "biological_features_total": 30146,
+        "correct_species_features": 30146,
+        "namespace": "Ensembl mouse gene (ENSMUSG)",
+        "revision_needed": false,
+        "species": "Mus musculus",
+        "stable_ensembl_id_features": 30146,
+        "stable_id_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409",
+        "status": "PASS"
+      },
+      "x": {
+        "created_at": "2026-07-18 14:07:34.043091+00:00",
+        "hash": "CBXADPd34OX0lx02wvzQ7Q",
+        "key": "data/cleaned/cellxgene-659f6e10-86fd-4b76-bc5e-34f9a09f1580/X.h5ad",
+        "size": 857452931,
+        "uid": "K0Zi9Nem7Z1s4EVA0000"
+      },
+      "x_validation": {
+        "artifact_hash": "CBXADPd34OX0lx02wvzQ7Q",
+        "artifact_size": 857452931,
+        "obs_axis_sha256": "b9110f5855092975f96e45b61b8f12ab4a3fffb352a0f939d0d01004f5284f87",
+        "revision_needed": false,
+        "shape": [
+          41958,
+          30146
+        ],
+        "status": "PASS",
+        "var_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409"
+      }
+    },
+    {
+      "artifact_prefix": "data/cleaned/cellxgene-732a691e-4504-4226-aecf-5d627e062efc",
+      "dataset_id": "732a691e-4504-4226-aecf-5d627e062efc",
+      "experiment": "e2f7_proliferating_stem_subset",
+      "feature_link_x_key": "data/cleaned/cellxgene-732a691e-4504-4226-aecf-5d627e062efc/X.h5ad",
+      "logical_prefix": "pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/cellxgene-732a691e-4504-4226-aecf-5d627e062efc",
+      "obs": {
+        "created_at": "2026-07-30 18:09:10.211088+00:00",
+        "hash": "n_zUccwmsGZn0uKvM_xlqQ",
+        "key": "data/cleaned/cellxgene-732a691e-4504-4226-aecf-5d627e062efc/obs.parquet",
+        "size": 650456,
+        "uid": "sW76sHkMV3oZdAf80002"
+      },
+      "obs_curation": {
+        "experimental_axes": {
+          "biological_time": {
+            "canonical_timepoint_exposed": false,
+            "level": "sample projected to cell",
+            "row_frequencies": {
+              "10080": 3941
+            },
+            "source_levels_minutes": [
+              10080
+            ],
+            "verdict": "single_timepoint_non_temporal"
+          },
+          "dose": {
+            "row_frequencies": {
+              "<missing>": 3941
+            },
+            "unit_frequencies": {
+              "<missing>": 3941
+            },
+            "verdict": "not_applicable"
+          },
+          "perturbation": {
+            "level": "mouse/sample",
+            "row_frequencies": {
+              "E2f7 homozygous knockout": 1932,
+              "E2f7 wild-type control": 2009
+            },
+            "verdict": "inherited_genotype_contrast"
+          },
+          "pseudotime": {
+            "level": "cell",
+            "present_rows": 0,
+            "verdict": "not_available_for_member"
+          }
+        },
+        "experimental_unit": {
+          "intervention_level": "mouse genotype/sample",
+          "observation": "single CELLxGENE cell",
+          "sample_assignment": "source orig.ident projected to cells"
+        },
+        "field_states": {
+          "age": {
+            "present": 3941
+          },
+          "assay": {
+            "present": 3941
+          },
+          "batch": {
+            "present": 3941
+          },
+          "cell_id": {
+            "present": 3941
+          },
+          "cell_line": {
+            "not_applicable": 3941
+          },
+          "cell_type": {
+            "present": 3941
+          },
+          "dataset": {
+            "present": 3941
+          },
+          "disease": {
+            "present": 3941
+          },
+          "donor_id": {
+            "present": 3941
+          },
+          "dose": {
+            "not_applicable": 3941
+          },
+          "dose_unit": {
+            "not_applicable": 3941
+          },
+          "ethnicity": {
+            "not_applicable": 3941
+          },
+          "guide_sequence": {
+            "not_applicable": 3941
+          },
+          "is_baseline": {
+            "present": 3941
+          },
+          "is_bulk": {
+            "present": 3941
+          },
+          "is_control": {
+            "present": 3941
+          },
+          "is_low_quality": {
+            "present": 3941
+          },
+          "is_pseudobulk": {
+            "present": 3941
+          },
+          "media": {
+            "present": 3941
+          },
+          "modality": {
+            "present": 3941
+          },
+          "molecule_sequence": {
+            "not_applicable": 3941
+          },
+          "n_counts": {
+            "present": 3941
+          },
+          "n_genes": {
+            "present": 3941
+          },
+          "organism": {
+            "present": 3941
+          },
+          "pct_mito": {
+            "present": 3941
+          },
+          "pct_ribo": {
+            "missing": 3941
+          },
+          "perturbation": {
+            "present": 3941
+          },
+          "perturbation_library": {
+            "not_applicable": 3941
+          },
+          "perturbation_technology": {
+            "present": 3941
+          },
+          "perturbation_type": {
+            "present": 3941
+          },
+          "pseudotime": {
+            "not_applicable": 3941
+          },
+          "response_metric": {
+            "not_applicable": 3941
+          },
+          "response_source": {
+            "not_applicable": 3941
+          },
+          "response_value": {
+            "not_applicable": 3941
+          },
+          "sample": {
+            "present": 3941
+          },
+          "sensitivity": {
+            "not_applicable": 3941
+          },
+          "sequencer": {
+            "present": 3941
+          },
+          "sex": {
+            "missing": 3941
+          },
+          "technology": {
+            "present": 3941
+          },
+          "timepoint": {
+            "not_applicable": 3941
+          },
+          "tissue_type": {
+            "present": 3941
+          },
+          "trajectory_id": {
+            "not_applicable": 3941
+          }
+        },
+        "frame_sha256": "45bcbc9e773cfdc31008ee2db975eaac47e1c811b016a084994e4ae15194276a",
+        "obs_uuid_sha256": "e2b12fc450343d6f5d250e06a5f26eca8b89f910902f3e7940622580f0cd6724",
+        "original_obs_index_sha256": "690b1f3dcbc139542829445a82bc0bbfe31c9e068a602b0f86571050bf2ab3e0",
+        "outcomes_endpoints": {
+          "expression": {
+            "level": "cell",
+            "semantics": "accepted source X expression matrix"
+          },
+          "scalar_response_or_viability": {
+            "level": "none",
+            "verdict": "not_applicable"
+          }
+        },
+        "residual_unknowns": {
+          "pct_ribo": 3941,
+          "sex": 3941
+        },
+        "row_order_preserved": true,
+        "rows": 3941,
+        "scientific_modality": "single-cell RNA expression after inherited E2f7 knockout contrast"
+      },
+      "obs_history_count": 3,
+      "var": {
+        "created_at": "2026-07-18 14:07:39.957705+00:00",
+        "hash": "f8DQmU5vySOb1NOYRLdUHQ",
+        "key": "data/cleaned/cellxgene-732a691e-4504-4226-aecf-5d627e062efc/var.parquet",
+        "size": 700836,
+        "uid": "8rp3fBnjrRuBmtCf0000"
+      },
+      "var_validation": {
+        "biological_features_total": 30146,
+        "correct_species_features": 30146,
+        "namespace": "Ensembl mouse gene (ENSMUSG)",
+        "revision_needed": false,
+        "species": "Mus musculus",
+        "stable_ensembl_id_features": 30146,
+        "stable_id_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409",
+        "status": "PASS"
+      },
+      "x": {
+        "created_at": "2026-07-18 14:07:38.454500+00:00",
+        "hash": "i24jlqiJoPu4hRewNEn_ag",
+        "key": "data/cleaned/cellxgene-732a691e-4504-4226-aecf-5d627e062efc/X.h5ad",
+        "size": 70197049,
+        "uid": "b0qetCMT1ps5eJKV0000"
+      },
+      "x_validation": {
+        "artifact_hash": "i24jlqiJoPu4hRewNEn_ag",
+        "artifact_size": 70197049,
+        "obs_axis_sha256": "690b1f3dcbc139542829445a82bc0bbfe31c9e068a602b0f86571050bf2ab3e0",
+        "revision_needed": false,
+        "shape": [
+          3941,
+          30146
+        ],
+        "status": "PASS",
+        "var_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409"
+      }
+    },
+    {
+      "artifact_prefix": "data/cleaned/cellxgene-93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4",
+      "dataset_id": "93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4",
+      "experiment": "ribociclib_full",
+      "feature_link_x_key": "data/cleaned/cellxgene-93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4/X.h5ad",
+      "logical_prefix": "pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/cellxgene-93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4",
+      "obs": {
+        "created_at": "2026-07-30 18:09:15.804226+00:00",
+        "hash": "lW4gO8P7kB13CAy-W3Go8A",
+        "key": "data/cleaned/cellxgene-93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4/obs.parquet",
+        "size": 5490214,
+        "uid": "fAZscF97pt8KdU4u0002"
+      },
+      "obs_curation": {
+        "experimental_axes": {
+          "biological_time": {
+            "canonical_timepoint_exposed": false,
+            "level": "sample projected to cell",
+            "row_frequencies": {
+              "4320": 32932
+            },
+            "source_levels_minutes": [
+              4320
+            ],
+            "verdict": "single_timepoint_non_temporal"
+          },
+          "dose": {
+            "row_frequencies": {
+              "10.0": 14789,
+              "<missing>": 18143
+            },
+            "unit_frequencies": {
+              "<missing>": 18143,
+              "micromolar": 14789
+            },
+            "verdict": "treatment_dose_with_vehicle_concentration_unknown"
+          },
+          "perturbation": {
+            "level": "culture sample",
+            "row_frequencies": {
+              "DMSO vehicle control": 18143,
+              "ribociclib": 14789
+            },
+            "verdict": "pharmacological_treatment_contrast"
+          },
+          "pseudotime": {
+            "level": "cell",
+            "present_rows": 28980,
+            "verdict": "computed_trajectory_coordinate"
+          }
+        },
+        "experimental_unit": {
+          "intervention_level": "culture sample",
+          "observation": "single CELLxGENE cell",
+          "sample_assignment": "source orig.ident projected to cells"
+        },
+        "field_states": {
+          "age": {
+            "present": 32932
+          },
+          "assay": {
+            "present": 32932
+          },
+          "batch": {
+            "present": 32932
+          },
+          "cell_id": {
+            "present": 32932
+          },
+          "cell_line": {
+            "not_applicable": 32932
+          },
+          "cell_type": {
+            "present": 32932
+          },
+          "dataset": {
+            "present": 32932
+          },
+          "disease": {
+            "present": 32932
+          },
+          "donor_id": {
+            "present": 32932
+          },
+          "dose": {
+            "missing": 18143,
+            "present": 14789
+          },
+          "dose_unit": {
+            "missing": 18143,
+            "present": 14789
+          },
+          "ethnicity": {
+            "not_applicable": 32932
+          },
+          "guide_sequence": {
+            "not_applicable": 32932
+          },
+          "is_baseline": {
+            "present": 32932
+          },
+          "is_bulk": {
+            "present": 32932
+          },
+          "is_control": {
+            "present": 32932
+          },
+          "is_low_quality": {
+            "present": 32932
+          },
+          "is_pseudobulk": {
+            "present": 32932
+          },
+          "media": {
+            "present": 32932
+          },
+          "modality": {
+            "present": 32932
+          },
+          "molecule_sequence": {
+            "present": 32932
+          },
+          "n_counts": {
+            "present": 32932
+          },
+          "n_genes": {
+            "present": 32932
+          },
+          "organism": {
+            "present": 32932
+          },
+          "pct_mito": {
+            "present": 32932
+          },
+          "pct_ribo": {
+            "missing": 32932
+          },
+          "perturbation": {
+            "present": 32932
+          },
+          "perturbation_library": {
+            "not_applicable": 32932
+          },
+          "perturbation_technology": {
+            "present": 32932
+          },
+          "perturbation_type": {
+            "present": 32932
+          },
+          "pseudotime": {
+            "not_applicable": 3952,
+            "present": 28980
+          },
+          "response_metric": {
+            "not_applicable": 32932
+          },
+          "response_source": {
+            "not_applicable": 32932
+          },
+          "response_value": {
+            "not_applicable": 32932
+          },
+          "sample": {
+            "present": 32932
+          },
+          "sensitivity": {
+            "not_applicable": 32932
+          },
+          "sequencer": {
+            "present": 32932
+          },
+          "sex": {
+            "missing": 32932
+          },
+          "technology": {
+            "present": 32932
+          },
+          "timepoint": {
+            "not_applicable": 32932
+          },
+          "tissue_type": {
+            "present": 32932
+          },
+          "trajectory_id": {
+            "not_applicable": 3952,
+            "present": 28980
+          }
+        },
+        "frame_sha256": "0224472a389eae83a8237b5c0f5e093f9cca0448dbfc784312a2096f4ff6a633",
+        "obs_uuid_sha256": "8e3ae7066ddab6148d679a9318088ed7e74d20f2cc5f33fa6fe62486ef3d5f4a",
+        "original_obs_index_sha256": "9bd3081195f638f4927c7b9e70031cf2e7cae49a6b83f6b05cb24fbfca9a87e4",
+        "outcomes_endpoints": {
+          "expression": {
+            "level": "cell",
+            "semantics": "accepted source X expression matrix"
+          },
+          "scalar_response_or_viability": {
+            "level": "none",
+            "verdict": "not_applicable"
+          }
+        },
+        "residual_unknowns": {
+          "dose": 18143,
+          "dose_unit": 18143,
+          "pct_ribo": 32932,
+          "sex": 32932
+        },
+        "row_order_preserved": true,
+        "rows": 32932,
+        "scientific_modality": "single-cell RNA expression after ribociclib versus DMSO treatment"
+      },
+      "obs_history_count": 3,
+      "var": {
+        "created_at": "2026-07-18 14:07:44.381080+00:00",
+        "hash": "NLkDCyyiKcvM84Ec7Q6nJQ",
+        "key": "data/cleaned/cellxgene-93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4/var.parquet",
+        "size": 533687,
+        "uid": "2ljzs0Uwc7r7lJ4U0000"
+      },
+      "var_validation": {
+        "biological_features_total": 30146,
+        "correct_species_features": 30146,
+        "namespace": "Ensembl mouse gene (ENSMUSG)",
+        "revision_needed": false,
+        "species": "Mus musculus",
+        "stable_ensembl_id_features": 30146,
+        "stable_id_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409",
+        "status": "PASS"
+      },
+      "x": {
+        "created_at": "2026-07-18 14:07:42.909105+00:00",
+        "hash": "BaQYuNMDVmLH7wyDiYPWzw",
+        "key": "data/cleaned/cellxgene-93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4/X.h5ad",
+        "size": 2392854347,
+        "uid": "ePTKRSFzjazYyRx10000"
+      },
+      "x_validation": {
+        "artifact_hash": "BaQYuNMDVmLH7wyDiYPWzw",
+        "artifact_size": 2392854347,
+        "obs_axis_sha256": "9bd3081195f638f4927c7b9e70031cf2e7cae49a6b83f6b05cb24fbfca9a87e4",
+        "revision_needed": false,
+        "shape": [
+          32932,
+          30146
+        ],
+        "status": "PASS",
+        "var_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409"
+      }
+    },
+    {
+      "artifact_prefix": "data/cleaned/cellxgene-ae9e6a8c-83d6-4870-a7aa-e604f1c01752",
+      "dataset_id": "ae9e6a8c-83d6-4870-a7aa-e604f1c01752",
+      "experiment": "ribociclib_multiciliated_subset",
+      "feature_link_x_key": "data/cleaned/cellxgene-ae9e6a8c-83d6-4870-a7aa-e604f1c01752/X.h5ad",
+      "logical_prefix": "pert-gym/logical/temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/cellxgene-ae9e6a8c-83d6-4870-a7aa-e604f1c01752",
+      "obs": {
+        "created_at": "2026-07-30 18:09:21.446492+00:00",
+        "hash": "OSY96ZN2ugeKiQe54EQw6Q",
+        "key": "data/cleaned/cellxgene-ae9e6a8c-83d6-4870-a7aa-e604f1c01752/obs.parquet",
+        "size": 2235672,
+        "uid": "fC44ToMHjtwA7S5v0002"
+      },
+      "obs_curation": {
+        "experimental_axes": {
+          "biological_time": {
+            "canonical_timepoint_exposed": false,
+            "level": "sample projected to cell",
+            "row_frequencies": {
+              "4320": 13905
+            },
+            "source_levels_minutes": [
+              4320
+            ],
+            "verdict": "single_timepoint_non_temporal"
+          },
+          "dose": {
+            "row_frequencies": {
+              "10.0": 5645,
+              "<missing>": 8260
+            },
+            "unit_frequencies": {
+              "<missing>": 8260,
+              "micromolar": 5645
+            },
+            "verdict": "treatment_dose_with_vehicle_concentration_unknown"
+          },
+          "perturbation": {
+            "level": "culture sample",
+            "row_frequencies": {
+              "DMSO vehicle control": 8260,
+              "ribociclib": 5645
+            },
+            "verdict": "pharmacological_treatment_contrast"
+          },
+          "pseudotime": {
+            "level": "cell",
+            "present_rows": 13905,
+            "verdict": "computed_trajectory_coordinate"
+          }
+        },
+        "experimental_unit": {
+          "intervention_level": "culture sample",
+          "observation": "single CELLxGENE cell",
+          "sample_assignment": "source orig.ident projected to cells"
+        },
+        "field_states": {
+          "age": {
+            "present": 13905
+          },
+          "assay": {
+            "present": 13905
+          },
+          "batch": {
+            "present": 13905
+          },
+          "cell_id": {
+            "present": 13905
+          },
+          "cell_line": {
+            "not_applicable": 13905
+          },
+          "cell_type": {
+            "present": 13905
+          },
+          "dataset": {
+            "present": 13905
+          },
+          "disease": {
+            "present": 13905
+          },
+          "donor_id": {
+            "present": 13905
+          },
+          "dose": {
+            "missing": 8260,
+            "present": 5645
+          },
+          "dose_unit": {
+            "missing": 8260,
+            "present": 5645
+          },
+          "ethnicity": {
+            "not_applicable": 13905
+          },
+          "guide_sequence": {
+            "not_applicable": 13905
+          },
+          "is_baseline": {
+            "present": 13905
+          },
+          "is_bulk": {
+            "present": 13905
+          },
+          "is_control": {
+            "present": 13905
+          },
+          "is_low_quality": {
+            "present": 13905
+          },
+          "is_pseudobulk": {
+            "present": 13905
+          },
+          "media": {
+            "present": 13905
+          },
+          "modality": {
+            "present": 13905
+          },
+          "molecule_sequence": {
+            "present": 13905
+          },
+          "n_counts": {
+            "present": 13905
+          },
+          "n_genes": {
+            "present": 13905
+          },
+          "organism": {
+            "present": 13905
+          },
+          "pct_mito": {
+            "present": 13905
+          },
+          "pct_ribo": {
+            "missing": 13905
+          },
+          "perturbation": {
+            "present": 13905
+          },
+          "perturbation_library": {
+            "not_applicable": 13905
+          },
+          "perturbation_technology": {
+            "present": 13905
+          },
+          "perturbation_type": {
+            "present": 13905
+          },
+          "pseudotime": {
+            "present": 13905
+          },
+          "response_metric": {
+            "not_applicable": 13905
+          },
+          "response_source": {
+            "not_applicable": 13905
+          },
+          "response_value": {
+            "not_applicable": 13905
+          },
+          "sample": {
+            "present": 13905
+          },
+          "sensitivity": {
+            "not_applicable": 13905
+          },
+          "sequencer": {
+            "present": 13905
+          },
+          "sex": {
+            "missing": 13905
+          },
+          "technology": {
+            "present": 13905
+          },
+          "timepoint": {
+            "not_applicable": 13905
+          },
+          "tissue_type": {
+            "present": 13905
+          },
+          "trajectory_id": {
+            "present": 13905
+          }
+        },
+        "frame_sha256": "eac208a23bafc61ab05203cdbe212c07341b0529e830f15a49cf991eb92f3404",
+        "obs_uuid_sha256": "7ad1209a54a02eeff3147e6015449759c938c4dea3ddc449b315eb8fa2e417e4",
+        "original_obs_index_sha256": "c35f84ce3e5f450b916705f424663820ad0d43379cd54ee9aacfacf94d22c5a2",
+        "outcomes_endpoints": {
+          "expression": {
+            "level": "cell",
+            "semantics": "accepted source X expression matrix"
+          },
+          "scalar_response_or_viability": {
+            "level": "none",
+            "verdict": "not_applicable"
+          }
+        },
+        "residual_unknowns": {
+          "dose": 8260,
+          "dose_unit": 8260,
+          "pct_ribo": 13905,
+          "sex": 13905
+        },
+        "row_order_preserved": true,
+        "rows": 13905,
+        "scientific_modality": "single-cell RNA expression after ribociclib versus DMSO treatment"
+      },
+      "obs_history_count": 3,
+      "var": {
+        "created_at": "2026-07-18 14:07:48.844017+00:00",
+        "hash": "NLkDCyyiKcvM84Ec7Q6nJQ",
+        "key": "data/cleaned/cellxgene-ae9e6a8c-83d6-4870-a7aa-e604f1c01752/var.parquet",
+        "size": 533687,
+        "uid": "2TfwCP4XDksQF0RA0000"
+      },
+      "var_validation": {
+        "biological_features_total": 30146,
+        "correct_species_features": 30146,
+        "namespace": "Ensembl mouse gene (ENSMUSG)",
+        "revision_needed": false,
+        "species": "Mus musculus",
+        "stable_ensembl_id_features": 30146,
+        "stable_id_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409",
+        "status": "PASS"
+      },
+      "x": {
+        "created_at": "2026-07-18 14:07:47.345584+00:00",
+        "hash": "LEH9aXn2B5wuj-cyeJgmzQ",
+        "key": "data/cleaned/cellxgene-ae9e6a8c-83d6-4870-a7aa-e604f1c01752/X.h5ad",
+        "size": 1058434640,
+        "uid": "dKK4lXxsdaeOJn7v0000"
+      },
+      "x_validation": {
+        "artifact_hash": "LEH9aXn2B5wuj-cyeJgmzQ",
+        "artifact_size": 1058434640,
+        "obs_axis_sha256": "c35f84ce3e5f450b916705f424663820ad0d43379cd54ee9aacfacf94d22c5a2",
+        "revision_needed": false,
+        "shape": [
+          13905,
+          30146
+        ],
+        "status": "PASS",
+        "var_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409"
+      }
+    }
+  ],
+  "mode": "verify",
+  "obs_validation": {
+    "canonical_fields": 42,
+    "fabricated_values": false,
+    "members": 8,
+    "obs_uuid_global_unique": true,
+    "rows": 151275,
+    "state_source_evidence": true,
+    "status": "PASS"
+  },
+  "outcomes_endpoints": {
+    "expression": {
+      "level": "cell",
+      "semantics": "accepted source X expression matrices"
+    },
+    "scalar_response_or_viability": {
+      "level": "none",
+      "verdict": "not_applicable"
+    }
+  },
+  "registry_counts": {
+    "after": {
+      "artifacts": 28564,
+      "collections": 42
+    },
+    "before": {
+      "artifacts": 28564,
+      "collections": 42
+    }
+  },
+  "replay_noop": true,
+  "scientific_modality": {
+    "family": "single-cell RNA expression across one differentiation time course and two intervention contrasts",
+    "members": {
+      "e2f7_full": "single-cell RNA expression after inherited E2f7 knockout contrast",
+      "e2f7_multiciliated_subset": "single-cell RNA expression after inherited E2f7 knockout contrast",
+      "e2f7_proliferating_stem_subset": "single-cell RNA expression after inherited E2f7 knockout contrast",
+      "ribociclib_full": "single-cell RNA expression after ribociclib versus DMSO treatment",
+      "ribociclib_multiciliated_subset": "single-cell RNA expression after ribociclib versus DMSO treatment",
+      "timecourse_full": "single-cell RNA expression during unperturbed air-liquid-interface differentiation",
+      "timecourse_multiciliated_subset": "single-cell RNA expression during unperturbed air-liquid-interface differentiation",
+      "timecourse_proliferating_stem_subset": "single-cell RNA expression during unperturbed air-liquid-interface differentiation"
+    }
+  },
+  "source_exhaustive": true,
+  "source_manifest_sha256": "6aa8d7db71a5d6c86ec71f6b441c35d8821fac6b70f0418a2b1d60487759e205",
+  "status": "PASS",
+  "task_id": "t_b626108c",
+  "var_validation": {
+    "biological_features_total_per_member": 30146,
+    "correct_species_features_per_member": 30146,
+    "shared_axis_sha256": "819037845c972ee2b6e451bb603f6aa8c96cb86e8f74c2f77f2bb47070300409",
+    "stable_ensembl_id_features_per_member": 30146,
+    "status": "PASS"
+  },
+  "writes": {
+    "collection_writes": 0,
+    "deletions": 0,
+    "obs_revisions": 0,
+    "var_revisions": 0,
+    "x_revisions": 0
+  }
+}
