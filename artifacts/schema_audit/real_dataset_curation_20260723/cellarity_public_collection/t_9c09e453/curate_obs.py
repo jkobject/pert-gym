@@ -9,6 +9,7 @@ import json
 import os
 import platform
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -28,9 +29,12 @@ from pandas.testing import assert_frame_equal
 from tools.lamin_context import connect_pertdata
 from tools.pert_gym_vm_runner import (
     BILLING_PROJECT,
+    MIN_AVAILABLE_MEMORY_GB,
+    Preflight,
+    _available_memory_bytes,
     distributed_lamin_writer_lease,
     lamin_writer_lease,
-    preflight,
+    require_heavy_vm,
 )
 
 TASK_ID = "t_9c09e453"
@@ -47,6 +51,7 @@ CANONICAL_OBS_FIELDS = tuple(OBS_CONTRACT["canonical_obs_columns"])
 if len(CANONICAL_OBS_FIELDS) != OBS_CONTRACT["canonical_obs_column_count"]:
     raise AssertionError("binding OBS contract count drift")
 OBS_CONTRACT_SHA256 = hashlib.sha256(OBS_CONTRACT_PATH.read_bytes()).hexdigest()
+METADATA_MIN_FREE_DISK_GB = 10
 
 # These source-backed columns remain useful but are not part of the binding
 # OBS_COMPLETED/v1 denominator. Keeping the two sets separate prevents receipts
@@ -61,6 +66,32 @@ SUPPLEMENTAL_OBS_FIELDS = (
     "control_availability",
     "x_semantics",
 )
+
+
+def metadata_preflight() -> Preflight:
+    """Gate the metadata-only replay without pretending it needs 50 GiB scratch."""
+    hostname, project, zone, instance = require_heavy_vm()
+    free_disk = shutil.disk_usage(REPO_ROOT).free
+    available_memory = _available_memory_bytes()
+    if free_disk < METADATA_MIN_FREE_DISK_GB * 1024**3:
+        raise RuntimeError(
+            f"insufficient metadata-only disk: {free_disk / 1024**3:.1f} GiB free; "
+            f"need {METADATA_MIN_FREE_DISK_GB:.1f} GiB"
+        )
+    if available_memory < MIN_AVAILABLE_MEMORY_GB * 1024**3:
+        raise RuntimeError(
+            f"insufficient memory: {available_memory / 1024**3:.1f} GiB available; "
+            f"need {MIN_AVAILABLE_MEMORY_GB:.1f} GiB"
+        )
+    return Preflight(
+        hostname=hostname,
+        project=project,
+        zone=zone,
+        instance=instance,
+        free_disk_bytes=free_disk,
+        available_memory_bytes=available_memory,
+        billing_project=BILLING_PROJECT,
+    )
 
 
 def canonical_prefix(spec: dict[str, Any]) -> str:
@@ -1662,7 +1693,7 @@ def main() -> int:
     mode = sys.argv[1]
     if platform.system() == "Darwin":
         raise RuntimeError("refusing Mac execution")
-    capacity = preflight()
+    capacity = metadata_preflight()
     frozen = load_frozen_inputs()
     manifest = load_source_manifest()
     predecessor_evidence = load_predecessor_source_evidence()

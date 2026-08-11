@@ -305,6 +305,36 @@ def test_predecessor_receipt_is_accepted_for_source_join_not_mutation_credit() -
     )
 
 
+def test_metadata_preflight_keeps_exact_vm_and_bounded_capacity_gates(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    identity = (
+        "pert-gym-worker-eu",
+        "jkobject-1549353370965",
+        "europe-west1-b",
+        "pert-gym-worker-eu",
+    )
+    monkeypatch.setattr(curation, "require_heavy_vm", lambda: identity)
+    monkeypatch.setattr(curation, "_available_memory_bytes", lambda: 32 * 1024**3)
+    monkeypatch.setattr(
+        curation.shutil,
+        "disk_usage",
+        lambda _: SimpleNamespace(free=20 * 1024**3),
+    )
+
+    capacity = curation.metadata_preflight()
+
+    assert capacity.hostname == "pert-gym-worker-eu"
+    assert capacity.free_disk_bytes == 20 * 1024**3
+    monkeypatch.setattr(
+        curation.shutil,
+        "disk_usage",
+        lambda _: SimpleNamespace(free=9 * 1024**3),
+    )
+    with pytest.raises(RuntimeError, match="insufficient metadata-only disk"):
+        curation.metadata_preflight()
+
+
 def test_source_join_requires_exact_unique_index_order() -> None:
     obs = base_obs(["a", "b"])
     source = pd.DataFrame({"LIBRARY_ID": ["L1", "L2"]}, index=["b", "a"])
