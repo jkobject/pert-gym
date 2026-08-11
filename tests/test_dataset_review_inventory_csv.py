@@ -437,23 +437,49 @@ def test_accepted_wave_is_scoped_but_full_dod_remains_fail_closed() -> None:
             assert "canonical_data_cleaned_payload" in row["missing_requirements"]
 
 
-def test_full_dod_requires_the_accepted_head_integration_gate() -> None:
+@pytest.mark.parametrize(
+    ("gate", "missing_requirement"),
+    [
+        ("strict_obs_validated", "full_obs_validation"),
+        ("strict_var_validated", "var_validation_or_NA_disposition"),
+        ("chunks_or_structure_validated", "chunks_or_structure_validation"),
+        ("cleaning_validated", "cleaning_acceptance"),
+        ("lamin_registered", "add_to_lamin"),
+        ("in_versioned_collection", "add_to_versioned_collection"),
+        ("scientific_contract_bound", "scientific_contract_evidence"),
+        ("processing_decision_notebook", "executable_processing_decision_notebook"),
+        ("canonical_data_cleaned_payload", "canonical_data_cleaned_payload"),
+        ("accepted_head_integrated", "accepted_head_integration"),
+        ("staging_decommissioned_with_receipt", "staging_decommission_receipt"),
+        ("inventory_docs_same_snapshot_accepted", "accepted_inventory_docs_snapshot"),
+        ("exact_head_inventory_pr_merged", "merged_exact_head_inventory_pr"),
+    ],
+)
+def test_full_dod_fails_closed_when_any_mandatory_gate_is_absent(
+    gate: str, missing_requirement: str
+) -> None:
     row = next(row for row in build_rows() if row["accepted_wave"])
     candidate = dict(row)
-    candidate.update(
-        {
-            "scientific_contract_bound": True,
-            "processing_decision_notebook": True,
-            "canonical_data_cleaned_payload": True,
-            "accepted_head_integrated": False,
-            "staging_decommissioned_with_receipt": True,
-            "inventory_docs_same_snapshot_accepted": True,
-            "exact_head_inventory_pr_merged": True,
-        }
-    )
+    for required_gate in [
+        "strict_obs_validated",
+        "strict_var_validated",
+        "chunks_or_structure_validated",
+        "cleaning_validated",
+        "lamin_registered",
+        "in_versioned_collection",
+        "scientific_contract_bound",
+        "processing_decision_notebook",
+        "canonical_data_cleaned_payload",
+        "accepted_head_integrated",
+        "staging_decommissioned_with_receipt",
+        "inventory_docs_same_snapshot_accepted",
+        "exact_head_inventory_pr_merged",
+    ]:
+        candidate[required_gate] = True
+    candidate[gate] = False
     inventory_builder._finalize_row(candidate)
     assert not candidate["entirely_validated"]
-    assert "accepted_head_integration" in candidate["missing_requirements"]
+    assert missing_requirement in candidate["missing_requirements"]
 
 
 def test_every_incomplete_dataset_names_missing_requirements() -> None:

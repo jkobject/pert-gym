@@ -120,6 +120,11 @@ and X-axis parity.
 - The 60 base-public components map to 26 biological review units. Their frozen
   recoverable-existing OBS candidate universe has denominator 640; additions
   outside that universe never increment `/640`.
+- The separate 404-row storage inventory reserves `in_lamindb` for the **23
+  canonical cleaned** Lamin publications, exactly matching
+  `in_canonical_lamindb`. Its 176 working/historical catalog rows remain explicit
+  through catalog-status and branch/evidence fields but receive no publication
+  credit.
 - Missing applicable metadata remains `unknown`; genuinely inapplicable metadata
   is `not_applicable`.
 

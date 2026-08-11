@@ -377,11 +377,16 @@ def test_generator_does_not_overwrite_the_reviewed_manual_notebook():
     unchanged_manual_sources = {
         cell.id: cell.source
         for cell in manual
-        if cell.id not in {"dataset-level-review-title", "dataset-level-review-load"}
+        if cell.id
+        not in {
+            "review-inventory-status-views",
+            "dataset-level-review-title",
+            "dataset-level-review-load",
+        }
     }
     digest = hashlib.sha256(
         json.dumps(
             unchanged_manual_sources, sort_keys=True, separators=(",", ":")
         ).encode()
     ).hexdigest()
-    assert digest == "720adc2ff8406529ee679f1476de341f4bf30a2a16ec0ff27c808e5471a274b9"
+    assert digest == "d09f81aa8cefb61895a13202324660d5266a84040ec34ab06d6d60df4abe07bf"

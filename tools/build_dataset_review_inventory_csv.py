@@ -449,18 +449,8 @@ def _finalize_row(row: dict[str, Any]) -> None:
     )
     scoped = strict_scoped or bool(row["accepted_wave_scoped_validation"])
     row["scoped_scientific_validation_accepted"] = scoped
-    entire = scoped and all(
-        bool(row[key])
-        for key in [
-            "scientific_contract_bound",
-            "processing_decision_notebook",
-            "canonical_data_cleaned_payload",
-            "accepted_head_integrated",
-            "staging_decommissioned_with_receipt",
-            "inventory_docs_same_snapshot_accepted",
-            "exact_head_inventory_pr_merged",
-        ]
-    )
+    missing = _missing(row)
+    entire = not missing
     row["entirely_validated"] = entire
     row["entirely_validated_main_existing_dataset"] = entire and bool(
         row["main_dataset_or_similar_visible"]
@@ -468,7 +458,6 @@ def _finalize_row(row: dict[str, Any]) -> None:
     row["entirely_validated_jkobject_addition"] = entire and not bool(
         row["main_dataset_or_similar_visible"]
     )
-    missing = _missing(row)
     row["missing_requirements"] = ";".join(missing)
     row["next_review_focus"] = _focus(missing)
 
