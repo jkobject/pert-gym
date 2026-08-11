@@ -387,6 +387,10 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def ordered_sha256(values: pd.Index) -> str:
+    return sha256_bytes("\n".join(values.astype(str)).encode())
+
+
 def artifact_identity(artifact: Any) -> dict[str, Any]:
     return {
         "uid": str(artifact.uid),
@@ -545,6 +549,51 @@ def load_source_inputs(path: Path, columns: list[str]) -> pd.DataFrame:
         )
         frame.index = _frame_axis(obs)
     return frame
+
+
+def verify_var(var: pd.DataFrame, source_inspection: dict[str, Any]) -> dict[str, Any]:
+    if "feature_class" in var:
+        biological = var["feature_class"].astype("string").eq("gene")
+    elif "feature_types" in var:
+        biological = var["feature_types"].astype("string").eq("Gene Expression")
+    else:
+        biological = pd.Series(True, index=var.index, dtype="boolean")
+    stable = var.get("stable_feature_id", pd.Series(pd.NA, index=var.index)).astype(
+        "string"
+    )
+    statuses = var.get(
+        "stable_feature_id_mapping_status", pd.Series(pd.NA, index=var.index)
+    ).astype("string")
+    exact_ensembl = stable.str.fullmatch(r"ENSG[0-9]+", na=False)
+    exact_status = statuses.eq("exact_stable_id")
+    non_biological = ~biological
+    non_biological_na = statuses.str.startswith("not_applicable_non_gene_", na=False)
+    checks = {
+        "rows_match_source": len(var) == source_inspection["source_var_rows"],
+        "ordered_axis_matches_source": ordered_sha256(var.index)
+        == source_inspection["source_var_index_sha256"],
+        "every_biological_feature_has_exact_human_ensembl_id": bool(
+            (exact_ensembl[biological] & exact_status[biological]).all()
+        ),
+        "every_non_biological_feature_is_explicitly_not_applicable": bool(
+            non_biological_na[non_biological].all()
+        ),
+    }
+    if not all(checks.values()):
+        raise AssertionError(f"VAR Ensembl/species gate failed: {checks}")
+    return {
+        "status": "PASS",
+        "VAR_ENSEMBL_SPECIES_COMPLETED": True,
+        "organism": "Homo sapiens",
+        "species_evidence": "exact ENSG namespace on every biological gene feature",
+        "rows": len(var),
+        "biological_features_total": int(biological.sum()),
+        "stable_ensembl_id_features": int(exact_ensembl[biological].sum()),
+        "correct_species_features": int(exact_ensembl[biological].sum()),
+        "non_biological_features_not_applicable": int(non_biological.sum()),
+        "ordered_var_axis_sha256": ordered_sha256(var.index),
+        "checks": checks,
+    }
 
 
 def series_equal(left: pd.Series, right: pd.Series) -> bool:
@@ -1703,6 +1752,9 @@ def inspect_all(
         ):
             raise AssertionError(f"frozen source identity drift: {spec['prefix']}")
         result = current_member(ln, spec, None)
+        result["var_verification"] = verify_var(
+            result["var_artifact"].load(), source_record["inspection"]
+        )
         if require_curated and not result["already_curated"]:
             raise AssertionError(f"curated revision absent: {spec['prefix']}")
         if require_curated:

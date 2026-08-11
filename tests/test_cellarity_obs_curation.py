@@ -214,6 +214,36 @@ def test_staging_decommission_gate_is_fail_closed() -> None:
         )
 
 
+def test_var_gate_requires_exact_human_ensembl_ids_for_every_gene_feature() -> None:
+    var = pd.DataFrame(
+        {
+            "feature_class": ["gene", "gene", "chromatin_accessibility_peak"],
+            "stable_feature_id": ["ENSG00000121410", "ENSG00000175899", pd.NA],
+            "stable_feature_id_mapping_status": [
+                "exact_stable_id",
+                "exact_stable_id",
+                "not_applicable_non_gene_atac_peak",
+            ],
+        },
+        index=pd.Index(["A1BG", "A2M", "chr1:1-10"]),
+    )
+    source = {
+        "source_var_rows": 3,
+        "source_var_index_sha256": curation.ordered_sha256(var.index),
+    }
+
+    receipt = curation.verify_var(var, source)
+
+    assert receipt["VAR_ENSEMBL_SPECIES_COMPLETED"] is True
+    assert receipt["biological_features_total"] == 2
+    assert receipt["stable_ensembl_id_features"] == 2
+    assert receipt["non_biological_features_not_applicable"] == 1
+    broken = var.copy()
+    broken.loc["A2M", "stable_feature_id"] = pd.NA
+    with pytest.raises(AssertionError, match="VAR Ensembl/species gate failed"):
+        curation.verify_var(broken, source)
+
+
 def test_every_canonical_field_has_value_state_and_source_columns() -> None:
     index = ["c1"]
     source = pd.DataFrame(
