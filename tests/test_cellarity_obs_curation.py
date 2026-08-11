@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
 from types import SimpleNamespace
 
+import nbclient
+import nbformat
 import pandas as pd
 import pytest
 
@@ -17,6 +20,12 @@ assert SPEC is not None and SPEC.loader is not None
 curation = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(curation)
 EVIDENCE_ROOT = SCRIPT.parent
+PROCESSING_DECISIONS_NOTEBOOK = (
+    EVIDENCE_ROOT / "Cellarity_public_collection_processing_decisions.ipynb"
+)
+LIVE_RECEIPT_INDEX = EVIDENCE_ROOT / "live_receipt_index.json"
+AUTHORITATIVE_MUTATION_RECEIPT = EVIDENCE_ROOT / "authoritative_mutation_receipt.json"
+ZERO_WRITE_VERIFY_RECEIPT = EVIDENCE_ROOT / "zero_write_verify_receipt.json"
 OBS_CONTRACT = Path(__file__).parents[1] / "config/obs_completed_contract_v1.json"
 
 
@@ -339,6 +348,66 @@ def test_receipt_member_preserves_var_axis_verification() -> None:
     member = curation.strip_runtime(result)
 
     assert member["var_verification"] == verification
+
+
+def _canonical_receipt_sha256(receipt: dict[str, object]) -> str:
+    unsigned = {
+        key: value for key, value in receipt.items() if key != "canonical_sha256"
+    }
+    payload = json.dumps(
+        unsigned, sort_keys=True, separators=(",", ":"), default=str
+    ).encode()
+    return hashlib.sha256(payload).hexdigest()
+
+
+def test_committed_live_receipts_reconcile_authoritative_transition() -> None:
+    mutation = json.loads(AUTHORITATIVE_MUTATION_RECEIPT.read_text())
+    verify = json.loads(ZERO_WRITE_VERIFY_RECEIPT.read_text())
+    index = json.loads(LIVE_RECEIPT_INDEX.read_text())["receipts"]
+
+    for name, receipt in (
+        ("authoritative_mutation", mutation),
+        ("zero_write_verify", verify),
+    ):
+        assert receipt["status"] == "PASS"
+        assert receipt["canonical_sha256"] == _canonical_receipt_sha256(receipt)
+        assert index[name]["canonical_sha256"] == receipt["canonical_sha256"]
+        assert index[name]["remote"]["uri"].startswith(
+            "gs://scperturb/data/cleaned/cellarity_public_collection/_receipts/"
+        )
+
+    assert mutation["mode"] == "mutate"
+    assert mutation["registry_counts"] == {
+        "before": {"artifacts": 28590, "collections": 52},
+        "after": {"artifacts": 28600, "collections": 55},
+    }
+    assert mutation["writes"]["obs_revisions"] == 10
+    assert mutation["writes"]["collection_writes"] == 3
+    assert len(mutation["writes"]["artifacts"]) == 10
+    assert len(mutation["post_write_readback"]) == 10
+
+    assert verify["mode"] == "verify"
+    assert verify["replay_noop"] is True
+    assert verify["registry_counts"]["before"] == verify["registry_counts"]["after"]
+    assert verify["writes"]["obs_revisions"] == 0
+    assert verify["writes"]["collection_writes"] == 0
+    assert len(verify["members"]) == 10
+    proofs = [member["var_verification"] for member in verify["members"]]
+    assert all(proof["VAR_ENSEMBL_SPECIES_COMPLETED"] for proof in proofs)
+    assert {proof["axis_match_mode"] for proof in proofs} == {
+        "byte_exact",
+        "exact_ordered_case_normalization_bijection",
+    }
+    assert sum(not proof["source_axis_byte_exact"] for proof in proofs) == 3
+    assert verify["gcs_decommission"]["GCS_DECOMMISSION_READY"] is True
+    assert verify["gcs_decommission"]["objects_remaining"] == 0
+
+
+def test_processing_decisions_notebook_executes_offline() -> None:
+    notebook = nbformat.read(PROCESSING_DECISIONS_NOTEBOOK, as_version=4)
+    nbclient.NotebookClient(notebook, timeout=120, kernel_name="python3").execute(
+        cwd=Path(__file__).parents[1]
+    )
 
 
 def test_every_canonical_field_has_value_state_and_source_columns() -> None:

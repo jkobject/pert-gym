@@ -1,0 +1,41 @@
+{
+  "format": "pert-gym.live-receipt-index/v1",
+  "dataset_id": "cellarity/public-collection",
+  "lamin_instance": "laminlabs/pertdata",
+  "lamin_branch": "jkobject",
+  "receipts": {
+    "authoritative_mutation": {
+      "local_path": "artifacts/schema_audit/real_dataset_curation_20260723/cellarity_public_collection/t_9c09e453/authoritative_mutation_receipt.json",
+      "canonical_sha256": "12466181392258c8007f2adbce4034d0b2b62643b0ffce9a7103fda8e3a2d539",
+      "file_sha256": "f51a5cefc99c25e8b9db8b51cd38fa6c5c801d004da531b810b184f0e74fcaf2",
+      "remote": {
+        "uri": "gs://scperturb/data/cleaned/cellarity_public_collection/_receipts/mutate-receipt-20260811T151930Z.json",
+        "generation": 1786461571071443,
+        "etag": "CNP75PrvmJYDEAE=",
+        "size": 309163
+      }
+    },
+    "publication_plan": {
+      "local_path": "artifacts/schema_audit/real_dataset_curation_20260723/cellarity_public_collection/t_9c09e453/publication_plan_receipt.json",
+      "canonical_sha256": "0e709237d681aa39ae109901ca6b2e0731c5323719e712e812a5b393a4379610",
+      "file_sha256": "5d493fdb664ae6f23b6ea3d43c1d8b904e8c0d5ca1930ccfbea9f19753a65368",
+      "remote": {
+        "uri": "gs://scperturb/data/cleaned/cellarity_public_collection/_receipts/plan-receipt-20260811T150843Z.json",
+        "generation": 1786460923625467,
+        "etag": "CPv/h8btmJYDEAE=",
+        "size": 80651
+      }
+    },
+    "zero_write_verify": {
+      "local_path": "artifacts/schema_audit/real_dataset_curation_20260723/cellarity_public_collection/t_9c09e453/zero_write_verify_receipt.json",
+      "canonical_sha256": "2935283a1adae896c9cb1a95c5ca0aaf2457af8307834a4f328c4bebf3d337a0",
+      "file_sha256": "e331b10cd13e06f948ae40469560d5263c9a6f2db385678fb85934ba3f274004",
+      "remote": {
+        "uri": "gs://scperturb/data/cleaned/cellarity_public_collection/_receipts/verify-receipt-20260811T165744Z.json",
+        "generation": 1786467464918603,
+        "etag": "CMvsmPWFmZYDEAE=",
+        "size": 299180
+      }
+    }
+  }
+}
