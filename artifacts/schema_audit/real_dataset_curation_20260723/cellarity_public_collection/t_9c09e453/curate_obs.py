@@ -37,6 +37,7 @@ TASK_ID = "t_9c09e453"
 REAL_DATASET_ID = "cellarity/public-collection"
 SOURCE_MANIFEST_PATH = Path(__file__).with_name("source_manifest.json")
 FROZEN_BINDINGS_PATH = Path(__file__).with_name("frozen_inputs") / "bindings.json"
+PREDECESSOR_RECEIPT_PATH = Path(__file__).with_name("mutation_receipt.json")
 STAGING_PREFIX = "pert-gym/staging/pert-gym/curation/cellarity/t_9c09e453"
 RECEIPT_PREFIX = "data/cleaned/cellarity_public_collection/_receipts"
 REPO_ROOT = Path(__file__).parents[5]
@@ -416,6 +417,44 @@ def load_source_manifest() -> dict[str, Any]:
     if sum(item["n_obs"] for item in objects.values()) != 2_212_441:
         raise AssertionError("source manifest observation denominator drift")
     return manifest
+
+
+def load_predecessor_source_evidence() -> dict[str, Any]:
+    """Reuse frozen source-join proof while explicitly withholding mutation credit."""
+    receipt = json.loads(PREDECESSOR_RECEIPT_PATH.read_text())
+    claimed = receipt.pop("canonical_sha256", None)
+    actual = sha256_bytes(canonical(receipt).encode())
+    if claimed != actual:
+        raise AssertionError("predecessor receipt canonical digest drift")
+    if (
+        receipt.get("status") != "PASS"
+        or receipt.get("mode") != "mutate"
+        or receipt.get("writes", {}).get("obs_revisions") != 0
+        or receipt.get("registry_counts", {}).get("before")
+        != receipt.get("registry_counts", {}).get("after")
+    ):
+        raise AssertionError("predecessor source evidence classification drift")
+    members = {
+        item["identity"]["prefix"]: {
+            "source": item["source"],
+            "source_join": item["source_join"],
+        }
+        for item in receipt["members"]
+    }
+    if set(members) != {spec["prefix"] for spec in MEMBERS}:
+        raise AssertionError("predecessor source evidence denominator drift")
+    for prefix, member in members.items():
+        if not member["source_join"].get("exact_index_order_match"):
+            raise AssertionError(f"predecessor source join failed: {prefix}")
+    return {
+        "receipt_canonical_sha256": claimed,
+        "members": members,
+        "adjudication": {
+            "mutation_credit": False,
+            "reason": "receipt records zero writes and zero registry delta",
+            "source_join_evidence_reusable": True,
+        },
+    }
 
 
 def source_path(
@@ -1145,6 +1184,41 @@ def field_dispositions(frame: pd.DataFrame) -> dict[str, Any]:
     return result
 
 
+def revise_task_owned_obs(obs: pd.DataFrame, spec: dict[str, Any]) -> pd.DataFrame:
+    """Repair the binding contract without replaying the 74 GiB source inspection."""
+    revised = obs.copy(deep=True)
+    index = revised.index
+    if "molecule_sequence" not in revised:
+        set_field(
+            revised,
+            "molecule_sequence",
+            nulls(index),
+            "unknown",
+            "frozen source-join evidence contains no defensible molecule sequence",
+        )
+    if spec["accession"] == "GSE305370":
+        if "timepoint" not in revised:
+            raise AssertionError("task-owned GSE305370 OBS lacks canonical timepoint")
+        timepoint = pd.to_numeric(revised["timepoint"], errors="coerce").astype(
+            "Float64"
+        )
+        baseline = timepoint.eq(0).astype("boolean")
+        set_field(
+            revised,
+            "is_baseline",
+            baseline,
+            np.where(timepoint.notna(), "known", "unknown"),
+            "source-backed canonical timepoint; baseline is the earliest day-zero state",
+        )
+    for field in CANONICAL_OBS_FIELDS:
+        required = {field, f"{field}_state", f"{field}_source"}
+        if missing := required - set(revised.columns):
+            raise AssertionError(f"task-owned canonical OBS coverage drift: {missing}")
+    if len(revised) != len(obs) or not revised.index.equals(obs.index):
+        raise AssertionError("task-owned OBS row/order drift")
+    return revised
+
+
 def verify_obs(actual: pd.DataFrame, expected: pd.DataFrame) -> None:
     if not actual.index.equals(expected.index) or list(actual.columns) != list(
         expected.columns
@@ -1154,7 +1228,7 @@ def verify_obs(actual: pd.DataFrame, expected: pd.DataFrame) -> None:
 
 
 def current_member(
-    ln: Any, spec: dict[str, Any], source: pd.DataFrame
+    ln: Any, spec: dict[str, Any], source: pd.DataFrame | None
 ) -> dict[str, Any]:
     legacy_obs_key = f"{spec['prefix']}/obs.parquet"
     obs_key = f"{canonical_prefix(spec)}/obs.parquet"
@@ -1177,10 +1251,18 @@ def current_member(
             f"unexpected latest OBS identity: {obs_artifact.key} {obs_artifact.uid}"
         )
     obs = obs_artifact.load()
-    join = verify_source_join(obs, source, spec)
     task_owned = str(obs_artifact.description).startswith(
         f"{TASK_ID}: source-exhaustive Cellarity OBS"
     )
+    if source is None:
+        if not task_owned:
+            raise AssertionError(
+                f"frozen source evidence may revise only task-owned OBS: {spec['prefix']}"
+            )
+        frozen = load_predecessor_source_evidence()["members"][spec["prefix"]]
+        join = frozen["source_join"]
+    else:
+        join = verify_source_join(obs, source, spec)
     x_artifact = resolve_artifact(ln, obs_artifact.features.get_values()["X"])
     if str(x_artifact.uid) != spec["x_uid"] or str(x_artifact.hash) != spec["x_hash"]:
         raise AssertionError(f"OBS->X identity drift: {spec['prefix']}")
@@ -1189,10 +1271,13 @@ def current_member(
         raise AssertionError(f"X->VAR identity drift: {spec['prefix']}")
     already = False
     if task_owned:
-        baseline_artifact = resolve_artifact(ln, spec["before_obs_uid"])
-        baseline_obs = baseline_artifact.load()
-        verify_source_join(baseline_obs, source, spec)
-        curated = curate_obs(baseline_obs, source, spec)
+        if source is None:
+            curated = revise_task_owned_obs(obs, spec)
+        else:
+            baseline_artifact = resolve_artifact(ln, spec["before_obs_uid"])
+            baseline_obs = baseline_artifact.load()
+            verify_source_join(baseline_obs, source, spec)
+            curated = curate_obs(baseline_obs, source, spec)
         try:
             verify_obs(obs, curated)
         except AssertionError:
@@ -1526,14 +1611,24 @@ def remote_attestation(
 
 
 def inspect_all(
-    ln: Any, manifest: dict[str, Any], source_root: Path, require_curated: bool
+    ln: Any, manifest: dict[str, Any], require_curated: bool
 ) -> list[dict[str, Any]]:
     receipts = []
+    predecessor = load_predecessor_source_evidence()
     for index, spec in enumerate(MEMBERS, start=1):
         emit_product("verify", index - 1)
-        path, source_identity = source_path(spec, manifest, source_root)
-        source = load_source_inputs(path, spec["source_columns"])
-        result = current_member(ln, spec, source)
+        source_identity = predecessor["members"][spec["prefix"]]["source"]
+        source_record = next(
+            item
+            for item in manifest["target_source_objects"]
+            if item["filename"] == spec["filename"]
+        )
+        if any(
+            source_identity.get(key) != source_record.get(key)
+            for key in ("url", "size", "sha256", "n_obs")
+        ):
+            raise AssertionError(f"frozen source identity drift: {spec['prefix']}")
+        result = current_member(ln, spec, None)
         if require_curated and not result["already_curated"]:
             raise AssertionError(f"curated revision absent: {spec['prefix']}")
         if require_curated:
@@ -1557,7 +1652,7 @@ def inspect_all(
                 **strip_runtime(result),
             }
         )
-        del source, result
+        del result
     return receipts
 
 
@@ -1570,9 +1665,8 @@ def main() -> int:
     capacity = preflight()
     frozen = load_frozen_inputs()
     manifest = load_source_manifest()
+    predecessor_evidence = load_predecessor_source_evidence()
     helper_sha256 = sha256_file(Path(__file__))
-    source_root = Path(tempfile.gettempdir()) / f"{TASK_ID}-cellarity-sources"
-    source_root.mkdir(parents=True, exist_ok=True)
     ln = connect_pertdata()
     if (
         ln.setup.settings.instance.slug != "laminlabs/pertdata"
@@ -1619,9 +1713,7 @@ def main() -> int:
             published: dict[str, Any] = {}
             for index, spec in enumerate(MEMBERS, start=1):
                 emit_product("mutate", index - 1)
-                path, _ = source_path(spec, manifest, source_root)
-                source = load_source_inputs(path, spec["source_columns"])
-                result = current_member(ln, spec, source)
+                result = current_member(ln, spec, None)
                 for role, artifact, filename in (
                     ("X", result["x_artifact"], "X.h5ad"),
                     ("var", result["var_artifact"], "var.parquet"),
@@ -1637,7 +1729,7 @@ def main() -> int:
                 else:
                     artifact = result["obs_artifact"]
                 published[spec["prefix"]] = artifact
-                del source, result
+                del result
             collection_publication, collection_writes = ensure_successor_collections(
                 ln, published, allow_create=True
             )
@@ -1646,7 +1738,7 @@ def main() -> int:
             except AttributeError:
                 ln.context.finish()
     before_or_after = inspect_all(
-        ln, manifest, source_root, require_curated=mode in {"mutate", "verify"}
+        ln, manifest, require_curated=mode in {"mutate", "verify"}
     )
     if mode == "verify":
         published = {
@@ -1692,6 +1784,12 @@ def main() -> int:
             "sha256": OBS_CONTRACT_SHA256,
             "canonical_field_count": len(CANONICAL_OBS_FIELDS),
             "canonical_fields": list(CANONICAL_OBS_FIELDS),
+        },
+        "predecessor_receipt_adjudication": {
+            "receipt_canonical_sha256": predecessor_evidence[
+                "receipt_canonical_sha256"
+            ],
+            **predecessor_evidence["adjudication"],
         },
         "frozen_inputs": frozen["inputs"],
         "source_denominator": {

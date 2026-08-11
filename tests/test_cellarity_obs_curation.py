@@ -257,6 +257,54 @@ def test_supplemental_source_backed_fields_are_not_miscounted_as_canonical() -> 
     )
 
 
+def test_task_owned_revision_reuses_frozen_source_join_and_only_repairs_contract() -> (
+    None
+):
+    existing = curation.curate_obs(
+        base_obs(["day-zero", "day-two"]),
+        pd.DataFrame(
+            {
+                "day": [0, 2],
+                "donor": ["donor-1", "donor-1"],
+                "library": ["library-1", "library-1"],
+            },
+            index=["day-zero", "day-two"],
+        ),
+        member("gse305370_rna", 2),
+    )
+    existing = existing.drop(
+        columns=[
+            "molecule_sequence",
+            "molecule_sequence_state",
+            "molecule_sequence_source",
+        ]
+    )
+    existing["is_baseline"] = pd.Series(
+        [pd.NA, pd.NA], index=existing.index, dtype="boolean"
+    )
+    existing["is_baseline_state"] = "not_applicable"
+
+    revised = curation.revise_task_owned_obs(existing, member("gse305370_rna", 2))
+
+    assert revised["is_baseline"].tolist() == [True, False]
+    assert revised["is_baseline_state"].eq("known").all()
+    assert revised["molecule_sequence"].isna().all()
+    assert revised["molecule_sequence_state"].eq("unknown").all()
+    assert existing.index.equals(revised.index)
+    assert len(existing) == len(revised)
+
+
+def test_predecessor_receipt_is_accepted_for_source_join_not_mutation_credit() -> None:
+    evidence = curation.load_predecessor_source_evidence()
+
+    assert len(evidence["members"]) == 10
+    assert evidence["adjudication"]["mutation_credit"] is False
+    assert evidence["adjudication"]["source_join_evidence_reusable"] is True
+    assert evidence["receipt_canonical_sha256"] == (
+        "0f1429d634e8a8ac74ef50ccc8826a867e6652f9fc82a06d645fc64ad244c41c"
+    )
+
+
 def test_source_join_requires_exact_unique_index_order() -> None:
     obs = base_obs(["a", "b"])
     source = pd.DataFrame({"LIBRARY_ID": ["L1", "L2"]}, index=["b", "a"])
