@@ -479,6 +479,14 @@
           "timepoint_hr",
           "well"
         ],
+        "accepted_var_index_sha256": "15ad0354229911da0c2e72fa4e395b5ef7e19c2bd509f41fb35f7cff01daf40e",
+        "source_var_axis_case_normalization_mismatches": 170,
+        "source_var_axis_casefold_sha256": "34cfaf1d30c5bc3cf6552f8b5c8019c481c366160bfddb1893758588a05f2c35",
+        "source_var_axis_casefold_source": {
+          "filename": "GSE306429_combined_pseudobulk.h5ad",
+          "sha256": "ca113616caae7619c12b9acb0ed47c8abcd0867c3932f02b6316a83db32d2644",
+          "shared_axis_basis": "identical source_var_index_sha256"
+        },
         "source_var_index_sha256": "cd28ef5753f523e073b12ff25bd0cc470b5b1c8905e99c504af0195bc1ea41c1",
         "source_var_rows": 13290
       },
@@ -512,6 +520,14 @@
           "timepoint_hr",
           "well"
         ],
+        "accepted_var_index_sha256": "15ad0354229911da0c2e72fa4e395b5ef7e19c2bd509f41fb35f7cff01daf40e",
+        "source_var_axis_case_normalization_mismatches": 170,
+        "source_var_axis_casefold_sha256": "34cfaf1d30c5bc3cf6552f8b5c8019c481c366160bfddb1893758588a05f2c35",
+        "source_var_axis_casefold_source": {
+          "filename": "GSE306429_combined_pseudobulk.h5ad",
+          "sha256": "ca113616caae7619c12b9acb0ed47c8abcd0867c3932f02b6316a83db32d2644",
+          "shared_axis_basis": "identical source_var_index_sha256"
+        },
         "source_var_index_sha256": "cd28ef5753f523e073b12ff25bd0cc470b5b1c8905e99c504af0195bc1ea41c1",
         "source_var_rows": 13290
       },
@@ -540,6 +556,14 @@
           "replicate",
           "well"
         ],
+        "accepted_var_index_sha256": "15ad0354229911da0c2e72fa4e395b5ef7e19c2bd509f41fb35f7cff01daf40e",
+        "source_var_axis_case_normalization_mismatches": 170,
+        "source_var_axis_casefold_sha256": "34cfaf1d30c5bc3cf6552f8b5c8019c481c366160bfddb1893758588a05f2c35",
+        "source_var_axis_casefold_source": {
+          "filename": "GSE306429_combined_pseudobulk.h5ad",
+          "sha256": "ca113616caae7619c12b9acb0ed47c8abcd0867c3932f02b6316a83db32d2644",
+          "shared_axis_basis": "identical source_var_index_sha256"
+        },
         "source_var_index_sha256": "cd28ef5753f523e073b12ff25bd0cc470b5b1c8905e99c504af0195bc1ea41c1",
         "source_var_rows": 13290
       },

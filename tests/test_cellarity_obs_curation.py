@@ -273,6 +273,40 @@ def test_var_gate_uses_exact_source_axis_column_when_display_index_differs() -> 
     assert receipt["ordered_var_axis_sha256"] == curation.ordered_sha256(source_axis)
 
 
+def test_var_gate_accepts_only_frozen_one_to_one_case_normalization() -> None:
+    var = pd.DataFrame(
+        {
+            "pert_gym_original_var_index": ["C1orf159", "A2M"],
+            "stable_feature_id": ["ENSG00000121410", "ENSG00000175899"],
+            "stable_feature_id_mapping_status": ["exact_stable_id", "exact_stable_id"],
+        },
+        index=pd.Index(["C1orf159", "A2M"]),
+    )
+    accepted = pd.Index(var["pert_gym_original_var_index"])
+    source = pd.Index(["C1ORF159", "A2M"])
+    source_evidence = {
+        "source_var_rows": len(var),
+        "source_var_index_sha256": curation.ordered_sha256(source),
+        "accepted_var_index_sha256": curation.ordered_sha256(accepted),
+        "source_var_axis_casefold_sha256": curation.ordered_sha256(
+            pd.Index(source.str.casefold())
+        ),
+        "source_var_axis_case_normalization_mismatches": 1,
+    }
+
+    receipt = curation.verify_var(var, source_evidence)
+
+    assert receipt["axis_match_mode"] == "exact_ordered_case_normalization_bijection"
+    assert receipt["source_axis_byte_exact"] is False
+    assert receipt["axis_identity_source"] == "var.index"
+    assert receipt["source_axis_case_normalization_mismatches"] == 1
+
+    ambiguous = pd.concat([var, var.iloc[[0]]], ignore_index=True)
+    ambiguous_source = {**source_evidence, "source_var_rows": len(ambiguous)}
+    with pytest.raises(AssertionError, match="VAR Ensembl/species gate failed"):
+        curation.verify_var(ambiguous, ambiguous_source)
+
+
 def test_receipt_member_preserves_var_axis_verification() -> None:
     verification = {
         "status": "PASS",

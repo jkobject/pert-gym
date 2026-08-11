@@ -585,11 +585,36 @@ def verify_var(var: pd.DataFrame, source_inspection: dict[str, Any]) -> dict[str
         for source, digest in candidate_hashes.items()
         if digest == source_inspection["source_var_index_sha256"]
     ]
-    axis_identity_source = matching_sources[0] if matching_sources else "unresolved"
+    casefold_hashes = {
+        source: ordered_sha256(pd.Index(values.str.casefold()))
+        for source, values in axis_candidates.items()
+    }
+    normalized_sources = [
+        source
+        for source, digest in candidate_hashes.items()
+        if digest == source_inspection.get("accepted_var_index_sha256")
+        and casefold_hashes[source]
+        == source_inspection.get("source_var_axis_casefold_sha256")
+        and axis_candidates[source].is_unique
+    ]
+    axis_identity_source = (
+        matching_sources[0]
+        if matching_sources
+        else normalized_sources[0]
+        if normalized_sources
+        else "unresolved"
+    )
     axis_sha256 = candidate_hashes.get(axis_identity_source)
+    axis_match_mode = (
+        "byte_exact"
+        if matching_sources
+        else "exact_ordered_case_normalization_bijection"
+        if normalized_sources
+        else "unresolved"
+    )
     checks = {
         "rows_match_source": len(var) == source_inspection["source_var_rows"],
-        "ordered_axis_matches_source": bool(matching_sources),
+        "ordered_axis_matches_source": bool(matching_sources or normalized_sources),
         "every_biological_feature_has_exact_human_ensembl_id": bool(
             (exact_ensembl[biological] & exact_status[biological]).all()
         ),
@@ -611,8 +636,15 @@ def verify_var(var: pd.DataFrame, source_inspection: dict[str, Any]) -> dict[str
         "non_biological_features_not_applicable": int(non_biological.sum()),
         "ordered_var_axis_sha256": axis_sha256,
         "axis_identity_source": axis_identity_source,
+        "axis_match_mode": axis_match_mode,
+        "source_axis_byte_exact": bool(matching_sources),
+        "source_axis_case_normalization_mismatches": source_inspection.get(
+            "source_var_axis_case_normalization_mismatches", 0
+        ),
         "matching_axis_identity_sources": matching_sources,
+        "normalized_axis_identity_sources": normalized_sources,
         "axis_candidate_sha256": candidate_hashes,
+        "axis_candidate_casefold_sha256": casefold_hashes,
         "checks": checks,
     }
 
