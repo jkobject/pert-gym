@@ -1,0 +1,152 @@
+{
+  "format": "pert-gym.gse203592-source-evidence/v1",
+  "task_id": "t_40b72cca",
+  "real_dataset_id": "geo/GSE203592",
+  "dataset_id": "prism_collection/GSE203592",
+  "search_timestamp": "2026-07-23",
+  "search_effort_complete": true,
+  "publication": {
+    "title": "Genome-wide CRISPR screens of T cell exhaustion identify chromatin remodeling factors that limit T cell persistence",
+    "doi": "10.1016/j.ccell.2022.06.001",
+    "pmid": "35750052",
+    "pmcid": "PMC9949532",
+    "geo_accession": "GSE203592"
+  },
+  "sources_inspected": [
+    {
+      "name": "GEO GSE203592 family SOFT",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE203nnn/GSE203592/soft/GSE203592_family.soft.gz",
+      "bytes": 3432,
+      "sha256": "594c23198698b3ab2759dcdebcdece1e2721d8755915b9e5202a43e63b4b4af2",
+      "findings": [
+        "one Mus musculus Perturb-seq sample, GSM6160064",
+        "sample source is in-vivo CRISPR screen of ex-vivo-expanded CD8-positive T cells and tumor-infiltrating lymphocytes",
+        "raw sequencing platform is GPL19057 / Illumina NextSeq 500",
+        "processed source reported by GEO is GSE203592_integrated_v2.rds.gz"
+      ]
+    },
+    {
+      "name": "Cell article full text and Methods",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9949532/",
+      "findings": [
+        "direct-capture Perturb-seq used 10x Chromium Next GEM Single Cell V(D)J 5-prime v1.1 with Feature Barcoding",
+        "the custom pool comprised four guides for each of nine targets and 12 non-targeting controls, 48 sgRNAs total",
+        "targeting guides were designed using the Broad GPP sgRNA Design Tool",
+        "tumor cells were recovered 15 days post adoptive transfer",
+        "each replicate was one tumor or two tumors from one mouse combined; captures split for yield were computationally merged"
+      ]
+    },
+    {
+      "name": "Cell Table S2",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/9949532/bin/NIHMS1816251-supplement-3.xlsx",
+      "bytes": 13284,
+      "sha256": "ccd39fd1991551935898aecc0e5208186394110068d22167351e5d8874384789",
+      "findings": [
+        "Table S2 reports the selected genes and in-vivo screen statistics",
+        "Table S2 does not publish sgRNA nucleotide sequences or per-guide stable identifiers"
+      ]
+    },
+    {
+      "name": "Ensembl release 93 mouse GTF",
+      "url": "https://ftp.ensembl.org/pub/release-93/gtf/mus_musculus/Mus_musculus.GRCm38.93.gtf.gz",
+      "bytes": 29193889,
+      "sha256": "d88c3e541b2916e5fe4662cdc9ec2007a7b074d6e5ccf59f643229cf9b88d1dd",
+      "findings": [
+        "the 31,053-row source-symbol axis maps deterministically to unique ENSMUSG identifiers above the 99 percent acceptance threshold",
+        "Seurat make.unique suffix order resolves duplicate release-93 gene_name rows only when the source and axis multiplicities match",
+        "remaining ambiguous symbols retain an explicit source-symbol feature_index fallback"
+      ]
+    },
+    {
+      "name": "current exact Lamin OBS/X/VAR readback",
+      "obs_uid": "DQDHXFkEpvdiCySB0002",
+      "x_uid": "PhpiVnUwNAeZ26m40000",
+      "var_uid": "N0CJ8e8f2rE4PjL10001",
+      "findings": [
+        "OBS has 70,646 unique source-preserved cell_barcode/original_obs_index rows",
+        "experiment_id contains eight tumor/capture aggregates and orig_batch contains V35/V41",
+        "orig_guide contains 48 specific guide labels plus aggregate zMulti/zNone labels",
+        "source-preserved nCount_RNA, nFeature_RNA and percent.mt are complete",
+        "accepted X is 70,646 by 31,053 and is unchanged by this task",
+        "the prior VAR was incorrectly mapped against human Ensembl and contained only 14 ENSG identifiers"
+      ]
+    }
+  ],
+  "explicit_unresolved_fields": {
+    "guide_sequence": {
+      "state": "unknown",
+      "reason": "GEO, the paper Methods, the Key Resources Table, and Table S2 identify the 48-guide library but do not publish the nucleotide sequences; Broad GPP design-tool provenance is insufficient to reconstruct exact selected guides without stable guide identifiers",
+      "join_key": "orig_guide / guide_id",
+      "projection_guard": "do not substitute newly designed or current GPP candidate sequences for the unpublished historical library"
+    },
+    "perturbation_target_id": {
+      "state": "unknown",
+      "reason": "source provides mouse gene symbols but no stable target-ID namespace; do not infer a target ID independently of the exact guide library"
+    },
+    "donor_id": {
+      "state": "unknown",
+      "reason": "publication describes tumor/mouse replicate aggregation but the released cell table does not expose a stable donor/mouse identifier beyond experiment_id"
+    },
+    "sex": {
+      "state": "unknown",
+      "reason": "female tumor hosts are reported, but the transferred Pmel-1 donor T-cell sex is not cell-level joinable and is not projected"
+    },
+    "age": {
+      "state": "unknown",
+      "reason": "mouse age is not present in the released cell metadata"
+    },
+    "pct_ribo": {
+      "state": "unknown",
+      "reason": "not supplied in released cell metadata and not recomputed because this task does not rewrite X"
+    },
+    "is_low_quality": {
+      "state": "unknown",
+      "reason": "source-preserved scrub/scrub_score values are not documented as a binary low-quality decision"
+    }
+  },
+  "not_applicable_fields": {
+    "cell_line": "the assayed cells are primary mouse CD8-positive tumor-infiltrating T cells; MC38 is the tumor model, not the assayed cell line",
+    "dose": "genetic perturbation",
+    "dose_unit": "genetic perturbation",
+    "trajectory_id": "single endpoint without lineage trajectory",
+    "pseudotime": "single endpoint without inferred pseudotime",
+    "sensitivity": "not a response table",
+    "response_metric": "not a response table",
+    "response_value": "not a response table",
+    "response_source": "not a response table"
+  },
+  "reported_sources_not_claimed_inspected": [
+    {
+      "source": "GSE203592_integrated_v2.rds.gz",
+      "size_reported_by_GEO": "2.7G",
+      "reason": "the current PRISM OBS preserves the complete released Seurat metadata columns needed for exact row-level curation; no claim is made that the 2.7G RDS payload was reloaded by this task"
+    },
+    {
+      "source": "raw SRA FASTQ runs SRR20021035-SRR20021039",
+      "reason": "raw sequencing reads cannot recover unpublished guide design sequences or sample metadata joins without a separately specified reprocessing contract"
+    }
+  ],
+  "join_contract": {
+    "cell_identity": "cell_barcode equals original_obs_index for all 70,646 rows and remains unique",
+    "sample": "experiment_id is preserved as the source tumor/capture aggregate",
+    "batch": "orig_batch is preserved as V35/V41",
+    "guide": "only orig_guide labels matching the 36 target-guide or 12 CTRL1-guide identifiers become guide_id; zMulti/zNone aggregate classes remain unknown guide identities",
+    "control": "source is_control must exactly agree with condition == control",
+    "var": "VAR symbols remain in exact accepted X order; Ensembl release-93 gene_name mapping is species-correct and ambiguous rows use source-symbol fallback"
+  },
+  "scope_guards": {
+    "allowed_writes": [
+      "append-only OBS revision for prism_collection/GSE203592/obs.parquet",
+      "append-only VAR revision for prism_collection/GSE203592/var.parquet",
+      "OBS to accepted X link",
+      "accepted X to revised VAR link"
+    ],
+    "forbidden_writes": [
+      "X revisions",
+      "Collection membership changes",
+      "deletions",
+      "Lamin main writes",
+      "TxGNN or Jouvence resources"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "format": "pert-gym.frozen-input-bindings/v1",
+  "inputs": [
+    {
+      "binding_path": "artifacts/schema_audit/real_dataset_curation_20260723/geo_GSE203592/t_40b72cca/frozen_inputs/real_biological_dataset_crosswalk_120_families_20260716.json.gz",
+      "gzip_bytes": 52179,
+      "gzip_sha256": "8acbf5b4f6b88ed9676f5403990d01a4a6a755cf8f5ed21af6821a1a5babe908",
+      "original_path": "artifacts/schema_audit/real_biological_dataset_crosswalk_120_families_20260716.json",
+      "uncompressed_bytes": 806794,
+      "uncompressed_sha256": "65388d3d575d99961e2f8fb62d35dd38366d50268068ff144445af6530b54a9b"
+    },
+    {
+      "binding_path": "artifacts/schema_audit/real_dataset_curation_20260723/geo_GSE203592/t_40b72cca/frozen_inputs/final_real_dataset_obs_var_20260717.json.gz",
+      "gzip_bytes": 612434,
+      "gzip_sha256": "28fc912fa9c270ca42a710984b0479dce761cd0467b1467f4602254b543dacff",
+      "original_path": "artifacts/schema_audit/final_real_dataset_obs_var_20260717.json",
+      "uncompressed_bytes": 17879030,
+      "uncompressed_sha256": "60530cc3a14fe28e1dbf06c9f62b3e993649750069287083e4351aea3f8318df"
+    }
+  ]
+}
