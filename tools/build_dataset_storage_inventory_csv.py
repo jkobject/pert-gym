@@ -182,7 +182,7 @@ def _empty_layer_row(dataset_name: str) -> dict[str, Any]:
         "cleaned_objects": 0,
         "cleaned_bytes": 0,
         "cleaned_size": "0 B",
-        "in_lamindb": True,
+        "in_lamindb": False,
         "lamin_artifacts": 0,
         "lamin_bytes": 0,
         "lamin_size": "unknown",
@@ -257,8 +257,8 @@ def _build_rows_from_evidence(
         matched = _match_cleaned_name(lamin_row, cleaned_names)
         dataset_name = matched or lamin_row["dataset_id"]
         target = rows_by_name.setdefault(dataset_name, _empty_layer_row(dataset_name))
-        target["in_lamindb"] = True
         is_canonical_lamin = matched in canonical_lamin_names
+        target["in_lamindb"] = is_canonical_lamin
         lamin_layer = (
             "canonical LaminDB"
             if is_canonical_lamin
@@ -354,7 +354,13 @@ def build_rows(
     names = [str(row["dataset_name"]) for row in base_rows]
     if len(names) != 404 or len(set(names)) != 404:
         raise RuntimeError("frozen storage inventory must contain 404 unique rows")
-    return sorted(base_rows, key=lambda row: str(row["dataset_name"]).lower())
+    rows = [dict(row) for row in base_rows]
+    for row in rows:
+        # Historical/working catalog evidence remains available in the explicit
+        # Lamin metadata columns. Reserve this broad-facing boolean for accepted
+        # canonical cleaned publication only.
+        row["in_lamindb"] = _truth(row["in_canonical_lamindb"])
+    return sorted(rows, key=lambda row: str(row["dataset_name"]).lower())
 
 
 def main() -> int:
@@ -383,8 +389,15 @@ def main() -> int:
         writer.writeheader()
         writer.writerows(rows)
     complete = sum(_truth(row["completely_done"]) for row in rows)
-    catalog_without_raw_or_cleaned = sum(
+    canonical_lamin_without_raw_or_cleaned = sum(
         _truth(row["in_lamindb"])
+        and not _truth(row["in_raw"])
+        and not _truth(row["in_cleaned"])
+        for row in rows
+    )
+    historical_catalog_without_raw_or_cleaned = sum(
+        row["lamin_catalog_status"]
+        == "working_or_historical_not_in_canonical_cleaned_layout"
         and not _truth(row["in_raw"])
         and not _truth(row["in_cleaned"])
         for row in rows
@@ -394,7 +407,8 @@ def main() -> int:
             {
                 "rows": len(rows),
                 "completely_done": complete,
-                "catalog_without_raw_or_cleaned": catalog_without_raw_or_cleaned,
+                "canonical_lamin_without_raw_or_cleaned": canonical_lamin_without_raw_or_cleaned,
+                "historical_catalog_without_raw_or_cleaned": historical_catalog_without_raw_or_cleaned,
                 "output": str(args.output),
                 "lamin_evidence": LAMIN_SNAPSHOT_LABEL,
             },

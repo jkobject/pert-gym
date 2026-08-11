@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import json
 import re
 import subprocess
 from pathlib import Path
@@ -35,32 +36,43 @@ def test_inventory_includes_lamin_only_and_fail_closed_completion() -> None:
     rebuilt = module.build_rows(rows)
 
     assert len(rebuilt) == 404
-    lamin_only = [
+    historical_catalog_only = [
         row
         for row in rebuilt
-        if module._truth(row["in_lamindb"])
+        if row["lamin_catalog_status"]
+        == "working_or_historical_not_in_canonical_cleaned_layout"
         and not module._truth(row["in_raw"])
         and not module._truth(row["in_cleaned"])
     ]
-    assert len(lamin_only) == 172
-    assert "DRUG-seq" in {row["dataset_name"] for row in lamin_only}
+    assert len(historical_catalog_only) == 172
+    assert "DRUG-seq" in {row["dataset_name"] for row in historical_catalog_only}
     assert "excluded/vars_helpers" not in {row["dataset_name"] for row in rebuilt}
-    assert all(row["lamin_inventory_evidence"] for row in lamin_only)
-    assert {row["lamin_branch_scope"] for row in lamin_only} == {
+    assert all(row["lamin_inventory_evidence"] for row in historical_catalog_only)
+    assert {row["lamin_branch_scope"] for row in historical_catalog_only} == {
         "jkobject_only",
         "main_and_jkobject_with_jkobject_revision",
     }
     assert all(
         row["lamin_catalog_status"]
         == "working_or_historical_not_in_canonical_cleaned_layout"
-        for row in lamin_only
+        for row in historical_catalog_only
     )
-    assert all(not module._truth(row["in_canonical_lamindb"]) for row in lamin_only)
-    assert sum(row["lamin_branch_scope"] == "jkobject_only" for row in lamin_only) == 62
+    assert all(not module._truth(row["in_lamindb"]) for row in historical_catalog_only)
+    assert all(
+        not module._truth(row["in_canonical_lamindb"])
+        for row in historical_catalog_only
+    )
+    assert (
+        sum(
+            row["lamin_branch_scope"] == "jkobject_only"
+            for row in historical_catalog_only
+        )
+        == 62
+    )
     assert (
         sum(
             row["lamin_branch_scope"] == "main_and_jkobject_with_jkobject_revision"
-            for row in lamin_only
+            for row in historical_catalog_only
         )
         == 110
     )
@@ -84,6 +96,22 @@ def test_inventory_includes_lamin_only_and_fail_closed_completion() -> None:
     assert all(module._truth(row["structurally_done"]) for row in complete)
 
 
+def test_in_lamindb_is_reserved_for_canonical_cleaned_publication() -> None:
+    module = load_module()
+    rows = read_rows()
+
+    canonical = [row for row in rows if module._truth(row["in_canonical_lamindb"])]
+    published = [row for row in rows if module._truth(row["in_lamindb"])]
+
+    assert len(canonical) == 23
+    assert published == canonical
+    assert all(
+        module._truth(row["in_canonical_lamindb"])
+        for row in rows
+        if module._truth(row["in_lamindb"])
+    )
+
+
 def test_user_notebook_exposes_complete_and_branch_scoped_catalog_views() -> None:
     notebook = nbformat.read(NOTEBOOK, as_version=4)
     cells = {cell.get("id"): cell for cell in notebook.cells}
@@ -95,6 +123,8 @@ def test_user_notebook_exposes_complete_and_branch_scoped_catalog_views() -> Non
     assert "both_branches_jkobject_revision" in source
     assert "lamin_only_datasets" not in source
     assert "completely_done == True" in source
+    assert "lamin_catalog_status ==" in source
+    assert "in_lamindb == True and in_canonical_lamindb == False" not in source
 
     for cell_id in ("94a5cecf", "b1ac96df"):
         assert cells[cell_id].cell_type == "markdown"
@@ -128,7 +158,12 @@ def test_committed_storage_csv_is_deterministic(tmp_path: Path) -> None:
         "--output",
         str(rebuilt),
     ]
-    subprocess.run(command, cwd=ROOT, check=True, capture_output=True, text=True)
+    completed = subprocess.run(
+        command, cwd=ROOT, check=True, capture_output=True, text=True
+    )
+    summary = json.loads(completed.stdout)
+    assert summary["historical_catalog_without_raw_or_cleaned"] == 172
+    assert summary["canonical_lamin_without_raw_or_cleaned"] == 0
     first = rebuilt.read_bytes()
     subprocess.run(command, cwd=ROOT, check=True, capture_output=True, text=True)
     assert rebuilt.read_bytes() == first

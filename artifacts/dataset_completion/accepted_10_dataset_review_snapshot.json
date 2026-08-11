@@ -1,0 +1,486 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "accepted-10-review-reconciliation@2026-08-11",
+  "dataset_count": 10,
+  "integration": {
+    "pull_request": 135,
+    "merge_commit": "36c7e02fdf0421f7844918ed646e49a6322ed30f",
+    "manifest": "artifacts/dataset_completion/accepted_10_of_10_integration_manifest.json",
+    "policy": "Exact independently accepted dataset-scoped blobs were integrated; this does not by itself satisfy the stronger whole-project dataset Definition of Done."
+  },
+  "unit_contract": {
+    "inventory_row": "one canonical scientific dataset/publication identity",
+    "not_equivalent_units": [
+      "logical family",
+      "physical member",
+      "raw prefix",
+      "cleaned unit",
+      "Lamin Artifact",
+      "Collection member"
+    ]
+  },
+  "denominator_reconciliation": {
+    "inventory_rows": 92,
+    "strict_ledger_rows": 70,
+    "genuinely_new_family_rows": 22,
+    "accepted_wave_rows": 10,
+    "accepted_wave_overlap_with_prior_scoped_complete": 0,
+    "accepted_wave_overlap_with_strict_70_exact_ids": 0,
+    "strict_70_alias_reconciliation": "unresolved_no_counter_credit",
+    "scoped_validation_before": 8,
+    "scoped_validation_after": 18,
+    "full_dod_before": 0,
+    "full_dod_after": 0
+  },
+  "full_dod_policy": {
+    "required_gates": [
+      "scientific_fields_complete_or_honestly_dispositioned",
+      "executable_processing_decision_notebook",
+      "canonical_data_cleaned_payload_with_obs_X_var_links",
+      "canonical_jkobject_publication",
+      "accepted_append_only_collection",
+      "staging_decommission_receipt_after_parity_readback_and_rollback_proof",
+      "inventory_TODO_and_docs_same_accepted_snapshot",
+      "independently_reviewed_merged_exact_head_inventory_PR"
+    ],
+    "current_snapshot_status": "pending_independent_review",
+    "full_dod_complete_rows": 0
+  },
+  "datasets": [
+    {
+      "canonical_dataset_id": "temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation",
+      "aliases": [
+        "GSE228110",
+        "temporal_v4_098_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation"
+      ],
+      "accepted_head": "8d97b16affb53564199044508ed3f709008fdfd7",
+      "producer_task_id": "t_b626108c",
+      "reviewer_task_id": "t_f8df2f65",
+      "physical_member_count": 8,
+      "observations": 151275,
+      "payload_prefixes": [
+        "data/cleaned/cellxgene-10a44ac3-09a6-42d1-9052-179e20bb2261",
+        "data/cleaned/cellxgene-2ae39b65-06f8-4dd8-891f-efc68f39a1c6",
+        "data/cleaned/cellxgene-5584e9bf-1ff4-4a7d-84b8-d8e427713da5",
+        "data/cleaned/cellxgene-567460ab-1af8-4df7-bf61-4aad9da2f94c",
+        "data/cleaned/cellxgene-659f6e10-86fd-4b76-bc5e-34f9a09f1580",
+        "data/cleaned/cellxgene-732a691e-4504-4226-aecf-5d627e062efc",
+        "data/cleaned/cellxgene-93dd56b0-5cac-4a99-b5cc-e0f2af2fd6b4",
+        "data/cleaned/cellxgene-ae9e6a8c-83d6-4870-a7aa-e604f1c01752"
+      ],
+      "canonical_data_cleaned_payload": true,
+      "scientific_modality": "single-cell RNA expression across an air-liquid-interface differentiation time course, inherited E2f7 genotype contrasts, and ribociclib versus DMSO contrasts",
+      "experimental_axes": {
+        "timecourse": "sample-projected biological time with cell-level pseudotime",
+        "e2f7": "inherited genotype contrast",
+        "ribociclib": "drug versus DMSO contrast"
+      },
+      "outcomes_endpoints": {
+        "expression": "cell-level accepted source X",
+        "scalar_response_or_viability": "not_applicable"
+      },
+      "annotation_level": "sample-level conditions projected to cells; cell-level pseudotime where source-supported",
+      "source_evidence": [
+        "GSE228110",
+        "artifacts/dataset_completion/temporal_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/source_manifest.json",
+        "artifacts/dataset_completion/temporal_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/completion_receipt.json"
+      ],
+      "processing_decision_notebook_path": "artifacts/dataset_completion/temporal_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/processing_decisions.ipynb",
+      "integration_dataset": "GSE228110",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/completion_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/source_manifest.json",
+        "artifacts/dataset_completion/temporal_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/completion_receipt.json"
+      ]
+    },
+    {
+      "canonical_dataset_id": "temporal/c_elegans_embryogenesis",
+      "aliases": [
+        "C. elegans embryogenesis",
+        "figshare:22491340",
+        "temporal_v4_057_c_elegans_embryogenesis"
+      ],
+      "accepted_head": "92111fbdf860828df71a039e5d2ccf9ffe4cbabb",
+      "producer_task_id": "t_a62edaa7",
+      "reviewer_task_id": "t_fd4e1a1a",
+      "physical_member_count": 1,
+      "observations": 46151,
+      "payload_prefixes": [
+        "data/cleaned/c_elegans_embryogenesis"
+      ],
+      "canonical_data_cleaned_payload": true,
+      "scientific_modality": "single-cell RNA expression developmental atlas",
+      "experimental_axes": {
+        "biological_developmental_time": "99 source-supported minute levels",
+        "batch": "technical or collection grouping"
+      },
+      "outcomes_endpoints": {
+        "expression": "cell-level expression",
+        "perturbation_response_viability_survival_disease": "none"
+      },
+      "annotation_level": "cell-level developmental time and expression; dataset/source-level provenance",
+      "source_evidence": [
+        "figshare article 22491340 file 39943585 md5 c3a37ca238921fcec7bd5e9faa6118f1",
+        "DOI:10.1126/science.aax1971",
+        "artifacts/dataset_completion/temporal__c_elegans_embryogenesis/verification_receipt.json"
+      ],
+      "processing_decision_notebook_path": "artifacts/dataset_completion/temporal__c_elegans_embryogenesis/processing_decisions.ipynb",
+      "integration_dataset": "C. elegans embryogenesis",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal__c_elegans_embryogenesis/verification_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal__c_elegans_embryogenesis/source_manifest.json",
+        "artifacts/dataset_completion/temporal__c_elegans_embryogenesis/verification_receipt.json"
+      ]
+    },
+    {
+      "canonical_dataset_id": "temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq",
+      "aliases": [
+        "E-MTAB-9304",
+        "temporal_v4_059_drosophila_embryo_dorsal_ventral_patterning_scrna_seq"
+      ],
+      "accepted_head": "fdd88db96616408d7d15689b49cd0ed4f90f52bd",
+      "producer_task_id": "t_851469bf",
+      "reviewer_task_id": "t_5049b6c0",
+      "physical_member_count": 1,
+      "observations": 119362,
+      "payload_prefixes": [
+        "pert-gym/logical/temporal/drosophila_embryo_dorsal_ventral_patterning_scrna_seq"
+      ],
+      "canonical_data_cleaned_payload": false,
+      "scientific_modality": "single-cell RNA expression",
+      "experimental_axes": {
+        "maternal_genotype": "five-level perturbation axis",
+        "collection_age": "single dataset-level 2.5-3.5 hour window",
+        "developmental_stage": "single stage-5 context"
+      },
+      "outcomes_endpoints": {
+        "expression": "source raw single-cell RNA counts",
+        "inferred_cell_type": "source annotation for 16786 rows",
+        "response_endpoint": "not_applicable"
+      },
+      "annotation_level": "cell-level expression and partial inferred cell type; genotype joined from sample characteristics",
+      "source_evidence": [
+        "BioStudies E-MTAB-9304",
+        "artifacts/dataset_completion/temporal__drosophila_dv_patterning/latest_receipt.json",
+        "artifacts/dataset_completion/temporal__drosophila_dv_patterning/gate_summary.json"
+      ],
+      "processing_decision_notebook_path": null,
+      "integration_dataset": "Drosophila E-MTAB-9304",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal__drosophila_dv_patterning/latest_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal__drosophila_dv_patterning/gate_summary.json",
+        "artifacts/dataset_completion/temporal__drosophila_dv_patterning/latest_receipt.json"
+      ]
+    },
+    {
+      "canonical_dataset_id": "temporal/organoiddb_odd001099_gse138002",
+      "aliases": [
+        "GSE138002",
+        "ODD001099",
+        "temporal_v4_094_organoiddb_odd001099_gse138002"
+      ],
+      "accepted_head": "0ec69b86568665a0f34446b764b980afdaa5e844",
+      "producer_task_id": "t_9b0cc7c2",
+      "reviewer_task_id": "t_57c56cea",
+      "physical_member_count": 1,
+      "observations": 118555,
+      "payload_prefixes": [
+        "data/cleaned/GSE138002"
+      ],
+      "canonical_data_cleaned_payload": true,
+      "scientific_modality": "observational single-cell RNA expression atlas of human retinal development",
+      "experimental_axes": {
+        "biological_age": "chronological age within retinal-organoid, fetal-primary, postnatal-primary, and adult trajectories"
+      },
+      "outcomes_endpoints": {
+        "expression_matrix": "raw_counts",
+        "source_umap": "descriptive embedding",
+        "scalar_response_survival_viability": "not_applicable"
+      },
+      "annotation_level": "cell-level expression and source annotations; biological age projected from source labels",
+      "source_evidence": [
+        "GEO:GSE138002",
+        "OrganoidDB:ODD001099",
+        "DOI:10.1016/j.devcel.2020.04.009",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001099_gse138002/source_manifest.json",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001099_gse138002/completion_receipt.json"
+      ],
+      "processing_decision_notebook_path": null,
+      "integration_dataset": "GSE138002",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal__organoiddb_odd001099_gse138002/completion_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal__organoiddb_odd001099_gse138002/source_manifest.json",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001099_gse138002/completion_receipt.json"
+      ]
+    },
+    {
+      "canonical_dataset_id": "temporal/organoiddb_odd001111_gse130238",
+      "aliases": [
+        "GSE130238",
+        "ODD001111",
+        "temporal_v4_097_organoiddb_odd001111_gse130238"
+      ],
+      "accepted_head": "323a0e16fdad15938eb6f99794192649ddb4887f",
+      "producer_task_id": "t_9b5c70a6",
+      "reviewer_task_id": "t_57c56cea",
+      "physical_member_count": 1,
+      "observations": 16086,
+      "payload_prefixes": [
+        "data/cleaned/GSE130238"
+      ],
+      "canonical_data_cleaned_payload": true,
+      "scientific_modality": "single-cell raw UMI expression profiling of unperturbed human cortical organoid maturation",
+      "experimental_axes": {
+        "biological_time": "sample-projected organoid maturation time"
+      },
+      "outcomes_endpoints": {
+        "expression": "raw_counts",
+        "scalar_response": "not_applicable"
+      },
+      "annotation_level": "cell-level expression; sample-projected time; aggregate publication classes remain unknown without an exact barcode join",
+      "source_evidence": [
+        "GEO:GSE130238",
+        "OrganoidDB:ODD001111",
+        "DOI:10.1016/j.stem.2019.08.002",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001111_gse130238/source_manifest.json",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001111_gse130238/verify_receipt.json"
+      ],
+      "processing_decision_notebook_path": null,
+      "integration_dataset": "GSE130238",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal__organoiddb_odd001111_gse130238/verify_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal__organoiddb_odd001111_gse130238/source_manifest.json",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001111_gse130238/verify_receipt.json"
+      ]
+    },
+    {
+      "canonical_dataset_id": "temporal/organoiddb_odd001154_gse194214",
+      "aliases": [
+        "GSE194214",
+        "ODD001154",
+        "temporal_v4_092_organoiddb_odd001154_gse194214"
+      ],
+      "accepted_head": "6b34d5cfe06765f01e27e190cf20be55b8186e2f",
+      "producer_task_id": "t_56a7b7cf",
+      "reviewer_task_id": "t_f8df2f65",
+      "physical_member_count": 1,
+      "observations": 18716,
+      "payload_prefixes": [
+        "data/cleaned/GSE194214"
+      ],
+      "canonical_data_cleaned_payload": true,
+      "scientific_modality": "10x Chromium 3-prime v3 single-cell RNA-seq developmental expression atlas",
+      "experimental_axes": {
+        "developmental_time": "cell-level day 1, 2, 3, and 5 chronological axis"
+      },
+      "outcomes_endpoints": {
+        "expression": "raw UMI counts",
+        "scalar_response": "not_applicable"
+      },
+      "annotation_level": "single-cell expression with source sample/day projection",
+      "source_evidence": [
+        "GEO:GSE194214",
+        "OrganoidDB:ODD001154",
+        "DOI:10.7554/eLife.68925",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001154_gse194214/source_manifest.json",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001154_gse194214/replay_receipt.json"
+      ],
+      "processing_decision_notebook_path": "notebooks/datasets/temporal_v4_092_organoiddb_odd001154_gse194214_processing_decisions.ipynb",
+      "integration_dataset": "GSE194214 / ODD001154",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal__organoiddb_odd001154_gse194214/replay_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal__organoiddb_odd001154_gse194214/source_manifest.json",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001154_gse194214/replay_receipt.json"
+      ]
+    },
+    {
+      "canonical_dataset_id": "temporal/organoiddb_odd001155_gse196799",
+      "aliases": [
+        "GSE196799",
+        "ODD001155",
+        "temporal_v4_089_organoiddb_odd001155_gse196799"
+      ],
+      "accepted_head": "923a0ae17c193481d68ad784e01de5a6c520ccdb",
+      "producer_task_id": "t_a2ff6038",
+      "reviewer_task_id": "t_f8df2f65",
+      "physical_member_count": 10,
+      "observations": 63035,
+      "payload_prefixes": [
+        "data/cleaned/GSM5901228",
+        "data/cleaned/GSM5901229",
+        "data/cleaned/GSM5901230",
+        "data/cleaned/GSM5901231",
+        "data/cleaned/GSM5901232",
+        "data/cleaned/GSM5901233",
+        "data/cleaned/GSM5901234",
+        "data/cleaned/GSM5901235",
+        "data/cleaned/GSM5901236",
+        "data/cleaned/GSM5901237"
+      ],
+      "shared_var_prefix": "data/cleaned/GSE196799",
+      "canonical_data_cleaned_payload": false,
+      "scientific_modality": "single-cell RNA expression across ten GSE196799 samples",
+      "experimental_axes": {
+        "sample": "ten exact GSM member identities",
+        "developmental_context": "source sample metadata"
+      },
+      "outcomes_endpoints": {
+        "expression": "cell-level expression",
+        "scalar_response": "not_applicable"
+      },
+      "annotation_level": "cell-level expression; cell type is explicit unknown because the notebook cluster map has no immutable barcode-level payload",
+      "source_evidence": [
+        "GEO:GSE196799",
+        "OrganoidDB:ODD001155",
+        "PMID:37714147",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001155_gse196799/source_manifest.json",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001155_gse196799/verification_receipt.json"
+      ],
+      "processing_decision_notebook_path": null,
+      "integration_dataset": "GSE196799 / ODD001155",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal__organoiddb_odd001155_gse196799/verification_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal__organoiddb_odd001155_gse196799/source_manifest.json",
+        "artifacts/dataset_completion/temporal__organoiddb_odd001155_gse196799/verification_receipt.json"
+      ]
+    },
+    {
+      "canonical_dataset_id": "temporal/perturbase_gse107185",
+      "aliases": [
+        "GSE107185",
+        "PRJNA419230",
+        "PerturBase repository 11",
+        "temporal_v4_116_perturbase_gse107185"
+      ],
+      "accepted_head": "83bdf3e8686453c6d8578047d005d60df13d95ca",
+      "producer_task_id": "t_ab37edf6",
+      "reviewer_task_id": "t_99c68302",
+      "physical_member_count": 1,
+      "observations": 8428,
+      "payload_prefixes": [
+        "pert-gym/logical/temporal/perturbase_gse107185"
+      ],
+      "canonical_data_cleaned_payload": false,
+      "scientific_modality": "pooled ORF-overexpression single-cell RNA-seq expression endpoint",
+      "experimental_axes": {
+        "perturbation": "61 constructs with 1403 controls and exact cell-level sequence assignment",
+        "media": "three contexts",
+        "duration": "day 5/6 media-specific endpoints, not a shared trajectory"
+      },
+      "outcomes_endpoints": {
+        "expression": "processed PerturBase single-cell matrix",
+        "fitness": "aggregate genotype/sample only; no exact cell-level join"
+      },
+      "annotation_level": "cell-level expression and perturbation; aggregate fitness only",
+      "source_evidence": [
+        "GEO:GSE107185",
+        "BioProject:PRJNA419230",
+        "DOI:10.1016/j.cels.2018.10.008",
+        "artifacts/dataset_completion/temporal__perturbase_gse107185/source_manifest.json",
+        "artifacts/dataset_completion/temporal__perturbase_gse107185/completion_receipt.json"
+      ],
+      "processing_decision_notebook_path": "notebooks/datasets/temporal_perturbase_gse107185_processing_decisions.ipynb",
+      "integration_dataset": "GSE107185",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal__perturbase_gse107185/completion_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal__perturbase_gse107185/source_manifest.json",
+        "artifacts/dataset_completion/temporal__perturbase_gse107185/completion_receipt.json"
+      ]
+    },
+    {
+      "canonical_dataset_id": "temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene",
+      "aliases": [
+        "SCP1973",
+        "GSE226373",
+        "temporal_v4_133_scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene"
+      ],
+      "accepted_head": "2c0f23bafb282a6200aaacf4dc52c2740a8df835",
+      "producer_task_id": "t_bb2f5bc0",
+      "reviewer_task_id": "t_246e50fa",
+      "physical_member_count": 1,
+      "observations": 11690,
+      "payload_prefixes": [
+        "pert-gym/logical/temporal/scrnaseq_unravels_the_transcriptional_network_underlying_zebrafish_retina_regene"
+      ],
+      "canonical_data_cleaned_payload": false,
+      "scientific_modality": "single-cell RNA-seq expression after phototoxic retinal injury",
+      "experimental_axes": {
+        "injury_condition": "uninjured control versus light lesion",
+        "elapsed_time_after_light_lesion_minutes": [
+          0,
+          2640,
+          5760,
+          8640
+        ],
+        "collection_batch": [
+          "collection_day_1",
+          "collection_day_2"
+        ]
+      },
+      "outcomes_endpoints": {
+        "trajectory": "cell-state and transcriptional regeneration progression",
+        "quantitative_response": "not_applicable"
+      },
+      "annotation_level": "cell-level expression, injury/time, and source cluster annotation",
+      "source_evidence": [
+        "Single Cell Portal:SCP1973",
+        "GEO:GSE226373",
+        "artifacts/dataset_completion/temporal__zebrafish_retina_regeneration/source_manifest.json",
+        "artifacts/dataset_completion/temporal__zebrafish_retina_regeneration/completion_receipt.json"
+      ],
+      "processing_decision_notebook_path": null,
+      "integration_dataset": "SCP1973 / GSE226373",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal__zebrafish_retina_regeneration/completion_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal__zebrafish_retina_regeneration/source_manifest.json",
+        "artifacts/dataset_completion/temporal__zebrafish_retina_regeneration/completion_receipt.json"
+      ]
+    },
+    {
+      "canonical_dataset_id": "temporal/stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq",
+      "aliases": [
+        "GSE269572",
+        "PRJNA1122543",
+        "temporal_v4_109_stable_chambered_cardioids_from_human_pluripotent_stem_cells_scrna_seq"
+      ],
+      "accepted_head": "44b934c168243dd1fcdad2918091ce793c8cedf5",
+      "producer_task_id": "t_363b9754",
+      "reviewer_task_id": "t_246e50fa",
+      "physical_member_count": 1,
+      "observations": 59373,
+      "payload_prefixes": [
+        "data/cleaned/GSE269572"
+      ],
+      "canonical_data_cleaned_payload": true,
+      "scientific_modality": "single-cell expression with one drug/culture design axis",
+      "experimental_axes": {
+        "condition": [
+          "2D culture",
+          "with PD173074",
+          "without PD173074"
+        ],
+        "sample": "11 exact GSM samples",
+        "time": "dataset-wide day 42.5 snapshot, not a trajectory"
+      },
+      "outcomes_endpoints": {
+        "expression_matrix": "raw_counts",
+        "drug_toxicity_endpoint": "not present",
+        "scalar_response_endpoint": "not_applicable"
+      },
+      "annotation_level": "cell-level expression and sample/condition; cell type unknown without immutable barcode-level annotation",
+      "source_evidence": [
+        "GEO:GSE269572",
+        "BioProject:PRJNA1122543",
+        "artifacts/dataset_completion/temporal__stable_chambered_cardioids/source_manifest.json",
+        "artifacts/dataset_completion/temporal__stable_chambered_cardioids/completion_receipt.json"
+      ],
+      "processing_decision_notebook_path": null,
+      "integration_dataset": "GSE269572",
+      "payload_evidence_path": "artifacts/dataset_completion/temporal__stable_chambered_cardioids/completion_receipt.json",
+      "scientific_evidence_paths": [
+        "artifacts/dataset_completion/temporal__stable_chambered_cardioids/source_manifest.json",
+        "artifacts/dataset_completion/temporal__stable_chambered_cardioids/completion_receipt.json"
+      ]
+    }
+  ]
+}

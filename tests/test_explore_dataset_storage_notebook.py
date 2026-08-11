@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -369,3 +370,23 @@ def test_generator_does_not_overwrite_the_reviewed_manual_notebook():
         "dataset-level-review-title",
         "dataset-level-review-load",
     }.issubset(committed_ids - generated_ids)
+
+    manual = [cell for cell in committed.cells if cell.id not in generated_ids]
+    assert len(manual) == 21
+    assert {cell.id for cell in manual} == committed_ids - generated_ids
+    unchanged_manual_sources = {
+        cell.id: cell.source
+        for cell in manual
+        if cell.id
+        not in {
+            "review-inventory-status-views",
+            "dataset-level-review-title",
+            "dataset-level-review-load",
+        }
+    }
+    digest = hashlib.sha256(
+        json.dumps(
+            unchanged_manual_sources, sort_keys=True, separators=(",", ":")
+        ).encode()
+    ).hexdigest()
+    assert digest == "d09f81aa8cefb61895a13202324660d5266a84040ec34ab06d6d60df4abe07bf"

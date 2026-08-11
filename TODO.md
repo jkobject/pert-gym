@@ -1,6 +1,6 @@
 # pert-gym TODO / active source of truth
 
-_Last verified: 2026-07-22 21:08 CEST from the `pert-gym` Kanban board, accepted product-delta ledger, immutable reviewer handoffs, and the bounded GSE150062 retry packet. Pending writers are never counted before independent acceptance._
+_Last reconciled: 2026-08-11 from the strict accepted product ledger and `accepted_10_dataset_review_snapshot.json`. Pending writers are never counted before independent acceptance; scoped validation is not full dataset completion._
 
 ## Product objective / Definition of Done
 
@@ -18,6 +18,8 @@ The project is complete only when every correctly downloadable target dataset is
 | Base-public recoverable-existing component×field candidates independently validated | **33/640** | 607 | frozen non-writable baseline; candidate-universe SHA-256 `371b2b78c755c5cfdf8fa82d7826e5b2fdbfe48b67ca11e6d2d77ec7b6ff60c2` |
 | Accepted OBS component×field assignments outside the base-public candidate universe | **6** | — | DepMap/CCLE 26Q1; intentionally no `/640` denominator |
 | VAR dataset remediations independently accepted | **8/70** | 62 | latest accepted delta: `scperturb/datlinger17` reviewer `t_2c228f48`, VAR `AYnivbGN3JCRzkN70001`; GSE150062 remains pending independent acceptance |
+| Inventory rows with scoped OBS+VAR+structure+cleaning+publication acceptance | **18/92** | 74 | prior 8 plus the independently reviewed accepted-10 wave; exact canonical-ID overlap 0 |
+| Scientific datasets satisfying the stronger full project DoD | **0/92** | 92 | fail-closed: no row has all processing-notebook, canonical publication, staging-decommission receipt, same-snapshot docs, and merged exact-head inventory-PR evidence |
 | External exclusions dispositioned | **60/60** | 0 | complete |
 
 The canonical surface remains **120 logical families / 1,056 physical members / 142,572,358 observations**. `accepted_components`, new-family registration, Collection membership, recompaction, OBS and VAR are separate units and must never be added together.
@@ -27,6 +29,10 @@ The canonical surface remains **120 logical families / 1,056 physical members / 
 - The publication workload contains **213 records = 153 executable components + 60 external exclusions**. Components are reconciliation/publication work units, not 153 new biological datasets on top of the existing 120 families.
 - The biological OBS/VAR reporting unit is the **real dataset/publication**. The conserved crosswalk contains **70 `real_dataset_id` rows = 26 base-public + 44 additions**; logical families and physical members remain provenance dimensions.
 - The 60 base-public components map to 26 biological/publication-level review units. Their frozen recoverable-existing component×field universe is the separate 640-denominator metric shown above; additions outside that universe never increment `/640`.
+- The deterministic review inventory has **92 rows = 70 strict-ledger dataset identities + 22 genuinely-new family identities**. The accepted-10 wave maps exactly to ten of the 22 rows, not to ten additional strict-70 rows. Its exact-ID overlap with the prior eight scoped-complete rows and with the frozen strict-70 IDs is zero. Until an accepted alias/crosswalk reconciliation binds those identities into the strict ledger, the wave receives no `/70` or `/640` credit.
+- Deterministic regeneration starts from the exact pre-reconciliation input `data/pert_gym_dataset_review_inventory_baseline_20260729.csv` (SHA-256 `6f79e32f7d829904debcacfe700ce3cd7b42a71428ba5044fe4be0ee1405842d`) and applies the immutable PR #135 integration manifest plus the accepted-10 review snapshot; the generated inventory is never used as its own source. `data/accepted_10_evidence_digests.json` records the 24 exact producer-head evidence digests and is itself code-pinned at SHA-256 `42926969b40e717e44b7474d7ae75677db61b5931e216406d19cf6b3128dbd69`, so verification remains fail-closed in shallow CI checkouts.
+- In the separate 404-row storage inventory, `in_lamindb` is reserved for the **23 canonical cleaned** Lamin publications and is identical to `in_canonical_lamindb`. The 176 working/historical catalog rows remain queryable through explicit catalog-status and branch/evidence columns but receive no canonical publication credit.
+- `scoped_scientific_validation_accepted` is an explicitly heterogeneous review counter: eight strict-ledger rows passed the earlier OBS+VAR+structure+cleaning+publication conjunction, while ten new-family rows passed code-owned predicates against immutable accepted receipts. Nine of those ten also have complete structured key→UID obs→X→var evidence; GSE196799 remains fail-closed because its accepted link rows are not joined to an immutable current OBS key→UID identity. The wave's strict-70 booleans remain false, so this counter cannot be reused as `/70` credit. It is not `entirely_validated`: the stronger 2026-08-11 full DoD also requires independently accepted scientific bindings, an executable processing-decision notebook, canonical `data/cleaned/<dataset>/` publication, accepted staging-decommission receipt, same-snapshot inventory/docs acceptance, and an independently reviewed merged exact-head inventory PR.
 - The durable pre-remediation evidence record is Kanban task `t_a5bf1b1b`. Local evidence copies, when present, are `artifacts/schema_audit/final_real_dataset_obs_var_20260717.{json,tsv,md}` and `artifacts/schema_audit/final_real_dataset_missingness_review_20260717.tsv`; recorded digests begin JSON `60530cc3…`, TSV `de267a96…`, Markdown `3d906840…`, and flat TSV `f2d6a07b…`.
 - `OBS_COMPLETED` and `VAR_ENSEMBL_SPECIES_COMPLETED` are orthogonal. Missing applicable metadata remains `unknown`; genuinely inapplicable metadata is `not_applicable`. Response-axis `not_applicable` does not determine the status of a separately joined baseline-expression reference.
 
@@ -40,11 +46,20 @@ The canonical surface remains **120 logical families / 1,056 physical members / 
 | Existing recompactions | **ONGOING — 9/32 accepted** | GSE216673 reviewer `t_dfcb1549` PASS; next capacity-safe JIT recompaction from the accepted exact inventory | Fresh source/readback parity, rollback identity, shared-var/storage proof, independent reviewer |
 | OBS continuation | **ONGOING — 10/70 datasets, 33/640 base-public component×fields, and 6 outside-universe component×fields accepted** | `geo/GSE132080` reviewer `t_3bb03773` authorized OBS **8→9/70**; current-main accepted history also includes GSE197452. GSE150062 remains pending independent acceptance and receives no anticipatory credit; GSE213921 is frozen after rejection 3/3 and must not be auto-rerun | Other additions may advance the dataset counter after review, but never the frozen base-public `/640` metric |
 | VAR remediation | **ONGOING — 8/70 accepted by the strict ledger** | `geo/GSE132080` reviewer `t_3bb03773` authorized **6→7/70**, then `scperturb/datlinger17` reviewer `t_2c228f48` authorized **7→8/70**; GSE150062 remains pending independent acceptance and receives no anticipatory credit | Continue one stable real-dataset identity at a time; conserve 70 datasets / 120 families / 1,056 members and keep residual false/unknown/not-applicable verdicts honest |
+| Accepted-10 inventory reconciliation | **SCOPED 8→18/92; full DoD 0/92** | snapshot `accepted-10-review-reconciliation@2026-08-11`; exact accepted heads and reviewer lineage are bound in the deterministic input | Independent review must accept this same inventory/TODO/docs snapshot; unresolved strict-70 aliases and per-row DoD gaps remain explicit |
 | Code/PR reliability | **SUBSTANTIAL CLEANUP COMPLETE; merge policy remains exact-SHA reviewer gated** | accepted/fused fixes include PRs #43, #45, #66, #71 and #75; remaining open PRs require their existing exact gates | No stale producer may be repromoted after a superseding continuation is accepted |
 | Final convergence | **DOWNSTREAM** | `t_12667244` → `t_fc3d4794` → `t_17ec66d9` → `t_61847c4c` → immutable final gate `t_3df00bdb` | Complete versioned Collection, exhaustive loader/shared-var/Zarr validation, terminal acceptance |
 | RxRx3 | **HUMAN BLOCKER ONLY** | `t_e8f9c88c` | Auth0/portal access and Recursion EULA resolved, or reviewer-accepted exclusion |
 
 ## Accepted work since the previous dashboard
+
+### Accepted ten-dataset scoped wave and full-DoD boundary
+
+PR #135 integrated the exact independently reviewed dataset-scoped blobs for GSE228110, C. elegans embryogenesis, E-MTAB-9304, GSE138002/ODD001099, GSE130238/ODD001111, GSE194214/ODD001154, GSE196799/ODD001155, GSE107185, SCP1973/GSE226373, and GSE269572. The canonical review snapshot binds each row to its immutable accepted head, producer, reviewer, aliases, scientific modality, axes/endpoints, annotation level, source evidence, and physical-member/observation denominator.
+
+Those ten identities are exactly the ten already registered genuinely-new-family rows. They overlap neither the prior eight scoped-complete inventory rows nor the frozen strict-70 exact IDs, so the honest scoped inventory delta is **8→18/92**, while registration and Collection remain **10/22** and strict OBS/VAR remain **10/70** and **8/70**. No arithmetic `8+10` is applied to `/70`.
+
+Under the binding stronger project DoD, **0/92** rows are currently complete. All ten wave rows retain explicit scientific-binding, executable-notebook, staging-decommission, accepted same-snapshot docs, and merged inventory-PR gaps; four have an immutable committed notebook, but none has execution/replay evidence in this snapshot. Four payloads retain canonical-layout evidence gaps: E-MTAB-9304, GSE107185, and SCP1973/GSE226373 live under `pert-gym/logical/...`, while GSE196799 lacks an immutable current OBS key→UID binding despite its explicit accepted link rows. This is a fail-closed reconciliation, not a rollback of their earlier scoped acceptance and not authorization to delete staging.
 
 ### New families
 
@@ -104,4 +119,5 @@ Lane 3 has five direct indispensable parents instead of 76 historical leaf paren
 - A producer, dry-run, heartbeat, green test, PR, staging object or VM process is not product progress. Credit requires `product_delta` with exact before/after/denominator/unit, mismatch 0 and durable live readback.
 - A superseding continuation must not be linked as parent of the stale source card. After accepted review, the stale source becomes terminal `superseded`.
 - Every accepted product delta must reconcile this file and `docs/project/current-status.md`; pending writers are labelled pending rather than anticipated.
+- A dataset is complete only when every stronger full-DoD gate is accepted together. Artifact/triplet presence, scoped metadata acceptance, registration, or Collection membership alone must never set `entirely_validated=true`.
 - `wiki/` is obsolete. `AGENTS.md` is the single boot file; durable detail belongs under `docs/`.
