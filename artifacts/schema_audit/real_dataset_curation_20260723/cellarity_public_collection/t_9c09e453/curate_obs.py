@@ -568,9 +568,16 @@ def verify_var(var: pd.DataFrame, source_inspection: dict[str, Any]) -> dict[str
     exact_status = statuses.eq("exact_stable_id")
     non_biological = ~biological
     non_biological_na = statuses.str.startswith("not_applicable_non_gene_", na=False)
+    if "pert_gym_original_var_index" in var:
+        axis_identity = pd.Index(var["pert_gym_original_var_index"].astype(str))
+        axis_identity_source = "pert_gym_original_var_index"
+    else:
+        axis_identity = var.index
+        axis_identity_source = "var.index"
+    axis_sha256 = ordered_sha256(axis_identity)
     checks = {
         "rows_match_source": len(var) == source_inspection["source_var_rows"],
-        "ordered_axis_matches_source": ordered_sha256(var.index)
+        "ordered_axis_matches_source": axis_sha256
         == source_inspection["source_var_index_sha256"],
         "every_biological_feature_has_exact_human_ensembl_id": bool(
             (exact_ensembl[biological] & exact_status[biological]).all()
@@ -591,7 +598,8 @@ def verify_var(var: pd.DataFrame, source_inspection: dict[str, Any]) -> dict[str
         "stable_ensembl_id_features": int(exact_ensembl[biological].sum()),
         "correct_species_features": int(exact_ensembl[biological].sum()),
         "non_biological_features_not_applicable": int(non_biological.sum()),
-        "ordered_var_axis_sha256": ordered_sha256(var.index),
+        "ordered_var_axis_sha256": axis_sha256,
+        "axis_identity_source": axis_identity_source,
         "checks": checks,
     }
 

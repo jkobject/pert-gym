@@ -238,6 +238,11 @@ def test_var_gate_requires_exact_human_ensembl_ids_for_every_gene_feature() -> N
     assert receipt["biological_features_total"] == 2
     assert receipt["stable_ensembl_id_features"] == 2
     assert receipt["non_biological_features_not_applicable"] == 1
+    transformed = var.copy()
+    transformed["pert_gym_original_var_index"] = var.index
+    transformed.index = pd.Index(["A1BG", "A2M", "peak_0"])
+    transformed_receipt = curation.verify_var(transformed, source)
+    assert transformed_receipt["axis_identity_source"] == "pert_gym_original_var_index"
     broken = var.copy()
     broken.loc["A2M", "stable_feature_id"] = pd.NA
     with pytest.raises(AssertionError, match="VAR Ensembl/species gate failed"):
