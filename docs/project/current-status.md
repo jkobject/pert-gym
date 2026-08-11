@@ -113,7 +113,10 @@ and X-axis parity.
 - Its tracked pre-reconciliation input is
   `data/pert_gym_dataset_review_inventory_baseline_20260729.csv`, SHA-256
   `6f79e32f7d829904debcacfe700ce3cd7b42a71428ba5044fe4be0ee1405842d`;
-  regeneration does not read the generated inventory as input.
+  regeneration does not read the generated inventory as input. The 24 exact
+  producer-head evidence blobs are independently hash-bound through
+  `data/accepted_10_evidence_digests.json`, whose own code-pinned SHA-256 is
+  `42926969b40e717e44b7474d7ae75677db61b5931e216406d19cf6b3128dbd69`.
 - The 60 base-public components map to 26 biological review units. Their frozen
   recoverable-existing OBS candidate universe has denominator 640; additions
   outside that universe never increment `/640`.

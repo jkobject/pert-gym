@@ -13,9 +13,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import re
-import subprocess
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -41,6 +41,14 @@ INTEGRATION_MANIFEST = (
     ROOT / "artifacts/dataset_completion/accepted_10_of_10_integration_manifest.json"
 )
 INTEGRATION_COMMIT = "36c7e02fdf0421f7844918ed646e49a6322ed30f"
+INTEGRATION_BASE = "5e27972bd09e0f931f6cd0f7ee4cd8df01726a5f"
+INTEGRATION_MANIFEST_SHA256 = (
+    "f0149596fd06ea61766499b812e0669ca08f6fce7440bad7af171d8885c40bd4"
+)
+ACCEPTED_EVIDENCE_DIGESTS = ROOT / "data/accepted_10_evidence_digests.json"
+ACCEPTED_EVIDENCE_DIGESTS_SHA256 = (
+    "42926969b40e717e44b7474d7ae75677db61b5931e216406d19cf6b3128dbd69"
+)
 
 EVIDENCE_LABEL = "dataset-review-inventory@2026-08-11"
 
@@ -475,43 +483,71 @@ def _immutable_accepted_file(
     local_path = ROOT / relative_path
     if not local_path.is_file():
         raise RuntimeError(f"accepted-wave evidence is missing: {relative_path}")
-    accepted = subprocess.run(
-        ["git", "show", f"{integration_item['accepted_sha']}:{relative_path}"],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-    ).stdout
     current = local_path.read_bytes()
-    if current != accepted:
+    index = _accepted_evidence_index()
+    dataset = integration_item["dataset"]
+    indexed = index.get(dataset)
+    if indexed is None or indexed["accepted_head"] != integration_item["accepted_sha"]:
+        raise RuntimeError(f"accepted-wave evidence head is not pinned: {dataset}")
+    expected_digest = indexed["files"].get(relative_path)
+    if (
+        expected_digest is None
+        or hashlib.sha256(current).hexdigest() != expected_digest
+    ):
         raise RuntimeError(
             f"accepted-wave evidence differs from its accepted head: {relative_path}"
         )
     return current
 
 
+def _accepted_evidence_index() -> dict[str, dict[str, Any]]:
+    raw = ACCEPTED_EVIDENCE_DIGESTS.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != ACCEPTED_EVIDENCE_DIGESTS_SHA256:
+        raise RuntimeError("accepted evidence digest index has drifted")
+    document = json.loads(raw)
+    if (
+        document.get("schema_version") != 1
+        or document.get("integration_commit") != INTEGRATION_COMMIT
+        or document.get("integration_manifest_sha256") != INTEGRATION_MANIFEST_SHA256
+    ):
+        raise RuntimeError("accepted evidence digest index contract is invalid")
+    index: dict[str, dict[str, Any]] = {}
+    for record in document.get("datasets", []):
+        dataset = record.get("dataset")
+        files = record.get("files")
+        if (
+            not isinstance(dataset, str)
+            or dataset in index
+            or not isinstance(files, list)
+        ):
+            raise RuntimeError("accepted evidence digest index is malformed")
+        file_index: dict[str, str] = {}
+        for item in files:
+            path = item.get("path") if isinstance(item, dict) else None
+            digest = item.get("sha256") if isinstance(item, dict) else None
+            if (
+                not isinstance(path, str)
+                or path in file_index
+                or not isinstance(digest, str)
+                or len(digest) != 64
+            ):
+                raise RuntimeError("accepted evidence digest index has an invalid file")
+            file_index[path] = digest
+        index[dataset] = {
+            "accepted_head": record.get("accepted_head"),
+            "files": file_index,
+        }
+    if set(index) != set(EXPECTED_ACCEPTED_LINEAGE):
+        raise RuntimeError("accepted evidence digest index dataset set has drifted")
+    return index
+
+
 def _immutable_integration_manifest() -> dict[str, Any]:
-    try:
-        relative_path = INTEGRATION_MANIFEST.relative_to(ROOT).as_posix()
-    except ValueError as error:
-        raise RuntimeError("integration manifest is outside the repository") from error
-    accepted = subprocess.run(
-        ["git", "show", f"{INTEGRATION_COMMIT}:{relative_path}"],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-    ).stdout
     current = INTEGRATION_MANIFEST.read_bytes()
-    if current != accepted:
+    if hashlib.sha256(current).hexdigest() != INTEGRATION_MANIFEST_SHA256:
         raise RuntimeError("integration manifest differs from its accepted commit")
     document = json.loads(current)
-    parent = subprocess.run(
-        ["git", "rev-parse", f"{INTEGRATION_COMMIT}^"],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
-    if parent != document["integration_base"]["sha"]:
+    if document["integration_base"]["sha"] != INTEGRATION_BASE:
         raise RuntimeError("integration commit is not based on the declared base")
     return document
 

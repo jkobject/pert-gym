@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "integration_commit": "36c7e02fdf0421f7844918ed646e49a6322ed30f",
+  "integration_manifest_sha256": "f0149596fd06ea61766499b812e0669ca08f6fce7440bad7af171d8885c40bd4",
+  "datasets": [
+    {
+      "dataset": "GSE228110",
+      "accepted_head": "8d97b16affb53564199044508ed3f709008fdfd7",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/completion_receipt.json",
+          "sha256": "2a12bd2d95ac89257a3ebb050ae9c081d36705cf11e50c08b3950668e0367c47"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/processing_decisions.ipynb",
+          "sha256": "bf12e562d1d8acec4dd212dc55b2c5dae8993eec5f2fa462e0d0c33f0aba0766"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal_an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation/source_manifest.json",
+          "sha256": "6aa8d7db71a5d6c86ec71f6b441c35d8821fac6b70f0418a2b1d60487759e205"
+        }
+      ]
+    },
+    {
+      "dataset": "C. elegans embryogenesis",
+      "accepted_head": "92111fbdf860828df71a039e5d2ccf9ffe4cbabb",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal__c_elegans_embryogenesis/processing_decisions.ipynb",
+          "sha256": "7fa58462a2905f8f59de3075a77bea2be33276014b33084080fdaa8e0b51d6f1"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__c_elegans_embryogenesis/source_manifest.json",
+          "sha256": "10a3cabe9c9205697481143aeb48c2582925696bdb2294f66a942c6500a59d62"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__c_elegans_embryogenesis/verification_receipt.json",
+          "sha256": "f7604f5e637f2ea507973a919292923aa30f13e4c086c5cbc1482f16fef7148c"
+        }
+      ]
+    },
+    {
+      "dataset": "Drosophila E-MTAB-9304",
+      "accepted_head": "fdd88db96616408d7d15689b49cd0ed4f90f52bd",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal__drosophila_dv_patterning/gate_summary.json",
+          "sha256": "92a7aab73967085122293ed94a42ecba91f419018ee288f145811a5ad033589c"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__drosophila_dv_patterning/latest_receipt.json",
+          "sha256": "335f96678f2d75f24a89fe6e712624c535c9ebe564f13318511796539f46ecd2"
+        }
+      ]
+    },
+    {
+      "dataset": "GSE138002",
+      "accepted_head": "0ec69b86568665a0f34446b764b980afdaa5e844",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal__organoiddb_odd001099_gse138002/completion_receipt.json",
+          "sha256": "310ed52e46159d068c6d19d9e8f18a852313651e1779bbd36706f59575ede8f3"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__organoiddb_odd001099_gse138002/source_manifest.json",
+          "sha256": "dafbf2632a7cc8b546eb337801938c6178f590142939e66573a5a33edba094ad"
+        }
+      ]
+    },
+    {
+      "dataset": "GSE130238",
+      "accepted_head": "323a0e16fdad15938eb6f99794192649ddb4887f",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal__organoiddb_odd001111_gse130238/source_manifest.json",
+          "sha256": "cad7212b04c622c870dd9b7837547df3b704f9c9ec4bf43439bfa5a301f6367e"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__organoiddb_odd001111_gse130238/verify_receipt.json",
+          "sha256": "3c85e38a8236fdb152e3af3e31a420ebcc7ba08bc2d2ef48cd3905e3570136a6"
+        }
+      ]
+    },
+    {
+      "dataset": "GSE194214 / ODD001154",
+      "accepted_head": "6b34d5cfe06765f01e27e190cf20be55b8186e2f",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal__organoiddb_odd001154_gse194214/replay_receipt.json",
+          "sha256": "9befd6fc2765a943012c6c9381120d5ead7f85aa30e22c391ceca8f0a0df4041"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__organoiddb_odd001154_gse194214/source_manifest.json",
+          "sha256": "020ae9b376929c9e7a59eff1de732224b29e331cfda9f70d318d8d5bdf5c95f6"
+        },
+        {
+          "path": "notebooks/datasets/temporal_v4_092_organoiddb_odd001154_gse194214_processing_decisions.ipynb",
+          "sha256": "2582a7cc1c6cd511021e9c5d531a87d70dffa8f3e23c0da7dc6a1894943904bf"
+        }
+      ]
+    },
+    {
+      "dataset": "GSE196799 / ODD001155",
+      "accepted_head": "923a0ae17c193481d68ad784e01de5a6c520ccdb",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal__organoiddb_odd001155_gse196799/source_manifest.json",
+          "sha256": "c9c032b296d2b5a9a1344719bf750cfce6ff1841526a94d9e891d86c47d2d187"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__organoiddb_odd001155_gse196799/verification_receipt.json",
+          "sha256": "d88871c761445f32e26cd3bdfe720384bd11c9f6d5ea8a1c806cf40758e4cc2e"
+        }
+      ]
+    },
+    {
+      "dataset": "GSE107185",
+      "accepted_head": "83bdf3e8686453c6d8578047d005d60df13d95ca",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal__perturbase_gse107185/completion_receipt.json",
+          "sha256": "d638c801da1282dd90e9b4b71e693021dd16d174f45a310d6f70442faca61ec1"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__perturbase_gse107185/source_manifest.json",
+          "sha256": "49c92ce2eca8ca7c5bf5ea42a53cfa134a2490d3e32eec644ee42edeaeb9b186"
+        },
+        {
+          "path": "notebooks/datasets/temporal_perturbase_gse107185_processing_decisions.ipynb",
+          "sha256": "ada8b1e73bce3cf27dc45bab3491607c7403ed09f83a2b8e1a2bcab8e29e07d5"
+        }
+      ]
+    },
+    {
+      "dataset": "SCP1973 / GSE226373",
+      "accepted_head": "2c0f23bafb282a6200aaacf4dc52c2740a8df835",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal__zebrafish_retina_regeneration/completion_receipt.json",
+          "sha256": "e862513df8b1f53a28e83a4da5620b6898b342f295f41142ce35d87a85b09a2d"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__zebrafish_retina_regeneration/source_manifest.json",
+          "sha256": "f97e322b45a1b298184c51422b4c275b29aa55977b28378632f37136a99eb6e6"
+        }
+      ]
+    },
+    {
+      "dataset": "GSE269572",
+      "accepted_head": "44b934c168243dd1fcdad2918091ce793c8cedf5",
+      "files": [
+        {
+          "path": "artifacts/dataset_completion/temporal__stable_chambered_cardioids/completion_receipt.json",
+          "sha256": "7f4fabae673bca08e255f0305e26902a77521b78409d8da4f3b956795003e587"
+        },
+        {
+          "path": "artifacts/dataset_completion/temporal__stable_chambered_cardioids/source_manifest.json",
+          "sha256": "4fca73f73e9478838540caab1f5b0f8930984573ff17c5b6b2b6456612bf2618"
+        }
+      ]
+    }
+  ]
+}

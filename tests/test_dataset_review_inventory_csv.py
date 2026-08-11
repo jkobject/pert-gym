@@ -21,6 +21,7 @@ ACCEPTED_WAVE = (
 INTEGRATION_MANIFEST = (
     ROOT / "artifacts/dataset_completion/accepted_10_of_10_integration_manifest.json"
 )
+ACCEPTED_EVIDENCE_DIGESTS = ROOT / "data/accepted_10_evidence_digests.json"
 
 ACCEPTED_WAVE_DATASET_IDS = {
     "temporal/an_alternative_cell_cycle_coordinates_multiciliated_cell_differentiation",
@@ -259,6 +260,32 @@ def test_integration_manifest_is_bound_to_accepted_integration_commit(
     candidate.write_text(json.dumps(integration))
     monkeypatch.setattr(inventory_builder, "INTEGRATION_MANIFEST", candidate)
     with pytest.raises(RuntimeError):
+        inventory_builder.build_rows()
+
+
+def test_accepted_evidence_digest_index_is_complete_and_hash_pinned(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    index = json.loads(ACCEPTED_EVIDENCE_DIGESTS.read_text())
+    records = {item["dataset"]: item for item in index["datasets"]}
+    snapshot = json.loads(ACCEPTED_WAVE.read_text())
+    for record in snapshot["datasets"]:
+        indexed = records[record["integration_dataset"]]
+        assert indexed["accepted_head"] == record["accepted_head"]
+        paths = {item["path"] for item in indexed["files"]}
+        expected = {
+            *record["scientific_evidence_paths"],
+            record["payload_evidence_path"],
+        }
+        if record["processing_decision_notebook_path"]:
+            expected.add(record["processing_decision_notebook_path"])
+        assert paths == expected
+
+    index["datasets"][0]["files"][0]["sha256"] = "0" * 64
+    candidate = tmp_path / ACCEPTED_EVIDENCE_DIGESTS.name
+    candidate.write_text(json.dumps(index))
+    monkeypatch.setattr(inventory_builder, "ACCEPTED_EVIDENCE_DIGESTS", candidate)
+    with pytest.raises(RuntimeError, match="digest index has drifted"):
         inventory_builder.build_rows()
 
 
