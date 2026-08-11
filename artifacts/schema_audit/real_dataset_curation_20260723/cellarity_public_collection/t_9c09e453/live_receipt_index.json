@@ -6,14 +6,16 @@
   "receipts": {
     "authoritative_mutation": {
       "local_path": "artifacts/schema_audit/real_dataset_curation_20260723/cellarity_public_collection/t_9c09e453/authoritative_mutation_receipt.json",
-      "canonical_sha256": "12466181392258c8007f2adbce4034d0b2b62643b0ffce9a7103fda8e3a2d539",
-      "file_sha256": "f51a5cefc99c25e8b9db8b51cd38fa6c5c801d004da531b810b184f0e74fcaf2",
+      "canonical_sha256": "8b5b623e15beea8011b15df3a610170e6a8a93ab251954acb1a5d357100bb361",
+      "file_sha256": "e3adbf460092d64c8269eb4822e9f90634d22e169a50abf827ca9144c4f7fd6d",
       "remote": {
         "uri": "gs://scperturb/data/cleaned/cellarity_public_collection/_receipts/mutate-receipt-20260811T151930Z.json",
         "generation": 1786461571071443,
         "etag": "CNP75PrvmJYDEAE=",
         "size": 309163
-      }
+      },
+      "remote_canonical_sha256": "12466181392258c8007f2adbce4034d0b2b62643b0ffce9a7103fda8e3a2d539",
+      "local_derivation": "posthoc VAR proof binding; immutable remote is the original mutation receipt"
     },
     "publication_plan": {
       "local_path": "artifacts/schema_audit/real_dataset_curation_20260723/cellarity_public_collection/t_9c09e453/publication_plan_receipt.json",

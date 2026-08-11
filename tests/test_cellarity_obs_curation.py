@@ -385,6 +385,29 @@ def test_committed_live_receipts_reconcile_authoritative_transition() -> None:
     assert mutation["writes"]["collection_writes"] == 3
     assert len(mutation["writes"]["artifacts"]) == 10
     assert len(mutation["post_write_readback"]) == 10
+    assert mutation["posthoc_var_verification_binding"] == {
+        "original_mutation_receipt_canonical_sha256": (
+            "12466181392258c8007f2adbce4034d0b2b62643b0ffce9a7103fda8e3a2d539"
+        ),
+        "source_receipt_canonical_sha256": verify["canonical_sha256"],
+        "source_receipt_mode": "verify",
+        "scope": "exact member VAR identities preserved by the mutation transition",
+        "temporal_semantics": (
+            "VAR proofs were observed by the later zero-write replay and bind to the "
+            "mutation members by exact prefix and VAR artifact identity"
+        ),
+    }
+    assert (
+        index["authoritative_mutation"]["remote_canonical_sha256"]
+        == (
+            mutation["posthoc_var_verification_binding"][
+                "original_mutation_receipt_canonical_sha256"
+            ]
+        )
+    )
+    assert index["authoritative_mutation"]["local_derivation"] == (
+        "posthoc VAR proof binding; immutable remote is the original mutation receipt"
+    )
 
     assert verify["mode"] == "verify"
     assert verify["replay_noop"] is True
@@ -392,13 +415,15 @@ def test_committed_live_receipts_reconcile_authoritative_transition() -> None:
     assert verify["writes"]["obs_revisions"] == 0
     assert verify["writes"]["collection_writes"] == 0
     assert len(verify["members"]) == 10
-    proofs = [member["var_verification"] for member in verify["members"]]
-    assert all(proof["VAR_ENSEMBL_SPECIES_COMPLETED"] for proof in proofs)
-    assert {proof["axis_match_mode"] for proof in proofs} == {
-        "byte_exact",
-        "exact_ordered_case_normalization_bijection",
-    }
-    assert sum(not proof["source_axis_byte_exact"] for proof in proofs) == 3
+    for receipt in (mutation, verify):
+        proofs = [member["var_verification"] for member in receipt["members"]]
+        assert len(proofs) == 10
+        assert all(proof["VAR_ENSEMBL_SPECIES_COMPLETED"] for proof in proofs)
+        assert {proof["axis_match_mode"] for proof in proofs} == {
+            "byte_exact",
+            "exact_ordered_case_normalization_bijection",
+        }
+        assert sum(not proof["source_axis_byte_exact"] for proof in proofs) == 3
     assert verify["gcs_decommission"]["GCS_DECOMMISSION_READY"] is True
     assert verify["gcs_decommission"]["objects_remaining"] == 0
 
