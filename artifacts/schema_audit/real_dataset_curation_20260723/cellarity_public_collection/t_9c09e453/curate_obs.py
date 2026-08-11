@@ -1365,6 +1365,33 @@ def validate_mutation_readback(
     return readback
 
 
+def recover_mutation_writes(
+    writes: list[dict[str, Any]],
+    members: list[dict[str, Any]],
+    *,
+    expected: int,
+) -> list[dict[str, Any]]:
+    """Recover unreceipted canonical writes after a bounded writer interruption."""
+    fresh_uids = {str(item["uid"]) for item in writes}
+    recovered = [
+        member["obs"]
+        for member in members
+        if str(member["obs"]["uid"]) not in fresh_uids
+        and str(member["obs"]["key"]).startswith("data/cleaned/")
+        and member.get("already_curated") is True
+    ]
+    effective = [*writes, *recovered]
+    if (
+        len(effective) != expected
+        or len({str(item["uid"]) for item in effective}) != expected
+    ):
+        raise AssertionError(
+            f"mutation recovery denominator drift: expected={expected} "
+            f"fresh={len(writes)} recovered={len(recovered)}"
+        )
+    return recovered
+
+
 def collection_membership(ln: Any) -> dict[str, Any]:
     prefixes = [item["prefix"] for item in MEMBERS]
     snapshots: dict[str, Any] = {}
@@ -1621,6 +1648,22 @@ def list_task_staging_objects() -> list[dict[str, Any]]:
     ]
 
 
+def list_durable_receipts(mode: str) -> list[dict[str, Any]]:
+    client = storage.Client(project=BILLING_PROJECT)
+    bucket = client.bucket("scperturb", user_project=BILLING_PROJECT)
+    return [
+        {
+            "name": str(blob.name),
+            "generation": int(blob.generation),
+            "size": int(blob.size),
+            "crc32c": str(blob.crc32c),
+        }
+        for blob in client.list_blobs(
+            bucket, prefix=f"{RECEIPT_PREFIX}/{mode}-receipt-"
+        )
+    ]
+
+
 def remote_attestation(
     receipt: dict[str, Any], remote_identity: dict[str, Any]
 ) -> dict[str, Any]:
@@ -1694,6 +1737,14 @@ def main() -> int:
     if platform.system() == "Darwin":
         raise RuntimeError("refusing Mac execution")
     capacity = metadata_preflight()
+    prior_mutation_receipts = (
+        list_durable_receipts("mutate") if mode == "mutate" else []
+    )
+    if prior_mutation_receipts:
+        raise RuntimeError(
+            "accepted durable mutation receipt already exists; use verify rather than "
+            "replaying product writes"
+        )
     frozen = load_frozen_inputs()
     manifest = load_source_manifest()
     predecessor_evidence = load_predecessor_source_evidence()
@@ -1798,8 +1849,16 @@ def main() -> int:
         raise AssertionError("Collection registry count drift")
     if mode == "verify" and counts_after != counts_before:
         raise AssertionError("verify replay changed registry counts")
+    recovered_writes = (
+        recover_mutation_writes(writes, before_or_after, expected=len(MEMBERS))
+        if mode == "mutate"
+        else []
+    )
+    effective_writes = [*writes, *recovered_writes]
     post_write_readback = (
-        validate_mutation_readback(writes, before_or_after) if mode == "mutate" else []
+        validate_mutation_readback(effective_writes, before_or_after)
+        if mode == "mutate"
+        else []
     )
     decommission = staging_decommission_gate(list_task_staging_objects())
     receipt = {
@@ -1839,6 +1898,7 @@ def main() -> int:
             "collection_writes": collection_writes,
             "deletions": 0,
             "artifacts": writes,
+            "recovered_unreceipted_artifacts": recovered_writes,
             "canonical_key_remaps": key_remaps,
         },
         "registry_counts": {"before": counts_before, "after": counts_after},

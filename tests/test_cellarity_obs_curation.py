@@ -146,6 +146,19 @@ def test_mutation_readback_requires_writes_and_exact_current_obs_identity() -> N
     ]
 
 
+def test_recover_mutation_writes_uses_only_canonical_unreceipted_members() -> None:
+    fresh = {"uid": "fresh", "key": "data/cleaned/fresh/obs.parquet"}
+    recovered = {"uid": "recovered", "key": "data/cleaned/recovered/obs.parquet"}
+    members = [
+        {"obs": fresh, "already_curated": True},
+        {"obs": recovered, "already_curated": True},
+    ]
+
+    assert curation.recover_mutation_writes([fresh], members, expected=2) == [recovered]
+    with pytest.raises(AssertionError, match="recovery denominator"):
+        curation.recover_mutation_writes([fresh], members, expected=3)
+
+
 def test_remote_attestation_binds_receipt_digest_and_exact_object_generation() -> None:
     receipt = {"canonical_sha256": "a" * 64, "mode": "mutate"}
     remote = {
