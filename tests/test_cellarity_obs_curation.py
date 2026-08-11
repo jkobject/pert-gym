@@ -249,6 +249,30 @@ def test_var_gate_requires_exact_human_ensembl_ids_for_every_gene_feature() -> N
         curation.verify_var(broken, source)
 
 
+def test_var_gate_uses_exact_source_axis_column_when_display_index_differs() -> None:
+    var = pd.DataFrame(
+        {
+            "gene_ids": ["ENSG00000121410", "ENSG00000175899"],
+            "stable_feature_id": ["ENSG00000121410", "ENSG00000175899"],
+            "stable_feature_id_mapping_status": ["exact_stable_id", "exact_stable_id"],
+        },
+        index=pd.Index(["A1BG", "A2M"]),
+    )
+    source_axis = pd.Index(var["gene_ids"])
+
+    receipt = curation.verify_var(
+        var,
+        {
+            "source_var_rows": len(var),
+            "source_var_index_sha256": curation.ordered_sha256(source_axis),
+        },
+    )
+
+    assert receipt["axis_identity_source"] == "gene_ids"
+    assert receipt["matching_axis_identity_sources"] == ["gene_ids"]
+    assert receipt["ordered_var_axis_sha256"] == curation.ordered_sha256(source_axis)
+
+
 def test_receipt_member_preserves_var_axis_verification() -> None:
     verification = {
         "status": "PASS",

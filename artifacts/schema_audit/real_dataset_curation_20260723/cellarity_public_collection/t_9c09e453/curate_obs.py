@@ -568,17 +568,28 @@ def verify_var(var: pd.DataFrame, source_inspection: dict[str, Any]) -> dict[str
     exact_status = statuses.eq("exact_stable_id")
     non_biological = ~biological
     non_biological_na = statuses.str.startswith("not_applicable_non_gene_", na=False)
-    if "pert_gym_original_var_index" in var:
-        axis_identity = pd.Index(var["pert_gym_original_var_index"].astype(str))
-        axis_identity_source = "pert_gym_original_var_index"
-    else:
-        axis_identity = var.index
-        axis_identity_source = "var.index"
-    axis_sha256 = ordered_sha256(axis_identity)
+    axis_candidates = {"var.index": pd.Index(var.index.astype(str))}
+    for column in (
+        "pert_gym_original_var_index",
+        "gene_ids",
+        "ensembl_gene_id",
+        "symbol",
+    ):
+        if column in var:
+            axis_candidates[column] = pd.Index(var[column].astype(str))
+    candidate_hashes = {
+        source: ordered_sha256(values) for source, values in axis_candidates.items()
+    }
+    matching_sources = [
+        source
+        for source, digest in candidate_hashes.items()
+        if digest == source_inspection["source_var_index_sha256"]
+    ]
+    axis_identity_source = matching_sources[0] if matching_sources else "unresolved"
+    axis_sha256 = candidate_hashes.get(axis_identity_source)
     checks = {
         "rows_match_source": len(var) == source_inspection["source_var_rows"],
-        "ordered_axis_matches_source": axis_sha256
-        == source_inspection["source_var_index_sha256"],
+        "ordered_axis_matches_source": bool(matching_sources),
         "every_biological_feature_has_exact_human_ensembl_id": bool(
             (exact_ensembl[biological] & exact_status[biological]).all()
         ),
@@ -600,6 +611,8 @@ def verify_var(var: pd.DataFrame, source_inspection: dict[str, Any]) -> dict[str
         "non_biological_features_not_applicable": int(non_biological.sum()),
         "ordered_var_axis_sha256": axis_sha256,
         "axis_identity_source": axis_identity_source,
+        "matching_axis_identity_sources": matching_sources,
+        "axis_candidate_sha256": candidate_hashes,
         "checks": checks,
     }
 
