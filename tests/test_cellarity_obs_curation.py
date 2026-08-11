@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pandas as pd
 import pytest
@@ -16,6 +17,7 @@ assert SPEC is not None and SPEC.loader is not None
 curation = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(curation)
 EVIDENCE_ROOT = SCRIPT.parent
+OBS_CONTRACT = Path(__file__).parents[1] / "config/obs_completed_contract_v1.json"
 
 
 def member(kind: str, rows: int) -> dict:
@@ -162,6 +164,43 @@ def test_remote_attestation_binds_receipt_digest_and_exact_object_generation() -
     assert len(attestation["canonical_sha256"]) == 64
 
 
+def test_canonical_prefix_is_a_flat_data_cleaned_triplet_prefix() -> None:
+    spec = member("gse305370_rna", 1)
+
+    assert curation.canonical_prefix(spec) == (
+        "data/cleaned/GSE305370_rna_combined_with_velocity_and_refined_annotations"
+    )
+
+
+def test_replace_collection_members_preserves_unrelated_members_exactly_once() -> None:
+    old_a = SimpleNamespace(uid="old-a", key="cellarity/a/obs.parquet")
+    old_b = SimpleNamespace(uid="old-b", key="cellarity/b/obs.parquet")
+    unrelated = SimpleNamespace(uid="other", key="other/obs.parquet")
+    new_a = SimpleNamespace(uid="new-a", key="data/cleaned/a/obs.parquet")
+    new_b = SimpleNamespace(uid="new-b", key="data/cleaned/b/obs.parquet")
+
+    replaced = curation.replace_collection_members(
+        [old_a, unrelated, old_b], {"old-a": new_a, "old-b": new_b}
+    )
+
+    assert [item.uid for item in replaced] == ["new-a", "other", "new-b"]
+    with pytest.raises(AssertionError, match="predecessor membership drift"):
+        curation.replace_collection_members(
+            [old_a, unrelated], {"old-a": new_a, "old-b": new_b}
+        )
+
+
+def test_staging_decommission_gate_is_fail_closed() -> None:
+    empty = curation.staging_decommission_gate([])
+    assert empty["GCS_DECOMMISSION_READY"] is True
+    assert empty["objects_remaining"] == 0
+
+    with pytest.raises(AssertionError, match="staging objects remain"):
+        curation.staging_decommission_gate(
+            [{"name": "receipt.json", "generation": 123, "size": 42}]
+        )
+
+
 def test_every_canonical_field_has_value_state_and_source_columns() -> None:
     index = ["c1"]
     source = pd.DataFrame(
@@ -184,6 +223,38 @@ def test_every_canonical_field_has_value_state_and_source_columns() -> None:
     assert curated.loc["c1", "perturbation"] == "No treatment"
     assert bool(curated.loc["c1", "is_control"])
     assert bool(curated.loc["c1", "is_baseline"])
+
+
+def test_canonical_fields_follow_binding_obs_completed_contract() -> None:
+    contract = json.loads(OBS_CONTRACT.read_text())
+
+    assert list(curation.CANONICAL_OBS_FIELDS) == contract["canonical_obs_columns"]
+    assert len(curation.CANONICAL_OBS_FIELDS) == contract["canonical_obs_column_count"]
+    assert curation.OBS_CONTRACT_SHA256 == curation.sha256_file(OBS_CONTRACT)
+
+
+def test_supplemental_source_backed_fields_are_not_miscounted_as_canonical() -> None:
+    index = ["c1"]
+    source = pd.DataFrame(
+        {
+            "CELL_ID": ["CCL-171"],
+            "CONCENTRATION_UM": [1.0],
+            "LIBRARY_ID": ["L1"],
+            "TIMEPOINT_HOURS": [24.0],
+        },
+        index=index,
+    )
+
+    curated = curation.curate_obs(
+        base_obs(index), source, member("gse305979_day0_raw", 1)
+    )
+
+    assert "source_accession" in curated
+    assert "source_accession" not in curation.CANONICAL_OBS_FIELDS
+    assert "molecule_sequence" in curated
+    assert set(curation.field_dispositions(curated)) == set(
+        curation.CANONICAL_OBS_FIELDS
+    )
 
 
 def test_source_join_requires_exact_unique_index_order() -> None:

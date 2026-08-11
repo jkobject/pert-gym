@@ -38,58 +38,73 @@ REAL_DATASET_ID = "cellarity/public-collection"
 SOURCE_MANIFEST_PATH = Path(__file__).with_name("source_manifest.json")
 FROZEN_BINDINGS_PATH = Path(__file__).with_name("frozen_inputs") / "bindings.json"
 STAGING_PREFIX = "pert-gym/staging/pert-gym/curation/cellarity/t_9c09e453"
+RECEIPT_PREFIX = "data/cleaned/cellarity_public_collection/_receipts"
+REPO_ROOT = Path(__file__).parents[5]
+OBS_CONTRACT_PATH = REPO_ROOT / "config/obs_completed_contract_v1.json"
+OBS_CONTRACT = json.loads(OBS_CONTRACT_PATH.read_text())
+CANONICAL_OBS_FIELDS = tuple(OBS_CONTRACT["canonical_obs_columns"])
+if len(CANONICAL_OBS_FIELDS) != OBS_CONTRACT["canonical_obs_column_count"]:
+    raise AssertionError("binding OBS contract count drift")
+OBS_CONTRACT_SHA256 = hashlib.sha256(OBS_CONTRACT_PATH.read_bytes()).hexdigest()
 
-CANONICAL_OBS_FIELDS = (
-    "dataset",
-    "sample",
-    "cell_id",
-    "donor_id",
-    "batch",
-    "cell_type",
-    "cell_line",
-    "disease",
-    "tissue_type",
-    "organism",
-    "sex",
-    "age",
-    "ethnicity",
-    "sequencer",
-    "technology",
-    "assay",
-    "modality",
-    "media",
-    "is_bulk",
-    "is_pseudobulk",
-    "perturbation",
-    "perturbation_type",
-    "perturbation_technology",
-    "perturbation_library",
+# These source-backed columns remain useful but are not part of the binding
+# OBS_COMPLETED/v1 denominator. Keeping the two sets separate prevents receipts
+# from silently claiming a hand-maintained superset as the canonical contract.
+SUPPLEMENTAL_OBS_FIELDS = (
     "guide_id",
-    "guide_sequence",
     "perturbation_target",
     "perturbation_target_id",
-    "is_control",
-    "dose",
-    "dose_unit",
-    "timepoint",
     "timepoint_unit",
-    "trajectory_id",
-    "pseudotime",
-    "is_baseline",
-    "sensitivity",
-    "response_metric",
-    "response_value",
-    "response_source",
-    "n_counts",
-    "n_genes",
-    "pct_mito",
-    "pct_ribo",
-    "is_low_quality",
     "source",
     "source_accession",
     "control_availability",
     "x_semantics",
 )
+
+
+def canonical_prefix(spec: dict[str, Any]) -> str:
+    """Return the flat canonical triplet prefix for one source H5AD family."""
+    filename = str(spec["filename"])
+    if not filename.endswith(".h5ad"):
+        raise AssertionError(f"unexpected Cellarity payload filename: {filename}")
+    stem = filename.removesuffix(".h5ad")
+    if "/" in stem or not stem.startswith(str(spec["accession"])):
+        raise AssertionError(f"unsafe canonical payload stem: {stem}")
+    return f"data/cleaned/{stem}"
+
+
+def replace_collection_members(
+    members: list[Any], replacements: dict[str, Any]
+) -> list[Any]:
+    """Replace every exact predecessor UID once while preserving order and peers."""
+    counts = {uid: 0 for uid in replacements}
+    after: list[Any] = []
+    for artifact in members:
+        uid = str(artifact.uid)
+        if uid in replacements:
+            counts[uid] += 1
+            after.append(replacements[uid])
+        else:
+            after.append(artifact)
+    if any(count != 1 for count in counts.values()):
+        raise AssertionError(f"predecessor membership drift: {counts}")
+    if len({str(item.uid) for item in after}) != len(after):
+        raise AssertionError("replacement introduced duplicate Collection members")
+    return after
+
+
+def staging_decommission_gate(objects: list[dict[str, Any]]) -> dict[str, Any]:
+    """Fail closed unless the task-owned staging prefix is proven empty."""
+    if objects:
+        raise AssertionError(f"staging objects remain: {objects}")
+    return {
+        "format": "pert-gym.GCS_DECOMMISSION_READY/v1",
+        "task_id": TASK_ID,
+        "prefix": f"gs://scperturb/{STAGING_PREFIX}/",
+        "objects_remaining": 0,
+        "GCS_DECOMMISSION_READY": True,
+    }
+
 
 MEMBERS = (
     {
@@ -347,6 +362,7 @@ def artifact_identity(artifact: Any) -> dict[str, Any]:
         "hash": str(artifact.hash),
         "version": str(artifact.version),
         "size": int(artifact.size),
+        "path": str(artifact.path),
         "created_at": str(artifact.created_at),
         "description": str(artifact.description),
         "run_uid": str(getattr(getattr(artifact, "run", None), "uid", None)),
@@ -573,7 +589,7 @@ def curate_obs(
     unknown_reason = (
         "source-exhaustive GEO/source-H5AD review found no defensible row value"
     )
-    for field in CANONICAL_OBS_FIELDS:
+    for field in (*CANONICAL_OBS_FIELDS, *SUPPLEMENTAL_OBS_FIELDS):
         set_field(curated, field, nulls(index), "unknown", unknown_reason)
 
     not_applicable = {
@@ -1140,8 +1156,17 @@ def verify_obs(actual: pd.DataFrame, expected: pd.DataFrame) -> None:
 def current_member(
     ln: Any, spec: dict[str, Any], source: pd.DataFrame
 ) -> dict[str, Any]:
-    obs_key = f"{spec['prefix']}/obs.parquet"
-    obs_artifact, history = latest_artifact(ln, obs_key)
+    legacy_obs_key = f"{spec['prefix']}/obs.parquet"
+    obs_key = f"{canonical_prefix(spec)}/obs.parquet"
+    canonical_history = list(ln.Artifact.filter(key=obs_key).all())
+    if canonical_history:
+        canonical_history.sort(key=lambda item: (str(item.created_at), str(item.uid)))
+        obs_artifact = canonical_history[-1]
+        if not bool(obs_artifact.is_latest):
+            raise AssertionError(f"newest canonical OBS is not latest: {obs_key}")
+        history = canonical_history
+    else:
+        obs_artifact, history = latest_artifact(ln, legacy_obs_key)
     if not (
         str(obs_artifact.uid) == spec["before_obs_uid"]
         or str(obs_artifact.description).startswith(
@@ -1149,7 +1174,7 @@ def current_member(
         )
     ):
         raise AssertionError(
-            f"unexpected latest OBS identity: {obs_key} {obs_artifact.uid}"
+            f"unexpected latest OBS identity: {obs_artifact.key} {obs_artifact.uid}"
         )
     obs = obs_artifact.load()
     join = verify_source_join(obs, source, spec)
@@ -1175,7 +1200,7 @@ def current_member(
             # than accepting an obsolete revision as an idempotent replay.
             already = False
         else:
-            already = True
+            already = str(obs_artifact.key) == obs_key
     else:
         curated = curate_obs(obs, source, spec)
     return {
@@ -1254,13 +1279,169 @@ def collection_membership(ln: Any) -> dict[str, Any]:
     return snapshots
 
 
+def ensure_canonical_artifact_key(
+    ln: Any, artifact: Any, target_key: str
+) -> dict[str, Any] | None:
+    """Idempotently remap one immutable payload record to its canonical key."""
+    existing = list(ln.Artifact.filter(key=target_key).all())
+    if existing:
+        if len(existing) != 1 or str(existing[0].uid) != str(artifact.uid):
+            raise AssertionError(f"canonical Artifact key collision: {target_key}")
+        return None
+    before = artifact_identity(artifact)
+    artifact.key = target_key
+    artifact.save()
+    after = artifact_identity(artifact)
+    if after["uid"] != before["uid"] or after["hash"] != before["hash"]:
+        raise AssertionError(
+            f"canonical key remap changed payload identity: {target_key}"
+        )
+    if after["key"] != target_key:
+        raise AssertionError(f"canonical key remap readback mismatch: {target_key}")
+    return {"before": before, "after": after}
+
+
+def collection_identity(collection: Any) -> dict[str, Any]:
+    members = sorted(
+        (
+            {"uid": str(item.uid), "key": str(item.key)}
+            for item in collection.artifacts.only("uid", "key").all()
+        ),
+        key=lambda item: (item["key"], item["uid"]),
+    )
+    return {
+        "uid": str(collection.uid),
+        "key": str(collection.key),
+        "hash": str(collection.hash),
+        "member_count": len(members),
+        "members": members,
+    }
+
+
+def ensure_successor_collections(
+    ln: Any, published: dict[str, Any], *, allow_create: bool
+) -> tuple[dict[str, Any], int]:
+    """Publish/read back broad successors plus one exact logical Collection."""
+    successor_specs = (
+        (
+            "pert-gym/base-public/20260621",
+            f"pert-gym/successors/base-public/20260621/cellarity/{TASK_ID}",
+        ),
+        (
+            "pert-gym/canonical/20260621",
+            f"pert-gym/successors/canonical/20260621/cellarity/{TASK_ID}",
+        ),
+    )
+    output: dict[str, Any] = {}
+    created = 0
+    for predecessor_key, successor_key in successor_specs:
+        predecessors = list(ln.Collection.filter(key=predecessor_key).all())
+        if len(predecessors) != 1:
+            raise AssertionError(f"Collection identity drift: {predecessor_key}")
+        predecessor = predecessors[0]
+        before = list(predecessor.artifacts.all())
+        replacement_by_uid: dict[str, Any] = {}
+        for spec in MEMBERS:
+            matches = [
+                item
+                for item in before
+                if str(item.key) == f"{spec['prefix']}/obs.parquet"
+            ]
+            if len(matches) != 1:
+                raise AssertionError(
+                    f"predecessor target drift: {predecessor_key} {spec['prefix']}"
+                )
+            replacement_by_uid[str(matches[0].uid)] = published[spec["prefix"]]
+        after = replace_collection_members(before, replacement_by_uid)
+        description = canonical(
+            {
+                "task_id": TASK_ID,
+                "predecessor_uid": str(predecessor.uid),
+                "purpose": "replace 10 Cellarity OBS members with canonical source-exhaustive revisions while preserving every unrelated member",
+                "replacements": {
+                    uid: str(item.uid)
+                    for uid, item in sorted(replacement_by_uid.items())
+                },
+            }
+        )
+        records = list(ln.Collection.filter(key=successor_key).all())
+        if records:
+            if len(records) != 1:
+                raise AssertionError(f"successor Collection collision: {successor_key}")
+            successor = records[0]
+        else:
+            if not allow_create:
+                raise AssertionError(
+                    f"required successor Collection absent: {successor_key}"
+                )
+            successor = ln.Collection(
+                after,
+                key=successor_key,
+                description=description,
+                skip_hash_lookup=True,
+            ).save()
+            created += 1
+        actual = collection_identity(successor)
+        expected = sorted(
+            ({"uid": str(item.uid), "key": str(item.key)} for item in after),
+            key=lambda item: (item["key"], item["uid"]),
+        )
+        if str(successor.description) != description or actual["members"] != expected:
+            raise AssertionError(
+                f"successor Collection readback drift: {successor_key}"
+            )
+        output[successor_key] = {
+            "predecessor": collection_identity(predecessor),
+            "successor": actual,
+        }
+
+    logical_key = "pert-gym/datasets/cellarity-public-collection"
+    logical_members = [published[spec["prefix"]] for spec in MEMBERS]
+    logical_description = canonical(
+        {
+            "task_id": TASK_ID,
+            "real_dataset_id": REAL_DATASET_ID,
+            "logical_families": len(MEMBERS),
+            "purpose": "exact Cellarity public dataset Collection over canonical OBS members",
+        }
+    )
+    logical_records = list(ln.Collection.filter(key=logical_key).all())
+    if logical_records:
+        if len(logical_records) != 1:
+            raise AssertionError(f"logical Collection collision: {logical_key}")
+        logical = logical_records[0]
+    else:
+        if not allow_create:
+            raise AssertionError(f"required logical Collection absent: {logical_key}")
+        logical = ln.Collection(
+            logical_members,
+            key=logical_key,
+            description=logical_description,
+            skip_hash_lookup=True,
+        ).save()
+        created += 1
+    logical_identity = collection_identity(logical)
+    expected_logical = sorted(
+        ({"uid": str(item.uid), "key": str(item.key)} for item in logical_members),
+        key=lambda item: (item["key"], item["uid"]),
+    )
+    if (
+        str(logical.description) != logical_description
+        or logical_identity["members"] != expected_logical
+        or logical_identity["member_count"] != len(MEMBERS)
+    ):
+        raise AssertionError("logical Collection readback drift")
+    output[logical_key] = {"successor": logical_identity}
+    return output, created
+
+
 def publish(ln: Any, result: dict[str, Any], spec: dict[str, Any]) -> Any:
     root = Path(tempfile.mkdtemp(prefix=f"{TASK_ID}-cellarity-publish-"))
     path = root / "obs.parquet"
     result["curated"].to_parquet(path)
     artifact = ln.Artifact.from_dataframe(
         path,
-        key=f"{spec['prefix']}/obs.parquet",
+        key=f"{canonical_prefix(spec)}/obs.parquet",
         revises=result["obs_artifact"],
         description=f"{TASK_ID}: source-exhaustive Cellarity OBS; exact GEO H5AD row join; accession={spec['accession']}; family={spec['filename']}",
     ).save()
@@ -1292,7 +1473,7 @@ def emit_product(phase: str, current: int) -> None:
 
 def upload_receipt(receipt: dict[str, Any], mode: str) -> dict[str, Any]:
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    object_name = f"{STAGING_PREFIX}/{mode}-receipt-{timestamp}.json"
+    object_name = f"{RECEIPT_PREFIX}/{mode}-receipt-{timestamp}.json"
     payload = canonical(receipt).encode() + b"\n"
     client = storage.Client(project=BILLING_PROJECT)
     blob = client.bucket("scperturb", user_project=BILLING_PROJECT).blob(object_name)
@@ -1308,6 +1489,20 @@ def upload_receipt(receipt: dict[str, Any], mode: str) -> dict[str, Any]:
         "crc32c": str(blob.crc32c),
         "etag": str(blob.etag),
     }
+
+
+def list_task_staging_objects() -> list[dict[str, Any]]:
+    client = storage.Client(project=BILLING_PROJECT)
+    bucket = client.bucket("scperturb", user_project=BILLING_PROJECT)
+    return [
+        {
+            "name": str(blob.name),
+            "generation": int(blob.generation),
+            "size": int(blob.size),
+            "crc32c": str(blob.crc32c),
+        }
+        for blob in client.list_blobs(bucket, prefix=f"{STAGING_PREFIX}/")
+    ]
 
 
 def remote_attestation(
@@ -1341,6 +1536,17 @@ def inspect_all(
         result = current_member(ln, spec, source)
         if require_curated and not result["already_curated"]:
             raise AssertionError(f"curated revision absent: {spec['prefix']}")
+        if require_curated:
+            expected_keys = {
+                "obs_artifact": f"{canonical_prefix(spec)}/obs.parquet",
+                "x_artifact": f"{canonical_prefix(spec)}/X.h5ad",
+                "var_artifact": f"{canonical_prefix(spec)}/var.parquet",
+            }
+            for name, expected_key in expected_keys.items():
+                if str(result[name].key) != expected_key:
+                    raise AssertionError(
+                        f"canonical payload key absent: {spec['prefix']} {name}"
+                    )
         receipts.append(
             {
                 "identity": {
@@ -1379,6 +1585,9 @@ def main() -> int:
         "collections": ln.Collection.filter().count(),
     }
     writes: list[dict[str, Any]] = []
+    key_remaps: list[dict[str, Any]] = []
+    collection_publication: dict[str, Any] = {}
+    collection_writes = 0
 
     if mode == "mutate":
         metadata = {
@@ -1407,15 +1616,31 @@ def main() -> int:
                 pypackages=False,
                 stream_tracking=False,
             )
+            published: dict[str, Any] = {}
             for index, spec in enumerate(MEMBERS, start=1):
                 emit_product("mutate", index - 1)
                 path, _ = source_path(spec, manifest, source_root)
                 source = load_source_inputs(path, spec["source_columns"])
                 result = current_member(ln, spec, source)
+                for role, artifact, filename in (
+                    ("X", result["x_artifact"], "X.h5ad"),
+                    ("var", result["var_artifact"], "var.parquet"),
+                ):
+                    remap = ensure_canonical_artifact_key(
+                        ln, artifact, f"{canonical_prefix(spec)}/{filename}"
+                    )
+                    if remap is not None:
+                        key_remaps.append({"role": role, **remap})
                 if not result["already_curated"]:
                     artifact = publish(ln, result, spec)
                     writes.append(artifact_identity(artifact))
+                else:
+                    artifact = result["obs_artifact"]
+                published[spec["prefix"]] = artifact
                 del source, result
+            collection_publication, collection_writes = ensure_successor_collections(
+                ln, published, allow_create=True
+            )
             try:
                 ln.finish()
             except AttributeError:
@@ -1423,6 +1648,14 @@ def main() -> int:
     before_or_after = inspect_all(
         ln, manifest, source_root, require_curated=mode in {"mutate", "verify"}
     )
+    if mode == "verify":
+        published = {
+            spec["prefix"]: resolve_artifact(ln, member["obs"]["uid"])
+            for spec, member in zip(MEMBERS, before_or_after, strict=True)
+        }
+        collection_publication, collection_writes = ensure_successor_collections(
+            ln, published, allow_create=False
+        )
     collections_after = collection_membership(ln)
     if collections_after != collections_before:
         raise AssertionError("Collection drift")
@@ -1434,11 +1667,18 @@ def main() -> int:
         "artifacts"
     ] != len(writes):
         raise AssertionError("artifact registry count drift")
+    if (
+        mode == "mutate"
+        and counts_after["collections"] - counts_before["collections"]
+        != collection_writes
+    ):
+        raise AssertionError("Collection registry count drift")
     if mode == "verify" and counts_after != counts_before:
         raise AssertionError("verify replay changed registry counts")
     post_write_readback = (
         validate_mutation_readback(writes, before_or_after) if mode == "mutate" else []
     )
+    decommission = staging_decommission_gate(list_task_staging_objects())
     receipt = {
         "format": "pert-gym.real-dataset-obs-curation/v2",
         "task_id": TASK_ID,
@@ -1447,6 +1687,12 @@ def main() -> int:
         "mode": mode,
         "helper_sha256": helper_sha256,
         "source_manifest_sha256": sha256_file(SOURCE_MANIFEST_PATH),
+        "obs_contract": {
+            "contract_id": OBS_CONTRACT["contract_id"],
+            "sha256": OBS_CONTRACT_SHA256,
+            "canonical_field_count": len(CANONICAL_OBS_FIELDS),
+            "canonical_fields": list(CANONICAL_OBS_FIELDS),
+        },
         "frozen_inputs": frozen["inputs"],
         "source_denominator": {
             "biological_datasets": 1,
@@ -1455,17 +1701,20 @@ def main() -> int:
             "observations": 2_212_441,
         },
         "members": before_or_after,
-        "collections": collections_after,
+        "predecessor_collections": collections_after,
+        "published_collections": collection_publication,
         "writes": {
             "obs_revisions": len(writes),
             "var_revisions": 0,
             "x_revisions": 0,
-            "collection_writes": 0,
+            "collection_writes": collection_writes,
             "deletions": 0,
             "artifacts": writes,
+            "canonical_key_remaps": key_remaps,
         },
         "registry_counts": {"before": counts_before, "after": counts_after},
         "post_write_readback": post_write_readback,
+        "gcs_decommission": decommission,
         "rollback_identity": [
             {
                 "before_obs_uid": spec["before_obs_uid"],
