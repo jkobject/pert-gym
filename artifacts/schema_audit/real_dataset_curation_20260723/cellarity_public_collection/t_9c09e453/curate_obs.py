@@ -1394,6 +1394,7 @@ def strip_runtime(result: dict[str, Any]) -> dict[str, Any]:
         "obs": artifact_identity(result["obs_artifact"]),
         "x": artifact_identity(result["x_artifact"]),
         "var": artifact_identity(result["var_artifact"]),
+        "var_verification": result["var_verification"],
         "history_count": result["history_count"],
         "already_curated": result["already_curated"],
         "source_join": result["source_join"],

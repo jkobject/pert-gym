@@ -249,6 +249,40 @@ def test_var_gate_requires_exact_human_ensembl_ids_for_every_gene_feature() -> N
         curation.verify_var(broken, source)
 
 
+def test_receipt_member_preserves_var_axis_verification() -> None:
+    verification = {
+        "status": "PASS",
+        "VAR_ENSEMBL_SPECIES_COMPLETED": True,
+        "ordered_var_axis_sha256": "a" * 64,
+        "axis_identity_source": "pert_gym_original_var_index",
+    }
+    artifact = SimpleNamespace(
+        uid="artifact-uid",
+        key="data/cleaned/cellarity/family/var.parquet",
+        hash="artifact-hash",
+        version="0001",
+        size=42,
+        path="s3://bucket/artifact.parquet",
+        description="test artifact",
+        created_at="2026-08-11T00:00:00Z",
+        run=SimpleNamespace(uid="run-uid"),
+    )
+    result = {
+        "obs_artifact": artifact,
+        "x_artifact": artifact,
+        "var_artifact": artifact,
+        "var_verification": verification,
+        "history_count": 1,
+        "already_curated": True,
+        "source_join": {"exact_index_order_match": True},
+        "field_dispositions": {},
+    }
+
+    member = curation.strip_runtime(result)
+
+    assert member["var_verification"] == verification
+
+
 def test_every_canonical_field_has_value_state_and_source_columns() -> None:
     index = ["c1"]
     source = pd.DataFrame(
