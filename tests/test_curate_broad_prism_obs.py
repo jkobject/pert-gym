@@ -5,6 +5,7 @@ import json
 import sqlite3
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 
 import pandas as pd
 import pyarrow as pa
@@ -266,7 +267,7 @@ class _FakeArtifact:
 
 
 class _FakeFilter:
-    def __init__(self, values: list[_FakeArtifact]) -> None:
+    def __init__(self, values: list[Any]) -> None:
         self.values = values
 
     def count(self) -> int:
@@ -274,6 +275,9 @@ class _FakeFilter:
 
     def exists(self) -> bool:
         return bool(self.values)
+
+    def all(self) -> list[object]:
+        return list(self.values)
 
 
 class _FakeArtifactManager:
@@ -304,9 +308,6 @@ class _FakeArtifactManager:
     def count(self) -> int:
         return len(self.artifacts)
 
-    def all(self) -> list[_FakeArtifact]:
-        return list(self.artifacts.values())
-
     def from_dataframe(
         self,
         path: Path,
@@ -332,8 +333,8 @@ class _FakeCollectionManager:
     def count(self) -> int:
         return len(self.collections)
 
-    def all(self) -> list[object]:
-        return list(self.collections)
+    def filter(self) -> _FakeFilter:
+        return _FakeFilter(self.collections)
 
 
 class _FakeCollectionArtifacts:

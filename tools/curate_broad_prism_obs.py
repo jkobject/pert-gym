@@ -585,7 +585,7 @@ def resolve_artifact(ln: Any, value: Any) -> Any:
 
 def collection_memberships(ln: Any, artifact: Any) -> list[dict[str, str]]:
     memberships: list[dict[str, str]] = []
-    for collection in ln.Collection.all():
+    for collection in ln.Collection.filter().all():
         if collection.artifacts.filter(uid=artifact.uid).exists():
             memberships.append(collection_identity(collection))
     return sorted(memberships, key=lambda item: (item["name"], item["uid"]))
@@ -612,14 +612,14 @@ def collection_identity(collection: Any) -> dict[str, str]:
 
 def artifact_registry_inventory(ln: Any) -> list[dict[str, object]]:
     return sorted(
-        (artifact_identity(artifact) for artifact in ln.Artifact.all()),
+        (artifact_identity(artifact) for artifact in ln.Artifact.filter().all()),
         key=lambda item: (str(item["uid"]), str(item["key"])),
     )
 
 
 def collection_registry_inventory(ln: Any) -> list[dict[str, object]]:
     inventory: list[dict[str, object]] = []
-    for collection in ln.Collection.all():
+    for collection in ln.Collection.filter().all():
         artifacts = sorted(str(artifact.uid) for artifact in collection.artifacts.all())
         inventory.append(
             {
