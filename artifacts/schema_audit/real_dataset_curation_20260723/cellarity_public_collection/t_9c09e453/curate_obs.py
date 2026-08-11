@@ -798,12 +798,13 @@ def curate_obs(
             set_field(
                 curated, "timepoint_unit", "minute", "known", "canonical time unit"
             )
+        baseline = timepoint.eq(0).astype("boolean")
         set_field(
             curated,
             "is_baseline",
-            nulls(index, "boolean"),
-            "not_applicable",
-            "no untreated perturbation baseline axis",
+            baseline,
+            np.where(timepoint.notna(), "known", "unknown"),
+            "source H5AD day; baseline is the earliest day-zero state",
         )
     elif spec["accession"] == "GSE305979":
         set_field(
@@ -1152,7 +1153,7 @@ def current_member(
         )
     obs = obs_artifact.load()
     join = verify_source_join(obs, source, spec)
-    already = str(obs_artifact.description).startswith(
+    task_owned = str(obs_artifact.description).startswith(
         f"{TASK_ID}: source-exhaustive Cellarity OBS"
     )
     x_artifact = resolve_artifact(ln, obs_artifact.features.get_values()["X"])
@@ -1161,12 +1162,20 @@ def current_member(
     var_artifact = resolve_artifact(ln, x_artifact.features.get_values()["var"])
     if str(var_artifact.uid) != spec["var_uid"]:
         raise AssertionError(f"X->VAR identity drift: {spec['prefix']}")
-    if already:
+    already = False
+    if task_owned:
         baseline_artifact = resolve_artifact(ln, spec["before_obs_uid"])
         baseline_obs = baseline_artifact.load()
         verify_source_join(baseline_obs, source, spec)
         curated = curate_obs(baseline_obs, source, spec)
-        verify_obs(obs, curated)
+        try:
+            verify_obs(obs, curated)
+        except AssertionError:
+            # A corrected curation contract must revise the task-owned OBS rather
+            # than accepting an obsolete revision as an idempotent replay.
+            already = False
+        else:
+            already = True
     else:
         curated = curate_obs(obs, source, spec)
     return {
@@ -1192,6 +1201,27 @@ def strip_runtime(result: dict[str, Any]) -> dict[str, Any]:
         "source_join": result["source_join"],
         "field_dispositions": result["field_dispositions"],
     }
+
+
+def validate_mutation_readback(
+    writes: list[dict[str, Any]], members: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    if not writes:
+        raise AssertionError("mutate mode produced zero writes; use verify for replay")
+    readback_by_uid = {
+        str(member["obs"]["uid"]): member
+        for member in members
+        if member.get("already_curated") is True
+    }
+    readback: list[dict[str, Any]] = []
+    for written in writes:
+        member = readback_by_uid.get(str(written["uid"]))
+        if member is None or member["obs"] != written:
+            raise AssertionError(
+                f"post-write readback does not match written OBS {written['uid']}"
+            )
+        readback.append(member["obs"])
+    return readback
 
 
 def collection_membership(ln: Any) -> dict[str, Any]:
@@ -1275,7 +1305,29 @@ def upload_receipt(receipt: dict[str, Any], mode: str) -> dict[str, Any]:
         "generation": int(blob.generation),
         "size": len(payload),
         "sha256": sha256_bytes(payload),
+        "crc32c": str(blob.crc32c),
+        "etag": str(blob.etag),
     }
+
+
+def remote_attestation(
+    receipt: dict[str, Any], remote_identity: dict[str, Any]
+) -> dict[str, Any]:
+    required = {"uri", "generation", "size", "sha256", "crc32c", "etag"}
+    if set(remote_identity) != required:
+        raise AssertionError("remote receipt identity is incomplete")
+    if (
+        not isinstance(remote_identity["generation"], int)
+        or remote_identity["generation"] <= 0
+    ):
+        raise AssertionError("remote receipt generation is invalid")
+    attestation = {
+        "format": "pert-gym.remote-receipt-attestation/v1",
+        "receipt_canonical_sha256": receipt["canonical_sha256"],
+        "remote_identity": remote_identity,
+    }
+    attestation["canonical_sha256"] = sha256_bytes(canonical(attestation).encode())
+    return attestation
 
 
 def inspect_all(
@@ -1384,6 +1436,9 @@ def main() -> int:
         raise AssertionError("artifact registry count drift")
     if mode == "verify" and counts_after != counts_before:
         raise AssertionError("verify replay changed registry counts")
+    post_write_readback = (
+        validate_mutation_readback(writes, before_or_after) if mode == "mutate" else []
+    )
     receipt = {
         "format": "pert-gym.real-dataset-obs-curation/v2",
         "task_id": TASK_ID,
@@ -1410,6 +1465,7 @@ def main() -> int:
             "artifacts": writes,
         },
         "registry_counts": {"before": counts_before, "after": counts_after},
+        "post_write_readback": post_write_readback,
         "rollback_identity": [
             {
                 "before_obs_uid": spec["before_obs_uid"],
@@ -1428,8 +1484,10 @@ def main() -> int:
     }
     receipt["canonical_sha256"] = sha256_bytes(canonical(receipt).encode())
     pointer = upload_receipt(receipt, mode)
+    attestation = remote_attestation(receipt, pointer)
     emit_product("checkpointing", len(MEMBERS))
     print("CELLARITY_CURATION_RECEIPT=" + canonical(pointer), flush=True)
+    print("CELLARITY_CURATION_ATTESTATION=" + canonical(attestation), flush=True)
     return 0
 
 

@@ -80,6 +80,88 @@ def test_pseudobulk_distinguishes_vehicle_from_compound_dose() -> None:
     assert curated["cell_line"].tolist() == ["A375", "A549"]
 
 
+@pytest.mark.parametrize(
+    ("kind", "source_column"),
+    [
+        ("gse305370_citeseq", "time"),
+        ("gse305370_rna", "day"),
+    ],
+)
+def test_gse305370_time_axis_materializes_baseline(
+    kind: str, source_column: str
+) -> None:
+    index = ["day-zero", "day-two"]
+    source = pd.DataFrame(
+        {
+            source_column: [0, 2],
+            "donor": ["donor-1", "donor-1"],
+            "library": ["library-1", "library-1"],
+        },
+        index=index,
+    )
+
+    curated = curation.curate_obs(base_obs(index), source, member(kind, len(index)))
+
+    assert curated["timepoint"].tolist() == [0.0, 2880.0]
+    assert curated["is_baseline"].tolist() == [True, False]
+    assert curated["is_baseline_state"].eq("known").all()
+
+
+def test_gse305370_missing_row_time_keeps_baseline_applicable_unknown() -> None:
+    index = ["cell-1"]
+    source = pd.DataFrame({"library": ["library-1"]}, index=index)
+
+    curated = curation.curate_obs(
+        base_obs(index), source, member("gse305370_multiome", len(index))
+    )
+
+    assert curated["is_baseline"].isna().all()
+    assert curated["is_baseline_state"].eq("unknown").all()
+
+
+def test_mutation_readback_requires_writes_and_exact_current_obs_identity() -> None:
+    written = {
+        "uid": "obs-new",
+        "key": "cellarity/family/obs.parquet",
+        "hash": "hash-new",
+        "version": "2",
+    }
+    member_readback = {
+        "identity": {"prefix": "cellarity/family"},
+        "obs": written,
+        "already_curated": True,
+    }
+
+    with pytest.raises(AssertionError, match="zero writes"):
+        curation.validate_mutation_readback([], [member_readback])
+    with pytest.raises(AssertionError, match="post-write readback"):
+        curation.validate_mutation_readback(
+            [written], [{**member_readback, "obs": {**written, "uid": "other"}}]
+        )
+
+    assert curation.validate_mutation_readback([written], [member_readback]) == [
+        written
+    ]
+
+
+def test_remote_attestation_binds_receipt_digest_and_exact_object_generation() -> None:
+    receipt = {"canonical_sha256": "a" * 64, "mode": "mutate"}
+    remote = {
+        "uri": "gs://bucket/path/mutate-receipt.json",
+        "generation": 123,
+        "size": 42,
+        "sha256": "b" * 64,
+        "crc32c": "AAAAAA==",
+        "etag": "etag-value",
+    }
+
+    attestation = curation.remote_attestation(receipt, remote)
+
+    assert attestation["receipt_canonical_sha256"] == "a" * 64
+    assert attestation["remote_identity"] == remote
+    assert len(attestation["canonical_sha256"]) == 64
+
+
 def test_every_canonical_field_has_value_state_and_source_columns() -> None:
     index = ["c1"]
     source = pd.DataFrame(
