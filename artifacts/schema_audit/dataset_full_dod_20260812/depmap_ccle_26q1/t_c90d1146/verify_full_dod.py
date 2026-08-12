@@ -266,9 +266,12 @@ def collection_identity(collection: Any) -> dict[str, Any]:
         "unique_key_count": len({str(member.key) for member in members}),
         "membership_sha256": membership_sha256(uids),
         "target_members": sorted(
-            {"uid": str(member.uid), "key": str(member.key)}
-            for member in members
-            if str(member.key) == f"{PREFIX}/obs.parquet"
+            (
+                {"uid": str(member.uid), "key": str(member.key)}
+                for member in members
+                if str(member.key) == f"{PREFIX}/obs.parquet"
+            ),
+            key=lambda item: (item["uid"], item["key"]),
         ),
     }
 

@@ -86,3 +86,24 @@ def test_verify_only_capacity_does_not_apply_writer_disk_floor(monkeypatch) -> N
     capacity = MODULE.verify_only_capacity()
     assert capacity["free_disk_bytes"] == 1
     assert capacity["available_memory_bytes"] == 1024 * 1024
+
+
+def test_collection_identity_sorts_duplicate_target_key_revisions() -> None:
+    class Members:
+        def only(self, *_fields):
+            return self
+
+        def all(self):
+            return [
+                SimpleNamespace(uid="z", key="depmap_ccle/26q1/obs.parquet"),
+                SimpleNamespace(uid="a", key="depmap_ccle/26q1/obs.parquet"),
+            ]
+
+    collection = SimpleNamespace(
+        uid="collection",
+        key="test",
+        hash="hash",
+        artifacts=Members(),
+    )
+    identity = MODULE.collection_identity(collection)
+    assert [item["uid"] for item in identity["target_members"]] == ["a", "z"]
