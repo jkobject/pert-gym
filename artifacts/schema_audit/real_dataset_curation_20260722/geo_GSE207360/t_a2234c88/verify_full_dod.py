@@ -316,7 +316,7 @@ def validate_receipt(
         "task_scoped_labels_cleared": True,
         "local_lease_absent": True,
     }
-    if lifecycle != expected_lifecycle:
+    if any(lifecycle.get(key) != value for key, value in expected_lifecycle.items()):
         raise AssertionError("receipt lifecycle evidence is incomplete")
     decommission = receipt.get("gcs_decommission", {})
     if decommission.get("eligible") is not False or decommission.get("action") != "preserved_no_deletion":

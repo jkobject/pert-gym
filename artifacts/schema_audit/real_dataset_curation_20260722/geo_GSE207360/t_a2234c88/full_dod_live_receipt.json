@@ -1,0 +1,527 @@
+{
+  "artifacts": {
+    "explicit_links": true,
+    "obs": {
+      "hash": "HZm19cFnhQVE6TPO4kL0zg",
+      "is_latest": true,
+      "key": "prism_collection/GSE207360/obs.parquet",
+      "n_observations": 12487,
+      "size": 2531291,
+      "uid": "KSAkP0NJF5P5g1mJ0004",
+      "version": "0004"
+    },
+    "species_strata": {
+      "Homo sapiens": 10984,
+      "Mus musculus": 1503
+    },
+    "var": {
+      "hash": "wv2BwlQShhowaM7AYyu4uQ",
+      "human_ensg": 32738,
+      "is_latest": true,
+      "key": "prism_collection/GSE207360/var.parquet",
+      "mouse_ensmusg": 27998,
+      "n_observations": 60736,
+      "rows": 60736,
+      "size": 4083025,
+      "uid": "U8OeHI58YG9Y9Nsb0002",
+      "version": "0002"
+    },
+    "x": {
+      "hash": "rLTZFYwmtPyrsHhVQ6_kp-",
+      "is_latest": true,
+      "key": "prism_collection/GSE207360/X.h5ad",
+      "n_observations": 12487,
+      "obs_names_sha256": "65de59c0c005cbdbbdd3a08d6aba68efb7a0667bd12f7a393cd396a80eeb193b",
+      "shape": [
+        12487,
+        60736
+      ],
+      "size": 453049912,
+      "stored_nonzero": 56169414,
+      "uid": "4IOEQEw4ylx0Zx4c0000",
+      "var_names_sha256": "aa592b3ef2d217646eb95395c0207af7ae0a42c7b27c363710b722982cc1ffb3",
+      "version": "0000"
+    }
+  },
+  "canonical_sha256": "fb869bf44dc7e00f2b74a23a8122e1dd4cbec3a42f75843342836317bc11b0b8",
+  "code": {
+    "branch": "pert-gym/t_f2593783-complete-gse207360-live-dod-after-pr-117",
+    "head": "443f7dce6db9be0b3eba1f9489d91b60b373a811",
+    "pr": 138,
+    "verifier_sha256": "4e9c05d572f42d10fdefe67453534af188152371390de130c4245064689fdfb4"
+  },
+  "collections_with_target_key": [
+    {
+      "hash": "GXnxligyjv_jQmZGzENIiA",
+      "key": "pert-gym/additions/20260621",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "kYkBznC2fuGmbUbg0000"
+    },
+    {
+      "hash": "FuT5cWa5QodFHfYbzsyLRw",
+      "key": "pert-gym/canonical/20260621",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "aEWBxMlcWx2d7Cd80000"
+    },
+    {
+      "hash": "7p8d_e1ecBStZ6MZ-d38fQ",
+      "key": "pert-gym/canonical/20260624-shared-var",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "38lC0mmlfUMGLa6i0000"
+    },
+    {
+      "hash": "vdFZS7um8nZZaAvy2c3TPA",
+      "key": "pert-gym/additions/20260624-tiny-tail-minimal",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "4k78ixIrCnBndSWK0000"
+    },
+    {
+      "hash": "NbAuUlPCPxCxCIntDiJiNw",
+      "key": "pert-gym/canonical/20260624-tiny-tail-minimal",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "WyS1x7L3j7ml1PRx0000"
+    },
+    {
+      "hash": "lvslAxNMvMgRpLFOFVyJjA",
+      "key": "pert-gym/canonical/20260624-shared-var-alias",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "gdJ6mLdlfCLWFxAE0000"
+    },
+    {
+      "hash": "ZN8aqwyEXFpyKWcIkCIhgg",
+      "key": "pert-gym/additions/20260717-c-elegans-pilot",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "uA0lyIvPz0wvwkho0000"
+    },
+    {
+      "hash": "hxBAjNYvEwzRQjXW9nKpLw",
+      "key": "pert-gym/additions/20260718-odd001154-gse194214",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "Kx7T3b75KmqnDhmv0000"
+    },
+    {
+      "hash": "u2ombBSmaDVI3OsTMBh8Kg",
+      "key": "pert-gym/additions/20260718-odd001155-gse196799",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "nhx8lM9cElyfHDNq0000"
+    },
+    {
+      "hash": "qPVTqqfNQjYFLGeIiZGiEw",
+      "key": "pert-gym/additions/20260718-odd001111-gse130238",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "TwC9RNVYX56GXQrQ0000"
+    },
+    {
+      "hash": "g7z8r2TTwtnj192C2Ra7tA",
+      "key": "pert-gym/additions/20260718-odd001099-gse138002",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "M3RK4i6Alb6IY3MW0000"
+    },
+    {
+      "hash": "PazpnU8IsyK0lliETQ4DSA",
+      "key": "pert-gym/additions/20260718-temporal-v4-098-multiciliated-differentiation",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "t5vYC6ws9hUoxiCw0000"
+    },
+    {
+      "hash": "VCRuYPFJFF48IfsjuLbh1w",
+      "key": "pert-gym/additions/20260719-temporal-v4-109-stable-chambered-cardioids",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "s4nGi0cl9DIcBwiR0000"
+    },
+    {
+      "hash": "_6lKH1wifEr64imo92RXaw",
+      "key": "pert-gym/additions/20260719-temporal-v4-133-zebrafish-retina-regeneration",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "4KzIQvzliuWg8R0k0000"
+    },
+    {
+      "hash": "O3SYC-ko5RHB9bAB4HWNKw",
+      "key": "pert-gym/additions/20260719-temporal-v4-116-perturbase-gse107185",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "gTFAbqEVHm9tFLzV0000"
+    },
+    {
+      "hash": "JtWQXByhDd6wVBbNI0_VRw",
+      "key": "pert-gym/additions/20260719-temporal-v4-059-drosophila-dorsal-ventral",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "WBFxVN9Alr8zFt9T0000"
+    },
+    {
+      "hash": "z6blPVzHnMTIpoEpgdtusg",
+      "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "aH1RWvlWo87xGpsb0000"
+    },
+    {
+      "hash": "ImySHsnSBRg8WsSXmRcGzw",
+      "key": "pert-gym/additions/20260721-depmap-ccle-26q1-e2e-r2",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "B9N5cXbu8Cm0RZSj0000"
+    },
+    {
+      "hash": "lsA-KQnpRV66FuOawrA6uA",
+      "key": "pert-gym/additions/20260721-ginkgo-vcpi-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "qoTeH7T78kjbmIWA0000"
+    },
+    {
+      "hash": "ZsctJFBSIiaKnrIzEh-1-g",
+      "key": "pert-gym/additions/20260721-drug-seq-gse120222-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "Ltjv1RYDCnuxqqRT0000"
+    },
+    {
+      "hash": "NbQ1KgLmng3Jc5qGjnmTVA",
+      "key": "pert-gym/additions/20260723-gse197452-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "ZTXfvA5YDoaqrd750000"
+    },
+    {
+      "hash": "-MZf01S-e8dOwVeoaV-UxQ",
+      "key": "pert-gym/additions/20260801-gse269572-strict-obs-v2",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "NFBw58RkNoGgn9pO0000"
+    },
+    {
+      "hash": "dutzDtW5Ax11bfnr4dpR5A",
+      "key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "XwM4hPo8erPJKOAz0000"
+    },
+    {
+      "hash": "ykInvLS943_EwyCbpNh30Q",
+      "key": "pert-gym/additions/20260730-gse138002-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "v40mGQWasaHrIP7f0000"
+    },
+    {
+      "hash": "RW27QHxIfc11wO3yjtWClA",
+      "key": "pert-gym/additions/20260730-alternative-cell-cycle-multiciliated-e2e-v2",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "Hck3g1dNOGJBOv3R0000"
+    },
+    {
+      "hash": "c5eIDLYNirtHuEw0kjhRzg",
+      "key": "pert-gym/additions/20260730-odd001155-gse196799-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "FlK1x1wByjbMTRCM0000"
+    },
+    {
+      "hash": "zPWFZ2AJpCM5K6GVpT9KsA",
+      "key": "pert-gym/additions/20260730-gse130238-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "whLgwg8opPvW9qdN0000"
+    },
+    {
+      "hash": "70eCYeZ2PboMZ3Jsnu_rtw",
+      "key": "pert-gym/additions/20260730-gse269572-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "jgMqCxKblbeO5uT60000"
+    },
+    {
+      "hash": "ybVSmxBIxR4r9jziOg69rg",
+      "key": "pert-gym/additions/20260730-gse107185-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "Gr2tdh9dUVgIoqB80000"
+    },
+    {
+      "hash": "vJZNaQoYGfXQk-d25eMVQQ",
+      "key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "GvFuzrWQeKB6Pd8t0000"
+    },
+    {
+      "hash": "ySZTGASBL-bz7FN_J0zYQw",
+      "key": "pert-gym/additions/20260730-odd001154-gse194214-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "GvFuzrWQeKB6Pd8t0001"
+    },
+    {
+      "hash": "7b71S1I3_S04350CqwN7jQ",
+      "key": "pert-gym/additions/20260801-gse107185-review-fix",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "oabDLe6umomPkBHG0000"
+    },
+    {
+      "hash": "58k-M7PfI-UVp2IdHYvEnw",
+      "key": "pert-gym/additions/20260802-c-elegans-embryogenesis-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "9MkL8bCk3WzbuPlV0000"
+    },
+    {
+      "hash": "dZNbchOzV4-pyP7AF2wnUg",
+      "key": "pert-gym/additions/20260801-e-mtab-9304-curated-e2e",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "nNM0dHevOHkv2kjt0000"
+    },
+    {
+      "hash": "W-npIXuZoVlKApzfRyb-xA",
+      "key": "pert-gym/successors/canonical/20260621/cellarity/t_9c09e453",
+      "target_members": [
+        {
+          "key": "prism_collection/GSE207360/obs.parquet",
+          "uid": "KSAkP0NJF5P5g1mJ0000"
+        }
+      ],
+      "uid": "geoeUHQvdb3Yb7na0000"
+    }
+  ],
+  "command": {
+    "argv": [
+      "artifacts/schema_audit/real_dataset_curation_20260722/geo_GSE207360/t_a2234c88/verify_full_dod.py"
+    ],
+    "exit_code": 0
+  },
+  "completed_at": 1786522213,
+  "dataset_id": "geo/GSE207360",
+  "exact_current_collection_memberships": [],
+  "format": "pert-gym.gse207360-full-dod-live-readback/v2",
+  "gcs_decommission": {
+    "action": "preserved_no_deletion",
+    "canonical_cleaned": {
+      "exists": false,
+      "http_status": 200,
+      "object_count_lower_bound": 0,
+      "objects": [],
+      "truncated": false,
+      "uri": "gs://scperturb/data/cleaned/GSE207360/"
+    },
+    "eligible": false,
+    "gates": {
+      "accepted_current_collection_membership": false,
+      "accepted_parity_and_readback": true,
+      "canonical_data_cleaned_payload": false,
+      "exact_deletion_scope_present": false,
+      "executable_processing_notebook": true,
+      "immutable_source_and_rollback": true,
+      "independent_review_of_this_receipt": false
+    },
+    "legacy_staging": {
+      "exists": false,
+      "http_status": 200,
+      "object_count_lower_bound": 0,
+      "objects": [],
+      "truncated": false,
+      "uri": "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE207360.h5ad"
+    },
+    "unmet_gates": [
+      "exact_deletion_scope_present",
+      "canonical_data_cleaned_payload",
+      "accepted_current_collection_membership",
+      "independent_review_of_this_receipt"
+    ]
+  },
+  "host": {
+    "available_memory_bytes": 32968019968,
+    "free_disk_bytes": 16653955072,
+    "hostname": "pert-gym-worker-eu"
+  },
+  "lifecycle": {
+    "control_plane_readback": {
+      "instance_id": "3715582979673213789",
+      "labels": {
+        "region": "europe-west1",
+        "role": "data-worker"
+      }
+    },
+    "local_lease_absent": true,
+    "payload_exit_code": 0,
+    "task_scoped_labels_cleared": true,
+    "terminal_vm_status": "TERMINATED"
+  },
+  "registry_drift": 0,
+  "replay_noop": true,
+  "run_id": "4662",
+  "snapshots": {
+    "after": {
+      "artifact_count": 28600,
+      "artifact_identities_sha256": "0cbb342cf9adf5c7f6f963cce87b92c882d5ea9e7dfb841b68d5175093cdaddf",
+      "canonical_sha256": "3aa150dd6c00e4b03f2e1390f3121348624b3e04eafa5acf066c435c8926c313",
+      "collection_count": 55,
+      "collection_identities_and_memberships_sha256": "da15ca5957b863c3162c84ccd18ae567b57a42b328e979e00a282cd517f944aa"
+    },
+    "before": {
+      "artifact_count": 28600,
+      "artifact_identities_sha256": "0cbb342cf9adf5c7f6f963cce87b92c882d5ea9e7dfb841b68d5175093cdaddf",
+      "canonical_sha256": "3aa150dd6c00e4b03f2e1390f3121348624b3e04eafa5acf066c435c8926c313",
+      "collection_count": 55,
+      "collection_identities_and_memberships_sha256": "da15ca5957b863c3162c84ccd18ae567b57a42b328e979e00a282cd517f944aa"
+    }
+  },
+  "source": {
+    "sha256": "b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+    "size": 4174159639
+  },
+  "task_id": "t_f2593783"
+}

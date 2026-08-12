@@ -17,6 +17,16 @@
       "within_monthly_ceiling": true,
       "terminal_vm_status": "TERMINATED",
       "task_scoped_labels_cleared": true
+    },
+    "full_dod_live_receipt.json": {
+      "sha256": "587ac9814746d9ae1c0c62fb16d1718e681d1709c72aaf2849cac938bae8ffdf",
+      "canonical_sha256": "fb869bf44dc7e00f2b74a23a8122e1dd4cbec3a42f75843342836317bc11b0b8",
+      "run_id": "4662",
+      "code_head": "443f7dce6db9be0b3eba1f9489d91b60b373a811",
+      "verifier_sha256": "4e9c05d572f42d10fdefe67453534af188152371390de130c4245064689fdfb4",
+      "replay_noop": true,
+      "terminal_vm_status": "TERMINATED",
+      "task_scoped_labels_cleared": true
     }
   },
   "code_bindings": {

@@ -28,6 +28,7 @@ MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 DECISION_NOTEBOOK = MODULE_PATH.parent / "GSE207360_processing_decisions.ipynb"
 FULL_DOD_VERIFIER = MODULE_PATH.parent / "verify_full_dod.py"
+FULL_DOD_RECEIPT = MODULE_PATH.parent / "full_dod_live_receipt.json"
 FULL_DOD_SPEC = importlib.util.spec_from_file_location(
     "gse207360_full_dod", FULL_DOD_VERIFIER
 )
@@ -488,3 +489,18 @@ def test_registry_snapshot_uses_live_artifact_schema_without_version_field() -> 
     snapshot = FULL_DOD_MODULE.registry_snapshot(Lamin)
     assert snapshot["artifact_count"] == 0
     assert snapshot["collection_count"] == 0
+
+
+def test_committed_full_dod_receipt_is_immutable_and_valid() -> None:
+    receipt = json.loads(FULL_DOD_RECEIPT.read_text())
+    FULL_DOD_MODULE.validate_receipt(
+        receipt,
+        expected_head="443f7dce6db9be0b3eba1f9489d91b60b373a811",
+        expected_run_id="4662",
+        expected_verifier_sha256="4e9c05d572f42d10fdefe67453534af188152371390de130c4245064689fdfb4",
+    )
+    assert receipt["canonical_sha256"] == "fb869bf44dc7e00f2b74a23a8122e1dd4cbec3a42f75843342836317bc11b0b8"
+    assert receipt["snapshots"]["before"] == receipt["snapshots"]["after"]
+    assert receipt["gcs_decommission"]["legacy_staging"]["http_status"] == 200
+    assert receipt["gcs_decommission"]["canonical_cleaned"]["http_status"] == 200
+    assert receipt["lifecycle"]["terminal_vm_status"] == "TERMINATED"
