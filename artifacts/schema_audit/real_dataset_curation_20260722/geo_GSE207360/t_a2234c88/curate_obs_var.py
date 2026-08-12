@@ -25,6 +25,7 @@ from tools.pert_gym_vm_runner import (
     distributed_lamin_writer_lease,
     lamin_writer_lease,
     preflight,
+    verify_only_preflight,
 )
 
 TASK_ID = "t_e8bc7216"
@@ -654,7 +655,7 @@ def main() -> int:
     source_manifest = json.loads(SOURCE_MANIFEST_PATH.read_text())
     if source_manifest["real_dataset_id"] != REAL_DATASET_ID:
         raise AssertionError("source manifest identity drift")
-    capacity = preflight()
+    capacity = verify_only_preflight() if mode == "verify" else preflight()
     emit_product("preflight", 9)
     source, source_summary = load_source_metadata()
     ln = connect_pertdata()

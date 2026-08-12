@@ -97,6 +97,9 @@ def test_frozen_rows_and_source_manifest_are_bound() -> None:
         assert hashlib.sha256(bound_bytes).hexdigest() == expected_sha256
 
     live_receipt = json.loads((MODULE.EVIDENCE_DIR / "live_receipt.json").read_text())
+    assert live_receipt["helper_sha256"] == receipt_manifest[
+        "historical_live_receipt_helper_sha256"
+    ]
     assert (
         live_receipt["canonical_sha256"]
         == receipt_manifest["receipts"]["live_receipt.json"]["canonical_sha256"]
@@ -298,4 +301,23 @@ def test_main_refuses_mac(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(MODULE.platform, "system", lambda: "Darwin")
     monkeypatch.setattr(MODULE.sys, "argv", [str(MODULE_PATH), "plan"])
     with pytest.raises(RuntimeError, match="refusing Mac execution"):
+        MODULE.main()
+
+
+def test_verify_mode_uses_bounded_verify_only_capacity_gate(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(MODULE.platform, "system", lambda: "Linux")
+    monkeypatch.setattr(MODULE.sys, "argv", [str(MODULE_PATH), "verify"])
+
+    def verify_gate() -> None:
+        raise RuntimeError("verify gate reached")
+
+    monkeypatch.setattr(MODULE, "verify_only_preflight", verify_gate)
+    monkeypatch.setattr(
+        MODULE,
+        "preflight",
+        lambda: (_ for _ in ()).throw(AssertionError("writer gate must not run")),
+    )
+    with pytest.raises(RuntimeError, match="verify gate reached"):
         MODULE.main()

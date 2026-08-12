@@ -20,9 +20,10 @@
     }
   },
   "code_bindings": {
-    "curate_obs_var.py": "7835871c4c4530ab2e3c09144616388457d204212a58d882d73141f646c01f26",
+    "curate_obs_var.py": "4765e0f7519c8b127ff422a1e919129224b0b8308463a71a09e5d1650fcde533",
     "extract_seurat_metadata.R": "9ebcd93024fc83ae28ffe84d123ca6c5fb20458494439f46ba2c5722c86e1295",
     "source_manifest.json": "67c31791c00717b1cbd6fab962666ecb1afa7f6293c02d20b2ed5e38022e974c"
   },
-  "provenance_note": "The replay receipt was captured by an exact-head EU verify after the append-only mixed-species OBS successor was published. It proves zero-write no-drift readback of OBS KSAkP0NJF5P5g1mJ0004 while preserving X 4IOEQEw4ylx0Zx4c0000 and VAR U8OeHI58YG9Y9Nsb0002; the cost receipt proves terminal VM stop and lease release."
+  "historical_live_receipt_helper_sha256": "7835871c4c4530ab2e3c09144616388457d204212a58d882d73141f646c01f26",
+  "provenance_note": "The historical replay receipt was captured by an exact-head EU verify after the append-only mixed-species OBS successor was published. The current helper differs only by using the fixed bounded verify-only capacity gate while preserving the 50-GiB writer gate; historical receipt helper identity remains explicit."
 }
