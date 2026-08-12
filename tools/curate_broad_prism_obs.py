@@ -39,7 +39,7 @@ import pyarrow.parquet as pq
 
 from tools.lamin_context import connect_pertdata
 
-TASK_ID = "t_a15f5366"
+TASK_ID = "t_cf959e37"
 DATASET_ID = "broad_prism_repurposing"
 OBS_KEY = f"{DATASET_ID}/obs.parquet"
 X_KEY = f"{DATASET_ID}/X.h5ad"
@@ -971,9 +971,11 @@ def build_candidate(
                 "tissue_type_source",
                 ["figshare.primary_tissue" if row else "contract" for row in cell_rows],
             )
-            set_column(frame, "disease", "cancer")
-            set_column(frame, "disease_state", "present")
-            set_column(frame, "disease_source", f"paper:{PAPER_DOI}")
+            set_column(frame, "disease", "unknown")
+            set_column(frame, "disease_state", "missing")
+            set_column(
+                frame, "disease_source", "contract:no row-level disease evidence"
+            )
             set_column(frame, "organism", "Homo sapiens")
             set_column(frame, "organism_state", "present")
             set_column(frame, "organism_source", f"paper:{PAPER_DOI}")
@@ -1038,11 +1040,9 @@ def build_candidate(
                 ["present" if row["dose"] else "missing" for row in metadata_rows],
             )
             set_column(frame, "dose_source", "treatment_metadata.dose")
-            set_column(frame, "dose_unit", "micromolar")
-            set_column(frame, "dose_unit_state", "present")
-            set_column(
-                frame, "dose_unit_source", f"paper:{PAPER_DOI};figshare:{FIGSHARE_DOI}"
-            )
+            set_column(frame, "dose_unit", "unknown")
+            set_column(frame, "dose_unit_state", "missing")
+            set_column(frame, "dose_unit_source", "contract:source unit unavailable")
             timepoints = [parse_timepoint_minutes(raw[2]) for raw in source_rows]
             set_column(
                 frame,

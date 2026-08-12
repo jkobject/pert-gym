@@ -7,12 +7,55 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
+import nbformat
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 
 from tools import curate_broad_prism_obs as curate
+
+
+def test_publication_contract_is_owned_by_current_task() -> None:
+    assert curate.TASK_ID == "t_cf959e37"
+
+
+def test_processing_decision_notebook_executes_from_repo_root(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root = Path(__file__).parents[1]
+    notebook_path = (
+        root
+        / "notebooks"
+        / "datasets"
+        / "broad_prism_repurposing_processing_decisions.ipynb"
+    )
+    notebook = nbformat.read(notebook_path, as_version=4)
+    nbformat.validate(notebook)
+    monkeypatch.chdir(root)
+    namespace: dict[str, Any] = {}
+    for cell in notebook.cells:
+        if cell.cell_type == "code":
+            exec(compile(cell.source, str(notebook_path), "exec"), namespace)
+    contract = namespace["contract"]
+    assert contract["identity"]["dataset_id"] == "broad_prism_repurposing"
+    assert contract["reconstruction"]["safe_to_remove_gcs"] is False
+
+
+def test_full_dod_assessment_remains_fail_closed() -> None:
+    root = Path(__file__).parents[1]
+    assessment = json.loads(
+        (
+            root
+            / "artifacts"
+            / "schema_audit"
+            / "broad_prism_full_dod_assessment_20260812.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert assessment["status"] == "blocked_no_write"
+    assert assessment["execution"]["writes_attempted"] == 0
+    assert assessment["write_decision"] == "refused_fail_closed"
+    assert [gate["gate"] for gate in assessment["gates"]] == list(range(1, 14))
 
 
 def _source_database(path: Path) -> None:
@@ -146,6 +189,10 @@ def test_build_candidate_preserves_axis_and_materializes_only_lfc(
     assert candidate.loc[3, "timepoint"] == "7200"
     assert candidate.loc[3, "tissue_type"] == "lung"
     assert candidate.loc[7, "tissue_type"] == "unknown"
+    assert set(candidate["disease"]) == {"unknown"}
+    assert set(candidate["disease_state"]) == {"missing"}
+    assert set(candidate["dose_unit"]) == {"unknown"}
+    assert set(candidate["dose_unit_state"]) == {"missing"}
     assert candidate.loc[7, "is_control"]
     assert candidate.loc[3, "quality_flag"] == "accepted_lfc"
     assert candidate.loc[7, "quality_flag"] == "source_qc_failed"

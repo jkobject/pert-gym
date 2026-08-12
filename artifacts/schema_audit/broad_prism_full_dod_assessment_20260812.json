@@ -1,0 +1,92 @@
+{
+  "format": "pert-gym.full-dod-assessment.v1",
+  "dataset_id": "broad_prism_repurposing",
+  "task_id": "t_cf959e37",
+  "status": "blocked_no_write",
+  "assessed_at_utc": "2026-08-12T00:08:40Z",
+  "assessed_at_paris": "2026-08-12T02:08:40+02:00",
+  "git": {
+    "base_commit": "1a143ae4915d885c32de6a686cca6a4f0409a8f0",
+    "live_assessment_commit": "a7690785169e001b0c223d00e2d1fc7f3c80e41e",
+    "pull_request": "https://github.com/jkobject/pert-gym/pull/116",
+    "exact_head_ci": "pass"
+  },
+  "execution": {
+    "host": "pert-gym-worker-eu",
+    "zone": "europe-west1-b",
+    "launcher": "tools/launch_pert_gym_heavy.py",
+    "launcher_task": "t_cf959e37",
+    "mode": "verify_only",
+    "writes_attempted": 0,
+    "writes_observed": 0,
+    "terminal_state_after_assessment": "TERMINATED",
+    "lease_released": true
+  },
+  "source_contract": {
+    "json_path": "artifacts/schema_audit/broad_prism_lfc_source_row_contract_20260711.json",
+    "json_sha256": "238905ddb1a40578173a35bbe00346c8b495a6fcba9d9eb34353b229e2e78a53",
+    "lfc_rows": 4462415,
+    "primary_rows": 1900,
+    "combined_direct_source_rows": 4464315,
+    "license_status": "unknown_pending_exact_source_license_evidence",
+    "dose_unit_status": "unknown_source_does_not_bind_unit",
+    "row_level_disease_status": "unknown_no_exact_row_level_evidence"
+  },
+  "live_jkobject": {
+    "instance": "laminlabs/pertdata",
+    "branch": "jkobject",
+    "obs": {
+      "uid": "eKrJkcFDb9TEDbte0003",
+      "key": "broad_prism_repurposing/obs.parquet",
+      "hash": "eTlpTtt2GmWYEdQHLsjP-t",
+      "rows": 22316860,
+      "size": 594094912,
+      "collection_memberships": []
+    },
+    "X": {
+      "uid": "ah3Fl8EUHErIckk80000",
+      "key": "broad_prism_repurposing/X.h5ad",
+      "hash": "bcNvWQGYzZZ9bK9wjqbCD-",
+      "n_observations": 22316860,
+      "size": 1740665272
+    },
+    "var": {
+      "uid": "T3YpaJB1Rt51Ef4U0000",
+      "key": "broad_prism_repurposing/var.parquet",
+      "hash": "E_sicDWhXPcCeaPVdq8ZZw",
+      "rows": 0,
+      "feature_class": "non_gene_empty_response_axis",
+      "verdict": "not_applicable"
+    },
+    "exact_key_revision_counts": {
+      "obs": 4,
+      "X": 1,
+      "var": 1
+    },
+    "artifact_registry_sha256": "e31e8236cf2e333918bb1846de9cb5797fae1af43a7e6a8501efb518eb04eaba"
+  },
+  "gates": [
+    {"gate": 1, "name": "identity_source_provenance_license", "status": "blocked", "reason": "immutable source generations/checksums exist, but exact source license evidence remains unknown"},
+    {"gate": 2, "name": "live_existing_state_source_parity", "status": "blocked", "reason": "legacy OBS has 22316860 structural rows while direct immutable sources have 4464315 rows; intended canonical row unit is not accepted"},
+    {"gate": 3, "name": "duplicate_equivalence_jkobject_vs_main", "status": "blocked", "reason": "same-snapshot bounded main comparison is not implemented or evidenced"},
+    {"gate": 4, "name": "obs_metadata_coverage", "status": "blocked", "reason": "source-backed candidate is not published; applicable missingness must remain unknown and current task corrections are code-only"},
+    {"gate": 5, "name": "scientific_alignment", "status": "blocked", "reason": "legacy five-field expansion and synthetic-control rows are not yet accepted as the intended response-table unit"},
+    {"gate": 6, "name": "x_var_semantics", "status": "blocked", "reason": "empty non-gene VAR is supported, but X/OBS denominator depends on unresolved canonical row semantics"},
+    {"gate": 7, "name": "canonical_data_cleaned_paths", "status": "failed", "reason": "live keys use broad_prism_repurposing/* rather than data/cleaned/broad_prism_repurposing/*"},
+    {"gate": 8, "name": "current_collection_membership", "status": "failed", "reason": "live predecessor OBS has no Collection membership"},
+    {"gate": 9, "name": "publication_safety", "status": "partial", "reason": "append-only authorized publication code is fail-closed, but the canonical triplet and Collection target are not implemented"},
+    {"gate": 10, "name": "remote_readback", "status": "partial", "reason": "legacy triplet was read back on the EU worker; no canonical target exists to verify"},
+    {"gate": 11, "name": "model_ready_query", "status": "failed", "reason": "no current Collection member exists"},
+    {"gate": 12, "name": "processing_notebook_receipts", "status": "partial", "reason": "a committed metadata-first processing notebook and this assessment exist, but no accepted publication/verify receipts exist"},
+    {"gate": 13, "name": "decommission_docs_merged_inventory_pr", "status": "failed", "reason": "no GCS_DECOMMISSION_READY manifest, accepted same-snapshot docs/inventory, or merged inventory PR exists"}
+  ],
+  "smallest_authorized_delta_after_decision": [
+    "Accept one exact canonical row-unit contract: preserve the 22316860-row legacy expansion or reconstruct the 4464315 direct-source-row table; no publication is safe before this is explicit.",
+    "Bind exact source license evidence and exact per-field dispositions; dose_unit and row-level disease remain unknown unless exact evidence is added.",
+    "Implement a bounded same-snapshot jkobject-versus-main duplicate/equivalence query.",
+    "Build and validate a coherent canonical obs-X-var triplet under data/cleaned/broad_prism_repurposing/ with OBS/X denominator parity.",
+    "Publish append-only under exact-task authorization, create/update the intended versioned Collection, and verify public loader/model-ready query from a clean process.",
+    "Execute and retain the processing notebook and immutable plan/write/verify receipts; only then assess a guarded GCS_DECOMMISSION_READY manifest and inventory/docs merge."
+  ],
+  "write_decision": "refused_fail_closed"
+}
