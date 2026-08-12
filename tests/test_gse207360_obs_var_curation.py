@@ -453,3 +453,12 @@ def test_full_dod_receipt_validation_rejects_bad_canonical_digest() -> None:
             expected_run_id="4662",
             expected_verifier_sha256="b" * 64,
         )
+
+
+def test_detached_checkout_is_bound_to_explicit_expected_branch() -> None:
+    assert (
+        FULL_DOD_MODULE.resolve_launch_branch("", FULL_DOD_MODULE.EXPECTED_BRANCH)
+        == FULL_DOD_MODULE.EXPECTED_BRANCH
+    )
+    with pytest.raises(RuntimeError, match="launch branch"):
+        FULL_DOD_MODULE.resolve_launch_branch("", "wrong-branch")

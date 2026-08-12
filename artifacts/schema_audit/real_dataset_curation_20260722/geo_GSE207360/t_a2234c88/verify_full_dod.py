@@ -89,6 +89,15 @@ def verifier_sha256() -> str:
     return sha256_file(Path(__file__))
 
 
+def resolve_launch_branch(actual_branch: str, expected_launch_branch: str) -> str:
+    """Bind detached exact-head execution to the explicitly declared PR branch."""
+    if expected_launch_branch != EXPECTED_BRANCH:
+        raise RuntimeError("exact PERT_GYM_VERIFY_BRANCH launch branch is required")
+    if actual_branch and actual_branch != expected_launch_branch:
+        raise RuntimeError("checked-out branch does not match immutable launch binding")
+    return expected_launch_branch
+
+
 def gcloud_access_token() -> str:
     result = subprocess.run(
         ["gcloud", "auth", "application-default", "print-access-token"],
@@ -315,16 +324,18 @@ def main() -> int:
     capacity = verify_only_preflight()
     expected_head = os.environ.get("PERT_GYM_VERIFY_HEAD", "")
     run_id = os.environ.get("PERT_GYM_KANBAN_RUN_ID", "")
-    if len(expected_head) != 40 or not run_id:
-        raise RuntimeError("exact PERT_GYM_VERIFY_HEAD and PERT_GYM_KANBAN_RUN_ID are required")
+    expected_branch = os.environ.get("PERT_GYM_VERIFY_BRANCH", "")
+    if len(expected_head) != 40 or not run_id or not expected_branch:
+        raise RuntimeError("exact head, branch, and Kanban run launch bindings are required")
     actual_head = subprocess.run(
         ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True
     ).stdout.strip()
-    branch = subprocess.run(
+    actual_branch = subprocess.run(
         ["git", "branch", "--show-current"], check=True, capture_output=True, text=True
     ).stdout.strip()
-    if actual_head != expected_head or branch != EXPECTED_BRANCH:
-        raise RuntimeError("checked-out code head/branch does not match immutable launch binding")
+    branch = resolve_launch_branch(actual_branch, expected_branch)
+    if actual_head != expected_head:
+        raise RuntimeError("checked-out code head does not match immutable launch binding")
     if not SOURCE_PATH.is_file() or SOURCE_PATH.stat().st_size != 4_174_159_639:
         raise AssertionError("immutable filtered source is absent or has wrong size")
     if sha256_file(SOURCE_PATH) != SOURCE_SHA256:
