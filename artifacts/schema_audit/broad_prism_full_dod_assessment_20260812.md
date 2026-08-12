@@ -1,7 +1,8 @@
 # Broad PRISM full-DoD assessment — 2026-08-12
 
-**Dataset:** `broad_prism_repurposing`  
-**Task:** `t_cf959e37`  
+**Dataset:** `broad_prism_repurposing`
+
+**Task:** `t_cf959e37`
 **Status:** **BLOCKED / NO WRITE**
 
 The exact machine-readable assessment is
