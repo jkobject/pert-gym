@@ -164,6 +164,7 @@ def gcs_get_exact(uri: str) -> dict[str, Any]:
         raise RuntimeError(
             f"GCS exact object transport/response failure: {exc}"
         ) from exc
+    document = json.loads(payload)
     observed = {
         "uri": uri,
         "name": str(metadata["name"]),
@@ -171,7 +172,8 @@ def gcs_get_exact(uri: str) -> dict[str, Any]:
         "size": int(metadata["size"]),
         "md5Hash": str(metadata.get("md5Hash", "")),
         "sha256": sha256_bytes(payload),
-        "json": json.loads(payload),
+        "decoded_manifest_canonical_sha256": sha256_bytes(canonical(document).encode()),
+        "decoded_manifest_top_level_keys": sorted(document),
     }
     if observed["sha256"] != STAGING_MANIFEST_SHA256:
         raise AssertionError("generation-pinned staging manifest checksum drift")
