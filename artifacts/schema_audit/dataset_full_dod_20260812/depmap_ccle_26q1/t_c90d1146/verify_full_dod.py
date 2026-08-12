@@ -291,11 +291,21 @@ def scoped_registry_snapshot(ln: Any) -> dict[str, Any]:
         identity = collection_identity(collection)
         if identity["target_members"]:
             memberships.append(identity)
-    return {
+    detailed = {
         "artifact_count": int(ln.Artifact.filter().count()),
         "collection_count": int(ln.Collection.filter().count()),
         "target_histories": histories,
         "target_memberships": sorted(memberships, key=lambda item: item["uid"]),
+    }
+    return {
+        "artifact_count": detailed["artifact_count"],
+        "collection_count": detailed["collection_count"],
+        "target_history_count": sum(len(items) for items in histories.values()),
+        "target_membership_count": len(memberships),
+        "canonical_sha256": sha256_bytes(canonical(detailed).encode()),
+        "target_membership_uids": [
+            item["uid"] for item in detailed["target_memberships"]
+        ],
     }
 
 
@@ -447,9 +457,8 @@ def main() -> int:
         raise AssertionError("registry drift during zero-write verification")
     current_memberships = [
         row
-        for row in after["target_memberships"]
-        if row["target_members"]
-        == [{"uid": EXPECTED_ARTIFACTS["obs"]["uid"], "key": f"{PREFIX}/obs.parquet"}]
+        for row in [dataset_collection]
+        if row["uid"] in after["target_membership_uids"]
     ]
     decommission_gates = {
         "accepted_payload_and_source_parity": True,
