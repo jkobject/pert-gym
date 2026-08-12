@@ -1,6 +1,6 @@
 # pert-gym TODO / active source of truth
 
-_Last reconciled: 2026-08-12 from the strict accepted product ledger, `accepted_10_dataset_review_snapshot.json`, and the review-pending GSE207360 same-snapshot completion evidence. Pending writers are never counted before independent acceptance; scoped validation is not full dataset completion._
+_Last reconciled: 2026-08-11 from the strict accepted product ledger and `accepted_10_dataset_review_snapshot.json`. Pending writers are never counted before independent acceptance; scoped validation is not full dataset completion._
 
 ## Product objective / Definition of Done
 
@@ -18,7 +18,7 @@ The project is complete only when every correctly downloadable target dataset is
 | Base-public recoverable-existing component×field candidates independently validated | **33/640** | 607 | frozen non-writable baseline; candidate-universe SHA-256 `371b2b78c755c5cfdf8fa82d7826e5b2fdbfe48b67ca11e6d2d77ec7b6ff60c2` |
 | Accepted OBS component×field assignments outside the base-public candidate universe | **6** | — | DepMap/CCLE 26Q1; intentionally no `/640` denominator |
 | VAR dataset remediations independently accepted | **8/70** | 62 | latest accepted delta: `scperturb/datlinger17` reviewer `t_2c228f48`, VAR `AYnivbGN3JCRzkN70001`; GSE150062 remains pending independent acceptance |
-| Inventory rows with scoped OBS+VAR+structure+cleaning+publication acceptance | **19/92 review-pending snapshot** | 73 | accepted 18 plus merged PR #117 GSE207360 evidence; this PR still requires independent acceptance before the counter is authoritative |
+| Inventory rows with scoped OBS+VAR+structure+cleaning+publication acceptance | **18/92** | 74 | prior 8 plus the independently reviewed accepted-10 wave; exact canonical-ID overlap 0 |
 | Scientific datasets satisfying the stronger full project DoD | **0/92** | 92 | fail-closed: no row has all processing-notebook, canonical publication, staging-decommission receipt, same-snapshot docs, and merged exact-head inventory-PR evidence |
 | External exclusions dispositioned | **60/60** | 0 | complete |
 
@@ -53,24 +53,6 @@ The canonical surface remains **120 logical families / 1,056 physical members / 
 
 ## Accepted work since the previous dashboard
 
-### GSE207360 review-pending full-DoD continuation
-
-Merged PR #117 and its accepted reviewer establish the source-exhaustive OBS/VAR,
-processing notebook, and append-only OBS publication for `geo/GSE207360`. A fresh
-EU verify-only readback at exact head `f033b0ad4e6bbaf802bb3342a96c644769fa8003`
-reconfirmed OBS `KSAkP0NJF5P5g1mJ0004` → X `4IOEQEw4ylx0Zx4c0000` → VAR
-`U8OeHI58YG9Y9Nsb0002`, 12,487 rows split into 10,984 human and 1,503 mouse,
-source SHA-256 `b54a754f…`, and registry counts 28,600 Artifacts / 55 Collections
-before and after with zero writes or deletions. The canonical receipt digest is
-`7f9dfcd4dee95405e8eb5b41845e37db7d20853bdd599444fd54c1e05946d94f`.
-
-Full completion remains fail-closed. No Collection contains the current OBS UID,
-no canonical `gs://scperturb/data/cleaned/GSE207360/` payload exists, and the
-legacy staging object is already absent. Therefore no deletion was performed and
-no `GCS_DECOMMISSION_READY` is asserted. The review-pending inventory row is not
-`entirely_validated`; residual gates are canonical cleaned publication, current
-Collection membership, independently accepted decommission disposition, accepted
-same-snapshot docs, and merged exact-head inventory PR.
 
 ### Accepted ten-dataset scoped wave and full-DoD boundary
 

@@ -62,7 +62,7 @@ def test_dataset_review_inventory_has_unique_dataset_units_and_strict_counts() -
     assert counts == {
         "unique_datasets": 92,
         "main_baseline_datasets": 26,
-        "scoped_scientific_validation_accepted": 19,
+        "scoped_scientific_validation_accepted": 18,
         "accepted_wave_scoped_validation": 10,
         "entirely_validated": 0,
         "entirely_validated_main_existing": 0,
@@ -84,7 +84,6 @@ def test_dataset_review_inventory_has_unique_dataset_units_and_strict_counts() -
             "drug-seq/GSE120222",
             "geo/GSE132080",
             "geo/GSE197452",
-            "geo/GSE207360",
             "scperturb/adamson16",
             "scperturb/chang22",
             "scperturb/datlinger17",

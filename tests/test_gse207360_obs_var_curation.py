@@ -3,6 +3,9 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import subprocess
+from copy import deepcopy
+from email.message import Message
 from pathlib import Path
 
 import pytest
@@ -25,6 +28,12 @@ MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 DECISION_NOTEBOOK = MODULE_PATH.parent / "GSE207360_processing_decisions.ipynb"
 FULL_DOD_VERIFIER = MODULE_PATH.parent / "verify_full_dod.py"
+FULL_DOD_SPEC = importlib.util.spec_from_file_location(
+    "gse207360_full_dod", FULL_DOD_VERIFIER
+)
+assert FULL_DOD_SPEC is not None and FULL_DOD_SPEC.loader is not None
+FULL_DOD_MODULE = importlib.util.module_from_spec(FULL_DOD_SPEC)
+FULL_DOD_SPEC.loader.exec_module(FULL_DOD_MODULE)
 
 
 def source_frame() -> pd.DataFrame:
@@ -324,11 +333,123 @@ def test_verify_mode_uses_bounded_verify_only_capacity_gate(
         MODULE.main()
 
 
-def test_full_dod_verifier_is_zero_write_and_fail_closed_on_deletion() -> None:
-    source = FULL_DOD_VERIFIER.read_text()
-    assert '"artifact_writes": 0' in source
-    assert '"collection_writes": 0' in source
-    assert '"deletions": 0' in source
-    assert '"action": "preserved_no_deletion"' in source
-    assert '"independent_review_of_this_receipt": False' in source
-    assert "gcloud storage rm" not in source
+def test_gcs_probe_accepts_only_successful_structured_empty_listing(monkeypatch) -> None:
+    monkeypatch.setattr(
+        FULL_DOD_MODULE,
+        "gcloud_access_token",
+        lambda: "bounded-test-token",
+    )
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+        def read(self) -> bytes:
+            return b"{}"
+
+    monkeypatch.setattr(FULL_DOD_MODULE.urllib.request, "urlopen", lambda *_a, **_k: Response())
+    result = FULL_DOD_MODULE.gcs_prefix_probe(
+        "gs://scperturb/data/cleaned/GSE207360/"
+    )
+    assert result["exists"] is False
+    assert result["object_count_lower_bound"] == 0
+    assert result["http_status"] == 200
+
+
+@pytest.mark.parametrize("status", [401, 403, 429, 500])
+def test_gcs_probe_fails_closed_on_access_and_transport_errors(
+    monkeypatch, status: int
+) -> None:
+    import urllib.error
+
+    monkeypatch.setattr(FULL_DOD_MODULE, "gcloud_access_token", lambda: "token")
+
+    def denied(*_args, **_kwargs):
+        raise urllib.error.HTTPError("url", status, "denied", Message(), None)
+
+    monkeypatch.setattr(FULL_DOD_MODULE.urllib.request, "urlopen", denied)
+    with pytest.raises(RuntimeError, match=f"HTTP {status}"):
+        FULL_DOD_MODULE.gcs_prefix_probe(FULL_DOD_MODULE.LEGACY_STAGING_URI)
+
+
+def test_gcloud_access_token_failure_is_not_absence(monkeypatch) -> None:
+    monkeypatch.setattr(
+        FULL_DOD_MODULE.subprocess,
+        "run",
+        lambda *_a, **_k: subprocess.CompletedProcess(
+            ["gcloud"], 1, "", "Requester Pays billing project denied"
+        ),
+    )
+    with pytest.raises(RuntimeError, match="access token"):
+        FULL_DOD_MODULE.gcloud_access_token()
+
+
+def _valid_full_dod_receipt() -> dict:
+    receipt = {
+        "format": FULL_DOD_MODULE.RECEIPT_FORMAT,
+        "task_id": "t_f2593783",
+        "run_id": "4662",
+        "code": {
+            "head": "a" * 40,
+            "branch": "pert-gym/t_f2593783-complete-gse207360-live-dod-after-pr-117",
+            "pr": 138,
+            "verifier_sha256": "b" * 64,
+        },
+        "command": {"exit_code": 0},
+        "source": {"sha256": FULL_DOD_MODULE.SOURCE_SHA256, "size": 4_174_159_639},
+        "artifacts": deepcopy(FULL_DOD_MODULE.EXPECTED_ARTIFACTS),
+        "snapshots": {
+            "before": {"canonical_sha256": "c" * 64},
+            "after": {"canonical_sha256": "c" * 64},
+        },
+        "registry_drift": 0,
+        "replay_noop": True,
+        "gcs_decommission": {"eligible": False, "action": "preserved_no_deletion"},
+        "lifecycle": {
+            "payload_exit_code": 0,
+            "terminal_vm_status": "TERMINATED",
+            "task_scoped_labels_cleared": True,
+            "local_lease_absent": True,
+        },
+    }
+    receipt["canonical_sha256"] = FULL_DOD_MODULE.receipt_sha256(receipt)
+    return receipt
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    [
+        (lambda r: r["code"].update(head="wrong"), "code head"),
+        (lambda r: r["artifacts"]["x"].update(hash="wrong"), "artifact identity"),
+        (lambda r: r["artifacts"]["var"].update(key="wrong"), "artifact identity"),
+        (lambda r: r["snapshots"]["after"].update(canonical_sha256="d" * 64), "registry drift"),
+        (lambda r: r.update(replay_noop=False), "replay"),
+        (lambda r: r["lifecycle"].update(terminal_vm_status="RUNNING"), "lifecycle"),
+    ],
+)
+def test_full_dod_receipt_validation_rejects_tampering(mutation, message) -> None:
+    receipt = _valid_full_dod_receipt()
+    mutation(receipt)
+    receipt["canonical_sha256"] = FULL_DOD_MODULE.receipt_sha256(receipt)
+    with pytest.raises(AssertionError, match=message):
+        FULL_DOD_MODULE.validate_receipt(
+            receipt,
+            expected_head="a" * 40,
+            expected_run_id="4662",
+            expected_verifier_sha256="b" * 64,
+        )
+
+
+def test_full_dod_receipt_validation_rejects_bad_canonical_digest() -> None:
+    receipt = _valid_full_dod_receipt()
+    receipt["canonical_sha256"] = "0" * 64
+    with pytest.raises(AssertionError, match="canonical digest"):
+        FULL_DOD_MODULE.validate_receipt(
+            receipt,
+            expected_head="a" * 40,
+            expected_run_id="4662",
+            expected_verifier_sha256="b" * 64,
+        )
