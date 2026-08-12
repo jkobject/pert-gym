@@ -39,6 +39,19 @@ def test_processing_decision_notebook_executes_from_repo_root(
             exec(compile(cell.source, str(notebook_path), "exec"), namespace)
     contract = namespace["contract"]
     assert contract["identity"]["dataset_id"] == "broad_prism_repurposing"
+    assert contract["identity"]["checksums"] == {
+        "Repurposing_Public_24Q2_LFC.csv": curate.LFC_SHA256,
+        "Repurposing_Public_24Q2_Treatment_Meta_Data.csv": curate.TREATMENT_SHA256,
+        "primary-screen-cell-line-info.csv": curate.CELL_INFO_SHA256,
+    }
+    assert contract["validation"]["denominator"] == (
+        "Legacy OBS/X 22,316,860; immutable LFC source rows 4,463,372; "
+        "canonical denominator unresolved."
+    )
+    assert contract["processing_decisions"]["control_mapping"] == (
+        "Source trt_cp, trt_poscon, and ctl_vehicle classes remain explicit; "
+        "their canonical inclusion/control semantics are pending acceptance."
+    )
     assert contract["reconstruction"]["safe_to_remove_gcs"] is False
 
 
@@ -55,7 +68,48 @@ def test_full_dod_assessment_remains_fail_closed() -> None:
     assert assessment["status"] == "blocked_no_write"
     assert assessment["execution"]["writes_attempted"] == 0
     assert assessment["write_decision"] == "refused_fail_closed"
+    assert assessment["source_contract"] == {
+        "json_path": "artifacts/schema_audit/broad_prism_lfc_source_row_contract_20260711.json",
+        "json_sha256": "238905ddb1a40578173a35bbe00346c8b495a6fcba9d9eb34353b229e2e78a53",
+        "lfc_rows": curate.EXPECTED_SOURCE_ROWS,
+        "lfc_sha256": curate.LFC_SHA256,
+        "treatment_metadata_sha256": curate.TREATMENT_SHA256,
+        "license_status": "unknown_pending_exact_source_license_evidence",
+        "dose_unit_status": "unknown_source_does_not_bind_unit",
+        "row_level_disease_status": "unknown_no_exact_row_level_evidence",
+    }
+    assert assessment["live_jkobject"]["obs"]["uid"] == (
+        curate.EXPECTED_PREDECESSOR_OBS_UID
+    )
     assert [gate["gate"] for gate in assessment["gates"]] == list(range(1, 14))
+
+
+def test_sealed_curation_contract_matches_committed_source_and_live_evidence() -> None:
+    root = Path(__file__).parents[1]
+    source_contract = json.loads(
+        (
+            root
+            / "artifacts"
+            / "schema_audit"
+            / "broad_prism_lfc_source_row_contract_20260711.json"
+        ).read_text(encoding="utf-8")
+    )
+
+    assert (
+        curate.EXPECTED_PREDECESSOR_OBS_UID
+        == source_contract["current_lamin_obs_diagnostic"]["artifact_uid"]
+    )
+    assert curate.EXPECTED_SOURCE_ROWS == source_contract["denominator"]["source_rows"]
+    assert (
+        curate.LFC_SHA256
+        == source_contract["authoritative_source_files"]["lfc"]["sha256"]
+    )
+    assert (
+        curate.TREATMENT_SHA256
+        == source_contract["authoritative_source_files"]["treatment_metadata"]["sha256"]
+    )
+    assert curate.FIELD_DISPOSITIONS["disease"].startswith("unknown:")
+    assert curate.FIELD_DISPOSITIONS["dose_unit"].startswith("unknown:")
 
 
 def _source_database(path: Path) -> None:

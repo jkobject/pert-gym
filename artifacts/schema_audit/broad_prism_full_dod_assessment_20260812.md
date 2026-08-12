@@ -29,8 +29,9 @@ Live `jkobject` resolves the legacy triplet as:
 The empty non-gene var axis remains `not_applicable`; it must not be presented
 as gene-level VAR.
 
-The immutable source-row contract contains 4,462,415 LFC rows and 1,900 primary
-rows (4,464,315 direct source rows total). The 22,316,860-row live OBS is a
+The immutable source-row contract binds exactly 4,463,372 rows in
+`Repurposing_Public_24Q2_LFC.csv` (SHA-256 `824149f9b9f3821eb520b385a5976e1a9977d86b21caf5d22171763800a40523`).
+The 22,316,860-row live OBS is a
 legacy structural expansion with synthetic-control and per-field rows. The
 project has not accepted whether that expansion or the direct source-row table
 is the canonical response-table unit. That choice changes OBS identity, X shape,
@@ -58,7 +59,7 @@ it does not authorize a live publication.
 ## Smallest safe next delta
 
 1. Accept one exact row-unit contract: preserve the 22,316,860-row legacy
-   expansion or reconstruct the 4,464,315 direct-source-row table.
+   expansion or reconstruct the 4,463,372-row sealed LFC source table.
 2. Bind source license and per-field evidence. Keep `dose_unit` and row-level
    disease `unknown` unless exact evidence is added.
 3. Implement and capture a bounded same-snapshot `jkobject`/`main` equivalence

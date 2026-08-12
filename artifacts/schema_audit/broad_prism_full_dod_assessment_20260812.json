@@ -25,9 +25,9 @@
   "source_contract": {
     "json_path": "artifacts/schema_audit/broad_prism_lfc_source_row_contract_20260711.json",
     "json_sha256": "238905ddb1a40578173a35bbe00346c8b495a6fcba9d9eb34353b229e2e78a53",
-    "lfc_rows": 4462415,
-    "primary_rows": 1900,
-    "combined_direct_source_rows": 4464315,
+    "lfc_rows": 4463372,
+    "lfc_sha256": "824149f9b9f3821eb520b385a5976e1a9977d86b21caf5d22171763800a40523",
+    "treatment_metadata_sha256": "6be6422ba804ad0775e78b457677bdf088707b9354746a03e110ae63f5eb2061",
     "license_status": "unknown_pending_exact_source_license_evidence",
     "dose_unit_status": "unknown_source_does_not_bind_unit",
     "row_level_disease_status": "unknown_no_exact_row_level_evidence"
@@ -81,7 +81,7 @@
     {"gate": 13, "name": "decommission_docs_merged_inventory_pr", "status": "failed", "reason": "no GCS_DECOMMISSION_READY manifest, accepted same-snapshot docs/inventory, or merged inventory PR exists"}
   ],
   "smallest_authorized_delta_after_decision": [
-    "Accept one exact canonical row-unit contract: preserve the 22316860-row legacy expansion or reconstruct the 4464315 direct-source-row table; no publication is safe before this is explicit.",
+    "Accept one exact canonical row-unit contract: preserve the 22316860-row legacy expansion or reconstruct the 4463372-row sealed LFC source table; no publication is safe before this is explicit.",
     "Bind exact source license evidence and exact per-field dispositions; dose_unit and row-level disease remain unknown unless exact evidence is added.",
     "Implement a bounded same-snapshot jkobject-versus-main duplicate/equivalence query.",
     "Build and validate a coherent canonical obs-X-var triplet under data/cleaned/broad_prism_repurposing/ with OBS/X denominator parity.",

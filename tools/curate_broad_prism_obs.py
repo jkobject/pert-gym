@@ -44,7 +44,7 @@ DATASET_ID = "broad_prism_repurposing"
 OBS_KEY = f"{DATASET_ID}/obs.parquet"
 X_KEY = f"{DATASET_ID}/X.h5ad"
 VAR_KEY = f"{DATASET_ID}/var.parquet"
-EXPECTED_PREDECESSOR_OBS_UID = "eKrJkcFDb9TEDbte0000"
+EXPECTED_PREDECESSOR_OBS_UID = "eKrJkcFDb9TEDbte0003"
 EXPECTED_VAR_UID = "T3YpaJB1Rt51Ef4U0000"
 EXPECTED_OBS_ROWS = 22_316_860
 EXPECTED_SOURCE_ROWS = 4_463_372
@@ -116,7 +116,7 @@ FIELD_DISPOSITIONS = {
     "batch": "present: treatment metadata prism_replicate",
     "cell_type": "not_applicable: cell-line response screen",
     "cell_line": "present: ACH DepMap ID plus source ccle_name when joined",
-    "disease": "present: cancer, supported for all screened human cancer cell lines",
+    "disease": "unknown: no exact row-level disease binding in the sealed sources",
     "tissue_type": "present where Figshare cell-line metadata joins; otherwise unknown",
     "organism": "present: Homo sapiens",
     "sex": "unknown: not in the release-bound named sources",
@@ -139,7 +139,7 @@ FIELD_DISPOSITIONS = {
     "perturbation_target_id": "unknown: not supplied as a row-joinable release field",
     "is_control": "present: exact treatment type ctl_vehicle",
     "dose": "present: treatment metadata dose",
-    "dose_unit": "present: micromolar, publication/Figshare screen protocol",
+    "dose_unit": "unknown: the sealed source contract does not bind a dose unit",
     "timepoint": "present where encoded in profile_id (minutes)",
     "trajectory_id": "not_applicable: non-temporal response design",
     "pseudotime": "not_applicable: non-single-cell response screen",
