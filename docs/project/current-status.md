@@ -35,10 +35,10 @@ proves current OBS `kCNSxyUJoJJKRSgE0004` → X `fUSYT9ArHdQye5qv0001`
 → VAR `0S0wAPqgigynI4Av0003`, exact 1,719×19,215 ordered parity,
 27,216,323 stored nonzeros, complete six-field accepted OBS coverage, dataset
 Collection `6bVd5NhvcNOXom0s0000`, and unchanged 28,600 Artifact / 55 Collection
-counts. Canonical receipt SHA-256 is
+counts. The uncommitted full-stdout receipt SHA-256 is
 `30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0`.
 
-The notebook executes locally, but full DoD remains false: immutable original
+The notebook executes locally, but full DoD remains false: source-selection parity is unproven because immutable original
 acquisition checksum/raw retention is unknown, canonical `data/cleaned` is
 absent, staging is preserved with no reviewed decommission manifest, and this
 same-snapshot inventory/docs delta still requires independent review and merge.

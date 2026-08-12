@@ -1,5 +1,6 @@
 {
-  "canonical_sha256": "30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0",
+  "stdout_receipt_sha256": "30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0",
+  "projection_sha256": "d7577766326bbf460074bfaaec7360a5adbe2428ad2b6361458f8737b3e8173b",
   "code": {
     "branch": "pert-gym/t_c90d1146-complete-fixed-18-depmap_ccle-26q1-full",
     "head": "5d1c87ba1e35388337238f319587162afcdaf568",
@@ -123,5 +124,5 @@
     "task_scoped_labels_cleared": true,
     "local_lease_absent": true
   },
-  "capture_note": "This compact review copy projects the exact successful stdout receipt plus fresh launcher control-plane readback. The canonical_sha256 identifies the full stdout receipt; it is not recomputed over this compact projection."
+  "capture_note": "This compact review copy projects the successful stdout receipt plus fresh launcher control-plane readback. stdout_receipt_sha256 identifies the uncommitted full stdout receipt and is retained only as run provenance; projection_sha256 authenticates this committed JSON after removing only projection_sha256 itself. Source-selection parity remains unproven because the immutable acquisition payload/checksum is unavailable."
 }

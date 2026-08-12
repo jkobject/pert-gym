@@ -461,7 +461,10 @@ def main() -> int:
         if row["uid"] in after["target_membership_uids"]
     ]
     decommission_gates = {
-        "accepted_payload_and_source_parity": True,
+        # The retained live triplet proves internal payload parity only.  The
+        # immutable acquisition payload/checksum is unavailable, so the 1,719
+        # selected rows cannot be replayed against all 1,775 release rows.
+        "accepted_payload_and_source_parity": False,
         "executable_processing_notebook": False,
         "immutable_upstream_checksum_or_retained_raw_source": False,
         "canonical_data_cleaned_payload": cleaned["exists"],

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -60,6 +62,22 @@ def test_receipt_digest_excludes_only_its_signature() -> None:
     assert MODULE.receipt_sha256(receipt) == first
     receipt["nested"]["writes"] = 1
     assert MODULE.receipt_sha256(receipt) != first
+
+
+def test_committed_receipt_projection_has_a_verifiable_digest() -> None:
+    receipt_path = MODULE_PATH.with_name("live_readback_receipt.json")
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    expected = receipt.pop("projection_sha256")
+    actual = hashlib.sha256(
+        json.dumps(receipt, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    assert actual == expected
+    assert receipt["source_release"]["acquisition_checksum_status"] == "unknown"
+
+
+def test_source_selection_parity_remains_fail_closed() -> None:
+    source = MODULE_PATH.read_text(encoding="utf-8")
+    assert '"accepted_payload_and_source_parity": False' in source
 
 
 def test_verify_only_capacity_does_not_apply_writer_disk_floor(monkeypatch) -> None:

@@ -490,7 +490,7 @@ def _apply_depmap_ccle_26q1_full_dod_evidence(rows: list[dict[str, Any]]) -> Non
                 [
                     "DepMap Public 26Q1 portal",
                     "generation-pinned manifest sha256:ad3d220f2a0550d63d76ff944e93454a658dfa16efe4a3b3be7239ff0e492ecc",
-                    "live zero-write receipt canonical sha256:30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0",
+                    "live zero-write stdout receipt sha256:30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0",
                 ],
                 separators=(",", ":"),
             ),
@@ -510,7 +510,8 @@ def _apply_depmap_ccle_26q1_full_dod_evidence(rows: list[dict[str, Any]]) -> Non
             "evidence": (
                 "DepMap Public 26Q1 notebook; exact OBS kCNSxyUJoJJKRSgE0004 -> "
                 "X fUSYT9ArHdQye5qv0001 -> VAR 0S0wAPqgigynI4Av0003; zero-write "
-                "receipt 30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0"
+                "stdout receipt 30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0; "
+                "source-selection parity unproven"
             ),
         }
     )
