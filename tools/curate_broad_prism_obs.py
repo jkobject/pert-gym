@@ -725,7 +725,7 @@ def inspect_lamin(ln: Any) -> dict[str, Any]:
                 "feature_class": "non_gene_empty_response_axis",
                 "species": "Homo sapiens",
             },
-            "collection_count": int(ln.Collection.count()),
+            "collection_count": int(ln.Collection.filter().count()),
             "predecessor_collection_memberships": collection_memberships(ln, obs),
             "exact_obs_key_count": int(ln.Artifact.filter(key=OBS_KEY).count()),
             "exact_x_key_count": int(ln.Artifact.filter(key=X_KEY).count()),

@@ -330,9 +330,6 @@ class _FakeCollectionManager:
     def __init__(self) -> None:
         self.collections: list[object] = []
 
-    def count(self) -> int:
-        return len(self.collections)
-
     def filter(self) -> _FakeFilter:
         return _FakeFilter(self.collections)
 
