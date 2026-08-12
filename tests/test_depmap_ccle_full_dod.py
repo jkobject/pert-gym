@@ -107,3 +107,27 @@ def test_collection_identity_sorts_duplicate_target_key_revisions() -> None:
     )
     identity = MODULE.collection_identity(collection)
     assert [item["uid"] for item in identity["target_members"]] == ["a", "z"]
+
+
+def test_ordered_axis_identity_accepts_the_unique_matching_var_surface() -> None:
+    pd = pytest.importorskip("pandas")
+    var = pd.DataFrame(
+        {
+            "stable_feature_id": ["ENSG1", "ENSG2"],
+            "gene_symbol": ["A1BG", "A2M"],
+        },
+        index=["A1BG (1)", "A2M (2)"],
+    )
+    x_names = ["A1BG (1)", "A2M (2)"]
+    x_digest = MODULE.ordered_sha256(x_names)
+    candidates = {"var.index": MODULE.ordered_sha256(var.index)}
+    candidates.update(
+        {
+            f"var.{column}": MODULE.ordered_sha256(var[column].astype("string"))
+            for column in var.columns
+            if bool(var[column].astype("string").is_unique)
+        }
+    )
+    assert [source for source, digest in candidates.items() if digest == x_digest] == [
+        "var.index"
+    ]

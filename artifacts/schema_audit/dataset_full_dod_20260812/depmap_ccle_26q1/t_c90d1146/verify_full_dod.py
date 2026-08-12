@@ -324,8 +324,23 @@ def live_payload(ln: Any) -> dict[str, Any]:
     if ordered_sha256(obs.index) != ordered_sha256(x.obs_names):
         raise AssertionError("OBS/X observation order drift")
     stable_ids = var["stable_feature_id"].astype("string")
-    if ordered_sha256(stable_ids) != ordered_sha256(x.var_names):
-        raise AssertionError("X/VAR stable-feature order drift")
+    x_var_digest = ordered_sha256(x.var_names)
+    axis_candidates = {"var.index": ordered_sha256(var.index)}
+    axis_candidates.update(
+        {
+            f"var.{column}": ordered_sha256(var[column].astype("string"))
+            for column in var.columns
+            if bool(var[column].astype("string").is_unique)
+        }
+    )
+    matching_axis_sources = sorted(
+        source for source, digest in axis_candidates.items() if digest == x_var_digest
+    )
+    if len(matching_axis_sources) != 1:
+        raise AssertionError(
+            "X/VAR ordered-axis identity is ambiguous or absent: "
+            f"matches={matching_axis_sources!r}"
+        )
     canonical_fields = [
         "modality",
         "perturbation",
@@ -364,7 +379,9 @@ def live_payload(ln: Any) -> dict[str, Any]:
         "obs_index_sha256": ordered_sha256(obs.index),
         "x_obs_names_sha256": ordered_sha256(x.obs_names),
         "stable_feature_id_sha256": ordered_sha256(stable_ids),
-        "x_var_names_sha256": ordered_sha256(x.var_names),
+        "x_var_names_sha256": x_var_digest,
+        "var_axis_identity_source": matching_axis_sources[0],
+        "var_axis_identity_sha256": axis_candidates[matching_axis_sources[0]],
         "obs_columns": list(map(str, obs.columns)),
         "var_columns": list(map(str, var.columns)),
         "accepted_obs_field_coverage": coverage,
@@ -373,7 +390,9 @@ def live_payload(ln: Any) -> dict[str, Any]:
             "human_ensembl_release_116_unique": int(
                 stable_ids.str.fullmatch(r"ENSG\d+", na=False).sum()
             ),
-            "explicit_unresolved": int((stable_ids == "unknown").sum()),
+            "explicit_unresolved": int(
+                len(stable_ids) - stable_ids.str.fullmatch(r"ENSG\d+", na=False).sum()
+            ),
         },
     }
 
