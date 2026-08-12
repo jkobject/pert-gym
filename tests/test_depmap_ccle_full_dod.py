@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -59,3 +60,29 @@ def test_receipt_digest_excludes_only_its_signature() -> None:
     assert MODULE.receipt_sha256(receipt) == first
     receipt["nested"]["writes"] = 1
     assert MODULE.receipt_sha256(receipt) != first
+
+
+def test_verify_only_capacity_does_not_apply_writer_disk_floor(monkeypatch) -> None:
+    monkeypatch.setattr(
+        MODULE,
+        "require_heavy_vm",
+        lambda: (
+            "pert-gym-worker-eu",
+            "jkobject-1549353370965",
+            "europe-west1-b",
+            "pert-gym-worker-eu",
+        ),
+    )
+    monkeypatch.setattr(
+        MODULE.Path,
+        "read_text",
+        lambda _self, **_kwargs: "MemAvailable: 1024 kB\n",
+    )
+    monkeypatch.setattr(
+        MODULE.shutil,
+        "disk_usage",
+        lambda _path: SimpleNamespace(free=1),
+    )
+    capacity = MODULE.verify_only_capacity()
+    assert capacity["free_disk_bytes"] == 1
+    assert capacity["available_memory_bytes"] == 1024 * 1024

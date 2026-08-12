@@ -7,6 +7,8 @@ import hashlib
 import json
 import os
 import platform
+import shutil
+import socket
 import subprocess
 import sys
 import time
@@ -17,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 from tools.lamin_context import connect_pertdata
-from tools.pert_gym_vm_runner import preflight
+from tools.pert_gym_vm_runner import require_heavy_vm
 
 TASK_ID = "t_c90d1146"
 DATASET_ID = "depmap_ccle/26q1"
@@ -80,6 +82,24 @@ def ordered_sha256(values: Any) -> str:
 
 def verifier_sha256() -> str:
     return sha256_bytes(Path(__file__).read_bytes())
+
+
+def verify_only_capacity() -> dict[str, Any]:
+    """Measure the approved VM without applying the writer's 50-GiB disk floor."""
+    hostname, project, zone, instance = require_heavy_vm()
+    meminfo = {}
+    for line in Path("/proc/meminfo").read_text(encoding="utf-8").splitlines():
+        key, value = line.split(":", maxsplit=1)
+        meminfo[key] = int(value.strip().split()[0]) * 1024
+    return {
+        "hostname": hostname,
+        "socket_hostname": socket.gethostname(),
+        "project": project,
+        "zone": zone,
+        "instance": instance,
+        "free_disk_bytes": shutil.disk_usage(Path.cwd()).free,
+        "available_memory_bytes": meminfo["MemAvailable"],
+    }
 
 
 def receipt_sha256(receipt: dict[str, Any]) -> str:
@@ -358,7 +378,7 @@ def live_payload(ln: Any) -> dict[str, Any]:
 def main() -> int:
     if platform.system() == "Darwin":
         raise RuntimeError("refusing Mac execution")
-    capacity = preflight()
+    capacity = verify_only_capacity()
     expected_head = os.environ.get("PERT_GYM_VERIFY_HEAD", "")
     run_id = os.environ.get("PERT_GYM_KANBAN_RUN_ID", "")
     if len(expected_head) != 40 or not run_id:
@@ -455,9 +475,7 @@ def main() -> int:
             ],
         },
         "host": {
-            "hostname": capacity.hostname,
-            "free_disk_bytes": capacity.free_disk_bytes,
-            "available_memory_bytes": capacity.available_memory_bytes,
+            **capacity,
         },
         "lifecycle": {
             "payload_exit_code": 0,
