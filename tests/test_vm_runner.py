@@ -3,6 +3,7 @@ from __future__ import annotations
 import fcntl
 import json
 import os
+import shutil
 import signal
 import subprocess
 import sys
@@ -773,6 +774,36 @@ def _valid_preflight() -> runner.Preflight:
         available_memory_bytes=32 * 1024**3,
         billing_project=runner.BILLING_PROJECT,
     )
+
+
+def test_verify_only_preflight_uses_bounded_control_plane_disk_floor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        runner,
+        "require_heavy_vm",
+        lambda: (
+            "pert-gym-worker-eu",
+            runner.EXPECTED_GCE_PROJECT,
+            runner.EXPECTED_ZONE,
+            "pert-gym-worker-eu",
+        ),
+    )
+    monkeypatch.setattr(
+        runner.shutil,
+        "disk_usage",
+        lambda _: shutil._ntuple_diskusage(
+            30 * 1024**3, 10 * 1024**3, 20 * 1024**3
+        ),
+    )
+    monkeypatch.setattr(
+        runner, "_available_memory_bytes", lambda: 32 * 1024**3
+    )
+
+    with pytest.raises(RuntimeError, match="need 50.0 GiB"):
+        runner.preflight()
+    capacity = runner.verify_only_preflight()
+    assert capacity.free_disk_bytes == 20 * 1024**3
 
 
 def test_cli_rejects_user_host_and_resource_gate_overrides(

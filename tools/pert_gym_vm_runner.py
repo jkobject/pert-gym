@@ -40,6 +40,7 @@ EXPECTED_GCE_PROJECT = "jkobject-1549353370965"
 EXPECTED_ZONE = "europe-west1-b"
 BILLING_PROJECT = "jkobject-1549353370965"
 MIN_FREE_DISK_GB = 50
+VERIFY_ONLY_MIN_FREE_DISK_GB = 12
 MIN_AVAILABLE_MEMORY_GB = 16
 PRODUCTION_HEARTBEAT_SECONDS = 30.0
 METADATA_BASE_URL = "http://metadata.google.internal/computeMetadata/v1"
@@ -357,15 +358,15 @@ def require_heavy_vm() -> tuple[str, str, str, str]:
     return hostname, project, zone, instance
 
 
-def preflight() -> Preflight:
-    """Return measured capacity after applying fail-closed host/resource gates."""
+def _preflight(*, min_free_disk_gb: float) -> Preflight:
+    """Return measured capacity after applying fixed host/resource gates."""
     hostname, project, zone, instance = require_heavy_vm()
     free_disk = shutil.disk_usage(ROOT).free
     available_memory = _available_memory_bytes()
-    if free_disk < MIN_FREE_DISK_GB * 1024**3:
+    if free_disk < min_free_disk_gb * 1024**3:
         raise RuntimeError(
             f"insufficient disk: {free_disk / 1024**3:.1f} GiB free; "
-            f"need {MIN_FREE_DISK_GB:.1f} GiB"
+            f"need {min_free_disk_gb:.1f} GiB"
         )
     if available_memory < MIN_AVAILABLE_MEMORY_GB * 1024**3:
         raise RuntimeError(
@@ -381,6 +382,21 @@ def preflight() -> Preflight:
         available_memory_bytes=available_memory,
         billing_project=BILLING_PROJECT,
     )
+
+
+def preflight() -> Preflight:
+    """Gate heavy writers with the conservative 50-GiB free-space floor."""
+    return _preflight(min_free_disk_gb=MIN_FREE_DISK_GB)
+
+
+def verify_only_preflight() -> Preflight:
+    """Gate bounded readback that needs no local payload materialization.
+
+    The persistent EU control-plane disk is 30 GiB, so the writer floor cannot
+    be satisfied there. This separate fixed floor admits only verify-only callers
+    whose source and Lamin payloads are already cached or remotely streamed.
+    """
+    return _preflight(min_free_disk_gb=VERIFY_ONLY_MIN_FREE_DISK_GB)
 
 
 def vm_global_lamin_writer_lock_path(worktree: Path | None = None) -> Path:
