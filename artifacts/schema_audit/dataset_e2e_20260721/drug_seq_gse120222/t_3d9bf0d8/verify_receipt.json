@@ -1,0 +1,67 @@
+{
+  "format": "pert-gym.drug-seq-gse120222-verify-only-receipt-summary/v1",
+  "task_id": "t_3d9bf0d8",
+  "status": "PASS",
+  "mode": "verify",
+  "execution_git_head": "6038a39134cc6b306fde4906e9bccfcc5c01de0e",
+  "helper_sha256": "52c8a21be26553612cf21ef5d074488e093d1b04f569ad398d7cd2f64d830989",
+  "full_stdout_receipt_canonical_sha256": "9ee90abe3eaf5739a5607919fa6941b7e974fa57cc4dc2d1e7f9a54d6ff9db96",
+  "registry_counts": {
+    "before": {"artifacts": 28509, "collections": 38},
+    "after_first": {"artifacts": 28509, "collections": 38},
+    "after_replay": {"artifacts": 28509, "collections": 38}
+  },
+  "triplet_readback": {
+    "shape": [72, 60371],
+    "nnz": 1747564,
+    "obs_rows_checked": 72,
+    "var_rows_checked": 60371,
+    "human_ensembl_rows": 60279,
+    "ercc_rows": 92,
+    "mismatch_count": 0,
+    "sha256": {
+      "obs": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975",
+      "x": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84",
+      "var": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637"
+    }
+  },
+  "collection_readback": {
+    "dataset_collection_uid": "4tKR1YGxdI6AtfNa0000",
+    "dataset_collection_hash": "WuIMnlk3d3DKERMTUwzQ5Q",
+    "dataset_member_count": 1,
+    "global_collection_uid": "Ltjv1RYDCnuxqqRT0000",
+    "global_collection_hash": "ZsctJFBSIiaKnrIzEh-1-g",
+    "global_member_count": 1018,
+    "global_unique_uid_count": 1018,
+    "global_unique_key_count": 1018,
+    "global_membership_sha256": "f897f05f9dd920479fe44d14c7b193398642605cfd252e0e5ac67235ec1b2da7",
+    "predecessor_uid": "qoTeH7T78kjbmIWA0000",
+    "predecessor_unchanged": true,
+    "added_uids": ["mKSaEEcH4jyes43Z0002"],
+    "removed_uids": []
+  },
+  "verify_only": {
+    "first_pass_writes": 0,
+    "replay_writes": 0,
+    "duplicate_uid_count": 0,
+    "duplicate_key_count": 0,
+    "registry_counts_stable": true
+  },
+  "product_execution": {
+    "host": "pert-gym-worker-eu",
+    "pid": 1035,
+    "terminal_phase": "accepted",
+    "current": 1,
+    "denominator": 1,
+    "unit": "logical_dataset"
+  },
+  "terminal_control_plane": {
+    "instance_id": "3715582979673213789",
+    "instance_status": "TERMINATED",
+    "gce_lease_owner": "jkobject",
+    "gce_lease_task": "t-3d9bf0d8",
+    "gce_lease_until": "20260721t101133z",
+    "local_lease_until": "2026-07-21T10:11:33Z",
+    "note": "approved launcher stopped the VM; bounded task lease remains live and must not be shortened or taken over"
+  }
+}

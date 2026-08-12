@@ -1,0 +1,55 @@
+{
+  "format": "pert-gym.drug-seq-gse120222-review-fix-receipt/v1",
+  "task_id": "t_1f13aa0c",
+  "producer_task_id": "t_3d9bf0d8",
+  "status": "LOCAL_CONTRACT_PASS_REVIEW_REQUIRED",
+  "product_delta": 0,
+  "ledger_credit": 0,
+  "triplet": {
+    "obs": {
+      "uid": "mKSaEEcH4jyes43Z0002",
+      "key": "DRUG-seq/GSE120222/obs.parquet",
+      "sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975"
+    },
+    "x": {
+      "uid": "hfeVCMInQu1UKhwp0000",
+      "key": "DRUG-seq/GSE120222/X.h5ad",
+      "sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84"
+    },
+    "var": {
+      "uid": "vmqp94W72a1Tl2Xw0002",
+      "key": "DRUG-seq/GSE120222/var.parquet",
+      "sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637"
+    }
+  },
+  "historical_immutable_receipts": {
+    "mutation": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/mutation_receipt.json",
+      "sha256": "de688662e6014845d8b115b6cc4b3bc4c012df89d0d0ee7acb25600c4da6038c",
+      "modified": false
+    },
+    "verify": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/verify_receipt.json",
+      "sha256": "8f374617377b260ac463ae81db4b15ad375a26e7ecdac0814b400e1804c1859a",
+      "modified": false
+    }
+  },
+  "verifier_revision": {
+    "publisher_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/publish_collections.py",
+    "publisher_sha256": "35445c50cc8933326f789aa6515b5187579dcf488f44e46ef9b2eb9e5de0de5b",
+    "rejected_head": "f075583261baed9d15de094d48246f78646469a2",
+    "obs_contract": "all canonical fields explicitly dispositioned; eight accepted materialized fields validated against source-bound values/rules; unsupported fields remain absent with unknown/not_applicable/source-known-not-materialized dispositions",
+    "var_contract": "exact human ENSG format/namespace/Homo sapiens/mapping/gene type plus ERCC format/namespace/not_applicable organism and mapping/spike-in type; complete partition and stable-ID uniqueness",
+    "live_verify_only_readback": "pending fresh independent approved-launcher reviewer; this local continuation performed no cloud or Lamin access"
+  },
+  "safety": {
+    "cloud_access": false,
+    "gcs_access": false,
+    "lamin_access": false,
+    "collection_mutation": false,
+    "artifact_mutation": false,
+    "payload_rewrite": false,
+    "mutation_replay": false,
+    "deletion": false
+  }
+}
