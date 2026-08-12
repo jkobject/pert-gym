@@ -191,12 +191,11 @@ def registry_snapshot(ln: Any) -> dict[str, Any]:
             str(item.uid),
             str(item.key),
             str(item.hash),
-            str(item.version),
             bool(item.is_latest),
             int(item.size),
         )
         for item in ln.Artifact.filter().only(
-            "uid", "key", "hash", "version", "is_latest", "size"
+            "uid", "key", "hash", "is_latest", "size"
         )
     )
     collections = []

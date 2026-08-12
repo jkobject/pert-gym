@@ -462,3 +462,29 @@ def test_detached_checkout_is_bound_to_explicit_expected_branch() -> None:
     )
     with pytest.raises(RuntimeError, match="launch branch"):
         FULL_DOD_MODULE.resolve_launch_branch("", "wrong-branch")
+
+
+def test_registry_snapshot_uses_live_artifact_schema_without_version_field() -> None:
+    class Query:
+        def only(self, *fields):
+            assert "version" not in fields
+            return self
+
+        def __iter__(self):
+            return iter([])
+
+        def all(self):
+            return []
+
+    class Model:
+        @staticmethod
+        def filter():
+            return Query()
+
+    class Lamin:
+        Artifact = Model
+        Collection = Model
+
+    snapshot = FULL_DOD_MODULE.registry_snapshot(Lamin)
+    assert snapshot["artifact_count"] == 0
+    assert snapshot["collection_count"] == 0
