@@ -1,7 +1,7 @@
 # pert-gym current status
 
-_Last reconciled: 2026-08-11 from `TODO.md`, the strict accepted product ledger,
-and `accepted_10_dataset_review_snapshot.json`. Pending work is not counted;
+_Last reconciled: 2026-08-12 from `TODO.md`, the strict accepted product ledger,
+`accepted_10_dataset_review_snapshot.json`, and review-pending GSE207360 evidence. Pending work is not counted;
 scoped validation is not full dataset completion. `TODO.md` remains the
 operational dashboard._
 
@@ -17,7 +17,7 @@ operational dashboard._
 | Frozen base-public OBS component×field candidates | **33/640** | 607 | SHA-256 `371b2b78c755c5cfdf8fa82d7826e5b2fdbfe48b67ca11e6d2d77ec7b6ff60c2` |
 | Accepted OBS assignments outside that universe | **6** | — | depmap_ccle/26q1; intentionally no `/640` denominator |
 | VAR dataset remediations | **8/70** | 62 | latest accepted delta: `scperturb/datlinger17` reviewer `t_2c228f48`, VAR `AYnivbGN3JCRzkN70001`; GSE150062 remains pending independent acceptance |
-| Inventory rows with scoped scientific validation | **18/92** | 74 | prior 8 plus accepted-10 wave; exact canonical-ID overlap 0 |
+| Inventory rows with scoped scientific validation | **19/92 review-pending snapshot** | 73 | accepted 18 plus GSE207360 merged scientific evidence; independent acceptance of this snapshot is pending |
 | Scientific datasets satisfying the stronger full project DoD | **0/92** | 92 | no row has every notebook/publication/decommission/docs/merged-PR gate accepted together |
 | External exclusions | **60/60** | 0 | complete |
 
@@ -27,6 +27,20 @@ Collection membership, recompaction, OBS, and VAR are separate units and must
 not be added together.
 
 ## Accepted evidence and pending boundaries
+
+### GSE207360 review-pending continuation
+
+PR #117 is merged and its exact head was independently accepted. Fresh zero-write
+EU readback at `f033b0ad4e6bbaf802bb3342a96c644769fa8003` proves current explicit
+links OBS `KSAkP0NJF5P5g1mJ0004` → X `4IOEQEw4ylx0Zx4c0000` → VAR
+`U8OeHI58YG9Y9Nsb0002`, 12,487 rows, 10,984 human / 1,503 mouse, exact source
+SHA-256 `b54a754f…`, and unchanged registry counts 28,600 / 55. Receipt canonical
+SHA-256: `7f9dfcd4dee95405e8eb5b41845e37db7d20853bdd599444fd54c1e05946d94f`.
+
+The stronger full-DoD row remains false: the current OBS is absent from all
+Collections, canonical `data/cleaned/GSE207360/` is absent, the legacy staging
+object is already absent, and this same-snapshot evidence still needs independent
+review and merge. No GCS deletion occurred and no readiness manifest was issued.
 
 ### Accepted-10 reconciliation
 

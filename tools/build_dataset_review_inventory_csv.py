@@ -462,6 +462,50 @@ def _finalize_row(row: dict[str, Any]) -> None:
     row["next_review_focus"] = _focus(missing)
 
 
+def _apply_gse207360_review_pending(rows: list[dict[str, Any]]) -> None:
+    """Apply merged scientific evidence without claiming full completion."""
+    row = next(item for item in rows if item["dataset_id"] == "geo/GSE207360")
+    row.update(
+        {
+            "strict_obs_validated": True,
+            "strict_var_validated": True,
+            "chunks_or_structure_validated": True,
+            "cleaning_validated": True,
+            "accepted_wave_head": "68dce7e46e233962dc3be8467f3f94e08385d4f7",
+            "producer_task_id": "t_a2234c88",
+            "reviewer_task_id": "t_f1a9c44d",
+            "scientific_modality": "mixed-species xenograft scRNA-seq raw counts",
+            "experimental_axes": "EGFR-intact WT day 15 vs EGFR-knockout KO day 90; human tumour vs mouse host strata",
+            "outcomes_endpoints": "row-level cell identity, host exposure context, QC, raw-count expression",
+            "annotation_level": "single cell",
+            "source_evidence": json.dumps(
+                [
+                    "GEO GSE207360 filtered Seurat sha256:b54a754f26aeb6082de7480ac15622c1696b5f753e036e36b4346c98021bdba1",
+                    "PMID:38570528",
+                    "Vasectasia@cea7f3d8a14a3dfa828b8329721dac53a56a4a12",
+                ],
+                separators=(",", ":"),
+            ),
+            "scientific_contract_documented": True,
+            "scientific_contract_bound": True,
+            "payload_prefixes": json.dumps(
+                ["prism_collection/GSE207360"], separators=(",", ":")
+            ),
+            "structured_payload_evidence": True,
+            "processing_decision_notebook_present": True,
+            "processing_decision_notebook": True,
+            "processing_decision_notebook_path": "artifacts/schema_audit/real_dataset_curation_20260722/geo_GSE207360/t_a2234c88/GSE207360_processing_decisions.ipynb",
+            "canonical_data_cleaned_payload": False,
+            "accepted_head_integrated": True,
+            "staging_decommissioned_with_receipt": False,
+            "inventory_docs_same_snapshot_accepted": False,
+            "exact_head_inventory_pr_merged": False,
+            "evidence": "PR #117 merged 68dce7e; accepted reviewer t_f1a9c44d; fresh zero-write full-DoD receipt canonical sha256 7f9dfcd4dee95405e8eb5b41845e37db7d20853bdd599444fd54c1e05946d94f",
+        }
+    )
+    _finalize_row(row)
+
+
 def _immutable_accepted_file(
     integration_item: dict[str, Any], relative_path: str
 ) -> bytes:
@@ -1225,9 +1269,9 @@ def build_rows(
     *, base: Path = BASELINE_INPUT, refresh_from_evidence: bool = False
 ) -> list[dict[str, Any]]:
     """Canonicalize the frozen snapshot or explicitly rebuild from local evidence."""
-    if refresh_from_evidence:
-        return _build_rows_from_evidence()
-    return _read_frozen_rows(base)
+    rows = _build_rows_from_evidence() if refresh_from_evidence else _read_frozen_rows(base)
+    _apply_gse207360_review_pending(rows)
+    return rows
 
 
 def summary(rows: list[dict[str, Any]]) -> dict[str, int]:
