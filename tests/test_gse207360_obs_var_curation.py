@@ -389,33 +389,9 @@ def test_gcloud_access_token_failure_is_not_absence(monkeypatch) -> None:
 
 
 def _valid_full_dod_receipt() -> dict:
-    receipt = {
-        "format": FULL_DOD_MODULE.RECEIPT_FORMAT,
-        "task_id": "t_f2593783",
-        "run_id": "4662",
-        "code": {
-            "head": "a" * 40,
-            "branch": "pert-gym/t_f2593783-complete-gse207360-live-dod-after-pr-117",
-            "pr": 138,
-            "verifier_sha256": "b" * 64,
-        },
-        "command": {"exit_code": 0},
-        "source": {"sha256": FULL_DOD_MODULE.SOURCE_SHA256, "size": 4_174_159_639},
-        "artifacts": deepcopy(FULL_DOD_MODULE.EXPECTED_ARTIFACTS),
-        "snapshots": {
-            "before": {"canonical_sha256": "c" * 64},
-            "after": {"canonical_sha256": "c" * 64},
-        },
-        "registry_drift": 0,
-        "replay_noop": True,
-        "gcs_decommission": {"eligible": False, "action": "preserved_no_deletion"},
-        "lifecycle": {
-            "payload_exit_code": 0,
-            "terminal_vm_status": "TERMINATED",
-            "task_scoped_labels_cleared": True,
-            "local_lease_absent": True,
-        },
-    }
+    receipt = json.loads(FULL_DOD_RECEIPT.read_text())
+    receipt["code"]["head"] = "a" * 40
+    receipt["code"]["verifier_sha256"] = "b" * 64
     receipt["canonical_sha256"] = FULL_DOD_MODULE.receipt_sha256(receipt)
     return receipt
 
@@ -429,6 +405,37 @@ def _valid_full_dod_receipt() -> dict:
         (lambda r: r["snapshots"]["after"].update(canonical_sha256="d" * 64), "registry drift"),
         (lambda r: r.update(replay_noop=False), "replay"),
         (lambda r: r["lifecycle"].update(terminal_vm_status="RUNNING"), "lifecycle"),
+        (lambda r: r.update(dataset_id="wrong"), "dataset/task"),
+        (lambda r: r["code"].update(pr=999), "PR identity"),
+        (lambda r: r["command"].update(argv=["wrong.py"]), "command identity"),
+        (lambda r: r.update(completed_at=0), "completion timestamp"),
+        (lambda r: r["collections_with_target_key"][0].update(uid="wrong"), "Collection identity"),
+        (lambda r: r["collections_with_target_key"][0].update(key="wrong"), "Collection identity"),
+        (lambda r: r["collections_with_target_key"][0].update(hash="wrong"), "Collection identity"),
+        (
+            lambda r: r["collections_with_target_key"][0]["target_members"][0].update(uid="wrong"),
+            "Collection identity",
+        ),
+        (
+            lambda r: r["collections_with_target_key"][0]["target_members"][0].update(key="wrong"),
+            "Collection identity",
+        ),
+        (lambda r: r["collections_with_target_key"].pop(), "Collection rows"),
+        (
+            lambda r: r["exact_current_collection_memberships"].append(
+                deepcopy(r["collections_with_target_key"][0])
+            ),
+            "current Collection membership",
+        ),
+        (lambda r: r["gcs_decommission"]["legacy_staging"].update(http_status=403), "decommission"),
+        (lambda r: r["gcs_decommission"]["canonical_cleaned"].update(exists=True), "decommission"),
+        (
+            lambda r: r["gcs_decommission"]["gates"].update(
+                accepted_current_collection_membership=True
+            ),
+            "decommission",
+        ),
+        (lambda r: r["gcs_decommission"].update(unmet_gates=[]), "decommission"),
     ],
 )
 def test_full_dod_receipt_validation_rejects_tampering(mutation, message) -> None:

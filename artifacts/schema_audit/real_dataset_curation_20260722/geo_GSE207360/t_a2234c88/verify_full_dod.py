@@ -30,6 +30,21 @@ BILLING_PROJECT = "jkobject-1549353370965"
 LEGACY_STAGING_URI = "gs://scperturb/pert-gym/staging/data/main/prism_collection/GSE207360.h5ad"
 CLEANED_PREFIX = "gs://scperturb/data/cleaned/GSE207360/"
 EXPECTED_BRANCH = "pert-gym/t_f2593783-complete-gse207360-live-dod-after-pr-117"
+EXPECTED_PR = 138
+EXPECTED_COMMAND_ARGV = [
+    "artifacts/schema_audit/real_dataset_curation_20260722/geo_GSE207360/"
+    "t_a2234c88/verify_full_dod.py"
+]
+EXPECTED_RECEIPT_COMPLETED_AT = 1_786_522_213
+EXPECTED_REGISTRY_SNAPSHOT = {
+    "artifact_count": 28_600,
+    "collection_count": 55,
+    "artifact_identities_sha256": "0cbb342cf9adf5c7f6f963cce87b92c882d5ea9e7dfb841b68d5175093cdaddf",
+    "collection_identities_and_memberships_sha256": "da15ca5957b863c3162c84ccd18ae567b57a42b328e979e00a282cd517f944aa",
+    "canonical_sha256": "3aa150dd6c00e4b03f2e1390f3121348624b3e04eafa5acf066c435c8926c313",
+}
+EXPECTED_COLLECTION_ROWS = 35
+EXPECTED_COLLECTIONS_SHA256 = "8bddc99f3951da175f11d9ae6171b60ca8dd4581bb2bc53d625ddb704c5cea71"
 EXPECTED_ARTIFACTS = {
     "obs": {
         "uid": "KSAkP0NJF5P5g1mJ0004",
@@ -291,21 +306,31 @@ def validate_receipt(
         raise AssertionError("receipt canonical digest mismatch")
     if receipt.get("format") != RECEIPT_FORMAT or receipt.get("task_id") != TASK_ID:
         raise AssertionError("receipt dataset/task identity mismatch")
+    if receipt.get("dataset_id") != DATASET_ID:
+        raise AssertionError("receipt dataset/task identity mismatch")
     if receipt.get("run_id") != expected_run_id:
         raise AssertionError("receipt run identity mismatch")
     code = receipt.get("code", {})
     if code.get("head") != expected_head or code.get("branch") != EXPECTED_BRANCH:
         raise AssertionError("receipt code head or branch mismatch")
+    if code.get("pr") != EXPECTED_PR:
+        raise AssertionError("receipt PR identity mismatch")
     if code.get("verifier_sha256") != expected_verifier_sha256:
         raise AssertionError("receipt verifier lineage mismatch")
-    if receipt.get("command", {}).get("exit_code") != 0:
-        raise AssertionError("receipt command did not exit successfully")
+    if receipt.get("command") != {"argv": EXPECTED_COMMAND_ARGV, "exit_code": 0}:
+        raise AssertionError("receipt command identity or exit status mismatch")
+    if receipt.get("completed_at") != EXPECTED_RECEIPT_COMPLETED_AT:
+        raise AssertionError("receipt completion timestamp mismatch")
     if receipt.get("source") != {"sha256": SOURCE_SHA256, "size": 4_174_159_639}:
         raise AssertionError("receipt source identity mismatch")
     if receipt.get("artifacts") != EXPECTED_ARTIFACTS:
         raise AssertionError("receipt artifact identity mismatch")
     snapshots = receipt.get("snapshots", {})
-    if snapshots.get("before") != snapshots.get("after") or receipt.get("registry_drift") != 0:
+    if (
+        snapshots.get("before") != EXPECTED_REGISTRY_SNAPSHOT
+        or snapshots.get("after") != EXPECTED_REGISTRY_SNAPSHOT
+        or receipt.get("registry_drift") != 0
+    ):
         raise AssertionError("receipt registry drift detected")
     if receipt.get("replay_noop") is not True:
         raise AssertionError("receipt replay is not a no-op")
@@ -318,8 +343,56 @@ def validate_receipt(
     }
     if any(lifecycle.get(key) != value for key, value in expected_lifecycle.items()):
         raise AssertionError("receipt lifecycle evidence is incomplete")
+    collection_rows = receipt.get("collections_with_target_key")
+    if not isinstance(collection_rows, list) or len(collection_rows) != EXPECTED_COLLECTION_ROWS:
+        raise AssertionError("receipt Collection rows mismatch")
+    if hashlib.sha256(canonical(collection_rows).encode()).hexdigest() != EXPECTED_COLLECTIONS_SHA256:
+        raise AssertionError("receipt Collection identity/member mismatch")
+    expected_current_memberships = [
+        row
+        for row in collection_rows
+        if row.get("target_members")
+        == [{"uid": EXPECTED_ARTIFACTS["obs"]["uid"], "key": EXPECTED_ARTIFACTS["obs"]["key"]}]
+    ]
+    if receipt.get("exact_current_collection_memberships") != expected_current_memberships:
+        raise AssertionError("receipt current Collection membership derivation mismatch")
+
+    expected_empty_probes = {
+        "legacy_staging": {
+            "uri": LEGACY_STAGING_URI,
+            "http_status": 200,
+            "exists": False,
+            "object_count_lower_bound": 0,
+            "truncated": False,
+            "objects": [],
+        },
+        "canonical_cleaned": {
+            "uri": CLEANED_PREFIX,
+            "http_status": 200,
+            "exists": False,
+            "object_count_lower_bound": 0,
+            "truncated": False,
+            "objects": [],
+        },
+    }
+    expected_gates = {
+        "accepted_parity_and_readback": True,
+        "executable_processing_notebook": True,
+        "immutable_source_and_rollback": True,
+        "exact_deletion_scope_present": False,
+        "canonical_data_cleaned_payload": False,
+        "accepted_current_collection_membership": bool(expected_current_memberships),
+        "independent_review_of_this_receipt": False,
+    }
+    expected_decommission = {
+        **expected_empty_probes,
+        "gates": expected_gates,
+        "eligible": False,
+        "action": "preserved_no_deletion",
+        "unmet_gates": [key for key, value in expected_gates.items() if not value],
+    }
     decommission = receipt.get("gcs_decommission", {})
-    if decommission.get("eligible") is not False or decommission.get("action") != "preserved_no_deletion":
+    if decommission != expected_decommission:
         raise AssertionError("receipt decommission disposition is unsafe")
 
 
