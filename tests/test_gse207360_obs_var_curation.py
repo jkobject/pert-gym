@@ -23,6 +23,7 @@ SPEC = importlib.util.spec_from_file_location("gse207360_curation", MODULE_PATH)
 assert SPEC is not None and SPEC.loader is not None
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
+DECISION_NOTEBOOK = MODULE_PATH.parent / "GSE207360_processing_decisions.ipynb"
 
 
 def source_frame() -> pd.DataFrame:
@@ -75,12 +76,16 @@ def test_frozen_rows_and_source_manifest_are_bound() -> None:
     assert frozen["audit_row"]["logical_family_count"] == 1
     manifest = json.loads(MODULE.SOURCE_MANIFEST_PATH.read_text())
     assert manifest["real_dataset_id"] == "geo/GSE207360"
-    filtered = next(item for item in manifest["files"] if item["name"].endswith("filtered.rds.gz"))
+    filtered = next(
+        item for item in manifest["files"] if item["name"].endswith("filtered.rds.gz")
+    )
     assert filtered["sha256"] == MODULE.SOURCE_SPEC["sha256"]
     assert manifest["geo"]["scrna_samples"][0]["time_days_after_injection"] == 15
     assert manifest["geo"]["scrna_samples"][1]["time_days_after_injection"] == 90
 
-    receipt_manifest = json.loads((MODULE.EVIDENCE_DIR / "receipt_manifest.json").read_text())
+    receipt_manifest = json.loads(
+        (MODULE.EVIDENCE_DIR / "receipt_manifest.json").read_text()
+    )
     assert receipt_manifest["captured_against_head"] == (
         "cbe143a2a53514246a389ac39051bca14dcb7aa0"
     )
@@ -92,13 +97,15 @@ def test_frozen_rows_and_source_manifest_are_bound() -> None:
         assert hashlib.sha256(bound_bytes).hexdigest() == expected_sha256
 
     live_receipt = json.loads((MODULE.EVIDENCE_DIR / "live_receipt.json").read_text())
-    assert live_receipt["canonical_sha256"] == receipt_manifest["receipts"][
-        "live_receipt.json"
-    ]["canonical_sha256"]
+    assert (
+        live_receipt["canonical_sha256"]
+        == receipt_manifest["receipts"]["live_receipt.json"]["canonical_sha256"]
+    )
     assert live_receipt["replay_noop"] is True
-    assert live_receipt["registry_counts"]["before"] == live_receipt["registry_counts"][
-        "after"
-    ]
+    assert (
+        live_receipt["registry_counts"]["before"]
+        == live_receipt["registry_counts"]["after"]
+    )
     assert live_receipt["writes"] == {
         "artifacts": [],
         "collection_writes": 0,
@@ -107,6 +114,21 @@ def test_frozen_rows_and_source_manifest_are_bound() -> None:
         "var_revisions": 0,
         "x_revisions": 0,
     }
+
+
+def test_processing_decision_notebook_executes_and_lists_residual_gates() -> None:
+    nbformat = pytest.importorskip("nbformat")
+    notebook_client = pytest.importorskip("nbclient")
+    notebook = nbformat.read(DECISION_NOTEBOOK, as_version=4)
+    executed = notebook_client.NotebookClient(
+        notebook,
+        timeout=60,
+        resources={"metadata": {"path": str(MODULE_PATH.parents[5])}},
+    ).execute(cwd=str(MODULE_PATH.parents[5]))
+    namespace = executed.cells[2]["source"]
+    assert "len(full_dod_gates) == 13" in namespace
+    assert "reviewed_gcs_decommission_ready" in namespace
+    assert "safe_to_remove_gcs'] is False" in namespace
 
 
 def test_exact_source_join_rejects_row_drift() -> None:
@@ -143,7 +165,12 @@ def test_curate_obs_materializes_source_exhaustive_semantics() -> None:
         "Pericytes": 1,
     }
 
-    assert curated["sample"].tolist() == ["GSM6284972", "GSM6284971", "GSM6284971", "GSM6284972"]
+    assert curated["sample"].tolist() == [
+        "GSM6284972",
+        "GSM6284971",
+        "GSM6284971",
+        "GSM6284972",
+    ]
     assert curated["timepoint"].tolist() == [129_600.0, 21_600.0, 21_600.0, 129_600.0]
     assert curated["perturbation"].tolist() == [
         "EGFR",
@@ -174,7 +201,9 @@ def test_curate_obs_materializes_source_exhaustive_semantics() -> None:
     assert curated["source_accession"].eq("GSE207360").all()
     assert curated["x_semantics"].eq("raw_counts").all()
     assert curated["pct_mito"].tolist() == pytest.approx([5.0, 2.0, 7.0, 4.0])
-    assert curated["source_original_perturbation"].tolist() == obs["perturbation"].tolist()
+    assert (
+        curated["source_original_perturbation"].tolist() == obs["perturbation"].tolist()
+    )
     assert curated["source_original_organism"].eq("mouse").all()
     assert curated["source_seurat_Sample"].tolist() == source["Sample"].tolist()
     assert curated["source_seurat_Cell_type1"].tolist() == source["Cell_type1"].tolist()
@@ -218,7 +247,9 @@ def test_curate_obs_reserves_direct_egfr_edit_for_human_ko_cells() -> None:
     assert curated.loc[human_ko, "perturbation"].eq("EGFR").all()
     assert curated.loc[human_ko, "perturbation_type"].eq("CRISPRko").all()
     assert curated.loc[human_ko, "perturbation_target"].eq("EGFR").all()
-    assert curated.loc[mouse_ko, "perturbation"].eq("EGFR-knockout tumour exposure").all()
+    assert (
+        curated.loc[mouse_ko, "perturbation"].eq("EGFR-knockout tumour exposure").all()
+    )
     assert curated.loc[mouse_ko, "perturbation_type"].eq("exposure").all()
     assert curated.loc[mouse_ko, "perturbation_target"].isna().all()
     assert curated.loc[mouse_ko, "perturbation_target_state"].eq("not_applicable").all()
@@ -242,10 +273,21 @@ def test_curate_obs_is_idempotent() -> None:
 
 
 def test_x_and_var_identities_are_fixed() -> None:
-    assert MODULE.EXPECTED_X == {"uid": "4IOEQEw4ylx0Zx4c0000", "hash": "rLTZFYwmtPyrsHhVQ6_kp-"}
-    assert MODULE.EXPECTED_VAR == {"uid": "U8OeHI58YG9Y9Nsb0002", "hash": "wv2BwlQShhowaM7AYyu4uQ"}
+    assert MODULE.EXPECTED_X == {
+        "uid": "4IOEQEw4ylx0Zx4c0000",
+        "hash": "rLTZFYwmtPyrsHhVQ6_kp-",
+    }
+    assert MODULE.EXPECTED_VAR == {
+        "uid": "U8OeHI58YG9Y9Nsb0002",
+        "hash": "wv2BwlQShhowaM7AYyu4uQ",
+    }
     var = pd.DataFrame(
-        {"stable_feature_id": [*[f"ENSG{i}" for i in range(32_738)], *[f"ENSMUSG{i}" for i in range(27_998)]]}
+        {
+            "stable_feature_id": [
+                *[f"ENSG{i}" for i in range(32_738)],
+                *[f"ENSMUSG{i}" for i in range(27_998)],
+            ]
+        }
     )
     verdict = MODULE.verify_var(var)
     assert verdict["needs_revision"] is False
