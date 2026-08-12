@@ -24,6 +24,7 @@ assert SPEC is not None and SPEC.loader is not None
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 DECISION_NOTEBOOK = MODULE_PATH.parent / "GSE207360_processing_decisions.ipynb"
+FULL_DOD_VERIFIER = MODULE_PATH.parent / "verify_full_dod.py"
 
 
 def source_frame() -> pd.DataFrame:
@@ -321,3 +322,13 @@ def test_verify_mode_uses_bounded_verify_only_capacity_gate(
     )
     with pytest.raises(RuntimeError, match="verify gate reached"):
         MODULE.main()
+
+
+def test_full_dod_verifier_is_zero_write_and_fail_closed_on_deletion() -> None:
+    source = FULL_DOD_VERIFIER.read_text()
+    assert '"artifact_writes": 0' in source
+    assert '"collection_writes": 0' in source
+    assert '"deletions": 0' in source
+    assert '"action": "preserved_no_deletion"' in source
+    assert '"independent_review_of_this_receipt": False' in source
+    assert "gcloud storage rm" not in source
