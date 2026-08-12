@@ -109,12 +109,13 @@ def test_collection_identity_sorts_duplicate_target_key_revisions() -> None:
     assert [item["uid"] for item in identity["target_members"]] == ["a", "z"]
 
 
-def test_ordered_axis_identity_accepts_the_unique_matching_var_surface() -> None:
+def test_ordered_axis_identity_accepts_canonical_index_with_exact_alias() -> None:
     pd = pytest.importorskip("pandas")
     var = pd.DataFrame(
         {
             "stable_feature_id": ["ENSG1", "ENSG2"],
             "gene_symbol": ["A1BG", "A2M"],
+            "pert_gym_original_var_index": ["A1BG (1)", "A2M (2)"],
         },
         index=["A1BG (1)", "A2M (2)"],
     )
@@ -128,6 +129,6 @@ def test_ordered_axis_identity_accepts_the_unique_matching_var_surface() -> None
             if bool(var[column].astype("string").is_unique)
         }
     )
-    assert [source for source, digest in candidates.items() if digest == x_digest] == [
-        "var.index"
-    ]
+    assert sorted(
+        source for source, digest in candidates.items() if digest == x_digest
+    ) == ["var.index", "var.pert_gym_original_var_index"]

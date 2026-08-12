@@ -336,11 +336,12 @@ def live_payload(ln: Any) -> dict[str, Any]:
     matching_axis_sources = sorted(
         source for source, digest in axis_candidates.items() if digest == x_var_digest
     )
-    if len(matching_axis_sources) != 1:
+    if "var.index" not in matching_axis_sources:
         raise AssertionError(
-            "X/VAR ordered-axis identity is ambiguous or absent: "
+            "X/VAR ordered-axis identity is absent from canonical VAR index: "
             f"matches={matching_axis_sources!r}"
         )
+    axis_source = "var.index"
     canonical_fields = [
         "modality",
         "perturbation",
@@ -380,8 +381,9 @@ def live_payload(ln: Any) -> dict[str, Any]:
         "x_obs_names_sha256": ordered_sha256(x.obs_names),
         "stable_feature_id_sha256": ordered_sha256(stable_ids),
         "x_var_names_sha256": x_var_digest,
-        "var_axis_identity_source": matching_axis_sources[0],
-        "var_axis_identity_sha256": axis_candidates[matching_axis_sources[0]],
+        "var_axis_identity_source": axis_source,
+        "var_axis_identity_aliases": matching_axis_sources,
+        "var_axis_identity_sha256": axis_candidates[axis_source],
         "obs_columns": list(map(str, obs.columns)),
         "var_columns": list(map(str, var.columns)),
         "accepted_obs_field_coverage": coverage,
