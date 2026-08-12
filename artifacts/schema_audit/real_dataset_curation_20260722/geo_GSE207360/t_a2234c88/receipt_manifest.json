@@ -1,0 +1,28 @@
+{
+  "format": "pert-gym.immutable-receipt-manifest/v1",
+  "real_dataset_id": "geo/GSE207360",
+  "producer_task": "t_a2234c88",
+  "continuation_task": "t_e8bc7216",
+  "captured_against_head": "cbe143a2a53514246a389ac39051bca14dcb7aa0",
+  "receipts": {
+    "live_receipt.json": {
+      "sha256": "e40a5145eb683a9e9c9f79b4b3625b7eae05405946c8d0605ef409491c6a4589",
+      "canonical_sha256": "1cfffe6662087b3c1e486e810fadfe289a764b3602339142330b4c9bcb26aa89",
+      "replay_noop": true,
+      "writes": 0,
+      "deletions": 0
+    },
+    "cloud_cost_receipt.json": {
+      "sha256": "75cc94b312b3214f4f30f096d4719d0f6390ccb213b5d94e9d3e6acb9adb6185",
+      "within_monthly_ceiling": true,
+      "terminal_vm_status": "TERMINATED",
+      "task_scoped_labels_cleared": true
+    }
+  },
+  "code_bindings": {
+    "curate_obs_var.py": "7835871c4c4530ab2e3c09144616388457d204212a58d882d73141f646c01f26",
+    "extract_seurat_metadata.R": "9ebcd93024fc83ae28ffe84d123ca6c5fb20458494439f46ba2c5722c86e1295",
+    "source_manifest.json": "67c31791c00717b1cbd6fab962666ecb1afa7f6293c02d20b2ed5e38022e974c"
+  },
+  "provenance_note": "The replay receipt was captured by an exact-head EU verify after the append-only mixed-species OBS successor was published. It proves zero-write no-drift readback of OBS KSAkP0NJF5P5g1mJ0004 while preserving X 4IOEQEw4ylx0Zx4c0000 and VAR U8OeHI58YG9Y9Nsb0002; the cost receipt proves terminal VM stop and lease release."
+}

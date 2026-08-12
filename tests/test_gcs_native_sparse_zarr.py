@@ -351,7 +351,26 @@ def test_writer_refuses_operation_budget_before_first_remote_object(
     )
 
     with pytest.raises(GCSNativeWriterError, match="operation budget"):
-        write(fs, tmp_path / "cache")
+        write(
+            fs,
+            tmp_path / "cache",
+            peak_rss_reader=lambda: 5 * 1024**3,
+        )
+
+    assert fs.find("bucket/staging/family/example") == []
+
+
+def test_writer_still_refuses_hard_rss_after_operation_budget_accepts(
+    tmp_path: Path,
+) -> None:
+    fs = memory_filesystem()
+
+    with pytest.raises(BlockPlanConflict, match="hard RSS ceiling"):
+        write(
+            fs,
+            tmp_path / "cache",
+            peak_rss_reader=lambda: 5 * 1024**3,
+        )
 
     assert fs.find("bucket/staging/family/example") == []
 

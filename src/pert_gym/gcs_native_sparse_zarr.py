@@ -1498,6 +1498,28 @@ def write_gcs_native_sparse_revision(
     component_dtypes = _source_component_dtypes(
         matrix, probe_rows=probe_rows, sparse_format=sparse_format
     )
+    # Reject an unavoidable operation-budget breach before calibration can
+    # obscure it with a process-level RSS high-water mark.  Recovery objects
+    # are omitted only for this lower-bound preflight; the calibrated exact
+    # forecast below still includes and validates every reviewed retry.
+    operation_floor_forecast = forecast_gcs_operation_cost(
+        n_obs=shape[0],
+        n_vars=shape[1],
+        nnz=nnz,
+        data_dtype=component_dtypes[0],
+        index_dtype=component_dtypes[1],
+        indptr_dtype=component_dtypes[2],
+        sparse_format=sparse_format,
+        logical_blocks=forecast_logical_blocks,
+        calibration_rows=probe_rows,
+        target_object_bytes=target_object_bytes,
+        max_recovery_attempts=0,
+    )
+    validate_gcs_operation_budget(
+        operation_floor_forecast,
+        exception=operation_cost_exception,
+        launch_context=launch_context,
+    )
     if operation_counter is None:
         operation_counter = (
             fs.operation_counter
