@@ -1,6 +1,6 @@
 # pert-gym TODO / active source of truth
 
-_Last reconciled: 2026-08-11 from the strict accepted product ledger and `accepted_10_dataset_review_snapshot.json`. Pending writers are never counted before independent acceptance; scoped validation is not full dataset completion._
+_Last reconciled: 2026-08-12 from the strict accepted product ledger, `accepted_10_dataset_review_snapshot.json`, and the review-pending DepMap/CCLE 26Q1 full-DoD evidence. Pending writers are never counted before independent acceptance; scoped validation is not full dataset completion._
 
 ## Product objective / Definition of Done
 
@@ -52,6 +52,28 @@ The canonical surface remains **120 logical families / 1,056 physical members / 
 | RxRx3 | **HUMAN BLOCKER ONLY** | `t_e8f9c88c` | Auth0/portal access and Recursion EULA resolved, or reviewer-accepted exclusion |
 
 ## Accepted work since the previous dashboard
+
+### DepMap/CCLE Public 26Q1 review-pending full-DoD continuation
+
+A fresh bounded EU zero-write readback at exact helper head
+`5d1c87ba1e35388337238f319587162afcdaf568` follows explicit links from OBS
+`kCNSxyUJoJJKRSgE0004` to X `fUSYT9ArHdQye5qv0001` and VAR
+`0S0wAPqgigynI4Av0003`. It records 1,719 selected default model profiles and the
+1,775-row release denominator, and proves internal 1,719×19,215 axis/order parity, 27,216,323 stored
+nonzeros, six complete accepted OBS fields, 17,747 human Ensembl mappings and
+1,468 explicit unresolved features. Dataset Collection
+`6bVd5NhvcNOXom0s0000` contains exactly the current OBS; registry counts remained
+28,600 Artifacts / 55 Collections and the receipt reports zero writes/deletions.
+The uncommitted full-stdout receipt SHA-256 is
+`30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0`.
+
+The executable processing-decisions notebook is now present, but the stronger
+row remains fail-closed. Source-selection parity is unproven because the original acquisition payload checksum/retained raw
+source is unknown, canonical `gs://scperturb/data/cleaned/depmap_ccle/26q1/` is
+absent, the generation-pinned staging manifest remains, and no reviewed
+`GCS_DECOMMISSION_READY` exists. No deletion or publication mutation occurred;
+same-snapshot review and merged exact-head inventory evidence remain pending, so
+the authoritative counters stay scoped **18/92** and full DoD **0/92**.
 
 ### Accepted ten-dataset scoped wave and full-DoD boundary
 

@@ -462,6 +462,62 @@ def _finalize_row(row: dict[str, Any]) -> None:
     row["next_review_focus"] = _focus(missing)
 
 
+def _apply_depmap_ccle_26q1_full_dod_evidence(rows: list[dict[str, Any]]) -> None:
+    """Bind fresh scientific/notebook evidence without overstating full completion."""
+    row = next(item for item in rows if item["dataset_id"] == "depmap_ccle/26q1")
+    row.update(
+        {
+            "aliases": json.dumps(
+                ["depmap_ccle26q1", "DepMap/CCLE Public 26Q1"],
+                separators=(",", ":"),
+            ),
+            "accepted_wave_head": "5d1c87ba1e35388337238f319587162afcdaf568",
+            "producer_task_id": "t_c90d1146",
+            "scientific_modality": "bulk RNA-seq baseline expression",
+            "experimental_axes": json.dumps(
+                {"model_id": "1,719 unique default DepMap model entries"},
+                separators=(",", ":"),
+            ),
+            "outcomes_endpoints": json.dumps(
+                {
+                    "expression": "model-level baseline log1p expression",
+                    "perturbation_response": "not_applicable",
+                },
+                separators=(",", ":"),
+            ),
+            "annotation_level": "model/cell-line level",
+            "source_evidence": json.dumps(
+                [
+                    "DepMap Public 26Q1 portal",
+                    "generation-pinned manifest sha256:ad3d220f2a0550d63d76ff944e93454a658dfa16efe4a3b3be7239ff0e492ecc",
+                    "live zero-write stdout receipt sha256:30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0",
+                ],
+                separators=(",", ":"),
+            ),
+            "scientific_contract_documented": True,
+            "scientific_contract_bound": True,
+            "payload_prefixes": json.dumps(["depmap_ccle/26q1"], separators=(",", ":")),
+            "structured_payload_evidence": True,
+            "processing_decision_notebook_present": True,
+            "processing_decision_notebook": True,
+            "processing_decision_notebook_path": "notebooks/datasets/depmap_ccle_26q1_processing_decisions.ipynb",
+            "canonical_data_cleaned_payload": False,
+            "accepted_head_integrated": True,
+            "staging_decommissioned_with_receipt": False,
+            "inventory_docs_same_snapshot_accepted": False,
+            "exact_head_inventory_pr_merged": False,
+            "source_completion_state": "full_dod_live_readback_passed; stronger_full_dod_pending",
+            "evidence": (
+                "DepMap Public 26Q1 notebook; exact OBS kCNSxyUJoJJKRSgE0004 -> "
+                "X fUSYT9ArHdQye5qv0001 -> VAR 0S0wAPqgigynI4Av0003; zero-write "
+                "stdout receipt 30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0; "
+                "source-selection parity unproven"
+            ),
+        }
+    )
+    _finalize_row(row)
+
+
 def _immutable_accepted_file(
     integration_item: dict[str, Any], relative_path: str
 ) -> bytes:
@@ -1225,9 +1281,13 @@ def build_rows(
     *, base: Path = BASELINE_INPUT, refresh_from_evidence: bool = False
 ) -> list[dict[str, Any]]:
     """Canonicalize the frozen snapshot or explicitly rebuild from local evidence."""
-    if refresh_from_evidence:
-        return _build_rows_from_evidence()
-    return _read_frozen_rows(base)
+    rows = (
+        _build_rows_from_evidence()
+        if refresh_from_evidence
+        else _read_frozen_rows(base)
+    )
+    _apply_depmap_ccle_26q1_full_dod_evidence(rows)
+    return rows
 
 
 def summary(rows: list[dict[str, Any]]) -> dict[str, int]:

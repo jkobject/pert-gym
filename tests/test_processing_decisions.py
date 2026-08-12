@@ -13,6 +13,9 @@ ODD001137_NOTEBOOK = (
     ROOT
     / "notebooks/datasets/temporal_v4_095_organoiddb_odd001137_gse158999_processing_decisions.ipynb"
 )
+DEPMAP_NOTEBOOK = (
+    ROOT / "notebooks/datasets/depmap_ccle_26q1_processing_decisions.ipynb"
+)
 README = ROOT / "notebooks/datasets/README.md"
 
 
@@ -196,6 +199,26 @@ def test_odd001137_notebook_executes_as_complete_local_reconstruction_record() -
     assert contract["identity"]["dataset_id"].endswith("gse158999")
     assert contract["reconstruction"]["safe_to_remove_gcs"] is False
     assert len(contract["temporary_gcs_dependencies"]) == 2
+
+
+def test_depmap_notebook_executes_and_keeps_decommission_fail_closed() -> None:
+    notebook = nbformat.read(DEPMAP_NOTEBOOK, as_version=4)
+    nbformat.validate(notebook)
+    namespace: dict[str, object] = {"__file__": str(DEPMAP_NOTEBOOK)}
+    for cell in notebook.cells:
+        if cell.cell_type == "code":
+            assert cell.outputs == []
+            exec(cell.source, namespace)
+
+    contract = namespace["contract"]
+    assert isinstance(contract, dict)
+    assert namespace["errors"] == []
+    assert contract["identity"]["dataset_id"] == "depmap_ccle/26q1"
+    assert contract["reconstruction"]["reproducibility_claimed"] is False
+    assert contract["reconstruction"]["safe_to_remove_gcs"] is False
+    assert contract["identity"]["checksums"]["original acquisition payload"] == (
+        "unknown"
+    )
 
 
 def test_readme_explains_durable_gcs_exit_contract() -> None:

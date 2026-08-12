@@ -1,0 +1,128 @@
+{
+  "stdout_receipt_sha256": "30505ef51e8c1ed9ae17f80afeb934d0bcf993c09d1de90aec000e2dd3bb0ab0",
+  "projection_sha256": "d7577766326bbf460074bfaaec7360a5adbe2428ad2b6361458f8737b3e8173b",
+  "code": {
+    "branch": "pert-gym/t_c90d1146-complete-fixed-18-depmap_ccle-26q1-full",
+    "head": "5d1c87ba1e35388337238f319587162afcdaf568",
+    "verifier_sha256": "32df4ec582defa4cb1bc6b8e23cde4a7bdcedcefe4d965429c855c117675390f"
+  },
+  "completed_at": 1786541027,
+  "dataset_id": "depmap_ccle/26q1",
+  "format": "pert-gym.depmap-ccle-26q1-full-dod-live-readback/v1",
+  "status": "PASS_ZERO_WRITE_FULL_DOD_INCOMPLETE",
+  "run_id": "4666",
+  "source_release": {
+    "name": "DepMap Public 26Q1",
+    "portal": "https://depmap.org/portal/download/all/",
+    "source_rows_total": 1775,
+    "selected_default_model_rows": 1719,
+    "excluded_non_default_rows": 56,
+    "acquisition_checksum_status": "unknown"
+  },
+  "artifacts": {
+    "obs": {
+      "uid": "kCNSxyUJoJJKRSgE0004",
+      "key": "depmap_ccle/26q1/obs.parquet",
+      "hash": "Zm-yc0UfSwnYI1DnDfoccQ",
+      "size": 259235,
+      "n_observations": 1719,
+      "version": "0004"
+    },
+    "x": {
+      "uid": "fUSYT9ArHdQye5qv0001",
+      "key": "depmap_ccle/26q1/X.h5ad",
+      "hash": "I1DppOQzGK8jczy2Lh_J9O",
+      "size": 218922952,
+      "n_observations": 1719,
+      "version": "0001"
+    },
+    "var": {
+      "uid": "0S0wAPqgigynI4Av0003",
+      "key": "depmap_ccle/26q1/var.parquet",
+      "hash": "5wjqSsaFA7D0kcZSts--ig",
+      "size": 1268168,
+      "n_observations": 19215,
+      "version": "0003"
+    }
+  },
+  "payload_parity": {
+    "shape": [1719, 19215],
+    "matrix_dtype": "float32",
+    "matrix_stored_nonzero": 27216323,
+    "obs_index_sha256": "1aea962ffd48355feb05f57ef1dbc5e38ea13fe3a673568bc7bbc196068b115b",
+    "x_obs_names_sha256": "1aea962ffd48355feb05f57ef1dbc5e38ea13fe3a673568bc7bbc196068b115b",
+    "x_var_names_sha256": "6bd59118c7990364826c6763d561a7b40055b49e4e37bf9e38a62c0353a38c22",
+    "var_axis_identity_source": "var.index",
+    "var_axis_identity_aliases": ["var.index", "var.pert_gym_original_var_index"],
+    "var_axis_identity_sha256": "6bd59118c7990364826c6763d561a7b40055b49e4e37bf9e38a62c0353a38c22",
+    "human_ensembl_release_116_unique": 17747,
+    "explicit_unresolved": 1468
+  },
+  "accepted_obs_fields": {
+    "modality": {"non_null": 1719, "values": {"bulk_RNA": 1719}},
+    "perturbation": {"non_null": 1719, "values": {"none": 1719}},
+    "perturbation_type": {"non_null": 1719, "values": {"none": 1719}},
+    "source": {"non_null": 1719, "values": {"DepMap/CCLE": 1719}},
+    "source_accession": {"non_null": 1719, "values": {"26q1": 1719}},
+    "x_semantics": {"non_null": 1719, "values": {"log1p_expression": 1719}}
+  },
+  "dataset_collection": {
+    "uid": "6bVd5NhvcNOXom0s0000",
+    "key": "pert-gym/dataset/depmap_ccle/26q1/20260721-e2e",
+    "hash": "WTrCJAmC8y3rJupQb9Xn_w",
+    "member_count": 1,
+    "membership_sha256": "4c9ea52a66181a2a8dc9b515b9b49225a9487d00ac34d7b58a58fb9fc63439cd",
+    "target_obs_uid": "kCNSxyUJoJJKRSgE0004"
+  },
+  "registry": {
+    "artifact_count_before": 28600,
+    "artifact_count_after": 28600,
+    "collection_count_before": 55,
+    "collection_count_after": 55,
+    "target_history_count": 11,
+    "target_membership_count": 36,
+    "snapshot_sha256_before": "441a61fd37ce2602a4cd91405036705249d5094044b1b6096b7ca256fecb5ae9",
+    "snapshot_sha256_after": "441a61fd37ce2602a4cd91405036705249d5094044b1b6096b7ca256fecb5ae9",
+    "registry_drift": 0,
+    "replay_noop": true
+  },
+  "staging_manifest": {
+    "uri": "gs://scperturb/pert-gym/staging/pert-gym/logical/depmap_ccle26q1/revisions/depmap-ccle26q1-default-models-wave01-960f9db1b737f306/manifest.json#1784226218253256",
+    "sha256": "ad3d220f2a0550d63d76ff944e93454a658dfa16efe4a3b3be7239ff0e492ecc",
+    "decoded_manifest_canonical_sha256": "33f254f9480cd5042432d4f53d3ff85e886e869bfb35589fe7fc4d3f4cae2b93"
+  },
+  "gcs_decommission": {
+    "staging_revision_exists": true,
+    "canonical_cleaned_exists": false,
+    "eligible": false,
+    "action": "preserved_no_deletion",
+    "unmet_gates": [
+      "executable_processing_notebook",
+      "immutable_upstream_checksum_or_retained_raw_source",
+      "canonical_data_cleaned_payload",
+      "reviewed_gcs_decommission_ready_manifest",
+      "independent_review_of_this_receipt"
+    ]
+  },
+  "writes": {
+    "artifacts": 0,
+    "collections": 0,
+    "feature_links": 0,
+    "gcs": 0,
+    "deletions": 0
+  },
+  "host": {
+    "hostname": "pert-gym-worker-eu",
+    "project": "jkobject-1549353370965",
+    "zone": "europe-west1-b",
+    "free_disk_bytes": 16620122112,
+    "available_memory_bytes": 32964628480
+  },
+  "lifecycle_control_plane_readback": {
+    "payload_exit_code": 0,
+    "terminal_vm_status": "TERMINATED",
+    "task_scoped_labels_cleared": true,
+    "local_lease_absent": true
+  },
+  "capture_note": "This compact review copy projects the successful stdout receipt plus fresh launcher control-plane readback. stdout_receipt_sha256 identifies the uncommitted full stdout receipt and is retained only as run provenance; projection_sha256 authenticates this committed JSON after removing only projection_sha256 itself. Source-selection parity remains unproven because the immutable acquisition payload/checksum is unavailable."
+}

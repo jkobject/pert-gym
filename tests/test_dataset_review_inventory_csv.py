@@ -92,6 +92,20 @@ def test_dataset_review_inventory_has_unique_dataset_units_and_strict_counts() -
     )
     assert not {row["dataset_id"] for row in rows if row["entirely_validated"]}
 
+    depmap = next(row for row in rows if row["dataset_id"] == "depmap_ccle/26q1")
+    assert depmap["scientific_contract_bound"] is True
+    assert depmap["processing_decision_notebook"] is True
+    assert depmap["structured_payload_evidence"] is True
+    assert depmap["canonical_data_cleaned_payload"] is False
+    assert depmap["staging_decommissioned_with_receipt"] is False
+    assert depmap["entirely_validated"] is False
+    assert depmap["missing_requirements"].split(";") == [
+        "canonical_data_cleaned_payload",
+        "staging_decommission_receipt",
+        "accepted_inventory_docs_snapshot",
+        "merged_exact_head_inventory_pr",
+    ]
+
 
 def test_accepted_wave_binds_aliases_heads_reviewers_and_scientific_evidence() -> None:
     snapshot = json.loads(ACCEPTED_WAVE.read_text())
