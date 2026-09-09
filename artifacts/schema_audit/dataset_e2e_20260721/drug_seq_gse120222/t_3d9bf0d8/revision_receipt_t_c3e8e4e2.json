@@ -1,0 +1,71 @@
+{
+  "format": "pert-gym.drug-seq-gse120222-review-fix-receipt/v4",
+  "task_id": "t_c3e8e4e2",
+  "producer_task_id": "t_3d9bf0d8",
+  "base_pr_head": "6dd8d1fc3cbcb0084a2eb6557019df03b77aca47",
+  "status": "LOCAL_CONTRACT_PASS",
+  "product_delta": 0,
+  "ledger_credit": 0,
+  "triplet": {
+    "obs": {
+      "uid": "mKSaEEcH4jyes43Z0002",
+      "key": "DRUG-seq/GSE120222/obs.parquet",
+      "sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975"
+    },
+    "x": {
+      "uid": "hfeVCMInQu1UKhwp0000",
+      "key": "DRUG-seq/GSE120222/X.h5ad",
+      "sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84"
+    },
+    "var": {
+      "uid": "vmqp94W72a1Tl2Xw0002",
+      "key": "DRUG-seq/GSE120222/var.parquet",
+      "sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637"
+    }
+  },
+  "publisher_binding": {
+    "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/publish_collections.py",
+    "sha256": "942ac1e31b7090e6141189ee574f16ce58e0ea7d74f4c410f4fcda26d58c1163",
+    "keys": {
+      "obs": "DRUG-seq/GSE120222/obs.parquet",
+      "x": "DRUG-seq/GSE120222/X.h5ad",
+      "var": "DRUG-seq/GSE120222/var.parquet"
+    }
+  },
+  "verification_contract": {
+    "obs": "Every schema canonical OBS field has a materialized_expected, source_known_not_materialized, not_applicable, or unknown disposition; materialized perturbation, dose, and timepoint must exactly equal preserved pert_name, pert_dose, and pert_time row by row.",
+    "var": "The 60,279 human rows must use exact ENSG identifiers, Ensembl stable gene ID namespace, Homo sapiens organism, mapped or mapped_exact status, gene feature type, and unique stable identity; the 92 ERCC rows must use exact ERCC-##### identifiers and the ERCC spike-in namespace/not_applicable organism and mapping dispositions.",
+    "negative_tests": "Wrong-but-non-null scientific OBS values, missing preserved source mappings, malformed or duplicate stable VAR IDs, wrong organism, wrong mapping status, and non-exact Ensembl-containing namespace values fail closed."
+  },
+  "preserved_immutable_evidence": {
+    "mutation_receipt": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/mutation_receipt.json",
+      "sha256": "de688662e6014845d8b115b6cc4b3bc4c012df89d0d0ee7acb25600c4da6038c",
+      "modified": false
+    },
+    "verify_receipt": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/verify_receipt.json",
+      "sha256": "8f374617377b260ac463ae81db4b15ad375a26e7ecdac0814b400e1804c1859a",
+      "modified": false
+    },
+    "prior_revision_receipt": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/revision_receipt_t_eb3a96ca.json",
+      "sha256": "7e59b11b261b24d0890e512dbde0d86ec4f41c90a596f285a2bcc252618c9686",
+      "modified": false
+    },
+    "prior_integrated_handoff": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/integrated_handoff_t_eb3a96ca.json",
+      "sha256": "34097e2dfd8a268c1d3cc0b92f69006327dec37189f65715779d7ca7e0fad3c2",
+      "modified": false
+    }
+  },
+  "safety": {
+    "vm_start": false,
+    "gcp_or_gcs_access": false,
+    "lamindb_or_collection_or_artifact_mutation": false,
+    "payload_rewrite_or_replay": false,
+    "deletion_or_cleanup": false,
+    "ledger_mutation": false,
+    "txgnn_access": false
+  }
+}

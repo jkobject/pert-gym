@@ -22,8 +22,34 @@ publisher = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(publisher)
 
 EVIDENCE_DIR = PUBLISHER_PATH.parent
-REVISION_RECEIPT_PATH = EVIDENCE_DIR / "revision_receipt_t_eb3a96ca.json"
-REVISION_HANDOFF_PATH = EVIDENCE_DIR / "integrated_handoff_t_eb3a96ca.json"
+REVISION_RECEIPT_PATH = EVIDENCE_DIR / "revision_receipt_t_c3e8e4e2.json"
+REVISION_HANDOFF_PATH = EVIDENCE_DIR / "integrated_handoff_t_c3e8e4e2.json"
+PRESERVED_EVIDENCE_PATHS = {
+    "mutation": EVIDENCE_DIR / "mutation_receipt.json",
+    "verify": EVIDENCE_DIR / "verify_receipt.json",
+    "prior_revision": EVIDENCE_DIR / "revision_receipt_t_eb3a96ca.json",
+    "prior_handoff": EVIDENCE_DIR / "integrated_handoff_t_eb3a96ca.json",
+}
+RECEIPT_PRESERVED_EVIDENCE_NAMES = {
+    "mutation": "mutation_receipt",
+    "verify": "verify_receipt",
+    "prior_revision": "prior_revision_receipt",
+    "prior_handoff": "prior_integrated_handoff",
+}
+
+
+def _canonical_sha256_without_self(payload: dict[str, object]) -> str:
+    payload_without_self = {
+        key: value for key, value in payload.items() if key != "canonical_sha256"
+    }
+    return hashlib.sha256(
+        json.dumps(
+            payload_without_self,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+        ).encode()
+    ).hexdigest()
 
 
 def test_count_nnz_supports_dense_and_sparse_matrices() -> None:
@@ -53,7 +79,7 @@ def test_global_description_binds_exact_predecessor() -> None:
     assert description["resulting_membership_sha256"] == "a" * 64
 
 
-def test_triplet_keys_agree_across_publisher_receipt_and_revision_handoff() -> None:
+def test_triplet_keys_agree_across_publisher_preserved_receipts_and_handoff() -> None:
     receipt = json.loads(REVISION_RECEIPT_PATH.read_text())
     handoff = json.loads(REVISION_HANDOFF_PATH.read_text())
     expected = {
@@ -69,20 +95,35 @@ def test_triplet_keys_agree_across_publisher_receipt_and_revision_handoff() -> N
         "x": publisher.X_KEY,
         "var": publisher.VAR_KEY,
     } == expected
+    assert receipt["publisher_binding"]["keys"] == expected
     assert (
-        handoff["evidence"]["publisher_sha256"]
+        receipt["publisher_binding"]["sha256"]
+        == handoff["evidence"]["publisher_sha256"]
         == hashlib.sha256(PUBLISHER_PATH.read_bytes()).hexdigest()
     )
     assert (
         handoff["evidence"]["revision_receipt_sha256"]
         == hashlib.sha256(REVISION_RECEIPT_PATH.read_bytes()).hexdigest()
     )
+    assert handoff["canonical_sha256"] == _canonical_sha256_without_self(handoff)
+    for name, path in PRESERVED_EVIDENCE_PATHS.items():
+        expected_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+        assert (
+            receipt["preserved_immutable_evidence"][
+                RECEIPT_PRESERVED_EVIDENCE_NAMES[name]
+            ]["sha256"]
+            == expected_sha256
+        )
+        assert (
+            handoff["evidence"]["preserved_immutable_receipts"][name]["sha256"]
+            == expected_sha256
+        )
 
 
 def test_revision_evidence_preserves_historical_receipts_by_exact_hash() -> None:
     receipt = json.loads(REVISION_RECEIPT_PATH.read_text())
 
-    for historical in receipt["historical_immutable_receipts"].values():
+    for historical in receipt["preserved_immutable_evidence"].values():
         path = Path(__file__).parents[1] / historical["path"]
         assert historical["modified"] is False
         assert historical["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
