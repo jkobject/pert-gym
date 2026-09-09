@@ -62,7 +62,36 @@ cleanup() {
 }
 trap cleanup EXIT
 
-if pgrep -af 'curate_arc_vcc_obs_var|run_arc_vcc_obs_var_eu' | grep -v "$$"; then
+conflicting_arc_writer=$(python3 - "$$" <<'PY'
+import subprocess
+import sys
+
+self_pid = int(sys.argv[1])
+processes = {}
+for line in subprocess.check_output(
+    ["ps", "-eo", "pid=,ppid=,args="], text=True
+).splitlines():
+    fields = line.strip().split(None, 2)
+    if len(fields) != 3:
+        continue
+    pid, ppid, args = fields
+    processes[int(pid)] = (int(ppid), args)
+
+ancestors = set()
+pid = self_pid
+while pid and pid not in ancestors:
+    ancestors.add(pid)
+    pid = processes.get(pid, (0, ""))[0]
+
+for pid, (_, args) in processes.items():
+    if pid in ancestors:
+        continue
+    if "curate_arc_vcc_obs_var" in args or "run_arc_vcc_obs_var_eu" in args:
+        print(f"{pid} {args}")
+PY
+)
+if [[ -n "$conflicting_arc_writer" ]]; then
+  printf '%s\n' "$conflicting_arc_writer"
   echo 'CONFLICTING_ARC_WRITER'
   exit 70
 fi

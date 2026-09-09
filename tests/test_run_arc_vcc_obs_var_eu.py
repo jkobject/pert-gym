@@ -12,6 +12,10 @@ def test_arc_vcc_remote_runner_fails_closed_and_emits_payload_heartbeats() -> No
     assert 'write_heartbeat "${MODE}_source_join" 0' in text
     assert "write_heartbeat terminal 6" in text
     assert "os.replace(temporary, path)" in text
+    assert 'python3 - "$$"' in text
+    assert "if pid in ancestors:" in text
+    assert "CONFLICTING_ARC_WRITER" in text
+    assert "pgrep -af" not in text
 
 
 def test_arc_vcc_remote_runner_records_all_three_primary_h5ad_identities() -> None:
