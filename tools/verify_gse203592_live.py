@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 import platform
+import time
 from pathlib import Path
 from typing import Any
 
@@ -191,9 +192,31 @@ def var_receipt(var: pd.DataFrame, x_axis: pd.Index) -> dict[str, Any]:
     }
 
 
+def emit_product_execution(phase: str) -> None:
+    print(
+        "PRODUCT_EXECUTION="
+        + canonical_json(
+            {
+                "product_execution": {
+                    "host": os.uname().nodename,
+                    "pid": os.getpid(),
+                    "phase": phase,
+                    "payload_heartbeat_at": int(time.time()),
+                    "metric": "gse203592_live_readback",
+                    "current": 1 if phase == "complete" else 0,
+                    "denominator": 1,
+                    "unit": "biological_dataset",
+                }
+            }
+        ),
+        flush=True,
+    )
+
+
 def main() -> int:
     if platform.system() == "Darwin":
         raise RuntimeError("refusing Mac execution: use the approved EU VM launcher")
+    emit_product_execution("preflight")
     ln = connect_pertdata()
     if ln.setup.settings.instance.slug != "laminlabs/pertdata":
         raise AssertionError("wrong Lamin instance")
@@ -239,6 +262,7 @@ def main() -> int:
     }
     receipt["canonical_sha256"] = sha256_text(canonical_json(receipt))
     print("GSE203592_LIVE_READBACK=" + canonical_json(receipt), flush=True)
+    emit_product_execution("complete")
     return 0
 
 
