@@ -12,6 +12,8 @@ def test_arc_vcc_remote_runner_fails_closed_and_emits_payload_heartbeats() -> No
     assert 'exec >>"$LOG" 2>&1' in text
     assert 'cat "$LOG" >&3' in text
     assert 'exec > >(tee -a "$LOG") 2>&1' not in text
+    assert "MISSING_GCSFUSE" in text
+    assert "if ! command -v gcsfuse >/dev/null; then" in text
     assert "write_heartbeat preflight 0" in text
     assert 'write_heartbeat "${MODE}_source_join" 0' in text
     assert "write_heartbeat terminal 6" in text

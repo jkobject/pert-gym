@@ -104,7 +104,10 @@ if [[ -n "$conflicting_arc_writer" ]]; then
   echo 'CONFLICTING_ARC_WRITER'
   exit 70
 fi
-command -v gcsfuse
+if ! command -v gcsfuse >/dev/null; then
+  echo 'MISSING_GCSFUSE'
+  exit 69
+fi
 write_heartbeat preflight 0
 
 for object in \
