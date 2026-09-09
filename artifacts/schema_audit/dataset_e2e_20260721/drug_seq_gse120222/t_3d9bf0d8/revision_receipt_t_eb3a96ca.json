@@ -1,0 +1,103 @@
+{
+  "format": "pert-gym.drug-seq-gse120222-review-fix-receipt/v3",
+  "task_id": "t_eb3a96ca",
+  "producer_task_id": "t_3d9bf0d8",
+  "status": "LOCAL_CONTRACT_PASS_LIVE_VERIFY_BLOCKED_FOREIGN_LEASE",
+  "product_delta": 0,
+  "ledger_credit": 0,
+  "code_revision": "82db224c25393bf1b29db73129ab58d89b318967",
+  "triplet": {
+    "obs": {
+      "uid": "mKSaEEcH4jyes43Z0002",
+      "key": "DRUG-seq/GSE120222/obs.parquet",
+      "sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975"
+    },
+    "x": {
+      "uid": "hfeVCMInQu1UKhwp0000",
+      "key": "DRUG-seq/GSE120222/X.h5ad",
+      "sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84"
+    },
+    "var": {
+      "uid": "vmqp94W72a1Tl2Xw0002",
+      "key": "DRUG-seq/GSE120222/var.parquet",
+      "sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637"
+    }
+  },
+  "verifier_revision": {
+    "publisher_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/publish_collections.py",
+    "publisher_sha256": "942ac1e31b7090e6141189ee574f16ce58e0ea7d74f4c410f4fcda26d58c1163",
+    "source_row_mappings": {
+      "perturbation": "pert_name",
+      "dose": "pert_dose",
+      "timepoint": "pert_time"
+    },
+    "row_mapping_contract": "all three accepted canonical columns must be non-null and exactly equal their preserved source column row by row",
+    "adversarial_contract": "wrong-but-non-null perturbation, dose, or timepoint and absent source mapping columns fail closed with OBS metadata drift",
+    "verify_heartbeat_phases": [
+      "verify_preflight",
+      "verifying",
+      "accepted"
+    ]
+  },
+  "launcher_revision": {
+    "path": "tools/launch_pert_gym_heavy.py",
+    "sha256": "0f2f7e4ee7a9b8ee9a652db514d0171bad83189ff310e1c7848f273721bcc4f4",
+    "purpose": "review-pr104-drugseq-verify-only",
+    "initial_lease_max_minutes": 60,
+    "absolute_runtime_max_minutes": 90,
+    "renewal_guard": "fresh remote PID-file equality plus kill -0 for the exact exec-preserved payload PID",
+    "terminal_contract": "stop VM, read back TERMINATED with exact lease, remove task lease labels, prove labels absent, remove local lease",
+    "legacy_long_run_defaults_preserved": true
+  },
+  "local_verification": {
+    "focused_tests": "45 passed",
+    "make_test": "795 passed, 2 skipped; Ruff and ty passed",
+    "ruff_check": "PASS",
+    "ruff_format_check": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "live_verify_attempt": {
+    "attempted_via_approved_launcher": true,
+    "lease_publication": false,
+    "vm_start": false,
+    "payload_dispatch": false,
+    "failure": "existing live lease exceeds the requested verify-only lease; refusing to shorten it",
+    "fresh_instance_readback": {
+      "id": "3715582979673213789",
+      "name": "pert-gym-worker-eu",
+      "status": "TERMINATED",
+      "foreign_task": "t-f1d056cd",
+      "foreign_purpose": "pert-gym-longrun",
+      "foreign_lease_until": "20260721t191131z"
+    },
+    "required_follow_up": "rerun exact zero-write verify-only command after the foreign lease is released or expires; do not clear or shorten the foreign lease"
+  },
+  "historical_immutable_receipts": {
+    "mutation": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/mutation_receipt.json",
+      "sha256": "de688662e6014845d8b115b6cc4b3bc4c012df89d0d0ee7acb25600c4da6038c",
+      "modified": false
+    },
+    "verify": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/verify_receipt.json",
+      "sha256": "8f374617377b260ac463ae81db4b15ad375a26e7ecdac0814b400e1804c1859a",
+      "modified": false
+    },
+    "prior_revision_receipt": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/revision_receipt_t_1f13aa0c_r2.json",
+      "sha256": "d53ef5e94e57b07a23865eb77529d14796941e4ed94f59a8fc8b591f062f342c",
+      "modified": false
+    }
+  },
+  "safety": {
+    "cloud_control_plane_read": true,
+    "gcs_access": false,
+    "lamin_access": false,
+    "collection_mutation": false,
+    "artifact_mutation": false,
+    "payload_rewrite": false,
+    "mutation_replay": false,
+    "deletion": false,
+    "foreign_lease_modified": false
+  }
+}

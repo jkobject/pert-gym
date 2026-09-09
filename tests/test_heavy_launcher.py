@@ -55,6 +55,8 @@ class FakeGcloud:
             self.instance["status"] = "RUNNING"
             return completed(command)
         if "ssh" in command:
+            if "bounded-payload-heartbeat" in command[-1]:
+                return completed(command, stdout="1\n")
             return completed(command)
         if "stop" in command:
             self.instance["status"] = "TERMINATED"
@@ -970,6 +972,71 @@ def test_verify_only_refuses_renewal_after_exact_payload_pid_dies(
     }
 
 
+def test_verify_only_refuses_renewal_without_fresh_same_pid_heartbeat(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="RUNNING")
+    process = FakePayloadProcess(polls_before_exit=5)
+    clock = FakeClock()
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and "cat --" in command[-1] and "kill" not in command[-1]:
+            return completed(command, stdout="4242\n")
+        if "ssh" in command and "kill -0" in command[-1]:
+            return completed(command)
+        if "ssh" in command and "bounded-payload-heartbeat" in command[-1]:
+            return completed(command, stdout="0\n")
+        return fake(command)
+
+    with pytest.raises(RuntimeError, match="fresh same-PID payload heartbeat"):
+        launcher.launch_heavy_command(
+            task="t_eb3a96ca",
+            eta_hours=0.25,
+            command=["verify"],
+            purpose="review-pr104-drugseq-verify-only",
+            verify_only=True,
+            lease_minutes=10,
+            absolute_max_minutes=20,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 21, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=lambda command: process,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+
+    assert len([call for call in fake.calls if "add-labels" in call]) == 1
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {
+        "active-wave": "true",
+        "do-not-stop": "true",
+    }
+
+
+def test_payload_heartbeat_proof_binds_pid_timestamp_and_bounded_path() -> None:
+    launcher = _launcher()
+    calls: list[list[str]] = []
+    now = datetime(2026, 7, 21, 12, 10, tzinfo=timezone.utc)
+
+    def run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        calls.append(command)
+        return completed(command, stdout="1\n")
+
+    assert launcher._remote_payload_heartbeat_is_fresh(
+        run,
+        "/tmp/pert-gym/t_eb3a96ca/bounded-payload-heartbeat.jsonl",
+        4242,
+        now=now,
+    )
+    remote_command = calls[0][-1]
+    assert "payload_heartbeat_at" in remote_command
+    assert "expected_pid" in remote_command
+    assert "600" in remote_command
+    assert "bounded-payload-heartbeat.jsonl" in remote_command
+    assert str(int(now.timestamp())) in remote_command
+
+
 def test_bounded_writer_accepts_approved_three_hour_lifecycle(
     tmp_path: Path,
 ) -> None:
@@ -983,6 +1050,10 @@ def test_bounded_writer_accepts_approved_three_hour_lifecycle(
             return completed(command, stdout="4242\n")
         if "ssh" in command and "kill -0" in command[-1]:
             return completed(command)
+        if "ssh" in command and "bounded-payload-heartbeat" in command[-1]:
+            raise AssertionError(
+                "bounded writer must not require verify-only heartbeat"
+            )
         return fake(command)
 
     assert (
@@ -1012,6 +1083,44 @@ def test_bounded_writer_accepts_approved_three_hour_lifecycle(
         "do-not-stop": "true",
     }
     assert not local_lease.exists()
+
+
+def test_bounded_writer_renewal_does_not_require_verify_only_heartbeat(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="RUNNING")
+    process = FakePayloadProcess(polls_before_exit=5)
+    clock = FakeClock()
+
+    def control_run(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and "cat --" in command[-1] and "kill" not in command[-1]:
+            return completed(command, stdout="4242\n")
+        if "ssh" in command and "kill -0" in command[-1]:
+            return completed(command)
+        if "ssh" in command and "bounded-payload-heartbeat" in command[-1]:
+            raise AssertionError(
+                "bounded writer must not require verify-only heartbeat"
+            )
+        return fake(command)
+
+    assert (
+        launcher.launch_heavy_command(
+            task="t_79ff033e",
+            eta_hours=0.25,
+            command=["writer"],
+            purpose="gse132080-obs-var-curation",
+            lease_minutes=10,
+            absolute_max_minutes=20,
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 22, 12, 0, tzinfo=timezone.utc),
+            run=control_run,
+            payload_start=lambda command: process,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+        == 124
+    )
 
 
 def test_bounded_writer_local_lease_failure_stops_and_clears_exact_gce_lease(

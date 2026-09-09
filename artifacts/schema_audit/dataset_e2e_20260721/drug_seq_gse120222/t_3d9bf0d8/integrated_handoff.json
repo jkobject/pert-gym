@@ -1,0 +1,143 @@
+{
+  "format": "pert-gym.dataset-e2e-integrated-handoff/v1",
+  "task_id": "t_3d9bf0d8",
+  "status": "PASS_REVIEW_REQUIRED",
+  "dataset": {
+    "canonical_id": "DRUG-seq/GSE120222",
+    "real_dataset_id": "drug-seq/GSE120222",
+    "source": "DRUG-seq",
+    "source_accession": "GSE120222",
+    "source_rows_total": 72,
+    "source_members_total": 1,
+    "source_evidence": [
+      "https://doi.org/10.1038/s41467-018-06500-x",
+      "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE120222",
+      "https://pubmed.ncbi.nlm.nih.gov/30333485/"
+    ]
+  },
+  "execution_binding": {
+    "branch": "feat/t_3d9bf0d8-drugseq-e2e",
+    "execution_git_head": "6038a39134cc6b306fde4906e9bccfcc5c01de0e",
+    "helper_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/publish_collections.py",
+    "helper_sha256": "52c8a21be26553612cf21ef5d074488e093d1b04f569ad398d7cd2f64d830989",
+    "launcher": "tools/launch_pert_gym_heavy.py",
+    "host": "pert-gym-worker-eu",
+    "zone": "europe-west1-b",
+    "project": "jkobject-1549353370965"
+  },
+  "triplet": {
+    "obs_uid": "mKSaEEcH4jyes43Z0002",
+    "obs_key": "pert-gym/main/drug-seq/GSE120222/obs.parquet",
+    "obs_sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975",
+    "x_uid": "hfeVCMInQu1UKhwp0000",
+    "x_key": "pert-gym/main/drug-seq/GSE120222/X.h5ad",
+    "x_sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84",
+    "var_uid": "vmqp94W72a1Tl2Xw0002",
+    "var_key": "pert-gym/main/drug-seq/GSE120222/var.parquet",
+    "var_sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637",
+    "shape": [72, 60371],
+    "nnz": 1747564,
+    "dtype": "float64",
+    "mismatch_count": 0,
+    "human_ensembl_rows": 60279,
+    "ercc_rows": 92,
+    "canonical_fields_non_null": [
+      "control_availability",
+      "dose",
+      "modality",
+      "perturbation",
+      "perturbation_type",
+      "source",
+      "source_accession",
+      "timepoint"
+    ],
+    "x_semantics": "unknown; absent rather than invented"
+  },
+  "representation_decision": {
+    "status": "not_materially_needed",
+    "legacy_triplet_retained": true,
+    "reason": "The accepted dataset is one 37,790,360-byte X payload and 72 observations. Bounded backed loading plus an exact complete 72-row matrix slice passed, so another physical representation would add publication surface without material operational benefit.",
+    "rollback": "select exact immutable OBS/X/VAR UIDs"
+  },
+  "collections": {
+    "dataset": {
+      "uid": "4tKR1YGxdI6AtfNa0000",
+      "key": "pert-gym/dataset/DRUG-seq/GSE120222/20260721-e2e",
+      "hash": "WuIMnlk3d3DKERMTUwzQ5Q",
+      "member_count": 1,
+      "membership_sha256": "76b573af3c3b0ae29cf01bcb20a69a2d399aaa476025d07a76dafee13d925e1c"
+    },
+    "predecessor": {
+      "uid": "qoTeH7T78kjbmIWA0000",
+      "key": "pert-gym/additions/20260721-ginkgo-vcpi-e2e",
+      "hash": "lsA-KQnpRV66FuOawrA6uA",
+      "member_count": 1017,
+      "membership_sha256": "27845039a3e3e6cb833cf2f2068f1279fb60a6ab222e42d74ce73d9e07b15517",
+      "unchanged_after_publication": true
+    },
+    "global_successor": {
+      "uid": "Ltjv1RYDCnuxqqRT0000",
+      "key": "pert-gym/additions/20260721-drug-seq-gse120222-e2e",
+      "hash": "ZsctJFBSIiaKnrIzEh-1-g",
+      "member_count": 1018,
+      "unique_uid_count": 1018,
+      "unique_key_count": 1018,
+      "membership_sha256": "f897f05f9dd920479fe44d14c7b193398642605cfd252e0e5ac67235ec1b2da7",
+      "added_uids": ["mKSaEEcH4jyes43Z0002"],
+      "removed_uids": []
+    }
+  },
+  "mutation": {
+    "status": "PASS",
+    "receipt_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/mutation_receipt.json",
+    "receipt_sha256": "de688662e6014845d8b115b6cc4b3bc4c012df89d0d0ee7acb25600c4da6038c",
+    "stdout_receipt_canonical_sha256": "aa8f2f8b426dcdf4d26bafaf37621584a417cb49636deff04fe484c791817675",
+    "collection_writes": 2,
+    "artifact_writes": 0,
+    "triplet_rewrites": 0,
+    "gcs_mutations": 0,
+    "deletions": 0,
+    "same_process_replay_writes": 0
+  },
+  "verify_only": {
+    "status": "PASS",
+    "receipt_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/verify_receipt.json",
+    "receipt_sha256": "8f374617377b260ac463ae81db4b15ad375a26e7ecdac0814b400e1804c1859a",
+    "stdout_receipt_canonical_sha256": "9ee90abe3eaf5739a5607919fa6941b7e974fa57cc4dc2d1e7f9a54d6ff9db96",
+    "registry_counts_before": {"artifacts": 28509, "collections": 38},
+    "registry_counts_after_first": {"artifacts": 28509, "collections": 38},
+    "registry_counts_after_replay": {"artifacts": 28509, "collections": 38},
+    "first_pass_writes": 0,
+    "replay_writes": 0,
+    "duplicate_uid_count": 0,
+    "duplicate_key_count": 0
+  },
+  "validation": {
+    "focused": "uv run --extra dev pytest tests/test_drug_seq_gse120222_e2e.py -q -> 3 passed",
+    "format": "make fmt -> PASS; three unrelated origin/main files were reformatted by the mutating target and immediately restored",
+    "lint": "make lint -> All checks passed",
+    "full_first_attempt": "make test -> FAIL before pytest because declared optional scikit-learn/torch extras were absent from the worktree environment",
+    "environment_repair": "uv sync --all-extras --dev -> installed declared optional dependencies",
+    "full_final": "make test -> 767 passed, 2 skipped; ty and ruff passed"
+  },
+  "control_plane": {
+    "instance_id": "3715582979673213789",
+    "terminal_instance_status": "TERMINATED",
+    "gce_lease_owner": "jkobject",
+    "gce_lease_task": "t-3d9bf0d8",
+    "gce_lease_until": "20260721t101133z",
+    "local_lease_until": "2026-07-21T10:11:33Z",
+    "lease_released": false,
+    "note": "The approved launcher stopped the VM after the verify-only PASS. Its bounded task lease remains live by launcher design and was not shortened while any payload could have been alive."
+  },
+  "nonpassing_attempts": [
+    "Initial launcher SSH attempts immediately after VM starts returned connection refused; each retry reused the exact same task-owned bounded lease.",
+    "The first read-only preflight assumed scipy sparse .nnz on a dense H5AD matrix and failed before any writer tracking or mutation; the verifier was corrected to count nonzeros for dense or sparse matrices.",
+    "The first mutation preflight expected namespace ERCC instead of the accepted exact value ERCC stable spike-in ID; it failed before ln.track and before any writes. A read-only diagnostic bound the exact accepted value, then the publisher was corrected."
+  ],
+  "residual_risks": [
+    "x_semantics remains unknown because the accepted OBS does not carry that field; no value was invented.",
+    "The stopped VM still carries the unexpired task-owned bounded lease until 2026-07-21T10:11:33Z; reviewers must not shorten or replace it while relying on the recorded control-plane state.",
+    "Independent semantic/live review is still required before the task can be marked complete."
+  ]
+}

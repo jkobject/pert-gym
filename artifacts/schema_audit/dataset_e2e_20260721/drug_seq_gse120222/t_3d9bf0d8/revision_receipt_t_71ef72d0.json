@@ -1,0 +1,79 @@
+{
+  "format": "pert-gym.drug-seq-gse120222-review-fix-receipt/v5",
+  "task_id": "t_71ef72d0",
+  "producer_task_id": "t_3d9bf0d8",
+  "rejected_head": "6dab6061934306a9118015fb6ddb8f7304a411cc",
+  "base_pr_head": "4b40091c476ccb591f56822a563e5b2514b620d9",
+  "status": "LOCAL_CONTRACT_PASS",
+  "product_delta": 0,
+  "ledger_credit": 0,
+  "triplet": {
+    "obs": {
+      "uid": "mKSaEEcH4jyes43Z0002",
+      "key": "DRUG-seq/GSE120222/obs.parquet",
+      "sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975"
+    },
+    "x": {
+      "uid": "hfeVCMInQu1UKhwp0000",
+      "key": "DRUG-seq/GSE120222/X.h5ad",
+      "sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84"
+    },
+    "var": {
+      "uid": "vmqp94W72a1Tl2Xw0002",
+      "key": "DRUG-seq/GSE120222/var.parquet",
+      "sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637"
+    }
+  },
+  "publisher_binding": {
+    "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/publish_collections.py",
+    "sha256": "c4d7787c5e433c6032b0d6616e9e35c7a6e2b320e365e079bbc84c90791d7530",
+    "keys": {
+      "obs": "DRUG-seq/GSE120222/obs.parquet",
+      "x": "DRUG-seq/GSE120222/X.h5ad",
+      "var": "DRUG-seq/GSE120222/var.parquet"
+    }
+  },
+  "launcher_binding": {
+    "path": "tools/launch_pert_gym_heavy.py",
+    "sha256": "f2125d2e0618cb3f0c7c018e5ec5ebf56dec10b3f3dcc381b46374ec438b5751",
+    "test_path": "tests/test_heavy_launcher.py",
+    "test_sha256": "7e56928638f527dd240846acea6fb94069b5d3b2e41c0345da7bea5e7e6695dd"
+  },
+  "verification_contract": {
+    "obs": "Every canonical OBS field has an explicit disposition. Materialized perturbation, dose, and timepoint require unique OBS row identity and exact row-wise equality to preserved pert_name, pert_dose, and pert_time; missing, reordered, ambiguous, or fabricated values fail closed without normalization.",
+    "verify_launcher": "Verify-only requires exact non-default purpose, initial lease no longer than 60 minutes, absolute ceiling no longer than 90 minutes, SSH readiness before payload dispatch, and renewal only after exact PID-file, kill -0, and fresh same-PID payload-heartbeat proof. Every bounded terminal path ownership-fences VM stop, lease clear, local lease removal, and readback.",
+    "verify_heartbeat": "Verify mode emits verify_preflight then verifying, never writing, to the launcher-provided absolute PERT_GYM_PAYLOAD_HEARTBEAT_PATH.",
+    "negative_tests": "Fabricated non-null OBS values, missing/reordered/ambiguous source mappings, missing or stale same-PID payload heartbeat, lease-cap violations, PID exit, timeout, renewal failure, and terminal cleanup failure fail closed."
+  },
+  "preserved_immutable_evidence": {
+    "mutation_receipt": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/mutation_receipt.json",
+      "sha256": "de688662e6014845d8b115b6cc4b3bc4c012df89d0d0ee7acb25600c4da6038c",
+      "modified": false
+    },
+    "verify_receipt": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/verify_receipt.json",
+      "sha256": "8f374617377b260ac463ae81db4b15ad375a26e7ecdac0814b400e1804c1859a",
+      "modified": false
+    },
+    "prior_revision_receipt": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/revision_receipt_t_c3e8e4e2.json",
+      "sha256": "67aef77826ea141c399d7b51970ef9fecaa5c82ae228404aab501f1587c42ebc",
+      "modified": false
+    },
+    "prior_integrated_handoff": {
+      "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/integrated_handoff_t_c3e8e4e2.json",
+      "sha256": "b6975ef9154ca3181b0c3ffd950861c5552a481ca77c08f87504fddfc2cc95a1",
+      "modified": false
+    }
+  },
+  "safety": {
+    "vm_start": false,
+    "gcp_or_gcs_access": false,
+    "lamindb_or_collection_or_artifact_mutation": false,
+    "payload_rewrite_or_replay": false,
+    "deletion_or_cleanup": false,
+    "ledger_mutation": false,
+    "txgnn_access": false
+  }
+}
