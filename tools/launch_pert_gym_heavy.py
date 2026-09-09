@@ -35,6 +35,7 @@ DEFAULT_MAX_LEASE_HOURS = 14.0
 MAX_BOUNDED_WRITER_MINUTES = 360.0
 DEFAULT_SSH_READINESS_TIMEOUT_SECONDS = 300.0
 SSH_READINESS_INTERVAL_SECONDS = 5.0
+PAYLOAD_HEARTBEAT_MAX_AGE_SECONDS = 600
 DEFAULT_LOCAL_LEASE_PATH = (
     Path.home()
     / ".hermes"
@@ -377,6 +378,43 @@ def _remote_payload_is_live(run: Run, path: str, pid: int) -> bool:
     ).returncode
 
 
+def _remote_payload_heartbeat_is_fresh(
+    run: Run,
+    path: str,
+    pid: int,
+    *,
+    now: datetime,
+) -> bool:
+    """Require a current heartbeat from the exact remote payload PID."""
+    script = """
+import json
+import sys
+
+path, expected_pid, now_epoch, max_age = sys.argv[1:]
+try:
+    lines = [line for line in open(path, encoding="utf-8") if line.strip()]
+    payload = json.loads(lines[-1])["product_execution"]
+    age = int(now_epoch) - int(payload["payload_heartbeat_at"])
+    valid = int(payload["pid"]) == int(expected_pid) and 0 <= age <= int(max_age)
+except (IndexError, OSError, ValueError, KeyError, TypeError, json.JSONDecodeError):
+    valid = False
+print("1" if valid else "0")
+"""
+    command = " ".join(
+        [
+            "python3",
+            "-c",
+            shlex.quote(script),
+            shlex.quote(path),
+            str(pid),
+            str(int(now.timestamp())),
+            str(PAYLOAD_HEARTBEAT_MAX_AGE_SECONDS),
+        ]
+    )
+    result = run(_gcloud("ssh", INSTANCE, "--zone", ZONE, "--command", command))
+    return result.returncode == 0 and (result.stdout or "").strip() == "1"
+
+
 def _signal_remote_payload(run: Run, path: str, pid: int) -> None:
     path_q = shlex.quote(path)
     command = f'test "$(cat -- {path_q})" = {pid} && kill -TERM {pid}'
@@ -609,10 +647,22 @@ def launch_heavy_command(
         assert lifecycle_started is not None
         assert absolute_monotonic_deadline is not None
         pid_path = f"/tmp/pert-gym/{task}/bounded-payload.pid"
+        heartbeat_path = (
+            f"/tmp/pert-gym/{task}/bounded-payload-heartbeat.jsonl"
+            if verify_only
+            else None
+        )
+        stale_paths = shlex.quote(pid_path)
+        heartbeat_export = ""
+        if heartbeat_path is not None:
+            stale_paths += f" {shlex.quote(heartbeat_path)}"
+            heartbeat_export = f"export PERT_GYM_PAYLOAD_HEARTBEAT_PATH={shlex.quote(heartbeat_path)}; "
         remote = (
             "set -eu; umask 077; "
             f"mkdir -p {shlex.quote(str(Path(pid_path).parent))}; "
+            f"rm -f -- {stale_paths}; "
             f"printf '%s\\n' $$ > {shlex.quote(pid_path)}; "
+            f"{heartbeat_export}"
             f"exec {shlex.join(list(command))}"
         )
         started = lifecycle_started
@@ -680,6 +730,17 @@ def launch_heavy_command(
                         raise RuntimeError(
                             "refusing lease renewal without the exact live payload PID"
                         )
+                    if verify_only:
+                        assert heartbeat_path is not None
+                        if not _remote_payload_heartbeat_is_fresh(
+                            control_run,
+                            heartbeat_path,
+                            pid,
+                            now=wall_now,
+                        ):
+                            raise RuntimeError(
+                                "refusing lease renewal without a fresh same-PID payload heartbeat"
+                            )
                     if monotonic() >= absolute_monotonic_deadline:
                         _signal_remote_payload(run, pid_path, pid)
                         timed_out = True

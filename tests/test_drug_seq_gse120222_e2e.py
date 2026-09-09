@@ -22,13 +22,13 @@ publisher = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(publisher)
 
 EVIDENCE_DIR = PUBLISHER_PATH.parent
-REVISION_RECEIPT_PATH = EVIDENCE_DIR / "revision_receipt_t_c3e8e4e2.json"
-REVISION_HANDOFF_PATH = EVIDENCE_DIR / "integrated_handoff_t_c3e8e4e2.json"
+REVISION_RECEIPT_PATH = EVIDENCE_DIR / "revision_receipt_t_71ef72d0.json"
+REVISION_HANDOFF_PATH = EVIDENCE_DIR / "integrated_handoff_t_71ef72d0.json"
 PRESERVED_EVIDENCE_PATHS = {
     "mutation": EVIDENCE_DIR / "mutation_receipt.json",
     "verify": EVIDENCE_DIR / "verify_receipt.json",
-    "prior_revision": EVIDENCE_DIR / "revision_receipt_t_eb3a96ca.json",
-    "prior_handoff": EVIDENCE_DIR / "integrated_handoff_t_eb3a96ca.json",
+    "prior_revision": EVIDENCE_DIR / "revision_receipt_t_c3e8e4e2.json",
+    "prior_handoff": EVIDENCE_DIR / "integrated_handoff_t_c3e8e4e2.json",
 }
 RECEIPT_PRESERVED_EVIDENCE_NAMES = {
     "mutation": "mutation_receipt",
@@ -171,6 +171,20 @@ def test_verify_heartbeat_never_claims_writing() -> None:
     assert heartbeat.phase == "verifying"
 
 
+def test_verify_heartbeat_uses_bounded_payload_heartbeat_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    heartbeat_path = tmp_path / "bounded-payload-heartbeat.jsonl"
+    monkeypatch.setenv("PERT_GYM_PAYLOAD_HEARTBEAT_PATH", str(heartbeat_path))
+
+    heartbeat = publisher.ProductHeartbeat("verify")
+    heartbeat.emit()
+
+    payload = json.loads(heartbeat_path.read_text().strip())
+    assert payload["product_execution"]["pid"] > 1
+    assert payload["product_execution"]["phase"] == "verify_preflight"
+
+
 @pytest.mark.parametrize(
     ("field", "wrong_value"),
     [
@@ -198,6 +212,29 @@ def test_obs_verifier_rejects_wrong_but_non_null_scientific_metadata(
 @pytest.mark.parametrize("source_field", ["pert_name", "pert_dose", "pert_time"])
 def test_obs_verifier_requires_source_row_mapping(source_field: str) -> None:
     obs = _valid_obs().drop(columns=source_field)
+
+    with pytest.raises(AssertionError, match="OBS metadata drift"):
+        publisher.verify_obs_metadata(obs)
+
+
+@pytest.mark.parametrize("source_field", ["pert_name", "pert_dose", "pert_time"])
+def test_obs_verifier_rejects_missing_or_mismatched_source_values(
+    source_field: str,
+) -> None:
+    missing = _valid_obs()
+    missing.loc[missing.index[0], source_field] = pd.NA
+    mismatched = _valid_obs()
+    mismatched.loc[mismatched.index[1], source_field] = "source-value-drift"
+
+    with pytest.raises(AssertionError, match="OBS metadata drift"):
+        publisher.verify_obs_metadata(missing)
+    with pytest.raises(AssertionError, match="OBS metadata drift"):
+        publisher.verify_obs_metadata(mismatched)
+
+
+def test_obs_verifier_rejects_ambiguous_duplicate_row_mapping() -> None:
+    obs = _valid_obs()
+    obs.index = ["ambiguous", "ambiguous"]
 
     with pytest.raises(AssertionError, match="OBS metadata drift"):
         publisher.verify_obs_metadata(obs)

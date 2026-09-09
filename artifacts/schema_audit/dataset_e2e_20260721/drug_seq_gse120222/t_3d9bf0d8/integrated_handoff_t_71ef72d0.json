@@ -1,0 +1,107 @@
+{
+  "format": "pert-gym.dataset-e2e-integrated-handoff-review-fix/v5",
+  "task_id": "t_71ef72d0",
+  "producer_task_id": "t_3d9bf0d8",
+  "rejected_head": "6dab6061934306a9118015fb6ddb8f7304a411cc",
+  "base_pr_head": "4b40091c476ccb591f56822a563e5b2514b620d9",
+  "status": "LOCAL_CONTRACT_PASS",
+  "canonical_sha256": "27e04ffb781e062caca7e3999e7796d47f7adee66843f54c80c119cb0f8c41a0",
+  "dataset": {
+    "canonical_id": "DRUG-seq/GSE120222",
+    "real_dataset_id": "drug-seq/GSE120222",
+    "source_accession": "GSE120222",
+    "source_rows_total": 72,
+    "source_members_total": 1,
+    "organism": "Homo sapiens",
+    "cell_line": "U2OS"
+  },
+  "triplet": {
+    "obs": {
+      "uid": "mKSaEEcH4jyes43Z0002",
+      "key": "DRUG-seq/GSE120222/obs.parquet",
+      "sha256": "bfd125492d869a784f6f938a440b9a0e2cb54a8beafe2136d0ceb4f391893975"
+    },
+    "x": {
+      "uid": "hfeVCMInQu1UKhwp0000",
+      "key": "DRUG-seq/GSE120222/X.h5ad",
+      "sha256": "a1e1d9b5640082d8c599dd53bcca24a0d778c2721f6dd925c5c2ee72b152ce84"
+    },
+    "var": {
+      "uid": "vmqp94W72a1Tl2Xw0002",
+      "key": "DRUG-seq/GSE120222/var.parquet",
+      "sha256": "35bb21aa696af1213cd3d03bb14180cd149599e3f3ffc6880412d57ddf501637"
+    }
+  },
+  "collections": {
+    "dataset_uid": "4tKR1YGxdI6AtfNa0000",
+    "global_successor_uid": "Ltjv1RYDCnuxqqRT0000",
+    "preserved_without_mutation": true
+  },
+  "evidence": {
+    "publisher_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/publish_collections.py",
+    "publisher_sha256": "c4d7787c5e433c6032b0d6616e9e35c7a6e2b320e365e079bbc84c90791d7530",
+    "launcher_path": "tools/launch_pert_gym_heavy.py",
+    "launcher_sha256": "f2125d2e0618cb3f0c7c018e5ec5ebf56dec10b3f3dcc381b46374ec438b5751",
+    "revision_receipt_path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/revision_receipt_t_71ef72d0.json",
+    "revision_receipt_sha256": "b7f1ed47b8137ecaf319fe144ae41866b96ecdd520b25697ef7b6cb40105bb8d",
+    "preserved_immutable_receipts": {
+      "mutation": {
+        "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/mutation_receipt.json",
+        "sha256": "de688662e6014845d8b115b6cc4b3bc4c012df89d0d0ee7acb25600c4da6038c"
+      },
+      "verify": {
+        "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/verify_receipt.json",
+        "sha256": "8f374617377b260ac463ae81db4b15ad375a26e7ecdac0814b400e1804c1859a"
+      },
+      "prior_revision": {
+        "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/revision_receipt_t_c3e8e4e2.json",
+        "sha256": "67aef77826ea141c399d7b51970ef9fecaa5c82ae228404aab501f1587c42ebc"
+      },
+      "prior_handoff": {
+        "path": "artifacts/schema_audit/dataset_e2e_20260721/drug_seq_gse120222/t_3d9bf0d8/integrated_handoff_t_c3e8e4e2.json",
+        "sha256": "b6975ef9154ca3181b0c3ffd950861c5552a481ca77c08f87504fddfc2cc95a1"
+      }
+    }
+  },
+  "scientific_verifier": {
+    "obs": "All canonical OBS fields remain explicitly dispositioned. The three applicable treatment fields are source-row-bound through unique index plus exact equality, with missing, reordered, ambiguous, or invented values rejected.",
+    "var": "Human Ensembl and ERCC rows remain partitioned, format-, namespace-, organism-, mapping-, feature-type-, and uniqueness-validated."
+  },
+  "launcher_verifier": {
+    "purpose": "review-pr104-drugseq-verify-only",
+    "initial_lease_minutes_max": 60,
+    "absolute_runtime_minutes_max": 90,
+    "renewal_proof": [
+      "exact PID file equality",
+      "remote kill -0 exact PID",
+      "fresh same-PID payload heartbeat no older than 600 seconds"
+    ],
+    "verify_phases": [
+      "verify_preflight",
+      "verifying",
+      "accepted|failed"
+    ],
+    "terminal_cleanup": [
+      "ownership-fenced VM stop",
+      "GCE lease-label clear and readback",
+      "local lease and temporary-file removal"
+    ]
+  },
+  "review": {
+    "pr": "https://github.com/jkobject/pert-gym/pull/104",
+    "fresh_independent_eu_verify_only_required": true,
+    "mutation_or_replay_authorized": false,
+    "product_delta": 0,
+    "ledger_credit": 0
+  },
+  "safety": {
+    "scope": "local code/test/evidence only",
+    "vm_start": false,
+    "gcp_or_gcs_access": false,
+    "lamindb_or_collection_or_artifact_mutation": false,
+    "payload_rewrite_or_replay": false,
+    "deletion_or_cleanup": false,
+    "ledger_mutation": false,
+    "txgnn_access": false
+  }
+}

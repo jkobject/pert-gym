@@ -182,6 +182,8 @@ def _observed_values(series: pd.Series) -> list[str]:
 def verify_obs_metadata(obs: pd.DataFrame) -> dict[str, Any]:
     failures: list[str] = []
     dispositions: dict[str, dict[str, Any]] = {}
+    if not obs.index.is_unique:
+        failures.append("OBS row identity is ambiguous")
     for field in CANONICAL_OBS_FIELDS:
         if field in MATERIALIZED_OBS_EXPECTATIONS:
             expectation = MATERIALIZED_OBS_EXPECTATIONS[field]
@@ -451,9 +453,14 @@ class ProductHeartbeat:
         }
 
     def emit(self) -> None:
-        HEARTBEAT_PATH.parent.mkdir(parents=True, exist_ok=True)
+        heartbeat_path = Path(
+            os.environ.get("PERT_GYM_PAYLOAD_HEARTBEAT_PATH", HEARTBEAT_PATH)
+        )
+        if not heartbeat_path.is_absolute():
+            raise AssertionError("payload heartbeat path must be absolute")
+        heartbeat_path.parent.mkdir(parents=True, exist_ok=True)
         payload = self.payload()
-        with HEARTBEAT_PATH.open("a", encoding="utf-8") as handle:
+        with heartbeat_path.open("a", encoding="utf-8") as handle:
             handle.write(canonical(payload) + "\n")
             handle.flush()
             os.fsync(handle.fileno())
