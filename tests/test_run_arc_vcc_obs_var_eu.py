@@ -8,6 +8,10 @@ def test_arc_vcc_remote_runner_fails_closed_and_emits_payload_heartbeats() -> No
     text = SCRIPT.read_text(encoding="utf-8")
 
     assert "set -euo pipefail" in text
+    assert 'exec 3>&1' in text
+    assert 'exec >>"$LOG" 2>&1' in text
+    assert 'cat "$LOG" >&3' in text
+    assert 'exec > >(tee -a "$LOG") 2>&1' not in text
     assert "write_heartbeat preflight 0" in text
     assert 'write_heartbeat "${MODE}_source_join" 0' in text
     assert "write_heartbeat terminal 6" in text

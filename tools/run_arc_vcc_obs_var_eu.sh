@@ -15,7 +15,8 @@ STAMP=$(date -u +%Y%m%dT%H%M%SZ)
 LOG_URI="gs://scperturb/pert-gym/staging/arc_vcc/2025/${TASK}/${MODE}-${STAMP}.log"
 RECEIPT_URI="gs://scperturb/pert-gym/staging/arc_vcc/2025/${TASK}/${MODE}-${STAMP}.json"
 mkdir -p "$RUN" "$MOUNT" "$SOURCES"
-exec > >(tee -a "$LOG") 2>&1
+exec 3>&1
+exec >>"$LOG" 2>&1
 
 heartbeat="$RUN/product_execution.json"
 write_heartbeat() {
@@ -58,6 +59,7 @@ cleanup() {
     gcloud storage objects describe "$RECEIPT_URI" --billing-project=jkobject-1549353370965 --format='json(generation,size,md5Hash)'
   fi
   printf 'LOG_URI=%s\nRECEIPT_URI=%s\n' "$LOG_URI" "$RECEIPT_URI"
+  cat "$LOG" >&3
   exit "$rc"
 }
 trap cleanup EXIT
