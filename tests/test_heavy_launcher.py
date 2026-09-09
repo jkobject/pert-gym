@@ -114,6 +114,9 @@ def test_launcher_publishes_exact_bounded_lease_before_start_and_payload(
         "describe",
         "describe",
         "start",
+        "describe",
+        "ssh",
+        "describe",
         "ssh",
         "describe",
         "stop",
@@ -197,6 +200,66 @@ def test_launcher_stops_only_after_clean_terminal_payload(tmp_path: Path) -> Non
     )
     assert not any("stop" in call for call in fake.calls)
     assert fake.instance["labels"]["lease-until"] == "20260716t100000z"
+
+
+def test_legacy_launcher_waits_for_delayed_ssh_after_start(tmp_path: Path) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    readiness_attempts = 0
+
+    def delayed_readiness(command: list[str]) -> subprocess.CompletedProcess[str]:
+        nonlocal readiness_attempts
+        if "ssh" in command and command[-1] == "true":
+            readiness_attempts += 1
+            if readiness_attempts < 3:
+                return completed(command, returncode=255, stderr="Connection refused")
+        return fake(command)
+
+    assert (
+        launcher.launch_heavy_command(
+            task="t_f8501514",
+            eta_hours=8,
+            command=["heavy"],
+            local_lease_path=tmp_path / "lease.json",
+            now=datetime(2026, 7, 16, tzinfo=timezone.utc),
+            run=delayed_readiness,
+            monotonic=ExactClock().monotonic,
+            sleep=lambda seconds: None,
+        )
+        == 0
+    )
+    assert readiness_attempts == 3
+
+
+def test_legacy_readiness_timeout_stops_and_clears_exact_lease(
+    tmp_path: Path,
+) -> None:
+    launcher = _launcher()
+    fake = FakeGcloud(initial_status="TERMINATED")
+    clock = ExactClock()
+    local_lease = tmp_path / "lease.json"
+
+    def unavailable(command: list[str]) -> subprocess.CompletedProcess[str]:
+        if "ssh" in command and command[-1] == "true":
+            return completed(command, returncode=255, stderr="Connection refused")
+        return fake(command)
+
+    with pytest.raises(RuntimeError, match="SSH readiness timeout exhausted"):
+        launcher.launch_heavy_command(
+            task="t_f8501514",
+            eta_hours=8,
+            command=["heavy"],
+            local_lease_path=local_lease,
+            now=datetime(2026, 7, 16, tzinfo=timezone.utc),
+            run=unavailable,
+            readiness_timeout_seconds=10,
+            monotonic=clock.monotonic,
+            sleep=clock.sleep,
+        )
+
+    assert fake.instance["status"] == "TERMINATED"
+    assert fake.instance["labels"] == {"active-wave": "true", "do-not-stop": "true"}
+    assert not local_lease.exists()
 
 
 def test_expired_lease_replaced_during_payload_prevents_old_owner_stop(

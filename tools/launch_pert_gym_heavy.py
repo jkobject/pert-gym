@@ -586,6 +586,7 @@ def launch_heavy_command(
         immediately_before_launch = _describe(control_run)
         _verify_lease(immediately_before_launch, labels)
         status = immediately_before_launch.get("status")
+        started_instance = status == "TERMINATED"
         if status == "TERMINATED":
             _checked(
                 control_run,
@@ -603,6 +604,33 @@ def launch_heavy_command(
                 primary=primary,
             )
         raise
+
+    if started_instance and not bounded_lifecycle:
+        readiness_started = monotonic()
+        # Keep the lifecycle ceiling distinct from the readiness timeout so the
+        # latter remains the diagnostic when the legacy launch has no broader
+        # minute-bounded lifecycle.
+        readiness_deadline = readiness_started + readiness_timeout_seconds + 1
+        try:
+            _wait_for_ssh_readiness(
+                control_run,
+                labels=labels,
+                started=readiness_started,
+                absolute_deadline=readiness_deadline,
+                timeout_seconds=readiness_timeout_seconds,
+                monotonic=monotonic,
+                sleep=sleep,
+            )
+        except BaseException as primary:
+            # No payload has started yet, so preserving the newly started VM
+            # cannot aid recovery. Release the exact task-owned lease instead.
+            _cleanup_terminal_failure(
+                run,
+                labels=labels,
+                local_lease_path=local_lease_path,
+                primary=primary,
+            )
+            raise
 
     if bounded_lifecycle:
         assert lease_minutes is not None and absolute_max_minutes is not None
