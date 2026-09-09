@@ -13,7 +13,9 @@ def test_arc_vcc_remote_runner_fails_closed_and_emits_payload_heartbeats() -> No
     assert "write_heartbeat terminal 6" in text
     assert "os.replace(temporary, path)" in text
     assert 'python3 - "$$"' in text
-    assert "if pid in ancestors:" in text
+    assert "if pid in ancestors or pgid == current_pgid:" in text
+    assert '"pid=,ppid=,pgid=,args="' in text
+
     assert "CONFLICTING_ARC_WRITER" in text
     assert "pgrep -af" not in text
 

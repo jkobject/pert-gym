@@ -69,22 +69,29 @@ import sys
 self_pid = int(sys.argv[1])
 processes = {}
 for line in subprocess.check_output(
-    ["ps", "-eo", "pid=,ppid=,args="], text=True
+    ["ps", "-eo", "pid=,ppid=,pgid=,args="], text=True
 ).splitlines():
-    fields = line.strip().split(None, 2)
-    if len(fields) != 3:
+    fields = line.strip().split(None, 3)
+    if len(fields) != 4:
         continue
-    pid, ppid, args = fields
-    processes[int(pid)] = (int(ppid), args)
+    pid, ppid, pgid, args = fields
+    processes[int(pid)] = (int(ppid), int(pgid), args)
+
+current_pgid = processes.get(self_pid, (0, None, ""))[1]
+if current_pgid is None:
+    raise RuntimeError(f"current runner PID {self_pid} is absent from process table")
 
 ancestors = set()
 pid = self_pid
 while pid and pid not in ancestors:
     ancestors.add(pid)
-    pid = processes.get(pid, (0, ""))[0]
+    pid = processes.get(pid, (0, 0, ""))[0]
 
-for pid, (_, args) in processes.items():
-    if pid in ancestors:
+for pid, (_, pgid, args) in processes.items():
+    # The SSH transport may expose a duplicate shell for this script in the
+    # same process group.  It is part of this payload, not an independent
+    # writer.  A different process group remains an exact fail-closed guard.
+    if pid in ancestors or pgid == current_pgid:
         continue
     if "curate_arc_vcc_obs_var" in args or "run_arc_vcc_obs_var_eu" in args:
         print(f"{pid} {args}")
