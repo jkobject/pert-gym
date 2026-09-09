@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
+import pytest
 
 from tools import curate_broad_prism_obs as curate
 
@@ -14,14 +15,15 @@ def _source_database(path: Path) -> None:
     database = sqlite3.connect(path)
     database.execute(
         "CREATE TABLE source_rows ("
-        "source_index INTEGER PRIMARY KEY, row_id TEXT NOT NULL UNIQUE, "
+        "source_index INTEGER PRIMARY KEY, source_file_row_number INTEGER NOT NULL, "
+        "row_id TEXT NOT NULL UNIQUE, "
         "profile_id TEXT NOT NULL, lfc TEXT, lfc_cb TEXT, pass_value TEXT NOT NULL)"
     )
     database.executemany(
-        "INSERT INTO source_rows VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO source_rows VALUES (?, ?, ?, ?, ?, ?, ?)",
         [
-            (0, "ACH-000001::P1::W1::R1", "P1_120H_A", "-1.5", "-1.2", "TRUE"),
-            (1, "ACH-000002::P2::W2::R2", "P2_120H_B", "0.5", "0.4", "FALSE"),
+            (0, 2, "ACH-000001::P1::W1::R1", "P1_120H_A", "-1.5", "-1.2", "TRUE"),
+            (1, 3, "ACH-000002::P2::W2::R2", "P2_120H_B", "0.5", "0.4", "FALSE"),
         ],
     )
     database.commit()
@@ -68,8 +70,31 @@ def test_source_rows_for_indices_handles_control_field_wrap(tmp_path: Path) -> N
     finally:
         database.close()
     assert sorted(rows) == [0, 1]
-    assert rows[0][1] == "ACH-000001::P1::W1::R1"
-    assert rows[1][1] == "ACH-000002::P2::W2::R2"
+    assert rows[0][2] == "ACH-000001::P1::W1::R1"
+    assert rows[1][2] == "ACH-000002::P2::W2::R2"
+
+
+def test_source_index_keeps_physical_csv_line_numbers_for_multiline_records(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(curate, "EXPECTED_SOURCE_ROWS", 2)
+    source = tmp_path / "source.csv"
+    source.write_text(
+        "row_id,profile_id,LFC,LFC_cb,PASS\n"
+        "row-0,profile-0,1,1,TRUE\n"
+        'row-1,profile-1,"2\n",2,TRUE\n',
+        encoding="utf-8",
+    )
+    database_path = tmp_path / "source.sqlite"
+    assert curate.build_source_index(source, database_path)["source_rows"] == 2
+    database = sqlite3.connect(database_path)
+    try:
+        physical_lines = database.execute(
+            "SELECT source_file_row_number FROM source_rows ORDER BY source_index"
+        ).fetchall()
+    finally:
+        database.close()
+    assert physical_lines == [(2,), (4,)]
 
 
 def test_build_candidate_preserves_axis_and_materializes_only_lfc(
@@ -144,3 +169,51 @@ def test_build_candidate_preserves_axis_and_materializes_only_lfc(
     assert candidate.loc[7, "is_control"]
     assert candidate.loc[3, "quality_flag"] == "accepted_lfc"
     assert candidate.loc[7, "quality_flag"] == "source_qc_failed"
+    assert candidate["source_file_row_number"].tolist() == [
+        2,
+        3,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+    ]
+    assert candidate["source_row_chunk_index"].tolist() == [0] * 10
+    assert candidate["source_row_offset_in_chunk"].tolist() == [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+    ]
+    assert summary["streaming_memory_bound"] == {
+        "batch_limit_rows": 250_000,
+        "peak_resident_rows": 10,
+        "peak_queued_batches": 1,
+    }
+
+
+@pytest.mark.parametrize("value", ["", "unknown", "trt_poscon"])
+def test_unapproved_treatment_type_fails_closed(value: str) -> None:
+    with pytest.raises((ValueError, curate.prewrite_safety.ReviewRequired)):
+        curate.normalize_treatment_type(value)
+
+
+def test_direct_legacy_write_is_disabled_before_any_lamin_connection(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(
+        curate,
+        "connect_pertdata",
+        lambda: pytest.fail("direct writer must not contact Lamin"),
+    )
+    with pytest.raises(RuntimeError, match="direct Broad PRISM write is disabled"):
+        curate.run_write(tmp_path, tmp_path / "authorization.json")

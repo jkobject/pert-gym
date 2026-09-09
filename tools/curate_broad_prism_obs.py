@@ -37,15 +37,17 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from tools import broad_prism_prewrite_safety as prewrite_safety
 from tools.lamin_context import connect_pertdata
 
-TASK_ID = "t_a15f5366"
+TASK_ID = "t_dad3bbb9"
 DATASET_ID = "broad_prism_repurposing"
 OBS_KEY = f"{DATASET_ID}/obs.parquet"
 X_KEY = f"{DATASET_ID}/X.h5ad"
 VAR_KEY = f"{DATASET_ID}/var.parquet"
 EXPECTED_OBS_ROWS = 22_316_860
 EXPECTED_SOURCE_ROWS = 4_463_372
+MAX_STREAM_BATCH_ROWS = 250_000
 SOURCE_FIELDS = ("profile_id", "LFC", "LFC_cb", "PASS")
 SOURCE_RELEASE = "DepMap PRISM Primary Repurposing Public 24Q2"
 BILLING_PROJECT = "jkobject-1549353370965"
@@ -332,13 +334,14 @@ def build_source_index(path: Path, database_path: Path) -> dict[str, Any]:
     try:
         database.execute(
             "CREATE TABLE source_rows ("
-            "source_index INTEGER PRIMARY KEY, row_id TEXT NOT NULL UNIQUE, "
+            "source_index INTEGER PRIMARY KEY, source_file_row_number INTEGER NOT NULL, "
+            "row_id TEXT NOT NULL UNIQUE, "
             "profile_id TEXT NOT NULL, lfc TEXT, lfc_cb TEXT, pass_value TEXT NOT NULL)"
         )
         with path.open(encoding="utf-8-sig", newline="") as handle:
             reader = csv.DictReader(handle)
             require_columns(path, reader, SOURCE_REQUIRED_COLUMNS)
-            batch: list[tuple[int, str, str, str, str, str]] = []
+            batch: list[tuple[int, int, str, str, str, str, str]] = []
             for source_index, row in enumerate(reader):
                 row_id = (row.get("row_id") or "").strip()
                 profile_id = (row.get("profile_id") or "").strip()
@@ -353,10 +356,13 @@ def build_source_index(path: Path, database_path: Path) -> dict[str, Any]:
                 except ValueError:
                     pass
                 pass_value = (row.get("PASS") or "").strip()
-                pass_true += pass_value.lower() == "true"
+                # A source release token outside the two reviewed values is a
+                # source-contract failure, not an implicit failed QC result.
+                pass_true += prewrite_safety.parse_pass(pass_value)
                 batch.append(
                     (
                         source_index,
+                        reader.line_num,
                         row_id,
                         profile_id,
                         raw_lfc,
@@ -366,7 +372,7 @@ def build_source_index(path: Path, database_path: Path) -> dict[str, Any]:
                 )
                 if len(batch) >= 50_000:
                     database.executemany(
-                        "INSERT INTO source_rows VALUES (?, ?, ?, ?, ?, ?)", batch
+                        "INSERT INTO source_rows VALUES (?, ?, ?, ?, ?, ?, ?)", batch
                     )
                     database.commit()
                     batch.clear()
@@ -378,7 +384,7 @@ def build_source_index(path: Path, database_path: Path) -> dict[str, Any]:
                     )
             if batch:
                 database.executemany(
-                    "INSERT INTO source_rows VALUES (?, ?, ?, ?, ?, ?)", batch
+                    "INSERT INTO source_rows VALUES (?, ?, ?, ?, ?, ?, ?)", batch
                 )
                 database.commit()
         count = int(database.execute("SELECT COUNT(*) FROM source_rows").fetchone()[0])
@@ -479,9 +485,9 @@ def inspect_lamin(ln: Any) -> dict[str, Any]:
 
 def source_rows_between(
     database: sqlite3.Connection, first: int, last: int
-) -> list[tuple[int, str, str, str, str, str]]:
+) -> list[tuple[int, int, str, str, str, str, str]]:
     rows = database.execute(
-        "SELECT source_index, row_id, profile_id, lfc, lfc_cb, pass_value "
+        "SELECT source_index, source_file_row_number, row_id, profile_id, lfc, lfc_cb, pass_value "
         "FROM source_rows WHERE source_index BETWEEN ? AND ? ORDER BY source_index",
         (first, last),
     ).fetchall()
@@ -492,7 +498,7 @@ def source_rows_between(
 
 def source_rows_for_indices(
     database: sqlite3.Connection, indices: list[int]
-) -> dict[int, tuple[int, str, str, str, str, str]]:
+) -> dict[int, tuple[int, int, str, str, str, str, str]]:
     """Load bounded contiguous spans, including the control→field index wrap."""
     unique_indices = list(dict.fromkeys(indices))
     spans: list[tuple[int, int]] = []
@@ -503,7 +509,7 @@ def source_rows_for_indices(
             first = value
         previous = value
     spans.append((first, previous))
-    rows: dict[int, tuple[int, str, str, str, str, str]] = {}
+    rows: dict[int, tuple[int, int, str, str, str, str, str]] = {}
     for first, last in spans:
         for row in source_rows_between(database, first, last):
             rows[row[0]] = row
@@ -517,10 +523,12 @@ def normalize_treatment_type(raw: str) -> tuple[str, str, bool]:
     if value == "ctl_vehicle":
         return "drug", "vehicle", True
     if value == "trt_poscon":
-        return "drug", "positive_control", False
+        raise prewrite_safety.ReviewRequired(
+            "trt_poscon requires an explicit Broad PRISM review decision"
+        )
     if value == "trt_cp":
         return "drug", "not_control", False
-    return "drug", "unknown", False
+    raise ValueError(f"unrecognized treatment type: {raw!r}")
 
 
 def parse_timepoint_minutes(profile_id: str) -> int | None:
@@ -553,12 +561,20 @@ def build_candidate(
     database = sqlite3.connect(source_database_path)
     writer: pq.ParquetWriter | None = None
     global_position = 0
+    peak_resident_rows = 0
     counts: Counter[str] = Counter()
     source_type_counts: Counter[str] = Counter()
     try:
-        for row_group_index in range(parquet.num_row_groups):
-            table = parquet.read_row_group(row_group_index)
+        for batch_index, batch in enumerate(
+            parquet.iter_batches(batch_size=MAX_STREAM_BATCH_ROWS, use_threads=False)
+        ):
+            table = pa.Table.from_batches([batch])
             frame = table.to_pandas()
+            if len(frame) > MAX_STREAM_BATCH_ROWS:
+                raise MemoryError(
+                    "candidate transform exceeded its bounded row envelope"
+                )
+            peak_resident_rows = max(peak_resident_rows, len(frame))
             positions = list(range(global_position, global_position + len(frame)))
             source_indices_roles = [
                 expected_source_index_and_role(position, EXPECTED_SOURCE_ROWS)
@@ -569,12 +585,12 @@ def build_candidate(
             )
             source_rows = [by_index[index] for index, _ in source_indices_roles]
             roles = [role for _, role in source_indices_roles]
-            expected_row_ids = [row[1] for row in source_rows]
+            expected_row_ids = [row[2] for row in source_rows]
             observed_row_ids = frame["depmap_id"].astype(str).tolist()
             mismatches = sum(a != b for a, b in zip(observed_row_ids, expected_row_ids))
             if mismatches:
                 raise RuntimeError(
-                    f"legacy row/source order mismatch in row group {row_group_index}: {mismatches}"
+                    f"legacy row/source order mismatch in batch {batch_index}: {mismatches}"
                 )
             observed_roles = [
                 "legacy_synthetic_control"
@@ -584,30 +600,30 @@ def build_candidate(
             ]
             if observed_roles != roles:
                 raise RuntimeError(
-                    f"legacy field order mismatch in row group {row_group_index}"
+                    f"legacy field order mismatch in batch {batch_index}"
                 )
 
             metadata_rows: list[dict[str, str]] = []
             cell_rows: list[dict[str, str] | None] = []
             ach_ids: list[str] = []
             for raw in source_rows:
-                profile_id = raw[2]
+                profile_id = raw[3]
                 metadata = treatments.get(profile_id)
                 if metadata is None:
                     raise RuntimeError(f"unmatched treatment profile_id {profile_id!r}")
                 metadata_rows.append(metadata)
-                ach_id = raw[1].split("::", maxsplit=1)[0]
+                ach_id = raw[2].split("::", maxsplit=1)[0]
                 ach_ids.append(ach_id)
                 cell_rows.append(cell_lines.get(ach_id))
 
             treatment_types = [row["perturbation_type"] for row in metadata_rows]
             normalized = [normalize_treatment_type(value) for value in treatment_types]
             direct_lfc = [role == "LFC" for role in roles]
-            pass_flags = [raw[5].lower() == "true" for raw in source_rows]
+            pass_flags = [prewrite_safety.parse_pass(raw[6]) for raw in source_rows]
             finite_flags = []
             for raw in source_rows:
                 try:
-                    finite_flags.append(math.isfinite(float(raw[3])))
+                    finite_flags.append(math.isfinite(float(raw[4])))
                 except ValueError:
                     finite_flags.append(False)
             response_present = [
@@ -624,19 +640,41 @@ def build_candidate(
             )
             set_column(frame, "source_treatment_metadata_sha256", TREATMENT_SHA256)
             set_column(frame, "source_row_id", expected_row_ids)
-            set_column(frame, "source_profile_id", [raw[2] for raw in source_rows])
+            set_column(frame, "source_profile_id", [raw[3] for raw in source_rows])
             set_column(
                 frame,
                 "source_row_identifier",
-                [f"{raw[1]}|{raw[2]}" for raw in source_rows],
+                [f"{raw[2]}|{raw[3]}" for raw in source_rows],
+            )
+            coordinates = [
+                {
+                    **prewrite_safety.source_coordinates(raw[0], MAX_STREAM_BATCH_ROWS),
+                    "source_file_row_number": raw[1],
+                }
+                for raw in source_rows
+            ]
+            set_column(
+                frame,
+                "source_file_row_number",
+                [coordinate["source_file_row_number"] for coordinate in coordinates],
             )
             set_column(
-                frame, "source_file_row_number", [raw[0] + 1 for raw in source_rows]
+                frame,
+                "source_row_chunk_index",
+                [coordinate["source_row_chunk_index"] for coordinate in coordinates],
+            )
+            set_column(
+                frame,
+                "source_row_offset_in_chunk",
+                [
+                    coordinate["source_row_offset_in_chunk"]
+                    for coordinate in coordinates
+                ],
             )
             set_column(frame, "source_field_role", roles)
             set_column(frame, "source_pass", pass_flags)
-            set_column(frame, "source_lfc", [raw[3] for raw in source_rows])
-            set_column(frame, "source_lfc_cb", [raw[4] for raw in source_rows])
+            set_column(frame, "source_lfc", [raw[4] for raw in source_rows])
+            set_column(frame, "source_lfc_cb", [raw[5] for raw in source_rows])
             set_column(frame, "source_treatment_type", treatment_types)
             set_column(
                 frame,
@@ -776,7 +814,7 @@ def build_candidate(
             set_column(
                 frame, "dose_unit_source", f"paper:{PAPER_DOI};figshare:{FIGSHARE_DOI}"
             )
-            timepoints = [parse_timepoint_minutes(raw[2]) for raw in source_rows]
+            timepoints = [parse_timepoint_minutes(raw[3]) for raw in source_rows]
             set_column(
                 frame,
                 "timepoint",
@@ -832,7 +870,7 @@ def build_candidate(
                 ],
             )
             response_values = [
-                float(raw[3]) if present else None
+                float(raw[4]) if present else None
                 for raw, present in zip(source_rows, response_present)
             ]
             numeric_response_values = pd.Series(
@@ -987,7 +1025,7 @@ def build_candidate(
             )
             emit_heartbeat(
                 "materializing_candidate",
-                row_group_index + 1,
+                batch_index + 1,
                 global_position,
                 EXPECTED_OBS_ROWS,
             )
@@ -1012,6 +1050,11 @@ def build_candidate(
         "legacy_order_mismatch": 0,
         "treatment_join_mismatch": 0,
         "source_duplicate_count": 0,
+        "streaming_memory_bound": {
+            "batch_limit_rows": MAX_STREAM_BATCH_ROWS,
+            "peak_resident_rows": peak_resident_rows,
+            "peak_queued_batches": 1,
+        },
     }
 
 
@@ -1062,13 +1105,22 @@ def source_search_log() -> list[dict[str, Any]]:
 
 
 def write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
-    temporary = path.with_suffix(path.suffix + ".partial")
+    temporary = path.with_suffix(path.suffix + ".part")
+    if temporary.exists():
+        raise RuntimeError(
+            f"partial evidence exists; refusing ambiguous overwrite: {temporary}"
+        )
     with temporary.open("w", encoding="utf-8") as handle:
         json.dump(payload, handle, indent=2, sort_keys=True)
         handle.write("\n")
         handle.flush()
         os.fsync(handle.fileno())
     temporary.replace(path)
+    directory_fd = os.open(path.parent, os.O_RDONLY)
+    try:
+        os.fsync(directory_fd)
+    finally:
+        os.close(directory_fd)
 
 
 def run_plan(run_root: Path) -> dict[str, Any]:
@@ -1199,20 +1251,60 @@ def verify_candidate_readback(path: Path, expected_sha256: str) -> dict[str, Any
         "cell_line",
         "perturbation",
         "dose",
+        "original_obs_index",
+        "obs_uuid",
     }
     missing = sorted(required - set(parquet.schema_arrow.names))
     if missing:
         raise RuntimeError(f"fresh remote OBS readback lacks columns: {missing}")
+
+    def identity_rows() -> Iterable[tuple[int, str]]:
+        for batch in parquet.iter_batches(
+            batch_size=MAX_STREAM_BATCH_ROWS,
+            columns=["original_obs_index", "obs_uuid"],
+            use_threads=False,
+        ):
+            indices = batch.column(0).to_pylist()
+            uuids = batch.column(1).to_pylist()
+            if len(indices) > MAX_STREAM_BATCH_ROWS:
+                raise MemoryError("identity verification exceeded row batch envelope")
+            for original_index, obs_uuid in zip(indices, uuids):
+                if not isinstance(original_index, int) or not isinstance(obs_uuid, str):
+                    raise RuntimeError(
+                        "OBS identity columns have invalid physical types"
+                    )
+                yield original_index, obs_uuid
+
+    identity = prewrite_safety.ordered_obs_identity(identity_rows())
+    if identity["count"] != EXPECTED_OBS_ROWS:
+        raise RuntimeError("fresh remote OBS identity count mismatch")
     return {
         "bytes": path.stat().st_size,
         "sha256": expected_sha256,
         "rows": parquet.metadata.num_rows,
         "row_groups": parquet.num_row_groups,
         "required_columns_missing": [],
+        "ordered_obs_identity": identity,
     }
 
 
 def run_write(run_root: Path, authorization_path: Path) -> dict[str, Any]:
+    """Reject the superseded direct writer before it can contact Lamin.
+
+    The only supported mutation path is ``execute_one_write_transition`` with a
+    complete independently captured local state adapter.  This recovered script
+    predates that adapter, so allowing it to call ``Artifact.save`` would bypass
+    the durable admission journal and is intentionally fail-closed.
+    """
+    del run_root, authorization_path
+    raise RuntimeError(
+        "direct Broad PRISM write is disabled; use the sealed pre-write state machine"
+    )
+
+
+def _legacy_run_write_unreachable(
+    run_root: Path, authorization_path: Path
+) -> dict[str, Any]:
     require_eu_worker()
     plan = json.loads((run_root / "plan.json").read_text(encoding="utf-8"))
     if (
